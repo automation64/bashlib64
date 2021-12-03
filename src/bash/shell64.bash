@@ -25,11 +25,9 @@ declare -gx SHELL64_SCRIPT_SID="${BASHPID}"
 declare -gx SHELL64_LIB_VAR_NULL='__s64__'
 declare -gx SHELL64_LIB_VAR_TBD='TBD'
 
-if [[ -z "$SHELL64_LIB" ]]; then
-  SHELL64_LIB="${0%%/*}"
-  [[ ! -r "$SHELL64_LIB/shell64.bash" ]] &&
-    printf '%s\n' "Fatal: unable to identify shell64.bash base path. Please set the SHELL64_LIB variable." >&2 &&
-    exit 1
+if [[ ! -r "$SHELL64_LIB/shell64.bash" ]]; then
+  printf '%s\n' "Fatal: unable to identify shell64.bash base path. Please set the SHELL64_LIB variable." >&2
+  exit 1
 fi
 
 set -o pipefail
