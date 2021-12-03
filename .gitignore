@@ -1,0 +1,11 @@
+# codeskel64
+.tmp/
+.cache/
+.var/
+
+# vscode
+.vscode/*
+*.code-workspace
+
+# package builds for prod/dev/test
+dist/
