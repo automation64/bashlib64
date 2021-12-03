@@ -13,14 +13,14 @@
 declare -gx LANG
 declare -gx LC_ALL
 declare -gx LANGUAGE
-declare -gx SHELL64_LIB
-declare -gx SHELL64_LIB_DEBUG
+declare -gx SHELL64_LIB="${SHELL64_LIB:-${0%%/*}}"
+declare -gx SHELL64_LIB_DEBUG="${SHELL64_LIB_DEBUG:-0}"
 declare -gx SHELL64_LIB_STRICT="${SHELL64_LIB_STRICT:-1}"
 declare -gx SHELL64_LIB_LANG="${SHELL64_LIB_LANG:-1}"
 declare -gx SHELL64_LIB_SIGNAL_HUP="${SHELL64_LIB_SIGNAL_HUP:--}"
 declare -gx SHELL64_LIB_SIGNAL_STOP="${SHELL64_LIB_SIGNAL_STOP:--}"
 declare -gx SHELL64_LIB_SIGNAL_QUIT="${SHELL64_LIB_SIGNAL_QUIT:--}"
-declare -gx SHELL64_SCRIPT_NAME="${SHELL64_SCRIPT_NAME:-script}"
+declare -gx SHELL64_SCRIPT_NAME="${SHELL64_SCRIPT_NAME:-${0##*/}}"
 declare -gx SHELL64_SCRIPT_SID="${BASHPID}"
 declare -gx SHELL64_LIB_VAR_NULL='__s64__'
 declare -gx SHELL64_LIB_VAR_TBD='TBD'

@@ -22,7 +22,9 @@
 # Imports
 #
 
-source "${SHELL64_LIB:-.}/shell64.bash"
+#SHELL64_LIB='X_SHELL64_LIB_LOCATION_X'
+SHELL64_LIB='src/bash'
+source "${SHELL64_LIB}/shell64.bash"
 
 #
 # Exports
