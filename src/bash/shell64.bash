@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/shell64
-# Version: 1.0.0
+# Version: 1.0.1
 #######################################
 
 [[ -n "$SHELL64_LIB_DEBUG" && "$SHELL64_LIB_DEBUG" == '1' ]] && set -x
@@ -13,23 +13,21 @@
 declare -gx LANG
 declare -gx LC_ALL
 declare -gx LANGUAGE
-declare -gx SHELL64_LIB
-declare -gx SHELL64_LIB_DEBUG
+declare -gx SHELL64_LIB="${SHELL64_LIB:-${0%%/*}}"
+declare -gx SHELL64_LIB_DEBUG="${SHELL64_LIB_DEBUG:-0}"
 declare -gx SHELL64_LIB_STRICT="${SHELL64_LIB_STRICT:-1}"
 declare -gx SHELL64_LIB_LANG="${SHELL64_LIB_LANG:-1}"
 declare -gx SHELL64_LIB_SIGNAL_HUP="${SHELL64_LIB_SIGNAL_HUP:--}"
 declare -gx SHELL64_LIB_SIGNAL_STOP="${SHELL64_LIB_SIGNAL_STOP:--}"
 declare -gx SHELL64_LIB_SIGNAL_QUIT="${SHELL64_LIB_SIGNAL_QUIT:--}"
-declare -gx SHELL64_SCRIPT_NAME="${SHELL64_SCRIPT_NAME:-script}"
+declare -gx SHELL64_SCRIPT_NAME="${SHELL64_SCRIPT_NAME:-${0##*/}}"
 declare -gx SHELL64_SCRIPT_SID="${BASHPID}"
 declare -gx SHELL64_LIB_VAR_NULL='__s64__'
 declare -gx SHELL64_LIB_VAR_TBD='TBD'
 
-if [[ -z "$SHELL64_LIB" ]]; then
-  SHELL64_LIB="${0%%/*}"
-  [[ ! -r "$SHELL64_LIB/shell64.bash" ]] &&
-    printf '%s\n' "Fatal: unable to identify shell64.bash base path. Please set the SHELL64_LIB variable." >&2 &&
-    exit 1
+if [[ ! -r "$SHELL64_LIB/shell64.bash" ]]; then
+  printf '%s\n' "Fatal: unable to identify shell64.bash base path. Please set the SHELL64_LIB variable." >&2
+  exit 1
 fi
 
 set -o pipefail

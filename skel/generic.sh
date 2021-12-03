@@ -22,7 +22,8 @@
 # Imports
 #
 
-source "${SHELL64_LIB:-.}/shell64.bash"
+SHELL64_LIB='X_SHELL64_LIB_LOCATION_X'
+source "${SHELL64_LIB}/shell64.bash"
 
 #
 # Exports
@@ -99,7 +100,7 @@ declare X_NAMESPACE_SCRIPT_X_X_OPTION_X=''
 declare X_NAMESPACE_SCRIPT_X_X_FLAG_X='0'
 declare X_NAMESPACE_SCRIPT_X_option=''
 
-[[ $# = 0 ]] && X_NAMESPACE_SCRIPT_X_help && exit 1
+(( $# == 0 )) && X_NAMESPACE_SCRIPT_X_help && exit 1
 while getopts ':xy:zh' X_NAMESPACE_SCRIPT_X_option; do
   case "$X_NAMESPACE_SCRIPT_X_option" in
   x)
