@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/shell64
-# Version: 1.0.0
+# Version: 1.0.1
 #######################################
 
 #
@@ -122,24 +122,33 @@ function shell64_os_get_distro() {
 function shell64_os_set_command() {
   if [[ "$SHELL64_OS_DISTRO" =~ (UBUNTU-.*|FEDORA-.*|CENTOS-.*|OL-.*|DEBIAN-.*) ]]; then
     SHELL64_OS_CMD_AWK='/usr/bin/awk'
-    SHELL64_OS_CMD_CAT='/bin/cat'
-    SHELL64_OS_CMD_CHMOD='/usr/bin/chmod'
-    SHELL64_OS_CMD_CHOWN='/usr/bin/chown'
-    SHELL64_OS_CMD_CP='/usr/bin/cp'
-    SHELL64_OS_CMD_CAT='/usr/bin/cat'
-    SHELL64_OS_CMD_DATE="/usr/bin/date"
-    SHELL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
-    SHELL64_OS_CMD_LS='/bin/ls'
-    SHELL64_OS_CMD_ID='/bin/id'
-    SHELL64_OS_CMD_MKDIR='/usr/bin/mkdir'
-    SHELL64_OS_CMD_RM='/usr/bin/rm'
     SHELL64_OS_CMD_SUDO='/usr/bin/sudo'
     SHELL64_OS_CMD_USERADD='/usr/sbin/useradd'
   fi
   if [[ "$SHELL64_OS_DISTRO" =~ (UBUNTU-.*|DEBIAN-.*) ]]; then
+    SHELL64_OS_CMD_DATE="/bin/date"
+    SHELL64_OS_CMD_HOSTNAME='/bin/hostname'
+    SHELL64_OS_CMD_MKDIR='/bin/mkdir'
+    SHELL64_OS_CMD_RM='/bin/rm'
+    SHELL64_OS_CMD_CHMOD='/bin/chmod'
+    SHELL64_OS_CMD_CHOWN='/bin/chown'
+    SHELL64_OS_CMD_CP='/bin/cp'
+    SHELL64_OS_CMD_LS='/bin/ls'
+    SHELL64_OS_CMD_ID='/bin/id'
+    SHELL64_OS_CMD_CAT='/bin/cat'
     SHELL64_OS_CMD_APT='/usr/bin/apt-get'
   fi
   if [[ "$SHELL64_OS_DISTRO" =~ (FEDORA-.*|CENTOS-.*|OL-.*) ]]; then
+    SHELL64_OS_CMD_DATE="/usr/bin/date"
+    SHELL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
+    SHELL64_OS_CMD_MKDIR='/usr/bin/mkdir'
+    SHELL64_OS_CMD_RM='/usr/bin/rm'
+    SHELL64_OS_CMD_CHMOD='/usr/bin/chmod'
+    SHELL64_OS_CMD_CHOWN='/usr/bin/chown'
+    SHELL64_OS_CMD_CP='/usr/bin/cp'
+    SHELL64_OS_CMD_LS='/usr/bin/ls'
+    SHELL64_OS_CMD_ID='/usr/bin/id'
+    SHELL64_OS_CMD_CAT='/usr/bin/cat'
     SHELL64_OS_CMD_DNF='/usr/bin/dnf'
     SHELL64_OS_CMD_YUM='/usr/bin/yum'
   fi
