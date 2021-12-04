@@ -31,7 +31,6 @@ if [[ ! -r "$SHELL64_LIB/shell64.bash" ]]; then
 fi
 
 set -o pipefail
-set -e
 
 if [[ "$SHELL64_LIB_STRICT" == '1' ]]; then
   unset -f unalias
@@ -42,6 +41,7 @@ if [[ "$SHELL64_LIB_STRICT" == '1' ]]; then
   unset IFS
   set -u
   set -p
+  set -e
 fi
 
 # shellcheck disable=SC2064
