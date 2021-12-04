@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/shell64
-# Version: 1.0.1
+# Version: 1.0.2
 #######################################
 
 [[ -n "$SHELL64_LIB_DEBUG" && "$SHELL64_LIB_DEBUG" == '1' ]] && set -x
@@ -31,7 +31,6 @@ if [[ ! -r "$SHELL64_LIB/shell64.bash" ]]; then
 fi
 
 set -o pipefail
-set -e
 
 if [[ "$SHELL64_LIB_STRICT" == '1' ]]; then
   unset -f unalias
@@ -42,6 +41,7 @@ if [[ "$SHELL64_LIB_STRICT" == '1' ]]; then
   unset IFS
   set -u
   set -p
+  set -e
 fi
 
 # shellcheck disable=SC2064
