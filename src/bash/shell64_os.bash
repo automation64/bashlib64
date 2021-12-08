@@ -182,7 +182,7 @@ function shell64_os_set_command() {
 #######################################
 function shell64_os_set_alias() {
 
-  SHELL64_OS_ALIAS_LS_FILES="$SHELL64_OS_CMD_LS -f --color='never'"
+  SHELL64_OS_ALIAS_LS_FILES="$SHELL64_OS_CMD_LS --color=never"
   SHELL64_OS_ALIAS_ID_USER="$SHELL64_OS_CMD_ID -u -n"
   SHELL64_OS_ALIAS_CP_FILE="$SHELL64_OS_CMD_CP --verbose --force"
   SHELL64_OS_ALIAS_CHOWN_DIR="$SHELL64_OS_CMD_CHOWN --verbose --recursive"
