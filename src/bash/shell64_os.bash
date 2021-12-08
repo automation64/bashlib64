@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/shell64
-# Version: 1.0.1
+# Version: 1.0.2
 #######################################
 
 #
@@ -43,6 +43,7 @@ declare -gx SHELL64_OS_ALIAS_CP_FILE
 declare -gx SHELL64_OS_ALIAS_DNF_CACHE
 declare -gx SHELL64_OS_ALIAS_DNF_INSTALL
 declare -gx SHELL64_OS_ALIAS_ID_USER
+declare -gx SHELL64_OS_ALIAS_LS_FILES
 declare -gx SHELL64_OS_ALIAS_SUDO_ENV
 
 #
@@ -169,6 +170,7 @@ function shell64_os_set_command() {
 #  SHELL64_OS_ALIAS_DNF_CACHE
 #  SHELL64_OS_ALIAS_DNF_INSTALL
 #  SHELL64_OS_ALIAS_ID_USER
+#  SHELL64_OS_ALIAS_LS_FILES
 #  SHELL64_OS_ALIAS_SUDO_ENV
 # Arguments:
 #   STDOUT: None
@@ -180,6 +182,7 @@ function shell64_os_set_command() {
 #######################################
 function shell64_os_set_alias() {
 
+  SHELL64_OS_ALIAS_LS_FILES="$SHELL64_OS_CMD_LS -f --color='never'"
   SHELL64_OS_ALIAS_ID_USER="$SHELL64_OS_CMD_ID -u -n"
   SHELL64_OS_ALIAS_CP_FILE="$SHELL64_OS_CMD_CP --verbose --force"
   SHELL64_OS_ALIAS_CHOWN_DIR="$SHELL64_OS_CMD_CHOWN --verbose --recursive"
