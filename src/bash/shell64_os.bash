@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/shell64
-# Version: 1.0.2
+# Version: 1.0.3
 #######################################
 
 #
@@ -182,7 +182,7 @@ function shell64_os_set_command() {
 #######################################
 function shell64_os_set_alias() {
 
-  SHELL64_OS_ALIAS_LS_FILES="$SHELL64_OS_CMD_LS -f --color='never'"
+  SHELL64_OS_ALIAS_LS_FILES="$SHELL64_OS_CMD_LS --color=never"
   SHELL64_OS_ALIAS_ID_USER="$SHELL64_OS_CMD_ID -u -n"
   SHELL64_OS_ALIAS_CP_FILE="$SHELL64_OS_CMD_CP --verbose --force"
   SHELL64_OS_ALIAS_CHOWN_DIR="$SHELL64_OS_CMD_CHOWN --verbose --recursive"
