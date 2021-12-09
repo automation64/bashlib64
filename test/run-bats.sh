@@ -11,5 +11,5 @@ else
 fi
 
 for target in $test_list; do
-  "$PROJECT_SHELL64_CMD_BATS" --verbose-run "$target"
+  "$PROJECT_BL64_CMD_BATS" --verbose-run "$target"
 done

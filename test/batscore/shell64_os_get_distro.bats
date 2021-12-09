@@ -1,8 +1,8 @@
 setup() {
-  SHELL64_LIB="${PROJECT_SHELL64_SRC}"
-  . "${SHELL64_LIB}/shell64.bash"
+  BL64_LIB="${PROJECT_BL64_SRC}"
+  . "${BL64_LIB}/bashlib64.bash"
 }
 
 @test "1: identify platform()" {
-  [[ "$SHELL64_OS_DISTRO" != 'UNKNOWN' ]]
+  [[ "$BL64_OS_DISTRO" != 'UNKNOWN' ]]
 }
