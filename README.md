@@ -1,26 +1,28 @@
-# Project: Shell64
+# Project: BashLib64
 
 ```shell
-  █████████  █████               ████  ████   ████████  █████ █████ 
- ███░░░░░███░░███               ░░███ ░░███  ███░░░░███░░███ ░░███  
-░███    ░░░  ░███████    ██████  ░███  ░███ ░███   ░░░  ░███  ░███ █
-░░█████████  ░███░░███  ███░░███ ░███  ░███ ░█████████  ░███████████
- ░░░░░░░░███ ░███ ░███ ░███████  ░███  ░███ ░███░░░░███ ░░░░░░░███░█
- ███    ░███ ░███ ░███ ░███░░░   ░███  ░███ ░███   ░███       ░███░ 
-░░█████████  ████ █████░░██████  █████ █████░░████████        █████ 
- ░░░░░░░░░  ░░░░ ░░░░░  ░░░░░░  ░░░░░ ░░░░░  ░░░░░░░░        ░░░░░  
+
+
+██████╗  █████╗ ███████╗██╗  ██╗██╗     ██╗██████╗  ██████╗ ██╗  ██╗
+██╔══██╗██╔══██╗██╔════╝██║  ██║██║     ██║██╔══██╗██╔════╝ ██║  ██║
+██████╔╝███████║███████╗███████║██║     ██║██████╔╝███████╗ ███████║
+██╔══██╗██╔══██║╚════██║██╔══██║██║     ██║██╔══██╗██╔═══██╗╚════██║
+██████╔╝██║  ██║███████║██║  ██║███████╗██║██████╔╝╚██████╔╝     ██║
+╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝╚═════╝  ╚═════╝      ╚═╝
+
+
 ```
 
 ## Overview
 
-Shell64 is a project for creating bash libraries that can facilitate and accelerate the development of Bash scripts.
+BashLib64 is a project for creating bash libraries that can facilitate and accelerate the development of Bash scripts.
 
-| Library                     | Purpose                                                   |
-| --------------------------- | --------------------------------------------------------- |
-| `src/bash/shell64.bash`     | Prepare the execution environment, load shell64 libraries |
-| `src/bash/shell64_os.bash`  | Detect the OS, normalize common OS commands               |
-| `src/bash/shell64_msg.bash` | Show messages to the user                                 |
-| `src/bash/shell64_log.bash` | Write messages to logs repositories                       |
+| Library                  | Purpose                                                |
+| ------------------------ | ------------------------------------------------------ |
+| `src/bashlib64.bash`     | Prepare the execution environment, load bl64 libraries |
+| `src/bashlib64_os.bash`  | Detect the OS, normalize common OS commands            |
+| `src/bashlib64_msg.bash` | Show messages to the user                              |
+| `src/bashlib64_log.bash` | Write messages to logs repositories                    |
 
 ## Deployment
 
@@ -50,15 +52,15 @@ Download the library set to a directory where the target script can read them fr
 
 Add to the target script:
 
-- The location of the Shell64 library set:
-  > `SHELL64_LIB=<PATH_TO_THE_LIB>`
+- The location of the BashLib64 library set:
+  > `BL64_LIB=<PATH_TO_THE_LIB>`
 - The library loader:
-  > `source "$SHELL64_LIB/shell64.bash"`
+  > `source "$BL64_LIB/bashlib64.bash"`
 
 ### Create new sript
 
-- Copy the shell64 library set the project directory
-  > `cp src/bash/shell64*.bash <PROJECT_DIR>`
+- Copy the bl64 library set the project directory
+  > `cp src/bashlib64*.bash <PROJECT_DIR>`
 - Copy the skeletong script to the project directory
   > `cp skel/generic.sh <PROJECT_DIR>`
 - Customize the script by adding new content and replacing the predefined tags:
@@ -74,7 +76,7 @@ Add to the target script:
 
 ### Repositories
 
-- Project GIT repository: [https://github.com/serdigital64/shell64](https://github.com/serdigital64/shell64)
+- Project GIT repository: [https://github.com/serdigital64/bashlib64](https://github.com/serdigital64/bashlib64)
 
 ### Author
 
