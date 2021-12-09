@@ -9,48 +9,6 @@
 #######################################
 
 #
-# Exported Constants
-#
-
-#
-# Exported Variables
-#
-
-declare -gx BL64_OS_DISTRO
-
-declare -gx BL64_OS_CMD_AWK
-declare -gx BL64_OS_CMD_CAT
-declare -gx BL64_OS_CMD_CHMOD
-declare -gx BL64_OS_CMD_CHOWN
-declare -gx BL64_OS_CMD_CP
-declare -gx BL64_OS_CMD_CAT
-declare -gx BL64_OS_CMD_DATE
-declare -gx BL64_OS_CMD_HOSTNAME
-declare -gx BL64_OS_CMD_ID
-declare -gx BL64_OS_CMD_LS
-declare -gx BL64_OS_CMD_MKDIR
-declare -gx BL64_OS_CMD_RM
-declare -gx BL64_OS_CMD_SUDO
-declare -gx BL64_OS_CMD_USERADD
-declare -gx BL64_OS_CMD_APT
-declare -gx BL64_OS_CMD_DNF
-declare -gx BL64_OS_CMD_YUM
-
-declare -gx BL64_OS_ALIAS_APT_CACHE
-declare -gx BL64_OS_ALIAS_APT_INSTALL
-declare -gx BL64_OS_ALIAS_CHOWN_DIR
-declare -gx BL64_OS_ALIAS_CP_FILE
-declare -gx BL64_OS_ALIAS_DNF_CACHE
-declare -gx BL64_OS_ALIAS_DNF_INSTALL
-declare -gx BL64_OS_ALIAS_ID_USER
-declare -gx BL64_OS_ALIAS_LS_FILES
-declare -gx BL64_OS_ALIAS_SUDO_ENV
-
-#
-# Internal Variables
-#
-
-#
 # Internal Functions
 #
 

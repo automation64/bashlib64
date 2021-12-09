@@ -9,34 +9,6 @@
 #######################################
 
 #
-# Exported Constants
-#
-
-#
-# Exported Variables
-#
-
-#
-# Internal Variables
-#
-
-readonly _BL64_MSG_TXT_USAGE='Usage'
-readonly _BL64_MSG_TXT_COMMANDS='Commands'
-readonly _BL64_MSG_TXT_FLAGS='Flags'
-readonly _BL64_MSG_TXT_PARAMETERS='Parameters'
-readonly _BL64_MSG_TXT_ERROR='Error'
-readonly _BL64_MSG_TXT_INFO='Info'
-readonly _BL64_MSG_TXT_TASK='Task'
-readonly _BL64_MSG_TXT_DEBUG='Debug'
-readonly _BL64_MSG_TXT_WARNING='Warning'
-
-readonly _BL64_MSG_HEADER='%s@%s[%(%d/%b/%Y-%H:%M:%S)T]'
-
-#
-# Internal Functions
-#
-
-#
 # Exported Functions
 #
 

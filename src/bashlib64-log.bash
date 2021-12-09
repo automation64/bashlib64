@@ -9,31 +9,6 @@
 #######################################
 
 #
-# Exported Constants
-#
-
-declare -gx BL64_LOG_TYPE_FILE='F'
-declare -gx BL64_LOG_CATEGORY_INFO='info'
-declare -gx BL64_LOG_CATEGORY_TASK='task'
-declare -gx BL64_LOG_CATEGORY_DEBUG='debug'
-declare -gx BL64_LOG_CATEGORY_WARNING='warning'
-declare -gx BL64_LOG_CATEGORY_ERROR='error'
-declare -gx BL64_LOG_CATEGORY_RECORD='record'
-
-#
-# Exported Variables
-#
-
-declare -gx BL64_LOG_VERBOSE="${BL64_LOG_VERBOSE:-1}"
-declare -gx BL64_LOG_FS="${BL64_LOG_FS:-:}"
-declare -gx BL64_LOG_PATH="${BL64_LOG_PATH:-/dev/null}"
-declare -gx BL64_LOG_TYPE="${BL64_LOG_TYPE:-$BL64_LOG_TYPE_FILE}"
-
-#
-# Internal Variables
-#
-
-#
 # Internal Functions
 #
 
