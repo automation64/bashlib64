@@ -23,10 +23,10 @@
 #
 
 # shellcheck disable=SC2034
-SHELL64_LIB_STRICT='1'
-SHELL64_LIB='X_SHELL64_LIB_LOCATION_X'
+BL64_LIB_STRICT='1'
+BL64_LIB='X_BL64_LIB_LOCATION_X'
 # shellcheck disable=SC1091
-source "${SHELL64_LIB}/shell64.bash" || exit 1
+source "${BL64_LIB}/bashlib64.bash" || exit 1
 
 #
 # Exports
@@ -59,7 +59,7 @@ function X_APP_NAMESPACE_X_check() {
 
 function X_APP_NAMESPACE_X_help() {
 
-  shell64_msg_show_usage \
+  bl64_msg_show_usage \
     'X_CODE_PURPOSE_CLI_X' \
     'X_APP_INFO_X' \
     'X_CODE_PURPOSE_COMMANDSX' \
