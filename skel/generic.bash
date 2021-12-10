@@ -2,41 +2,16 @@
 #######################################
 # X_APP_INFO_X
 #
-# Globals:
-#   None
-# Arguments:
-#   None
-# Outputs:
-#   None
-# Returns:
-#   0: successfull execution
-#   >0: error
-#
 # Author: X_AUTHOR_ALIAS_X (X_AUTHOR_GIT_URL_X)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: X_PROJECT_GIT_URL_X
 # Version: X_APP_VERSION_X
 #######################################
 
-#
-# Imports
-#
-
-# shellcheck disable=SC2034
-BL64_LIB_STRICT='1'
-# shellcheck disable=SC1091
 source "${X_PATH_TO_LIB_X}/bashlib64.bash" || exit 1
 
-#
-# Exports
-#
-
-declare -xr X_APP_NAMESPACE_X_X_EXPORT_RO_X=''
-declare -x X_APP_NAMESPACE_X_X_EXPORT_X=''
-
-#
-# Functions
-#
+readonly X_APP_NAMESPACE_X_X_EXPORT_RO_X=''
+export X_APP_NAMESPACE_X_X_EXPORT_X=''
 
 function X_APP_NAMESPACE_X_X_FUNCTION_COMMAND_X() {
 
@@ -59,11 +34,11 @@ function X_APP_NAMESPACE_X_check() {
 function X_APP_NAMESPACE_X_help() {
 
   bl64_msg_show_usage \
-    'X_CODE_PURPOSE_CLI_X' \
+    'X_APP_NAME_CLI_X' \
     'X_APP_INFO_X' \
-    'X_CODE_PURPOSE_COMMANDSX' \
-    'X_CODE_PURPOSE_FLAGSX' \
-    'X_CODE_PURPOSE_PARAMETERSX'
+    'X_APP_COMMANDS_X' \
+    'X_APP_FLAGS_X' \
+    'X_APP_PARAMETERS_X'
 
 }
 
