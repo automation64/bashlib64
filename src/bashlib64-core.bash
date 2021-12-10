@@ -38,7 +38,7 @@ export TERM="${TERM:-vt100}"
 
 bl64_os_get_distro
 
-case $BL64_OS_DISTRO in
+case "$BL64_OS_DISTRO" in
 UBUNTU-* | FEDORA-* | CENTOS-* | OL-* | DEBIAN-*)
   if [[ "$BL64_LIB_LANG" == '1' ]]; then
     LANG='C'
