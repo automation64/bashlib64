@@ -17,16 +17,22 @@
 
 BashLib64 is a project for creating bash libraries that can facilitate and accelerate the development of Bash scripts.
 
-| File                   | Purpose                                                                  |
-| ---------------------- | ------------------------------------------------------------------------ |
-| `src/bashlib64-core.*` | Setup run-time environment                                               |
-| `src/bashlib64-os.*`   | Normalize OS distribution name and version, normalize common OS commands |
-| `src/bashlib64-msg.*`  | Show messages to the user                                                |
-| `src/bashlib64-log.*`  | Write messages to logs repositories                                      |
+The library is bundled as a stand-alone file that can easly be distributed along with your scripts.
+
+Source modules included in the library:
+
+| File                    | Purpose                                |
+| ----------------------- | -------------------------------------- |
+| `src/bashlib64-core.*`  | Setup run-time environment             |
+| `src/bashlib64-check.*` | Check for conditions and report status |
+| `src/bashlib64-log.*`   | Write messages to logs repositories    |
+| `src/bashlib64-pkg.*`   | Install native OS packages             |
+| `src/bashlib64-msg.*`   | Display messages                       |
+| `src/bashlib64-os.*`    | Identify OS attributes                 |
 
 ## Deployment
 
-### OS Compatibility
+## OS Compatibility
 
 The library has been tested in the following operating systems:
 
@@ -65,14 +71,14 @@ Download the library set to a directory where the target script can read them fr
   > `wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/skel/generic.bash`
 - Customize the script by adding new content and replacing the predefined tags:
 
-| Tag                  | Purpose                                |
-| -------------------- | -------------------------------------- |
-| X_AUTHOR_ALIAS_X     | Author alias, short-name, or AKA       |
-| X_AUTHOR_GIT_URL_X   | Author's GIT repo                      |
-| X_CODE_PURPOSE_X     | Program, script, app short description |
-| X_CODE_VERSION_X     | Code version                           |
-| X_PROJECT_GIT_URL_X  | Project GIT Repo URL                   |
-| X_NAMESPACE_SCRIPT_X | Script namespace                       |
+| Tag                 | Purpose                                |
+| ------------------- | -------------------------------------- |
+| X_AUTHOR_ALIAS_X    | Author alias, short-name, or AKA       |
+| X_AUTHOR_GIT_URL_X  | Author's GIT repo                      |
+| X_APP_INFO_X        | Program, script, app short description |
+| X_APP_VERSION_X     | Code version                           |
+| X_APP_NAMESPACE_X   | Script namespace                       |
+| X_PROJECT_GIT_URL_X | Project GIT Repo URL                   |
 
 ### Repositories
 
