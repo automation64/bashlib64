@@ -1,4 +1,3 @@
-#!/bin/bash
 #######################################
 # BashLib64 / Display messages
 #
