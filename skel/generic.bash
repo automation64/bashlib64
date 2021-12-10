@@ -24,9 +24,8 @@
 
 # shellcheck disable=SC2034
 BL64_LIB_STRICT='1'
-BL64_LIB='X_BL64_LIB_LOCATION_X'
 # shellcheck disable=SC1091
-source "${BL64_LIB}/bashlib64.bash" || exit 1
+source "${X_PATH_TO_LIB_X}/bashlib64.bash" || exit 1
 
 #
 # Exports

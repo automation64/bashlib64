@@ -8,4 +8,4 @@
 *.code-workspace
 
 # package builds for prod/dev/test
-dist/
+build/

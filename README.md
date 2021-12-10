@@ -17,12 +17,12 @@
 
 BashLib64 is a project for creating bash libraries that can facilitate and accelerate the development of Bash scripts.
 
-| Library                  | Purpose                                                |
-| ------------------------ | ------------------------------------------------------ |
-| `src/bashlib64.bash`     | Prepare the execution environment, load bl64 libraries |
-| `src/bashlib64_os.bash`  | Detect the OS, normalize common OS commands            |
-| `src/bashlib64_msg.bash` | Show messages to the user                              |
-| `src/bashlib64_log.bash` | Write messages to logs repositories                    |
+| File                   | Purpose                                                                  |
+| ---------------------- | ------------------------------------------------------------------------ |
+| `src/bashlib64-core.*` | Setup run-time environment                                               |
+| `src/bashlib64-os.*`   | Normalize OS distribution name and version, normalize common OS commands |
+| `src/bashlib64-msg.*`  | Show messages to the user                                                |
+| `src/bashlib64-log.*`  | Write messages to logs repositories                                      |
 
 ## Deployment
 
@@ -44,25 +44,25 @@ The library has been tested in the following operating systems:
 
 ### Installation
 
-Download the library set to a directory where the target script can read them from.
+Download the library set to a directory where the target script can read them from:
+
+- [BashLib64](https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash)
 
 ## Usage
 
 ### Add library to existing script
 
-Add to the target script:
+- Download the library to the project directory
+  > `cd <PROJECT_DIR>; wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash`
+- Add the library loader to the target script:
+  > `source "<PROJECT_DIR>/bashlib64.bash"`
 
-- The location of the BashLib64 library set:
-  > `BL64_LIB=<PATH_TO_THE_LIB>`
-- The library loader:
-  > `source "$BL64_LIB/bashlib64.bash"`
+### Create new script
 
-### Create new sript
-
-- Copy the bl64 library set the project directory
-  > `cp src/bashlib64*.bash <PROJECT_DIR>`
-- Copy the skeletong script to the project directory
-  > `cp skel/generic.sh <PROJECT_DIR>`
+- Download the library to the project directory
+  > `cd <PROJECT_DIR>; wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash`
+- Download the skeleton script:
+  > `wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/skel/generic.bash`
 - Customize the script by adding new content and replacing the predefined tags:
 
 | Tag                  | Purpose                                |
