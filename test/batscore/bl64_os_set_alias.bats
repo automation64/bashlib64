@@ -1,7 +1,6 @@
 setup() {
   BL64_LIB_STRICT='0'
-  BL64_LIB="${PROJECT_BL64_SRC}"
-  . "${BL64_LIB}/bashlib64.bash"
+  . "${PROJECT_BL64_BUILD}/bashlib64.bash"
 
   PROJECT_BL64_TEST___TMP="$(mktemp -d)"
   touch "$PROJECT_BL64_TEST___TMP/file1"
