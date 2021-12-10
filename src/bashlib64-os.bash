@@ -1,4 +1,3 @@
-#!/bin/bash
 #######################################
 # BashLib64 / Identify OS attributes
 #
