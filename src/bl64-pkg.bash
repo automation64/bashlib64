@@ -19,13 +19,16 @@
 # Initialize the package manager for installations
 #
 # Globals:
+#   BL64_OS_DISTRO
+#   BL64_PKG_ALIAS_APT_UPDATE
+#   BL64_PKG_ALIAS_DNF_CACHE
 # Arguments:
 #   None
 # Outputs:
 #   STDOUT: None
-#   STDERR: Error message
+#   STDERR: error from package manager
 # Returns:
-#   0:
+#   package manager exist status
 #######################################
 function bl64_pkg_prepare() {
 
@@ -47,13 +50,14 @@ function bl64_pkg_prepare() {
 # Install packages
 #
 # Globals:
+#   BL64_OS_DISTRO
 # Arguments:
 #   None
 # Outputs:
 #   STDOUT: None
-#   STDERR: Error message
+#   STDERR: error from package manager
 # Returns:
-#   0:
+#   package manager exist status
 #######################################
 function bl64_pkg_install() {
 
@@ -75,13 +79,14 @@ function bl64_pkg_install() {
 # Clean up the package manager run-time environment
 #
 # Globals:
+#   BL64_OS_DISTRO
 # Arguments:
 #   None
 # Outputs:
 #   STDOUT: None
-#   STDERR: Error message
+#   STDERR: error from package manager
 # Returns:
-#   0:
+#   package manager exist status
 #######################################
 function bl64_pkg_cleanup() {
 
