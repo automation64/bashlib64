@@ -38,14 +38,17 @@ function bl64_check_command() {
 
   if [[ -z "$path" ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (command path)"
+    # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_MISSING_PARAMETER
   fi
   if [[ ! -f "$path" ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_COMMAND_NOT_FOUND ($path)"
+    # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -x "$path" ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE ($path)"
+    # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_FILE_NOT_EXECUTE
   fi
   :
@@ -74,14 +77,17 @@ function bl64_check_file() {
 
   if [[ -z "$path" ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (file path)"
+    # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_MISSING_PARAMETER
   fi
   if [[ ! -f "$path" ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_FILE_NOT_FOUND ($path)"
+    # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -r "$path" ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_FILE_NOT_READABLE ($path)"
+    # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_FILE_NOT_READ
   fi
   :

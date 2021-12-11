@@ -47,7 +47,7 @@ UBUNTU-* | FEDORA-* | CENTOS-* | OL-* | DEBIAN-*)
   fi
   ;;
 *)
-  printf '%s\n' "Fatal: bl64 is not supported in the current OS" >&2
+  printf '%s\n' "Fatal: BashLib64 is not supported in the current OS" >&2
   exit 1
   ;;
 esac
