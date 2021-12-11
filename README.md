@@ -23,6 +23,7 @@ Source modules included in the library:
 
 | File                    | Purpose                                |
 | ----------------------- | -------------------------------------- |
+| `src/bashlib64-arc.*`   | Manipulate archive files               |
 | `src/bashlib64-core.*`  | Setup run-time environment             |
 | `src/bashlib64-check.*` | Check for conditions and report status |
 | `src/bashlib64-check.*` | Format data                            |
