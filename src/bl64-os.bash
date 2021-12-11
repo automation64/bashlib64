@@ -7,14 +7,6 @@
 # Version: 1.1.0
 #######################################
 
-#
-# Internal Functions
-#
-
-#
-# Exported Functions
-#
-
 #######################################
 # Identify and normalize Linux OS distribution name and version
 #
