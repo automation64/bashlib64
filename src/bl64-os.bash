@@ -200,7 +200,11 @@ function bl64_os_cleanup_caches() {
 }
 
 #######################################
-# Removes temporary content, resets logs and caches from standard locations
+# Performs a complete cleanup of the OS
+#
+# * Removes temporary files
+# * Cleans caches
+# * Removes or resets logs
 #
 # Globals:
 #   None
@@ -214,6 +218,7 @@ function bl64_os_cleanup_caches() {
 #######################################
 function bl64_os_cleanup_full() {
 
+  bl64_pkg_cleanup
   bl64_os_cleanup_tmps
   bl64_os_cleanup_logs
   bl64_os_cleanup_caches
