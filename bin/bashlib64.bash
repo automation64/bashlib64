@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 [[ -n "$BL64_LIB_DEBUG" && "$BL64_LIB_DEBUG" == '1' ]] && set -x
@@ -18,9 +18,11 @@ export BL64_OS_CMD_CP
 export BL64_OS_CMD_CAT
 export BL64_OS_CMD_DATE
 export BL64_OS_CMD_HOSTNAME
+export BL64_OS_CMD_GREP
 export BL64_OS_CMD_ID
 export BL64_OS_CMD_LS
 export BL64_OS_CMD_MKDIR
+export BL64_OS_CMD_MKTEMP
 export BL64_OS_CMD_RM
 export BL64_OS_CMD_SUDO
 export BL64_OS_CMD_USERADD
@@ -88,28 +90,32 @@ function bl64_os_set_command() {
     BL64_OS_CMD_USERADD='/usr/sbin/useradd'
   fi
   if [[ "$BL64_OS_DISTRO" =~ (UBUNTU-.*|DEBIAN-.*) ]]; then
-    BL64_OS_CMD_DATE="/bin/date"
-    BL64_OS_CMD_HOSTNAME='/bin/hostname'
-    BL64_OS_CMD_MKDIR='/bin/mkdir'
-    BL64_OS_CMD_RM='/bin/rm'
+    BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_CHMOD='/bin/chmod'
     BL64_OS_CMD_CHOWN='/bin/chown'
     BL64_OS_CMD_CP='/bin/cp'
-    BL64_OS_CMD_LS='/bin/ls'
+    BL64_OS_CMD_DATE="/bin/date"
+    BL64_OS_CMD_GREP='/bin/grep'
+    BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_ID='/bin/id'
-    BL64_OS_CMD_CAT='/bin/cat'
+    BL64_OS_CMD_LS='/bin/ls'
+    BL64_OS_CMD_MKDIR='/bin/mkdir'
+    BL64_OS_CMD_MKTEMP='/bin/mktemp'
+    BL64_OS_CMD_RM='/bin/rm'
   fi
   if [[ "$BL64_OS_DISTRO" =~ (FEDORA-.*|CENTOS-.*|OL-.*) ]]; then
-    BL64_OS_CMD_DATE="/usr/bin/date"
-    BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
-    BL64_OS_CMD_MKDIR='/usr/bin/mkdir'
-    BL64_OS_CMD_RM='/usr/bin/rm'
+    BL64_OS_CMD_CAT='/usr/bin/cat'
     BL64_OS_CMD_CHMOD='/usr/bin/chmod'
     BL64_OS_CMD_CHOWN='/usr/bin/chown'
     BL64_OS_CMD_CP='/usr/bin/cp'
-    BL64_OS_CMD_LS='/usr/bin/ls'
+    BL64_OS_CMD_DATE="/usr/bin/date"
+    BL64_OS_CMD_GREP='/usr/bin/grep'
+    BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_CAT='/usr/bin/cat'
+    BL64_OS_CMD_LS='/usr/bin/ls'
+    BL64_OS_CMD_MKDIR='/usr/bin/mkdir'
+    BL64_OS_CMD_MKTEMP='/usr/bin/mktemp'
+    BL64_OS_CMD_RM='/usr/bin/rm'
   fi
   return 0
 }
@@ -138,6 +144,10 @@ function bl64_os_cleanup_full() {
   bl64_os_cleanup_logs
   bl64_os_cleanup_caches
   :
+}
+function bl64_fmt_strip_comments() {
+  local source="${1:--}"
+  "$BL64_OS_CMD_GREP" -v -E '^#.*$|^ *#.*$' "$source"
 }
 function bl64_msg_show_usage() {
   local usage="${1:-$BL64_LIB_VAR_TBD}"

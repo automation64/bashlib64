@@ -16,17 +16,21 @@ function devbl64_build_prod_build() {
   local status=1
   local project_bl64_file=''
   local project_bl64_lib="$DEVBL64_BUILD/bashlib64.bash"
-  local project_bl64_modules='os msg log check pkg'
+  local project_bl64_modules='os fmt msg log check pkg'
 
+  bl64_msg_show_task "creating stand-alone library: $project_bl64_lib"
   "$BL64_OS_CMD_CAT" "$DEVBL64_SRC/bl64-core.header" >"$project_bl64_lib"
   for project_bl64_file in $project_bl64_modules; do
-    grep -v -E '^#.*|^$' "${DEVBL64_SRC}/bl64-${project_bl64_file}.env" >>"$project_bl64_lib"
+    bl64_msg_show_task "adding module $project_bl64_file environment"
+    bl64_fmt_strip_comments "${DEVBL64_SRC}/bl64-${project_bl64_file}.env" >>"$project_bl64_lib" || true
   done
 
   for project_bl64_file in $project_bl64_modules; do
-    grep -v -E '^#.*|^$' "${DEVBL64_SRC}/bl64-${project_bl64_file}.bash" >>"$project_bl64_lib"
+    bl64_msg_show_task "adding module $project_bl64_file code"
+    bl64_fmt_strip_comments "${DEVBL64_SRC}/bl64-${project_bl64_file}.bash" >>"$project_bl64_lib" || true
   done
 
+  bl64_msg_show_task 'adding core'
   "$BL64_OS_CMD_CAT" "$DEVBL64_SRC/bl64-core.env" >>"$project_bl64_lib"
   "$BL64_OS_CMD_CAT" "$DEVBL64_SRC/bl64-core.bash" >>"$project_bl64_lib"
   status=$?
