@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 [[ -n "$BL64_LIB_DEBUG" && "$BL64_LIB_DEBUG" == '1' ]] && set -x
@@ -27,6 +27,7 @@ export BL64_OS_CMD_MKDIR
 export BL64_OS_CMD_MKTEMP
 export BL64_OS_CMD_RM
 export BL64_OS_CMD_SUDO
+export BL64_OS_CMD_TAR
 export BL64_OS_CMD_USERADD
 
 export BL64_OS_ALIAS_CHOWN_DIR
@@ -73,6 +74,12 @@ readonly _BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE='the command is present but has 
 readonly _BL64_CHECK_TXT_FILE_NOT_FOUND='the file is not present'
 readonly _BL64_CHECK_TXT_FILE_NOT_READABLE='the file is present but has no read permission'
 
+readonly BL64_ARC_ERROR_MISSING_PARAMETER=200
+readonly BL64_ARC_ERROR_INVALID_DESTINATION=201
+
+readonly _BL64_ARC_TXT_MISSING_PARAMETER='required parameter is missing'
+readonly _BL64_ARC_TXT_DST_NOT_DIRECTORY='the destination is not a directory'
+
 readonly BL64_PKG_CMD_APT='/usr/bin/apt-get'
 readonly BL64_PKG_CMD_DNF='/usr/bin/dnf'
 readonly BL64_PKG_CMD_YUM='/usr/bin/yum'
@@ -106,6 +113,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_SUDO='/usr/bin/sudo'
     BL64_OS_CMD_USERADD='/usr/sbin/useradd'
+    BL64_OS_CMD_TAR='/bin/tar'
   fi
   if [[ "$BL64_OS_DISTRO" =~ (UBUNTU-.*|DEBIAN-.*) ]]; then
     BL64_OS_CMD_CAT='/bin/cat'
@@ -145,8 +153,8 @@ function bl64_os_set_alias() {
   BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP --verbose --force"
   BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
   BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
-  BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_CP --verbose --force --one-file-system"
-  BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_CP --verbose --force --one-file-system --recursive"
+  BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM --verbose --force --one-file-system"
+  BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM --verbose --force --one-file-system --recursive"
   BL64_OS_ALIAS_SUDO_ENV="$BL64_OS_CMD_SUDO --preserve-env --set-home"
 
 }
@@ -457,6 +465,41 @@ function bl64_check_file() {
     return $BL64_CHECK_ERROR_FILE_NOT_READ
   fi
   :
+}
+
+function bl64_arc_open_tar() {
+  local source="$1"
+  local destination="$2"
+  local status=0
+
+  if [[ -z "$source" || -z "$destination" ]]; then
+    bl64_msg_show_error "$_BL64_ARC_TXT_MISSING_PARAMETER (source,destination)"
+    return $BL64_ARC_ERROR_MISSING_PARAMETER
+  fi
+
+  if [[ ! -d "$destination" ]]; then
+    bl64_msg_show_error "$_BL64_ARC_TXT_DST_NOT_DIRECTORY ($destination)"
+    return $BL64_ARC_ERROR_INVALID_DESTINATION
+  fi
+
+  cd "$destination" || return 1
+
+  "$BL64_OS_CMD_TAR" \
+    --overwrite \
+    --extract \
+    --no-same-owner \
+    --preserve-permissions \
+    --no-acls \
+    --force-local \
+    --verbose \
+    --auto-compress \
+    --file="$source"
+  status=$?
+
+  ((status == 0)) && $BL64_OS_ALIAS_RM_FILE "$source"
+
+  return $status
+
 }
 
 function bl64_pkg_prepare() {
