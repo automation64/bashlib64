@@ -47,7 +47,7 @@ function devbl64_build_prod_check() {
 
 function devbl64_build_prod_help() {
   bl64_msg_show_usage \
-    '-x [-h]' \
+    '-b [-h]' \
     'Create the BashLib64 stand-alone distributable file' \
     '
     -b         : Build' '' ''
