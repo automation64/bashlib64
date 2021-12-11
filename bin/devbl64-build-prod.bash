@@ -31,8 +31,8 @@ function devbl64_build_prod_build() {
   done
 
   bl64_msg_show_task 'adding core'
-  "$BL64_OS_CMD_CAT" "$DEVBL64_SRC/bl64-core.env" >>"$project_bl64_lib"
-  "$BL64_OS_CMD_CAT" "$DEVBL64_SRC/bl64-core.bash" >>"$project_bl64_lib"
+  bl64_fmt_strip_comments "$DEVBL64_SRC/bl64-core.env" >>"$project_bl64_lib"
+  bl64_fmt_strip_comments "$DEVBL64_SRC/bl64-core.bash" >>"$project_bl64_lib"
   status=$?
 
   return $status
