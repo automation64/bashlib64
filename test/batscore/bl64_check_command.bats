@@ -1,6 +1,6 @@
 setup() {
   BL64_LIB_STRICT=0
-  . "${DEVBL64_BUILD}/bashlib64.bash"
+  . "${DEVBL64_TEST}/lib/bashlib64.bash"
 }
 
 @test "command is present" {
