@@ -15,18 +15,15 @@ function devbl64_run_tests_bats() {
 
   local case="$1"
   local target=''
-  local test_list=''
 
   if [[ -n "$case" ]]; then
-    test_list="$DEVBL64_TEST/batscore/${case}.bats"
+    target="$DEVBL64_TEST/batscore/${case}.bats"
   else
-    test_list="$(echo $DEVBL64_TEST/batscore/*)"
+    # target="$(echo $DEVBL64_TEST/batscore/*)"
+    target="$DEVBL64_TEST/batscore/"
   fi
 
-  for target in $test_list; do
-    bl64_msg_show_task "testing: $case"
-    "$DEVBL64_CMD_BATS" --verbose-run "$target"
-  done
+  "$DEVBL64_CMD_BATS" --verbose-run "$target"
 
   :
 
