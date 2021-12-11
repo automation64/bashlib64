@@ -7,14 +7,6 @@
 # Version: 1.0.0
 #######################################
 
-#
-# Internal Functions
-#
-
-#
-# Exported Functions
-#
-
 #######################################
 # Check and report if the command is present and has execute permissions for the current user.
 #
