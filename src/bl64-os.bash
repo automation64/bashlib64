@@ -61,6 +61,7 @@ function bl64_os_get_distro() {
 #   BL64_OS_CMD_DATE
 #   BL64_OS_CMD_HOSTNAME
 #   BL64_OS_CMD_ID
+#   BL64_OS_CMD_GREP
 #   BL64_OS_CMD_LS
 #   BL64_OS_CMD_MKDIR
 #   BL64_OS_CMD_RM
@@ -89,6 +90,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/bin/chown'
     BL64_OS_CMD_CP='/bin/cp'
     BL64_OS_CMD_LS='/bin/ls'
+    BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_ID='/bin/id'
     BL64_OS_CMD_CAT='/bin/cat'
   fi
@@ -101,6 +103,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/usr/bin/chown'
     BL64_OS_CMD_CP='/usr/bin/cp'
     BL64_OS_CMD_LS='/usr/bin/ls'
+    BL64_OS_CMD_GREP='/usr/bin/grep'
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_CAT='/usr/bin/cat'
   fi
