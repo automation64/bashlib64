@@ -203,22 +203,10 @@ function bl64_msg_show_task() {
 #   _BL64_MSG_HEADER
 #   _BL64_MSG_TXT_DEBUG
 # Arguments:formatting
-formatting
-formatting
-formatting
-formatting
-formatting
-formatting
 #   $1: message
 # Outputs:
 #   STDOUT: None
 #   STDERR: messageformatting
-formatting
-formatting
-formatting
-formatting
-formatting
-formatting
 # Returns:
 #   0: successfull execution
 #   >0: printf error
