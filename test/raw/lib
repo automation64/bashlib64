@@ -1,0 +1,4 @@
+#!/bin/bash
+
+source './.env' || exit 1
+. "${DEVBL64_BUILD}/bashlib64.bash"
