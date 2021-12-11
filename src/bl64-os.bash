@@ -134,8 +134,8 @@ function bl64_os_set_alias() {
   BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP --verbose --force"
   BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
   BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
-  BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_CP --verbose --force --one-file-system"
-  BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_CP --verbose --force --one-file-system --recursive"
+  BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM --verbose --force --one-file-system"
+  BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM --verbose --force --one-file-system --recursive"
   BL64_OS_ALIAS_SUDO_ENV="$BL64_OS_CMD_SUDO --preserve-env --set-home"
 
 }
