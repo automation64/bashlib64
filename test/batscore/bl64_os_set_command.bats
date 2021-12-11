@@ -1,5 +1,5 @@
 setup() {
-  . "${DEVBL64_BUILD}/bashlib64.bash"
+  . "${DEVBL64_TEST}/lib/bashlib64.bash"
 }
 
 @test "common globals are set" {
