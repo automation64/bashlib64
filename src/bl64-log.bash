@@ -1,5 +1,5 @@
 #######################################
-# BashLib64 / Log messages
+# BashLib64 / Log / Write messages to logs repositories
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
@@ -7,26 +7,16 @@
 # Version: 1.0.0
 #######################################
 
-#
-# Internal Functions
-#
-
 #######################################
 # Save a log record to the logs repository
 #
 # Globals:
-#   BL64_LOG_TYPE
-#   BL64_LOG_TYPE_FILE
 #   BL64_LOG_FS
 #   BL64_SCRIPT_NAME
 #   BL64_SCRIPT_SID
 #   BL64_LOG_PATH
-#   BL64_LOG_CATEGORY_INFO
-#   BL64_LOG_CATEGORY_TASK
-#   BL64_LOG_CATEGORY_DEBUG
-#   BL64_LOG_CATEGORY_WARNING
-#   BL64_LOG_CATEGORY_ERROR
-#   BL64_LOG_CATEGORY_RECORD
+#   BL64_LOG_TYPE
+#   BL64_LOG_TYPE_FILE
 # Arguments:
 #   $1: name of the function, command or script name that is generating the message
 #   $2: log message category. Use any of $BL64_LOG_CATEGORY_*
@@ -64,10 +54,6 @@ function _bl64_log_register() {
   esac
 
 }
-
-#
-# Exported Functions
-#
 
 #######################################
 # Initialize the log repository

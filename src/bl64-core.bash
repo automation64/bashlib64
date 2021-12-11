@@ -1,5 +1,5 @@
 #######################################
-# BashLib64 / Prepare the script for using bl64 libraries
+# BashLib64 / Core / Setup run-time environment
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
@@ -47,7 +47,7 @@ UBUNTU-* | FEDORA-* | CENTOS-* | OL-* | DEBIAN-*)
   fi
   ;;
 *)
-  printf '%s\n' "Fatal: bl64 is not supported in the current OS" >&2
+  printf '%s\n' "Fatal: BashLib64 is not supported in the current OS" >&2
   exit 1
   ;;
 esac

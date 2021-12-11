@@ -1,15 +1,11 @@
 #######################################
-# BashLib64 / Display messages
+# BashLib64 / Msg / Display messages
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.0.0
 #######################################
-
-#
-# Exported Functions
-#
 
 #######################################
 # Show script usage information
@@ -34,7 +30,7 @@
 #   STDERR: None
 # Returns:
 #   0: successfull execution
-#   >0: failed to execute due to formatting errors
+#   >0: printf error
 #######################################
 function bl64_msg_show_usage() {
 
@@ -81,7 +77,7 @@ function bl64_msg_show_usage() {
 #   STDERR: message
 # Returns:
 #   0: successfull execution
-#   >0: failed to execute due to formatting errors
+#   >0: printf error
 #######################################
 function bl64_msg_show_error() {
 
@@ -113,7 +109,7 @@ function bl64_msg_show_error() {
 #   STDERR: message
 # Returns:
 #   0: successfull execution
-#   >0: failed to execute due to formatting errors
+#   >0: printf error
 #######################################
 function bl64_msg_show_warning() {
 
@@ -145,7 +141,7 @@ function bl64_msg_show_warning() {
 #   STDERR: None
 # Returns:
 #   0: successfull execution
-#   >0: failed to execute due to formatting errors
+#   >0: printf error
 #######################################
 function bl64_msg_show_info() {
 
@@ -177,7 +173,7 @@ function bl64_msg_show_info() {
 #   STDERR: None
 # Returns:
 #   0: successfull execution
-#   >0: failed to execute due to formatting errors
+#   >0: printf error
 #######################################
 function bl64_msg_show_task() {
 
@@ -202,14 +198,14 @@ function bl64_msg_show_task() {
 #   BL64_SCRIPT_NAME
 #   _BL64_MSG_HEADER
 #   _BL64_MSG_TXT_DEBUG
-# Arguments:
+# Arguments:formatting
 #   $1: message
 # Outputs:
 #   STDOUT: None
-#   STDERR: message
+#   STDERR: messageformatting
 # Returns:
 #   0: successfull execution
-#   >0: failed to execute due to formatting errors
+#   >0: printf error
 #######################################
 function bl64_msg_show_debug() {
 
@@ -227,7 +223,7 @@ function bl64_msg_show_debug() {
 }
 
 #######################################
-# Display message
+# Display message. Plain output, no extra info.
 #
 # Globals:
 #   BL64_LIB_VAR_TBD
@@ -238,7 +234,7 @@ function bl64_msg_show_debug() {
 #   STDERR: None
 # Returns:
 #   0: successfull execution
-#   >0: failed to execute due to formatting errors
+#   >0: printf error
 #######################################
 function bl64_msg_show_text() {
 
