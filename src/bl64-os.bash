@@ -118,6 +118,8 @@ function bl64_os_set_command() {
 #  BL64_OS_ALIAS_CP_FILE
 #  BL64_OS_ALIAS_ID_USER
 #  BL64_OS_ALIAS_LS_FILES
+#  BL64_OS_ALIAS_RM_FILE
+#  BL64_OS_ALIAS_RM_FULL
 #  BL64_OS_ALIAS_SUDO_ENV
 # Arguments:
 #   None
