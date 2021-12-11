@@ -34,7 +34,7 @@
 #   STDERR: None
 # Returns:
 #   0: successfull execution
-#   >0: failed to execute due to formatting errors
+#   >0: printf error
 #######################################
 function bl64_msg_show_usage() {
 
@@ -81,7 +81,7 @@ function bl64_msg_show_usage() {
 #   STDERR: message
 # Returns:
 #   0: successfull execution
-#   >0: failed to execute due to formatting errors
+#   >0: printf error
 #######################################
 function bl64_msg_show_error() {
 
@@ -113,7 +113,7 @@ function bl64_msg_show_error() {
 #   STDERR: message
 # Returns:
 #   0: successfull execution
-#   >0: failed to execute due to formatting errors
+#   >0: printf error
 #######################################
 function bl64_msg_show_warning() {
 
@@ -145,7 +145,7 @@ function bl64_msg_show_warning() {
 #   STDERR: None
 # Returns:
 #   0: successfull execution
-#   >0: failed to execute due to formatting errors
+#   >0: printf error
 #######################################
 function bl64_msg_show_info() {
 
@@ -177,7 +177,7 @@ function bl64_msg_show_info() {
 #   STDERR: None
 # Returns:
 #   0: successfull execution
-#   >0: failed to execute due to formatting errors
+#   >0: printf error
 #######################################
 function bl64_msg_show_task() {
 
@@ -202,14 +202,26 @@ function bl64_msg_show_task() {
 #   BL64_SCRIPT_NAME
 #   _BL64_MSG_HEADER
 #   _BL64_MSG_TXT_DEBUG
-# Arguments:
+# Arguments:formatting
+formatting
+formatting
+formatting
+formatting
+formatting
+formatting
 #   $1: message
 # Outputs:
 #   STDOUT: None
-#   STDERR: message
+#   STDERR: messageformatting
+formatting
+formatting
+formatting
+formatting
+formatting
+formatting
 # Returns:
 #   0: successfull execution
-#   >0: failed to execute due to formatting errors
+#   >0: printf error
 #######################################
 function bl64_msg_show_debug() {
 
@@ -227,7 +239,7 @@ function bl64_msg_show_debug() {
 }
 
 #######################################
-# Display message
+# Display message. Plain output, no extra info.
 #
 # Globals:
 #   BL64_LIB_VAR_TBD
@@ -238,7 +250,7 @@ function bl64_msg_show_debug() {
 #   STDERR: None
 # Returns:
 #   0: successfull execution
-#   >0: failed to execute due to formatting errors
+#   >0: printf error
 #######################################
 function bl64_msg_show_text() {
 
