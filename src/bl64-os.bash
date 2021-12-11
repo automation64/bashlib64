@@ -55,6 +55,7 @@ function bl64_os_get_distro() {
 #   BL64_OS_CMD_ID
 #   BL64_OS_CMD_LS
 #   BL64_OS_CMD_MKDIR
+#   BL64_OS_CMD_MKTEMP
 #   BL64_OS_CMD_RM
 #   BL64_OS_CMD_SUDO
 #   BL64_OS_CMD_USERADD
@@ -83,6 +84,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_ID='/bin/id'
     BL64_OS_CMD_LS='/bin/ls'
     BL64_OS_CMD_MKDIR='/bin/mkdir'
+    BL64_OS_CMD_MKTEMP='/bin/mktemp'
     BL64_OS_CMD_RM='/bin/rm'
   fi
   if [[ "$BL64_OS_DISTRO" =~ (FEDORA-.*|CENTOS-.*|OL-.*) ]]; then
@@ -96,6 +98,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_LS='/usr/bin/ls'
     BL64_OS_CMD_MKDIR='/usr/bin/mkdir'
+    BL64_OS_CMD_MKTEMP='/usr/bin/mktemp'
     BL64_OS_CMD_RM='/usr/bin/rm'
   fi
 
