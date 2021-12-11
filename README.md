@@ -23,6 +23,7 @@ Source modules included in the library:
 
 | File                    | Purpose                                |
 | ----------------------- | -------------------------------------- |
+| `src/bashlib64-arc.*`   | Manipulate archive files               |
 | `src/bashlib64-core.*`  | Setup run-time environment             |
 | `src/bashlib64-check.*` | Check for conditions and report status |
 | `src/bashlib64-check.*` | Format data                            |
@@ -69,7 +70,7 @@ Download the library set to a directory where the target script can read them fr
 - Download the library to the project directory
   > `cd <PROJECT_DIR>; wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash`
 - Download the skeleton script:
-  > `wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/skel/generic.bash`
+  > `wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/skel/generic`
 - Customize the script by adding new content and replacing the predefined tags:
 
 | Tag                 | Purpose                                |

@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.0
+# Version: 1.1.1
 #######################################
 
 #######################################
@@ -58,6 +58,7 @@ function bl64_os_get_distro() {
 #   BL64_OS_CMD_MKTEMP
 #   BL64_OS_CMD_RM
 #   BL64_OS_CMD_SUDO
+#   BL64_OS_CMD_TAR
 #   BL64_OS_CMD_USERADD
 # Arguments:
 #   None
@@ -72,6 +73,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_SUDO='/usr/bin/sudo'
     BL64_OS_CMD_USERADD='/usr/sbin/useradd'
+    BL64_OS_CMD_TAR='/bin/tar'
   fi
   if [[ "$BL64_OS_DISTRO" =~ (UBUNTU-.*|DEBIAN-.*) ]]; then
     BL64_OS_CMD_CAT='/bin/cat'
@@ -132,8 +134,8 @@ function bl64_os_set_alias() {
   BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP --verbose --force"
   BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
   BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
-  BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_CP --verbose --force --one-file-system"
-  BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_CP --verbose --force --one-file-system --recursive"
+  BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM --verbose --force --one-file-system"
+  BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM --verbose --force --one-file-system --recursive"
   BL64_OS_ALIAS_SUDO_ENV="$BL64_OS_CMD_SUDO --preserve-env --set-home"
 
 }

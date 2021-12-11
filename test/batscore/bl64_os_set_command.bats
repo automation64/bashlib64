@@ -6,6 +6,7 @@ setup() {
 
 [[ -n "${BL64_OS_CMD_AWK}" ]] && \
 [[ -n "${BL64_OS_CMD_SUDO}" ]] && \
+[[ -n "${BL64_OS_CMD_TAR}" ]] && \
 [[ -n "${BL64_OS_CMD_USERADD}" ]] && \
 [[ -n "${BL64_OS_CMD_CAT}" ]] && \
 [[ -n "${BL64_OS_CMD_CHMOD}" ]] && \
@@ -26,6 +27,7 @@ setup() {
 
 [[ -x "${BL64_OS_CMD_AWK}" ]] && \
 [[ -x "${BL64_OS_CMD_SUDO}" ]] && \
+[[ -x "${BL64_OS_CMD_TAR}" ]] && \
 [[ -x "${BL64_OS_CMD_USERADD}" ]] && \
 [[ -x "${BL64_OS_CMD_CAT}" ]] && \
 [[ -x "${BL64_OS_CMD_CHMOD}" ]] && \
