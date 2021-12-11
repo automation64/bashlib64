@@ -67,10 +67,10 @@ function bl64_os_get_distro() {
 #   BL64_OS_CMD_SUDO
 #   BL64_OS_CMD_USERADD
 # Arguments:
+#   None
+# Outputs:
 #   STDOUT: None
 #   STDERR: None
-# Outputs:
-#   None
 # Returns:
 #   0: always ok, even when the OS is not supported
 #######################################
@@ -120,10 +120,10 @@ function bl64_os_set_command() {
 #  BL64_OS_ALIAS_LS_FILES
 #  BL64_OS_ALIAS_SUDO_ENV
 # Arguments:
+#   None
+# Outputs:
 #   STDOUT: None
 #   STDERR: None
-# Outputs:
-#   None
 # Returns:
 #   0: always ok
 #######################################
