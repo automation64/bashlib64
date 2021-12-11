@@ -16,8 +16,7 @@ setup() {
 [[ -n "${BL64_OS_CMD_CP}" ]] && \
 [[ -n "${BL64_OS_CMD_LS}" ]] && \
 [[ -n "${BL64_OS_CMD_ID}" ]] && \
-[[ -n "${BL64_OS_CMD_CAT}" ]] && \
-[[ -n "${BL64_OS_CMD_APT}" ]]
+[[ -n "${BL64_OS_CMD_CAT}" ]]
 
 }
 
@@ -35,7 +34,6 @@ setup() {
 [[ -x "${BL64_OS_CMD_CP}" ]] && \
 [[ -x "${BL64_OS_CMD_LS}" ]] && \
 [[ -x "${BL64_OS_CMD_ID}" ]] && \
-[[ -x "${BL64_OS_CMD_CAT}" ]] && \
-[[ -x "${BL64_OS_CMD_APT}" ]]
+[[ -x "${BL64_OS_CMD_CAT}" ]]
 
 }
