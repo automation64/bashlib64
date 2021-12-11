@@ -7,10 +7,6 @@
 # Version: 1.0.0
 #######################################
 
-#
-# Internal Functions
-#
-
 #######################################
 # Save a log record to the logs repository
 #
@@ -58,10 +54,6 @@ function _bl64_log_register() {
   esac
 
 }
-
-#
-# Exported Functions
-#
 
 #######################################
 # Initialize the log repository

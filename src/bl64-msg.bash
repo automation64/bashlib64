@@ -7,10 +7,6 @@
 # Version: 1.0.0
 #######################################
 
-#
-# Exported Functions
-#
-
 #######################################
 # Show script usage information
 #

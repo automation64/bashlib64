@@ -7,14 +7,6 @@
 # Version: 1.0.0
 #######################################
 
-#
-# Internal Functions
-#
-
-#
-# Exported Functions
-#
-
 #######################################
 # Initialize the package manager for installations
 #
