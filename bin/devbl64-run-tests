@@ -54,6 +54,7 @@ function devbl64_run_tests_help() {
 
 declare devbl64_run_tests_status=1
 declare devbl64_run_tests_command=''
+declare devbl64_run_tests_command_tag=''
 declare devbl64_run_tests_option=''
 declare devbl64_run_tests_case=''
 
