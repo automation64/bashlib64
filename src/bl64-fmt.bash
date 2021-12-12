@@ -10,8 +10,6 @@
 #######################################
 # Check and report if the command is present and has execute permissions for the current user.
 #
-# Globals:
-#   BL64_OS_CMD_GREP
 # Arguments:
 #   $1: Full path to the command to check
 # Outputs:

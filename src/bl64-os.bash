@@ -10,8 +10,6 @@
 #######################################
 # Identify and normalize Linux OS distribution name and version
 #
-# Globals:
-#   BL64_OS_DISTRO
 # Arguments:
 #   None
 # Outputs:
@@ -42,23 +40,6 @@ function bl64_os_get_distro() {
 # Identify and normalize common *nix OS commands
 # Commands are exported as variables with full path
 #
-# Globals:
-#   BL64_OS_DISTRO
-#   BL64_OS_CMD_AWK
-#   BL64_OS_CMD_CAT
-#   BL64_OS_CMD_CHMOD
-#   BL64_OS_CMD_CHOWN
-#   BL64_OS_CMD_CP
-#   BL64_OS_CMD_DATE
-#   BL64_OS_CMD_GREP
-#   BL64_OS_CMD_HOSTNAME
-#   BL64_OS_CMD_ID
-#   BL64_OS_CMD_LS
-#   BL64_OS_CMD_MKDIR
-#   BL64_OS_CMD_MKTEMP
-#   BL64_OS_CMD_RM
-#   BL64_OS_CMD_TAR
-#   BL64_OS_CMD_USERADD
 # Arguments:
 #   None
 # Outputs:
@@ -110,14 +91,6 @@ function bl64_os_set_command() {
 # Aliases are presented as regular shell variables for easy inclusion in SUDO
 # Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
 #
-# Globals:
-#  BL64_OS_ALIAS_CHOWN_DIR
-#  BL64_OS_ALIAS_CP_FILE
-#  BL64_OS_ALIAS_ID_USER
-#  BL64_OS_ALIAS_LS_FILES
-#  BL64_OS_ALIAS_MKDIR_FULL
-#  BL64_OS_ALIAS_RM_FILE
-#  BL64_OS_ALIAS_RM_FULL
 # Arguments:
 #   None
 # Outputs:
@@ -141,8 +114,6 @@ function bl64_os_set_alias() {
 #######################################
 # Remove content from OS temporary repositories
 #
-# Globals:
-#   BL64_OS_ALIAS_RM_FILE
 # Arguments:
 #   None
 # Outputs:
@@ -162,8 +133,6 @@ function bl64_os_cleanup_tmps() {
 #######################################
 # Remove or reset logs from standard locations
 #
-# Globals:
-#   None
 # Arguments:
 #   None
 # Outputs:
@@ -181,8 +150,6 @@ function bl64_os_cleanup_logs() {
 #######################################
 # Remove or reset caches from standard locations
 #
-# Globals:
-#   None
 # Arguments:
 #   None
 # Outputs:
@@ -204,8 +171,6 @@ function bl64_os_cleanup_caches() {
 # * Cleans caches
 # * Removes or resets logs
 #
-# Globals:
-#   None
 # Arguments:
 #   None
 # Outputs:
