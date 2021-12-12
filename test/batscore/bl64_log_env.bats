@@ -2,7 +2,7 @@ setup() {
   . "${DEVBL64_TEST}/lib/bashlib64.bash"
 }
 
-@test "constants are set" {
+@test "bl64_log_env: constants are set" {
 
   [[ "$BL64_LOG_TYPE_FILE" == 'F' ]] && \
   [[ "$BL64_LOG_CATEGORY_INFO" == 'info' ]] && \

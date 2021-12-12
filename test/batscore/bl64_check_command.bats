@@ -3,14 +3,14 @@ setup() {
   . "${DEVBL64_TEST}/lib/bashlib64.bash"
 }
 
-@test "command is present" {
+@test "bl64_check_command: command is present" {
 
   run bl64_check_command "$BL64_OS_CMD_CP"
   [[ "$status" == 0 ]]
 
 }
 
-@test "command is not present" {
+@test "bl64_check_command: command is not present" {
 
   run bl64_check_command '/fake/command'
   [[ "$status" == $BL64_CHECK_ERROR_FILE_NOT_FOUND ]]
@@ -18,7 +18,7 @@ setup() {
 
 }
 
-@test "command is not executable" {
+@test "bl64_check_command: command is not executable" {
 
   run bl64_check_command '/etc/hosts'
   [[ "$status" == $BL64_CHECK_ERROR_FILE_NOT_EXECUTE ]]
@@ -26,7 +26,7 @@ setup() {
 
 }
 
-@test "command parameter is not present" {
+@test "bl64_check_command: command parameter is not present" {
 
   run bl64_check_command
   [[ "$status" == $BL64_CHECK_ERROR_MISSING_PARAMETER ]]

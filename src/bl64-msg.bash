@@ -10,15 +10,6 @@
 #######################################
 # Show script usage information
 #
-# Globals:
-#   BL64_SCRIPT_NAME
-#   BL64_LIB_VAR_TBD
-#   BL64_LIB_VAR_NULL
-#   _BL64_MSG_TXT_USAGE
-#   _BL64_MSG_TXT_COMMANDS
-#   _BL64_MSG_TXT_FLAGS
-#   _BL64_MSG_TXT_PARAMETERS
-#   _BL64_MSG_TXT_USAGE
 # Arguments:
 #   $1: script command line. Include all required and optional components
 #   $2: full script usage description
@@ -65,11 +56,6 @@ function bl64_msg_show_usage() {
 #######################################
 # Display error message
 #
-# Globals:
-#   BL64_LIB_VAR_TBD
-#   BL64_SCRIPT_NAME
-#   _BL64_MSG_HEADER
-#   _BL64_MSG_TXT_ERROR
 # Arguments:
 #   $1: error message
 # Outputs:
@@ -97,11 +83,6 @@ function bl64_msg_show_error() {
 #######################################
 # Display warning message
 #
-# Globals:
-#   BL64_LIB_VAR_TBD
-#   BL64_SCRIPT_NAME
-#   _BL64_MSG_HEADER
-#   _BL64_MSG_TXT_WARNING
 # Arguments:
 #   $1: warning message
 # Outputs:
@@ -129,11 +110,6 @@ function bl64_msg_show_warning() {
 #######################################
 # Display info message
 #
-# Globals:
-#   BL64_LIB_VAR_TBD
-#   BL64_SCRIPT_NAME
-#   _BL64_MSG_HEADER
-#   _BL64_MSG_TXT_INFO
 # Arguments:
 #   $1: message
 # Outputs:
@@ -161,11 +137,6 @@ function bl64_msg_show_info() {
 #######################################
 # Display task message
 #
-# Globals:
-#   BL64_LIB_VAR_TBD
-#   BL64_SCRIPT_NAME
-#   _BL64_MSG_HEADER
-#   _BL64_MSG_TXT_TASK
 # Arguments:
 #   $1: message
 # Outputs:
@@ -193,11 +164,6 @@ function bl64_msg_show_task() {
 #######################################
 # Display debug message
 #
-# Globals:
-#   BL64_LIB_VAR_TBD
-#   BL64_SCRIPT_NAME
-#   _BL64_MSG_HEADER
-#   _BL64_MSG_TXT_DEBUG
 # Arguments:formatting
 #   $1: message
 # Outputs:
@@ -225,8 +191,6 @@ function bl64_msg_show_debug() {
 #######################################
 # Display message. Plain output, no extra info.
 #
-# Globals:
-#   BL64_LIB_VAR_TBD
 # Arguments:
 #   $1: message
 # Outputs:

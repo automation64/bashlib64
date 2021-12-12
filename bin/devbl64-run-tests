@@ -54,6 +54,7 @@ function devbl64_run_tests_bats_container() {
   IFS=' '
   for target in $image; do
     unset IFS
+    bl64_msg_show_task "run test cases on the container image: $target"
     "$DEVBL64_CMD_PODMAN" \
       run \
       --rm \

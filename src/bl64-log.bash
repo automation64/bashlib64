@@ -10,13 +10,6 @@
 #######################################
 # Save a log record to the logs repository
 #
-# Globals:
-#   BL64_LOG_FS
-#   BL64_SCRIPT_NAME
-#   BL64_SCRIPT_SID
-#   BL64_LOG_PATH
-#   BL64_LOG_TYPE
-#   BL64_LOG_TYPE_FILE
 # Arguments:
 #   $1: name of the function, command or script name that is generating the message
 #   $2: log message category. Use any of $BL64_LOG_CATEGORY_*
@@ -58,11 +51,6 @@ function _bl64_log_register() {
 #######################################
 # Initialize the log repository
 #
-# Globals:
-#   BL64_LOG_PATH
-#   BL64_LOG_VERBOSE
-#   BL64_LOG_TYPE
-#   BL64_LOG_FS
 # Arguments:
 #   $1: full path to the log repository
 #   $2: show log messages to STDOUT/STDERR?. 1: yes, 0: no
@@ -89,9 +77,6 @@ function bl64_log_setup() {
 # Save a single log record of type 'info' to the logs repository.
 # Optionally display the message on STDOUT (BL64_LOG_VERBOSE='1')
 #
-# Globals:
-#   BL64_LOG_VERBOSE
-#   BL64_LOG_CATEGORY_INFO
 # Arguments:
 #   $1: message to be recorded
 #   $2: name of the function, command or script name that is generating the message
@@ -122,9 +107,6 @@ function bl64_log_info() {
 # Save a single log record of type 'task' to the logs repository.
 # Optionally display the message on STDOUT (BL64_LOG_VERBOSE='1')
 #
-# Globals:
-#   BL64_LOG_VERBOSE
-#   BL64_LOG_CATEGORY_TASK
 # Arguments:
 #   $1: message to be recorded
 #   $2: name of the function, command or script name that is generating the message
@@ -155,9 +137,6 @@ function bl64_log_task() {
 # Save a single log record of type 'error' to the logs repository.
 # Optionally display the message on STDERR (BL64_LOG_VERBOSE='1')
 #
-# Globals:
-#   BL64_LOG_VERBOSE
-#   BL64_LOG_CATEGORY_ERROR
 # Arguments:
 #   $1: message to be recorded
 #   $2: name of the function, command or script name that is generating the message
@@ -188,9 +167,6 @@ function bl64_log_error() {
 # Save a single log record of type 'warning' to the logs repository.
 # Optionally display the message on STDERR (BL64_LOG_VERBOSE='1')
 #
-# Globals:
-#   BL64_LOG_VERBOSE
-#   BL64_LOG_CATEGORY_WARNING
 # Arguments:
 #   $1: message to be recorded
 #   $2: name of the function, command or script name that is generating the message
@@ -221,11 +197,6 @@ function bl64_log_warning() {
 # Record a log stream and save it to the logs repository.
 # Each line is saved as a different log record.
 #
-# Globals:
-#   BL64_LOG_TYPE
-#   BL64_LOG_TYPE_FILE
-#   BL64_LOG_CATEGORY_RECORD
-#   BL64_LOG_FS
 # Arguments:
 #   $1: short alphanumeric string to identify the log stream
 #   $2: name of the function, command or script name that is generating the stream

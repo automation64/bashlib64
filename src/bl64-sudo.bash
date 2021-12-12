@@ -10,17 +10,6 @@
 #######################################
 # Add password-less root privilege
 #
-# Globals:
-#   BL64_OS_CMD_AWK
-#   BL64_OS_CMD_CAT
-#   BL64_OS_ALIAS_CP_FILE
-#   BL64_SUDO_FILE_SUDOERS
-#   BL64_SUDO_ERROR_MISSING_PARAMETER
-#   BL64_SUDO_ERROR_MISSING_SUDOERS
-#   BL64_SUDO_ERROR_MISSING_AWK
-#   BL64_SUDO_ERROR_UPDATE_FAILED
-#   BL64_SUDO_ERROR_INVALID_SUDOERS
-#   _BL64_SUDO_TXT_MISSING_PARAMETER
 # Arguments:
 #   $1: user name. User must already be present.
 # Outputs:
@@ -81,11 +70,6 @@ function bl64_sudo_add_root() {
 #######################################
 # Use visudo --check to validate sudoers file
 #
-# Globals:
-#  BL64_SUDO_FILE_SUDOERS
-#  BL64_SUDO_CMD_VISUDO
-#  BL64_SUDO_ERROR_MISSING_VISUDO
-#  _BL64_SUDO_TXT_INVALID_SUDOERS
 # Arguments:
 #   $1: full path to the sudoers file
 # Outputs:
@@ -120,9 +104,6 @@ function bl64_sudo_check_sudoers() {
 # Aliases are presented as regular shell variables for easy inclusion in complex commands
 # Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
 #
-# Globals:
-#  BL64_SUDO_ALIAS_SUDO_ENV
-#  BL64_SUDO_CMD_SUDO
 # Arguments:
 #   None
 # Outputs:

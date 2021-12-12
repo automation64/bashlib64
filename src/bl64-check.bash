@@ -10,10 +10,6 @@
 #######################################
 # Check and report if the command is present and has execute permissions for the current user.
 #
-# Globals:
-#   _BL64_CHECK_TXT_MISSING_PARAMETER
-#   _BL64_CHECK_TXT_COMMAND_NOT_FOUND
-#   _BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE
 # Arguments:
 #   $1: Full path to the command to check
 # Outputs:
@@ -49,10 +45,6 @@ function bl64_check_command() {
 #######################################
 # Check and report if the file is present and has read permissions for the current user.
 #
-# Globals:
-#   _BL64_CHECK_TXT_MISSING_PARAMETER
-#   _BL64_CHECK_TXT_FILE_NOT_FOUND
-#   _BL64_CHECK_TXT_FILE_NOT_EXECUTABLE
 # Arguments:
 #   $1: Full path to the file to check
 # Outputs:

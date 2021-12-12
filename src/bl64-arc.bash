@@ -13,13 +13,6 @@
 # * Preserves permissions but not ownership
 # * Overwrites destination
 #
-# Globals:
-#   BL64_OS_CMD_TAR
-#   BL64_OS_ALIAS_RM_FILE
-#   _BL64_ARC_TXT_MISSING_PARAMETER
-#   _BL64_ARC_TXT_DST_NOT_DIRECTORY
-#   BL64_ERROR_MISSING_PARAMETER
-#   BL64_ERROR_INVALID_DESTINATION
 # Arguments:
 #   $1: Full path to the source file
 #   $2: Full path to the destination
