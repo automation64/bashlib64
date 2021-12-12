@@ -2,7 +2,7 @@ setup() {
   . "${DEVBL64_TEST}/lib/bashlib64.bash"
 }
 
-@test "common globals are set" {
+@test "bl64_sudo_set_alias: common globals are set" {
 
   bl64_sudo_set_alias
 

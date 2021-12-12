@@ -2,7 +2,7 @@ setup() {
   . "${DEVBL64_TEST}/lib/bashlib64.bash"
 }
 
-@test "common globals are set" {
+@test "bl64_os_set_command: common globals are set" {
 
 [[ -n "${BL64_OS_CMD_AWK}" ]] && \
 [[ -n "${BL64_OS_CMD_TAR}" ]] && \
@@ -22,7 +22,7 @@ setup() {
 
 }
 
-@test "common commands are set" {
+@test "bl64_os_set_command: common commands are set" {
 
 [[ -x "${BL64_OS_CMD_AWK}" ]] && \
 [[ -x "${BL64_OS_CMD_TAR}" ]] && \

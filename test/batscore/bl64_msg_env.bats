@@ -2,7 +2,7 @@ setup() {
   . "${DEVBL64_TEST}/lib/bashlib64.bash"
 }
 
-@test "constants are set" {
+@test "bl64_msg_env: constants are set" {
 
   [[ "$_BL64_MSG_TXT_USAGE" == 'Usage' ]] && \
   [[ "$_BL64_MSG_TXT_COMMANDS" == 'Commands' ]] && \

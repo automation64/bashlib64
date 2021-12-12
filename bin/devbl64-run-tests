@@ -41,24 +41,31 @@ function devbl64_run_tests_bats_container() {
   local image="$2"
   local registry="$3"
   local container_tests='/test/batscore'
+  local target=''
 
   [[ -z "$image" ]] && bl64_msg_show_error "missing parameter (image)" && return 1
 
   if [[ "$debug" == '1' ]]; then
-    verbose='--timing --trace --verbose-run'
+    verbose='--timing --verbose-run'
   else
     verbose='--formatter tap'
   fi
 
-  "$DEVBL64_CMD_PODMAN" \
-    run \
-    --rm \
-    -e DEVBL64_TEST="/test" \
-    -v "${DEVBL64_TEST}:/test" \
-    -ti \
-    "${registry}/${image}" \
-    "$container_tests" \
-    $verbose
+  IFS=' '
+  for target in $image; do
+    unset IFS
+    bl64_msg_show_task "run test cases on the container image: $target"
+    "$DEVBL64_CMD_PODMAN" \
+      run \
+      --rm \
+      --user "$DEVBL64_TEST_USR" \
+      --env DEVBL64_TEST="/test" \
+      --volume "${DEVBL64_TEST}:/test" \
+      "${registry}/${target}" \
+      "$container_tests" \
+      $verbose
+  done
+
 }
 
 function devbl64_run_tests_check() {
@@ -97,7 +104,7 @@ declare devbl64_run_tests_command=''
 declare devbl64_run_tests_command_tag=''
 declare devbl64_run_tests_option=''
 declare devbl64_run_tests_case=''
-declare devbl64_run_tests_image=''
+declare devbl64_run_tests_image="$DEVBL64_IMAGES"
 declare devbl64_run_tests_debug='0'
 declare devbl64_run_tests_registry="$DEVBL64_REGISTRY"
 
