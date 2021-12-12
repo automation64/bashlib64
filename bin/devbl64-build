@@ -1,0 +1,93 @@
+#!/bin/bash
+#######################################
+# Create the BashLib64 stand-alone distributable file
+#
+# Author: serdigital64 (https://github.com/serdigital64)
+# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
+# Repository: https://github.com/serdigital64/bashlib64
+# Version: 1.0.0
+#######################################
+
+source './.env' || exit 1
+source "${DEVBL64_BIN}/bashlib64.bash" || exit 1
+
+function devbl64_build_standalone() {
+
+  local status=1
+  local file=''
+  local lib="$DEVBL64_BUILD/bashlib64.bash"
+
+  bl64_msg_show_task "creating stand-alone library: $lib"
+  "$BL64_OS_CMD_CAT" "$DEVBL64_SRC/bl64-core.header" >"$lib"
+  for file in $DEVBL64_MODULES; do
+    bl64_msg_show_task "adding module $file environment"
+    bl64_fmt_strip_comments "${DEVBL64_SRC}/bl64-${file}.env" >>"$lib" || true
+  done
+
+  for file in $DEVBL64_MODULES; do
+    bl64_msg_show_task "adding module $file code"
+    bl64_fmt_strip_comments "${DEVBL64_SRC}/bl64-${file}.bash" >>"$lib" || true
+  done
+
+  bl64_msg_show_task 'adding core'
+  bl64_fmt_strip_comments "$DEVBL64_SRC/bl64-core.env" >>"$lib"
+  bl64_fmt_strip_comments "$DEVBL64_SRC/bl64-core.bash" >>"$lib"
+  status=$?
+
+  return $status
+
+}
+
+function devbl64_build_check() {
+
+  :
+
+}
+
+function devbl64_build_help() {
+  bl64_msg_show_usage \
+    '-b [-h]' \
+    'Create the BashLib64 stand-alone distributable file' \
+    '
+    -b         : Build' '' ''
+}
+
+#
+# Main
+#
+
+declare devbl64_build_status=1
+declare devbl64_build_command=''
+declare devbl64_build_option=''
+
+(($# == 0)) && devbl64_build_help && exit 1
+while getopts ':bh' devbl64_build_option; do
+  case "$devbl64_build_option" in
+  b)
+    devbl64_build_command='devbl64_build_standalone'
+    devbl64_build_command_tag='build stand-alone library'
+    ;;
+  h)
+    devbl64_build_help && exit
+    ;;
+  \?)
+    devbl64_build_help && exit 1
+    ;;
+  esac
+done
+[[ -z "$devbl64_build_command" ]] && devbl64_build_help && exit 1
+devbl64_build_check || exit 1
+
+bl64_msg_show_info "starting ${devbl64_build_command_tag} process"
+case "$devbl64_build_command" in
+'devbl64_build_standalone') "$devbl64_build_command";;
+esac
+devbl64_build_status=$?
+
+if ((devbl64_build_status == 0)); then
+  bl64_msg_show_info "${devbl64_build_command_tag} process complete"
+else
+  bl64_msg_show_info "${devbl64_build_command_tag} process complete with errors (error: $devbl64_build_status)"
+fi
+
+exit $devbl64_build_status

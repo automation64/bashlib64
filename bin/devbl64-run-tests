@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 source './.env' || exit 1
@@ -13,8 +13,10 @@ source "${DEVBL64_BIN}/bashlib64.bash" || exit 1
 
 function devbl64_run_tests_bats() {
 
-  local case="$1"
+  local debug="$1"
+  local case="$2"
   local target=''
+  local verbose=''
 
   if [[ -n "$case" ]]; then
     target="$DEVBL64_TEST/batscore/${case}.bats"
@@ -23,29 +25,67 @@ function devbl64_run_tests_bats() {
     target="$DEVBL64_TEST/batscore/"
   fi
 
-  "$DEVBL64_CMD_BATS" --verbose-run "$target"
+  if [[ "$debug" == '1' ]]; then
+    verbose='--timing --trace --verbose-run'
+  else
+    verbose='--formatter tap'
+  fi
 
-  :
+  "$DEVBL64_CMD_BATS" $verbose "$target"
 
+}
+
+function devbl64_run_tests_bats_container() {
+
+  local debug="$1"
+  local image="$2"
+  local registry="$3"
+  local container_tests='/test/batscore'
+
+  [[ -z "$image" ]] && bl64_msg_show_error "missing parameter (image)" && return 1
+
+  if [[ "$debug" == '1' ]]; then
+    verbose='--timing --trace --verbose-run'
+  else
+    verbose='--formatter tap'
+  fi
+
+  "$DEVBL64_CMD_PODMAN" \
+    run \
+    --rm \
+    -e DEVBL64_TEST="/test" \
+    -v "${DEVBL64_TEST}:/test" \
+    -ti \
+    "${registry}/${image}" \
+    "$container_tests" \
+    $verbose
 }
 
 function devbl64_run_tests_check() {
 
   bl64_check_command "$DEVBL64_CMD_BATS" || return 1
+  bl64_check_command "$DEVBL64_CMD_PODMAN" || return 1
+
   bl64_check_file "${DEVBL64_BUILD}/bashlib64.bash" || return 1
+
   :
 
 }
 
 function devbl64_run_tests_help() {
   bl64_msg_show_usage \
-    '-b [-t Case] [-h]' \
+    '-b|-o [-c Case] [-e Image] [-r Registry] [-g] [-h]' \
     'Run Tests' \
     '
-    -b      : Run bats-core based tests
-    ' '' '
-    -t case : Test case name. If not specified all cases are run.
-    '
+  -b         : Run bats-core based tests
+  -o         : Run bats-core based tests in container
+    ' '
+  -g         : Enable debug mode to show detailed execution information.
+    ' "
+  -c Case    : Test case name. If not specified all cases are run
+  -e Image   : Image name to use for running the container test
+  -r Registry: Registry URL where the container image is. Default: ${DEVBL64_REGISTRY}
+    "
 }
 
 #
@@ -57,23 +97,27 @@ declare devbl64_run_tests_command=''
 declare devbl64_run_tests_command_tag=''
 declare devbl64_run_tests_option=''
 declare devbl64_run_tests_case=''
+declare devbl64_run_tests_image=''
+declare devbl64_run_tests_debug='0'
+declare devbl64_run_tests_registry="$DEVBL64_REGISTRY"
 
 (($# == 0)) && devbl64_run_tests_help && exit 1
-while getopts ':bc:h' devbl64_run_tests_option; do
+while getopts ':boc:e:r:gh' devbl64_run_tests_option; do
   case "$devbl64_run_tests_option" in
   b)
     devbl64_run_tests_command='devbl64_run_tests_bats'
-    devbl64_run_tests_command_tag='run bats-core tests'
+    devbl64_run_tests_command_tag='run-bats-core-tests'
     ;;
-  c)
-    devbl64_run_tests_case="$OPTARG"
+  o)
+    devbl64_run_tests_command='devbl64_run_tests_bats_container'
+    devbl64_run_tests_command_tag='run-bats-core-tests-container'
     ;;
-  h)
-    devbl64_run_tests_help && exit
-    ;;
-  \?)
-    devbl64_run_tests_help && exit 1
-    ;;
+  c) devbl64_run_tests_case="$OPTARG" ;;
+  e) devbl64_run_tests_image="$OPTARG" ;;
+  r) devbl64_run_tests_registry="$OPTARG" ;;
+  g) devbl64_run_tests_debug='1' ;;
+  h) devbl64_run_tests_help && exit ;;
+  \?) devbl64_run_tests_help && exit 1 ;;
   esac
 done
 [[ -z "$devbl64_run_tests_command" ]] && devbl64_run_tests_help && exit 1
@@ -81,7 +125,8 @@ devbl64_run_tests_check || exit 1
 
 bl64_msg_show_info "starting ${devbl64_run_tests_command_tag} process"
 case "$devbl64_run_tests_command" in
-'devbl64_run_tests_bats') "$devbl64_run_tests_command" "$devbl64_run_tests_case";;
+'devbl64_run_tests_bats') "$devbl64_run_tests_command" "$devbl64_run_tests_debug" "$devbl64_run_tests_case" ;;
+'devbl64_run_tests_bats_container') "$devbl64_run_tests_command" "$devbl64_run_tests_debug" "$devbl64_run_tests_image" "$devbl64_run_tests_registry" ;;
 esac
 devbl64_run_tests_status=$?
 

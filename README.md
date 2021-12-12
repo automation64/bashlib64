@@ -30,6 +30,7 @@ Source modules included in the library:
 | `src/bashlib64-log.*`   | Write messages to logs repositories    |
 | `src/bashlib64-msg.*`   | Display messages                       |
 | `src/bashlib64-pkg.*`   | Install native OS packages             |
+| `src/bashlib64-sudo.*`  | Manipulate sudo configuration          |
 | `src/bashlib64-os.*`    | Identify OS attributes                 |
 
 ## Deployment
