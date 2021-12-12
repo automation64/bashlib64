@@ -25,26 +25,49 @@ function devbl64_run_tests_bats() {
 
   "$DEVBL64_CMD_BATS" --verbose-run "$target"
 
-  :
+}
+
+function devbl64_run_tests_bats_container() {
+
+  local image="$1"
+  local container_tests='/test/batscore'
+  local container_bats='/opt/bats-core-1.5.0/bin/bats'
+
+  [[ -z "$image" ]] && bl64_msg_show_error "missing parameter (image)" && return 1
+
+  "$DEVBL64_CMD_PODMAN" \
+    run \
+    --rm \
+    -e DEVBL64_TEST="/test" \
+    -v "${DEVBL64_TEST}:/test" \
+    -ti \
+    "{DEVBL64_REGISTRY}/${image}" \
+    "$container_bats" \
+    "$container_tests"
 
 }
 
 function devbl64_run_tests_check() {
 
   bl64_check_command "$DEVBL64_CMD_BATS" || return 1
+  bl64_check_command "$DEVBL64_CMD_PODMAN" || return 1
+
   bl64_check_file "${DEVBL64_BUILD}/bashlib64.bash" || return 1
+
   :
 
 }
 
 function devbl64_run_tests_help() {
   bl64_msg_show_usage \
-    '-b [-t Case] [-h]' \
+    '-b|-o [-c Case] [-e Image] [-h]' \
     'Run Tests' \
     '
     -b      : Run bats-core based tests
+    -o      : Run bats-core based tests in container
     ' '' '
-    -t case : Test case name. If not specified all cases are run.
+    -c Case : Test case name. If not specified all cases are run.
+    -e Image: Test case name. If not specified all cases are run.
     '
 }
 
@@ -57,17 +80,21 @@ declare devbl64_run_tests_command=''
 declare devbl64_run_tests_command_tag=''
 declare devbl64_run_tests_option=''
 declare devbl64_run_tests_case=''
+declare devbl64_run_tests_image=''
 
 (($# == 0)) && devbl64_run_tests_help && exit 1
-while getopts ':bc:h' devbl64_run_tests_option; do
+while getopts ':boc:e:h' devbl64_run_tests_option; do
   case "$devbl64_run_tests_option" in
   b)
     devbl64_run_tests_command='devbl64_run_tests_bats'
-    devbl64_run_tests_command_tag='run bats-core tests'
+    devbl64_run_tests_command_tag='run-bats-core-tests'
     ;;
-  c)
-    devbl64_run_tests_case="$OPTARG"
+  o)
+    devbl64_run_tests_command='devbl64_run_tests_bats_container'
+    devbl64_run_tests_command_tag='run-bats-core-tests-container'
     ;;
+  c) devbl64_run_tests_case="$OPTARG" ;;
+  e) devbl64_run_tests_image="$OPTARG" ;;
   h)
     devbl64_run_tests_help && exit
     ;;
@@ -81,7 +108,8 @@ devbl64_run_tests_check || exit 1
 
 bl64_msg_show_info "starting ${devbl64_run_tests_command_tag} process"
 case "$devbl64_run_tests_command" in
-'devbl64_run_tests_bats') "$devbl64_run_tests_command" "$devbl64_run_tests_case";;
+'devbl64_run_tests_bats') "$devbl64_run_tests_command" "$devbl64_run_tests_case" ;;
+'devbl64_run_tests_bats_container') "$devbl64_run_tests_command" "$devbl64_run_tests_image" ;;
 esac
 devbl64_run_tests_status=$?
 
