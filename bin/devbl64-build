@@ -11,7 +11,7 @@
 source './.env' || exit 1
 source "${DEVBL64_BIN}/bashlib64.bash" || exit 1
 
-function devbl64_build_build() {
+function devbl64_build_standalone() {
 
   local status=1
   local file=''
@@ -80,7 +80,7 @@ devbl64_build_check || exit 1
 
 bl64_msg_show_info "starting ${devbl64_build_command_tag} process"
 case "$devbl64_build_command" in
-'devbl64_build_build') "$devbl64_build_command";;
+'devbl64_build_standalone') "$devbl64_build_command";;
 esac
 devbl64_build_status=$?
 
