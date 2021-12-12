@@ -51,6 +51,7 @@ function bl64_os_get_distro() {
 function bl64_os_set_command() {
   if [[ "$BL64_OS_DISTRO" =~ (UBUNTU-.*|FEDORA-.*|CENTOS-.*|OL-.*|DEBIAN-.*) ]]; then
     BL64_OS_CMD_AWK='/usr/bin/awk'
+    BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_USERADD='/usr/sbin/useradd'
     BL64_OS_CMD_TAR='/bin/tar'
   fi
@@ -62,7 +63,6 @@ function bl64_os_set_command() {
     BL64_OS_CMD_DATE="/bin/date"
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
-    BL64_OS_CMD_ID='/bin/id'
     BL64_OS_CMD_LS='/bin/ls'
     BL64_OS_CMD_MKDIR='/bin/mkdir'
     BL64_OS_CMD_MKTEMP='/bin/mktemp'
@@ -76,7 +76,6 @@ function bl64_os_set_command() {
     BL64_OS_CMD_DATE="/usr/bin/date"
     BL64_OS_CMD_GREP='/usr/bin/grep'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
-    BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_LS='/usr/bin/ls'
     BL64_OS_CMD_MKDIR='/usr/bin/mkdir'
     BL64_OS_CMD_MKTEMP='/usr/bin/mktemp'
