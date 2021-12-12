@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.0
+# Version: 1.5.2
 #######################################
 
 [[ -n "$BL64_LIB_DEBUG" && "$BL64_LIB_DEBUG" == '1' ]] && set -x
@@ -126,6 +126,7 @@ function bl64_os_get_distro() {
 function bl64_os_set_command() {
   if [[ "$BL64_OS_DISTRO" =~ (UBUNTU-.*|FEDORA-.*|CENTOS-.*|OL-.*|DEBIAN-.*) ]]; then
     BL64_OS_CMD_AWK='/usr/bin/awk'
+    BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_USERADD='/usr/sbin/useradd'
     BL64_OS_CMD_TAR='/bin/tar'
   fi
@@ -137,7 +138,6 @@ function bl64_os_set_command() {
     BL64_OS_CMD_DATE="/bin/date"
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
-    BL64_OS_CMD_ID='/bin/id'
     BL64_OS_CMD_LS='/bin/ls'
     BL64_OS_CMD_MKDIR='/bin/mkdir'
     BL64_OS_CMD_MKTEMP='/bin/mktemp'
@@ -151,7 +151,6 @@ function bl64_os_set_command() {
     BL64_OS_CMD_DATE="/usr/bin/date"
     BL64_OS_CMD_GREP='/usr/bin/grep'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
-    BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_LS='/usr/bin/ls'
     BL64_OS_CMD_MKDIR='/usr/bin/mkdir'
     BL64_OS_CMD_MKTEMP='/usr/bin/mktemp'
@@ -655,7 +654,6 @@ if [[ "$BL64_LIB_STRICT" == '1' ]]; then
   unset IFS
   set -u
   set -p
-  set -e
 fi
 
 trap "$BL64_LIB_SIGNAL_HUP" 'SIGHUP'
