@@ -41,7 +41,7 @@ function devbl64_run_tests_bats_container() {
     -e DEVBL64_TEST="/test" \
     -v "${DEVBL64_TEST}:/test" \
     -ti \
-    "{DEVBL64_REGISTRY}/${image}" \
+    "${DEVBL64_REGISTRY}/${image}" \
     "$container_bats" \
     "$container_tests"
 
