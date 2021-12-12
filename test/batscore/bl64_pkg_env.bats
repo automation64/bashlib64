@@ -2,13 +2,13 @@ setup() {
   . "${DEVBL64_TEST}/lib/bashlib64.bash"
 }
 
-@test "commands are set" {
+@test "bl64_pkg_env: commands are set" {
   [[ "$BL64_PKG_CMD_APT" == '/usr/bin/apt-get' ]] && \
   [[ "$BL64_PKG_CMD_DNF" == '/usr/bin/dnf' ]] && \
   [[ "$BL64_PKG_CMD_YUM" == '/usr/bin/yum' ]]
 }
 
-@test "alias are set" {
+@test "bl64_pkg_env: alias are set" {
   [[ "$BL64_PKG_ALIAS_APT_UPDATE" == "$BL64_PKG_CMD_APT update" ]] && \
   [[ "$BL64_PKG_ALIAS_APT_INSTALL" == "$BL64_PKG_CMD_APT --assume-yes install" ]] && \
   [[ "$BL64_PKG_ALIAS_APT_CLEAN" == "$BL64_PKG_CMD_APT clean" ]] && \

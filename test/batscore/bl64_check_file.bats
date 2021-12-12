@@ -3,14 +3,14 @@ setup() {
   . "${DEVBL64_TEST}/lib/bashlib64.bash"
 }
 
-@test "file is present" {
+@test "bl64_check_file: file is present" {
 
   run bl64_check_file "$BL64_OS_CMD_CP"
   [[ "$status" == 0 ]]
 
 }
 
-@test "file is not present" {
+@test "bl64_check_file: file is not present" {
 
   run bl64_check_file '/fake/file'
   [[ "$status" == $BL64_CHECK_ERROR_FILE_NOT_FOUND ]]
@@ -18,7 +18,7 @@ setup() {
 
 }
 
-@test "file is not readable" {
+@test "bl64_check_file: file is not readable" {
 
   run bl64_check_file '/etc/shadow'
   [[ "$status" == $BL64_CHECK_ERROR_FILE_NOT_READ ]]
@@ -26,7 +26,7 @@ setup() {
 
 }
 
-@test "file parameter is not present" {
+@test "bl64_check_file: file parameter is not present" {
 
   run bl64_check_file
   [[ "$status" == $BL64_CHECK_ERROR_MISSING_PARAMETER ]]

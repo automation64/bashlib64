@@ -2,7 +2,7 @@ setup() {
   . "${DEVBL64_TEST}/lib/bashlib64.bash"
 }
 
-@test "defaults are set" {
+@test "bl64_core_env: defaults are set" {
   [[ -n "$BL64_LIB_DEBUG" ]] && \
   [[ -n "$BL64_LIB_STRICT" ]] && \
   [[ -n "$BL64_LIB_LANG" ]] && \
@@ -13,7 +13,7 @@ setup() {
   [[ -n "$BL64_SCRIPT_SID" ]]
 }
 
-@test "constants are set" {
+@test "bl64_core_env: constants are set" {
   [[ "$BL64_LIB_VAR_NULL" == '__s64__' ]] && \
   [[ "$BL64_LIB_VAR_TBD" == 'TBD' ]]
 }

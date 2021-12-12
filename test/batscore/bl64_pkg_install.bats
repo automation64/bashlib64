@@ -2,7 +2,7 @@ setup() {
   . "${DEVBL64_TEST}/lib/bashlib64.bash"
 }
 
-@test "prepare package manager" {
+@test "bl64_pkg_install: prepare package manager" {
   if [[ ! -f '/run/.containerenv' ]]; then
     skip 'this case can only be tested inside a container'
   fi

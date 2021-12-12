@@ -2,7 +2,7 @@ setup() {
   . "${DEVBL64_TEST}/lib/bashlib64.bash"
 }
 
-@test "common globals are set" {
+@test "bl64_os_set_alias: common globals are set" {
 
   [[ -n "$BL64_OS_ALIAS_CHOWN_DIR" ]] && \
   [[ -n "$BL64_OS_ALIAS_CP_FILE" ]] && \
