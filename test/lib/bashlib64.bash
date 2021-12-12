@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.4.3
+# Version: 1.5.0
 #######################################
 
 [[ -n "$BL64_LIB_DEBUG" && "$BL64_LIB_DEBUG" == '1' ]] && set -x
@@ -26,7 +26,6 @@ export BL64_OS_CMD_LS
 export BL64_OS_CMD_MKDIR
 export BL64_OS_CMD_MKTEMP
 export BL64_OS_CMD_RM
-export BL64_OS_CMD_SUDO
 export BL64_OS_CMD_TAR
 export BL64_OS_CMD_USERADD
 
@@ -37,7 +36,6 @@ export BL64_OS_ALIAS_LS_FILES
 export BL64_OS_ALIAS_MKDIR_FULL
 export BL64_OS_ALIAS_RM_FILE
 export BL64_OS_ALIAS_RM_FULL
-export BL64_OS_ALIAS_SUDO_ENV
 
 readonly _BL64_MSG_TXT_USAGE='Usage'
 readonly _BL64_MSG_TXT_COMMANDS='Commands'
@@ -92,6 +90,22 @@ readonly BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF --color=never makecache"
 readonly BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF --color=never --nodocs --assumeyes install"
 readonly BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
 
+readonly BL64_SUDO_CMD_SUDO='/usr/bin/sudo'
+readonly BL64_SUDO_CMD_VISUDO='/usr/sbin/visudo'
+readonly BL64_SUDO_FILE_SUDOERS='/etc/sudoers'
+
+readonly BL64_SUDO_ERROR_MISSING_PARAMETER=200
+readonly BL64_SUDO_ERROR_MISSING_AWK=201
+readonly BL64_SUDO_ERROR_MISSING_SUDOERS=202
+readonly BL64_SUDO_ERROR_MISSING_VISUDO=203
+readonly BL64_SUDO_ERROR_UPDATE_FAILED=210
+readonly BL64_SUDO_ERROR_INVALID_SUDOERS=211
+
+readonly _BL64_SUDO_TXT_MISSING_PARAMETER='required parameter is missing'
+readonly _BL64_SUDO_TXT_INVALID_SUDOERS='the sudoers file is corrupt or invalid'
+
+export BL64_SUDO_ALIAS_SUDO_ENV
+
 function bl64_os_get_distro() {
 
   BL64_OS_DISTRO='UNKNOWN'
@@ -112,7 +126,6 @@ function bl64_os_get_distro() {
 function bl64_os_set_command() {
   if [[ "$BL64_OS_DISTRO" =~ (UBUNTU-.*|FEDORA-.*|CENTOS-.*|OL-.*|DEBIAN-.*) ]]; then
     BL64_OS_CMD_AWK='/usr/bin/awk'
-    BL64_OS_CMD_SUDO='/usr/bin/sudo'
     BL64_OS_CMD_USERADD='/usr/sbin/useradd'
     BL64_OS_CMD_TAR='/bin/tar'
   fi
@@ -157,7 +170,6 @@ function bl64_os_set_alias() {
   BL64_OS_ALIAS_MKDIR_FULL="$BL64_OS_CMD_MKDIR --parents --verbose"
   BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM --verbose --force --one-file-system"
   BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM --verbose --force --one-file-system --recursive"
-  BL64_OS_ALIAS_SUDO_ENV="$BL64_OS_CMD_SUDO --preserve-env --set-home"
 
 }
 
@@ -550,6 +562,68 @@ function bl64_pkg_cleanup() {
     $BL64_PKG_ALIAS_DNF_CLEAN
     ;;
   esac
+
+}
+
+function bl64_sudo_add_root() {
+  local user="$1"
+  local status=$BL64_SUDO_ERROR_UPDATE_FAILED
+  local new_sudoers="${BL64_SUDO_FILE_SUDOERS}.bl64_new"
+  local old_sudoers="${BL64_SUDO_FILE_SUDOERS}.bl64_old"
+
+  if [[ -z "$user" ]]; then
+    bl64_msg_show_error "$_BL64_SUDO_TXT_MISSING_PARAMETER (user)"
+    return $BL64_SUDO_ERROR_MISSING_PARAMETER
+  fi
+
+  bl64_check_command "$BL64_OS_CMD_AWK" || return $BL64_SUDO_ERROR_MISSING_AWK
+  bl64_check_file "$BL64_SUDO_FILE_SUDOERS" || return $BL64_SUDO_ERROR_MISSING_SUDOERS
+  bl64_sudo_check_sudoers "$BL64_SUDO_FILE_SUDOERS" || return $BL64_SUDO_ERROR_INVALID_SUDOERS
+
+  umask 0266
+  "$BL64_OS_CMD_AWK" -v ControlUsr="$user" '
+    BEGIN { Found = 0 }
+    ControlUsr " ALL=(ALL) NOPASSWD: ALL" == $0 { Found = 1 }
+    { print $0 }
+    END {
+      if( Found == 0) {
+      print( ControlUsr " ALL=(ALL) NOPASSWD: ALL" )
+    }
+  }' "$BL64_SUDO_FILE_SUDOERS" > "$new_sudoers"
+
+  if [[ -s "$new_sudoers" ]]; then
+    $BL64_OS_ALIAS_CP_FILE "${BL64_SUDO_FILE_SUDOERS}" "$old_sudoers"
+  fi
+  if [[ -s "$new_sudoers" && -s "$old_sudoers" ]]; then
+    "$BL64_OS_CMD_CAT" "${BL64_SUDO_FILE_SUDOERS}.bl64_new" > "${BL64_SUDO_FILE_SUDOERS}" && \
+    bl64_sudo_check_sudoers "$BL64_SUDO_FILE_SUDOERS"
+    status=$?
+  fi
+
+  return $status
+}
+
+function bl64_sudo_check_sudoers() {
+  local sudoers="$1"
+  local status=0
+
+  bl64_check_command "$BL64_SUDO_CMD_VISUDO" || return $BL64_SUDO_ERROR_MISSING_VISUDO
+
+  "$BL64_SUDO_CMD_VISUDO" \
+    --check \
+    --file "$sudoers"
+  status=$?
+
+  if (( status != 0 )); then
+    bl64_msg_show_error "$_BL64_SUDO_TXT_INVALID_SUDOERS ($sudoers)"
+  fi
+
+  return $status
+}
+
+function bl64_sudo_set_alias() {
+
+  BL64_SUDO_ALIAS_SUDO_ENV="$BL64_SUDO_CMD_SUDO --preserve-env --set-home"
 
 }
 

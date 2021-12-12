@@ -5,7 +5,6 @@ setup() {
 @test "common globals are set" {
 
 [[ -n "${BL64_OS_CMD_AWK}" ]] && \
-[[ -n "${BL64_OS_CMD_SUDO}" ]] && \
 [[ -n "${BL64_OS_CMD_TAR}" ]] && \
 [[ -n "${BL64_OS_CMD_USERADD}" ]] && \
 [[ -n "${BL64_OS_CMD_CAT}" ]] && \
@@ -26,7 +25,6 @@ setup() {
 @test "common commands are set" {
 
 [[ -x "${BL64_OS_CMD_AWK}" ]] && \
-[[ -x "${BL64_OS_CMD_SUDO}" ]] && \
 [[ -x "${BL64_OS_CMD_TAR}" ]] && \
 [[ -x "${BL64_OS_CMD_USERADD}" ]] && \
 [[ -x "${BL64_OS_CMD_CAT}" ]] && \
