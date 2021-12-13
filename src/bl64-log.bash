@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -20,12 +20,23 @@
 # Returns:
 #   0: log record successfully saved
 #   >0: failed to save the log record
+#   BL64_MSG_ERROR_INVALID_FORMAT
 #######################################
 function _bl64_log_register() {
 
   local source="$1"
   local category="$2"
   local payload="$3"
+
+  if [[
+    -z "$BL64_LOG_PATH" || \
+    -z "$BL64_LOG_VERBOSE" || \
+    -z "$BL64_LOG_TYPE" || \
+    -z "$BL64_LOG_FS"
+  ]]; then
+    bl64_msg_show_error "$_BL64_LOG_TXT_NOT_SETUP"
+    return $BL64_LOG_ERROR_NOT_SETUP
+  fi
 
   case "$BL64_LOG_TYPE" in
   "$BL64_LOG_TYPE_FILE")
@@ -44,6 +55,9 @@ function _bl64_log_register() {
       "$BL64_LOG_FS" \
       "$payload" >>"$BL64_LOG_PATH"
     ;;
+  *)
+    bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
+    return $BL64_MSG_ERROR_INVALID_FORMAT
   esac
 
 }
@@ -60,16 +74,44 @@ function _bl64_log_register() {
 #   STDOUT: None
 #   STDERR: None
 # Returns:
-#   0: always ok
+#   0: setup ok
+#   BL64_MSG_ERROR_INVALID_FORMAT
+#   BL64_MSG_ERROR_INVALID_VERBOSE
 #######################################
 function bl64_log_setup() {
 
-  BL64_LOG_PATH="${1:-$BL64_LOG_PATH}"
-  BL64_LOG_VERBOSE="${2:-$BL64_LOG_VERBOSE}"
-  BL64_LOG_TYPE="${3:-$BL64_LOG_TYPE}"
-  BL64_LOG_FS="${4:-$BL64_LOG_FS}"
+  local path="$1"
+  local verbose="${2:-1}"
+  local type="${3:-$BL64_LOG_TYPE_FILE}"
+  local fs="${4:-:}"
 
-  return 0
+  # shellcheck disable=SC2086
+  if [[ -z "$path" ]]; then
+    bl64_msg_show_error "$_BL64_LOG_TXT_MISSING_PARAMETER"
+    return $BL64_LOG_ERROR_MISSING_PARAMETER
+  fi
+
+  # shellcheck disable=SC2086
+  if [[
+    "$type" != "$BL64_LOG_TYPE_FILE"
+  ]]; then
+    bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
+    return $BL64_LOG_ERROR_INVALID_TYPE
+  fi
+
+  # shellcheck disable=SC2086
+  if [[
+    "$verbose" != '0' && \
+    "$verbose" != '1'
+  ]]; then
+    bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_VERBOSE"
+    return $BL64_LOG_ERROR_INVALID_VERBOSE
+  fi
+
+  BL64_LOG_PATH="${path}" && \
+  BL64_LOG_VERBOSE="${verbose}" && \
+  BL64_LOG_TYPE="${type}" && \
+  BL64_LOG_FS="${fs}"
 
 }
 
