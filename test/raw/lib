@@ -2,3 +2,7 @@
 
 source './.env' || exit 1
 . "${DEVBL64_TEST}/lib/bashlib64.bash"
+
+# * Use this helper to perform ad-hoc tests.
+# * Do not commit, just remove the test after use
+# * Test code goes below this line

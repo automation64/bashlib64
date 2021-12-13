@@ -26,7 +26,7 @@ Source modules included in the library:
 | `src/bashlib64-arc.*`   | Manipulate archive files               |
 | `src/bashlib64-core.*`  | Setup run-time environment             |
 | `src/bashlib64-check.*` | Check for conditions and report status |
-| `src/bashlib64-check.*` | Format data                            |
+| `src/bashlib64-fmt.*`   | Format data                            |
 | `src/bashlib64-log.*`   | Write messages to logs repositories    |
 | `src/bashlib64-msg.*`   | Display messages                       |
 | `src/bashlib64-pkg.*`   | Install native OS packages             |
