@@ -13,6 +13,8 @@ source "${DEVBL64_BIN}/bashlib64.bash" || exit 1
 
 function devbl64_build_standalone() {
 
+  local promote="$1"
+  local test="$2"
   local status=1
   local file=''
   local lib="$DEVBL64_BUILD/bashlib64.bash"
@@ -34,6 +36,16 @@ function devbl64_build_standalone() {
   bl64_fmt_strip_comments "$DEVBL64_SRC/bl64-core.bash" >>"$lib"
   status=$?
 
+  if [[ "$status" == '0' && "$promote" == '1' ]]; then
+    bl64_msg_show_task 'promoting library'
+    $BL64_OS_ALIAS_CP_FILE "$lib" "$DEVBL64_ROOT"
+  fi
+
+  if [[ "$status" == '0' && "$test" == '1' ]]; then
+    bl64_msg_show_task 'updating test library'
+    $BL64_OS_ALIAS_CP_FILE "$lib" "$DEVBL64_TEST/lib"
+  fi
+
   return $status
 
 }
@@ -46,10 +58,13 @@ function devbl64_build_check() {
 
 function devbl64_build_help() {
   bl64_msg_show_usage \
-    '-b [-h]' \
+    '[-b] [-p] [-t] [-h]' \
     'Create the BashLib64 stand-alone distributable file' \
     '
-    -b         : Build' '' ''
+  -b: Build
+  ' '
+  -p: Promote
+  -t: Update test/lib' ''
 }
 
 #
@@ -59,20 +74,20 @@ function devbl64_build_help() {
 declare devbl64_build_status=1
 declare devbl64_build_command=''
 declare devbl64_build_option=''
+declare devbl64_build_promote='0'
+declare devbl64_build_test='0'
 
 (($# == 0)) && devbl64_build_help && exit 1
-while getopts ':bh' devbl64_build_option; do
+while getopts ':bpth' devbl64_build_option; do
   case "$devbl64_build_option" in
+  p) devbl64_build_promote='1' ;;
+  t) devbl64_build_test='1' ;;
   b)
     devbl64_build_command='devbl64_build_standalone'
     devbl64_build_command_tag='build stand-alone library'
     ;;
-  h)
-    devbl64_build_help && exit
-    ;;
-  \?)
-    devbl64_build_help && exit 1
-    ;;
+  h) devbl64_build_help && exit ;;
+  \?) devbl64_build_help && exit 1 ;;
   esac
 done
 [[ -z "$devbl64_build_command" ]] && devbl64_build_help && exit 1
@@ -80,7 +95,7 @@ devbl64_build_check || exit 1
 
 bl64_msg_show_info "starting ${devbl64_build_command_tag} process"
 case "$devbl64_build_command" in
-'devbl64_build_standalone') "$devbl64_build_command";;
+'devbl64_build_standalone') "$devbl64_build_command" "$devbl64_build_promote" "$devbl64_build_test" ;;
 esac
 devbl64_build_status=$?
 

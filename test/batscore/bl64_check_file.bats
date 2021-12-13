@@ -1,19 +1,23 @@
 setup() {
   BL64_LIB_STRICT=0
   . "${DEVBL64_TEST}/lib/bashlib64.bash"
+  . "${DEVBL64_BATS_HELPER}/bats-support/load.bash"
+  . "${DEVBL64_BATS_HELPER}/bats-assert/load.bash"
+  . "${DEVBL64_BATS_HELPER}/bats-file/load.bash"
+
 }
 
 @test "bl64_check_file: file is present" {
 
   run bl64_check_file "$BL64_OS_CMD_CP"
-  [[ "$status" == 0 ]]
+  assert_success
 
 }
 
 @test "bl64_check_file: file is not present" {
 
   run bl64_check_file '/fake/file'
-  [[ "$status" == $BL64_CHECK_ERROR_FILE_NOT_FOUND ]]
+  assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_FOUND && \
   [[ "$output" == *${_BL64_CHECK_TXT_file_NOT_FOUND}* ]]
 
 }
@@ -21,7 +25,7 @@ setup() {
 @test "bl64_check_file: file is not readable" {
 
   run bl64_check_file '/etc/shadow'
-  [[ "$status" == $BL64_CHECK_ERROR_FILE_NOT_READ ]]
+  assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_READ && \
   [[ "$output" == *${_BL64_CHECK_TXT_file_NOT_EXECUTABLE}* ]]
 
 }
@@ -29,7 +33,7 @@ setup() {
 @test "bl64_check_file: file parameter is not present" {
 
   run bl64_check_file
-  [[ "$status" == $BL64_CHECK_ERROR_MISSING_PARAMETER ]]
+  assert_equal "$status" $BL64_CHECK_ERROR_MISSING_PARAMETER && \
   [[ "$output" == *${_BL64_CHECK_TXT_MISSING_PARAMETER}* ]]
 
 }

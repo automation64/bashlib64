@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.2
+# Version: 1.6.0
 #######################################
 
 [[ -n "$BL64_LIB_DEBUG" && "$BL64_LIB_DEBUG" == '1' ]] && set -x
@@ -37,6 +37,14 @@ export BL64_OS_ALIAS_MKDIR_FULL
 export BL64_OS_ALIAS_RM_FILE
 export BL64_OS_ALIAS_RM_FULL
 
+readonly BL64_MSG_FORMAT_PLAIN='R'
+readonly BL64_MSG_FORMAT_HOST='H'
+readonly BL64_MSG_FORMAT_TIME='T'
+readonly BL64_MSG_FORMAT_CALLER='C'
+readonly BL64_MSG_FORMAT_FULL='F'
+
+readonly BL64_MSG_ERROR_INVALID_FORMAT=200
+
 readonly _BL64_MSG_TXT_USAGE='Usage'
 readonly _BL64_MSG_TXT_COMMANDS='Commands'
 readonly _BL64_MSG_TXT_FLAGS='Flags'
@@ -46,8 +54,9 @@ readonly _BL64_MSG_TXT_INFO='Info'
 readonly _BL64_MSG_TXT_TASK='Task'
 readonly _BL64_MSG_TXT_DEBUG='Debug'
 readonly _BL64_MSG_TXT_WARNING='Warning'
+readonly _BL64_MSG_TXT_INVALID_FORMAT='invalid format. Please use one of BL64_MSG_FORMAT_*'
 
-readonly _BL64_MSG_HEADER='%s@%s[%(%d/%b/%Y-%H:%M:%S)T]'
+export BL64_MSG_FORMAT="${BL64_MSG_FORMAT:-$BL64_MSG_FORMAT_FULL}"
 
 readonly BL64_LOG_TYPE_FILE='F'
 readonly BL64_LOG_CATEGORY_INFO='info'
@@ -57,10 +66,20 @@ readonly BL64_LOG_CATEGORY_WARNING='warning'
 readonly BL64_LOG_CATEGORY_ERROR='error'
 readonly BL64_LOG_CATEGORY_RECORD='record'
 
-export BL64_LOG_VERBOSE="${BL64_LOG_VERBOSE:-1}"
-export BL64_LOG_FS="${BL64_LOG_FS:-:}"
-export BL64_LOG_PATH="${BL64_LOG_PATH:-/dev/null}"
-export BL64_LOG_TYPE="${BL64_LOG_TYPE:-$BL64_LOG_TYPE_FILE}"
+readonly BL64_LOG_ERROR_MISSING_PARAMETER=200
+readonly BL64_LOG_ERROR_INVALID_TYPE=201
+readonly BL64_LOG_ERROR_INVALID_VERBOSE=202
+readonly BL64_LOG_ERROR_NOT_SETUP=203
+
+readonly _BL64_LOG_TXT_NOT_SETUP='missing setup information. Please use the bl64_log_setup function before calling bl64_log_* functions'
+readonly _BL64_LOG_TXT_MISSING_PARAMETER='required parameter is missing'
+readonly _BL64_LOG_TXT_INVALID_TYPE='invalid log type. Please use any of BL64_LOG_TYPE_*'
+readonly _BL64_LOG_TXT_INVALID_VERBOSE='invalid option for verbose. Please use 1 (enable) or 0 (disable)'
+
+export BL64_LOG_PATH
+export BL64_LOG_VERBOSE
+export BL64_LOG_FS
+export BL64_LOG_TYPE
 
 readonly BL64_CHECK_ERROR_MISSING_PARAMETER=1
 readonly BL64_CHECK_ERROR_FILE_NOT_FOUND=2
@@ -209,6 +228,67 @@ function bl64_fmt_strip_comments() {
 
 }
 
+function _bl64_msg_show() {
+
+  local type="$1"
+  local message="$2"
+
+  case "$BL64_MSG_FORMAT" in
+  "$BL64_MSG_FORMAT_PLAIN")
+    printf "%s: %s\n" \
+      "$type" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_HOST")
+    printf "@%s %s: %s\n" \
+      "$HOSTNAME" \
+      "$type" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_TIME")
+    printf "[%(%d/%b/%Y-%H:%M:%S)T] %s: %s\n" \
+      '-1' \
+      "$type" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_CALLER")
+    printf "%s %s: %s\n" \
+      "$BL64_SCRIPT_NAME" \
+      "$type" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_FULL")
+    printf "%s@%s[%(%d/%b/%Y-%H:%M:%S)T] %s: %s\n" \
+      "$BL64_SCRIPT_NAME" \
+      "$HOSTNAME" \
+      '-1' \
+      "$type" \
+      "$message"
+    ;;
+  *)
+    bl64_msg_show_error "$_BL64_MSG_TXT_INVALID_FORMAT"
+    return $BL64_MSG_ERROR_INVALID_FORMAT
+  esac
+
+}
+
+function bl64_msg_setup() {
+  local format="$1"
+
+  if [[
+    "$format" != "$BL64_MSG_FORMAT_PLAIN" && \
+    "$format" != "$BL64_MSG_FORMAT_HOST" && \
+    "$format" != "$BL64_MSG_FORMAT_TIME" && \
+    "$format" != "$BL64_MSG_FORMAT_CALLER" && \
+    "$format" != "$BL64_MSG_FORMAT_FULL"
+  ]]; then
+    bl64_msg_show_error "$_BL64_MSG_TXT_INVALID_FORMAT"
+    return $BL64_MSG_ERROR_INVALID_FORMAT
+  fi
+
+  BL64_MSG_FORMAT="$format"
+}
+
 function bl64_msg_show_usage() {
 
   local usage="${1:-$BL64_LIB_VAR_TBD}"
@@ -243,14 +323,7 @@ function bl64_msg_show_error() {
 
   local message="${1-$BL64_LIB_VAR_TBD}"
 
-  printf "$_BL64_MSG_HEADER %s: %s\n" \
-    "$BL64_SCRIPT_NAME" \
-    "$HOSTNAME" \
-    '-1' \
-    "$_BL64_MSG_TXT_ERROR" \
-    "$message" >&2
-
-  return 0
+  _bl64_msg_show "$_BL64_MSG_TXT_ERROR" "$message" >&2
 
 }
 
@@ -258,14 +331,7 @@ function bl64_msg_show_warning() {
 
   local message="${1-$BL64_LIB_VAR_TBD}"
 
-  printf "$_BL64_MSG_HEADER %s: %s\n" \
-    "$BL64_SCRIPT_NAME" \
-    "$HOSTNAME" \
-    '-1' \
-    "$_BL64_MSG_TXT_WARNING" \
-    "$message" >&2
-
-  return 0
+  _bl64_msg_show "$_BL64_MSG_TXT_WARNING" "$message" >&2
 
 }
 
@@ -273,14 +339,7 @@ function bl64_msg_show_info() {
 
   local message="${1-$BL64_LIB_VAR_TBD}"
 
-  printf "$_BL64_MSG_HEADER %s: %s\n" \
-    "$BL64_SCRIPT_NAME" \
-    "$HOSTNAME" \
-    '-1' \
-    "$_BL64_MSG_TXT_INFO" \
-    "$message"
-
-  return 0
+  _bl64_msg_show "$_BL64_MSG_TXT_INFO" "$message"
 
 }
 
@@ -288,14 +347,7 @@ function bl64_msg_show_task() {
 
   local message="${1-$BL64_LIB_VAR_TBD}"
 
-  printf "$_BL64_MSG_HEADER %s: %s\n" \
-    "$BL64_SCRIPT_NAME" \
-    "$HOSTNAME" \
-    '-1' \
-    "$_BL64_MSG_TXT_TASK" \
-    "$message"
-
-  return 0
+  _bl64_msg_show "$_BL64_MSG_TXT_TASK" "$message"
 
 }
 
@@ -303,14 +355,7 @@ function bl64_msg_show_debug() {
 
   local message="${1-$BL64_LIB_VAR_TBD}"
 
-  printf "$_BL64_MSG_HEADER %s: %s\n" \
-    "$BL64_SCRIPT_NAME" \
-    "$HOSTNAME" \
-    '-1' \
-    "$_BL64_MSG_TXT_DEBUG" \
-    "$message" >&2
-
-  return 0
+  _bl64_msg_show "$_BL64_MSG_TXT_DEBUG" "$message" >&2
 
 }
 
@@ -330,6 +375,16 @@ function _bl64_log_register() {
   local category="$2"
   local payload="$3"
 
+  if [[
+    -z "$BL64_LOG_PATH" || \
+    -z "$BL64_LOG_VERBOSE" || \
+    -z "$BL64_LOG_TYPE" || \
+    -z "$BL64_LOG_FS"
+  ]]; then
+    bl64_msg_show_error "$_BL64_LOG_TXT_NOT_SETUP"
+    return $BL64_LOG_ERROR_NOT_SETUP
+  fi
+
   case "$BL64_LOG_TYPE" in
   "$BL64_LOG_TYPE_FILE")
     printf '%(%d%m%Y%H%M%S)T%s%s%s%s%s%s%s%s%s%s%s%s\n' \
@@ -347,18 +402,44 @@ function _bl64_log_register() {
       "$BL64_LOG_FS" \
       "$payload" >>"$BL64_LOG_PATH"
     ;;
+  *)
+    bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
+    return $BL64_MSG_ERROR_INVALID_FORMAT
   esac
 
 }
 
 function bl64_log_setup() {
 
-  BL64_LOG_PATH="${1:-$BL64_LOG_PATH}"
-  BL64_LOG_VERBOSE="${2:-$BL64_LOG_VERBOSE}"
-  BL64_LOG_TYPE="${3:-$BL64_LOG_TYPE}"
-  BL64_LOG_FS="${4:-$BL64_LOG_FS}"
+  local path="$1"
+  local verbose="${2:-1}"
+  local type="${3:-$BL64_LOG_TYPE_FILE}"
+  local fs="${4:-:}"
 
-  return 0
+  if [[ -z "$path" ]]; then
+    bl64_msg_show_error "$_BL64_LOG_TXT_MISSING_PARAMETER"
+    return $BL64_LOG_ERROR_MISSING_PARAMETER
+  fi
+
+  if [[
+    "$type" != "$BL64_LOG_TYPE_FILE"
+  ]]; then
+    bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
+    return $BL64_LOG_ERROR_INVALID_TYPE
+  fi
+
+  if [[
+    "$verbose" != '0' && \
+    "$verbose" != '1'
+  ]]; then
+    bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_VERBOSE"
+    return $BL64_LOG_ERROR_INVALID_VERBOSE
+  fi
+
+  BL64_LOG_PATH="${path}" && \
+  BL64_LOG_VERBOSE="${verbose}" && \
+  BL64_LOG_TYPE="${type}" && \
+  BL64_LOG_FS="${fs}"
 
 }
 
@@ -681,4 +762,5 @@ esac
 
 bl64_os_set_command
 bl64_os_set_alias
+bl64_sudo_set_alias
 :

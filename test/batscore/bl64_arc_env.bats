@@ -6,10 +6,7 @@ setup() {
 
 }
 
-@test "bl64_sudo_set_alias: common globals are set" {
-
-  bl64_sudo_set_alias
-
-  [[ -n "$BL64_SUDO_ALIAS_SUDO_ENV" ]]
-
+@test "bl64_arc_env: public constants are set" {
+  assert_equal $BL64_ARC_ERROR_MISSING_PARAMETER 200 ]] && \
+  assert_equal $BL64_ARC_ERROR_INVALID_DESTINATION 201 ]]
 }

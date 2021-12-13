@@ -1,18 +1,18 @@
 setup() {
   . "${DEVBL64_TEST}/lib/bashlib64.bash"
+  . "${DEVBL64_BATS_HELPER}/bats-support/load.bash"
+  . "${DEVBL64_BATS_HELPER}/bats-assert/load.bash"
+  . "${DEVBL64_BATS_HELPER}/bats-file/load.bash"
+
 }
 
-@test "bl64_msg_env: constants are set" {
+@test "bl64_msg_env: public constants are set" {
 
-  [[ "$_BL64_MSG_TXT_USAGE" == 'Usage' ]] && \
-  [[ "$_BL64_MSG_TXT_COMMANDS" == 'Commands' ]] && \
-  [[ "$_BL64_MSG_TXT_FLAGS" == 'Flags' ]] && \
-  [[ "$_BL64_MSG_TXT_PARAMETERS" == 'Parameters' ]] && \
-  [[ "$_BL64_MSG_TXT_ERROR" == 'Error' ]] && \
-  [[ "$_BL64_MSG_TXT_INFO" == 'Info' ]] && \
-  [[ "$_BL64_MSG_TXT_TASK" == 'Task' ]] && \
-  [[ "$_BL64_MSG_TXT_DEBUG" == 'Debug' ]] && \
-  [[ "$_BL64_MSG_TXT_WARNING" == 'Warning' ]] && \
-  [[ "$_BL64_MSG_HEADER" == '%s@%s[%(%d/%b/%Y-%H:%M:%S)T]' ]]
+  assert_equal "$BL64_MSG_FORMAT_PLAIN" 'R' && \
+  assert_equal "$BL64_MSG_FORMAT_HOST" 'H' && \
+  assert_equal "$BL64_MSG_FORMAT_TIME" 'T' && \
+  assert_equal "$BL64_MSG_FORMAT_CALLER" 'C' && \
+  assert_equal "$BL64_MSG_FORMAT_FULL" 'F' && \
+  assert_equal "$BL64_MSG_ERROR_INVALID_FORMAT" 200
 
 }

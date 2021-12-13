@@ -4,8 +4,95 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
+
+#######################################
+# Display message helper
+#
+# Arguments:
+#   $1: type of message
+#   $2: message to show
+# Outputs:
+#   STDOUT: message
+#   STDERR: message when type is error or warning
+# Returns:
+#   printf exit status
+#   BL64_MSG_ERROR_INVALID_FORMAT
+#######################################
+function _bl64_msg_show() {
+
+  local type="$1"
+  local message="$2"
+
+  case "$BL64_MSG_FORMAT" in
+  "$BL64_MSG_FORMAT_PLAIN")
+    printf "%s: %s\n" \
+      "$type" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_HOST")
+    printf "@%s %s: %s\n" \
+      "$HOSTNAME" \
+      "$type" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_TIME")
+    printf "[%(%d/%b/%Y-%H:%M:%S)T] %s: %s\n" \
+      '-1' \
+      "$type" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_CALLER")
+    printf "%s %s: %s\n" \
+      "$BL64_SCRIPT_NAME" \
+      "$type" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_FULL")
+    printf "%s@%s[%(%d/%b/%Y-%H:%M:%S)T] %s: %s\n" \
+      "$BL64_SCRIPT_NAME" \
+      "$HOSTNAME" \
+      '-1' \
+      "$type" \
+      "$message"
+    ;;
+  *)
+    bl64_msg_show_error "$_BL64_MSG_TXT_INVALID_FORMAT"
+    return $BL64_MSG_ERROR_INVALID_FORMAT
+  esac
+
+}
+
+#######################################
+# Setup the message library
+#
+# Arguments:
+#   $1: define message format. One of BL64_MSG_FORMAT_*
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   BL64_MSG_ERROR_INVALID_FORMAT
+#######################################
+function bl64_msg_setup() {
+  local format="$1"
+
+  # shellcheck disable=SC2086
+  if [[
+    "$format" != "$BL64_MSG_FORMAT_PLAIN" && \
+    "$format" != "$BL64_MSG_FORMAT_HOST" && \
+    "$format" != "$BL64_MSG_FORMAT_TIME" && \
+    "$format" != "$BL64_MSG_FORMAT_CALLER" && \
+    "$format" != "$BL64_MSG_FORMAT_FULL"
+  ]]; then
+    bl64_msg_show_error "$_BL64_MSG_TXT_INVALID_FORMAT"
+    return $BL64_MSG_ERROR_INVALID_FORMAT
+  fi
+
+  BL64_MSG_FORMAT="$format"
+}
 
 #######################################
 # Show script usage information
@@ -69,14 +156,7 @@ function bl64_msg_show_error() {
 
   local message="${1-$BL64_LIB_VAR_TBD}"
 
-  printf "$_BL64_MSG_HEADER %s: %s\n" \
-    "$BL64_SCRIPT_NAME" \
-    "$HOSTNAME" \
-    '-1' \
-    "$_BL64_MSG_TXT_ERROR" \
-    "$message" >&2
-
-  return 0
+  _bl64_msg_show "$_BL64_MSG_TXT_ERROR" "$message" >&2
 
 }
 
@@ -96,14 +176,7 @@ function bl64_msg_show_warning() {
 
   local message="${1-$BL64_LIB_VAR_TBD}"
 
-  printf "$_BL64_MSG_HEADER %s: %s\n" \
-    "$BL64_SCRIPT_NAME" \
-    "$HOSTNAME" \
-    '-1' \
-    "$_BL64_MSG_TXT_WARNING" \
-    "$message" >&2
-
-  return 0
+  _bl64_msg_show "$_BL64_MSG_TXT_WARNING" "$message" >&2
 
 }
 
@@ -123,14 +196,7 @@ function bl64_msg_show_info() {
 
   local message="${1-$BL64_LIB_VAR_TBD}"
 
-  printf "$_BL64_MSG_HEADER %s: %s\n" \
-    "$BL64_SCRIPT_NAME" \
-    "$HOSTNAME" \
-    '-1' \
-    "$_BL64_MSG_TXT_INFO" \
-    "$message"
-
-  return 0
+  _bl64_msg_show "$_BL64_MSG_TXT_INFO" "$message"
 
 }
 
@@ -150,14 +216,7 @@ function bl64_msg_show_task() {
 
   local message="${1-$BL64_LIB_VAR_TBD}"
 
-  printf "$_BL64_MSG_HEADER %s: %s\n" \
-    "$BL64_SCRIPT_NAME" \
-    "$HOSTNAME" \
-    '-1' \
-    "$_BL64_MSG_TXT_TASK" \
-    "$message"
-
-  return 0
+  _bl64_msg_show "$_BL64_MSG_TXT_TASK" "$message"
 
 }
 
@@ -177,14 +236,7 @@ function bl64_msg_show_debug() {
 
   local message="${1-$BL64_LIB_VAR_TBD}"
 
-  printf "$_BL64_MSG_HEADER %s: %s\n" \
-    "$BL64_SCRIPT_NAME" \
-    "$HOSTNAME" \
-    '-1' \
-    "$_BL64_MSG_TXT_DEBUG" \
-    "$message" >&2
-
-  return 0
+  _bl64_msg_show "$_BL64_MSG_TXT_DEBUG" "$message" >&2
 
 }
 
