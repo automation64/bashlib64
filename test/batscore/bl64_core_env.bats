@@ -1,5 +1,9 @@
 setup() {
   . "${DEVBL64_TEST}/lib/bashlib64.bash"
+  . "${DEVBL64_BATS_HELPER}/bats-support/load.bash"
+  . "${DEVBL64_BATS_HELPER}/bats-assert/load.bash"
+  . "${DEVBL64_BATS_HELPER}/bats-file/load.bash"
+
 }
 
 @test "bl64_core_env: defaults are set" {
@@ -13,7 +17,7 @@ setup() {
   [[ -n "$BL64_SCRIPT_SID" ]]
 }
 
-@test "bl64_core_env: constants are set" {
-  [[ "$BL64_LIB_VAR_NULL" == '__s64__' ]] && \
-  [[ "$BL64_LIB_VAR_TBD" == 'TBD' ]]
+@test "bl64_core_env: public constants are set" {
+  assert_equal "$BL64_LIB_VAR_NULL" '__s64__' && \
+  assert_equal "$BL64_LIB_VAR_TBD" 'TBD'
 }
