@@ -63,15 +63,16 @@ The library has been tested on the following operating systems:
 
 ## Development
 
-### Repository
+### Repositories
 
 - Project GIT repository: [https://github.com/serdigital64/bashlib64](https://github.com/serdigital64/bashlib64)
+- Project Documentation: [https://serdigital64.github.io/bashlib64/](https://serdigital64.github.io/bashlib64/)
 
 ### Contributing
 
 Help on implementing new features and maintaining the code base is welcomed.
 
-Please see the [guidelines](cod) for further details.
+[Contributor Covenant Code of Conduct](https://serdigital64.github.io/bashlib64/cod/)
 
 ### License
 
