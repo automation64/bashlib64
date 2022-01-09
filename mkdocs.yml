@@ -30,6 +30,7 @@ plugins:
 
 theme:
   name: "material"
+  logo: "images/SerDigital64-Font:ANSIShadow-circle.png"
   features:
     #- navigation.tabs
     - navigation.instant
