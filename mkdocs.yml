@@ -16,8 +16,8 @@ extra:
     provider: "google"
     property: "G-KMX4RGXREV"
 
-# extra_css:
-#   - "css/pygments-tango.css"
+extra_css:
+  - "css/pygments-tango.css"
 
 plugins:
   - search:
