@@ -15,29 +15,13 @@
 
 ## Overview
 
-BashLib64 is a project for creating bash libraries that can facilitate and accelerate the development of Bash scripts.
-
-The library is bundled as a stand-alone file that can easly be distributed along with your scripts.
-
-Source modules included in the library:
-
-| File                    | Purpose                                |
-| ----------------------- | -------------------------------------- |
-| `src/bashlib64-arc.*`   | Manipulate archive files               |
-| `src/bashlib64-core.*`  | Setup run-time environment             |
-| `src/bashlib64-check.*` | Check for conditions and report status |
-| `src/bashlib64-fmt.*`   | Format data                            |
-| `src/bashlib64-log.*`   | Write messages to logs repositories    |
-| `src/bashlib64-msg.*`   | Display messages                       |
-| `src/bashlib64-pkg.*`   | Install native OS packages             |
-| `src/bashlib64-sudo.*`  | Manipulate sudo configuration          |
-| `src/bashlib64-os.*`    | Identify OS attributes                 |
+BashLib64 is a project for creating **Bash** functions that can facilitate and accelerate the development of Bash scripts and code snippets such as the ones used to create container images.
 
 ## Deployment
 
-## OS Compatibility
+### OS Compatibility
 
-The library has been tested in the following operating systems:
+The library has been tested on the following operating systems:
 
 - CentOS8
 - OracleLinux8
@@ -53,44 +37,46 @@ The library has been tested in the following operating systems:
 
 ### Installation
 
-Download the library set to a directory where the target script can read them from:
-
-- [BashLib64](https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash)
-
-## Usage
-
-### Add library to existing script
+#### Add library to existing script
 
 - Download the library to the project directory
-  > `cd <PROJECT_DIR>; wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash`
+  > `#!shell cd <PROJECT_DIR>; wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash`
 - Add the library loader to the target script:
-  > `source "<PROJECT_DIR>/bashlib64.bash"`
+  > `#!shell source "<PROJECT_DIR>/bashlib64.bash"`
 
-### Create new script
+#### Create new script
 
 - Download the library to the project directory
-  > `cd <PROJECT_DIR>; wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash`
+  > `#!shell cd <PROJECT_DIR>; wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash`
 - Download the skeleton script:
-  > `wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/skel/generic`
+  > `#!shell wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/skel/generic`
 - Customize the script by adding new content and replacing the predefined tags:
 
-| Tag                 | Purpose                                |
-| ------------------- | -------------------------------------- |
-| X_AUTHOR_ALIAS_X    | Author alias, short-name, or AKA       |
-| X_AUTHOR_GIT_URL_X  | Author's GIT repo                      |
-| X_APP_INFO_X        | Program, script, app short description |
-| X_APP_VERSION_X     | Code version                           |
-| X_APP_NAMESPACE_X   | Script namespace                       |
-| X_PROJECT_GIT_URL_X | Project GIT Repo URL                   |
+| Tag                   | Purpose                                |
+| --------------------- | -------------------------------------- |
+| `X_AUTHOR_ALIAS_X`    | Author alias, short-name, or AKA       |
+| `X_AUTHOR_GIT_URL_X`  | Author's GIT repo                      |
+| `X_APP_INFO_X`        | Program, script, app short description |
+| `X_APP_VERSION_X`     | Code version                           |
+| `X_APP_NAMESPACE_X`   | Script namespace                       |
+| `X_PROJECT_GIT_URL_X` | Project GIT Repo URL                   |
 
-### Repositories
+## Development
+
+### Repository
 
 - Project GIT repository: [https://github.com/serdigital64/bashlib64](https://github.com/serdigital64/bashlib64)
+
+### Contributing
+
+Help on implementing new features and maintaining the code base is welcomed.
+
+Please see the [guidelines](cod) for further details.
+
+### License
+
+[GPL-3.0-or-later](https://www.gnu.org/licenses/gpl-3.0.txt)
 
 ### Author
 
 - [SerDigital64](https://github.com/serdigital64)
-
-## License
-
-[GPL-3.0-or-later](https://www.gnu.org/licenses/gpl-3.0.txt)
