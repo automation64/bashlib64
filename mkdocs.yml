@@ -1,0 +1,96 @@
+---
+site_name: "BashLib64 Project"
+site_description: "BashLib64 is a project for creating bash libraries that can facilitate and accelerate the development of Bash scripts."
+site_author: "SerDigital64"
+
+site_url: "https://serdigital64.github.io/bashlib64"
+repo_url: "https://github.com/serdigital64/bashlib64"
+
+copyright: "GPL-3.0-or-later"
+docs_dir: "mkdocs"
+site_dir: "docs"
+strict: false
+
+extra:
+  analytics:
+    provider: "google"
+    property: "G-KMX4RGXREV"
+
+extra_css:
+  - "css/pygments-tango.css"
+
+plugins:
+  - search:
+      lang: en
+  - include-markdown:
+  - minify:
+      minify_html: true
+      htmlmin_opts:
+          remove_comments: true
+
+theme:
+  name: "material"
+  features:
+    #- navigation.tabs
+    - navigation.instant
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - toc.integrate
+    - navigation.top
+
+  palette:
+      - media: "(prefers-color-scheme: light)"
+        scheme: default
+        toggle:
+          icon: material/toggle-switch-off-outline
+          name: Switch to dark mode
+      - media: "(prefers-color-scheme: dark)"
+        scheme: slate
+        toggle:
+          icon: material/toggle-switch
+          name: Switch to light mode
+markdown_extensions:
+  - toc:
+      permalink: true
+  - markdown.extensions.abbr:
+  - markdown.extensions.admonition:
+  - markdown.extensions.attr_list:
+  - markdown.extensions.def_list:
+  - markdown.extensions.md_in_html:
+  - markdown.extensions.footnotes:
+  - markdown.extensions.meta:
+  - markdown.extensions.tables:
+  - pymdownx.betterem:
+  - pymdownx.tilde:
+  - pymdownx.caret:
+  - pymdownx.smartsymbols:
+  - pymdownx.escapeall:
+  - pymdownx.tasklist:
+  - pymdownx.progressbar:
+  - pymdownx.mark:
+  - pymdownx.striphtml:
+  - pymdownx.details:
+  - pymdownx.tabbed:
+  - pymdownx.saneheaders:
+  - pymdownx.inlinehilite:
+  - pymdownx.snippets:
+  - pymdownx.superfences:
+  - pymdownx.highlight:
+      guess_lang: false
+      use_pygments: true
+      linenums: true
+      linenums_style: "table"
+
+nav:
+  - Home: "index.md"
+  - API:
+    - bl64-arc.md
+    - bl64-check.md
+    - bl64-core.md
+    - bl64-fmt.md
+    - bl64-log.md
+    - bl64-msg.md
+    - bl64-os.md
+    - bl64-pkg.md
+    - bl64-sudo.md
