@@ -13,6 +13,7 @@ setup() {
   [[ -n "$BL64_OS_ALIAS_ID_USER" ]] && \
   [[ -n "$BL64_OS_ALIAS_LS_FILES" ]] && \
   [[ -n "$BL64_OS_ALIAS_MKDIR_FULL" ]] && \
+  [[ -n "$BL64_OS_ALIAS_MV" ]] && \
   [[ -n "$BL64_OS_ALIAS_RM_FILE" ]] && \
   [[ -n "$BL64_OS_ALIAS_RM_FULL" ]]
 
