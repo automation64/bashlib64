@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 [[ -n "$BL64_LIB_DEBUG" && "$BL64_LIB_DEBUG" == '1' ]] && set -x
@@ -82,15 +82,24 @@ export BL64_LOG_FS
 export BL64_LOG_TYPE
 
 readonly BL64_CHECK_ERROR_MISSING_PARAMETER=1
+
 readonly BL64_CHECK_ERROR_FILE_NOT_FOUND=2
 readonly BL64_CHECK_ERROR_FILE_NOT_READ=3
 readonly BL64_CHECK_ERROR_FILE_NOT_EXECUTE=4
 
+readonly BL64_CHECK_ERROR_DIRECTORY_NOT_FOUND=5
+readonly BL64_CHECK_ERROR_DIRECTORY_NOT_READ=6
+
 readonly _BL64_CHECK_TXT_MISSING_PARAMETER='required parameter is missing'
+
 readonly _BL64_CHECK_TXT_COMMAND_NOT_FOUND='the command is not present'
 readonly _BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE='the command is present but has no execution permission'
+
 readonly _BL64_CHECK_TXT_FILE_NOT_FOUND='the file is not present'
 readonly _BL64_CHECK_TXT_FILE_NOT_READABLE='the file is present but has no read permission'
+
+readonly _BL64_CHECK_TXT_DIRECTORY_NOT_FOUND='the directory is not present'
+readonly _BL64_CHECK_TXT_DIRECTORY_NOT_READABLE='the directory is present but has no read permission'
 
 readonly BL64_ARC_ERROR_MISSING_PARAMETER=200
 readonly BL64_ARC_ERROR_INVALID_DESTINATION=201
@@ -558,6 +567,24 @@ function bl64_check_file() {
   if [[ ! -r "$path" ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_FILE_NOT_READABLE ($path)"
     return $BL64_CHECK_ERROR_FILE_NOT_READ
+  fi
+  :
+}
+
+function bl64_check_directory() {
+  local path="$1"
+
+  if [[ -z "$path" ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (directory path)"
+    return $BL64_CHECK_ERROR_MISSING_PARAMETER
+  fi
+  if [[ ! -d "$path" ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND ($path)"
+    return $BL64_CHECK_ERROR_DIRECTORY_NOT_FOUND
+  fi
+  if [[ ! -r "$path" || ! -x "$path" ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE ($path)"
+    return $BL64_CHECK_ERROR_DIRECTORY_NOT_READ
   fi
   :
 }
