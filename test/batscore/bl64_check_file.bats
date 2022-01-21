@@ -18,7 +18,7 @@ setup() {
 
   run bl64_check_file '/fake/file'
   assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_FOUND && \
-  [[ "$output" == *${_BL64_CHECK_TXT_file_NOT_FOUND}* ]]
+  [[ "$output" == *${_BL64_CHECK_TXT_FILE_NOT_FOUND}* ]]
 
 }
 
@@ -26,7 +26,7 @@ setup() {
 
   run bl64_check_file '/etc/shadow'
   assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_READ && \
-  [[ "$output" == *${_BL64_CHECK_TXT_file_NOT_EXECUTABLE}* ]]
+  [[ "$output" == *${_BL64_CHECK_TXT_FILE_NOT_EXECUTABLE}* ]]
 
 }
 

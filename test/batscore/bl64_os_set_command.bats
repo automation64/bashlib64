@@ -22,6 +22,7 @@ setup() {
   [[ -n "${BL64_OS_CMD_LS}" ]] && \
   [[ -n "${BL64_OS_CMD_MKDIR}" ]] && \
   [[ -n "${BL64_OS_CMD_MKTEMP}" ]] && \
+  [[ -n "${BL64_OS_CMD_MV}" ]] && \
   [[ -n "${BL64_OS_CMD_RM}" ]]
 
 }
@@ -42,6 +43,7 @@ setup() {
   [[ -x "${BL64_OS_CMD_LS}" ]] && \
   [[ -x "${BL64_OS_CMD_MKDIR}" ]] && \
   [[ -x "${BL64_OS_CMD_MKTEMP}" ]] && \
+  [[ -x "${BL64_OS_CMD_MV}" ]] && \
   [[ -x "${BL64_OS_CMD_RM}" ]]
 
 }

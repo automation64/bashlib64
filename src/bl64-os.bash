@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.5
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -66,6 +66,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_LS='/bin/ls'
     BL64_OS_CMD_MKDIR='/bin/mkdir'
     BL64_OS_CMD_MKTEMP='/bin/mktemp'
+    BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
   fi
   if [[ "$BL64_OS_DISTRO" =~ (FEDORA-.*|CENTOS-.*|OL-.*) ]]; then
@@ -79,6 +80,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_LS='/usr/bin/ls'
     BL64_OS_CMD_MKDIR='/usr/bin/mkdir'
     BL64_OS_CMD_MKTEMP='/usr/bin/mktemp'
+    BL64_OS_CMD_MV='/usr/bin/mv'
     BL64_OS_CMD_RM='/usr/bin/rm'
   fi
 
@@ -105,6 +107,7 @@ function bl64_os_set_alias() {
   BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
   BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
   BL64_OS_ALIAS_MKDIR_FULL="$BL64_OS_CMD_MKDIR --parents --verbose"
+  BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV --force --verbose"
   BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM --verbose --force --one-file-system"
   BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM --verbose --force --one-file-system --recursive"
 
