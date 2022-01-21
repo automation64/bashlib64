@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -46,7 +46,7 @@ function bl64_check_command() {
 # Check and report if the file is present and has read permissions for the current user.
 #
 # Arguments:
-#   $1: Full path to the file to check
+#   $1: Full path to the file
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
@@ -73,6 +73,41 @@ function bl64_check_file() {
     bl64_msg_show_error "$_BL64_CHECK_TXT_FILE_NOT_READABLE ($path)"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_FILE_NOT_READ
+  fi
+  :
+}
+
+#######################################
+# Check and report if the directory is present and has read and execute permissions for the current user.
+#
+# Arguments:
+#   $1: Full path to the directory
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: File found
+#   $BL64_CHECK_ERROR_MISSING_PARAMETER
+#   $BL64_CHECK_ERROR_DIRECTORY_NOT_FOUND
+#   $BL64_CHECK_ERROR_DIRECTORY_NOT_READ
+#######################################
+function bl64_check_directory() {
+  local path="$1"
+
+  if [[ -z "$path" ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (directory path)"
+    # shellcheck disable=SC2086
+    return $BL64_CHECK_ERROR_MISSING_PARAMETER
+  fi
+  if [[ ! -d "$path" ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND ($path)"
+    # shellcheck disable=SC2086
+    return $BL64_CHECK_ERROR_DIRECTORY_NOT_FOUND
+  fi
+  if [[ ! -r "$path" || ! -x "$path" ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE ($path)"
+    # shellcheck disable=SC2086
+    return $BL64_CHECK_ERROR_DIRECTORY_NOT_READ
   fi
   :
 }

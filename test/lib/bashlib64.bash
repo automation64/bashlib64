@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.6.0
+# Version: 1.8.0
 #######################################
 
 [[ -n "$BL64_LIB_DEBUG" && "$BL64_LIB_DEBUG" == '1' ]] && set -x
@@ -25,6 +25,7 @@ export BL64_OS_CMD_ID
 export BL64_OS_CMD_LS
 export BL64_OS_CMD_MKDIR
 export BL64_OS_CMD_MKTEMP
+export BL64_OS_CMD_MV
 export BL64_OS_CMD_RM
 export BL64_OS_CMD_TAR
 export BL64_OS_CMD_USERADD
@@ -34,6 +35,7 @@ export BL64_OS_ALIAS_CP_FILE
 export BL64_OS_ALIAS_ID_USER
 export BL64_OS_ALIAS_LS_FILES
 export BL64_OS_ALIAS_MKDIR_FULL
+export BL64_OS_ALIAS_MV
 export BL64_OS_ALIAS_RM_FILE
 export BL64_OS_ALIAS_RM_FULL
 
@@ -82,15 +84,24 @@ export BL64_LOG_FS
 export BL64_LOG_TYPE
 
 readonly BL64_CHECK_ERROR_MISSING_PARAMETER=1
+
 readonly BL64_CHECK_ERROR_FILE_NOT_FOUND=2
 readonly BL64_CHECK_ERROR_FILE_NOT_READ=3
 readonly BL64_CHECK_ERROR_FILE_NOT_EXECUTE=4
 
+readonly BL64_CHECK_ERROR_DIRECTORY_NOT_FOUND=5
+readonly BL64_CHECK_ERROR_DIRECTORY_NOT_READ=6
+
 readonly _BL64_CHECK_TXT_MISSING_PARAMETER='required parameter is missing'
+
 readonly _BL64_CHECK_TXT_COMMAND_NOT_FOUND='the command is not present'
 readonly _BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE='the command is present but has no execution permission'
+
 readonly _BL64_CHECK_TXT_FILE_NOT_FOUND='the file is not present'
 readonly _BL64_CHECK_TXT_FILE_NOT_READABLE='the file is present but has no read permission'
+
+readonly _BL64_CHECK_TXT_DIRECTORY_NOT_FOUND='the directory is not present'
+readonly _BL64_CHECK_TXT_DIRECTORY_NOT_READABLE='the directory is present but has no read permission'
 
 readonly BL64_ARC_ERROR_MISSING_PARAMETER=200
 readonly BL64_ARC_ERROR_INVALID_DESTINATION=201
@@ -160,6 +171,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_LS='/bin/ls'
     BL64_OS_CMD_MKDIR='/bin/mkdir'
     BL64_OS_CMD_MKTEMP='/bin/mktemp'
+    BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
   fi
   if [[ "$BL64_OS_DISTRO" =~ (FEDORA-.*|CENTOS-.*|OL-.*) ]]; then
@@ -173,6 +185,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_LS='/usr/bin/ls'
     BL64_OS_CMD_MKDIR='/usr/bin/mkdir'
     BL64_OS_CMD_MKTEMP='/usr/bin/mktemp'
+    BL64_OS_CMD_MV='/usr/bin/mv'
     BL64_OS_CMD_RM='/usr/bin/rm'
   fi
 
@@ -186,6 +199,7 @@ function bl64_os_set_alias() {
   BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
   BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
   BL64_OS_ALIAS_MKDIR_FULL="$BL64_OS_CMD_MKDIR --parents --verbose"
+  BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV --force --verbose"
   BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM --verbose --force --one-file-system"
   BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM --verbose --force --one-file-system --recursive"
 
@@ -558,6 +572,24 @@ function bl64_check_file() {
   if [[ ! -r "$path" ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_FILE_NOT_READABLE ($path)"
     return $BL64_CHECK_ERROR_FILE_NOT_READ
+  fi
+  :
+}
+
+function bl64_check_directory() {
+  local path="$1"
+
+  if [[ -z "$path" ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (directory path)"
+    return $BL64_CHECK_ERROR_MISSING_PARAMETER
+  fi
+  if [[ ! -d "$path" ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND ($path)"
+    return $BL64_CHECK_ERROR_DIRECTORY_NOT_FOUND
+  fi
+  if [[ ! -r "$path" || ! -x "$path" ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE ($path)"
+    return $BL64_CHECK_ERROR_DIRECTORY_NOT_READ
   fi
   :
 }
