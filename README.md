@@ -28,6 +28,7 @@ The library has been tested on the following operating systems:
 - Ubuntu20
 - Ubuntu21
 - Fedora33
+- Fedora35
 - Debian10
 - Debian11
 
