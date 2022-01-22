@@ -1,5 +1,5 @@
 setup() {
-  . "${DEVBL64_TEST}/lib/bashlib64.bash"
+  . "$DEVBL64_TEST_BASHLIB64"
   . "${DEVBL64_BATS_HELPER}/bats-support/load.bash"
   . "${DEVBL64_BATS_HELPER}/bats-assert/load.bash"
   . "${DEVBL64_BATS_HELPER}/bats-file/load.bash"
