@@ -8,6 +8,7 @@
 # Version: 1.0.0
 #######################################
 
+# shellcheck disable=SC1091
 source './.env' || exit 1
 source "${DEVBL64_BIN}/bashlib64.bash" || exit 1
 
