@@ -10,7 +10,8 @@
 
 # shellcheck disable=SC1091
 source './.env' || exit 1
-source "${DEVBL64_BIN}/bashlib64.bash" || exit 1
+# shellcheck disable=SC1090
+source "$DEVBL64_BASHLIB64" || exit 1
 
 function devbl64_build_standalone() {
 
@@ -44,7 +45,7 @@ function devbl64_build_standalone() {
 
   if [[ "$status" == '0' && "$test" == '1' ]]; then
     bl64_msg_show_task 'updating test library'
-    $BL64_OS_ALIAS_CP_FILE "$lib" "$DEVBL64_TEST/lib"
+    $BL64_OS_ALIAS_CP_FILE "$lib" "$DEVBL64_TEST_BASHLIB64"
   fi
 
   return $status
@@ -53,7 +54,7 @@ function devbl64_build_standalone() {
 
 function devbl64_build_check() {
 
-  :
+  bl64_check_directory "$DEVBL64_SRC" || return 1
 
 }
 
