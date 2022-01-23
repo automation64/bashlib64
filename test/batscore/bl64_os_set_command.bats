@@ -19,6 +19,7 @@ setup() {
   [[ -n "${BL64_OS_CMD_GREP}" ]] && \
   [[ -n "${BL64_OS_CMD_HOSTNAME}" ]] && \
   [[ -n "${BL64_OS_CMD_ID}" ]] && \
+  [[ -n "${BL64_OS_CMD_LN}" ]] && \
   [[ -n "${BL64_OS_CMD_LS}" ]] && \
   [[ -n "${BL64_OS_CMD_MKDIR}" ]] && \
   [[ -n "${BL64_OS_CMD_MKTEMP}" ]] && \
@@ -40,6 +41,7 @@ setup() {
   [[ -x "${BL64_OS_CMD_GREP}" ]] && \
   [[ -x "${BL64_OS_CMD_HOSTNAME}" ]] && \
   [[ -x "${BL64_OS_CMD_ID}" ]] && \
+  [[ -x "${BL64_OS_CMD_LN}" ]] && \
   [[ -x "${BL64_OS_CMD_LS}" ]] && \
   [[ -x "${BL64_OS_CMD_MKDIR}" ]] && \
   [[ -x "${BL64_OS_CMD_MKTEMP}" ]] && \
