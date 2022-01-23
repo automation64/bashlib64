@@ -677,6 +677,14 @@ function bl64_arc_open_tar() {
 
 }
 
+function bl64_pkg_deploy() {
+
+  bl64_pkg_prepare && \
+  bl64_pkg_install "$@" && \
+  bl64_pkg_cleanup
+
+}
+
 function bl64_pkg_prepare() {
 
   export LC_ALL="C"
