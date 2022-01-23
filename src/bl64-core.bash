@@ -62,7 +62,7 @@ bl64_sudo_set_alias
 
 # Enable command mode: the library can be used as a stand-alone script to run embeded functions
 if [[ "$BL64_LIB_CMD" = '1' ]]; then
-  "@"
+  "$@"
 else
   :
 fi
