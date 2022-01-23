@@ -63,10 +63,10 @@ function devbl64_build_help() {
     '[-b] [-p] [-t] [-h]' \
     'Create the BashLib64 stand-alone distributable file' \
     '
-  -b: Build
+  -b: Build stand-alone file
   ' '
-  -p: Promote
-  -t: Update test/lib' ''
+  -p: Promote: copy the stand-alone file to the public location
+  -t: Update test/lib: copy the stand-alone file to the testing environment' ''
 }
 
 #
