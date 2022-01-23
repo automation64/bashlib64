@@ -8,8 +8,10 @@
 # Version: 1.0.0
 #######################################
 
+# shellcheck disable=SC1091
 source './.env' || exit 1
-source "${DEVBL64_BIN}/bashlib64.bash" || exit 1
+# shellcheck disable=SC1090
+source "$DEVBL64_BASHLIB64" || exit 1
 
 function devbl64_build_standalone() {
 
@@ -19,18 +21,23 @@ function devbl64_build_standalone() {
   local file=''
   local lib="$DEVBL64_BUILD/bashlib64.bash"
 
+  # Create header
   bl64_msg_show_task "creating stand-alone library: $lib"
   "$BL64_OS_CMD_CAT" "$DEVBL64_SRC/bl64-core.header" >"$lib"
+
+  # Add global variables
   for file in $DEVBL64_MODULES; do
     bl64_msg_show_task "adding module $file environment"
     bl64_fmt_strip_comments "${DEVBL64_SRC}/bl64-${file}.env" >>"$lib" || true
   done
 
+  # Add core module
   for file in $DEVBL64_MODULES; do
     bl64_msg_show_task "adding module $file code"
     bl64_fmt_strip_comments "${DEVBL64_SRC}/bl64-${file}.bash" >>"$lib" || true
   done
 
+  # Add remaining modules
   bl64_msg_show_task 'adding core'
   bl64_fmt_strip_comments "$DEVBL64_SRC/bl64-core.env" >>"$lib"
   bl64_fmt_strip_comments "$DEVBL64_SRC/bl64-core.bash" >>"$lib"
@@ -43,7 +50,7 @@ function devbl64_build_standalone() {
 
   if [[ "$status" == '0' && "$test" == '1' ]]; then
     bl64_msg_show_task 'updating test library'
-    $BL64_OS_ALIAS_CP_FILE "$lib" "$DEVBL64_TEST/lib"
+    $BL64_OS_ALIAS_CP_FILE "$lib" "$DEVBL64_TEST_BASHLIB64"
   fi
 
   return $status
@@ -52,7 +59,7 @@ function devbl64_build_standalone() {
 
 function devbl64_build_check() {
 
-  :
+  bl64_check_directory "$DEVBL64_SRC" || return 1
 
 }
 
@@ -61,10 +68,10 @@ function devbl64_build_help() {
     '[-b] [-p] [-t] [-h]' \
     'Create the BashLib64 stand-alone distributable file' \
     '
-  -b: Build
+  -b: Build stand-alone file
   ' '
-  -p: Promote
-  -t: Update test/lib' ''
+  -p: Promote: copy the stand-alone file to the public location
+  -t: Update test/lib: copy the stand-alone file to the testing environment' ''
 }
 
 #

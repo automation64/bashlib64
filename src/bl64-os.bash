@@ -1,10 +1,10 @@
 #######################################
-# BashLib64 / OS / Identify OS attributes
+# BashLib64 / OS / Identify OS attributes and provide command aliases
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -54,6 +54,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_USERADD='/usr/sbin/useradd'
     BL64_OS_CMD_TAR='/bin/tar'
+    BL64_OS_CMD_LN='/bin/ln'
   fi
   if [[ "$BL64_OS_DISTRO" =~ (UBUNTU-.*|DEBIAN-.*) ]]; then
     BL64_OS_CMD_CAT='/bin/cat'
@@ -105,6 +106,7 @@ function bl64_os_set_alias() {
   BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN --verbose --recursive"
   BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP --verbose --force"
   BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
+  BL64_OS_ALIAS_LN_SYMBOLIC="$BL64_OS_CMD_LN --verbose --symbolic"
   BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
   BL64_OS_ALIAS_MKDIR_FULL="$BL64_OS_CMD_MKDIR --parents --verbose"
   BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV --force --verbose"
@@ -114,20 +116,175 @@ function bl64_os_set_alias() {
 }
 
 #######################################
+# Change directory ownership with verbose and recursive flags
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_chown_dir() {
+  $BL64_OS_ALIAS_CHOWN_DIR "$@"
+}
+
+#######################################
+# Copy files with verbose and force flags
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_cp_file() {
+  $BL64_OS_ALIAS_CP_FILE "$@"
+}
+
+#######################################
+# Show current user name
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_id_user() {
+  $BL64_OS_ALIAS_ID_USER "$@"
+}
+
+#######################################
+# Create a symbolic link with verbose flag
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_ln_symbolic() {
+  $BL64_OS_ALIAS_LN_SYMBOLIC "$@"
+}
+
+#######################################
+# List files with nocolor flag
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_ls_files() {
+  $BL64_OS_ALIAS_LS_FILES "$@"
+}
+
+#######################################
+# Create full path including parents. Uses verbose flag
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_mkdir_full() {
+  $BL64_OS_ALIAS_MKDIR_FULL "$@"
+}
+
+#######################################
+# Move files using the verbose and force flags
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_mv() {
+  $BL64_OS_ALIAS_MV "$@"
+}
+
+#######################################
+# Remove files using the verbose and force flags. Limited to current filesystem
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_rm_file() {
+  $BL64_OS_ALIAS_RM_FILE "$@"
+}
+
+#######################################
+# Remove directories using the verbose and force flags. Limited to current filesystem
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_rm_full() {
+  $BL64_OS_ALIAS_RM_FULL "$@"
+}
+
+
+
+#######################################
 # Remove content from OS temporary repositories
 #
 # Arguments:
 #   None
 # Outputs:
-#   STDOUT: output from the rm command
-#   STDERR: output from the rm command
+#   STDOUT: rm output
+#   STDERR: rm stderr
 # Returns:
 #   0: always ok
 #######################################
 function bl64_os_cleanup_tmps() {
 
-  $BL64_OS_ALIAS_RM_FILE -- /tmp/*
-  $BL64_OS_ALIAS_RM_FILE -- /var/tmp/*
+  $BL64_OS_ALIAS_RM_FULL -- /tmp/[[:alnum:]]*
+  $BL64_OS_ALIAS_RM_FULL -- /var/tmp/[[:alnum:]]*
   :
 
 }
@@ -138,13 +295,16 @@ function bl64_os_cleanup_tmps() {
 # Arguments:
 #   None
 # Outputs:
-#   STDOUT: None
-#   STDERR: None
+#   STDOUT: rm output
+#   STDERR: rm stderr
 # Returns:
 #   0: always ok
 #######################################
 function bl64_os_cleanup_logs() {
 
+  if [[ -d /var/log ]]; then
+    $BL64_OS_ALIAS_RM_FULL /var/log/[[:alpha:]]*
+  fi
   :
 
 }
@@ -155,23 +315,27 @@ function bl64_os_cleanup_logs() {
 # Arguments:
 #   None
 # Outputs:
-#   STDOUT: None
-#   STDERR: None
+#   STDOUT: rm output
+#   STDERR: rm stderr
 # Returns:
 #   0: always ok
 #######################################
 function bl64_os_cleanup_caches() {
 
+  # Man cache
+  if [[ -d /var/cache/man ]]; then
+    $BL64_OS_ALIAS_RM_FULL /var/cache/man/[[:alpha:]]*
+  fi
   :
 
 }
 
 #######################################
-# Performs a complete cleanup of the OS
+# Performs a complete cleanup of the OS temporary content
 #
 # * Removes temporary files
 # * Cleans caches
-# * Removes or resets logs
+# * Removes logs
 #
 # Arguments:
 #   None
