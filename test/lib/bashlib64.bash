@@ -249,20 +249,26 @@ function bl64_os_cmd_rm_full() {
 
 function bl64_os_cleanup_tmps() {
 
-  $BL64_OS_ALIAS_RM_FILE -- /tmp/*
-  $BL64_OS_ALIAS_RM_FILE -- /var/tmp/*
+  $BL64_OS_ALIAS_RM_FULL -- /tmp/[[:alnum:]]*
+  $BL64_OS_ALIAS_RM_FULL -- /var/tmp/[[:alnum:]]*
   :
 
 }
 
 function bl64_os_cleanup_logs() {
 
+  if [[ -d /var/log ]]; then
+    $BL64_OS_ALIAS_RM_FULL /var/log/[[:alpha:]]*
+  fi
   :
 
 }
 
 function bl64_os_cleanup_caches() {
 
+  if [[ -d /var/cache/man ]]; then
+    $BL64_OS_ALIAS_RM_FULL /var/cache/man/[[:alpha:]]*
+  fi
   :
 
 }

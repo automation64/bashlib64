@@ -276,15 +276,15 @@ function bl64_os_cmd_rm_full() {
 # Arguments:
 #   None
 # Outputs:
-#   STDOUT: output from the rm command
-#   STDERR: output from the rm command
+#   STDOUT: rm output
+#   STDERR: rm stderr
 # Returns:
 #   0: always ok
 #######################################
 function bl64_os_cleanup_tmps() {
 
-  $BL64_OS_ALIAS_RM_FILE -- /tmp/*
-  $BL64_OS_ALIAS_RM_FILE -- /var/tmp/*
+  $BL64_OS_ALIAS_RM_FULL -- /tmp/[[:alnum:]]*
+  $BL64_OS_ALIAS_RM_FULL -- /var/tmp/[[:alnum:]]*
   :
 
 }
@@ -295,13 +295,16 @@ function bl64_os_cleanup_tmps() {
 # Arguments:
 #   None
 # Outputs:
-#   STDOUT: None
-#   STDERR: None
+#   STDOUT: rm output
+#   STDERR: rm stderr
 # Returns:
 #   0: always ok
 #######################################
 function bl64_os_cleanup_logs() {
 
+  if [[ -d /var/log ]]; then
+    $BL64_OS_ALIAS_RM_FULL /var/log/[[:alpha:]]*
+  fi
   :
 
 }
@@ -312,23 +315,27 @@ function bl64_os_cleanup_logs() {
 # Arguments:
 #   None
 # Outputs:
-#   STDOUT: None
-#   STDERR: None
+#   STDOUT: rm output
+#   STDERR: rm stderr
 # Returns:
 #   0: always ok
 #######################################
 function bl64_os_cleanup_caches() {
 
+  # Man cache
+  if [[ -d /var/cache/man ]]; then
+    $BL64_OS_ALIAS_RM_FULL /var/cache/man/[[:alpha:]]*
+  fi
   :
 
 }
 
 #######################################
-# Performs a complete cleanup of the OS
+# Performs a complete cleanup of the OS temporary content
 #
 # * Removes temporary files
 # * Cleans caches
-# * Removes or resets logs
+# * Removes logs
 #
 # Arguments:
 #   None
