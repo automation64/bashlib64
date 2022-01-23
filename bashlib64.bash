@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.9.0
+# Version: 1.9.1
 #######################################
 
 [[ -n "$BL64_LIB_DEBUG" && "$BL64_LIB_DEBUG" == '1' ]] && set -x
@@ -845,13 +845,17 @@ export LANG
 export LC_ALL
 export LANGUAGE
 
+export BL64_LIB_CMD="${BL64_LIB_CMD:-0}"
 export BL64_LIB_DEBUG="${BL64_LIB_DEBUG:-0}"
 export BL64_LIB_STRICT="${BL64_LIB_STRICT:-1}"
 export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
+
 export BL64_LIB_SIGNAL_HUP="${BL64_LIB_SIGNAL_HUP:--}"
 export BL64_LIB_SIGNAL_STOP="${BL64_LIB_SIGNAL_STOP:--}"
 export BL64_LIB_SIGNAL_QUIT="${BL64_LIB_SIGNAL_QUIT:--}"
+
 export BL64_SCRIPT_NAME="${BL64_SCRIPT_NAME:-${0##*/}}"
+
 export BL64_SCRIPT_SID="${BASHPID}"
 
 readonly BL64_LIB_VAR_NULL='__s64__'
@@ -897,4 +901,9 @@ esac
 bl64_os_set_command
 bl64_os_set_alias
 bl64_sudo_set_alias
-:
+
+if [[ "$BL64_LIB_CMD" = '1' ]]; then
+  "@"
+else
+  :
+fi
