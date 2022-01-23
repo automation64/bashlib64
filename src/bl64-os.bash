@@ -1,5 +1,5 @@
 #######################################
-# BashLib64 / OS / Identify OS attributes
+# BashLib64 / OS / Identify OS attributes and provide command aliases
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
@@ -128,7 +128,7 @@ function bl64_os_set_alias() {
 # Returns:
 #   n: command exit status
 #######################################
-function bl64_os_cmd_chown_dir() {
+function bl64_os_chown_dir() {
   $BL64_OS_ALIAS_CHOWN_DIR "$@"
 }
 
@@ -145,7 +145,7 @@ function bl64_os_cmd_chown_dir() {
 # Returns:
 #   n: command exit status
 #######################################
-function bl64_os_cmd_cp_file() {
+function bl64_os_cp_file() {
   $BL64_OS_ALIAS_CP_FILE "$@"
 }
 
@@ -162,7 +162,7 @@ function bl64_os_cmd_cp_file() {
 # Returns:
 #   n: command exit status
 #######################################
-function bl64_os_cmd_id_user() {
+function bl64_os_id_user() {
   $BL64_OS_ALIAS_ID_USER "$@"
 }
 
@@ -179,7 +179,7 @@ function bl64_os_cmd_id_user() {
 # Returns:
 #   n: command exit status
 #######################################
-function bl64_os_cmd_ln_symbolic() {
+function bl64_os_ln_symbolic() {
   $BL64_OS_ALIAS_LN_SYMBOLIC "$@"
 }
 
@@ -196,7 +196,7 @@ function bl64_os_cmd_ln_symbolic() {
 # Returns:
 #   n: command exit status
 #######################################
-function bl64_os_cmd_ls_files() {
+function bl64_os_ls_files() {
   $BL64_OS_ALIAS_LS_FILES "$@"
 }
 
@@ -213,7 +213,7 @@ function bl64_os_cmd_ls_files() {
 # Returns:
 #   n: command exit status
 #######################################
-function bl64_os_cmd_mkdir_full() {
+function bl64_os_mkdir_full() {
   $BL64_OS_ALIAS_MKDIR_FULL "$@"
 }
 
@@ -230,7 +230,7 @@ function bl64_os_cmd_mkdir_full() {
 # Returns:
 #   n: command exit status
 #######################################
-function bl64_os_cmd_mv() {
+function bl64_os_mv() {
   $BL64_OS_ALIAS_MV "$@"
 }
 
@@ -247,7 +247,7 @@ function bl64_os_cmd_mv() {
 # Returns:
 #   n: command exit status
 #######################################
-function bl64_os_cmd_rm_file() {
+function bl64_os_rm_file() {
   $BL64_OS_ALIAS_RM_FILE "$@"
 }
 
@@ -264,7 +264,7 @@ function bl64_os_cmd_rm_file() {
 # Returns:
 #   n: command exit status
 #######################################
-function bl64_os_cmd_rm_full() {
+function bl64_os_rm_full() {
   $BL64_OS_ALIAS_RM_FULL "$@"
 }
 
