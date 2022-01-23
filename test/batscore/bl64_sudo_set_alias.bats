@@ -10,6 +10,6 @@ setup() {
 
   bl64_sudo_set_alias
 
-  [[ -n "$BL64_SUDO_ALIAS_SUDO_ENV" ]]
+  assert_not_equal "$BL64_SUDO_ALIAS_SUDO_ENV" ''
 
 }

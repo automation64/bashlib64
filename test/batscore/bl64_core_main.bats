@@ -7,7 +7,7 @@ setup() {
 }
 
 @test "bl64_core_main: lang is set" {
-  assert_equal "$LANG" 'C' && \
-  assert_equal "$LC_ALL" 'C' && \
+  assert_equal "$LANG" 'C'
+  assert_equal "$LC_ALL" 'C'
   assert_equal "$LANGUAGE" 'C'
 }

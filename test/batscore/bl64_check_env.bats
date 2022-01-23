@@ -8,9 +8,12 @@ setup() {
 
 @test "bl64_check_env: public constants are set" {
 
-  assert_equal $BL64_CHECK_ERROR_MISSING_PARAMETER 1 ]] && \
-  assert_equal $BL64_CHECK_ERROR_FILE_NOT_FOUND 2 ]] && \
-  assert_equal $BL64_CHECK_ERROR_FILE_NOT_READ 3 ]] && \
-  assert_equal $BL64_CHECK_ERROR_FILE_NOT_EXECUTE 4 ]]
+  assert_equal $BL64_CHECK_ERROR_MISSING_PARAMETER 1
+  assert_equal $BL64_CHECK_ERROR_FILE_NOT_FOUND 2
+  assert_equal $BL64_CHECK_ERROR_FILE_NOT_READ 3
+  assert_equal $BL64_CHECK_ERROR_FILE_NOT_EXECUTE 4
+  assert_equal $BL64_CHECK_ERROR_DIRECTORY_NOT_FOUND 5
+  assert_equal $BL64_CHECK_ERROR_DIRECTORY_NOT_READ 6
+  assert_equal $BL64_CHECK_ERROR_PARAMETER_EMPTY 7
 
 }

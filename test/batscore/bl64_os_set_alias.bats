@@ -8,14 +8,14 @@ setup() {
 
 @test "bl64_os_set_alias: common globals are set" {
 
-  [[ -n "$BL64_OS_ALIAS_CHOWN_DIR" ]] && \
-  [[ -n "$BL64_OS_ALIAS_CP_FILE" ]] && \
-  [[ -n "$BL64_OS_ALIAS_ID_USER" ]] && \
-  [[ -n "$BL64_OS_ALIAS_LN_SYMBOLIC" ]] && \
-  [[ -n "$BL64_OS_ALIAS_LS_FILES" ]] && \
-  [[ -n "$BL64_OS_ALIAS_MKDIR_FULL" ]] && \
-  [[ -n "$BL64_OS_ALIAS_MV" ]] && \
-  [[ -n "$BL64_OS_ALIAS_RM_FILE" ]] && \
-  [[ -n "$BL64_OS_ALIAS_RM_FULL" ]]
+  assert_not_equal "$BL64_OS_ALIAS_CHOWN_DIR" ''
+  assert_not_equal "$BL64_OS_ALIAS_CP_FILE" ''
+  assert_not_equal "$BL64_OS_ALIAS_ID_USER" ''
+  assert_not_equal "$BL64_OS_ALIAS_LN_SYMBOLIC" ''
+  assert_not_equal "$BL64_OS_ALIAS_LS_FILES" ''
+  assert_not_equal "$BL64_OS_ALIAS_MKDIR_FULL" ''
+  assert_not_equal "$BL64_OS_ALIAS_MV" ''
+  assert_not_equal "$BL64_OS_ALIAS_RM_FILE" ''
+  assert_not_equal "$BL64_OS_ALIAS_RM_FULL" ''
 
 }
