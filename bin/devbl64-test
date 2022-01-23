@@ -8,8 +8,10 @@
 # Version: 1.1.0
 #######################################
 
+# shellcheck disable=SC1091
 source './.env' || exit 1
-source "${DEVBL64_BIN}/bashlib64.bash" || exit 1
+# shellcheck disable=SC1090
+source "$DEVBL64_BASHLIB64" || exit 1
 
 function devbl64_run_tests_bats() {
 
@@ -19,10 +21,10 @@ function devbl64_run_tests_bats() {
   local verbose=''
 
   if [[ -n "$case" ]]; then
-    target="$DEVBL64_TEST/batscore/${case}.bats"
+    target="${DEVBL64_TEST_BATSCORE}/${case}.bats"
   else
     # target="$(echo $DEVBL64_TEST/batscore/*)"
-    target="$DEVBL64_TEST/batscore/"
+    target="$DEVBL64_TEST_BATSCORE"
   fi
 
   if [[ "$debug" == '1' ]]; then
@@ -59,7 +61,9 @@ function devbl64_run_tests_bats_container() {
       run \
       --rm \
       --user "$DEVBL64_TEST_USR" \
-      --env DEVBL64_TEST="/test" \
+      --env DEVBL64_TEST='/test' \
+      --env DEVBL64_TEST_BASHLIB64='/test/lib/bashlib64.bash' \
+      --env DEVBL64_BATS_HELPER="$DEVBL64_BATS_HELPER" \
       --volume "${DEVBL64_TEST}:/test" \
       "${registry}/${target}" \
       "$container_tests" \

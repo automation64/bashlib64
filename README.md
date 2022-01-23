@@ -1,6 +1,6 @@
 # Project: BashLib64
 
-```shell
+```shell linenums="0"
 
 
 ██████╗  █████╗ ███████╗██╗  ██╗██╗     ██╗██████╗  ██████╗ ██╗  ██╗
@@ -17,6 +17,21 @@
 
 BashLib64 is a project for creating **Bash** functions that can facilitate and accelerate the development of Bash scripts and code snippets such as the ones used to create container images.
 
+The library is a stand-alone file build from modules that can be easily distributed and included into existing or new bash scripts:
+
+| Module                                                             | Purpose                                            |
+| ------------------------------------------------------------------ | -------------------------------------------------- |
+| [bl64-arc](https://serdigital64.github.io/bashlib64/bl64-arc/)     | Manipulate archive files                           |
+| [bl64-check](https://serdigital64.github.io/bashlib64/bl64-check/) | Check for conditions and report status             |
+| [bl64-core](https://serdigital64.github.io/bashlib64/bl64-core/)   | Setup script run-time environment                  |
+| [bl64-fmt](https://serdigital64.github.io/bashlib64/bl64-fmt/)     | Format text data                                   |
+| [bl64-log](https://serdigital64.github.io/bashlib64/bl64-log/)     | Write messages to logs                             |
+| [bl64-msg](https://serdigital64.github.io/bashlib64/bl64-msg/)     | Display messages                                   |
+| [bl64-os](https://serdigital64.github.io/bashlib64/bl64-os/)       | Identify OS attributes and provide command aliases |
+| [bl64-pkg](https://serdigital64.github.io/bashlib64/bl64-pkg/)     | Install native OS packages                         |
+| [bl64-sudo](https://serdigital64.github.io/bashlib64/bl64-sudo/)   | Manipulate sudo configuration                      |
+| [bl64-vcs](https://serdigital64.github.io/bashlib64/bl64-vcs/)     | Version Control System interface                   |
+
 ## Deployment
 
 ### OS Compatibility
@@ -28,6 +43,7 @@ The library has been tested on the following operating systems:
 - Ubuntu20
 - Ubuntu21
 - Fedora33
+- Fedora35
 - Debian10
 - Debian11
 
