@@ -116,6 +116,161 @@ function bl64_os_set_alias() {
 }
 
 #######################################
+# Change directory ownership with verbose and recursive flags
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_cmd_chown_dir() {
+  $BL64_OS_ALIAS_CHOWN_DIR "$@"
+}
+
+#######################################
+# Copy files with verbose and force flags
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_cmd_cp_file() {
+  $BL64_OS_ALIAS_CP_FILE "$@"
+}
+
+#######################################
+# Show current user name
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_cmd_id_user() {
+  $BL64_OS_ALIAS_ID_USER "$@"
+}
+
+#######################################
+# Create a symbolic link with verbose flag
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_cmd_ln_symbolic() {
+  $BL64_OS_ALIAS_LN_SYMBOLIC "$@"
+}
+
+#######################################
+# List files with nocolor flag
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_cmd_ls_files() {
+  $BL64_OS_ALIAS_LS_FILES "$@"
+}
+
+#######################################
+# Create full path including parents. Uses verbose flag
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_cmd_mkdir_full() {
+  $BL64_OS_ALIAS_MKDIR_FULL "$@"
+}
+
+#######################################
+# Move files using the verbose and force flags
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_cmd_mv() {
+  $BL64_OS_ALIAS_MV "$@"
+}
+
+#######################################
+# Remove files using the verbose and force flags. Limited to current filesystem
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_cmd_rm_file() {
+  $BL64_OS_ALIAS_RM_FILE "$@"
+}
+
+#######################################
+# Remove directories using the verbose and force flags. Limited to current filesystem
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_cmd_rm_full() {
+  $BL64_OS_ALIAS_RM_FULL "$@"
+}
+
+
+
+#######################################
 # Remove content from OS temporary repositories
 #
 # Arguments:

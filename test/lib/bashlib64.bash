@@ -209,6 +209,44 @@ function bl64_os_set_alias() {
 
 }
 
+function bl64_os_cmd_chown_dir() {
+  $BL64_OS_ALIAS_CHOWN_DIR "$@"
+}
+
+function bl64_os_cmd_cp_file() {
+  $BL64_OS_ALIAS_CP_FILE "$@"
+}
+
+function bl64_os_cmd_id_user() {
+  $BL64_OS_ALIAS_ID_USER "$@"
+}
+
+function bl64_os_cmd_ln_symbolic() {
+  $BL64_OS_ALIAS_LN_SYMBOLIC "$@"
+}
+
+function bl64_os_cmd_ls_files() {
+  $BL64_OS_ALIAS_LS_FILES "$@"
+}
+
+function bl64_os_cmd_mkdir_full() {
+  $BL64_OS_ALIAS_MKDIR_FULL "$@"
+}
+
+function bl64_os_cmd_mv() {
+  $BL64_OS_ALIAS_MV "$@"
+}
+
+function bl64_os_cmd_rm_file() {
+  $BL64_OS_ALIAS_RM_FILE "$@"
+}
+
+function bl64_os_cmd_rm_full() {
+  $BL64_OS_ALIAS_RM_FULL "$@"
+}
+
+
+
 function bl64_os_cleanup_tmps() {
 
   $BL64_OS_ALIAS_RM_FILE -- /tmp/*
