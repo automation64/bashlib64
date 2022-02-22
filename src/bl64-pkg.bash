@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -23,9 +23,9 @@
 #######################################
 function bl64_pkg_deploy() {
 
-  bl64_pkg_prepare && \
-  bl64_pkg_install "$@" && \
-  bl64_pkg_cleanup
+  bl64_pkg_prepare &&
+    bl64_pkg_install "$@" &&
+    bl64_pkg_cleanup
 
 }
 
@@ -42,8 +42,6 @@ function bl64_pkg_deploy() {
 #######################################
 function bl64_pkg_prepare() {
 
-  export LC_ALL="C"
-
   case "$BL64_OS_DISTRO" in
   UBUNTU-* | DEBIAN-*)
     export DEBIAN_FRONTEND="noninteractive"
@@ -51,6 +49,9 @@ function bl64_pkg_prepare() {
     ;;
   FEDORA-* | CENTOS-* | OL-*)
     $BL64_PKG_ALIAS_DNF_CACHE
+    ;;
+  ALPINE-*)
+    $BL64_PKG_ALIAS_APK_UPDATE
     ;;
   esac
 
@@ -69,8 +70,6 @@ function bl64_pkg_prepare() {
 #######################################
 function bl64_pkg_install() {
 
-  export LC_ALL="C"
-
   case "$BL64_OS_DISTRO" in
   UBUNTU-* | DEBIAN-*)
     export DEBIAN_FRONTEND="noninteractive"
@@ -78,6 +77,9 @@ function bl64_pkg_install() {
     ;;
   FEDORA-* | CENTOS-* | OL-*)
     $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
+    ;;
+  ALPINE-*)
+    $BL64_PKG_ALIAS_APK_INSTALL -- "$@"
     ;;
   esac
 
@@ -95,8 +97,7 @@ function bl64_pkg_install() {
 #   n: package manager exist status
 #######################################
 function bl64_pkg_cleanup() {
-
-  export LC_ALL="C"
+  local target=''
 
   case "$BL64_OS_DISTRO" in
   UBUNTU-* | DEBIAN-*)
@@ -105,6 +106,12 @@ function bl64_pkg_cleanup() {
     ;;
   FEDORA-* | CENTOS-* | OL-*)
     $BL64_PKG_ALIAS_DNF_CLEAN
+    ;;
+  ALPINE-*)
+    target='/var/cache/apk'
+    if [[ -d "$target" ]]; then
+      $BL64_OS_ALIAS_RM_FULL ${target}/[[:alpha:]]*
+    fi
     ;;
   esac
 

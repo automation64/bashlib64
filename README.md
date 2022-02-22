@@ -46,6 +46,7 @@ The library has been tested on the following operating systems:
 - Fedora35
 - Debian10
 - Debian11
+- Alpine3
 
 ### Prerequisites
 
