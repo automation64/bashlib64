@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# Set development environment
+#
+
+# Check calling location
+test -f ./.local
+if test $? -ne 0; then
+  echo "Error: source this file from the project's root directory" && return 1
+fi
+
+# Load local variables
+. ./.local
+
+# Load secrets
+. ./.secrets
+
+# Load global variables
+. ./.env
