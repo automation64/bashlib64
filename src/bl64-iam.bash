@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.0.1
 #######################################
 
 #######################################
@@ -30,5 +30,12 @@ function bl64_iam_user_add() {
 
   bl64_check_command "$BL64_OS_CMD_USERADD" || return $BL64_IAM_ERROR_MISSING_USER_ADD
 
-  "$BL64_OS_CMD_USERADD" "$login"
+  case "$BL64_OS_DISTRO" in
+  UBUNTU-* | DEBIAN-* | FEDORA-* | CENTOS-* | OL-*)
+    /usr/sbin/useradd "$login"
+    ;;
+  ALPINE-*)
+    /usr/sbin/adduser -D "$login"
+    ;;
+  esac
 }

@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.11.0
+# Version: 1.11.2
 #######################################
 
 [[ -n "$BL64_LIB_DEBUG" && "$BL64_LIB_DEBUG" == '1' ]] && set -x
@@ -318,7 +318,14 @@ function bl64_iam_user_add() {
 
   bl64_check_command "$BL64_OS_CMD_USERADD" || return $BL64_IAM_ERROR_MISSING_USER_ADD
 
-  "$BL64_OS_CMD_USERADD" "$login"
+  case "$BL64_OS_DISTRO" in
+  UBUNTU-* | DEBIAN-* | FEDORA-* | CENTOS-* | OL-*)
+    /usr/sbin/useradd "$login"
+    ;;
+  ALPINE-*)
+    /usr/sbin/adduser -D "$login"
+    ;;
+  esac
 }
 
 function _bl64_log_register() {
@@ -631,7 +638,6 @@ function bl64_os_set_command() {
   UBUNTU-* | DEBIAN-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_USERADD='/usr/sbin/useradd'
     BL64_OS_CMD_TAR='/bin/tar'
     BL64_OS_CMD_LN='/bin/ln'
     BL64_OS_CMD_CAT='/bin/cat'
@@ -650,7 +656,6 @@ function bl64_os_set_command() {
   FEDORA-* | CENTOS-* | OL-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_USERADD='/usr/sbin/useradd'
     BL64_OS_CMD_TAR='/bin/tar'
     BL64_OS_CMD_LN='/bin/ln'
     BL64_OS_CMD_CAT='/usr/bin/cat'
@@ -669,7 +674,6 @@ function bl64_os_set_command() {
   ALPINE-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_USERADD='/usr/sbin/adduser'
     BL64_OS_CMD_TAR='/bin/tar'
     BL64_OS_CMD_LN='/bin/ln'
     BL64_OS_CMD_CAT='/bin/cat'
