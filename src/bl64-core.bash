@@ -45,8 +45,7 @@ if [[ "$BL64_LIB_LANG" == '1' ]]; then
 fi
 
 # Detect current OS
-bl64_os_get_distro
-if (( $? != 0 )); then
+if ! bl64_os_get_distro; then
   printf '%s\n' "Fatal: BashLib64 is not supported in the current OS" >&2
   false
 else
