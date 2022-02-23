@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -16,24 +16,31 @@
 #   STDOUT: None
 #   STDERR: None
 # Returns:
-#   0: ok: always ok, even when unable to identify the platform
+#   0: ok
+#   1: os not supported
 #######################################
 function bl64_os_get_distro() {
 
   BL64_OS_DISTRO='UNKNOWN'
 
   if [[ -r '/etc/os-release' ]]; then
-
     # shellcheck disable=SC1091
     source '/etc/os-release'
-
     if [[ -n "$ID" && -n "$VERSION_ID" ]]; then
       BL64_OS_DISTRO="${ID^^}-${VERSION_ID}"
     fi
-
   fi
 
-  return 0
+  case "$BL64_OS_DISTRO" in
+  UBUNTU-20* | UBUNTU-21*) : ;;
+  DEBIAN-10* | DEBIAN-11*) : ;;
+  FEDORA-33* | FEDORA-35*) : ;;
+  CENTOS-8*) : ;;
+  OL-8*) : ;;
+  ALPINE-3*) : ;;
+  *) false ;;
+  esac
+  # Do not use return as this function gets sourced
 }
 
 #######################################
@@ -49,14 +56,13 @@ function bl64_os_get_distro() {
 #   0: always ok, even when the OS is not supported
 #######################################
 function bl64_os_set_command() {
-  if [[ "$BL64_OS_DISTRO" =~ (UBUNTU-.*|FEDORA-.*|CENTOS-.*|OL-.*|DEBIAN-.*) ]]; then
+  case "$BL64_OS_DISTRO" in
+  UBUNTU-* | DEBIAN-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_USERADD='/usr/sbin/useradd'
     BL64_OS_CMD_TAR='/bin/tar'
     BL64_OS_CMD_LN='/bin/ln'
-  fi
-  if [[ "$BL64_OS_DISTRO" =~ (UBUNTU-.*|DEBIAN-.*) ]]; then
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_CHMOD='/bin/chmod'
     BL64_OS_CMD_CHOWN='/bin/chown'
@@ -69,8 +75,13 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MKTEMP='/bin/mktemp'
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
-  fi
-  if [[ "$BL64_OS_DISTRO" =~ (FEDORA-.*|CENTOS-.*|OL-.*) ]]; then
+    ;;
+  FEDORA-* | CENTOS-* | OL-*)
+    BL64_OS_CMD_AWK='/usr/bin/awk'
+    BL64_OS_CMD_ID='/usr/bin/id'
+    BL64_OS_CMD_USERADD='/usr/sbin/useradd'
+    BL64_OS_CMD_TAR='/bin/tar'
+    BL64_OS_CMD_LN='/bin/ln'
     BL64_OS_CMD_CAT='/usr/bin/cat'
     BL64_OS_CMD_CHMOD='/usr/bin/chmod'
     BL64_OS_CMD_CHOWN='/usr/bin/chown'
@@ -83,9 +94,27 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MKTEMP='/usr/bin/mktemp'
     BL64_OS_CMD_MV='/usr/bin/mv'
     BL64_OS_CMD_RM='/usr/bin/rm'
-  fi
-
-  return 0
+    ;;
+  ALPINE-*)
+    BL64_OS_CMD_AWK='/usr/bin/awk'
+    BL64_OS_CMD_ID='/usr/bin/id'
+    BL64_OS_CMD_USERADD='/usr/sbin/adduser'
+    BL64_OS_CMD_TAR='/bin/tar'
+    BL64_OS_CMD_LN='/bin/ln'
+    BL64_OS_CMD_CAT='/bin/cat'
+    BL64_OS_CMD_CHMOD='/bin/chmod'
+    BL64_OS_CMD_CHOWN='/bin/chown'
+    BL64_OS_CMD_CP='/bin/cp'
+    BL64_OS_CMD_DATE="/bin/date"
+    BL64_OS_CMD_GREP='/bin/grep'
+    BL64_OS_CMD_HOSTNAME='/bin/hostname'
+    BL64_OS_CMD_LS='/bin/ls'
+    BL64_OS_CMD_MKDIR='/bin/mkdir'
+    BL64_OS_CMD_MKTEMP='/bin/mktemp'
+    BL64_OS_CMD_MV='/bin/mv'
+    BL64_OS_CMD_RM='/bin/rm'
+    ;;
+  esac
 }
 
 #######################################
@@ -102,7 +131,6 @@ function bl64_os_set_command() {
 #   0: always ok
 #######################################
 function bl64_os_set_alias() {
-
   BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN --verbose --recursive"
   BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP --verbose --force"
   BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
@@ -112,7 +140,6 @@ function bl64_os_set_alias() {
   BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV --force --verbose"
   BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM --verbose --force --one-file-system"
   BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM --verbose --force --one-file-system --recursive"
-
 }
 
 #######################################
@@ -268,8 +295,6 @@ function bl64_os_rm_full() {
   $BL64_OS_ALIAS_RM_FULL "$@"
 }
 
-
-
 #######################################
 # Remove content from OS temporary repositories
 #
@@ -301,16 +326,17 @@ function bl64_os_cleanup_tmps() {
 #   0: always ok
 #######################################
 function bl64_os_cleanup_logs() {
+  local target='/var/log'
 
-  if [[ -d /var/log ]]; then
-    $BL64_OS_ALIAS_RM_FULL /var/log/[[:alpha:]]*
+  if [[ -d "$target" ]]; then
+    $BL64_OS_ALIAS_RM_FULL ${target}/[[:alnum:]]*
   fi
   :
 
 }
 
 #######################################
-# Remove or reset caches from standard locations
+# Remove or reset OS caches from standard locations
 #
 # Arguments:
 #   None
@@ -321,10 +347,10 @@ function bl64_os_cleanup_logs() {
 #   0: always ok
 #######################################
 function bl64_os_cleanup_caches() {
+  local target='/var/cache/man'
 
-  # Man cache
-  if [[ -d /var/cache/man ]]; then
-    $BL64_OS_ALIAS_RM_FULL /var/cache/man/[[:alpha:]]*
+  if [[ -d "$target" ]]; then
+    $BL64_OS_ALIAS_RM_FULL ${target}/[[:alnum:]]*
   fi
   :
 

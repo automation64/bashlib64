@@ -9,12 +9,9 @@ setup() {
 }
 
 @test "bl64_msg_show_task: output" {
-  local value='testing task msg'
+  local value='testing batch msg'
 
-  run bl64_msg_show_task "$value"
+  run bl64_msg_show_batch_start "$value"
 
-  assert_output --partial "${BL64_SCRIPT_NAME}"
-  assert_output --partial "${HOSTNAME}"
-  assert_output --partial "${_BL64_MSG_TXT_TASK}"
-  assert_output --partial "${value}"
+  assert_output --partial "${_BL64_MSG_TXT_BATCH_START}: $value"
 }
