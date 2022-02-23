@@ -117,7 +117,6 @@ export BL64_OS_CMD_MKTEMP
 export BL64_OS_CMD_MV
 export BL64_OS_CMD_RM
 export BL64_OS_CMD_TAR
-export BL64_OS_CMD_USERADD
 
 export BL64_OS_ALIAS_CHOWN_DIR
 export BL64_OS_ALIAS_CP_FILE
@@ -315,8 +314,6 @@ function bl64_iam_user_add() {
     bl64_msg_show_error "$_BL64_IAM_TXT_MISSING_PARAMETER (login)"
     return $BL64_IAM_ERROR_MISSING_PARAMETER
   fi
-
-  bl64_check_command "$BL64_OS_CMD_USERADD" || return $BL64_IAM_ERROR_MISSING_USER_ADD
 
   case "$BL64_OS_DISTRO" in
   UBUNTU-* | DEBIAN-* | FEDORA-* | CENTOS-* | OL-*)
