@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.10.0
+# Version: 1.11.0
 #######################################
 
 [[ -n "$BL64_LIB_DEBUG" && "$BL64_LIB_DEBUG" == '1' ]] && set -x
@@ -44,6 +44,11 @@ readonly _BL64_CHECK_TXT_DIRECTORY_NOT_READABLE='required directory is present b
 
 readonly _BL64_CHECK_TXT_EXPORT_EMPTY='required shell exported variable is empty'
 readonly _BL64_CHECK_TXT_EXPORT_SET='required shell exported variable is not set'
+
+readonly BL64_IAM_ERROR_MISSING_PARAMETER=200
+readonly BL64_IAM_ERROR_MISSING_USER_ADD=201
+
+readonly _BL64_IAM_TXT_MISSING_PARAMETER='required parameter is missing'
 
 readonly BL64_LOG_TYPE_FILE='F'
 readonly BL64_LOG_CATEGORY_INFO='info'
@@ -290,6 +295,19 @@ function bl64_fmt_strip_comments() {
 
   "$BL64_OS_CMD_GREP" -v -E '^#.*$|^ *#.*$' "$source"
 
+}
+
+function bl64_iam_user_add() {
+  local login="$1"
+
+  if [[ -z "$login" ]]; then
+    bl64_msg_show_error "$_BL64_IAM_TXT_MISSING_PARAMETER (login)"
+    return $BL64_IAM_ERROR_MISSING_PARAMETER
+  fi
+
+  bl64_check_command "$BL64_OS_CMD_USERADD" || return $BL64_IAM_ERROR_MISSING_USER_ADD
+
+  "$BL64_OS_CMD_USERADD" "$login"
 }
 
 function _bl64_log_register() {
