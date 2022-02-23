@@ -28,8 +28,6 @@ function bl64_iam_user_add() {
     return $BL64_IAM_ERROR_MISSING_PARAMETER
   fi
 
-  bl64_check_command "$BL64_OS_CMD_USERADD" || return $BL64_IAM_ERROR_MISSING_USER_ADD
-
   case "$BL64_OS_DISTRO" in
   UBUNTU-* | DEBIAN-* | FEDORA-* | CENTOS-* | OL-*)
     /usr/sbin/useradd "$login"
