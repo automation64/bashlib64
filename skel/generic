@@ -54,6 +54,7 @@ function X_APP_NAMESPACE_X_help() {
     -x         :
     -w         :
     ' '
+    -h         : Show help
     -z         :' '
     -y X_OPT1_X: '
 
@@ -64,10 +65,11 @@ function X_APP_NAMESPACE_X_help() {
 #
 
 declare X_APP_NAMESPACE_X_status=1
+declare X_APP_NAMESPACE_X_option=''
 declare X_APP_NAMESPACE_X_command=''
+declare X_APP_NAMESPACE_X_command_tag=''
 declare X_APP_NAMESPACE_X_X_OPTION_X=''
 declare X_APP_NAMESPACE_X_X_FLAG_X='0'
-declare X_APP_NAMESPACE_X_option=''
 
 (( $# == 0 )) && X_APP_NAMESPACE_X_help && exit 1
 while getopts ':xwy:zh' X_APP_NAMESPACE_X_option; do

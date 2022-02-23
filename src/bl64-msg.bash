@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -261,3 +261,50 @@ function bl64_msg_show_text() {
   return 0
 
 }
+
+#######################################
+# Display batch process start message
+#
+# Arguments:
+#   $1: message
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_batch_start() {
+
+  local message="${1-$BL64_LIB_VAR_TBD}"
+
+  _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "${_BL64_MSG_TXT_BATCH_START}: $message"
+
+}
+
+#######################################
+# Display batch process complete message
+#
+# Arguments:
+#   $1: process exit status
+#   $2: message
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_batch_finish() {
+
+  local status="$1"
+  local message="${2-$BL64_LIB_VAR_TBD}"
+
+  if ((status == 0)); then
+    _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "${_BL64_MSG_TXT_BATCH_FINISH_OK}: $message"
+  else
+    _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: $message (error: ${status})"
+  fi
+
+}
+

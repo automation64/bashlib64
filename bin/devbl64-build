@@ -5,11 +5,10 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.0.1
 #######################################
 
-# shellcheck disable=SC1091
-source './.env' || exit 1
+[[ -z "$DEVBL64_BIN" ]] && echo "Error: prepare the dev environment before executing this file" && exit 1
 # shellcheck disable=SC1090
 source "$DEVBL64_BASHLIB64" || exit 1
 
@@ -100,16 +99,11 @@ done
 [[ -z "$devbl64_build_command" ]] && devbl64_build_help && exit 1
 devbl64_build_check || exit 1
 
-bl64_msg_show_info "starting ${devbl64_build_command_tag} process"
+bl64_msg_show_batch_start "$devbl64_build_command_tag"
 case "$devbl64_build_command" in
 'devbl64_build_standalone') "$devbl64_build_command" "$devbl64_build_promote" "$devbl64_build_test" ;;
 esac
 devbl64_build_status=$?
 
-if ((devbl64_build_status == 0)); then
-  bl64_msg_show_info "${devbl64_build_command_tag} process complete"
-else
-  bl64_msg_show_info "${devbl64_build_command_tag} process complete with errors (error: $devbl64_build_status)"
-fi
-
+bl64_msg_show_batch_finish $devbl64_build_status "$devbl64_build_command_tag"
 exit $devbl64_build_status
