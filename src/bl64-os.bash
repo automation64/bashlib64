@@ -16,7 +16,8 @@
 #   STDOUT: None
 #   STDERR: None
 # Returns:
-#   0: ok: always ok, even when unable to identify the platform
+#   0: ok
+#   1: os not supported
 #######################################
 function bl64_os_get_distro() {
 
@@ -37,9 +38,9 @@ function bl64_os_get_distro() {
   CENTOS-8*) : ;;
   OL-8*) : ;;
   ALPINE-3*) : ;;
-  *) return 1 ;;
+  *) false ;;
   esac
-
+  # Do not use return as this function gets sourced
 }
 
 #######################################
@@ -56,7 +57,7 @@ function bl64_os_get_distro() {
 #######################################
 function bl64_os_set_command() {
   case "$BL64_OS_DISTRO" in
-  UBUNTU-.* | DEBIAN-.*)
+  UBUNTU-* | DEBIAN-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_USERADD='/usr/sbin/useradd'
@@ -75,7 +76,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
     ;;
-  FEDORA-.* | CENTOS-.* | OL-.*)
+  FEDORA-* | CENTOS-* | OL-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_USERADD='/usr/sbin/useradd'
@@ -94,7 +95,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/usr/bin/mv'
     BL64_OS_CMD_RM='/usr/bin/rm'
     ;;
-  ALPINE-.*)
+  ALPINE-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_USERADD='/usr/sbin/adduser'
@@ -114,8 +115,6 @@ function bl64_os_set_command() {
     BL64_OS_CMD_RM='/bin/rm'
     ;;
   esac
-
-  return 0
 }
 
 #######################################
@@ -132,7 +131,6 @@ function bl64_os_set_command() {
 #   0: always ok
 #######################################
 function bl64_os_set_alias() {
-
   BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN --verbose --recursive"
   BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP --verbose --force"
   BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
@@ -142,7 +140,6 @@ function bl64_os_set_alias() {
   BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV --force --verbose"
   BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM --verbose --force --one-file-system"
   BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM --verbose --force --one-file-system --recursive"
-
 }
 
 #######################################
