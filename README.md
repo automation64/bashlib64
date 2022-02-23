@@ -15,22 +15,27 @@
 
 ## Overview
 
-BashLib64 is a project for creating **Bash** functions that can facilitate and accelerate the development of Bash scripts and code snippets such as the ones used to create container images.
-
-The library is a stand-alone file build from modules that can be easily distributed and included into existing or new bash scripts:
+BashLib64 is a **Bash** library intended to provide a simple interface to common OS management use cases:
 
 | Module                                                             | Purpose                                            |
 | ------------------------------------------------------------------ | -------------------------------------------------- |
-| [bl64-arc](https://serdigital64.github.io/bashlib64/bl64-arc/)     | Manipulate archive files                           |
+| [bl64-arc](https://serdigital64.github.io/bashlib64/bl64-arc/)     | Manage archive files                               |
 | [bl64-check](https://serdigital64.github.io/bashlib64/bl64-check/) | Check for conditions and report status             |
 | [bl64-core](https://serdigital64.github.io/bashlib64/bl64-core/)   | Setup script run-time environment                  |
 | [bl64-fmt](https://serdigital64.github.io/bashlib64/bl64-fmt/)     | Format text data                                   |
+| [bl64-iam](https://serdigital64.github.io/bashlib64/bl64-iam/)     | Manage OS identity and access service                      |
 | [bl64-log](https://serdigital64.github.io/bashlib64/bl64-log/)     | Write messages to logs                             |
 | [bl64-msg](https://serdigital64.github.io/bashlib64/bl64-msg/)     | Display messages                                   |
 | [bl64-os](https://serdigital64.github.io/bashlib64/bl64-os/)       | Identify OS attributes and provide command aliases |
-| [bl64-pkg](https://serdigital64.github.io/bashlib64/bl64-pkg/)     | Install native OS packages                         |
-| [bl64-sudo](https://serdigital64.github.io/bashlib64/bl64-sudo/)   | Manipulate sudo configuration                      |
+| [bl64-pkg](https://serdigital64.github.io/bashlib64/bl64-pkg/)     | Manage native OS packages                          |
+| [bl64-sudo](https://serdigital64.github.io/bashlib64/bl64-sudo/)   | Manage sudo configuration                          |
 | [bl64-vcs](https://serdigital64.github.io/bashlib64/bl64-vcs/)     | Version Control System interface                   |
+
+The library is designed to create a predictable and secure execution environment for scripts:
+
+- Initializes the script for secure execution.
+- Provides exported constants with full paths to OS commands.
+- Provides wrapper functions to common OS commands.
 
 ## Deployment
 
@@ -57,17 +62,34 @@ The library has been tested on the following operating systems:
 #### Add library to existing script
 
 - Download the library to the project directory
-  > `#!shell cd <PROJECT_DIR>; wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash`
+
+  ```shell
+  cd <PROJECT_DIR>
+  wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash
+  ```
+
 - Add the library loader to the target script:
-  > `#!shell source "<PROJECT_DIR>/bashlib64.bash"`
+
+  ```shell
+  source "<PROJECT_DIR>/bashlib64.bash"
+  ```
 
 #### Create new script
 
-- Download the library to the project directory
-  > `#!shell cd <PROJECT_DIR>; wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash`
-- Download the skeleton script:
-  > `#!shell wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/skel/generic`
-- Customize the script by adding new content and replacing the predefined tags:
+- Download library to the project directory
+
+  ```shell
+  cd <PROJECT_DIR>
+  wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash
+  ```
+
+- Download skeleton script:
+
+  ```shell
+  wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/skel/generic
+  ```
+
+- Customize the script by adding new content and replacing predefined tags:
 
 | Tag                   | Purpose                                |
 | --------------------- | -------------------------------------- |
