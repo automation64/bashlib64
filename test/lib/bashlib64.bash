@@ -85,7 +85,11 @@ readonly _BL64_MSG_TXT_INFO='Info'
 readonly _BL64_MSG_TXT_TASK='Task'
 readonly _BL64_MSG_TXT_DEBUG='Debug'
 readonly _BL64_MSG_TXT_WARNING='Warning'
+readonly _BL64_MSG_TXT_BATCH='Batch'
 readonly _BL64_MSG_TXT_INVALID_FORMAT='invalid format. Please use one of BL64_MSG_FORMAT_*'
+readonly _BL64_MSG_TXT_BATCH_START='starting process'
+readonly _BL64_MSG_TXT_BATCH_FINISH_OK='process completed successfully'
+readonly _BL64_MSG_TXT_BATCH_FINISH_ERROR='process completed with errors'
 
 export BL64_MSG_FORMAT="${BL64_MSG_FORMAT:-$BL64_MSG_FORMAT_FULL}"
 
@@ -586,6 +590,28 @@ function bl64_msg_show_text() {
 
 }
 
+function bl64_msg_show_batch_start() {
+
+  local message="${1-$BL64_LIB_VAR_TBD}"
+
+  _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "${_BL64_MSG_TXT_BATCH_START}: $message"
+
+}
+
+function bl64_msg_show_batch_finish() {
+
+  local status="$1"
+  local message="${2-$BL64_LIB_VAR_TBD}"
+
+  if ((status == 0)); then
+    _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "${_BL64_MSG_TXT_BATCH_FINISH_OK}: $message"
+  else
+    _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: $message (error: ${status})"
+  fi
+
+}
+
+
 function bl64_os_get_distro() {
 
   BL64_OS_DISTRO='UNKNOWN'
@@ -950,8 +976,7 @@ if [[ "$BL64_LIB_LANG" == '1' ]]; then
   export LANGUAGE='C'
 fi
 
-bl64_os_get_distro
-if (( $? != 0 )); then
+if ! bl64_os_get_distro; then
   printf '%s\n' "Fatal: BashLib64 is not supported in the current OS" >&2
   false
 else
