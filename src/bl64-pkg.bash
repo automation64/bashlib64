@@ -1,5 +1,5 @@
 #######################################
-# BashLib64 / Install native OS packages
+# BashLib64 / Manage native OS packages
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
@@ -22,11 +22,9 @@
 #   n: process exist status
 #######################################
 function bl64_pkg_deploy() {
-
   bl64_pkg_prepare &&
     bl64_pkg_install "$@" &&
     bl64_pkg_cleanup
-
 }
 
 #######################################
@@ -41,7 +39,6 @@ function bl64_pkg_deploy() {
 #   n: package manager exist status
 #######################################
 function bl64_pkg_prepare() {
-
   case "$BL64_OS_DISTRO" in
   UBUNTU-* | DEBIAN-*)
     export DEBIAN_FRONTEND="noninteractive"
@@ -54,7 +51,6 @@ function bl64_pkg_prepare() {
     $BL64_PKG_ALIAS_APK_UPDATE
     ;;
   esac
-
 }
 
 #######################################
@@ -69,7 +65,6 @@ function bl64_pkg_prepare() {
 #   n: package manager exist status
 #######################################
 function bl64_pkg_install() {
-
   case "$BL64_OS_DISTRO" in
   UBUNTU-* | DEBIAN-*)
     export DEBIAN_FRONTEND="noninteractive"
@@ -82,7 +77,6 @@ function bl64_pkg_install() {
     $BL64_PKG_ALIAS_APK_INSTALL -- "$@"
     ;;
   esac
-
 }
 
 #######################################
@@ -114,5 +108,4 @@ function bl64_pkg_cleanup() {
     fi
     ;;
   esac
-
 }
