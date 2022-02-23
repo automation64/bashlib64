@@ -1,5 +1,5 @@
 #######################################
-# BashLib64 / Manipulate sudo configuration
+# BashLib64 / Manage sudo configuration
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
@@ -113,8 +113,6 @@ function bl64_sudo_check_sudoers() {
 #   0: always ok
 #######################################
 function bl64_sudo_set_alias() {
-
   # shellcheck disable=SC2034
   BL64_SUDO_ALIAS_SUDO_ENV="$BL64_SUDO_CMD_SUDO --preserve-env --set-home"
-
 }

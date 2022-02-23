@@ -1,5 +1,5 @@
 #######################################
-# BashLib64 / Version Control System interface
+# BashLib64 / Manage Version Control System
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
@@ -22,6 +22,8 @@
 #   STDERR: git stderr
 # Returns:
 #   n: git exit status
+#   BL64_VCS_ERROR_MISSING_PARAMETER
+#   BL64_VCS_ERROR_DESTINATION_ERROR
 #######################################
 function bl64_vcs_git_clone() {
   local source="${1}"
@@ -42,5 +44,4 @@ function bl64_vcs_git_clone() {
     --single-branch \
     --branch "$branch" \
     "$source"
-
 }

@@ -21,7 +21,6 @@
 #   BL64_MSG_ERROR_INVALID_FORMAT
 #######################################
 function _bl64_msg_show() {
-
   local type="$1"
   local message="$2"
 
@@ -61,7 +60,6 @@ function _bl64_msg_show() {
     bl64_msg_show_error "$_BL64_MSG_TXT_INVALID_FORMAT"
     return $BL64_MSG_ERROR_INVALID_FORMAT
   esac
-
 }
 
 #######################################
@@ -111,7 +109,6 @@ function bl64_msg_setup() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_usage() {
-
   local usage="${1:-$BL64_LIB_VAR_TBD}"
   local description="${2:-$BL64_LIB_VAR_NULL}"
   local commands="${3:-$BL64_LIB_VAR_NULL}"
@@ -137,7 +134,6 @@ function bl64_msg_show_usage() {
   fi
 
   return 0
-
 }
 
 #######################################
@@ -153,11 +149,9 @@ function bl64_msg_show_usage() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_error() {
-
   local message="${1-$BL64_LIB_VAR_TBD}"
 
   _bl64_msg_show "$_BL64_MSG_TXT_ERROR" "$message" >&2
-
 }
 
 #######################################
@@ -173,11 +167,9 @@ function bl64_msg_show_error() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_warning() {
-
   local message="${1-$BL64_LIB_VAR_TBD}"
 
   _bl64_msg_show "$_BL64_MSG_TXT_WARNING" "$message" >&2
-
 }
 
 #######################################
@@ -193,11 +185,9 @@ function bl64_msg_show_warning() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_info() {
-
   local message="${1-$BL64_LIB_VAR_TBD}"
 
   _bl64_msg_show "$_BL64_MSG_TXT_INFO" "$message"
-
 }
 
 #######################################
@@ -213,11 +203,9 @@ function bl64_msg_show_info() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_task() {
-
   local message="${1-$BL64_LIB_VAR_TBD}"
 
   _bl64_msg_show "$_BL64_MSG_TXT_TASK" "$message"
-
 }
 
 #######################################
@@ -233,11 +221,9 @@ function bl64_msg_show_task() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_debug() {
-
   local message="${1-$BL64_LIB_VAR_TBD}"
 
   _bl64_msg_show "$_BL64_MSG_TXT_DEBUG" "$message" >&2
-
 }
 
 #######################################
@@ -253,13 +239,9 @@ function bl64_msg_show_debug() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_text() {
-
   local message="${1-$BL64_LIB_VAR_TBD}"
 
   printf '%s\n' "$message"
-
-  return 0
-
 }
 
 #######################################
@@ -275,11 +257,9 @@ function bl64_msg_show_text() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_batch_start() {
-
   local message="${1-$BL64_LIB_VAR_TBD}"
 
   _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "${_BL64_MSG_TXT_BATCH_START}: $message"
-
 }
 
 #######################################
@@ -296,7 +276,6 @@ function bl64_msg_show_batch_start() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_batch_finish() {
-
   local status="$1"
   local message="${2-$BL64_LIB_VAR_TBD}"
 
@@ -305,6 +284,5 @@ function bl64_msg_show_batch_finish() {
   else
     _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: $message (error: ${status})"
   fi
-
 }
 
