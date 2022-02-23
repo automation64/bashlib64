@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.4.0
+# Version: 1.4.1
 #######################################
 
 #######################################
@@ -20,7 +20,6 @@
 #   1: os not supported
 #######################################
 function bl64_os_get_distro() {
-
   BL64_OS_DISTRO='UNKNOWN'
 
   if [[ -r '/etc/os-release' ]]; then
@@ -131,15 +130,30 @@ function bl64_os_set_command() {
 #   0: always ok
 #######################################
 function bl64_os_set_alias() {
-  BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN --verbose --recursive"
-  BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP --verbose --force"
-  BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
-  BL64_OS_ALIAS_LN_SYMBOLIC="$BL64_OS_CMD_LN --verbose --symbolic"
-  BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
-  BL64_OS_ALIAS_MKDIR_FULL="$BL64_OS_CMD_MKDIR --parents --verbose"
-  BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV --force --verbose"
-  BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM --verbose --force --one-file-system"
-  BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM --verbose --force --one-file-system --recursive"
+  case "$BL64_OS_DISTRO" in
+  UBUNTU-* | DEBIAN-* | FEDORA-* | CENTOS-* | OL-*)
+    BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN --verbose --recursive"
+    BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP --verbose --force"
+    BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
+    BL64_OS_ALIAS_LN_SYMBOLIC="$BL64_OS_CMD_LN --verbose --symbolic"
+    BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
+    BL64_OS_ALIAS_MKDIR_FULL="$BL64_OS_CMD_MKDIR --parents --verbose"
+    BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV --force --verbose"
+    BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM --verbose --force --one-file-system"
+    BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM --verbose --force --one-file-system --recursive"
+    ;;
+  ALPINE-*)
+    BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN -v -R"
+    BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP -v -f"
+    BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
+    BL64_OS_ALIAS_LN_SYMBOLIC="$BL64_OS_CMD_LN -v -s"
+    BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
+    BL64_OS_ALIAS_MKDIR_FULL="$BL64_OS_CMD_MKDIR -p"
+    BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV -f"
+    BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM -f"
+    BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM -f -R"
+    ;;
+  esac
 }
 
 #######################################
@@ -307,11 +321,9 @@ function bl64_os_rm_full() {
 #   0: always ok
 #######################################
 function bl64_os_cleanup_tmps() {
-
   $BL64_OS_ALIAS_RM_FULL -- /tmp/[[:alnum:]]*
   $BL64_OS_ALIAS_RM_FULL -- /var/tmp/[[:alnum:]]*
-  :
-
+  return 0
 }
 
 #######################################
@@ -331,8 +343,7 @@ function bl64_os_cleanup_logs() {
   if [[ -d "$target" ]]; then
     $BL64_OS_ALIAS_RM_FULL ${target}/[[:alnum:]]*
   fi
-  :
-
+  return 0
 }
 
 #######################################
@@ -352,8 +363,7 @@ function bl64_os_cleanup_caches() {
   if [[ -d "$target" ]]; then
     $BL64_OS_ALIAS_RM_FULL ${target}/[[:alnum:]]*
   fi
-  :
-
+  return 0
 }
 
 #######################################
@@ -372,11 +382,10 @@ function bl64_os_cleanup_caches() {
 #   0: always ok
 #######################################
 function bl64_os_cleanup_full() {
-
   bl64_pkg_cleanup
   bl64_os_cleanup_tmps
   bl64_os_cleanup_logs
   bl64_os_cleanup_caches
-  :
 
+  return 0
 }

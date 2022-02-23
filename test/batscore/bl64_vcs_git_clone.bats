@@ -1,5 +1,4 @@
 setup() {
-  BL64_LIB_STRICT=0
   . "$DEVBL64_TEST_BASHLIB64"
   . "${DEVBL64_BATS_HELPER}/bats-support/load.bash"
   . "${DEVBL64_BATS_HELPER}/bats-assert/load.bash"
@@ -7,7 +6,7 @@ setup() {
 
   _bl64_vcs_git_clone_destination="$(mktemp -d)"
   export _bl64_vcs_git_clone_destination
-
+  set +u # to avoid IFS missing error in run function
 }
 
 teardown() {

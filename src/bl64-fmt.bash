@@ -22,5 +22,4 @@ function bl64_fmt_strip_comments() {
   local source="${1:--}"
 
   "$BL64_OS_CMD_GREP" -v -E '^#.*$|^ *#.*$' "$source"
-
 }

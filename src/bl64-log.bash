@@ -20,10 +20,10 @@
 # Returns:
 #   0: log record successfully saved
 #   >0: failed to save the log record
-#   BL64_MSG_ERROR_INVALID_FORMAT
+#   BL64_LOG_ERROR_NOT_SETUP
+#   BL64_LOG_ERROR_INVALID_TYPE
 #######################################
 function _bl64_log_register() {
-
   local source="$1"
   local category="$2"
   local payload="$3"
@@ -57,9 +57,8 @@ function _bl64_log_register() {
     ;;
   *)
     bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
-    return $BL64_MSG_ERROR_INVALID_FORMAT
+    return $BL64_LOG_ERROR_INVALID_TYPE
   esac
-
 }
 
 #######################################
@@ -75,11 +74,11 @@ function _bl64_log_register() {
 #   STDERR: None
 # Returns:
 #   0: setup ok
-#   BL64_MSG_ERROR_INVALID_FORMAT
-#   BL64_MSG_ERROR_INVALID_VERBOSE
+#   BL64_LOG_ERROR_MISSING_PARAMETER
+#   BL64_LOG_ERROR_INVALID_TYPE
+#   BL64_LOG_ERROR_INVALID_VERBOSE
 #######################################
 function bl64_log_setup() {
-
   local path="$1"
   local verbose="${2:-1}"
   local type="${3:-$BL64_LOG_TYPE_FILE}"
@@ -112,7 +111,6 @@ function bl64_log_setup() {
   BL64_LOG_VERBOSE="${verbose}" && \
   BL64_LOG_TYPE="${type}" && \
   BL64_LOG_FS="${fs}"
-
 }
 
 #######################################
@@ -130,7 +128,6 @@ function bl64_log_setup() {
 #   >0: failed to save the log record
 #######################################
 function bl64_log_info() {
-
   local payload="$1"
   local source="${2:-${FUNCNAME[1]}}"
 
@@ -142,7 +139,6 @@ function bl64_log_info() {
     "${source:-main}" \
     "$BL64_LOG_CATEGORY_INFO" \
     "$payload"
-
 }
 
 #######################################
@@ -160,7 +156,6 @@ function bl64_log_info() {
 #   >0: failed to save the log record
 #######################################
 function bl64_log_task() {
-
   local payload="$1"
   local source="${2:-${FUNCNAME[1]}}"
 
@@ -172,7 +167,6 @@ function bl64_log_task() {
     "${source:-main}" \
     "$BL64_LOG_CATEGORY_TASK" \
     "$payload"
-
 }
 
 #######################################
@@ -190,7 +184,6 @@ function bl64_log_task() {
 #   >0: failed to save the log record
 #######################################
 function bl64_log_error() {
-
   local payload="$1"
   local source="${2:-${FUNCNAME[1]}}"
 
@@ -202,7 +195,6 @@ function bl64_log_error() {
     "${source:-main}" \
     "$BL64_LOG_CATEGORY_ERROR" \
     "$payload"
-
 }
 
 #######################################
@@ -220,7 +212,6 @@ function bl64_log_error() {
 #   >0: failed to save the log record
 #######################################
 function bl64_log_warning() {
-
   local payload="$1"
   local source="${2:-${FUNCNAME[1]}}"
 
@@ -232,7 +223,6 @@ function bl64_log_warning() {
     "${source:-main}" \
     "$BL64_LOG_CATEGORY_WARNING" \
     "$payload"
-
 }
 
 #######################################
@@ -250,7 +240,6 @@ function bl64_log_warning() {
 #   >0: failed to save the stream
 #######################################
 function bl64_log_record() {
-
   local tag="${1:-tag}"
   local source="${2:-${FUNCNAME[1]}}"
   local input_log_line=''
@@ -265,5 +254,4 @@ function bl64_log_record() {
     done
     ;;
   esac
-
 }

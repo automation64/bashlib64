@@ -1,10 +1,10 @@
 #######################################
-# BashLib64 / Manipulate archive files
+# BashLib64 / Manage archive files
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -20,8 +20,8 @@
 #   STDOUT: None
 #   STDERR: tar or lib error messages
 # Returns:
-#   BL64_ERROR_MISSING_PARAMETER
-#   BL64_ERROR_INVALID_DESTINATION
+#   BL64_ARC_ERROR_MISSING_PARAMETER
+#   BL64_ARC_ERROR_INVALID_DESTINATION
 #   tar error status
 #######################################
 function bl64_arc_open_tar() {
@@ -43,20 +43,32 @@ function bl64_arc_open_tar() {
 
   cd "$destination" || return 1
 
-  "$BL64_OS_CMD_TAR" \
-    --overwrite \
-    --extract \
-    --no-same-owner \
-    --preserve-permissions \
-    --no-acls \
-    --force-local \
-    --verbose \
-    --auto-compress \
-    --file="$source"
-  status=$?
+  case "$BL64_OS_DISTRO" in
+  UBUNTU-* | DEBIAN-* | FEDORA-* | CENTOS-* | OL-*)
+    "$BL64_OS_CMD_TAR" \
+      --overwrite \
+      --extract \
+      --no-same-owner \
+      --preserve-permissions \
+      --no-acls \
+      --force-local \
+      --verbose \
+      --auto-compress \
+      --file="$source"
+    status=$?
+    ;;
+  ALPINE-*)
+    "$BL64_OS_CMD_TAR" \
+      x \
+      --overwrite \
+      -f "$source" \
+      -o \
+      -v
+    status=$?
+    ;;
+  esac
 
   ((status == 0)) && $BL64_OS_ALIAS_RM_FILE "$source"
 
   return $status
-
 }
