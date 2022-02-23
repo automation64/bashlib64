@@ -133,17 +133,12 @@ done
 [[ -z "$devbl64_run_tests_command" ]] && devbl64_run_tests_help && exit 1
 devbl64_run_tests_check || exit 1
 
-bl64_msg_show_info "starting ${devbl64_run_tests_command_tag} process"
+bl64_msg_show_batch_start "$devbl64_run_tests_command_tag"
 case "$devbl64_run_tests_command" in
 'devbl64_run_tests_bats') "$devbl64_run_tests_command" "$devbl64_run_tests_debug" "$devbl64_run_tests_case" ;;
 'devbl64_run_tests_bats_container') "$devbl64_run_tests_command" "$devbl64_run_tests_debug" "$devbl64_run_tests_image" "$devbl64_run_tests_registry" ;;
 esac
 devbl64_run_tests_status=$?
 
-if ((devbl64_run_tests_status == 0)); then
-  bl64_msg_show_info "${devbl64_run_tests_command_tag} process complete"
-else
-  bl64_msg_show_info "${devbl64_run_tests_command_tag} process complete with errors (error: $devbl64_run_tests_status)"
-fi
-
+bl64_msg_show_batch_finish $devbl64_run_tests_status "$devbl64_run_tests_command_tag"
 exit $devbl64_run_tests_status
