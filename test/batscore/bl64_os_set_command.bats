@@ -10,7 +10,6 @@ setup() {
 
   assert_not_equal "${BL64_OS_CMD_AWK}" ''
   assert_not_equal "${BL64_OS_CMD_TAR}" ''
-  assert_not_equal "${BL64_OS_CMD_USERADD}" ''
   assert_not_equal "${BL64_OS_CMD_CAT}" ''
   assert_not_equal "${BL64_OS_CMD_CHMOD}" ''
   assert_not_equal "${BL64_OS_CMD_CHOWN}" ''
@@ -32,7 +31,6 @@ setup() {
 
   assert_file_executable "${BL64_OS_CMD_AWK}"
   assert_file_executable "${BL64_OS_CMD_TAR}"
-  assert_file_executable "${BL64_OS_CMD_USERADD}"
   assert_file_executable "${BL64_OS_CMD_CAT}"
   assert_file_executable "${BL64_OS_CMD_CHMOD}"
   assert_file_executable "${BL64_OS_CMD_CHOWN}"

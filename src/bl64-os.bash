@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.4.1
+# Version: 1.4.2
 #######################################
 
 #######################################
@@ -59,7 +59,6 @@ function bl64_os_set_command() {
   UBUNTU-* | DEBIAN-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_USERADD='/usr/sbin/useradd'
     BL64_OS_CMD_TAR='/bin/tar'
     BL64_OS_CMD_LN='/bin/ln'
     BL64_OS_CMD_CAT='/bin/cat'
@@ -78,7 +77,6 @@ function bl64_os_set_command() {
   FEDORA-* | CENTOS-* | OL-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_USERADD='/usr/sbin/useradd'
     BL64_OS_CMD_TAR='/bin/tar'
     BL64_OS_CMD_LN='/bin/ln'
     BL64_OS_CMD_CAT='/usr/bin/cat'
@@ -97,7 +95,6 @@ function bl64_os_set_command() {
   ALPINE-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_USERADD='/usr/sbin/adduser'
     BL64_OS_CMD_TAR='/bin/tar'
     BL64_OS_CMD_LN='/bin/ln'
     BL64_OS_CMD_CAT='/bin/cat'
