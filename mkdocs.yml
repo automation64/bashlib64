@@ -1,14 +1,14 @@
 ---
 site_name: "BashLib64 Project"
-site_description: "BashLib64 is a project for creating bash libraries that can facilitate and accelerate the development of Bash scripts."
+site_description: "BashLib64 is a **Bash** library that provides a simple abstraction layer for developing multi-platform scripts"
 site_author: "SerDigital64"
 
 site_url: "https://serdigital64.github.io/bashlib64"
 repo_url: "https://github.com/serdigital64/bashlib64"
 
 copyright: "GPL-3.0-or-later"
-docs_dir: "mkdocs"
-site_dir: "docs"
+docs_dir: "docs"
+site_dir: "build/site"
 strict: false
 
 extra:
