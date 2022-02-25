@@ -15,7 +15,7 @@
 
 ## Overview
 
-BashLib64 is a **Bash** library intended to provide a simple interface to common OS management use cases:
+BashLib64 is a **Bash** library that provides a simple abstraction layer for developing multi-platform scripts.
 
 | Module                                                             | Purpose                                            |
 | ------------------------------------------------------------------ | -------------------------------------------------- |
@@ -30,12 +30,6 @@ BashLib64 is a **Bash** library intended to provide a simple interface to common
 | [bl64-pkg](https://serdigital64.github.io/bashlib64/bl64-pkg/)     | Manage native OS packages                          |
 | [bl64-sudo](https://serdigital64.github.io/bashlib64/bl64-sudo/)   | Manage sudo configuration                          |
 | [bl64-vcs](https://serdigital64.github.io/bashlib64/bl64-vcs/)     | Manage Version Control System                      |
-
-The library is designed to create a predictable and secure execution environment for scripts:
-
-- Initializes the script for secure execution.
-- Provides exported constants with full paths to OS commands.
-- Provides wrapper functions to common OS commands.
 
 ## Deployment
 
@@ -111,7 +105,7 @@ The library has been tested on the following operating systems:
 
 Help on implementing new features and maintaining the code base is welcomed.
 
-[Contributor Covenant Code of Conduct](https://serdigital64.github.io/bashlib64/cod/)
+[Contributor Covenant Code of Conduct](https://github.com/serdigital64/bashlib64/blob/main/CODE_OF_CONDUCT.md)
 
 ### License
 
