@@ -1,8 +1,8 @@
 setup() {
-  . "$DEVBL64_TEST_BASHLIB64"
-  . "${DEVBL64_BATS_HELPER}/bats-support/load.bash"
-  . "${DEVBL64_BATS_HELPER}/bats-assert/load.bash"
-  . "${DEVBL64_BATS_HELPER}/bats-file/load.bash"
+  . "$DEVBL_TEST_BASHLIB64"
+  . "${DEVBL_BATS_HELPER}/bats-support/load.bash"
+  . "${DEVBL_BATS_HELPER}/bats-assert/load.bash"
+  . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
 
   _bl64_vcs_git_clone_destination="$(mktemp -d)"
   export _bl64_vcs_git_clone_destination

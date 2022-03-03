@@ -8,9 +8,9 @@
 # Version: 1.0.1
 #######################################
 
-[[ -z "$DEVBL64_BIN" ]] && echo "Error: prepare the dev environment before executing this file" && exit 1
+[[ -z "$DEVBL_BIN" ]] && echo "Error: prepare the dev environment before executing this file" && exit 1
 # shellcheck disable=SC1090
-source "$DEVBL64_BASHLIB64" || exit 1
+source "$DEVBL_BASHLIB64" || exit 1
 
 function devbl64_build_standalone() {
 
@@ -18,38 +18,38 @@ function devbl64_build_standalone() {
   local test="$2"
   local status=1
   local file=''
-  local lib="$DEVBL64_BUILD/bashlib64.bash"
+  local lib="$DEVBL_BUILD/bashlib64.bash"
 
   # Create header
   bl64_msg_show_task "creating stand-alone library: $lib"
-  "$BL64_OS_CMD_CAT" "$DEVBL64_SRC/bl64-core.header" >"$lib"
+  "$BL64_OS_CMD_CAT" "$DEVBL_SRC/bl64-core.header" >"$lib"
 
   # Add global variables
-  for file in $DEVBL64_MODULES; do
+  for file in $DEVBL_MODULES; do
     bl64_msg_show_task "adding module $file environment"
-    bl64_fmt_strip_comments "${DEVBL64_SRC}/bl64-${file}.env" >>"$lib" || true
+    bl64_fmt_strip_comments "${DEVBL_SRC}/bl64-${file}.env" >>"$lib" || true
   done
 
   # Add core module
-  for file in $DEVBL64_MODULES; do
+  for file in $DEVBL_MODULES; do
     bl64_msg_show_task "adding module $file code"
-    bl64_fmt_strip_comments "${DEVBL64_SRC}/bl64-${file}.bash" >>"$lib" || true
+    bl64_fmt_strip_comments "${DEVBL_SRC}/bl64-${file}.bash" >>"$lib" || true
   done
 
   # Add remaining modules
   bl64_msg_show_task 'adding core'
-  bl64_fmt_strip_comments "$DEVBL64_SRC/bl64-core.env" >>"$lib"
-  bl64_fmt_strip_comments "$DEVBL64_SRC/bl64-core.bash" >>"$lib"
+  bl64_fmt_strip_comments "$DEVBL_SRC/bl64-core.env" >>"$lib"
+  bl64_fmt_strip_comments "$DEVBL_SRC/bl64-core.bash" >>"$lib"
   status=$?
 
   if [[ "$status" == '0' && "$promote" == '1' ]]; then
     bl64_msg_show_task 'promoting library'
-    $BL64_OS_ALIAS_CP_FILE "$lib" "$DEVBL64_ROOT"
+    $BL64_OS_ALIAS_CP_FILE "$lib" "$DEVBL_ROOT"
   fi
 
   if [[ "$status" == '0' && "$test" == '1' ]]; then
     bl64_msg_show_task 'updating test library'
-    $BL64_OS_ALIAS_CP_FILE "$lib" "$DEVBL64_TEST_BASHLIB64"
+    $BL64_OS_ALIAS_CP_FILE "$lib" "$DEVBL_TEST_BASHLIB64"
   fi
 
   return $status
@@ -58,7 +58,7 @@ function devbl64_build_standalone() {
 
 function devbl64_build_check() {
 
-  bl64_check_directory "$DEVBL64_SRC" || return 1
+  bl64_check_directory "$DEVBL_SRC" || return 1
 
 }
 

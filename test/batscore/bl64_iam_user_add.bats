@@ -1,8 +1,8 @@
 setup() {
-  . "$DEVBL64_TEST_BASHLIB64"
-  . "${DEVBL64_BATS_HELPER}/bats-support/load.bash"
-  . "${DEVBL64_BATS_HELPER}/bats-assert/load.bash"
-  . "${DEVBL64_BATS_HELPER}/bats-file/load.bash"
+  . "$DEVBL_TEST_BASHLIB64"
+  . "${DEVBL_BATS_HELPER}/bats-support/load.bash"
+  . "${DEVBL_BATS_HELPER}/bats-assert/load.bash"
+  . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
   set +u # to avoid IFS missing error in run function
 }
 
@@ -16,5 +16,5 @@ setup() {
   if [[ ! -f '/run/.containerenv' ]]; then
     skip 'this case can only be tested inside a container'
   fi
-  run /usr/bin/sudo /bin/bash -c ". $DEVBL64_TEST_BASHLIB64 bl64_iam_user_add testusr"
+  run /usr/bin/sudo /bin/bash -c ". $DEVBL_TEST_BASHLIB64 bl64_iam_user_add testusr"
 }

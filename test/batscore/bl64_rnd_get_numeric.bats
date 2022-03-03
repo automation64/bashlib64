@@ -3,9 +3,13 @@ setup() {
   . "${DEVBL_BATS_HELPER}/bats-support/load.bash"
   . "${DEVBL_BATS_HELPER}/bats-assert/load.bash"
   . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
-
 }
 
-@test "bl64_os_get_distro: identify platform" {
-  assert_not_equal "$BL64_OS_DISTRO" 'UNKNOWN'
+@test "bl64_rnd_get_numeric: check length" {
+
+  local length=10
+
+  test="$(bl64_rnd_get_numeric $length)"
+  (( ${#test} == length ))
+
 }
