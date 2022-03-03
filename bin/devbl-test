@@ -8,9 +8,9 @@
 # Version: 1.1.1
 #######################################
 
-[[ -z "$DEVBL64_BIN" ]] && echo "Error: prepare the dev environment before executing this file" && exit 1
+[[ -z "$DEVBL_BIN" ]] && echo "Error: prepare the dev environment before executing this file" && exit 1
 # shellcheck disable=SC1090
-source "$DEVBL64_BASHLIB64" || exit 1
+source "$DEVBL_BASHLIB64" || exit 1
 
 function devbl64_run_tests_bats() {
 
@@ -20,10 +20,10 @@ function devbl64_run_tests_bats() {
   local verbose=''
 
   if [[ -n "$case" ]]; then
-    target="${DEVBL64_TEST_BATSCORE}/${case}.bats"
+    target="${DEVBL_TEST_BATSCORE}/${case}.bats"
   else
-    # target="$(echo $DEVBL64_TEST/batscore/*)"
-    target="$DEVBL64_TEST_BATSCORE"
+    # target="$(echo $DEVBL_TEST/batscore/*)"
+    target="$DEVBL_TEST_BATSCORE"
   fi
 
   if [[ "$debug" == '1' ]]; then
@@ -32,7 +32,7 @@ function devbl64_run_tests_bats() {
     verbose='--formatter tap'
   fi
 
-  "$DEVBL64_CMD_BATS" $verbose "$target"
+  "$DEVBL_CMD_BATS" $verbose "$target"
 
 }
 
@@ -56,14 +56,14 @@ function devbl64_run_tests_bats_container() {
   for target in $image; do
     unset IFS
     bl64_msg_show_task "run test cases on the container image: $target"
-    "$DEVBL64_CMD_PODMAN" \
+    "$DEVBL_CMD_PODMAN" \
       run \
       --rm \
-      --user "$DEVBL64_TEST_USR" \
-      --env DEVBL64_TEST='/test' \
-      --env DEVBL64_TEST_BASHLIB64='/test/lib/bashlib64.bash' \
-      --env DEVBL64_BATS_HELPER="$DEVBL64_BATS_HELPER" \
-      --volume "${DEVBL64_TEST}:/test" \
+      --user "$DEVBL_TEST_USR" \
+      --env DEVBL_TEST='/test' \
+      --env DEVBL_TEST_BASHLIB64='/test/lib/bashlib64.bash' \
+      --env DEVBL_BATS_HELPER="$DEVBL_BATS_HELPER" \
+      --volume "${DEVBL_TEST}:/test" \
       "${registry}/${target}" \
       "$container_tests" \
       $verbose
@@ -73,10 +73,10 @@ function devbl64_run_tests_bats_container() {
 
 function devbl64_run_tests_check() {
 
-  bl64_check_command "$DEVBL64_CMD_BATS" || return 1
-  bl64_check_command "$DEVBL64_CMD_PODMAN" || return 1
+  bl64_check_command "$DEVBL_CMD_BATS" || return 1
+  bl64_check_command "$DEVBL_CMD_PODMAN" || return 1
 
-  bl64_check_file "${DEVBL64_BUILD}/bashlib64.bash" || return 1
+  bl64_check_file "${DEVBL_BUILD}/bashlib64.bash" || return 1
 
   :
 
@@ -94,7 +94,7 @@ function devbl64_run_tests_help() {
     ' "
   -c Case    : Test case name. If not specified all cases are run
   -e Image   : Image name to use for running the container test
-  -r Registry: Registry URL where the container image is. Default: ${DEVBL64_REGISTRY}
+  -r Registry: Registry URL where the container image is. Default: ${DEVBL_REGISTRY}
     "
 }
 
@@ -107,9 +107,9 @@ declare devbl64_run_tests_command=''
 declare devbl64_run_tests_command_tag=''
 declare devbl64_run_tests_option=''
 declare devbl64_run_tests_case=''
-declare devbl64_run_tests_image="$DEVBL64_IMAGES"
+declare devbl64_run_tests_image="$DEVBL_IMAGES"
 declare devbl64_run_tests_debug='0'
-declare devbl64_run_tests_registry="$DEVBL64_REGISTRY"
+declare devbl64_run_tests_registry="$DEVBL_REGISTRY"
 
 (($# == 0)) && devbl64_run_tests_help && exit 1
 while getopts ':boc:e:r:gh' devbl64_run_tests_option; do
