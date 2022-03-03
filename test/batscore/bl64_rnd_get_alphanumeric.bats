@@ -5,12 +5,11 @@ setup() {
   . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
 }
 
-@test "bl64_rnd_get_range: check range" {
+@test "bl64_rnd_get_alphanumeric: check length" {
 
-  local min=2
-  local max=8
+  local length=20
 
-  test="$(bl64_rnd_get_range $min $max)"
-  (( test <=  && test >= min ))
+  test="$(bl64_rnd_get_alphanumeric $length)"
+  (( ${#test} == length ))
 
 }
