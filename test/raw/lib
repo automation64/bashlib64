@@ -1,8 +1,0 @@
-#!/bin/bash
-
-source './.env' || exit 1
-. "$DEVBL64_TEST_BASHLIB64"
-
-# * Use this helper to perform ad-hoc tests.
-# * Do not commit, just remove the test after use
-# * Test code goes below this line

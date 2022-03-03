@@ -28,6 +28,7 @@ BashLib64 is a **Bash** library that provides a simple abstraction layer for dev
 | [bl64-msg](https://serdigital64.github.io/bashlib64/bl64-msg/)     | Display messages                                   |
 | [bl64-os](https://serdigital64.github.io/bashlib64/bl64-os/)       | Identify OS attributes and provide command aliases |
 | [bl64-pkg](https://serdigital64.github.io/bashlib64/bl64-pkg/)     | Manage native OS packages                          |
+| [bl64-rnd](https://serdigital64.github.io/bashlib64/bl64-rnd/)     | Generate random data                               |
 | [bl64-sudo](https://serdigital64.github.io/bashlib64/bl64-sudo/)   | Manage sudo configuration                          |
 | [bl64-vcs](https://serdigital64.github.io/bashlib64/bl64-vcs/)     | Manage Version Control System                      |
 
@@ -53,8 +54,6 @@ The library has been tested on the following operating systems:
 
 ### Installation
 
-#### Add library to existing script
-
 - Download the library to the project directory
 
   ```shell
@@ -67,32 +66,6 @@ The library has been tested on the following operating systems:
   ```shell
   source "<PROJECT_DIR>/bashlib64.bash"
   ```
-
-#### Create new script
-
-- Download library to the project directory
-
-  ```shell
-  cd <PROJECT_DIR>
-  wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash
-  ```
-
-- Download skeleton script:
-
-  ```shell
-  wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/skel/generic
-  ```
-
-- Customize the script by adding new content and replacing predefined tags:
-
-| Tag                   | Purpose                                |
-| --------------------- | -------------------------------------- |
-| `X_AUTHOR_ALIAS_X`    | Author alias, short-name, or AKA       |
-| `X_AUTHOR_GIT_URL_X`  | Author's GIT repo                      |
-| `X_APP_INFO_X`        | Program, script, app short description |
-| `X_APP_VERSION_X`     | Code version                           |
-| `X_APP_NAMESPACE_X`   | Script namespace                       |
-| `X_PROJECT_GIT_URL_X` | Project GIT Repo URL                   |
 
 ## Development
 
