@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.3.0
+# Version: 1.3.1
 #######################################
 
 #
@@ -54,8 +54,11 @@ else
   bl64_os_set_alias
   bl64_sudo_set_alias
 
+  # Enable app tracing
+  [[ -n "$BL64_LIB_DEBUG" && "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_APP" ]] && set -x
+
   # Enable command mode: the library can be used as a stand-alone script to run embeded functions
-  if [[ "$BL64_LIB_CMD" = '1' ]]; then
+  if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
     "$@"
   else
     :

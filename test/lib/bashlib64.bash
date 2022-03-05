@@ -8,6 +8,7 @@
 # Version: 1.13.0
 #######################################
 
+# Enable library and app tracing
 [[ -n "$BL64_LIB_DEBUG" && "$BL64_LIB_DEBUG" == '1' ]] && set -x
 
 readonly BL64_ARC_ERROR_MISSING_PARAMETER=200
@@ -978,6 +979,13 @@ function bl64_sudo_set_alias() {
   BL64_SUDO_ALIAS_SUDO_ENV="$BL64_SUDO_CMD_SUDO --preserve-env --set-home"
 }
 
+function bl64_txt_search_line() {
+  local source="${1:--}"
+  local line="$2"
+
+  "$BL64_OS_CMD_GREP" -E "^${line}$" "$source" > /dev/null
+}
+
 function bl64_vcs_git_clone() {
   local source="${1}"
   local destination="${2}"
@@ -1004,8 +1012,14 @@ export LC_ALL
 export LANGUAGE
 
 export BL64_LIB_CMD="${BL64_LIB_CMD:-0}"
+
 export BL64_LIB_DEBUG="${BL64_LIB_DEBUG:-0}"
+readonly BL64_LIB_DEBUG_NONE='0'
+readonly BL64_LIB_DEBUG_LIB='1'
+readonly BL64_LIB_DEBUG_APP='2'
+
 export BL64_LIB_STRICT="${BL64_LIB_STRICT:-1}"
+
 export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
 
 export BL64_LIB_SIGNAL_HUP="${BL64_LIB_SIGNAL_HUP:--}"
@@ -1014,10 +1028,16 @@ export BL64_LIB_SIGNAL_QUIT="${BL64_LIB_SIGNAL_QUIT:--}"
 
 export BL64_SCRIPT_NAME="${BL64_SCRIPT_NAME:-${0##*/}}"
 
+export BL64_SCRIPT_PATH="${BL64_SCRIPT_PATH:-${BASH_SOURCE[0]%/*}}/"
+
 export BL64_SCRIPT_SID="${BASHPID}"
 
 readonly BL64_LIB_VAR_NULL='__s64__'
 readonly BL64_LIB_VAR_TBD='TBD'
+readonly BL64_LIB_VAR_ON='1'
+readonly BL64_LIB_VAR_OFF='0'
+readonly BL64_LIB_VAR_TRUE='0'
+readonly BL64_LIB_VAR_FALSE='1'
 
 
 set -o pipefail
@@ -1054,7 +1074,9 @@ else
   bl64_os_set_alias
   bl64_sudo_set_alias
 
-  if [[ "$BL64_LIB_CMD" = '1' ]]; then
+  [[ -n "$BL64_LIB_DEBUG" && "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_APP" ]] && set -x
+
+  if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
     "$@"
   else
     :
