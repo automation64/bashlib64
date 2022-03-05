@@ -11,6 +11,6 @@ setup() {
   local max=8
 
   test="$(bl64_rnd_get_range $min $max)"
-  (( test <=  && test >= min ))
+  (( test <= max && test >= min ))
 
 }
