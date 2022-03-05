@@ -51,7 +51,17 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://serdigital64.github.io/bashlib64/bl64-rnd/</loc>
+         <lastmod>2022-03-05</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://serdigital64.github.io/bashlib64/bl64-sudo/</loc>
+         <lastmod>2022-03-05</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://serdigital64.github.io/bashlib64/bl64-txt/</loc>
          <lastmod>2022-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
