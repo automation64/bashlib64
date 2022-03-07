@@ -70,6 +70,36 @@ The library has been tested on the following operating systems:
 
 ## Development
 
+## Development
+
+### Environment
+
+- Prepare dev tools
+  - Install GIT
+  - Install Podman: container based testing
+  - Install ShellCheck code linting
+  - Install Bats-Core: code testing
+- Clone GIT repository
+
+  ```shell
+  git clone https://github.com/serdigital64/bashlib64.git
+  ```
+
+- Adjust environment variables to reflect your configuration:
+
+  ```shell
+  # Copy environment definition files from templates:
+  cp dot.local .local
+  cp dot.secrets .secrets
+  # Review and update content for both files
+  ```
+
+- Initialize dev environment variables
+
+  ```shell
+  source bin/devbl-set
+  ```
+
 ### Repositories
 
 - Project GIT repository: [https://github.com/serdigital64/bashlib64](https://github.com/serdigital64/bashlib64)
