@@ -12,7 +12,7 @@
 # shellcheck disable=SC1090
 source "$DEVBL_BASHLIB64" || exit 1
 
-function devbl64_build_standalone() {
+function devbl_build_standalone() {
 
   local promote="$1"
   local test="$2"
@@ -56,13 +56,13 @@ function devbl64_build_standalone() {
 
 }
 
-function devbl64_build_check() {
+function devbl_build_check() {
 
   bl64_check_directory "$DEVBL_SRC" || return 1
 
 }
 
-function devbl64_build_help() {
+function devbl_build_help() {
   bl64_msg_show_usage \
     '[-b] [-p] [-t] [-h]' \
     'Create the BashLib64 stand-alone distributable file' \
@@ -77,33 +77,33 @@ function devbl64_build_help() {
 # Main
 #
 
-declare devbl64_build_status=1
-declare devbl64_build_command=''
-declare devbl64_build_option=''
-declare devbl64_build_promote='0'
-declare devbl64_build_test='0'
+declare devbl_build_status=1
+declare devbl_build_command=''
+declare devbl_build_option=''
+declare devbl_build_promote='0'
+declare devbl_build_test='0'
 
-(($# == 0)) && devbl64_build_help && exit 1
-while getopts ':bpth' devbl64_build_option; do
-  case "$devbl64_build_option" in
-  p) devbl64_build_promote='1' ;;
-  t) devbl64_build_test='1' ;;
+(($# == 0)) && devbl_build_help && exit 1
+while getopts ':bpth' devbl_build_option; do
+  case "$devbl_build_option" in
+  p) devbl_build_promote='1' ;;
+  t) devbl_build_test='1' ;;
   b)
-    devbl64_build_command='devbl64_build_standalone'
-    devbl64_build_command_tag='build stand-alone library'
+    devbl_build_command='devbl_build_standalone'
+    devbl_build_command_tag='build stand-alone library'
     ;;
-  h) devbl64_build_help && exit ;;
-  \?) devbl64_build_help && exit 1 ;;
+  h) devbl_build_help && exit ;;
+  \?) devbl_build_help && exit 1 ;;
   esac
 done
-[[ -z "$devbl64_build_command" ]] && devbl64_build_help && exit 1
-devbl64_build_check || exit 1
+[[ -z "$devbl_build_command" ]] && devbl_build_help && exit 1
+devbl_build_check || exit 1
 
-bl64_msg_show_batch_start "$devbl64_build_command_tag"
-case "$devbl64_build_command" in
-'devbl64_build_standalone') "$devbl64_build_command" "$devbl64_build_promote" "$devbl64_build_test" ;;
+bl64_msg_show_batch_start "$devbl_build_command_tag"
+case "$devbl_build_command" in
+'devbl_build_standalone') "$devbl_build_command" "$devbl_build_promote" "$devbl_build_test" ;;
 esac
-devbl64_build_status=$?
+devbl_build_status=$?
 
-bl64_msg_show_batch_finish $devbl64_build_status "$devbl64_build_command_tag"
-exit $devbl64_build_status
+bl64_msg_show_batch_finish $devbl_build_status "$devbl_build_command_tag"
+exit $devbl_build_status
