@@ -12,7 +12,7 @@
 # shellcheck disable=SC1090
 source "$DEVBL_BASHLIB64" || exit 1
 
-function devbl64_run_tests_bats() {
+function devbl_run_tests_bats() {
 
   local debug="$1"
   local case="$2"
@@ -36,7 +36,7 @@ function devbl64_run_tests_bats() {
 
 }
 
-function devbl64_run_tests_bats_container() {
+function devbl_run_tests_bats_container() {
 
   local debug="$1"
   local image="$2"
@@ -71,7 +71,7 @@ function devbl64_run_tests_bats_container() {
 
 }
 
-function devbl64_run_tests_check() {
+function devbl_run_tests_check() {
 
   bl64_check_command "$DEVBL_CMD_BATS" || return 1
   bl64_check_command "$DEVBL_CMD_PODMAN" || return 1
@@ -82,7 +82,7 @@ function devbl64_run_tests_check() {
 
 }
 
-function devbl64_run_tests_help() {
+function devbl_run_tests_help() {
   bl64_msg_show_usage \
     '-b|-o [-c Case] [-e Image] [-r Registry] [-g] [-h]' \
     'Run Tests' \
@@ -102,43 +102,43 @@ function devbl64_run_tests_help() {
 # Main
 #
 
-declare devbl64_run_tests_status=1
-declare devbl64_run_tests_command=''
-declare devbl64_run_tests_command_tag=''
-declare devbl64_run_tests_option=''
-declare devbl64_run_tests_case=''
-declare devbl64_run_tests_image="$DEVBL_IMAGES"
-declare devbl64_run_tests_debug='0'
-declare devbl64_run_tests_registry="$DEVBL_REGISTRY"
+declare devbl_run_tests_status=1
+declare devbl_run_tests_command=''
+declare devbl_run_tests_command_tag=''
+declare devbl_run_tests_option=''
+declare devbl_run_tests_case=''
+declare devbl_run_tests_image="$DEVBL_IMAGES"
+declare devbl_run_tests_debug='0'
+declare devbl_run_tests_registry="$DEVBL_REGISTRY"
 
-(($# == 0)) && devbl64_run_tests_help && exit 1
-while getopts ':boc:e:r:gh' devbl64_run_tests_option; do
-  case "$devbl64_run_tests_option" in
+(($# == 0)) && devbl_run_tests_help && exit 1
+while getopts ':boc:e:r:gh' devbl_run_tests_option; do
+  case "$devbl_run_tests_option" in
   b)
-    devbl64_run_tests_command='devbl64_run_tests_bats'
-    devbl64_run_tests_command_tag='run-bats-core-tests'
+    devbl_run_tests_command='devbl_run_tests_bats'
+    devbl_run_tests_command_tag='run-bats-core-tests'
     ;;
   o)
-    devbl64_run_tests_command='devbl64_run_tests_bats_container'
-    devbl64_run_tests_command_tag='run-bats-core-tests-container'
+    devbl_run_tests_command='devbl_run_tests_bats_container'
+    devbl_run_tests_command_tag='run-bats-core-tests-container'
     ;;
-  c) devbl64_run_tests_case="$OPTARG" ;;
-  e) devbl64_run_tests_image="$OPTARG" ;;
-  r) devbl64_run_tests_registry="$OPTARG" ;;
-  g) devbl64_run_tests_debug='1' ;;
-  h) devbl64_run_tests_help && exit ;;
-  \?) devbl64_run_tests_help && exit 1 ;;
+  c) devbl_run_tests_case="$OPTARG" ;;
+  e) devbl_run_tests_image="$OPTARG" ;;
+  r) devbl_run_tests_registry="$OPTARG" ;;
+  g) devbl_run_tests_debug='1' ;;
+  h) devbl_run_tests_help && exit ;;
+  \?) devbl_run_tests_help && exit 1 ;;
   esac
 done
-[[ -z "$devbl64_run_tests_command" ]] && devbl64_run_tests_help && exit 1
-devbl64_run_tests_check || exit 1
+[[ -z "$devbl_run_tests_command" ]] && devbl_run_tests_help && exit 1
+devbl_run_tests_check || exit 1
 
-bl64_msg_show_batch_start "$devbl64_run_tests_command_tag"
-case "$devbl64_run_tests_command" in
-'devbl64_run_tests_bats') "$devbl64_run_tests_command" "$devbl64_run_tests_debug" "$devbl64_run_tests_case" ;;
-'devbl64_run_tests_bats_container') "$devbl64_run_tests_command" "$devbl64_run_tests_debug" "$devbl64_run_tests_image" "$devbl64_run_tests_registry" ;;
+bl64_msg_show_batch_start "$devbl_run_tests_command_tag"
+case "$devbl_run_tests_command" in
+'devbl_run_tests_bats') "$devbl_run_tests_command" "$devbl_run_tests_debug" "$devbl_run_tests_case" ;;
+'devbl_run_tests_bats_container') "$devbl_run_tests_command" "$devbl_run_tests_debug" "$devbl_run_tests_image" "$devbl_run_tests_registry" ;;
 esac
-devbl64_run_tests_status=$?
+devbl_run_tests_status=$?
 
-bl64_msg_show_batch_finish $devbl64_run_tests_status "$devbl64_run_tests_command_tag"
-exit $devbl64_run_tests_status
+bl64_msg_show_batch_finish $devbl_run_tests_status "$devbl_run_tests_command_tag"
+exit $devbl_run_tests_status
