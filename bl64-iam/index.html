@@ -10,14 +10,18 @@
 <span class=normal>10</span>
 <span class=normal>11</span>
 <span class=normal>12</span>
-<span class=normal>13</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>13</span>
+<span class=normal>14</span>
+<span class=normal>15</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Manage OS identity and access service</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.0.0</span>
+<span class=c1># Version: 1.1.0</span>
 <span class=c1>#######################################</span>
+
+<span class=nb>export</span> BL64_IAM_ALIAS_USERADD
 
 <span class=nb>readonly</span> <span class=nv>BL64_IAM_ERROR_MISSING_PARAMETER</span><span class=o>=</span><span class=m>200</span>
 <span class=nb>readonly</span> <span class=nv>BL64_IAM_ERROR_MISSING_USER_ADD</span><span class=o>=</span><span class=m>201</span>
@@ -61,14 +65,64 @@
 <span class=normal>36</span>
 <span class=normal>37</span>
 <span class=normal>38</span>
-<span class=normal>39</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>39</span>
+<span class=normal>40</span>
+<span class=normal>41</span>
+<span class=normal>42</span>
+<span class=normal>43</span>
+<span class=normal>44</span>
+<span class=normal>45</span>
+<span class=normal>46</span>
+<span class=normal>47</span>
+<span class=normal>48</span>
+<span class=normal>49</span>
+<span class=normal>50</span>
+<span class=normal>51</span>
+<span class=normal>52</span>
+<span class=normal>53</span>
+<span class=normal>54</span>
+<span class=normal>55</span>
+<span class=normal>56</span>
+<span class=normal>57</span>
+<span class=normal>58</span>
+<span class=normal>59</span>
+<span class=normal>60</span>
+<span class=normal>61</span>
+<span class=normal>62</span>
+<span class=normal>63</span>
+<span class=normal>64</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Manage OS identity and access service</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.0.1</span>
+<span class=c1># Version: 1.1.0</span>
 <span class=c1>#######################################</span>
+
+<span class=c1>#######################################</span>
+<span class=c1># Create command aliases for common use cases</span>
+<span class=c1># Aliases are presented as regular shell variables for easy inclusion in complex commands</span>
+<span class=c1># Use the alias without quotes, otherwise the shell will interprete spaces as part of the command</span>
+<span class=c1>#</span>
+<span class=c1># Arguments:</span>
+<span class=c1>#   None</span>
+<span class=c1># Outputs:</span>
+<span class=c1>#   STDOUT: None</span>
+<span class=c1>#   STDERR: None</span>
+<span class=c1># Returns:</span>
+<span class=c1>#   0: always ok</span>
+<span class=c1>#######################################</span>
+<span class=k>function</span> bl64_iam_set_alias<span class=o>()</span> <span class=o>{</span>
+  <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=k>in</span>
+  UBUNTU-* <span class=p>|</span> DEBIAN-* <span class=p>|</span> FEDORA-* <span class=p>|</span> CENTOS-* <span class=p>|</span> OL-*<span class=o>)</span>
+    <span class=nv>BL64_IAM_ALIAS_USERADD</span><span class=o>=</span><span class=s1>&#39;/usr/sbin/useradd&#39;</span>
+    <span class=p>;;</span>
+  ALPINE-*<span class=o>)</span>
+    <span class=c1># shellcheck disable=SC2034</span>
+    <span class=nv>BL64_IAM_ALIAS_USERADD</span><span class=o>=</span><span class=s1>&#39;/usr/sbin/adduser&#39;</span>
+    <span class=p>;;</span>
+  <span class=k>esac</span>
+<span class=o>}</span>
 
 <span class=c1>#######################################</span>
 <span class=c1># Create OS user</span>
@@ -93,10 +147,10 @@
 
   <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=k>in</span>
   UBUNTU-* <span class=p>|</span> DEBIAN-* <span class=p>|</span> FEDORA-* <span class=p>|</span> CENTOS-* <span class=p>|</span> OL-*<span class=o>)</span>
-    /usr/sbin/useradd <span class=s2>&quot;</span><span class=nv>$login</span><span class=s2>&quot;</span>
+    <span class=s2>&quot;</span><span class=nv>$BL64_IAM_ALIAS_USERADD</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$login</span><span class=s2>&quot;</span>
     <span class=p>;;</span>
   ALPINE-*<span class=o>)</span>
-    /usr/sbin/adduser -D <span class=s2>&quot;</span><span class=nv>$login</span><span class=s2>&quot;</span>
+    <span class=s2>&quot;</span><span class=nv>$BL64_IAM_ALIAS_USERADD</span><span class=s2>&quot;</span> -D <span class=s2>&quot;</span><span class=nv>$login</span><span class=s2>&quot;</span>
     <span class=p>;;</span>
   <span class=k>esac</span>
 <span class=o>}</span>
