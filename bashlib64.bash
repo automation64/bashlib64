@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.14.0
+# Version: 1.15.0
 #######################################
 
 # Enable library and app tracing
@@ -45,6 +45,8 @@ readonly _BL64_CHECK_TXT_DIRECTORY_NOT_READABLE='required directory is present b
 
 readonly _BL64_CHECK_TXT_EXPORT_EMPTY='required shell exported variable is empty'
 readonly _BL64_CHECK_TXT_EXPORT_SET='required shell exported variable is not set'
+
+export BL64_IAM_ALIAS_USERADD
 
 readonly BL64_IAM_ERROR_MISSING_PARAMETER=200
 readonly BL64_IAM_ERROR_MISSING_USER_ADD=201
@@ -341,6 +343,17 @@ function bl64_fmt_dirname() {
   printf '%s' "${path%/*}"
 }
 
+function bl64_iam_set_alias() {
+  case "$BL64_OS_DISTRO" in
+  UBUNTU-* | DEBIAN-* | FEDORA-* | CENTOS-* | OL-*)
+    BL64_IAM_ALIAS_USERADD='/usr/sbin/useradd'
+    ;;
+  ALPINE-*)
+    BL64_IAM_ALIAS_USERADD='/usr/sbin/adduser'
+    ;;
+  esac
+}
+
 function bl64_iam_user_add() {
   local login="$1"
 
@@ -351,10 +364,10 @@ function bl64_iam_user_add() {
 
   case "$BL64_OS_DISTRO" in
   UBUNTU-* | DEBIAN-* | FEDORA-* | CENTOS-* | OL-*)
-    /usr/sbin/useradd "$login"
+    "$BL64_IAM_ALIAS_USERADD" "$login"
     ;;
   ALPINE-*)
-    /usr/sbin/adduser -D "$login"
+    "$BL64_IAM_ALIAS_USERADD" -D "$login"
     ;;
   esac
 }
@@ -1072,6 +1085,7 @@ if ! bl64_os_get_distro; then
 else
   bl64_os_set_command
   bl64_os_set_alias
+  bl64_iam_set_alias
   bl64_sudo_set_alias
 
   [[ -n "$BL64_LIB_DEBUG" && "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_APP" ]] && set -x

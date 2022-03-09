@@ -4,8 +4,33 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.1
+# Version: 1.1.0
 #######################################
+
+#######################################
+# Create command aliases for common use cases
+# Aliases are presented as regular shell variables for easy inclusion in complex commands
+# Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_iam_set_alias() {
+  case "$BL64_OS_DISTRO" in
+  UBUNTU-* | DEBIAN-* | FEDORA-* | CENTOS-* | OL-*)
+    BL64_IAM_ALIAS_USERADD='/usr/sbin/useradd'
+    ;;
+  ALPINE-*)
+    # shellcheck disable=SC2034
+    BL64_IAM_ALIAS_USERADD='/usr/sbin/adduser'
+    ;;
+  esac
+}
 
 #######################################
 # Create OS user
@@ -30,10 +55,10 @@ function bl64_iam_user_add() {
 
   case "$BL64_OS_DISTRO" in
   UBUNTU-* | DEBIAN-* | FEDORA-* | CENTOS-* | OL-*)
-    /usr/sbin/useradd "$login"
+    "$BL64_IAM_ALIAS_USERADD" "$login"
     ;;
   ALPINE-*)
-    /usr/sbin/adduser -D "$login"
+    "$BL64_IAM_ALIAS_USERADD" -D "$login"
     ;;
   esac
 }
