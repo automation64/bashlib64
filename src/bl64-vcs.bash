@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.0.1
 #######################################
 
 #######################################
@@ -24,18 +24,26 @@
 #   n: git exit status
 #   BL64_VCS_ERROR_MISSING_PARAMETER
 #   BL64_VCS_ERROR_DESTINATION_ERROR
+#   BL64_VCS_ERROR_MISSING_COMMAND
 #######################################
 function bl64_vcs_git_clone() {
   local source="${1}"
   local destination="${2}"
   local branch="${3:-main}"
 
+  # shellcheck disable=SC2086
+  bl64_check_command "$BL64_VCS_CMD_GIT" || return $BL64_VCS_ERROR_MISSING_COMMAND
+
+  # shellcheck disable=SC2086
   bl64_check_parameter 'source' 'repository source' || return $BL64_VCS_ERROR_MISSING_PARAMETER
+  # shellcheck disable=SC2086
   bl64_check_parameter 'destination' 'repository destination' || return $BL64_VCS_ERROR_MISSING_PARAMETER
 
   [[ ! -d "$destination" ]] && bl64_os_mkdir_full "$destination"
+  # shellcheck disable=SC2086
   bl64_check_directory "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
 
+  # shellcheck disable=SC2086
   cd "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
 
   "$BL64_VCS_CMD_GIT" \
