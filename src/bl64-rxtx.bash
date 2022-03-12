@@ -82,3 +82,34 @@ function bl64_rxtx_web_get_file() {
   fi
 
 }
+
+#######################################
+# Pull directory structure from git repo
+#
+# * git repo info is removed after pull (.git)
+#
+# Arguments:
+#   $1: URL to the GIT repository
+#   $2: destination path where the repository will be created
+#   $3: branch name. Default: main
+#   $4: include pattern list. Field separator: space
+# Outputs:
+#   STDOUT: command stdout
+#   STDERR: command error
+# Returns:
+#   command error status
+#######################################
+function bl64_rxtx_git_get_dir() {
+  local source="${1}"
+  local destination="${2}"
+  local branch="${3:-main}"
+  local pattern="${4}"
+  local git_data="$destination/.git"
+  local status=0
+
+  bl64_vcs_git_sparse "$source" "$destination" "$branch" "$pattern"
+  status=$?
+
+  [[ -d "$git_data" ]] && bl64_os_rm_full "$git_data"
+  return $status
+}
