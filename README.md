@@ -29,6 +29,7 @@ BashLib64 is a **Bash** library that provides a simple abstraction layer for dev
 | [bl64-os](https://serdigital64.github.io/bashlib64/bl64-os/)       | Identify OS attributes and provide command aliases |
 | [bl64-pkg](https://serdigital64.github.io/bashlib64/bl64-pkg/)     | Manage native OS packages                          |
 | [bl64-rnd](https://serdigital64.github.io/bashlib64/bl64-rnd/)     | Generate random data                               |
+| [bl64-rxtx](https://serdigital64.github.io/bashlib64/bl64-rxtx/)   | Transfer and Receive data over the network         |
 | [bl64-sudo](https://serdigital64.github.io/bashlib64/bl64-sudo/)   | Manage sudo configuration                          |
 | [bl64-txt](https://serdigital64.github.io/bashlib64/bl64-txt/)     | Manipulate text files content                      |
 | [bl64-vcs](https://serdigital64.github.io/bashlib64/bl64-vcs/)     | Manage Version Control System                      |
@@ -70,8 +71,6 @@ The library has been tested on the following operating systems:
 
 ## Development
 
-## Development
-
 ### Environment
 
 - Prepare dev tools
@@ -104,17 +103,18 @@ The library has been tested on the following operating systems:
 
 - Project GIT repository: [https://github.com/serdigital64/bashlib64](https://github.com/serdigital64/bashlib64)
 - Project Documentation: [https://serdigital64.github.io/bashlib64/](https://serdigital64.github.io/bashlib64/)
+- Release history: [CHANGELOG](CHANGELOG.md)
 
-### Contributing
+## Contributing
 
 Help on implementing new features and maintaining the code base is welcomed.
 
 [Contributor Covenant Code of Conduct](https://github.com/serdigital64/bashlib64/blob/main/CODE_OF_CONDUCT.md)
 
-### License
+## License
 
 [GPL-3.0-or-later](https://www.gnu.org/licenses/gpl-3.0.txt)
 
-### Author
+## Author
 
 - [SerDigital64](https://github.com/serdigital64)
