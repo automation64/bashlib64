@@ -6,9 +6,8 @@ setup() {
 
 }
 
-@test "bl64_rxtx_set_command: commands are set" {
+@test "bl64_vcs_set_command: commands are set" {
 
-  assert_not_equal "${BL64_RXTX_CMD_CURL}" ''
-  assert_not_equal "${BL64_RXTX_CMD_WGET}" ''
+  assert_not_equal "${BL64_VCS_CMD_GIT}" ''
 
 }

@@ -6,7 +6,7 @@ setup() {
 
 }
 
-@test "bl64_os_set_command: common globals are set" {
+@test "bl64_os_set_command: commands are set" {
 
   assert_not_equal "${BL64_OS_CMD_AWK}" ''
   assert_not_equal "${BL64_OS_CMD_TAR}" ''
@@ -27,7 +27,7 @@ setup() {
 
 }
 
-@test "bl64_os_set_command: common commands are set" {
+@test "bl64_os_set_command: commands are present" {
 
   assert_file_executable "${BL64_OS_CMD_AWK}"
   assert_file_executable "${BL64_OS_CMD_TAR}"
