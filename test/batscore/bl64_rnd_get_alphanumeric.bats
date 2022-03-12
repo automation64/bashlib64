@@ -10,6 +10,6 @@ setup() {
   local length=20
 
   test="$(bl64_rnd_get_alphanumeric $length)"
-  (( ${#test} == length ))
+  (( ${#test} == $length ))
 
 }
