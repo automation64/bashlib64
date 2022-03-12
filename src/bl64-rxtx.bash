@@ -40,6 +40,8 @@ function bl64_rxtx_set_command() {
 #   STDOUT: None unless BL64_LIB_DEBUG_CMD is enabled
 #   STDERR: command error
 # Returns:
+#   BL64_RXTX_ERROR_MISSING_PARAMETER
+#   BL64_RXTX_ERROR_MISSING_COMMAND
 #   command error status
 #######################################
 function bl64_rxtx_web_get_file() {
