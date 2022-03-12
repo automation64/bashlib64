@@ -53,6 +53,7 @@ else
   bl64_os_set_command
   bl64_os_set_alias
   bl64_iam_set_alias
+  bl64_sudo_set_command
   bl64_sudo_set_alias
   bl64_vcs_set_command
   bl64_rxtx_set_command
