@@ -6,10 +6,6 @@ setup() {
 
 }
 
-@test "bl64_vcs_env: commands are set" {
-  assert_equal "$BL64_VCS_CMD_GIT" '/usr/bin/git'
-}
-
 @test "bl64_vcs_env: public constants are set" {
   assert_equal $BL64_VCS_ERROR_MISSING_PARAMETER 200
   assert_equal $BL64_VCS_ERROR_DESTINATION_ERROR 201
