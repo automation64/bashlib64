@@ -24,6 +24,7 @@ setup() {
   assert_equal "$BL64_LIB_VAR_OFF" '0'
   assert_equal "$BL64_LIB_VAR_TRUE" '0'
   assert_equal "$BL64_LIB_VAR_FALSE" '1'
+  assert_equal "$BL64_LIB_VAR_OK" '0'
 }
 
 @test "bl64_core_env: debug constants are set" {
