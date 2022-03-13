@@ -23,3 +23,47 @@ setup() {
   assert_equal "$BL64_RND_ERROR_MAX" 2
 
 }
+
+@test "bl64_check_env: BL64_RND_POOL_UPPERCASE content" {
+
+  max=$(( ${#BL64_RND_POOL_UPPERCASE} - 1 ))
+  assert_equal "$BL64_RND_POOL_UPPERCASE_MAX_IDX" "$max"
+  assert_equal "${BL64_RND_POOL_UPPERCASE:0:1}" 'A'
+  assert_equal "${BL64_RND_POOL_UPPERCASE:1:1}" 'B'
+  assert_equal "${BL64_RND_POOL_UPPERCASE:${max}:1}" 'Z'
+
+}
+
+@test "bl64_check_env: BL64_RND_POOL_LOWERCASE content" {
+
+  max=$(( ${#BL64_RND_POOL_LOWERCASE} - 1 ))
+  assert_equal "$BL64_RND_POOL_LOWERCASE_MAX_IDX" "$max"
+  assert_equal "${BL64_RND_POOL_LOWERCASE:0:1}" 'a'
+  assert_equal "${BL64_RND_POOL_LOWERCASE:1:1}" 'b'
+  assert_equal "${BL64_RND_POOL_LOWERCASE:${max}:1}" 'z'
+
+}
+
+@test "bl64_check_env: BL64_RND_POOL_DIGITS content" {
+
+  max=$(( ${#BL64_RND_POOL_DIGITS} - 1 ))
+  assert_equal "$BL64_RND_POOL_DIGITS_MAX_IDX" "$max"
+  assert_equal "${BL64_RND_POOL_DIGITS:0:1}" '0'
+  assert_equal "${BL64_RND_POOL_DIGITS:1:1}" '1'
+  assert_equal "${BL64_RND_POOL_DIGITS:${max}:1}" '9'
+
+}
+
+@test "bl64_check_env: BL64_RND_POOL_ALPHANUMERIC content" {
+
+  max=$(( ${#BL64_RND_POOL_ALPHANUMERIC} - 1 ))
+  umax=$(( ${#BL64_RND_POOL_UPPERCASE} - 1 ))
+  lmax=$(( ${#BL64_RND_POOL_LOWERCASE} - 1 + umax + 1 ))
+  assert_equal "$BL64_RND_POOL_ALPHANUMERIC_MAX_IDX" "$max"
+  assert_equal "${BL64_RND_POOL_ALPHANUMERIC:0:1}" 'A'
+  assert_equal "${BL64_RND_POOL_ALPHANUMERIC:1:1}" 'B'
+  assert_equal "${BL64_RND_POOL_ALPHANUMERIC:${umax}:1}" 'Z'
+  assert_equal "${BL64_RND_POOL_ALPHANUMERIC:${lmax}:1}" 'z'
+  assert_equal "${BL64_RND_POOL_ALPHANUMERIC:${max}:1}" '9'
+
+}
