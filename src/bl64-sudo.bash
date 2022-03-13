@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -53,14 +53,14 @@ function bl64_sudo_add_root() {
       if( Found == 0) {
       print( ControlUsr " ALL=(ALL) NOPASSWD: ALL" )
     }
-  }' "$BL64_SUDO_FILE_SUDOERS" > "$new_sudoers"
+  }' "$BL64_SUDO_FILE_SUDOERS" >"$new_sudoers"
 
   if [[ -s "$new_sudoers" ]]; then
     $BL64_OS_ALIAS_CP_FILE "${BL64_SUDO_FILE_SUDOERS}" "$old_sudoers"
   fi
   if [[ -s "$new_sudoers" && -s "$old_sudoers" ]]; then
-    "$BL64_OS_CMD_CAT" "${BL64_SUDO_FILE_SUDOERS}.bl64_new" > "${BL64_SUDO_FILE_SUDOERS}" && \
-    bl64_sudo_check_sudoers "$BL64_SUDO_FILE_SUDOERS"
+    "$BL64_OS_CMD_CAT" "${BL64_SUDO_FILE_SUDOERS}.bl64_new" >"${BL64_SUDO_FILE_SUDOERS}" &&
+      bl64_sudo_check_sudoers "$BL64_SUDO_FILE_SUDOERS"
     status=$?
   fi
 
@@ -92,11 +92,35 @@ function bl64_sudo_check_sudoers() {
     --file "$sudoers"
   status=$?
 
-  if (( status != 0 )); then
+  if ((status != 0)); then
     bl64_msg_show_error "$_BL64_SUDO_TXT_INVALID_SUDOERS ($sudoers)"
   fi
 
   return $status
+}
+
+#######################################
+# Identify and normalize commands
+#
+# * Commands are exported as variables with full path
+# * The caller function is responsible for checking that the target command is present (installed)
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_sudo_set_command() {
+  case "$BL64_OS_DISTRO" in
+  UBUNTU-* | DEBIAN-* | FEDORA-* | CENTOS-* | OL-* | ALPINE-*)
+    BL64_SUDO_CMD_SUDO='/usr/bin/sudo'
+    BL64_SUDO_CMD_VISUDO='/usr/sbin/visudo'
+    BL64_SUDO_FILE_SUDOERS='/etc/sudoers'
+    ;;
+  esac
 }
 
 #######################################

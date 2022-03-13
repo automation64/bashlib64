@@ -6,6 +6,7 @@ setup() {
 }
 
 @test "bl64_core_env: defaults are set" {
+  assert_not_equal "$BL64_LIB_CMD" ''
   assert_not_equal "$BL64_LIB_DEBUG" ''
   assert_not_equal "$BL64_LIB_STRICT" ''
   assert_not_equal "$BL64_LIB_LANG" ''
@@ -19,4 +20,16 @@ setup() {
 @test "bl64_core_env: public constants are set" {
   assert_equal "$BL64_LIB_VAR_NULL" '__s64__'
   assert_equal "$BL64_LIB_VAR_TBD" 'TBD'
+  assert_equal "$BL64_LIB_VAR_ON" '1'
+  assert_equal "$BL64_LIB_VAR_OFF" '0'
+  assert_equal "$BL64_LIB_VAR_TRUE" '0'
+  assert_equal "$BL64_LIB_VAR_FALSE" '1'
+  assert_equal "$BL64_LIB_VAR_OK" '0'
+}
+
+@test "bl64_core_env: debug constants are set" {
+assert_equal "$BL64_LIB_DEBUG_NONE" '0'
+assert_equal "$BL64_LIB_DEBUG_LIB" '1'
+assert_equal "$BL64_LIB_DEBUG_APP" '2'
+assert_equal "$BL64_LIB_DEBUG_CMD" '3'
 }

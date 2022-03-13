@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.0.1
 #######################################
 
 #######################################
@@ -27,7 +27,9 @@ function bl64_rnd_get_range() {
   local max="${2:-$BL64_RND_RANDOM_MAX}"
   local modulo=0
 
+  # shellcheck disable=SC2086
   (( min < BL64_RND_RANDOM_MIN )) && bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MIN $BL64_RND_RANDOM_MIN" && return $BL64_RND_ERROR_MIN
+  # shellcheck disable=SC2086
   (( max > BL64_RND_RANDOM_MAX )) && bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MAX $BL64_RND_RANDOM_MAX" && return $BL64_RND_ERROR_MAX
 
   modulo=$(( max - min + 1))
@@ -53,7 +55,9 @@ function bl64_rnd_get_numeric() {
   local length="${1:-$BL64_RND_LENGTH_1}"
   local seed=''
 
+  # shellcheck disable=SC2086
   (( length < BL64_RND_LENGTH_1 )) && bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MIN $BL64_RND_LENGTH_1" && return $BL64_RND_ERROR_MIN
+  # shellcheck disable=SC2086
   (( length > BL64_RND_LENGTH_20 )) && bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MAX $BL64_RND_LENGTH_20" && return $BL64_RND_ERROR_MAX
 
   seed="${RANDOM}${RANDOM}${RANDOM}${RANDOM}${RANDOM}"
@@ -82,11 +86,13 @@ function bl64_rnd_get_alphanumeric() {
   local index=0
   local count=0
 
+  # shellcheck disable=SC2086
   (( length < BL64_RND_LENGTH_1 )) && bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MIN $BL64_RND_LENGTH_1" && return $BL64_RND_ERROR_MIN
+  # shellcheck disable=SC2086
   (( length > BL64_RND_LENGTH_100 )) && bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MAX $BL64_RND_LENGTH_100" && return $BL64_RND_ERROR_MAX
 
   while (( count < length )); do
-    index=$( bl64_rnd_get_range '0' "${#BL64_RND_POOL_ALPHANUMERIC}" )
+    index=$( bl64_rnd_get_range '0' "$BL64_RND_POOL_ALPHANUMERIC_MAX_IDX" )
     item="$( printf '%s' "${BL64_RND_POOL_ALPHANUMERIC:$index:1}" )"
     output="${output}${item}"
     (( count++ ))
