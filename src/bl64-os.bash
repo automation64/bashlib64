@@ -134,6 +134,7 @@ function bl64_os_set_alias() {
   UBUNTU-* | DEBIAN-* | FEDORA-* | CENTOS-* | OL-*)
     BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
     BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN --verbose --recursive"
+    BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP --verbose --force --recursive"
     BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP --verbose --force"
     BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
     BL64_OS_ALIAS_LN_SYMBOLIC="$BL64_OS_CMD_LN --verbose --symbolic"
@@ -148,6 +149,7 @@ function bl64_os_set_alias() {
   ALPINE-*)
     BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
     BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN -v -R"
+    BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP -v -f -R"
     BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP -v -f"
     BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
     BL64_OS_ALIAS_LN_SYMBOLIC="$BL64_OS_CMD_LN -v -s"
@@ -194,6 +196,23 @@ function bl64_os_chown_dir() {
 #######################################
 function bl64_os_cp_file() {
   $BL64_OS_ALIAS_CP_FILE "$@"
+}
+
+#######################################
+# Copy directory recursively with verbose and force flags
+#
+# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+#
+# Arguments:
+#   $@: arguments are passed as is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   n: command exit status
+#######################################
+function bl64_os_cp_dir() {
+  $BL64_OS_ALIAS_CP_DIR "$@"
 }
 
 #######################################

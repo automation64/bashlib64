@@ -10,6 +10,7 @@ setup() {
 
   assert_not_equal "$BL64_OS_ALIAS_AWK" ''
   assert_not_equal "$BL64_OS_ALIAS_CHOWN_DIR" ''
+  assert_not_equal "$BL64_OS_ALIAS_CP_DIR" ''
   assert_not_equal "$BL64_OS_ALIAS_CP_FILE" ''
   assert_not_equal "$BL64_OS_ALIAS_ID_USER" ''
   assert_not_equal "$BL64_OS_ALIAS_LN_SYMBOLIC" ''
