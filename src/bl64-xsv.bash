@@ -11,13 +11,18 @@
 # Search for records based on key filters and return matching rows
 #
 # Arguments:
-#   $1: source file path. Default: STDIN
+#   $1: Single string with one ore more search values separated by $BL64_XSV_FS
+#   $2: source file path. Default: STDIN
+#   $3: one ore more column numbers (keys) where values will be searched. Format: single string using $BL64_XSV_COLON as field separator
+#   $4: one or more fields to show on record match. Format: single string using $BL64_XSV_COLON as field separator
+#   $5: field separator for the source file. Default: $BL64_XSV_COLON
 # Outputs:
 #   STDOUT: matching records
 #   STDERR: Error messages
 # Returns:
 #   0: successfull execution
 #   BL64_XSV_ERROR_MISSING_COMMAND
+#   BL64_XSV_ERROR_MISSING_PARAMETER
 #   >0: awk command exit status
 #######################################
 function bl64_xsv_search_records() {
