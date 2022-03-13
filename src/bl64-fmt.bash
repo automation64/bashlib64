@@ -87,7 +87,7 @@ function bl64_fmt_strip_ending_slash() {
 }
 
 #######################################
-# Show the last part (basename) of a full path
+# Show the last part (basename) of a path
 #
 # * The function operates on text data, it doesn't verify path existance
 # * The last part can be either a directory or a file
@@ -95,8 +95,18 @@ function bl64_fmt_strip_ending_slash() {
 # * The basename is defined by taking the text to the right of the last separator
 # * Function mimics the linux basename command
 #
+# Examples:
+#
+#   bl64_fmt_basename '/full/path/to/file' -> 'file'
+#   bl64_fmt_basename '/full/path/to/file/' -> ''
+#   bl64_fmt_basename 'path/to/file' -> 'file'
+#   bl64_fmt_basename 'path/to/file/' -> ''
+#   bl64_fmt_basename '/file' -> 'file'
+#   bl64_fmt_basename '/' -> ''
+#   bl64_fmt_basename 'file' -> 'file'
+#
 # Arguments:
-#   $1: Full path
+#   $1: Path
 # Outputs:
 #   STDOUT: Basename
 #   STDERR: None
@@ -107,18 +117,22 @@ function bl64_fmt_strip_ending_slash() {
 function bl64_fmt_basename() {
   local path="$1"
 
-  [[ -z "$path" ]] && return 0
-
-  printf '%s' "${path##*/}"
+  # shellcheck disable=SC2086
+  if [[ -z "$path" ]]; then
+    return $BL64_LIB_VAR_OK
+  elif [[ "$path" == '/' ]]; then
+    return $BL64_LIB_VAR_OK
+  else
+    printf '%s' "${path##*/}"
+  fi
 }
 
 #######################################
-# Show the directory part of a full path
+# Show the directory part of a path
 #
 # * The function operates on text data, it doesn't verify path existance
-# * Parts are separated by the / character
+# * Parts are separated by the slash (/) character
 # * The directory is defined by taking the input string up to the last separator
-# * Function mimics the linux dirname command
 #
 # Examples:
 #
@@ -126,9 +140,10 @@ function bl64_fmt_basename() {
 #   bl64_fmt_dirname '/full/path/to/file/' -> '/full/path/to/file'
 #   bl64_fmt_dirname '/file' -> '/'
 #   bl64_fmt_dirname '/' -> '/'
+#   bl64_fmt_dirname 'dir' -> 'dir'
 #
 # Arguments:
-#   $1: Full path
+#   $1: Path
 # Outputs:
 #   STDOUT: Dirname
 #   STDERR: None
@@ -139,7 +154,18 @@ function bl64_fmt_basename() {
 function bl64_fmt_dirname() {
   local path="$1"
 
-  [[ -z "$path" ]] && return 0
-
-  printf '%s' "${path%/*}"
+  # shellcheck disable=SC2086
+  if [[ -z "$path" ]]; then
+    return $BL64_LIB_VAR_OK
+  elif [[ "$path" == '/' ]]; then
+    printf '%s' "${path}"
+  elif [[ "$path" != */* ]]; then
+    printf '%s' "${path}"
+  elif [[ "$path" == /*/* ]]; then
+    printf '%s' "${path%/*}"
+  elif [[ "$path" == */*/* ]]; then
+    printf '%s' "${path%/*}"
+  elif [[ "$path" == /* && "${path:1}" != */* ]]; then
+    printf '%s' '/'
+  fi
 }
