@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.4.2
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -135,6 +135,8 @@ function bl64_os_set_alias() {
     BL64_OS_ALIAS_LN_SYMBOLIC="$BL64_OS_CMD_LN --verbose --symbolic"
     BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
     BL64_OS_ALIAS_MKDIR_FULL="$BL64_OS_CMD_MKDIR --parents --verbose"
+    BL64_OS_ALIAS_MKTEMP_DIR="$BL64_OS_CMD_MKTEMP -d"
+    BL64_OS_ALIAS_MKTEMP_FILE="$BL64_OS_CMD_MKTEMP"
     BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV --force --verbose"
     BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM --verbose --force --one-file-system"
     BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM --verbose --force --one-file-system --recursive"
@@ -146,6 +148,8 @@ function bl64_os_set_alias() {
     BL64_OS_ALIAS_LN_SYMBOLIC="$BL64_OS_CMD_LN -v -s"
     BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
     BL64_OS_ALIAS_MKDIR_FULL="$BL64_OS_CMD_MKDIR -p"
+    BL64_OS_ALIAS_MKTEMP_DIR="$BL64_OS_CMD_MKTEMP -d"
+    BL64_OS_ALIAS_MKTEMP_FILE="$BL64_OS_CMD_MKTEMP"
     BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV -f"
     BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM -f"
     BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM -f -R"
