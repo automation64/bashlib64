@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -12,6 +12,7 @@
 #
 # Arguments:
 #   $1: Full path to the command to check
+#   $2: Not found error message. Default: _BL64_CHECK_TXT_COMMAND_NOT_FOUND
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
@@ -23,6 +24,7 @@
 #######################################
 function bl64_check_command() {
   local path="$1"
+  local message="${2:-$_BL64_CHECK_TXT_COMMAND_NOT_FOUND}"
 
   if [[ -z "$path" ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (command path)"
@@ -30,12 +32,12 @@ function bl64_check_command() {
     return $BL64_CHECK_ERROR_MISSING_PARAMETER
   fi
   if [[ ! -f "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_COMMAND_NOT_FOUND ($path)"
+    bl64_msg_show_error "${message} (${path})"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -x "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE ($path)"
+    bl64_msg_show_error "$_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE (${path})"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_FILE_NOT_EXECUTE
   fi
@@ -47,6 +49,7 @@ function bl64_check_command() {
 #
 # Arguments:
 #   $1: Full path to the file
+#   $2: Not found error message. Default: _BL64_CHECK_TXT_FILE_NOT_FOUND
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
@@ -58,6 +61,7 @@ function bl64_check_command() {
 #######################################
 function bl64_check_file() {
   local path="$1"
+  local message="${2:-$_BL64_CHECK_TXT_FILE_NOT_FOUND}"
 
   if [[ -z "$path" ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (file path)"
@@ -65,12 +69,12 @@ function bl64_check_file() {
     return $BL64_CHECK_ERROR_MISSING_PARAMETER
   fi
   if [[ ! -f "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_FILE_NOT_FOUND ($path)"
+    bl64_msg_show_error "${message} (${path})"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -r "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_FILE_NOT_READABLE ($path)"
+    bl64_msg_show_error "$_BL64_CHECK_TXT_FILE_NOT_READABLE (${path})"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_FILE_NOT_READ
   fi
@@ -82,6 +86,7 @@ function bl64_check_file() {
 #
 # Arguments:
 #   $1: Full path to the directory
+#   $2: Not found error message. Default: _BL64_CHECK_TXT_DIRECTORY_NOT_FOUND
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
@@ -93,6 +98,7 @@ function bl64_check_file() {
 #######################################
 function bl64_check_directory() {
   local path="$1"
+  local message="${2:-$_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND}"
 
   if [[ -z "$path" ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (directory path)"
@@ -100,12 +106,12 @@ function bl64_check_directory() {
     return $BL64_CHECK_ERROR_MISSING_PARAMETER
   fi
   if [[ ! -d "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND ($path)"
+    bl64_msg_show_error "${message} (${path})"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_DIRECTORY_NOT_FOUND
   fi
   if [[ ! -r "$path" || ! -x "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE ($path)"
+    bl64_msg_show_error "$_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE (${path})"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_DIRECTORY_NOT_READ
   fi
@@ -138,7 +144,7 @@ function bl64_check_parameter() {
   fi
 
   if eval "[[ -z \$${parameter} ]]"; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER ($description)"
+    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (${description})"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_PARAMETER_EMPTY
   fi
@@ -173,13 +179,13 @@ function bl64_check_export() {
   fi
 
   if [[ ! -v "$export_name" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_EXPORT_SET ($description)"
+    bl64_msg_show_error "$_BL64_CHECK_TXT_EXPORT_SET (${description})"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_EXPORT_SET
   fi
 
   if eval "[[ -z \$${export_name} ]]"; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_EXPORT_EMPTY ($description)"
+    bl64_msg_show_error "$_BL64_CHECK_TXT_EXPORT_EMPTY (${description})"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_EXPORT_EMPTY
   fi
