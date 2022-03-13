@@ -82,6 +82,9 @@ markdown_extensions:
       use_pygments: true
       linenums: true
       linenums_style: "table"
+  - mdx_truly_sane_lists:
+      nested_indent: 2
+      truly_sane: true
 
 nav:
   - Home: "index.md"
@@ -100,3 +103,4 @@ nav:
     - "bl64-sudo.md"
     - "bl64-txt.md"
     - "bl64-vcs.md"
+    - "bl64-xsv.md"
