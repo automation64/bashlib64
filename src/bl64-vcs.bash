@@ -57,9 +57,9 @@ function bl64_vcs_git_clone() {
   bl64_check_command "$BL64_VCS_CMD_GIT" || return $BL64_VCS_ERROR_MISSING_COMMAND
 
   # shellcheck disable=SC2086
-  bl64_check_parameter 'source' 'repository source' || return $BL64_VCS_ERROR_MISSING_PARAMETER
-  # shellcheck disable=SC2086
-  bl64_check_parameter 'destination' 'repository destination' || return $BL64_VCS_ERROR_MISSING_PARAMETER
+  bl64_check_parameter 'source' 'repository source' &&
+    bl64_check_parameter 'destination' 'repository destination' ||
+    return $BL64_VCS_ERROR_MISSING_PARAMETER
 
   [[ ! -d "$destination" ]] && bl64_os_mkdir_full "$destination"
   # shellcheck disable=SC2086
@@ -107,11 +107,9 @@ function bl64_vcs_git_sparse() {
   bl64_check_command "$BL64_VCS_CMD_GIT" || return $BL64_VCS_ERROR_MISSING_COMMAND
 
   # shellcheck disable=SC2086
-  bl64_check_parameter 'source' 'repository source' || return $BL64_VCS_ERROR_MISSING_PARAMETER
-  # shellcheck disable=SC2086
-  bl64_check_parameter 'destination' 'repository destination' || return $BL64_VCS_ERROR_MISSING_PARAMETER
-  # shellcheck disable=SC2086
-  bl64_check_parameter 'pattern' 'pattern list' || return $BL64_VCS_ERROR_MISSING_PARAMETER
+  bl64_check_parameter 'source' 'repository source' &&
+    bl64_check_parameter 'destination' 'repository destination' &&
+    bl64_check_parameter 'pattern' 'pattern list' || return $BL64_VCS_ERROR_MISSING_PARAMETER
 
   [[ ! -d "$destination" ]] && bl64_os_mkdir_full "$destination"
   # shellcheck disable=SC2086
