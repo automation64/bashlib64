@@ -33,6 +33,7 @@ BashLib64 is a **Bash** library that provides a simple abstraction layer for dev
 | [bl64-sudo](https://serdigital64.github.io/bashlib64/bl64-sudo/)   | Manage sudo configuration                          |
 | [bl64-txt](https://serdigital64.github.io/bashlib64/bl64-txt/)     | Manipulate text files content                      |
 | [bl64-vcs](https://serdigital64.github.io/bashlib64/bl64-vcs/)     | Manage Version Control System                      |
+| [bl64-xsv](https://serdigital64.github.io/bashlib64/bl64-xsv/)     | Manipulate CSV like text files                     |
 
 ## Deployment
 
