@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -26,6 +26,64 @@ function bl64_fmt_strip_comments() {
   local source="${1:--}"
 
   "$BL64_OS_CMD_GREP" -v -E '^#.*$|^ *#.*$' "$source"
+}
+
+#######################################
+# Removes starting slash from path
+#
+# * If path is a single slash or relative path no change is done
+#
+# Arguments:
+#   $1: Target path
+# Outputs:
+#   STDOUT: Updated path
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_fmt_strip_starting_slash() {
+  local path="$1"
+
+  # shellcheck disable=SC2086
+  if [[ -z "$path" ]]; then
+    return $BL64_LIB_VAR_OK
+  elif [[ "$path" == '/' ]]; then
+    printf '%s' "${path}"
+  elif [[ "$path" == /* ]]; then
+    printf '%s' "${path:1}"
+  else
+    printf '%s' "${path}"
+  fi
+}
+
+#######################################
+# Removes ending slash from path
+#
+# * If path is a single slash or no ending slash is present no change is done
+#
+# Arguments:
+#   $1: Target path
+# Outputs:
+#   STDOUT: Updated path
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_fmt_strip_ending_slash() {
+  local path="$1"
+
+  # shellcheck disable=SC2086
+  if [[ -z "$path" ]]; then
+    return $BL64_LIB_VAR_OK
+  elif [[ "$path" == '/' ]]; then
+    printf '%s' "${path}"
+  elif [[ "$path" == */ ]]; then
+    printf '%s' "${path:0:-1}"
+  else
+    printf '%s' "${path}"
+  fi
 }
 
 #######################################
@@ -61,6 +119,13 @@ function bl64_fmt_basename() {
 # * Parts are separated by the / character
 # * The directory is defined by taking the input string up to the last separator
 # * Function mimics the linux dirname command
+#
+# Examples:
+#
+#   bl64_fmt_dirname '/full/path/to/file' -> '/full/path/to'
+#   bl64_fmt_dirname '/full/path/to/file/' -> '/full/path/to/file'
+#   bl64_fmt_dirname '/file' -> '/'
+#   bl64_fmt_dirname '/' -> '/'
 #
 # Arguments:
 #   $1: Full path
