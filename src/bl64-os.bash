@@ -37,6 +37,7 @@ function bl64_os_get_distro() {
   ${BL64_OS_DEB}-10* | ${BL64_OS_DEB}-11*) : ;;
   ${BL64_OS_FD}-33* | ${BL64_OS_FD}-35*) : ;;
   ${BL64_OS_OL}-8*) : ;;
+  ${BL64_OS_RHEL}-8*) : ;;
   ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
   *) false ;;
   esac
@@ -76,7 +77,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_CAT='/usr/bin/cat'
     BL64_OS_CMD_CHMOD='/usr/bin/chmod'
@@ -132,7 +133,7 @@ function bl64_os_set_command() {
 #######################################
 function bl64_os_set_alias() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
     BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN --verbose --recursive"
     BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP --verbose --force --recursive"

@@ -44,7 +44,7 @@ function bl64_arc_open_tar() {
   cd "$destination" || return 1
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     "$BL64_OS_CMD_TAR" \
       --overwrite \
       --extract \
