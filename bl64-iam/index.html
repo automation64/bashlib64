@@ -96,7 +96,7 @@
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.1.0</span>
+<span class=c1># Version: 1.2.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -114,10 +114,10 @@
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_iam_set_alias<span class=o>()</span> <span class=o>{</span>
   <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=k>in</span>
-  UBUNTU-* <span class=p>|</span> DEBIAN-* <span class=p>|</span> FEDORA-* <span class=p>|</span> CENTOS-* <span class=p>|</span> OL-*<span class=o>)</span>
+  <span class=si>${</span><span class=nv>BL64_OS_UB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_RHEL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_ALM</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=nv>BL64_IAM_ALIAS_USERADD</span><span class=o>=</span><span class=s1>&#39;/usr/sbin/useradd&#39;</span>
     <span class=p>;;</span>
-  ALPINE-*<span class=o>)</span>
+  <span class=si>${</span><span class=nv>BL64_OS_ALP</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=c1># shellcheck disable=SC2034</span>
     <span class=nv>BL64_IAM_ALIAS_USERADD</span><span class=o>=</span><span class=s1>&#39;/usr/sbin/adduser&#39;</span>
     <span class=p>;;</span>
@@ -146,10 +146,10 @@
   <span class=k>fi</span>
 
   <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=k>in</span>
-  UBUNTU-* <span class=p>|</span> DEBIAN-* <span class=p>|</span> FEDORA-* <span class=p>|</span> CENTOS-* <span class=p>|</span> OL-*<span class=o>)</span>
+  <span class=si>${</span><span class=nv>BL64_OS_UB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_RHEL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_ALM</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=s2>&quot;</span><span class=nv>$BL64_IAM_ALIAS_USERADD</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$login</span><span class=s2>&quot;</span>
     <span class=p>;;</span>
-  ALPINE-*<span class=o>)</span>
+  <span class=si>${</span><span class=nv>BL64_OS_ALP</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=s2>&quot;</span><span class=nv>$BL64_IAM_ALIAS_USERADD</span><span class=s2>&quot;</span> -D <span class=s2>&quot;</span><span class=nv>$login</span><span class=s2>&quot;</span>
     <span class=p>;;</span>
   <span class=k>esac</span>
