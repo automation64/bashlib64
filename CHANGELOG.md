@@ -12,7 +12,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - os
-  - os tags based on os-release id
+  - OS tags (BL64_OS_*)
+  - AlmaLinux compatibility
+- arc
+  - AlmaLinux compatibility
+- iam
+  - AlmaLinux compatibility
+- os
+  - AlmaLinux compatibility
+- pkg
+  - AlmaLinux compatibility
+- rxtx
+  - AlmaLinux compatibility
+- sudo
+  - AlmaLinux compatibility
+- vcs
+  - AlmaLinux compatibility
 
 ### Changed
 
