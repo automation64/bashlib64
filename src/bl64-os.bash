@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -31,12 +31,12 @@ function bl64_os_get_distro() {
   fi
 
   case "$BL64_OS_DISTRO" in
-  UBUNTU-20* | UBUNTU-21*) : ;;
-  DEBIAN-10* | DEBIAN-11*) : ;;
-  FEDORA-33* | FEDORA-35*) : ;;
-  CENTOS-8*) : ;;
-  OL-8*) : ;;
-  ALPINE-3*) : ;;
+  ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
+  ${BL64_OS_DEB}-10* | ${BL64_OS_DEB}-11*) : ;;
+  ${BL64_OS_FD}-33* | ${BL64_OS_FD}-35*) : ;;
+  ${BL64_OS_CNT}-8*) : ;;
+  ${BL64_OS_OL}-8*) : ;;
+  ${BL64_OS_ALP}-3*) : ;;
   *) false ;;
   esac
   # Do not use return as this function gets sourced
@@ -56,7 +56,7 @@ function bl64_os_get_distro() {
 #######################################
 function bl64_os_set_command() {
   case "$BL64_OS_DISTRO" in
-  UBUNTU-* | DEBIAN-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_CHMOD='/bin/chmod'
@@ -75,7 +75,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
     ;;
-  FEDORA-* | CENTOS-* | OL-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_CAT='/usr/bin/cat'
     BL64_OS_CMD_CHMOD='/usr/bin/chmod'
@@ -94,7 +94,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_RM='/usr/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
     ;;
-  ALPINE-*)
+  ${BL64_OS_ALP}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_CHMOD='/bin/chmod'
@@ -131,7 +131,7 @@ function bl64_os_set_command() {
 #######################################
 function bl64_os_set_alias() {
   case "$BL64_OS_DISTRO" in
-  UBUNTU-* | DEBIAN-* | FEDORA-* | CENTOS-* | OL-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-*)
     BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
     BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN --verbose --recursive"
     BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP --verbose --force --recursive"
@@ -146,7 +146,7 @@ function bl64_os_set_alias() {
     BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM --verbose --force --one-file-system"
     BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM --verbose --force --one-file-system --recursive"
     ;;
-  ALPINE-*)
+  ${BL64_OS_ALP}-*)
     BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
     BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN -v -R"
     BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP -v -f -R"
