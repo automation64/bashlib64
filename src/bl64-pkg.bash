@@ -44,7 +44,7 @@ function bl64_pkg_prepare() {
     export DEBIAN_FRONTEND="noninteractive"
     $BL64_PKG_ALIAS_APT_UPDATE
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     $BL64_PKG_ALIAS_DNF_CACHE
     ;;
   ${BL64_OS_ALP}-*)
@@ -70,7 +70,7 @@ function bl64_pkg_install() {
     export DEBIAN_FRONTEND="noninteractive"
     $BL64_PKG_ALIAS_APT_INSTALL -- "$@"
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
     ;;
   ${BL64_OS_ALP}-*)
@@ -98,7 +98,7 @@ function bl64_pkg_cleanup() {
     export DEBIAN_FRONTEND="noninteractive"
     $BL64_PKG_ALIAS_APT_CLEAN
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     $BL64_PKG_ALIAS_DNF_CLEAN
     ;;
   ${BL64_OS_ALP}-*)

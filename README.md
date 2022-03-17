@@ -41,15 +41,16 @@ BashLib64 is a **Bash** library that provides a simple abstraction layer for dev
 
 The library has been tested on the following operating systems:
 
+- AlmaLinux8
+- Alpine3
 - CentOS8
+- Debian10
+- Debian11
+- Fedora33
+- Fedora35
 - OracleLinux8
 - Ubuntu20
 - Ubuntu21
-- Fedora33
-- Fedora35
-- Debian10
-- Debian11
-- Alpine3
 
 ### Prerequisites
 
