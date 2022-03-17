@@ -133,13 +133,14 @@ export BL64_OS_ALIAS_MV
 export BL64_OS_ALIAS_RM_FILE
 export BL64_OS_ALIAS_RM_FULL
 
-readonly BL64_OS_UB='UBUNTU'; export BL64_OS_UB
+readonly BL64_OS_ALM='ALMALINUX'; export BL64_OS_ALM
+readonly BL64_OS_ALP='ALPINE'; export BL64_OS_ALP
+readonly BL64_OS_AMZ='AMZN'; export BL64_OS_AMZ
+readonly BL64_OS_CNT='CENTOS'; export BL64_OS_CNT
 readonly BL64_OS_DEB='DEBIAN'; export BL64_OS_DEB
 readonly BL64_OS_FD='FEDORA'; export BL64_OS_FD
-readonly BL64_OS_CNT='CENTOS'; export BL64_OS_CNT
 readonly BL64_OS_OL='OL'; export BL64_OS_OL
-readonly BL64_OS_ALMALINUX='ALMALINUX'; export BL64_OS_ALMALINUX
-readonly BL64_OS_ALP='ALPINE'; export BL64_OS_ALP
+readonly BL64_OS_UB='UBUNTU'; export BL64_OS_UB
 
 readonly BL64_PKG_CMD_APT='/usr/bin/apt-get'
 readonly BL64_PKG_CMD_DNF='/usr/bin/dnf'
@@ -256,7 +257,7 @@ function bl64_arc_open_tar() {
   cd "$destination" || return 1
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     "$BL64_OS_CMD_TAR" \
       --overwrite \
       --extract \
@@ -445,7 +446,7 @@ function bl64_fmt_dirname() {
 
 function bl64_iam_set_alias() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     BL64_IAM_ALIAS_USERADD='/usr/sbin/useradd'
     ;;
   ${BL64_OS_ALP}-*)
@@ -463,7 +464,7 @@ function bl64_iam_user_add() {
   fi
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     "$BL64_IAM_ALIAS_USERADD" "$login"
     ;;
   ${BL64_OS_ALP}-*)
@@ -767,12 +768,13 @@ function bl64_os_get_distro() {
   fi
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
+  ${BL64_OS_ALM}-8*) : ;;
+  ${BL64_OS_ALP}-3*) : ;;
+  ${BL64_OS_CNT}-8*) : ;;
   ${BL64_OS_DEB}-10* | ${BL64_OS_DEB}-11*) : ;;
   ${BL64_OS_FD}-33* | ${BL64_OS_FD}-35*) : ;;
-  ${BL64_OS_CNT}-8*) : ;;
   ${BL64_OS_OL}-8*) : ;;
-  ${BL64_OS_ALP}-3*) : ;;
+  ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
   *) false ;;
   esac
 }
@@ -798,7 +800,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_CAT='/usr/bin/cat'
     BL64_OS_CMD_CHMOD='/usr/bin/chmod'
@@ -841,7 +843,7 @@ function bl64_os_set_command() {
 
 function bl64_os_set_alias() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
     BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN --verbose --recursive"
     BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP --verbose --force --recursive"
@@ -959,7 +961,7 @@ function bl64_pkg_prepare() {
     export DEBIAN_FRONTEND="noninteractive"
     $BL64_PKG_ALIAS_APT_UPDATE
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     $BL64_PKG_ALIAS_DNF_CACHE
     ;;
   ${BL64_OS_ALP}-*)
@@ -974,7 +976,7 @@ function bl64_pkg_install() {
     export DEBIAN_FRONTEND="noninteractive"
     $BL64_PKG_ALIAS_APT_INSTALL -- "$@"
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
     ;;
   ${BL64_OS_ALP}-*)
@@ -991,7 +993,7 @@ function bl64_pkg_cleanup() {
     export DEBIAN_FRONTEND="noninteractive"
     $BL64_PKG_ALIAS_APT_CLEAN
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     $BL64_PKG_ALIAS_DNF_CLEAN
     ;;
   ${BL64_OS_ALP}-*)
@@ -1084,7 +1086,7 @@ function _bl64_rxtx_restore() {
 
 function bl64_rxtx_set_command() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-*)
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
     BL64_RXTX_CMD_WGET='/usr/bin/wget'
     ;;
@@ -1233,7 +1235,7 @@ function bl64_sudo_check_sudoers() {
 
 function bl64_sudo_set_command() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-*)
     BL64_SUDO_CMD_SUDO='/usr/bin/sudo'
     BL64_SUDO_CMD_VISUDO='/usr/sbin/visudo'
     BL64_SUDO_FILE_SUDOERS='/etc/sudoers'
@@ -1254,7 +1256,7 @@ function bl64_txt_search_line() {
 
 function bl64_vcs_set_command() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-*)
     BL64_VCS_CMD_GIT='/usr/bin/git'
     ;;
   esac
