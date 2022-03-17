@@ -7,11 +7,58 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.17.0]
+
+### Added
+
+- os
+  - OS tags (BL64_OS_*)
+  - AlmaLinux compatibility
+  - RedHatLinux compatibility
+- arc
+  - AlmaLinux compatibility
+  - RedHatLinux compatibility
+- iam
+  - AlmaLinux compatibility
+  - RedHatLinux compatibility
+- os
+  - AlmaLinux compatibility
+  - RedHatLinux compatibility
+- pkg
+  - AlmaLinux compatibility
+  - RedHatLinux compatibility
+- rxtx
+  - AlmaLinux compatibility
+  - RedHatLinux compatibility
+- sudo
+  - AlmaLinux compatibility
+  - RedHatLinux compatibility
+- vcs
+  - AlmaLinux compatibility
+  - RedHatLinux compatibility
+
+### Changed
+
+- arc
+  - use BL64_OS_* for OS id
+- iam
+  - use BL64_OS_* for OS id
+- os
+  - use BL64_OS_* for OS id
+- pkg
+  - use BL64_OS_* for OS id
+- rxtx
+  - use BL64_OS_* for OS id
+- sudo
+  - use BL64_OS_* for OS id
+- vcs
+  - use BL64_OS_* for OS id
+
 ## [1.16.0]
 
 ### Added
 
-- xsv:
+- xsv
   - new module
 - rxtx
   - new module
@@ -29,9 +76,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_os_set_command: gawk
   - bl64_os_cp_dir: new function
 - check
-  - bl64_check_command: add optional error message
-  - bl64_check_file: add optional error message
-  - bl64_check_directory: add optional error message
+  - bl64_check_command: optional error message
+  - bl64_check_file: optional error message
+  - bl64_check_directory: optional error message
 - fmt
   - bl64_fmt_strip_starting_slash: new function
   - bl64_fmt_strip_ending_slash: new function
@@ -57,6 +104,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[Unreleased]: https://github.com/serdigital64/bashlib64/compare/1.16.0...HEAD
+[Unreleased]: https://github.com/serdigital64/bashlib64/compare/1.17.0...HEAD
+[1.17.0]: https://github.com/serdigital64/bashlib64/compare/1.16.0...1.17.0
 [1.16.0]: https://github.com/serdigital64/bashlib64/compare/1.15.0...1.16.0
 [1.15.0]: https://github.com/serdigital64/bashlib64/releases/tag/1.15.0
