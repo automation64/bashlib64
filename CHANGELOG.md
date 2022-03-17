@@ -14,20 +14,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - os
   - OS tags (BL64_OS_*)
   - AlmaLinux compatibility
+  - RedHatLinux compatibility
 - arc
   - AlmaLinux compatibility
+  - RedHatLinux compatibility
 - iam
   - AlmaLinux compatibility
+  - RedHatLinux compatibility
 - os
   - AlmaLinux compatibility
+  - RedHatLinux compatibility
 - pkg
   - AlmaLinux compatibility
+  - RedHatLinux compatibility
 - rxtx
   - AlmaLinux compatibility
+  - RedHatLinux compatibility
 - sudo
   - AlmaLinux compatibility
+  - RedHatLinux compatibility
 - vcs
   - AlmaLinux compatibility
+  - RedHatLinux compatibility
 
 ### Changed
 

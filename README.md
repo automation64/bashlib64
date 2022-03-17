@@ -49,6 +49,7 @@ The library has been tested on the following operating systems:
 - Fedora33
 - Fedora35
 - OracleLinux8
+- RedHatLinux8
 - Ubuntu20
 - Ubuntu21
 

@@ -115,7 +115,7 @@ function bl64_sudo_check_sudoers() {
 #######################################
 function bl64_sudo_set_command() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-*)
     BL64_SUDO_CMD_SUDO='/usr/bin/sudo'
     BL64_SUDO_CMD_VISUDO='/usr/sbin/visudo'
     BL64_SUDO_FILE_SUDOERS='/etc/sudoers'
