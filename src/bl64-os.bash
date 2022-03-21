@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 #######################################
@@ -177,7 +177,7 @@ function bl64_os_set_alias() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_chown_dir() {
   $BL64_OS_ALIAS_CHOWN_DIR "$@"
@@ -194,7 +194,7 @@ function bl64_os_chown_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_cp_file() {
   $BL64_OS_ALIAS_CP_FILE "$@"
@@ -211,10 +211,45 @@ function bl64_os_cp_file() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_cp_dir() {
   $BL64_OS_ALIAS_CP_DIR "$@"
+}
+
+#######################################
+# Merge contents from source directory to target
+#
+# Arguments:
+#   $1: source path
+#   $2: target path
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   bl64_check_parameter
+#   bl64_check_directory
+#   command exit status
+#######################################
+function bl64_os_merge_dir() {
+  local source="${1:-${BL64_LIB_VAR_TBD}}"
+  local target="${2:-${BL64_LIB_VAR_TBD}}"
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'target' &&
+    bl64_check_directory "$source" &&
+    bl64_check_directory "$target" ||
+    return 1
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+    $BL64_OS_ALIAS_CP_DIR --no-target-directory "$source" "$target"
+    ;;
+  ${BL64_OS_ALP}-*)
+    $BL64_OS_ALIAS_CP_DIR "$source" -t "$target"
+    ;;
+  esac
+
 }
 
 #######################################
@@ -228,7 +263,7 @@ function bl64_os_cp_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_id_user() {
   $BL64_OS_ALIAS_ID_USER "$@"
@@ -245,7 +280,7 @@ function bl64_os_id_user() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_ln_symbolic() {
   $BL64_OS_ALIAS_LN_SYMBOLIC "$@"
@@ -262,7 +297,7 @@ function bl64_os_ln_symbolic() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_ls_files() {
   $BL64_OS_ALIAS_LS_FILES "$@"
@@ -279,7 +314,7 @@ function bl64_os_ls_files() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_mkdir_full() {
   $BL64_OS_ALIAS_MKDIR_FULL "$@"
@@ -296,7 +331,7 @@ function bl64_os_mkdir_full() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_mv() {
   $BL64_OS_ALIAS_MV "$@"
@@ -313,7 +348,7 @@ function bl64_os_mv() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_rm_file() {
   $BL64_OS_ALIAS_RM_FILE "$@"
@@ -330,7 +365,7 @@ function bl64_os_rm_file() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_rm_full() {
   $BL64_OS_ALIAS_RM_FULL "$@"
