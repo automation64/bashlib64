@@ -6,9 +6,17 @@ setup() {
   set +u # to avoid IFS missing error in run function
 }
 
-@test "bl64_check_parameter: parameter is present" {
+@test "bl64_check_parameter: parameter is present + numeric" {
 
   test_parameter=1
+  run bl64_check_parameter 'test_parameter' 'test_parameter'
+  assert_success
+
+}
+
+@test "bl64_check_parameter: parameter is present + string" {
+
+  test_parameter='string with spaces'
   run bl64_check_parameter 'test_parameter' 'test_parameter'
   assert_success
 
@@ -18,7 +26,14 @@ setup() {
 
   run bl64_check_parameter 'fake_parameter'
   assert_equal "$status" $BL64_CHECK_ERROR_PARAMETER_EMPTY
-  assert_output --partial "${_BL64_CHECK_TXT_MISSING_PARAMETER}"
+
+}
+
+@test "bl64_check_parameter: parameter is not present + using default value" {
+
+  TEST_PARAMETER="$BL64_LIB_VAR_TBD"
+  run bl64_check_parameter 'TEST_PARAMETER'
+  assert_equal "$status" $BL64_CHECK_ERROR_PARAMETER_EMPTY
 
 }
 
@@ -26,6 +41,5 @@ setup() {
 
   run bl64_check_parameter
   assert_equal "$status" $BL64_CHECK_ERROR_MISSING_PARAMETER
-  assert_output --partial "${_BL64_CHECK_TXT_MISSING_PARAMETER}"
 
 }
