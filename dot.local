@@ -10,3 +10,18 @@
 # Project base location. Adjust to your local GIT repo
 DEVBL_ROOT="${HOME}/git/bashlib64"
 export DEVBL_ROOT
+
+DEVBL_BATS='/opt/bats-core'
+export DEVBL_BATS
+
+DEVBL_BATS_HELPER="$DEVBL_BATS/test_helper"
+export DEVBL_BATS_HELPER
+
+DEVBL_CMD_BATS="$DEVBL_BATS/bin/bats"
+export DEVBL_CMD_BATS
+
+DEVBL_CMD_PODMAN='/usr/bin/podman'
+export DEVBL_CMD_PODMAN
+
+VIRTUALENVWRAPPER_PYTHON='/usr/bin/python3.9'
+export VIRTUALENVWRAPPER_PYTHON
