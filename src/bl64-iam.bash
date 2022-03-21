@@ -9,8 +9,9 @@
 
 #######################################
 # Create command aliases for common use cases
-# Aliases are presented as regular shell variables for easy inclusion in complex commands
-# Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
+#
+# * Aliases are presented as regular shell variables for easy inclusion in complex commands
+# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
 #
 # Arguments:
 #   None
