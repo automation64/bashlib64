@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.1
+# Version: 1.2.0
 #######################################
 
 [[ -z "$DEVBL_BIN" ]] && echo "Error: prepare the dev environment before executing this file" && exit 1
@@ -61,6 +61,7 @@ function devbl_run_tests_bats_container() {
       --rm \
       --user "$DEVBL_TEST_USR" \
       --env DEVBL_TEST='/test' \
+      --env DEVBL_SAMPLES='/test/samples' \
       --env DEVBL_TEST_BASHLIB64='/test/lib/bashlib64.bash' \
       --env DEVBL_BATS_HELPER="$DEVBL_BATS_HELPER" \
       --volume "${DEVBL_TEST}:/test" \
