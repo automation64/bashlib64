@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 function _bl64_rxtx_backup() {
@@ -18,7 +18,7 @@ function _bl64_rxtx_backup() {
     status=$?
   fi
 
-  (( status != 0 )) && status=$BL64_RXTX_ERROR_BACKUP
+  ((status != 0)) && status=$BL64_RXTX_ERROR_BACKUP
   # shellcheck disable=SC2086
   return $status
 }
@@ -44,7 +44,7 @@ function _bl64_rxtx_restore() {
   bl64_os_mv "$backup" "$destination"
   status=$?
 
-  (( status != 0 )) && status=$BL64_RXTX_ERROR_RESTORE
+  ((status != 0)) && status=$BL64_RXTX_ERROR_RESTORE
   # shellcheck disable=SC2086
   return $status
 }
@@ -68,6 +68,30 @@ function bl64_rxtx_set_command() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-*)
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
     BL64_RXTX_CMD_WGET='/usr/bin/wget'
+    ;;
+  esac
+}
+
+#######################################
+# Create command aliases for common use cases
+#
+# * Aliases are presented as regular shell variables for easy inclusion in complex commands
+# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_rxtx_set_alias() {
+  # shellcheck disable=SC2034
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-*)
+    BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL --no-progress-meter  --config /dev/null"
+    BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET --no-config"
     ;;
   esac
 }
@@ -113,16 +137,13 @@ function bl64_rxtx_web_get_file() {
 
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
     [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose='--verbose'
-    "$BL64_RXTX_CMD_CURL" $verbose \
-      --no-progress-meter \
-      --config '/dev/null' \
+    $BL64_RXTX_ALIAS_CURL $verbose \
       --output "$destination" \
       "$source"
     status=$?
   elif [[ -x "$BL64_RXTX_CMD_WGET" ]]; then
     [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose='--verbose'
-    "$BL64_RXTX_CMD_WGET" $verbose \
-      --no-config \
+    "$BL64_RXTX_ALIAS_WGET" $verbose \
       --no-directories \
       --output-document "$destination" \
       "$source"
@@ -190,8 +211,8 @@ function bl64_rxtx_git_get_dir() {
   bl64_vcs_git_sparse "$source_url" "$repo" "$branch" "$source_path" &&
     [[ -d "$source" ]] &&
     bl64_os_mkdir_full "${repo}/transition" &&
-    bl64_os_mv "$source" "$transition" > /dev/null &&
-    bl64_os_mv "${transition}" "$destination" > /dev/null
+    bl64_os_mv "$source" "$transition" >/dev/null &&
+    bl64_os_mv "${transition}" "$destination" >/dev/null
   status=$?
 
   _bl64_rxtx_restore "$destination" "$status" >/dev/null || return $?
