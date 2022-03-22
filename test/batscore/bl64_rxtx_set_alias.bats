@@ -6,8 +6,9 @@ setup() {
 
 }
 
-@test "bl64_iam_set_alias: common globals are set" {
+@test "bl64_rxtx_set_alias: aliases are set" {
 
-  assert_not_equal "$BL64_IAM_ALIAS_USERADD" ''
+  assert_not_equal "${BL64_RXTX_ALIAS_CURL}" ''
+  assert_not_equal "${BL64_RXTX_ALIAS_WGET}" ''
 
 }
