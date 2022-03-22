@@ -32,6 +32,7 @@ function devbl_run_tests_bats() {
     verbose='--formatter tap'
   fi
 
+    # shellcheck disable=SC2086
   "$DEVBL_CMD_BATS" $verbose "$target"
 
 }
@@ -43,20 +44,26 @@ function devbl_run_tests_bats_container() {
   local registry="$3"
   local container_tests='/test/batscore'
   local target=''
+  local verbose=''
+  local loglevel=''
 
   [[ -z "$image" ]] && bl64_msg_show_error "missing parameter (image)" && return 1
 
   if [[ "$debug" == '1' ]]; then
-    verbose='--timing --verbose-run'
+    verbose='--timing --trace --verbose-run'
+    loglevel='--log-level=debug'
   else
     verbose='--formatter tap'
+    loglevel=''
   fi
 
   IFS=' '
   for target in $image; do
     unset IFS
     bl64_msg_show_task "run test cases on the container image: $target"
+    # shellcheck disable=SC2086
     "$DEVBL_CMD_PODMAN" \
+      $loglevel \
       run \
       --rm \
       --user "$DEVBL_TEST_USR" \
@@ -91,7 +98,8 @@ function devbl_run_tests_help() {
   -b         : Run bats-core based tests
   -o         : Run bats-core based tests in container
     ' '
-  -g         : Enable debug mode to show detailed execution information.
+  -g         : Enable debug mode to show detailed execution information
+  -h         : Show Help
     ' "
   -c Case    : Test case name. If not specified all cases are run
   -e Image   : Image name to use for running the container test
