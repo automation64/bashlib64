@@ -76,11 +76,13 @@ else
   # Load commands and aliases
   bl64_os_set_command
   bl64_os_set_alias
+  bl64_iam_set_command
   bl64_iam_set_alias
   bl64_sudo_set_command
   bl64_sudo_set_alias
   bl64_vcs_set_command
   bl64_rxtx_set_command
+  bl64_rxtx_set_alias
 
   # Enable app tracing
   [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_APP" ]] && set -x
