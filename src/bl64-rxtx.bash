@@ -147,7 +147,7 @@ function bl64_rxtx_web_get_file() {
     status=$?
   elif [[ -x "$BL64_RXTX_CMD_WGET" ]]; then
     [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose='--verbose'
-    "$BL64_RXTX_ALIAS_WGET" $verbose \
+    $BL64_RXTX_ALIAS_WGET $verbose \
       --no-directories \
       --output-document "$destination" \
       "$source"
