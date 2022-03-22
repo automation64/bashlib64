@@ -7,6 +7,70 @@
 # Version: 1.8.0
 #######################################
 
+function _bl64_os_match() {
+
+  local os="$1"
+  local item="$2"
+  local version="${item##*-}"
+
+  # Pattern: OOO-V.V
+  if [[ "$item" == +([[:alpha:]])-+([[:digit:]]).+([[:digit:]]) ]]; then
+    [[ "$BL64_OS_DISTRO" == "${os}-${version}" ]]
+  # Pattern: OOO-V
+  elif [[ "$item" == +([[:alpha:]])-+([[:digit:]]) ]]; then
+    [[ "$BL64_OS_DISTRO" == ${os}-${version}.+([[:digit:]]) ]]
+  # Pattern: OOO
+  else
+    [[ "$BL64_OS_DISTRO" == ${os}-+([[:digit:]]).+([[:digit:]]) ]]
+  fi
+}
+
+#######################################
+# Check if the current OS matches the target list
+#
+# * Valid OS Patterns:
+#   * ALM   -> AlmaLinux
+#   * ALP   -> Alpine Linux
+#   * AMZ   -> Amazon Linux
+#   * CNT   -> CentOS
+#   * DEB   -> Debian
+#   * FD    -> Fedora
+#   * OL    -> OracleLinux
+#   * RHEL  -> RedHat Enterprise Linux
+#   * UB    -> Ubuntu
+#
+# Arguments:
+#   $@: list of normalized OS names. Formats: OOO | OOO-V | OOO-V.V
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: ok
+#   1: os not supported
+#######################################
+
+function bl64_os_match() {
+  local item=''
+
+  # shellcheck disable=SC2086
+  for item in "$@"; do
+    case "$item" in
+    'ALM' | ALM-*) _bl64_os_match "$BL64_OS_ALM" "$item" && return ;;
+    'ALP' | ALP-*) _bl64_os_match "$BL64_OS_ALP" "$item" && return ;;
+    'CNT' | CNT-*) _bl64_os_match "$BL64_OS_CNT" "$item" && return ;;
+    'DEB' | DEB-*) _bl64_os_match "$BL64_OS_DEB" "$item" && return ;;
+    'FD' | FD-*) _bl64_os_match "$BL64_OS_FD" "$item" && return ;;
+    'OL' | OL-*) _bl64_os_match "$BL64_OS_OL" "$item" && return ;;
+    'RHEL' | RHEL-*) _bl64_os_match "$BL64_OS_RHEL" "$item" && return ;;
+    'UB' | UB-*) _bl64_os_match "$BL64_OS_UB" "$item" && return ;;
+    *) return $BL64_OS_ERROR_INVALID_OS_TAG ;;
+    esac
+  done
+
+  # shellcheck disable=SC2086
+  return $BL64_OS_ERROR_NO_OS_MATCH
+}
+
 #######################################
 # Identify and normalize Linux OS distribution name and version
 #
@@ -20,12 +84,11 @@
 #   1: os not supported
 #######################################
 function bl64_os_get_distro() {
-  BL64_OS_DISTRO='UNKNOWN'
 
   if [[ -r '/etc/os-release' ]]; then
     # shellcheck disable=SC1091
     source '/etc/os-release'
-    if [[ -n "$ID" && -n "$VERSION_ID" ]]; then
+    if [[ -n "$ID" && -n "$VERSION_ID" && "$BL64_OS_DISTRO" != "${ID^^}-${VERSION_ID}" ]]; then
       BL64_OS_DISTRO="${ID^^}-${VERSION_ID}"
     fi
   fi
@@ -39,7 +102,10 @@ function bl64_os_get_distro() {
   ${BL64_OS_OL}-8*) : ;;
   ${BL64_OS_RHEL}-8*) : ;;
   ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
-  *) false ;;
+  *)
+    BL64_OS_DISTRO='UNKNOWN'
+    false
+    ;;
   esac
   # Do not use return as this function gets sourced
 }
