@@ -89,13 +89,29 @@ function bl64_rxtx_set_command() {
 function bl64_rxtx_set_alias() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_ALP}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-*)
     BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL --no-progress-meter  --config /dev/null"
     BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET --no-config"
+    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+    BL64_RXTX_SET_CURL_OUTPUT='--output'
+    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
     ;;
   ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL --config /dev/null"
     BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET --no-config"
+    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+    BL64_RXTX_SET_CURL_OUTPUT='--output'
+    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL"
+    BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET"
+    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+    BL64_RXTX_SET_CURL_OUTPUT='--output'
+    BL64_RXTX_SET_WGET_OUTPUT='-O'
     ;;
   esac
 }
@@ -140,16 +156,15 @@ function bl64_rxtx_web_get_file() {
   _bl64_rxtx_backup "$destination" >/dev/null || return $?
 
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
-    [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose='--verbose'
+    [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
     $BL64_RXTX_ALIAS_CURL $verbose \
-      --output "$destination" \
+      $BL64_RXTX_SET_CURL_OUTPUT "$destination" \
       "$source"
     status=$?
   elif [[ -x "$BL64_RXTX_CMD_WGET" ]]; then
-    [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose='--verbose'
+    [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
     $BL64_RXTX_ALIAS_WGET $verbose \
-      --no-directories \
-      --output-document "$destination" \
+      BL64_RXTX_SET_WGET_OUTPUT "$destination" \
       "$source"
     status=$?
   else
