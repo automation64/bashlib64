@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -27,6 +27,25 @@ function bl64_vcs_set_command() {
     BL64_VCS_CMD_GIT='/usr/bin/git'
     ;;
   esac
+}
+
+#######################################
+# Create command aliases for common use cases
+#
+# * Aliases are presented as regular shell variables for easy inclusion in complex commands
+# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_vcs_set_alias() {
+  # shellcheck disable=SC2034
+  BL64_VCS_ALIAS_GIT="$BL64_VCS_CMD_GIT"
 }
 
 #######################################
@@ -68,7 +87,7 @@ function bl64_vcs_git_clone() {
   # shellcheck disable=SC2086
   cd "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
 
-  "$BL64_VCS_CMD_GIT" \
+  $BL64_VCS_ALIAS_GIT \
     clone \
     --depth 1 \
     --single-branch \
@@ -124,7 +143,7 @@ function bl64_vcs_git_sparse() {
   )"
 
   # shellcheck disable=SC2086
-  "$BL64_VCS_CMD_GIT" init &&
+  $BL64_VCS_ALIAS_GIT init &&
     "$BL64_VCS_CMD_GIT" sparse-checkout set &&
     { echo $include_list | "$BL64_VCS_CMD_GIT" sparse-checkout add --stdin; } &&
     "$BL64_VCS_CMD_GIT" remote add origin "$source" &&
