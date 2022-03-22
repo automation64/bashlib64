@@ -134,10 +134,16 @@ function bl64_os_set_command() {
 #   0: always ok
 #######################################
 function bl64_os_set_alias() {
+  local cmd_mawk='/usr/bin/mawk'
+
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
+    if [[ -x "$cmd_mawk" ]]; then
+      BL64_OS_ALIAS_AWK="$cmd_mawk"
+    else
+      BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
+    fi
     BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN --verbose --recursive"
     BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP --verbose --force --recursive"
     BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP --verbose --force"
