@@ -57,6 +57,7 @@ function bl64_os_get_distro() {
 #   0: always ok, even when the OS is not supported
 #######################################
 function bl64_os_set_command() {
+  # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
@@ -133,6 +134,7 @@ function bl64_os_set_command() {
 #   0: always ok
 #######################################
 function bl64_os_set_alias() {
+  # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
