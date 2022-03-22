@@ -6,8 +6,8 @@ setup() {
 
 }
 
-@test "bl64_sudo_set_alias: common globals are set" {
+@test "bl64_vcs_set_alias: common globals are set" {
 
-  assert_not_equal "$BL64_SUDO_ALIAS_SUDO_ENV" ''
+  assert_not_equal "$BL64_VCS_ALIAS_GIT" ''
 
 }
