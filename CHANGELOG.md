@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.18.0]
+
+### Added
+
+- core
+  - shtop defaults
+- check
+  - bl64_check_parameter: check for placeholder (BL64_LIB_VAR_TBD)
+- os
+  - bl64_os_merge_dir: new function
+  - bl64_os_match: new function
+- iam
+  - bl64_iam_set_command: new function
+- rxtx
+  - bl64_rxtx_set_alias: new function
+- vcs
+  - bl64_vcs_set_alias: new function
+  - bl64_vcs_git_sparse: support for git with no sparse-checkout command
+
+### Changed
+
+- rxtx
+  - bl64_rxtx_web_get_file: use aliases instead of commands
+- os
+  - bl64_os_set_alias: prefer mawk over gawk for ALIAS_AWK
+  - bl64_os_get_distro: normalize exit status, normalize Debian version (10->10.0)
+- vcs
+  - bl64_vcs_git_sparse: use aliases instead of commands
+  - bl64_vcs_git_clone: use aliases instead of commands
+
 ## [1.17.0]
 
 ### Added
