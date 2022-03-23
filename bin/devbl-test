@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.1
+# Version: 1.2.0
 #######################################
 
 [[ -z "$DEVBL_BIN" ]] && echo "Error: prepare the dev environment before executing this file" && exit 1
@@ -19,10 +19,9 @@ function devbl_run_tests_bats() {
   local target=''
   local verbose=''
 
-  if [[ -n "$case" ]]; then
+  if [[ "$case" != 'all' ]]; then
     target="${DEVBL_TEST_BATSCORE}/${case}.bats"
   else
-    # target="$(echo $DEVBL_TEST/batscore/*)"
     target="$DEVBL_TEST_BATSCORE"
   fi
 
@@ -32,6 +31,7 @@ function devbl_run_tests_bats() {
     verbose='--formatter tap'
   fi
 
+  # shellcheck disable=SC2086
   "$DEVBL_CMD_BATS" $verbose "$target"
 
 }
@@ -39,36 +39,58 @@ function devbl_run_tests_bats() {
 function devbl_run_tests_bats_container() {
 
   local debug="$1"
-  local image="$2"
-  local registry="$3"
-  local container_tests='/test/batscore'
+  local case="$2"
+  local image="$3"
+  local registry="$4"
+  local container=''
   local target=''
+  local verbose=''
+  local loglevel=''
 
   [[ -z "$image" ]] && bl64_msg_show_error "missing parameter (image)" && return 1
 
+  if [[ "$case" != 'all' ]]; then
+    target="/test/batscore/${case}.bats"
+  else
+    target="/test/batscore"
+  fi
+
   if [[ "$debug" == '1' ]]; then
-    verbose='--timing --verbose-run'
+    verbose='--timing --trace --verbose-run'
+    loglevel='--log-level=debug'
   else
     verbose='--formatter tap'
+    loglevel=''
   fi
 
   IFS=' '
-  for target in $image; do
+  for container in $image; do
     unset IFS
-    bl64_msg_show_task "run test cases on the container image: $target"
+    bl64_msg_show_task "run test cases on the container image: $container"
+    # shellcheck disable=SC2086
     "$DEVBL_CMD_PODMAN" \
+      $loglevel \
       run \
       --rm \
       --user "$DEVBL_TEST_USR" \
       --env DEVBL_TEST='/test' \
+      --env DEVBL_SAMPLES='/test/samples' \
       --env DEVBL_TEST_BASHLIB64='/test/lib/bashlib64.bash' \
       --env DEVBL_BATS_HELPER="$DEVBL_BATS_HELPER" \
       --volume "${DEVBL_TEST}:/test" \
-      "${registry}/${target}" \
-      "$container_tests" \
-      $verbose
+      "${registry}/${container}" \
+      $verbose \
+      "$target"
   done
 
+}
+
+function devbl_list_images() {
+  echo "$DEVBL_IMAGES"
+}
+
+function devbl_list_cases() {
+  "$BL64_OS_CMD_LS" "$DEVBL_TEST_BATSCORE"
 }
 
 function devbl_run_tests_check() {
@@ -84,13 +106,16 @@ function devbl_run_tests_check() {
 
 function devbl_run_tests_help() {
   bl64_msg_show_usage \
-    '-b|-o [-c Case] [-e Image] [-r Registry] [-g] [-h]' \
+    '<-b|-o|-l|-i> [-c Case] [-e Image] [-r Registry] [-g] [-h]' \
     'Run Tests' \
     '
-  -b         : Run bats-core based tests
-  -o         : Run bats-core based tests in container
+  -b         : Run tests
+  -o         : Run tests in containers
+  -l         : List test cases
+  -i         : List container images
     ' '
-  -g         : Enable debug mode to show detailed execution information.
+  -g         : Enable debug mode to show detailed execution information
+  -h         : Show Help
     ' "
   -c Case    : Test case name. If not specified all cases are run
   -e Image   : Image name to use for running the container test
@@ -106,21 +131,29 @@ declare devbl_run_tests_status=1
 declare devbl_run_tests_command=''
 declare devbl_run_tests_command_tag=''
 declare devbl_run_tests_option=''
-declare devbl_run_tests_case=''
+declare devbl_run_tests_case='all'
 declare devbl_run_tests_image="$DEVBL_IMAGES"
 declare devbl_run_tests_debug='0'
 declare devbl_run_tests_registry="$DEVBL_REGISTRY"
 
 (($# == 0)) && devbl_run_tests_help && exit 1
-while getopts ':boc:e:r:gh' devbl_run_tests_option; do
+while getopts ':blioc:e:r:gh' devbl_run_tests_option; do
   case "$devbl_run_tests_option" in
   b)
     devbl_run_tests_command='devbl_run_tests_bats'
-    devbl_run_tests_command_tag='run-bats-core-tests'
+    devbl_run_tests_command_tag='run bats-core tests'
     ;;
   o)
     devbl_run_tests_command='devbl_run_tests_bats_container'
-    devbl_run_tests_command_tag='run-bats-core-tests-container'
+    devbl_run_tests_command_tag='run bats-core tests in containers'
+    ;;
+  l)
+    devbl_run_tests_command='devbl_list_cases'
+    devbl_run_tests_command_tag='list test cases'
+    ;;
+  i)
+    devbl_run_tests_command='devbl_list_images'
+    devbl_run_tests_command_tag='list container images'
     ;;
   c) devbl_run_tests_case="$OPTARG" ;;
   e) devbl_run_tests_image="$OPTARG" ;;
@@ -135,8 +168,9 @@ devbl_run_tests_check || exit 1
 
 bl64_msg_show_batch_start "$devbl_run_tests_command_tag"
 case "$devbl_run_tests_command" in
+'devbl_list_cases' | 'devbl_list_images') "$devbl_run_tests_command" ;;
 'devbl_run_tests_bats') "$devbl_run_tests_command" "$devbl_run_tests_debug" "$devbl_run_tests_case" ;;
-'devbl_run_tests_bats_container') "$devbl_run_tests_command" "$devbl_run_tests_debug" "$devbl_run_tests_image" "$devbl_run_tests_registry" ;;
+'devbl_run_tests_bats_container') "$devbl_run_tests_command" "$devbl_run_tests_debug" "$devbl_run_tests_case" "$devbl_run_tests_image" "$devbl_run_tests_registry" ;;
 esac
 devbl_run_tests_status=$?
 

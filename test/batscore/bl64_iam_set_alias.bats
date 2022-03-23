@@ -8,8 +8,6 @@ setup() {
 
 @test "bl64_iam_set_alias: common globals are set" {
 
-  bl64_iam_set_alias
-
   assert_not_equal "$BL64_IAM_ALIAS_USERADD" ''
 
 }

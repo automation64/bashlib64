@@ -4,11 +4,79 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
+
+function _bl64_os_match() {
+
+  local os="$1"
+  local item="$2"
+  local version="${item##*-}"
+
+  # Pattern: OOO-V.V
+  if [[ "$item" == +([[:alpha:]])-+([[:digit:]]).+([[:digit:]]) ]]; then
+    [[ "$BL64_OS_DISTRO" == "${os}-${version}" ]]
+  # Pattern: OOO-V
+  elif [[ "$item" == +([[:alpha:]])-+([[:digit:]]) ]]; then
+    [[ "$BL64_OS_DISTRO" == ${os}-${version}.+([[:digit:]]) ]]
+  # Pattern: OOO
+  else
+    [[ "$BL64_OS_DISTRO" == ${os}-+([[:digit:]]).+([[:digit:]]) ]]
+  fi
+}
+
+#######################################
+# Check if the current OS matches the target list
+#
+# Arguments:
+#   $@: list of normalized OS names. Formats: as defined by bl64_os_get_distro
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: os match
+#   BL64_OS_ERROR_NO_OS_MATCH
+#   BL64_OS_ERROR_INVALID_OS_TAG
+#######################################
+
+function bl64_os_match() {
+  local item=''
+
+  # shellcheck disable=SC2086
+  for item in "$@"; do
+    case "$item" in
+    'ALM' | ALM-*) _bl64_os_match "$BL64_OS_ALM" "$item" && return ;;
+    'ALP' | ALP-*) _bl64_os_match "$BL64_OS_ALP" "$item" && return ;;
+    'CNT' | CNT-*) _bl64_os_match "$BL64_OS_CNT" "$item" && return ;;
+    'DEB' | DEB-*) _bl64_os_match "$BL64_OS_DEB" "$item" && return ;;
+    'FD' | FD-*) _bl64_os_match "$BL64_OS_FD" "$item" && return ;;
+    'OL' | OL-*) _bl64_os_match "$BL64_OS_OL" "$item" && return ;;
+    'RHEL' | RHEL-*) _bl64_os_match "$BL64_OS_RHEL" "$item" && return ;;
+    'UB' | UB-*) _bl64_os_match "$BL64_OS_UB" "$item" && return ;;
+    *) return $BL64_OS_ERROR_INVALID_OS_TAG ;;
+    esac
+  done
+
+  # shellcheck disable=SC2086
+  return $BL64_OS_ERROR_NO_OS_MATCH
+}
 
 #######################################
 # Identify and normalize Linux OS distribution name and version
+#
+# * Target format: OOO-V.V
+#   * OOO: OS short name (tag)
+#   * V.V: Version (Major, Minor)
+# * OS tags:
+#   * ALM   -> AlmaLinux
+#   * ALP   -> Alpine Linux
+#   * AMZ   -> Amazon Linux
+#   * CNT   -> CentOS
+#   * DEB   -> Debian
+#   * FD    -> Fedora
+#   * OL    -> OracleLinux
+#   * RHEL  -> RedHat Enterprise Linux
+#   * UB    -> Ubuntu
 #
 # Arguments:
 #   None
@@ -17,10 +85,9 @@
 #   STDERR: None
 # Returns:
 #   0: ok
-#   1: os not supported
+#   BL64_OS_ERROR_UNKNOWN_OS: os not supported
 #######################################
 function bl64_os_get_distro() {
-  BL64_OS_DISTRO='UNKNOWN'
 
   if [[ -r '/etc/os-release' ]]; then
     # shellcheck disable=SC1091
@@ -34,12 +101,21 @@ function bl64_os_get_distro() {
   ${BL64_OS_ALM}-8*) : ;;
   ${BL64_OS_ALP}-3*) : ;;
   ${BL64_OS_CNT}-8*) : ;;
-  ${BL64_OS_DEB}-10* | ${BL64_OS_DEB}-11*) : ;;
+  ${BL64_OS_DEB}-10*)
+    [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-10" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-10.0"
+    ;;
+  ${BL64_OS_DEB}-11*)
+    [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-11" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-11.0"
+    ;;
   ${BL64_OS_FD}-33* | ${BL64_OS_FD}-35*) : ;;
   ${BL64_OS_OL}-8*) : ;;
   ${BL64_OS_RHEL}-8*) : ;;
   ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
-  *) false ;;
+  *)
+    BL64_OS_DISTRO='UNKNOWN'
+    # shellcheck disable=SC2086
+    return $BL64_OS_ERROR_UNKNOWN_OS
+    ;;
   esac
   # Do not use return as this function gets sourced
 }
@@ -57,6 +133,7 @@ function bl64_os_get_distro() {
 #   0: always ok, even when the OS is not supported
 #######################################
 function bl64_os_set_command() {
+  # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
@@ -120,8 +197,9 @@ function bl64_os_set_command() {
 
 #######################################
 # Create command aliases for common use cases
-# Aliases are presented as regular shell variables for easy inclusion in SUDO
-# Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
+#
+# * Aliases are presented as regular shell variables for easy inclusion in complex commands
+# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
 #
 # Arguments:
 #   None
@@ -132,9 +210,16 @@ function bl64_os_set_command() {
 #   0: always ok
 #######################################
 function bl64_os_set_alias() {
+  local cmd_mawk='/usr/bin/mawk'
+
+  # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
+    if [[ -x "$cmd_mawk" ]]; then
+      BL64_OS_ALIAS_AWK="$cmd_mawk"
+    else
+      BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
+    fi
     BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN --verbose --recursive"
     BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP --verbose --force --recursive"
     BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP --verbose --force"
@@ -177,7 +262,7 @@ function bl64_os_set_alias() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_chown_dir() {
   $BL64_OS_ALIAS_CHOWN_DIR "$@"
@@ -194,7 +279,7 @@ function bl64_os_chown_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_cp_file() {
   $BL64_OS_ALIAS_CP_FILE "$@"
@@ -211,10 +296,51 @@ function bl64_os_cp_file() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_cp_dir() {
   $BL64_OS_ALIAS_CP_DIR "$@"
+}
+
+#######################################
+# Merge contents from source directory to target
+#
+# Arguments:
+#   $1: source path
+#   $2: target path
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   bl64_check_parameter
+#   bl64_check_directory
+#   command exit status
+#######################################
+function bl64_os_merge_dir() {
+  local source="${1:-${BL64_LIB_VAR_TBD}}"
+  local target="${2:-${BL64_LIB_VAR_TBD}}"
+  local status=0
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'target' &&
+    bl64_check_directory "$source" &&
+    bl64_check_directory "$target" ||
+    return 1
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+    $BL64_OS_ALIAS_CP_DIR --no-target-directory "$source" "$target"
+    ;;
+  ${BL64_OS_ALP}-*)
+    shopt -sq dotglob
+    # shellcheck disable=SC2086
+    $BL64_OS_ALIAS_CP_DIR $source/* -t "$target"
+    status=$?
+    shopt -uq dotglob
+    ;;
+  esac
+
+  return $status
 }
 
 #######################################
@@ -228,7 +354,7 @@ function bl64_os_cp_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_id_user() {
   $BL64_OS_ALIAS_ID_USER "$@"
@@ -245,7 +371,7 @@ function bl64_os_id_user() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_ln_symbolic() {
   $BL64_OS_ALIAS_LN_SYMBOLIC "$@"
@@ -262,7 +388,7 @@ function bl64_os_ln_symbolic() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_ls_files() {
   $BL64_OS_ALIAS_LS_FILES "$@"
@@ -279,7 +405,7 @@ function bl64_os_ls_files() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_mkdir_full() {
   $BL64_OS_ALIAS_MKDIR_FULL "$@"
@@ -296,7 +422,7 @@ function bl64_os_mkdir_full() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_mv() {
   $BL64_OS_ALIAS_MV "$@"
@@ -313,7 +439,7 @@ function bl64_os_mv() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_rm_file() {
   $BL64_OS_ALIAS_RM_FILE "$@"
@@ -330,7 +456,7 @@ function bl64_os_rm_file() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   n: command exit status
+#   command exit status
 #######################################
 function bl64_os_rm_full() {
   $BL64_OS_ALIAS_RM_FULL "$@"
