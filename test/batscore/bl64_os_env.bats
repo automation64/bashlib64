@@ -6,7 +6,7 @@ setup() {
 
 }
 
-@test "bl64_sudo_env: public constants are set" {
+@test "bl64_os_env: public OS constants are set" {
   assert_equal "$BL64_OS_ALM" 'ALMALINUX'
   assert_equal "$BL64_OS_ALP" 'ALPINE'
   assert_equal "$BL64_OS_AMZ" 'AMZN'
@@ -17,3 +17,9 @@ setup() {
   assert_equal "$BL64_OS_RHEL" 'RHEL'
   assert_equal "$BL64_OS_UB" 'UBUNTU'
 }
+
+@test "bl64_os_env: error constants are set" {
+  assert_equal "$BL64_OS_ERROR_NO_OS_MATCH" 200
+  assert_equal "$BL64_OS_ERROR_INVALID_OS_TAG" 201
+}
+

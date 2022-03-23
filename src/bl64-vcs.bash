@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -27,6 +27,25 @@ function bl64_vcs_set_command() {
     BL64_VCS_CMD_GIT='/usr/bin/git'
     ;;
   esac
+}
+
+#######################################
+# Create command aliases for common use cases
+#
+# * Aliases are presented as regular shell variables for easy inclusion in complex commands
+# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_vcs_set_alias() {
+  # shellcheck disable=SC2034
+  BL64_VCS_ALIAS_GIT="$BL64_VCS_CMD_GIT"
 }
 
 #######################################
@@ -68,7 +87,7 @@ function bl64_vcs_git_clone() {
   # shellcheck disable=SC2086
   cd "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
 
-  "$BL64_VCS_CMD_GIT" \
+  $BL64_VCS_ALIAS_GIT \
     clone \
     --depth 1 \
     --single-branch \
@@ -101,7 +120,7 @@ function bl64_vcs_git_sparse() {
   local destination="${2}"
   local branch="${3:-main}"
   local pattern="${4}"
-  local include_list=''
+  local item=''
 
   # shellcheck disable=SC2086
   bl64_check_command "$BL64_VCS_CMD_GIT" || return $BL64_VCS_ERROR_MISSING_COMMAND
@@ -118,15 +137,26 @@ function bl64_vcs_git_sparse() {
   # shellcheck disable=SC2086
   cd "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
 
-  include_list="$(
-    IFS=' '
-    for item in $pattern; do echo "$item"; done
-  )"
-
-  # shellcheck disable=SC2086
-  "$BL64_VCS_CMD_GIT" init &&
-    "$BL64_VCS_CMD_GIT" sparse-checkout set &&
-    { echo $include_list | "$BL64_VCS_CMD_GIT" sparse-checkout add --stdin; } &&
-    "$BL64_VCS_CMD_GIT" remote add origin "$source" &&
-    "$BL64_VCS_CMD_GIT" pull --depth 1 origin "$branch"
+  if bl64_os_match 'DEB-10' 'UB-20'; then
+    # shellcheck disable=SC2086
+    $BL64_VCS_ALIAS_GIT init &&
+      $BL64_VCS_ALIAS_GIT remote add origin "$source" &&
+      $BL64_VCS_ALIAS_GIT config core.sparseCheckout true &&
+      {
+        IFS=' '
+        for item in $pattern; do echo "$item" >>'.git/info/sparse-checkout'; done
+        unset IFS
+      } &&
+      $BL64_VCS_ALIAS_GIT pull --depth 1 origin "$branch"
+  else
+    # shellcheck disable=SC2086
+    $BL64_VCS_ALIAS_GIT init &&
+      $BL64_VCS_ALIAS_GIT sparse-checkout set &&
+      {
+        IFS=' '
+        for item in $pattern; do echo "$item"; done | $BL64_VCS_ALIAS_GIT sparse-checkout add --stdin
+      } &&
+      $BL64_VCS_ALIAS_GIT remote add origin "$source" &&
+      $BL64_VCS_ALIAS_GIT pull --depth 1 origin "$branch"
+  fi
 }

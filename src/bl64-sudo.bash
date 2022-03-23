@@ -45,15 +45,19 @@ function bl64_sudo_add_root() {
 
   umask 0266
   # shellcheck disable=SC2016
-  "$BL64_OS_CMD_AWK" -v ControlUsr="$user" '
-    BEGIN { Found = 0 }
-    ControlUsr " ALL=(ALL) NOPASSWD: ALL" == $0 { Found = 1 }
-    { print $0 }
-    END {
-      if( Found == 0) {
-      print( ControlUsr " ALL=(ALL) NOPASSWD: ALL" )
-    }
-  }' "$BL64_SUDO_FILE_SUDOERS" >"$new_sudoers"
+  $BL64_OS_ALIAS_AWK \
+    -v ControlUsr="$user" \
+    '
+      BEGIN { Found = 0 }
+      ControlUsr " ALL=(ALL) NOPASSWD: ALL" == $0 { Found = 1 }
+      { print $0 }
+      END {
+        if( Found == 0) {
+          print( ControlUsr " ALL=(ALL) NOPASSWD: ALL" )
+        }
+      }
+    ' \
+    "$BL64_SUDO_FILE_SUDOERS" >"$new_sudoers"
 
   if [[ -s "$new_sudoers" ]]; then
     $BL64_OS_ALIAS_CP_FILE "${BL64_SUDO_FILE_SUDOERS}" "$old_sudoers"
@@ -125,8 +129,9 @@ function bl64_sudo_set_command() {
 
 #######################################
 # Create command aliases for common use cases
-# Aliases are presented as regular shell variables for easy inclusion in complex commands
-# Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
+#
+# * Aliases are presented as regular shell variables for easy inclusion in complex commands
+# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
 #
 # Arguments:
 #   None

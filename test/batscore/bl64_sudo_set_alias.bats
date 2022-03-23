@@ -8,8 +8,6 @@ setup() {
 
 @test "bl64_sudo_set_alias: common globals are set" {
 
-  bl64_sudo_set_alias
-
   assert_not_equal "$BL64_SUDO_ALIAS_SUDO_ENV" ''
 
 }

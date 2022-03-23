@@ -4,27 +4,51 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 #
 # Main
 #
 
+# Ensure pipeline exit status is failed when any cmd fails
 set -o pipefail
+
+# Do not inherit aliases and commands
+unset -f unalias
+\unalias -a
+unset -f command
+
+# Do not inherit sensitive environment variables
+unset MAIL
+unset ENV
+unset IFS
+
+# Normalize shtop defaults
+shopt -qu \
+  dotglob \
+  extdebug \
+  failglob \
+  globstar \
+  gnu_errfmt \
+  huponexit \
+  lastpipe \
+  login_shell \
+  nocaseglob \
+  nocasematch \
+  nullglob \
+  nullglob \
+  xpg_echo
+shopt -qs \
+  extquote
 
 # Set strict mode for enhanced security
 if [[ "$BL64_LIB_STRICT" == '1' ]]; then
-  unset -f unalias
-  \unalias -a
-  unset -f command
-  unset MAIL
-  unset ENV
-  unset IFS
   set -u
   set -p
 fi
 
+# Set signal handlers
 # shellcheck disable=SC2064
 trap "$BL64_LIB_SIGNAL_HUP" 'SIGHUP'
 # shellcheck disable=SC2064
@@ -52,11 +76,14 @@ else
   # Load commands and aliases
   bl64_os_set_command
   bl64_os_set_alias
+  bl64_iam_set_command
   bl64_iam_set_alias
   bl64_sudo_set_command
   bl64_sudo_set_alias
   bl64_vcs_set_command
+  bl64_vcs_set_alias
   bl64_rxtx_set_command
+  bl64_rxtx_set_alias
 
   # Enable app tracing
   [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_APP" ]] && set -x
