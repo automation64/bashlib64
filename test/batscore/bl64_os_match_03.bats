@@ -23,6 +23,15 @@ setup() {
 
 }
 
+@test "bl64_os_match: os = DEB-10 + list" {
+
+  set +u # to avoid IFS missing error in run function
+  export BL64_OS_DISTRO="${BL64_OS_DEB}-10.0"
+  run bl64_os_match 'DEB-10' 'UB-20'
+  assert_success
+
+}
+
 @test "bl64_os_match: os = ALM-8.5 + list" {
 
   set +u # to avoid IFS missing error in run function
