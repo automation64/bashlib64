@@ -319,6 +319,7 @@ function bl64_os_cp_dir() {
 function bl64_os_merge_dir() {
   local source="${1:-${BL64_LIB_VAR_TBD}}"
   local target="${2:-${BL64_LIB_VAR_TBD}}"
+  local status=0
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'target' &&
@@ -331,10 +332,15 @@ function bl64_os_merge_dir() {
     $BL64_OS_ALIAS_CP_DIR --no-target-directory "$source" "$target"
     ;;
   ${BL64_OS_ALP}-*)
-    $BL64_OS_ALIAS_CP_DIR "$source" -t "$target"
+    shopt -sq dotglob
+    # shellcheck disable=SC2086
+    $BL64_OS_ALIAS_CP_DIR $source/* -t "$target"
+    status=$?
+    shopt -uq dotglob
     ;;
   esac
 
+  return $status
 }
 
 #######################################
