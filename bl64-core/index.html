@@ -50,7 +50,9 @@
 <span class=normal>50</span>
 <span class=normal>51</span>
 <span class=normal>52</span>
-<span class=normal>53</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>53</span>
+<span class=normal>54</span>
+<span class=normal>55</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Setup script run-time environment</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
@@ -89,9 +91,11 @@
 <span class=c1># Script PID</span>
 <span class=nb>export</span> <span class=nv>BL64_SCRIPT_SID</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BASHPID</span><span class=si>}</span><span class=s2>&quot;</span>
 
+<span class=c1># Use as default value for mandatory parameters</span>
+<span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_TBD</span><span class=o>=</span><span class=s1>&#39;TBD&#39;</span>
+
 <span class=c1># Common values</span>
 <span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_NULL</span><span class=o>=</span><span class=s1>&#39;__s64__&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_TBD</span><span class=o>=</span><span class=s1>&#39;TBD&#39;</span>
 <span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_ON</span><span class=o>=</span><span class=s1>&#39;1&#39;</span>
 <span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_OFF</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
 <span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_TRUE</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
@@ -172,33 +176,84 @@
 <span class=normal>67</span>
 <span class=normal>68</span>
 <span class=normal>69</span>
-<span class=normal>70</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>70</span>
+<span class=normal>71</span>
+<span class=normal>72</span>
+<span class=normal>73</span>
+<span class=normal>74</span>
+<span class=normal>75</span>
+<span class=normal>76</span>
+<span class=normal>77</span>
+<span class=normal>78</span>
+<span class=normal>79</span>
+<span class=normal>80</span>
+<span class=normal>81</span>
+<span class=normal>82</span>
+<span class=normal>83</span>
+<span class=normal>84</span>
+<span class=normal>85</span>
+<span class=normal>86</span>
+<span class=normal>87</span>
+<span class=normal>88</span>
+<span class=normal>89</span>
+<span class=normal>90</span>
+<span class=normal>91</span>
+<span class=normal>92</span>
+<span class=normal>93</span>
+<span class=normal>94</span>
+<span class=normal>95</span>
+<span class=normal>96</span>
+<span class=normal>97</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Setup script run-time environment</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.5.0</span>
+<span class=c1># Version: 1.6.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#</span>
 <span class=c1># Main</span>
 <span class=c1>#</span>
 
+<span class=c1># Ensure pipeline exit status is failed when any cmd fails</span>
 <span class=nb>set</span> -o pipefail
+
+<span class=c1># Do not inherit aliases and commands</span>
+<span class=nb>unset</span> -f <span class=nb>unalias</span>
+<span class=se>\u</span>nalias -a
+<span class=nb>unset</span> -f <span class=nb>command</span>
+
+<span class=c1># Do not inherit sensitive environment variables</span>
+<span class=nb>unset</span> MAIL
+<span class=nb>unset</span> ENV
+<span class=nb>unset</span> IFS
+
+<span class=c1># Normalize shtop defaults</span>
+<span class=nb>shopt</span> -qu <span class=se>\</span>
+  dotglob <span class=se>\</span>
+  extdebug <span class=se>\</span>
+  failglob <span class=se>\</span>
+  globstar <span class=se>\</span>
+  gnu_errfmt <span class=se>\</span>
+  huponexit <span class=se>\</span>
+  lastpipe <span class=se>\</span>
+  login_shell <span class=se>\</span>
+  nocaseglob <span class=se>\</span>
+  nocasematch <span class=se>\</span>
+  nullglob <span class=se>\</span>
+  nullglob <span class=se>\</span>
+  xpg_echo
+<span class=nb>shopt</span> -qs <span class=se>\</span>
+  extquote
 
 <span class=c1># Set strict mode for enhanced security</span>
 <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_STRICT</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;1&#39;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-  <span class=nb>unset</span> -f <span class=nb>unalias</span>
-  <span class=se>\u</span>nalias -a
-  <span class=nb>unset</span> -f <span class=nb>command</span>
-  <span class=nb>unset</span> MAIL
-  <span class=nb>unset</span> ENV
-  <span class=nb>unset</span> IFS
   <span class=nb>set</span> -u
   <span class=nb>set</span> -p
 <span class=k>fi</span>
 
+<span class=c1># Set signal handlers</span>
 <span class=c1># shellcheck disable=SC2064</span>
 <span class=nb>trap</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_SIGNAL_HUP</span><span class=s2>&quot;</span> <span class=s1>&#39;SIGHUP&#39;</span>
 <span class=c1># shellcheck disable=SC2064</span>
@@ -226,11 +281,14 @@
   <span class=c1># Load commands and aliases</span>
   bl64_os_set_command
   bl64_os_set_alias
+  bl64_iam_set_command
   bl64_iam_set_alias
   bl64_sudo_set_command
   bl64_sudo_set_alias
   bl64_vcs_set_command
+  bl64_vcs_set_alias
   bl64_rxtx_set_command
+  bl64_rxtx_set_alias
 
   <span class=c1># Enable app tracing</span>
   <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG_APP</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nb>set</span> -x

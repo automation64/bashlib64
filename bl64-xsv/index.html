@@ -154,7 +154,9 @@
 <span class=normal>83</span>
 <span class=normal>84</span>
 <span class=normal>85</span>
-<span class=normal>86</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>86</span>
+<span class=normal>87</span>
+<span class=normal>88</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Manipulate CSV like text files</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
@@ -199,44 +201,46 @@
     <span class=k>return</span> <span class=nv>$BL64_XSV_ERROR_MISSING_PARAMETER</span>
 
   <span class=c1># shellcheck disable=SC2016</span>
-  <span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_AWK</span><span class=s2>&quot;</span> <span class=se>\</span>
+  <span class=nv>$BL64_OS_ALIAS_AWK</span> <span class=se>\</span>
     -F <span class=s2>&quot;</span><span class=nv>$fs_src</span><span class=s2>&quot;</span> <span class=se>\</span>
     -v <span class=nv>VALUES</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>values</span><span class=si>}</span><span class=s2>&quot;</span> <span class=se>\</span>
     -v <span class=nv>KEYS</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$keys</span><span class=s2>&quot;</span> <span class=se>\</span>
     -v <span class=nv>FIELDS</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$fields</span><span class=s2>&quot;</span> <span class=se>\</span>
     -v <span class=nv>FS_OUT</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$fs_out</span><span class=s2>&quot;</span> <span class=se>\</span>
-    <span class=s1>&#39;BEGIN {</span>
-<span class=s1>      show_total = split( FIELDS, show_fields, ENVIRON[&quot;BL64_XSV_FS_COLON&quot;] )</span>
-<span class=s1>      keys_total = split( KEYS, keys_fields, ENVIRON[&quot;BL64_XSV_FS_COLON&quot;] )</span>
-<span class=s1>      values_total = split( VALUES, values_fields, ENVIRON[&quot;BL64_XSV_FS&quot;] )</span>
-<span class=s1>      if( keys_total != values_total ) {</span>
-<span class=s1>        exit ENVIRON[&quot;BL64_XSV_ERROR_SEARCH_VALUES&quot;]</span>
-<span class=s1>      }</span>
-<span class=s1>      row_match = &quot;&quot;</span>
-<span class=s1>      count = 0</span>
-<span class=s1>      found = 0</span>
-<span class=s1>    }</span>
-<span class=s1>    /^#/ || /^$/ { next }</span>
-<span class=s1>    {</span>
-<span class=s1>      found = 0</span>
-<span class=s1>      for( count = 1; count &lt;= keys_total; count++ ) {</span>
-<span class=s1>        if ( $keys_fields[count] == values_fields[count] ) {</span>
-<span class=s1>          found = 1</span>
-<span class=s1>        } else {</span>
-<span class=s1>          found = 0</span>
-<span class=s1>          break</span>
+    <span class=s1>&#39;</span>
+<span class=s1>      BEGIN {</span>
+<span class=s1>        show_total = split( FIELDS, show_fields, ENVIRON[&quot;BL64_XSV_FS_COLON&quot;] )</span>
+<span class=s1>        keys_total = split( KEYS, keys_fields, ENVIRON[&quot;BL64_XSV_FS_COLON&quot;] )</span>
+<span class=s1>        values_total = split( VALUES, values_fields, ENVIRON[&quot;BL64_XSV_FS&quot;] )</span>
+<span class=s1>        if( keys_total != values_total ) {</span>
+<span class=s1>          exit ENVIRON[&quot;BL64_XSV_ERROR_SEARCH_VALUES&quot;]</span>
 <span class=s1>        }</span>
+<span class=s1>        row_match = &quot;&quot;</span>
+<span class=s1>        count = 0</span>
+<span class=s1>        found = 0</span>
 <span class=s1>      }</span>
+<span class=s1>      /^#/ || /^$/ { next }</span>
+<span class=s1>      {</span>
+<span class=s1>        found = 0</span>
+<span class=s1>        for( count = 1; count &lt;= keys_total; count++ ) {</span>
+<span class=s1>          if ( $keys_fields[count] == values_fields[count] ) {</span>
+<span class=s1>            found = 1</span>
+<span class=s1>          } else {</span>
+<span class=s1>            found = 0</span>
+<span class=s1>            break</span>
+<span class=s1>          }</span>
+<span class=s1>        }</span>
 
-<span class=s1>      if( found == 1 ) {</span>
-<span class=s1>        row_match = $show_fields[1]</span>
-<span class=s1>        for( count = 2; count &lt;= show_total; count++ ) {</span>
-<span class=s1>          row_match = row_match FS_OUT $show_fields[count]</span>
+<span class=s1>        if( found == 1 ) {</span>
+<span class=s1>          row_match = $show_fields[1]</span>
+<span class=s1>          for( count = 2; count &lt;= show_total; count++ ) {</span>
+<span class=s1>            row_match = row_match FS_OUT $show_fields[count]</span>
+<span class=s1>          }</span>
+<span class=s1>          print row_match</span>
 <span class=s1>        }</span>
-<span class=s1>        print row_match</span>
 <span class=s1>      }</span>
-<span class=s1>    }</span>
-<span class=s1>    END {}&#39;</span> <span class=se>\</span>
+<span class=s1>      END {}</span>
+<span class=s1>    &#39;</span> <span class=se>\</span>
     <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span>
 
 <span class=o>}</span>

@@ -269,7 +269,7 @@
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.4.0</span>
+<span class=c1># Version: 1.5.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -408,7 +408,7 @@
     <span class=k>return</span> <span class=nv>$BL64_CHECK_ERROR_MISSING_PARAMETER</span>
   <span class=k>fi</span>
 
-  <span class=k>if</span> <span class=nb>eval</span> <span class=s2>&quot;[[ -z \$</span><span class=si>${</span><span class=nv>parameter</span><span class=si>}</span><span class=s2> ]]&quot;</span><span class=p>;</span> <span class=k>then</span>
+  <span class=k>if</span> <span class=nb>eval</span> <span class=s2>&quot;[[ -z \&quot;\$</span><span class=si>${</span><span class=nv>parameter</span><span class=si>}</span><span class=s2>\&quot; || \&quot;\$</span><span class=si>${</span><span class=nv>parameter</span><span class=si>}</span><span class=s2>\&quot; == &#39;</span><span class=si>${</span><span class=nv>BL64_LIB_VAR_TBD</span><span class=si>}</span><span class=s2>&#39; ]]&quot;</span><span class=p>;</span> <span class=k>then</span>
     bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_CHECK_TXT_MISSING_PARAMETER</span><span class=s2> (</span><span class=si>${</span><span class=nv>description</span><span class=si>}</span><span class=s2>)&quot;</span>
     <span class=c1># shellcheck disable=SC2086</span>
     <span class=k>return</span> <span class=nv>$BL64_CHECK_ERROR_PARAMETER_EMPTY</span>

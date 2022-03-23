@@ -19,17 +19,33 @@
 <span class=normal>19</span>
 <span class=normal>20</span>
 <span class=normal>21</span>
-<span class=normal>22</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>22</span>
+<span class=normal>23</span>
+<span class=normal>24</span>
+<span class=normal>25</span>
+<span class=normal>26</span>
+<span class=normal>27</span>
+<span class=normal>28</span>
+<span class=normal>29</span>
+<span class=normal>30</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Transfer and Receive data over the network</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.0.0</span>
+<span class=c1># Version: 1.1.0</span>
 <span class=c1>#######################################</span>
 
 <span class=nb>export</span> BL64_RXTX_CMD_CURL
 <span class=nb>export</span> BL64_RXTX_CMD_WGET
+
+<span class=nb>export</span> BL64_RXTX_ALIAS_CURL
+<span class=nb>export</span> BL64_RXTX_ALIAS_WGET
+
+<span class=nb>export</span> BL64_RXTX_SET_CURL_VERBOSE
+<span class=nb>export</span> BL64_RXTX_SET_WGET_VERBOSE
+<span class=nb>export</span> BL64_RXTX_SET_CURL_OUTPUT
+<span class=nb>export</span> BL64_RXTX_SET_WGET_OUTPUT
 
 <span class=nb>readonly</span> <span class=nv>BL64_RXTX_ERROR_BACKUP</span><span class=o>=</span><span class=m>197</span>
 <span class=nb>readonly</span> <span class=nv>BL64_RXTX_ERROR_RESTORE</span><span class=o>=</span><span class=m>198</span>
@@ -241,13 +257,53 @@
 <span class=normal>198</span>
 <span class=normal>199</span>
 <span class=normal>200</span>
-<span class=normal>201</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>201</span>
+<span class=normal>202</span>
+<span class=normal>203</span>
+<span class=normal>204</span>
+<span class=normal>205</span>
+<span class=normal>206</span>
+<span class=normal>207</span>
+<span class=normal>208</span>
+<span class=normal>209</span>
+<span class=normal>210</span>
+<span class=normal>211</span>
+<span class=normal>212</span>
+<span class=normal>213</span>
+<span class=normal>214</span>
+<span class=normal>215</span>
+<span class=normal>216</span>
+<span class=normal>217</span>
+<span class=normal>218</span>
+<span class=normal>219</span>
+<span class=normal>220</span>
+<span class=normal>221</span>
+<span class=normal>222</span>
+<span class=normal>223</span>
+<span class=normal>224</span>
+<span class=normal>225</span>
+<span class=normal>226</span>
+<span class=normal>227</span>
+<span class=normal>228</span>
+<span class=normal>229</span>
+<span class=normal>230</span>
+<span class=normal>231</span>
+<span class=normal>232</span>
+<span class=normal>233</span>
+<span class=normal>234</span>
+<span class=normal>235</span>
+<span class=normal>236</span>
+<span class=normal>237</span>
+<span class=normal>238</span>
+<span class=normal>239</span>
+<span class=normal>240</span>
+<span class=normal>241</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Transfer and Receive data over the network</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.1.0</span>
+<span class=c1># Version: 1.2.0</span>
 <span class=c1>#######################################</span>
 
 <span class=k>function</span> _bl64_rxtx_backup<span class=o>()</span> <span class=o>{</span>
@@ -261,7 +317,7 @@
     <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
   <span class=k>fi</span>
 
-  <span class=o>((</span> status !<span class=o>=</span> <span class=m>0</span> <span class=o>))</span> <span class=o>&amp;&amp;</span> <span class=nv>status</span><span class=o>=</span><span class=nv>$BL64_RXTX_ERROR_BACKUP</span>
+  <span class=o>((</span>status !<span class=o>=</span> <span class=m>0</span><span class=o>))</span> <span class=o>&amp;&amp;</span> <span class=nv>status</span><span class=o>=</span><span class=nv>$BL64_RXTX_ERROR_BACKUP</span>
   <span class=c1># shellcheck disable=SC2086</span>
   <span class=k>return</span> <span class=nv>$status</span>
 <span class=o>}</span>
@@ -287,7 +343,7 @@
   bl64_os_mv <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>
   <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
 
-  <span class=o>((</span> status !<span class=o>=</span> <span class=m>0</span> <span class=o>))</span> <span class=o>&amp;&amp;</span> <span class=nv>status</span><span class=o>=</span><span class=nv>$BL64_RXTX_ERROR_RESTORE</span>
+  <span class=o>((</span>status !<span class=o>=</span> <span class=m>0</span><span class=o>))</span> <span class=o>&amp;&amp;</span> <span class=nv>status</span><span class=o>=</span><span class=nv>$BL64_RXTX_ERROR_RESTORE</span>
   <span class=c1># shellcheck disable=SC2086</span>
   <span class=k>return</span> <span class=nv>$status</span>
 <span class=o>}</span>
@@ -311,6 +367,50 @@
   <span class=si>${</span><span class=nv>BL64_OS_UB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_RHEL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_ALM</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_ALP</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=nv>BL64_RXTX_CMD_CURL</span><span class=o>=</span><span class=s1>&#39;/usr/bin/curl&#39;</span>
     <span class=nv>BL64_RXTX_CMD_WGET</span><span class=o>=</span><span class=s1>&#39;/usr/bin/wget&#39;</span>
+    <span class=p>;;</span>
+  <span class=k>esac</span>
+<span class=o>}</span>
+
+<span class=c1>#######################################</span>
+<span class=c1># Create command aliases for common use cases</span>
+<span class=c1>#</span>
+<span class=c1># * Aliases are presented as regular shell variables for easy inclusion in complex commands</span>
+<span class=c1># * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command</span>
+<span class=c1>#</span>
+<span class=c1># Arguments:</span>
+<span class=c1>#   None</span>
+<span class=c1># Outputs:</span>
+<span class=c1>#   STDOUT: None</span>
+<span class=c1>#   STDERR: None</span>
+<span class=c1># Returns:</span>
+<span class=c1>#   0: always ok</span>
+<span class=c1>#######################################</span>
+<span class=k>function</span> bl64_rxtx_set_alias<span class=o>()</span> <span class=o>{</span>
+  <span class=c1># shellcheck disable=SC2034</span>
+  <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=k>in</span>
+  <span class=si>${</span><span class=nv>BL64_OS_UB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-11.* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_RXTX_ALIAS_CURL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_CURL</span><span class=s2> --no-progress-meter  --config /dev/null&quot;</span>
+    <span class=nv>BL64_RXTX_ALIAS_WGET</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_WGET</span><span class=s2> --no-config&quot;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output-document&#39;</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_RHEL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_ALM</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-10.*<span class=o>)</span>
+    <span class=nv>BL64_RXTX_ALIAS_CURL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_CURL</span><span class=s2> --config /dev/null&quot;</span>
+    <span class=nv>BL64_RXTX_ALIAS_WGET</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_WGET</span><span class=s2> --no-config&quot;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output-document&#39;</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_ALP</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_RXTX_ALIAS_CURL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_CURL</span><span class=s2>&quot;</span>
+    <span class=nv>BL64_RXTX_ALIAS_WGET</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_WGET</span><span class=s2>&quot;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_OUTPUT</span><span class=o>=</span><span class=s1>&#39;-O&#39;</span>
     <span class=p>;;</span>
   <span class=k>esac</span>
 <span class=o>}</span>
@@ -355,19 +455,15 @@
   _bl64_rxtx_backup <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=k>if</span> <span class=o>[[</span> -x <span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_CURL</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG_CMD</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>verbose</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
-    <span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_CURL</span><span class=s2>&quot;</span> <span class=nv>$verbose</span> <span class=se>\</span>
-      --no-progress-meter <span class=se>\</span>
-      --config <span class=s1>&#39;/dev/null&#39;</span> <span class=se>\</span>
-      --output <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=se>\</span>
+    <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG_CMD</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>verbose</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_SET_CURL_VERBOSE</span><span class=s2>&quot;</span>
+    <span class=nv>$BL64_RXTX_ALIAS_CURL</span> <span class=nv>$verbose</span> <span class=se>\</span>
+      <span class=nv>$BL64_RXTX_SET_CURL_OUTPUT</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=se>\</span>
       <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span>
     <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
   <span class=k>elif</span> <span class=o>[[</span> -x <span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_WGET</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG_CMD</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>verbose</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
-    <span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_WGET</span><span class=s2>&quot;</span> <span class=nv>$verbose</span> <span class=se>\</span>
-      --no-config <span class=se>\</span>
-      --no-directories <span class=se>\</span>
-      --output-document <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=se>\</span>
+    <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG_CMD</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>verbose</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_SET_WGET_VERBOSE</span><span class=s2>&quot;</span>
+    <span class=nv>$BL64_RXTX_ALIAS_WGET</span> <span class=nv>$verbose</span> <span class=se>\</span>
+      <span class=nv>$BL64_RXTX_SET_WGET_OUTPUT</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=se>\</span>
       <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span>
     <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
   <span class=k>else</span>
@@ -433,8 +529,8 @@
   bl64_vcs_git_sparse <span class=s2>&quot;</span><span class=nv>$source_url</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$repo</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$branch</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$source_path</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span>
     <span class=o>[[</span> -d <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span>
     bl64_os_mkdir_full <span class=s2>&quot;</span><span class=si>${</span><span class=nv>repo</span><span class=si>}</span><span class=s2>/transition&quot;</span> <span class=o>&amp;&amp;</span>
-    bl64_os_mv <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$transition</span><span class=s2>&quot;</span> &gt; /dev/null <span class=o>&amp;&amp;</span>
-    bl64_os_mv <span class=s2>&quot;</span><span class=si>${</span><span class=nv>transition</span><span class=si>}</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> &gt; /dev/null
+    bl64_os_mv <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$transition</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>&amp;&amp;</span>
+    bl64_os_mv <span class=s2>&quot;</span><span class=si>${</span><span class=nv>transition</span><span class=si>}</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> &gt;/dev/null
   <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
 
   _bl64_rxtx_restore <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$status</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>

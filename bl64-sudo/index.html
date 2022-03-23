@@ -186,7 +186,12 @@
 <span class=normal>139</span>
 <span class=normal>140</span>
 <span class=normal>141</span>
-<span class=normal>142</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>142</span>
+<span class=normal>143</span>
+<span class=normal>144</span>
+<span class=normal>145</span>
+<span class=normal>146</span>
+<span class=normal>147</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Manage sudo configuration</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
@@ -233,15 +238,19 @@
 
   <span class=nb>umask</span> <span class=m>0266</span>
   <span class=c1># shellcheck disable=SC2016</span>
-  <span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_AWK</span><span class=s2>&quot;</span> -v <span class=nv>ControlUsr</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$user</span><span class=s2>&quot;</span> <span class=s1>&#39;</span>
-<span class=s1>    BEGIN { Found = 0 }</span>
-<span class=s1>    ControlUsr &quot; ALL=(ALL) NOPASSWD: ALL&quot; == $0 { Found = 1 }</span>
-<span class=s1>    { print $0 }</span>
-<span class=s1>    END {</span>
-<span class=s1>      if( Found == 0) {</span>
-<span class=s1>      print( ControlUsr &quot; ALL=(ALL) NOPASSWD: ALL&quot; )</span>
-<span class=s1>    }</span>
-<span class=s1>  }&#39;</span> <span class=s2>&quot;</span><span class=nv>$BL64_SUDO_FILE_SUDOERS</span><span class=s2>&quot;</span> &gt;<span class=s2>&quot;</span><span class=nv>$new_sudoers</span><span class=s2>&quot;</span>
+  <span class=nv>$BL64_OS_ALIAS_AWK</span> <span class=se>\</span>
+    -v <span class=nv>ControlUsr</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$user</span><span class=s2>&quot;</span> <span class=se>\</span>
+    <span class=s1>&#39;</span>
+<span class=s1>      BEGIN { Found = 0 }</span>
+<span class=s1>      ControlUsr &quot; ALL=(ALL) NOPASSWD: ALL&quot; == $0 { Found = 1 }</span>
+<span class=s1>      { print $0 }</span>
+<span class=s1>      END {</span>
+<span class=s1>        if( Found == 0) {</span>
+<span class=s1>          print( ControlUsr &quot; ALL=(ALL) NOPASSWD: ALL&quot; )</span>
+<span class=s1>        }</span>
+<span class=s1>      }</span>
+<span class=s1>    &#39;</span> <span class=se>\</span>
+    <span class=s2>&quot;</span><span class=nv>$BL64_SUDO_FILE_SUDOERS</span><span class=s2>&quot;</span> &gt;<span class=s2>&quot;</span><span class=nv>$new_sudoers</span><span class=s2>&quot;</span>
 
   <span class=k>if</span> <span class=o>[[</span> -s <span class=s2>&quot;</span><span class=nv>$new_sudoers</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
     <span class=nv>$BL64_OS_ALIAS_CP_FILE</span> <span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_SUDO_FILE_SUDOERS</span><span class=si>}</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$old_sudoers</span><span class=s2>&quot;</span>
@@ -313,8 +322,9 @@
 
 <span class=c1>#######################################</span>
 <span class=c1># Create command aliases for common use cases</span>
-<span class=c1># Aliases are presented as regular shell variables for easy inclusion in complex commands</span>
-<span class=c1># Use the alias without quotes, otherwise the shell will interprete spaces as part of the command</span>
+<span class=c1>#</span>
+<span class=c1># * Aliases are presented as regular shell variables for easy inclusion in complex commands</span>
+<span class=c1># * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command</span>
 <span class=c1>#</span>
 <span class=c1># Arguments:</span>
 <span class=c1>#   None</span>
