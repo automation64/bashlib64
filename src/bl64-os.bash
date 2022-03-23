@@ -28,19 +28,8 @@ function _bl64_os_match() {
 #######################################
 # Check if the current OS matches the target list
 #
-# * Valid OS Patterns:
-#   * ALM   -> AlmaLinux
-#   * ALP   -> Alpine Linux
-#   * AMZ   -> Amazon Linux
-#   * CNT   -> CentOS
-#   * DEB   -> Debian
-#   * FD    -> Fedora
-#   * OL    -> OracleLinux
-#   * RHEL  -> RedHat Enterprise Linux
-#   * UB    -> Ubuntu
-#
 # Arguments:
-#   $@: list of normalized OS names. Formats: OOO | OOO-V | OOO-V.V
+#   $@: list of normalized OS names. Formats: as defined by bl64_os_get_distro
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -75,6 +64,20 @@ function bl64_os_match() {
 #######################################
 # Identify and normalize Linux OS distribution name and version
 #
+# * Target format: OOO-V.V
+#   * OOO: OS short name (tag)
+#   * V.V: Version (Major, Minor)
+# * OS tags:
+#   * ALM   -> AlmaLinux
+#   * ALP   -> Alpine Linux
+#   * AMZ   -> Amazon Linux
+#   * CNT   -> CentOS
+#   * DEB   -> Debian
+#   * FD    -> Fedora
+#   * OL    -> OracleLinux
+#   * RHEL  -> RedHat Enterprise Linux
+#   * UB    -> Ubuntu
+#
 # Arguments:
 #   None
 # Outputs:
@@ -98,7 +101,12 @@ function bl64_os_get_distro() {
   ${BL64_OS_ALM}-8*) : ;;
   ${BL64_OS_ALP}-3*) : ;;
   ${BL64_OS_CNT}-8*) : ;;
-  ${BL64_OS_DEB}-10* | ${BL64_OS_DEB}-11*) : ;;
+  ${BL64_OS_DEB}-10*)
+    [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-10" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-10.0"
+    ;;
+  ${BL64_OS_DEB}-11*)
+    [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-11" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-11.0"
+    ;;
   ${BL64_OS_FD}-33* | ${BL64_OS_FD}-35*) : ;;
   ${BL64_OS_OL}-8*) : ;;
   ${BL64_OS_RHEL}-8*) : ;;
