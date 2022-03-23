@@ -31,7 +31,7 @@ function devbl_run_tests_bats() {
     verbose='--formatter tap'
   fi
 
-    # shellcheck disable=SC2086
+  # shellcheck disable=SC2086
   "$DEVBL_CMD_BATS" $verbose "$target"
 
 }
@@ -85,6 +85,14 @@ function devbl_run_tests_bats_container() {
 
 }
 
+function devbl_list_images() {
+  echo "$DEVBL_IMAGES"
+}
+
+function devbl_list_cases() {
+  "$BL64_OS_CMD_LS" "$DEVBL_TEST_BATSCORE"
+}
+
 function devbl_run_tests_check() {
 
   bl64_check_command "$DEVBL_CMD_BATS" || return 1
@@ -98,11 +106,13 @@ function devbl_run_tests_check() {
 
 function devbl_run_tests_help() {
   bl64_msg_show_usage \
-    '-b|-o [-c Case] [-e Image] [-r Registry] [-g] [-h]' \
+    '<-b|-o|-l|-i> [-c Case] [-e Image] [-r Registry] [-g] [-h]' \
     'Run Tests' \
     '
-  -b         : Run bats-core based tests
-  -o         : Run bats-core based tests in container
+  -b         : Run tests
+  -o         : Run tests in containers
+  -l         : List test cases
+  -i         : List container images
     ' '
   -g         : Enable debug mode to show detailed execution information
   -h         : Show Help
@@ -127,15 +137,23 @@ declare devbl_run_tests_debug='0'
 declare devbl_run_tests_registry="$DEVBL_REGISTRY"
 
 (($# == 0)) && devbl_run_tests_help && exit 1
-while getopts ':boc:e:r:gh' devbl_run_tests_option; do
+while getopts ':blioc:e:r:gh' devbl_run_tests_option; do
   case "$devbl_run_tests_option" in
   b)
     devbl_run_tests_command='devbl_run_tests_bats'
-    devbl_run_tests_command_tag='run-bats-core-tests'
+    devbl_run_tests_command_tag='run bats-core tests'
     ;;
   o)
     devbl_run_tests_command='devbl_run_tests_bats_container'
-    devbl_run_tests_command_tag='run-bats-core-tests-container'
+    devbl_run_tests_command_tag='run bats-core tests in containers'
+    ;;
+  l)
+    devbl_run_tests_command='devbl_list_cases'
+    devbl_run_tests_command_tag='list test cases'
+    ;;
+  i)
+    devbl_run_tests_command='devbl_list_images'
+    devbl_run_tests_command_tag='list container images'
     ;;
   c) devbl_run_tests_case="$OPTARG" ;;
   e) devbl_run_tests_image="$OPTARG" ;;
@@ -150,6 +168,7 @@ devbl_run_tests_check || exit 1
 
 bl64_msg_show_batch_start "$devbl_run_tests_command_tag"
 case "$devbl_run_tests_command" in
+'devbl_list_cases' | 'devbl_list_images') "$devbl_run_tests_command" ;;
 'devbl_run_tests_bats') "$devbl_run_tests_command" "$devbl_run_tests_debug" "$devbl_run_tests_case" ;;
 'devbl_run_tests_bats_container') "$devbl_run_tests_command" "$devbl_run_tests_debug" "$devbl_run_tests_case" "$devbl_run_tests_image" "$devbl_run_tests_registry" ;;
 esac
