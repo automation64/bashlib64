@@ -45,8 +45,9 @@ function _bl64_os_match() {
 #   STDOUT: None
 #   STDERR: None
 # Returns:
-#   0: ok
-#   1: os not supported
+#   0: os match
+#   BL64_OS_ERROR_NO_OS_MATCH
+#   BL64_OS_ERROR_INVALID_OS_TAG
 #######################################
 
 function bl64_os_match() {
@@ -81,14 +82,14 @@ function bl64_os_match() {
 #   STDERR: None
 # Returns:
 #   0: ok
-#   1: os not supported
+#   BL64_OS_ERROR_UNKNOWN_OS: os not supported
 #######################################
 function bl64_os_get_distro() {
 
   if [[ -r '/etc/os-release' ]]; then
     # shellcheck disable=SC1091
     source '/etc/os-release'
-    if [[ -n "$ID" && -n "$VERSION_ID" && "$BL64_OS_DISTRO" != "${ID^^}-${VERSION_ID}" ]]; then
+    if [[ -n "$ID" && -n "$VERSION_ID" ]]; then
       BL64_OS_DISTRO="${ID^^}-${VERSION_ID}"
     fi
   fi
@@ -104,7 +105,8 @@ function bl64_os_get_distro() {
   ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
   *)
     BL64_OS_DISTRO='UNKNOWN'
-    false
+    # shellcheck disable=SC2086
+    return $BL64_OS_ERROR_UNKNOWN_OS
     ;;
   esac
   # Do not use return as this function gets sourced
