@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.17.0
+# Version: 1.18.0
 #######################################
 
 # Enable library and app tracing
@@ -45,6 +45,8 @@ readonly _BL64_CHECK_TXT_DIRECTORY_NOT_READABLE='required directory is present b
 
 readonly _BL64_CHECK_TXT_EXPORT_EMPTY='required shell exported variable is empty'
 readonly _BL64_CHECK_TXT_EXPORT_SET='required shell exported variable is not set'
+
+export BL64_IAM_CMD_USERADD
 
 export BL64_IAM_ALIAS_USERADD
 
@@ -143,6 +145,10 @@ readonly BL64_OS_OL='OL'; export BL64_OS_OL
 readonly BL64_OS_RHEL='RHEL'; export BL64_OS_RHEL
 readonly BL64_OS_UB='UBUNTU'; export BL64_OS_UB
 
+readonly BL64_OS_ERROR_NO_OS_MATCH=200
+readonly BL64_OS_ERROR_INVALID_OS_TAG=201
+readonly BL64_OS_ERROR_UNKNOWN_OS=202
+
 readonly BL64_PKG_CMD_APT='/usr/bin/apt-get'
 readonly BL64_PKG_CMD_DNF='/usr/bin/dnf'
 readonly BL64_PKG_CMD_YUM='/usr/bin/yum'
@@ -181,6 +187,14 @@ readonly _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
 export BL64_RXTX_CMD_CURL
 export BL64_RXTX_CMD_WGET
 
+export BL64_RXTX_ALIAS_CURL
+export BL64_RXTX_ALIAS_WGET
+
+export BL64_RXTX_SET_CURL_VERBOSE
+export BL64_RXTX_SET_WGET_VERBOSE
+export BL64_RXTX_SET_CURL_OUTPUT
+export BL64_RXTX_SET_WGET_OUTPUT
+
 readonly BL64_RXTX_ERROR_BACKUP=197
 readonly BL64_RXTX_ERROR_RESTORE=198
 readonly BL64_RXTX_ERROR_TEMPORARY_REPO=199
@@ -209,6 +223,8 @@ readonly _BL64_SUDO_TXT_INVALID_SUDOERS='the sudoers file is corrupt or invalid'
 export BL64_SUDO_ALIAS_SUDO_ENV
 
 export BL64_VCS_CMD_GIT
+
+export BL64_VCS_ALIAS_GIT
 
 readonly BL64_VCS_ERROR_MISSING_PARAMETER=200
 readonly BL64_VCS_ERROR_DESTINATION_ERROR=201
@@ -353,7 +369,7 @@ function bl64_check_parameter() {
     return $BL64_CHECK_ERROR_MISSING_PARAMETER
   fi
 
-  if eval "[[ -z \$${parameter} ]]"; then
+  if eval "[[ -z \"\$${parameter}\" || \"\$${parameter}\" == '${BL64_LIB_VAR_TBD}' ]]"; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (${description})"
     return $BL64_CHECK_ERROR_PARAMETER_EMPTY
   fi
@@ -445,13 +461,24 @@ function bl64_fmt_dirname() {
   fi
 }
 
+function bl64_iam_set_command() {
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+    BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_IAM_CMD_USERADD='/usr/sbin/adduser'
+    ;;
+  esac
+}
+
 function bl64_iam_set_alias() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    BL64_IAM_ALIAS_USERADD='/usr/sbin/useradd'
+    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
     ;;
   ${BL64_OS_ALP}-*)
-    BL64_IAM_ALIAS_USERADD='/usr/sbin/adduser'
+    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
     ;;
   esac
 }
@@ -758,8 +785,43 @@ function bl64_msg_show_batch_finish() {
 }
 
 
+function _bl64_os_match() {
+
+  local os="$1"
+  local item="$2"
+  local version="${item##*-}"
+
+  if [[ "$item" == +([[:alpha:]])-+([[:digit:]]).+([[:digit:]]) ]]; then
+    [[ "$BL64_OS_DISTRO" == "${os}-${version}" ]]
+  elif [[ "$item" == +([[:alpha:]])-+([[:digit:]]) ]]; then
+    [[ "$BL64_OS_DISTRO" == ${os}-${version}.+([[:digit:]]) ]]
+  else
+    [[ "$BL64_OS_DISTRO" == ${os}-+([[:digit:]]).+([[:digit:]]) ]]
+  fi
+}
+
+
+function bl64_os_match() {
+  local item=''
+
+  for item in "$@"; do
+    case "$item" in
+    'ALM' | ALM-*) _bl64_os_match "$BL64_OS_ALM" "$item" && return ;;
+    'ALP' | ALP-*) _bl64_os_match "$BL64_OS_ALP" "$item" && return ;;
+    'CNT' | CNT-*) _bl64_os_match "$BL64_OS_CNT" "$item" && return ;;
+    'DEB' | DEB-*) _bl64_os_match "$BL64_OS_DEB" "$item" && return ;;
+    'FD' | FD-*) _bl64_os_match "$BL64_OS_FD" "$item" && return ;;
+    'OL' | OL-*) _bl64_os_match "$BL64_OS_OL" "$item" && return ;;
+    'RHEL' | RHEL-*) _bl64_os_match "$BL64_OS_RHEL" "$item" && return ;;
+    'UB' | UB-*) _bl64_os_match "$BL64_OS_UB" "$item" && return ;;
+    *) return $BL64_OS_ERROR_INVALID_OS_TAG ;;
+    esac
+  done
+
+  return $BL64_OS_ERROR_NO_OS_MATCH
+}
+
 function bl64_os_get_distro() {
-  BL64_OS_DISTRO='UNKNOWN'
 
   if [[ -r '/etc/os-release' ]]; then
     source '/etc/os-release'
@@ -772,12 +834,20 @@ function bl64_os_get_distro() {
   ${BL64_OS_ALM}-8*) : ;;
   ${BL64_OS_ALP}-3*) : ;;
   ${BL64_OS_CNT}-8*) : ;;
-  ${BL64_OS_DEB}-10* | ${BL64_OS_DEB}-11*) : ;;
+  ${BL64_OS_DEB}-10*)
+    [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-10" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-10.0"
+    ;;
+  ${BL64_OS_DEB}-11*)
+    [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-11" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-11.0"
+    ;;
   ${BL64_OS_FD}-33* | ${BL64_OS_FD}-35*) : ;;
   ${BL64_OS_OL}-8*) : ;;
   ${BL64_OS_RHEL}-8*) : ;;
   ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
-  *) false ;;
+  *)
+    BL64_OS_DISTRO='UNKNOWN'
+    return $BL64_OS_ERROR_UNKNOWN_OS
+    ;;
   esac
 }
 
@@ -844,9 +914,15 @@ function bl64_os_set_command() {
 }
 
 function bl64_os_set_alias() {
+  local cmd_mawk='/usr/bin/mawk'
+
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
+    if [[ -x "$cmd_mawk" ]]; then
+      BL64_OS_ALIAS_AWK="$cmd_mawk"
+    else
+      BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
+    fi
     BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN --verbose --recursive"
     BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP --verbose --force --recursive"
     BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP --verbose --force"
@@ -888,6 +964,32 @@ function bl64_os_cp_file() {
 
 function bl64_os_cp_dir() {
   $BL64_OS_ALIAS_CP_DIR "$@"
+}
+
+function bl64_os_merge_dir() {
+  local source="${1:-${BL64_LIB_VAR_TBD}}"
+  local target="${2:-${BL64_LIB_VAR_TBD}}"
+  local status=0
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'target' &&
+    bl64_check_directory "$source" &&
+    bl64_check_directory "$target" ||
+    return 1
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+    $BL64_OS_ALIAS_CP_DIR --no-target-directory "$source" "$target"
+    ;;
+  ${BL64_OS_ALP}-*)
+    shopt -sq dotglob
+    $BL64_OS_ALIAS_CP_DIR $source/* -t "$target"
+    status=$?
+    shopt -uq dotglob
+    ;;
+  esac
+
+  return $status
 }
 
 function bl64_os_id_user() {
@@ -1062,7 +1164,7 @@ function _bl64_rxtx_backup() {
     status=$?
   fi
 
-  (( status != 0 )) && status=$BL64_RXTX_ERROR_BACKUP
+  ((status != 0)) && status=$BL64_RXTX_ERROR_BACKUP
   return $status
 }
 
@@ -1082,7 +1184,7 @@ function _bl64_rxtx_restore() {
   bl64_os_mv "$backup" "$destination"
   status=$?
 
-  (( status != 0 )) && status=$BL64_RXTX_ERROR_RESTORE
+  ((status != 0)) && status=$BL64_RXTX_ERROR_RESTORE
   return $status
 }
 
@@ -1091,6 +1193,35 @@ function bl64_rxtx_set_command() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-*)
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
     BL64_RXTX_CMD_WGET='/usr/bin/wget'
+    ;;
+  esac
+}
+
+function bl64_rxtx_set_alias() {
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-11.* | ${BL64_OS_FD}-*)
+    BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL --no-progress-meter  --config /dev/null"
+    BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET --no-config"
+    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+    BL64_RXTX_SET_CURL_OUTPUT='--output'
+    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
+    ;;
+  ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_DEB}-10.*)
+    BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL --config /dev/null"
+    BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET --no-config"
+    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+    BL64_RXTX_SET_CURL_OUTPUT='--output'
+    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL"
+    BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET"
+    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+    BL64_RXTX_SET_CURL_OUTPUT='--output'
+    BL64_RXTX_SET_WGET_OUTPUT='-O'
     ;;
   esac
 }
@@ -1116,19 +1247,15 @@ function bl64_rxtx_web_get_file() {
   _bl64_rxtx_backup "$destination" >/dev/null || return $?
 
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
-    [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose='--verbose'
-    "$BL64_RXTX_CMD_CURL" $verbose \
-      --no-progress-meter \
-      --config '/dev/null' \
-      --output "$destination" \
+    [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
+    $BL64_RXTX_ALIAS_CURL $verbose \
+      $BL64_RXTX_SET_CURL_OUTPUT "$destination" \
       "$source"
     status=$?
   elif [[ -x "$BL64_RXTX_CMD_WGET" ]]; then
-    [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose='--verbose'
-    "$BL64_RXTX_CMD_WGET" $verbose \
-      --no-config \
-      --no-directories \
-      --output-document "$destination" \
+    [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
+    $BL64_RXTX_ALIAS_WGET $verbose \
+      $BL64_RXTX_SET_WGET_OUTPUT "$destination" \
       "$source"
     status=$?
   else
@@ -1169,8 +1296,8 @@ function bl64_rxtx_git_get_dir() {
   bl64_vcs_git_sparse "$source_url" "$repo" "$branch" "$source_path" &&
     [[ -d "$source" ]] &&
     bl64_os_mkdir_full "${repo}/transition" &&
-    bl64_os_mv "$source" "$transition" > /dev/null &&
-    bl64_os_mv "${transition}" "$destination" > /dev/null
+    bl64_os_mv "$source" "$transition" >/dev/null &&
+    bl64_os_mv "${transition}" "$destination" >/dev/null
   status=$?
 
   _bl64_rxtx_restore "$destination" "$status" >/dev/null || return $?
@@ -1195,15 +1322,19 @@ function bl64_sudo_add_root() {
   bl64_sudo_check_sudoers "$BL64_SUDO_FILE_SUDOERS" || return $BL64_SUDO_ERROR_INVALID_SUDOERS
 
   umask 0266
-  "$BL64_OS_CMD_AWK" -v ControlUsr="$user" '
-    BEGIN { Found = 0 }
-    ControlUsr " ALL=(ALL) NOPASSWD: ALL" == $0 { Found = 1 }
-    { print $0 }
-    END {
-      if( Found == 0) {
-      print( ControlUsr " ALL=(ALL) NOPASSWD: ALL" )
-    }
-  }' "$BL64_SUDO_FILE_SUDOERS" >"$new_sudoers"
+  $BL64_OS_ALIAS_AWK \
+    -v ControlUsr="$user" \
+    '
+      BEGIN { Found = 0 }
+      ControlUsr " ALL=(ALL) NOPASSWD: ALL" == $0 { Found = 1 }
+      { print $0 }
+      END {
+        if( Found == 0) {
+          print( ControlUsr " ALL=(ALL) NOPASSWD: ALL" )
+        }
+      }
+    ' \
+    "$BL64_SUDO_FILE_SUDOERS" >"$new_sudoers"
 
   if [[ -s "$new_sudoers" ]]; then
     $BL64_OS_ALIAS_CP_FILE "${BL64_SUDO_FILE_SUDOERS}" "$old_sudoers"
@@ -1264,6 +1395,10 @@ function bl64_vcs_set_command() {
   esac
 }
 
+function bl64_vcs_set_alias() {
+  BL64_VCS_ALIAS_GIT="$BL64_VCS_CMD_GIT"
+}
+
 function bl64_vcs_git_clone() {
   local source="${1}"
   local destination="${2}"
@@ -1280,7 +1415,7 @@ function bl64_vcs_git_clone() {
 
   cd "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
 
-  "$BL64_VCS_CMD_GIT" \
+  $BL64_VCS_ALIAS_GIT \
     clone \
     --depth 1 \
     --single-branch \
@@ -1293,7 +1428,7 @@ function bl64_vcs_git_sparse() {
   local destination="${2}"
   local branch="${3:-main}"
   local pattern="${4}"
-  local include_list=''
+  local item=''
 
   bl64_check_command "$BL64_VCS_CMD_GIT" || return $BL64_VCS_ERROR_MISSING_COMMAND
 
@@ -1306,16 +1441,26 @@ function bl64_vcs_git_sparse() {
 
   cd "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
 
-  include_list="$(
-    IFS=' '
-    for item in $pattern; do echo "$item"; done
-  )"
-
-  "$BL64_VCS_CMD_GIT" init &&
-    "$BL64_VCS_CMD_GIT" sparse-checkout set &&
-    { echo $include_list | "$BL64_VCS_CMD_GIT" sparse-checkout add --stdin; } &&
-    "$BL64_VCS_CMD_GIT" remote add origin "$source" &&
-    "$BL64_VCS_CMD_GIT" pull --depth 1 origin "$branch"
+  if bl64_os_match 'DEB-10' 'UB-20'; then
+    $BL64_VCS_ALIAS_GIT init &&
+      $BL64_VCS_ALIAS_GIT remote add origin "$source" &&
+      $BL64_VCS_ALIAS_GIT config core.sparseCheckout true &&
+      {
+        IFS=' '
+        for item in $pattern; do echo "$item" >>'.git/info/sparse-checkout'; done
+        unset IFS
+      } &&
+      $BL64_VCS_ALIAS_GIT pull --depth 1 origin "$branch"
+  else
+    $BL64_VCS_ALIAS_GIT init &&
+      $BL64_VCS_ALIAS_GIT sparse-checkout set &&
+      {
+        IFS=' '
+        for item in $pattern; do echo "$item"; done | $BL64_VCS_ALIAS_GIT sparse-checkout add --stdin
+      } &&
+      $BL64_VCS_ALIAS_GIT remote add origin "$source" &&
+      $BL64_VCS_ALIAS_GIT pull --depth 1 origin "$branch"
+  fi
 }
 
 function bl64_xsv_search_records() {
@@ -1331,44 +1476,46 @@ function bl64_xsv_search_records() {
   bl64_check_parameter 'values' 'search value' ||
     return $BL64_XSV_ERROR_MISSING_PARAMETER
 
-  "$BL64_OS_CMD_AWK" \
+  $BL64_OS_ALIAS_AWK \
     -F "$fs_src" \
     -v VALUES="${values}" \
     -v KEYS="$keys" \
     -v FIELDS="$fields" \
     -v FS_OUT="$fs_out" \
-    'BEGIN {
-      show_total = split( FIELDS, show_fields, ENVIRON["BL64_XSV_FS_COLON"] )
-      keys_total = split( KEYS, keys_fields, ENVIRON["BL64_XSV_FS_COLON"] )
-      values_total = split( VALUES, values_fields, ENVIRON["BL64_XSV_FS"] )
-      if( keys_total != values_total ) {
-        exit ENVIRON["BL64_XSV_ERROR_SEARCH_VALUES"]
-      }
-      row_match = ""
-      count = 0
-      found = 0
-    }
-    /^#/ || /^$/ { next }
-    {
-      found = 0
-      for( count = 1; count <= keys_total; count++ ) {
-        if ( $keys_fields[count] == values_fields[count] ) {
-          found = 1
-        } else {
-          found = 0
-          break
+    '
+      BEGIN {
+        show_total = split( FIELDS, show_fields, ENVIRON["BL64_XSV_FS_COLON"] )
+        keys_total = split( KEYS, keys_fields, ENVIRON["BL64_XSV_FS_COLON"] )
+        values_total = split( VALUES, values_fields, ENVIRON["BL64_XSV_FS"] )
+        if( keys_total != values_total ) {
+          exit ENVIRON["BL64_XSV_ERROR_SEARCH_VALUES"]
         }
+        row_match = ""
+        count = 0
+        found = 0
       }
+      /^#/ || /^$/ { next }
+      {
+        found = 0
+        for( count = 1; count <= keys_total; count++ ) {
+          if ( $keys_fields[count] == values_fields[count] ) {
+            found = 1
+          } else {
+            found = 0
+            break
+          }
+        }
 
-      if( found == 1 ) {
-        row_match = $show_fields[1]
-        for( count = 2; count <= show_total; count++ ) {
-          row_match = row_match FS_OUT $show_fields[count]
+        if( found == 1 ) {
+          row_match = $show_fields[1]
+          for( count = 2; count <= show_total; count++ ) {
+            row_match = row_match FS_OUT $show_fields[count]
+          }
+          print row_match
         }
-        print row_match
       }
-    }
-    END {}' \
+      END {}
+    ' \
     "$source"
 
 }
@@ -1395,8 +1542,9 @@ export BL64_SCRIPT_PATH="${BL64_SCRIPT_PATH:-${BASH_SOURCE[0]%/*}}/"
 
 export BL64_SCRIPT_SID="${BASHPID}"
 
-readonly BL64_LIB_VAR_NULL='__s64__'
 readonly BL64_LIB_VAR_TBD='TBD'
+
+readonly BL64_LIB_VAR_NULL='__s64__'
 readonly BL64_LIB_VAR_ON='1'
 readonly BL64_LIB_VAR_OFF='0'
 readonly BL64_LIB_VAR_TRUE='0'
@@ -1411,13 +1559,32 @@ readonly BL64_LIB_DEBUG_CMD='3'
 
 set -o pipefail
 
+unset -f unalias
+\unalias -a
+unset -f command
+
+unset MAIL
+unset ENV
+unset IFS
+
+shopt -qu \
+  dotglob \
+  extdebug \
+  failglob \
+  globstar \
+  gnu_errfmt \
+  huponexit \
+  lastpipe \
+  login_shell \
+  nocaseglob \
+  nocasematch \
+  nullglob \
+  nullglob \
+  xpg_echo
+shopt -qs \
+  extquote
+
 if [[ "$BL64_LIB_STRICT" == '1' ]]; then
-  unset -f unalias
-  \unalias -a
-  unset -f command
-  unset MAIL
-  unset ENV
-  unset IFS
   set -u
   set -p
 fi
@@ -1441,11 +1608,14 @@ if ! bl64_os_get_distro; then
 else
   bl64_os_set_command
   bl64_os_set_alias
+  bl64_iam_set_command
   bl64_iam_set_alias
   bl64_sudo_set_command
   bl64_sudo_set_alias
   bl64_vcs_set_command
+  bl64_vcs_set_alias
   bl64_rxtx_set_command
+  bl64_rxtx_set_alias
 
   [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_APP" ]] && set -x
 
