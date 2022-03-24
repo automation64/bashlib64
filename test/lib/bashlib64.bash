@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.18.0
+# Version: 1.19.0
 #######################################
 
 # Enable library and app tracing
@@ -255,6 +255,8 @@ export BL64_XSV_FS_PIPE
 export BL64_XSV_FS_AT
 export BL64_XSV_FS_DOLLAR
 export BL64_XSV_FS_SLASH
+
+readonly _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
 
 function bl64_arc_open_tar() {
   local source="$1"
@@ -1461,6 +1463,17 @@ function bl64_vcs_git_sparse() {
       $BL64_VCS_ALIAS_GIT remote add origin "$source" &&
       $BL64_VCS_ALIAS_GIT pull --depth 1 origin "$branch"
   fi
+}
+
+function bl64_xsv_dump() {
+
+  local source="$1"
+
+  bl64_check_parameter 'source' || return $?
+  bl64_check_file "$source" "$_BL64_XSV_TXT_SOURCE_NOT_FOUND" || return $?
+
+  "$BL64_OS_CMD_GREP" -v -E '^#.*$|^$' "$source"
+
 }
 
 function bl64_xsv_search_records() {
