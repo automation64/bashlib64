@@ -6,10 +6,10 @@ bl64_check_env.bats
 bl64_check_export.bats
 bl64_check_file.bats
 bl64_check_parameter.bats
-bl64_core_env.bats
-bl64_core_main.bats
-bl64_core_main_cmd.bats
-bl64_core_source.bats
+bl64_lib_env.bats
+bl64_lib_main.bats
+bl64_lib_main_cmd.bats
+bl64_lib_source.bats
 bl64_fmt_basename.bats
 bl64_fmt_dirname.bats
 bl64_fmt_strip_comments.bats

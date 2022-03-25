@@ -4,8 +4,32 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
+
+#######################################
+# Dump file to STDOUT without comments and spaces
+#
+# Arguments:
+#   $1: Full path to the file
+# Outputs:
+#   STDOUT: file content
+#   STDERR: Error messages
+# Returns:
+#   0: successfull execution
+#   BL64_CHECK_ERROR_MISSING_PARAMETER
+#   BL64_CHECK_ERROR_FILE_*
+#######################################
+function bl64_xsv_dump() {
+
+  local source="$1"
+
+  bl64_check_parameter 'source' || return $?
+  bl64_check_file "$source" "$_BL64_XSV_TXT_SOURCE_NOT_FOUND" || return $?
+
+  "$BL64_OS_CMD_GREP" -v -E '^#.*$|^$' "$source"
+
+}
 
 #######################################
 # Search for records based on key filters and return matching rows

@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.19.0]
+
+### Added
+
+- dbg
+  - add new module
+- core
+  - add verbose flag (BL64_LIB_VERBOSE)
+  - move debug flags to module dbg
+- xsv
+  - bl64_xsv_dump: new function
+  - use dbg flags
+- msg
+  - add verbose flag
+
+### Changed
+
+- core
+  - Renamed module to lib
+- msg
+  - Optimize batch message
+
 ## [1.18.0]
 
 ### Added
@@ -134,7 +156,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[Unreleased]: https://github.com/serdigital64/bashlib64/compare/1.18.0...HEAD
+[Unreleased]: https://github.com/serdigital64/bashlib64/compare/1.19.0...HEAD
+[1.19.0]: https://github.com/serdigital64/bashlib64/compare/1.18.0...1.19.0
 [1.18.0]: https://github.com/serdigital64/bashlib64/compare/1.17.0...1.18.0
 [1.17.0]: https://github.com/serdigital64/bashlib64/compare/1.16.0...1.17.0
 [1.16.0]: https://github.com/serdigital64/bashlib64/compare/1.15.0...1.16.0

@@ -2,9 +2,9 @@ bl64-arc.bash
 bl64-arc.env
 bl64-check.bash
 bl64-check.env
-bl64-core.bash
-bl64-core.env
-bl64-core.header
+bl64-lib.bash
+bl64-lib.env
+bl64-lib.header
 bl64-fmt.bash
 bl64-fmt.env
 bl64-iam.bash

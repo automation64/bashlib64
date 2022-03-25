@@ -24,7 +24,7 @@ setup() {
 
   bl64_msg_setup "$BL64_MSG_FORMAT_CALLER"
 
-  assert_equal $? 0
+  assert_equal "$?" "0"
   assert_equal "$BL64_MSG_FORMAT" "$BL64_MSG_FORMAT_CALLER"
 
 }

@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -58,6 +58,7 @@ function _bl64_msg_show() {
     ;;
   *)
     bl64_msg_show_error "$_BL64_MSG_TXT_INVALID_FORMAT"
+    # shellcheck disable=SC2086
     return $BL64_MSG_ERROR_INVALID_FORMAT
   esac
 }
@@ -187,6 +188,8 @@ function bl64_msg_show_warning() {
 function bl64_msg_show_info() {
   local message="${1-$BL64_LIB_VAR_TBD}"
 
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
+
   _bl64_msg_show "$_BL64_MSG_TXT_INFO" "$message"
 }
 
@@ -204,6 +207,8 @@ function bl64_msg_show_info() {
 #######################################
 function bl64_msg_show_task() {
   local message="${1-$BL64_LIB_VAR_TBD}"
+
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
 
   _bl64_msg_show "$_BL64_MSG_TXT_TASK" "$message"
 }
@@ -241,6 +246,8 @@ function bl64_msg_show_debug() {
 function bl64_msg_show_text() {
   local message="${1-$BL64_LIB_VAR_TBD}"
 
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
+
   printf '%s\n' "$message"
 }
 
@@ -259,7 +266,9 @@ function bl64_msg_show_text() {
 function bl64_msg_show_batch_start() {
   local message="${1-$BL64_LIB_VAR_TBD}"
 
-  _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "${_BL64_MSG_TXT_BATCH_START}: $message"
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
+
+  _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_START}"
 }
 
 #######################################
@@ -279,10 +288,12 @@ function bl64_msg_show_batch_finish() {
   local status="$1"
   local message="${2-$BL64_LIB_VAR_TBD}"
 
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
+
   if ((status == 0)); then
-    _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "${_BL64_MSG_TXT_BATCH_FINISH_OK}: $message"
+    _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_OK}"
   else
-    _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: $message (error: ${status})"
+    _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: exit-status-${status}"
   fi
 }
 

@@ -6,13 +6,13 @@ setup() {
 
 }
 
-@test "bl64_core_main: lang is set" {
+@test "bl64_lib_main: lang is set" {
   assert_equal "$LANG" 'C'
   assert_equal "$LC_ALL" 'C'
   assert_equal "$LANGUAGE" 'C'
 }
 
-@test "bl64_core_main: default flags are set" {
+@test "bl64_lib_main: default flags are set" {
   assert_equal "$BL64_LIB_CMD" '0'
   assert_equal "$BL64_LIB_DEBUG" '0'
   assert_equal "$BL64_LIB_STRICT" '1'
