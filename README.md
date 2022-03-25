@@ -21,7 +21,7 @@ BashLib64 is a **Bash** library that provides a simple abstraction layer for dev
 | ------------------------------------------------------------------ | -------------------------------------------------- |
 | [bl64-arc](https://serdigital64.github.io/bashlib64/bl64-arc/)     | Manage archive files                               |
 | [bl64-check](https://serdigital64.github.io/bashlib64/bl64-check/) | Check for conditions and report status             |
-| [bl64-core](https://serdigital64.github.io/bashlib64/bl64-core/)   | Setup script run-time environment                  |
+| [bl64-lib](https://serdigital64.github.io/bashlib64/bl64-lib/)   | Setup script run-time environment                  |
 | [bl64-fmt](https://serdigital64.github.io/bashlib64/bl64-fmt/)     | Format text data                                   |
 | [bl64-iam](https://serdigital64.github.io/bashlib64/bl64-iam/)     | Manage OS identity and access service              |
 | [bl64-log](https://serdigital64.github.io/bashlib64/bl64-log/)     | Write messages to logs                             |
