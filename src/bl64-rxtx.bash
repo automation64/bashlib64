@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 function _bl64_rxtx_backup() {
@@ -126,7 +126,7 @@ function bl64_rxtx_set_alias() {
 #   $2: Full path to the destination file
 #   $3: replace existing content Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)
 # Outputs:
-#   STDOUT: None unless BL64_LIB_DEBUG_CMD is enabled
+#   STDOUT: None unless BL64_DBG_TARGET_CMD
 #   STDERR: command error
 # Returns:
 #   BL64_RXTX_ERROR_MISSING_PARAMETER
@@ -156,13 +156,13 @@ function bl64_rxtx_web_get_file() {
   _bl64_rxtx_backup "$destination" >/dev/null || return $?
 
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
-    [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
+    [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_CMD" ]] && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
     $BL64_RXTX_ALIAS_CURL $verbose \
       $BL64_RXTX_SET_CURL_OUTPUT "$destination" \
       "$source"
     status=$?
   elif [[ -x "$BL64_RXTX_CMD_WGET" ]]; then
-    [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
+    [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_CMD" ]] && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
     $BL64_RXTX_ALIAS_WGET $verbose \
       $BL64_RXTX_SET_WGET_OUTPUT "$destination" \
       "$source"
