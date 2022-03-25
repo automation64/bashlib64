@@ -27,10 +27,3 @@ setup() {
   assert_equal "$BL64_LIB_VAR_TBD" 'TBD'
   assert_equal "$BL64_LIB_VAR_TRUE" '0'
 }
-
-@test "bl64_lib_env: debug constants are set" {
-assert_equal "$BL64_LIB_DEBUG_NONE" '0'
-assert_equal "$BL64_LIB_DEBUG_LIB" '1'
-assert_equal "$BL64_LIB_DEBUG_APP" '2'
-assert_equal "$BL64_LIB_DEBUG_CMD" '3'
-}

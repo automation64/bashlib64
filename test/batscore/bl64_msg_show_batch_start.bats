@@ -13,5 +13,5 @@ setup() {
 
   run bl64_msg_show_batch_start "$value"
 
-  assert_output --partial "${_BL64_MSG_TXT_BATCH_START}: $value"
+  assert_success
 }

@@ -14,7 +14,7 @@ setup() {
 
   run bl64_msg_show_batch_finish $finish "$value"
 
-  assert_output --partial "${_BL64_MSG_TXT_BATCH_FINISH_OK}: $value"
+  assert_success
 }
 
 @test "bl64_msg_show_batch_finish: error" {
@@ -23,5 +23,5 @@ setup() {
 
   run bl64_msg_show_batch_finish $finish "$value"
 
-  assert_output --partial "${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: $value (error: ${finish})"
+  assert_success
 }
