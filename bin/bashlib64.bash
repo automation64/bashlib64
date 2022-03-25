@@ -46,6 +46,12 @@ readonly _BL64_CHECK_TXT_DIRECTORY_NOT_READABLE='required directory is present b
 readonly _BL64_CHECK_TXT_EXPORT_EMPTY='required shell exported variable is empty'
 readonly _BL64_CHECK_TXT_EXPORT_SET='required shell exported variable is not set'
 
+readonly BL64_DBG_TARGET_NONE='0'
+readonly BL64_DBG_TARGET_LIB='1'
+readonly BL64_DBG_TARGET_APP='2'
+readonly BL64_DBG_TARGET_CMD='3'
+readonly BL64_DBG_TARGET_FNC='4'
+
 export BL64_IAM_CMD_USERADD
 
 export BL64_IAM_ALIAS_USERADD
@@ -95,11 +101,11 @@ readonly _BL64_MSG_TXT_INFO='Info'
 readonly _BL64_MSG_TXT_TASK='Task'
 readonly _BL64_MSG_TXT_DEBUG='Debug'
 readonly _BL64_MSG_TXT_WARNING='Warning'
-readonly _BL64_MSG_TXT_BATCH='Batch'
+readonly _BL64_MSG_TXT_BATCH='Process'
 readonly _BL64_MSG_TXT_INVALID_FORMAT='invalid format. Please use one of BL64_MSG_FORMAT_*'
-readonly _BL64_MSG_TXT_BATCH_START='starting process'
-readonly _BL64_MSG_TXT_BATCH_FINISH_OK='process completed successfully'
-readonly _BL64_MSG_TXT_BATCH_FINISH_ERROR='process completed with errors'
+readonly _BL64_MSG_TXT_BATCH_START='start executing command'
+readonly _BL64_MSG_TXT_BATCH_FINISH_OK='command executed successfully'
+readonly _BL64_MSG_TXT_BATCH_FINISH_ERROR='command executed with errors'
 
 export BL64_MSG_FORMAT="${BL64_MSG_FORMAT:-$BL64_MSG_FORMAT_FULL}"
 
@@ -256,6 +262,8 @@ export BL64_XSV_FS_AT
 export BL64_XSV_FS_DOLLAR
 export BL64_XSV_FS_SLASH
 
+readonly _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
+
 function bl64_arc_open_tar() {
   local source="$1"
   local destination="$2"
@@ -395,6 +403,31 @@ function bl64_check_export() {
     return $BL64_CHECK_ERROR_EXPORT_EMPTY
   fi
   :
+}
+
+function bl64_dbg_function_start() { set +x
+  local name="$1"
+
+  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_FNC" ]] && return
+  [[ "${FUNCNAME[1]}" != "$name" ]] && return
+
+  bl64_msg_show_debug "[${name}] start tracing function"
+  bl64_msg_show_debug "[${name}] function source: line:${BASH_LINENO[1]}@file:${BASH_SOURCE[1]}"
+  bl64_msg_show_debug "[${name}] function caller: ${FUNCNAME[2]}@line:${BASH_LINENO[2]}@file:${BASH_SOURCE[2]}"
+  set -x
+
+  return
+}
+
+function bl64_dbg_function_stop() {
+  local name="$1"
+
+  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_FNC" ]] && return
+  [[ "${FUNCNAME[1]}" != "$name" ]] && return
+  set +x
+  bl64_msg_show_debug "[${name}] stop tracing function"
+
+  return
 }
 
 function bl64_fmt_strip_comments() {
@@ -746,11 +779,15 @@ function bl64_msg_show_warning() {
 function bl64_msg_show_info() {
   local message="${1-$BL64_LIB_VAR_TBD}"
 
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
+
   _bl64_msg_show "$_BL64_MSG_TXT_INFO" "$message"
 }
 
 function bl64_msg_show_task() {
   local message="${1-$BL64_LIB_VAR_TBD}"
+
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
 
   _bl64_msg_show "$_BL64_MSG_TXT_TASK" "$message"
 }
@@ -764,23 +801,29 @@ function bl64_msg_show_debug() {
 function bl64_msg_show_text() {
   local message="${1-$BL64_LIB_VAR_TBD}"
 
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
+
   printf '%s\n' "$message"
 }
 
 function bl64_msg_show_batch_start() {
   local message="${1-$BL64_LIB_VAR_TBD}"
 
-  _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "${_BL64_MSG_TXT_BATCH_START}: $message"
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
+
+  _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_START}"
 }
 
 function bl64_msg_show_batch_finish() {
   local status="$1"
   local message="${2-$BL64_LIB_VAR_TBD}"
 
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
+
   if ((status == 0)); then
-    _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "${_BL64_MSG_TXT_BATCH_FINISH_OK}: $message"
+    _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_OK}"
   else
-    _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: $message (error: ${status})"
+    _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: exit-status-${status}"
   fi
 }
 
@@ -1247,13 +1290,13 @@ function bl64_rxtx_web_get_file() {
   _bl64_rxtx_backup "$destination" >/dev/null || return $?
 
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
-    [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
+    [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_CMD" ]] && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
     $BL64_RXTX_ALIAS_CURL $verbose \
       $BL64_RXTX_SET_CURL_OUTPUT "$destination" \
       "$source"
     status=$?
   elif [[ -x "$BL64_RXTX_CMD_WGET" ]]; then
-    [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_CMD" ]] && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
+    [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_CMD" ]] && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
     $BL64_RXTX_ALIAS_WGET $verbose \
       $BL64_RXTX_SET_WGET_OUTPUT "$destination" \
       "$source"
@@ -1463,6 +1506,17 @@ function bl64_vcs_git_sparse() {
   fi
 }
 
+function bl64_xsv_dump() {
+
+  local source="$1"
+
+  bl64_check_parameter 'source' || return $?
+  bl64_check_file "$source" "$_BL64_XSV_TXT_SOURCE_NOT_FOUND" || return $?
+
+  "$BL64_OS_CMD_GREP" -v -E '^#.*$|^$' "$source"
+
+}
+
 function bl64_xsv_search_records() {
   local values="$1"
   local source="${2:--}"
@@ -1526,6 +1580,8 @@ export LANGUAGE
 
 export BL64_LIB_CMD="${BL64_LIB_CMD:-0}"
 
+export BL64_LIB_VERBOSE="${BL64_LIB_VERBOSE:-1}"
+
 export BL64_LIB_DEBUG="${BL64_LIB_DEBUG:-0}"
 
 export BL64_LIB_STRICT="${BL64_LIB_STRICT:-1}"
@@ -1544,17 +1600,12 @@ export BL64_SCRIPT_SID="${BASHPID}"
 
 readonly BL64_LIB_VAR_TBD='TBD'
 
-readonly BL64_LIB_VAR_NULL='__s64__'
-readonly BL64_LIB_VAR_ON='1'
-readonly BL64_LIB_VAR_OFF='0'
-readonly BL64_LIB_VAR_TRUE='0'
 readonly BL64_LIB_VAR_FALSE='1'
+readonly BL64_LIB_VAR_NULL='__s64__'
+readonly BL64_LIB_VAR_OFF='0'
 readonly BL64_LIB_VAR_OK='0'
-
-readonly BL64_LIB_DEBUG_NONE='0'
-readonly BL64_LIB_DEBUG_LIB='1'
-readonly BL64_LIB_DEBUG_APP='2'
-readonly BL64_LIB_DEBUG_CMD='3'
+readonly BL64_LIB_VAR_ON='1'
+readonly BL64_LIB_VAR_TRUE='0'
 
 
 set -o pipefail
@@ -1617,7 +1668,7 @@ else
   bl64_rxtx_set_command
   bl64_rxtx_set_alias
 
-  [[ "$BL64_LIB_DEBUG" == "$BL64_LIB_DEBUG_APP" ]] && set -x
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP" ]] && set -x
 
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
     "$@"
