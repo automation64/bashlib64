@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -111,26 +111,26 @@ function bl64_msg_setup() {
 #######################################
 function bl64_msg_show_usage() {
   local usage="${1:-$BL64_LIB_VAR_TBD}"
-  local description="${2:-$BL64_LIB_VAR_NULL}"
-  local commands="${3:-$BL64_LIB_VAR_NULL}"
-  local flags="${4:-$BL64_LIB_VAR_NULL}"
-  local parameters="${5:-$BL64_LIB_VAR_NULL}"
+  local description="${2:-$BL64_LIB_VAR_TBD}"
+  local commands="${3:-$BL64_LIB_VAR_TBD}"
+  local flags="${4:-$BL64_LIB_VAR_TBD}"
+  local parameters="${5:-$BL64_LIB_VAR_TBD}"
 
   printf '\n%s: %s %s\n\n' "$_BL64_MSG_TXT_USAGE" "$BL64_SCRIPT_NAME" "$usage"
 
-  if [[ "$description" != "$BL64_LIB_VAR_NULL" ]]; then
+  if [[ "$description" != "$BL64_LIB_VAR_TBD" ]]; then
     printf '%s\n\n' "$description"
   fi
 
-  if [[ "$commands" != "$BL64_LIB_VAR_NULL" ]]; then
+  if [[ "$commands" != "$BL64_LIB_VAR_TBD" ]]; then
     printf '%s\n%s\n' "$_BL64_MSG_TXT_COMMANDS" "$commands"
   fi
 
-  if [[ "$flags" != "$BL64_LIB_VAR_NULL" ]]; then
+  if [[ "$flags" != "$BL64_LIB_VAR_TBD" ]]; then
     printf '%s\n%s\n' "$_BL64_MSG_TXT_FLAGS" "$flags"
   fi
 
-  if [[ "$parameters" != "$BL64_LIB_VAR_NULL" ]]; then
+  if [[ "$parameters" != "$BL64_LIB_VAR_TBD" ]]; then
     printf '%s\n%s\n' "$_BL64_MSG_TXT_PARAMETERS" "$parameters"
   fi
 
