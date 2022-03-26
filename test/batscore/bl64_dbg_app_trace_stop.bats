@@ -5,14 +5,14 @@ setup() {
   . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
 }
 
-function _test_bl64_dbg_function_start() {
-  bl64_dbg_function_start '_test_bl64_dbg_function_start'
+function _test_bl64_dbg_app_trace_stop() {
+  bl64_dbg_app_trace_stop
 }
 
-@test "bl64_dbg_function_start: start dbg" {
+@test "bl64_dbg_app_trace_stop: stop dbg" {
 
   set +u # to avoid IFS missing error in run function
-  run _test_bl64_dbg_function_start
+  run _test_bl64_dbg_app_trace_stop
 
   assert_success
 
