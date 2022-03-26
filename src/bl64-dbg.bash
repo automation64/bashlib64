@@ -8,48 +8,109 @@
 #######################################
 
 #######################################
-# Enable shell function tracing
+# Stop application shell tracing
 #
 # Arguments:
-#   $1: function name
+#   None
 # Outputs:
-#   STDOUT: Tracing
-#   STDERR: Debug messages
+#   STDOUT: None
+#   STDERR: None
 # Returns:
 #   0: always ok
 #######################################
-function bl64_dbg_function_start() { set +x
-  local name="$1"
-
-  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_FNC" ]] && return
-  [[ "${FUNCNAME[1]}" != "$name" ]] && return
-
-  bl64_msg_show_debug "[${name}] start tracing function"
-  bl64_msg_show_debug "[${name}] function source: line:${BASH_LINENO[1]}@file:${BASH_SOURCE[1]}"
-  bl64_msg_show_debug "[${name}] function caller: ${FUNCNAME[2]}@line:${BASH_LINENO[2]}@file:${BASH_SOURCE[2]}"
-  set -x
-
-  return
+function bl64_dbg_app_trace_stop() {
+  set +x
 }
 
 #######################################
-# Disable shell function tracing
+# Start application shell tracing if target is in scope
 #
 # Arguments:
-#   $1: function name
+#   None
 # Outputs:
 #   STDOUT: Tracing
 #   STDERR: Debug messages
 # Returns:
 #   0: always ok
 #######################################
-function bl64_dbg_function_stop() {
-  local name="$1"
-
-  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_FNC" ]] && return
-  [[ "${FUNCNAME[1]}" != "$name" ]] && return
+function bl64_dbg_app_trace_start() {
   set +x
-  bl64_msg_show_debug "[${name}] stop tracing function"
 
-  return
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL_TRACE" ]] && set -x
+
+  return 0
+}
+
+#######################################
+# Stop bashlib64 shell tracing
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_dbg_lib_trace_stop() {
+  set +x
+}
+
+#######################################
+# Start bashlib64 shell tracing if target is in scope
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: Tracing
+#   STDERR: Debug messages
+# Returns:
+#   0: always ok
+#######################################
+function bl64_dbg_lib_trace_start() {
+  set +x
+
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL_TRACE" ]] && set -x
+
+  return 0
+}
+
+#######################################
+# Show task level debugging information
+#
+# Arguments:
+#   $1: message
+# Outputs:
+#   STDOUT: None
+#   STDERR: Debug message
+# Returns:
+#   0: always ok
+#######################################
+function bl64_dbg_lib_show() {
+  local message="$1"
+
+  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_TASK" ]] && return 0
+  bl64_msg_show_debug "[${FUNCNAME[1]}] $message"
+
+  return 0
+}
+
+#######################################
+# Show task level debugging information
+#
+# Arguments:
+#   $1: message
+# Outputs:
+#   STDOUT: None
+#   STDERR: Debug message
+# Returns:
+#   0: always ok
+#######################################
+function bl64_dbg_app_show() {
+  local message="$1"
+
+  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_TASK" ]] && return 0
+  bl64_msg_show_debug "[${FUNCNAME[1]}] $message"
+
+  return 0
 }
