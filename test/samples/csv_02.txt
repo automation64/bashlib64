@@ -1,0 +1,4 @@
+bl64_arc_env.bats:file::record1:last1
+bl64_arc_open_tar.bats:file::record2:last2
+bl64_check_command.bats:file::record3:last3
+last_record

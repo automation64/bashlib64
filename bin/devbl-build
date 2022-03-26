@@ -20,9 +20,12 @@ function devbl_build_standalone() {
   local file=''
   local lib="$DEVBL_BUILD/bashlib64.bash"
 
+
+  bl64_dbg_app_show "DEVBL_MODULES='${DEVBL_MODULES}'"
+
   # Create header
   bl64_msg_show_task "creating stand-alone library: $lib"
-  "$BL64_OS_CMD_CAT" "$DEVBL_SRC/bl64-core.header" >"$lib"
+  "$BL64_OS_CMD_CAT" "$DEVBL_SRC/bl64-lib.header" >"$lib"
 
   # Add global variables
   for file in $DEVBL_MODULES; do
@@ -38,8 +41,8 @@ function devbl_build_standalone() {
 
   # Add remaining modules
   bl64_msg_show_task 'adding core'
-  bl64_fmt_strip_comments "$DEVBL_SRC/bl64-core.env" >>"$lib"
-  bl64_fmt_strip_comments "$DEVBL_SRC/bl64-core.bash" >>"$lib"
+  bl64_fmt_strip_comments "$DEVBL_SRC/bl64-lib.env" >>"$lib"
+  bl64_fmt_strip_comments "$DEVBL_SRC/bl64-lib.bash" >>"$lib"
   status=$?
 
   if [[ "$status" == '0' && "$promote" == '1' ]]; then
@@ -57,9 +60,7 @@ function devbl_build_standalone() {
 }
 
 function devbl_build_check() {
-
   bl64_check_directory "$DEVBL_SRC" || return 1
-
 }
 
 function devbl_build_help() {
