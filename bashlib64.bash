@@ -46,11 +46,14 @@ readonly _BL64_CHECK_TXT_DIRECTORY_NOT_READABLE='required directory is present b
 readonly _BL64_CHECK_TXT_EXPORT_EMPTY='required shell exported variable is empty'
 readonly _BL64_CHECK_TXT_EXPORT_SET='required shell exported variable is not set'
 
+
 readonly BL64_DBG_TARGET_NONE='0'
-readonly BL64_DBG_TARGET_LIB='1'
-readonly BL64_DBG_TARGET_APP='2'
-readonly BL64_DBG_TARGET_CMD='3'
-readonly BL64_DBG_TARGET_FNC='4'
+readonly BL64_DBG_TARGET_CMD='1'
+readonly BL64_DBG_TARGET_ALL_TRACE='2'
+readonly BL64_DBG_TARGET_APP_TRACE='3'
+readonly BL64_DBG_TARGET_APP_TASK='4'
+readonly BL64_DBG_TARGET_LIB_TRACE='5'
+readonly BL64_DBG_TARGET_LIB_TASK='6'
 
 export BL64_IAM_CMD_USERADD
 
@@ -405,29 +408,46 @@ function bl64_check_export() {
   :
 }
 
-function bl64_dbg_function_start() { set +x
-  local name="$1"
-
-  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_FNC" ]] && return
-  [[ "${FUNCNAME[1]}" != "$name" ]] && return
-
-  bl64_msg_show_debug "[${name}] start tracing function"
-  bl64_msg_show_debug "[${name}] function source: line:${BASH_LINENO[1]}@file:${BASH_SOURCE[1]}"
-  bl64_msg_show_debug "[${name}] function caller: ${FUNCNAME[2]}@line:${BASH_LINENO[2]}@file:${BASH_SOURCE[2]}"
-  set -x
-
-  return
+function bl64_dbg_app_trace_stop() {
+  set +x
 }
 
-function bl64_dbg_function_stop() {
-  local name="$1"
-
-  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_FNC" ]] && return
-  [[ "${FUNCNAME[1]}" != "$name" ]] && return
+function bl64_dbg_app_trace_start() {
   set +x
-  bl64_msg_show_debug "[${name}] stop tracing function"
 
-  return
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL_TRACE" ]] && set -x
+
+  return 0
+}
+
+function bl64_dbg_lib_trace_stop() {
+  set +x
+}
+
+function bl64_dbg_lib_trace_start() {
+  set +x
+
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL_TRACE" ]] && set -x
+
+  return 0
+}
+
+function bl64_dbg_lib_show() {
+  local message="$1"
+
+  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_TASK" ]] && return 0
+  bl64_msg_show_debug "[${FUNCNAME[1]}] $message"
+
+  return 0
+}
+
+function bl64_dbg_app_show() {
+  local message="$1"
+
+  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_TASK" ]] && return 0
+  bl64_msg_show_debug "[${FUNCNAME[1]}] $message"
+
+  return 0
 }
 
 function bl64_fmt_strip_comments() {
@@ -738,26 +758,26 @@ function bl64_msg_setup() {
 
 function bl64_msg_show_usage() {
   local usage="${1:-$BL64_LIB_VAR_TBD}"
-  local description="${2:-$BL64_LIB_VAR_NULL}"
-  local commands="${3:-$BL64_LIB_VAR_NULL}"
-  local flags="${4:-$BL64_LIB_VAR_NULL}"
-  local parameters="${5:-$BL64_LIB_VAR_NULL}"
+  local description="${2:-$BL64_LIB_VAR_TBD}"
+  local commands="${3:-$BL64_LIB_VAR_TBD}"
+  local flags="${4:-$BL64_LIB_VAR_TBD}"
+  local parameters="${5:-$BL64_LIB_VAR_TBD}"
 
   printf '\n%s: %s %s\n\n' "$_BL64_MSG_TXT_USAGE" "$BL64_SCRIPT_NAME" "$usage"
 
-  if [[ "$description" != "$BL64_LIB_VAR_NULL" ]]; then
+  if [[ "$description" != "$BL64_LIB_VAR_TBD" ]]; then
     printf '%s\n\n' "$description"
   fi
 
-  if [[ "$commands" != "$BL64_LIB_VAR_NULL" ]]; then
+  if [[ "$commands" != "$BL64_LIB_VAR_TBD" ]]; then
     printf '%s\n%s\n' "$_BL64_MSG_TXT_COMMANDS" "$commands"
   fi
 
-  if [[ "$flags" != "$BL64_LIB_VAR_NULL" ]]; then
+  if [[ "$flags" != "$BL64_LIB_VAR_TBD" ]]; then
     printf '%s\n%s\n' "$_BL64_MSG_TXT_FLAGS" "$flags"
   fi
 
-  if [[ "$parameters" != "$BL64_LIB_VAR_NULL" ]]; then
+  if [[ "$parameters" != "$BL64_LIB_VAR_TBD" ]]; then
     printf '%s\n%s\n' "$_BL64_MSG_TXT_PARAMETERS" "$parameters"
   fi
 
@@ -1600,12 +1620,12 @@ export BL64_SCRIPT_SID="${BASHPID}"
 
 readonly BL64_LIB_VAR_TBD='TBD'
 
-readonly BL64_LIB_VAR_FALSE='1'
 readonly BL64_LIB_VAR_NULL='__s64__'
+readonly BL64_LIB_VAR_TRUE='0'
+readonly BL64_LIB_VAR_FALSE='1'
+readonly BL64_LIB_VAR_ON='1'
 readonly BL64_LIB_VAR_OFF='0'
 readonly BL64_LIB_VAR_OK='0'
-readonly BL64_LIB_VAR_ON='1'
-readonly BL64_LIB_VAR_TRUE='0'
 
 
 set -o pipefail
@@ -1668,7 +1688,7 @@ else
   bl64_rxtx_set_command
   bl64_rxtx_set_alias
 
-  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP" ]] && set -x
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL_TRACE" ]] && set -x
 
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
     "$@"
