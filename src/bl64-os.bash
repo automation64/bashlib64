@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 function _bl64_os_match() {
@@ -153,6 +153,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
+    BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
@@ -172,6 +173,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/usr/bin/mv'
     BL64_OS_CMD_RM='/usr/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
+    BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
@@ -191,6 +193,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
+    BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   esac
 }
