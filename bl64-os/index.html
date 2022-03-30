@@ -52,13 +52,31 @@
 <span class=normal>52</span>
 <span class=normal>53</span>
 <span class=normal>54</span>
-<span class=normal>55</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>55</span>
+<span class=normal>56</span>
+<span class=normal>57</span>
+<span class=normal>58</span>
+<span class=normal>59</span>
+<span class=normal>60</span>
+<span class=normal>61</span>
+<span class=normal>62</span>
+<span class=normal>63</span>
+<span class=normal>64</span>
+<span class=normal>65</span>
+<span class=normal>66</span>
+<span class=normal>67</span>
+<span class=normal>68</span>
+<span class=normal>69</span>
+<span class=normal>70</span>
+<span class=normal>71</span>
+<span class=normal>72</span>
+<span class=normal>73</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / OS / Identify OS attributes and provide command aliases</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.6.0</span>
+<span class=c1># Version: 1.7.0</span>
 <span class=c1>#######################################</span>
 
 <span class=nb>export</span> BL64_OS_DISTRO
@@ -70,6 +88,7 @@
 <span class=nb>export</span> BL64_OS_CMD_CHOWN
 <span class=nb>export</span> BL64_OS_CMD_CP
 <span class=nb>export</span> BL64_OS_CMD_DATE
+<span class=nb>export</span> BL64_OS_CMD_FALSE
 <span class=nb>export</span> BL64_OS_CMD_GAWK
 <span class=nb>export</span> BL64_OS_CMD_GREP
 <span class=nb>export</span> BL64_OS_CMD_HOSTNAME
@@ -81,6 +100,8 @@
 <span class=nb>export</span> BL64_OS_CMD_MV
 <span class=nb>export</span> BL64_OS_CMD_RM
 <span class=nb>export</span> BL64_OS_CMD_TAR
+<span class=nb>export</span> BL64_OS_CMD_TRUE
+<span class=nb>export</span> BL64_OS_CMD_UNAME
 
 <span class=nb>export</span> BL64_OS_ALIAS_AWK
 <span class=nb>export</span> BL64_OS_ALIAS_CHOWN_DIR
@@ -93,6 +114,19 @@
 <span class=nb>export</span> BL64_OS_ALIAS_RM_FILE
 <span class=nb>export</span> BL64_OS_ALIAS_RM_FULL
 
+<span class=c1># * OS tags:</span>
+<span class=c1>#   * ALM   -&gt; AlmaLinux</span>
+<span class=c1>#   * ALP   -&gt; Alpine Linux</span>
+<span class=c1>#   * AMZ   -&gt; Amazon Linux</span>
+<span class=c1>#   * CNT   -&gt; CentOS</span>
+<span class=c1>#   * DEB   -&gt; Debian</span>
+<span class=c1>#   * FD    -&gt; Fedora</span>
+<span class=c1>#   * MCOS  -&gt; MacOS (Darwin)</span>
+<span class=c1>#   * OL    -&gt; OracleLinux</span>
+<span class=c1>#   * RHEL  -&gt; RedHat Enterprise Linux</span>
+<span class=c1>#   * UB    -&gt; Ubuntu</span>
+<span class=nb>readonly</span> <span class=nv>BL64_OS_TAGS</span><span class=o>=</span><span class=s1>&#39;ALM ALP AMZ CNT DEB FD MCOS OL RHEL UB&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_TAGS
+
 <span class=c1># OS tags. Uppercase version of os-release id</span>
 <span class=nb>readonly</span> <span class=nv>BL64_OS_ALM</span><span class=o>=</span><span class=s1>&#39;ALMALINUX&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_ALM
 <span class=nb>readonly</span> <span class=nv>BL64_OS_ALP</span><span class=o>=</span><span class=s1>&#39;ALPINE&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_ALP
@@ -100,9 +134,11 @@
 <span class=nb>readonly</span> <span class=nv>BL64_OS_CNT</span><span class=o>=</span><span class=s1>&#39;CENTOS&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_CNT
 <span class=nb>readonly</span> <span class=nv>BL64_OS_DEB</span><span class=o>=</span><span class=s1>&#39;DEBIAN&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_DEB
 <span class=nb>readonly</span> <span class=nv>BL64_OS_FD</span><span class=o>=</span><span class=s1>&#39;FEDORA&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_FD
+<span class=nb>readonly</span> <span class=nv>BL64_OS_MCOS</span><span class=o>=</span><span class=s1>&#39;DARWIN&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_MCOS
 <span class=nb>readonly</span> <span class=nv>BL64_OS_OL</span><span class=o>=</span><span class=s1>&#39;OL&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_OL
 <span class=nb>readonly</span> <span class=nv>BL64_OS_RHEL</span><span class=o>=</span><span class=s1>&#39;RHEL&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_RHEL
 <span class=nb>readonly</span> <span class=nv>BL64_OS_UB</span><span class=o>=</span><span class=s1>&#39;UBUNTU&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_UB
+<span class=nb>readonly</span> <span class=nv>BL64_OS_UNK</span><span class=o>=</span><span class=s1>&#39;UNKNOWN&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_UNK
 
 <span class=nb>readonly</span> <span class=nv>BL64_OS_ERROR_NO_OS_MATCH</span><span class=o>=</span><span class=m>200</span>
 <span class=nb>readonly</span> <span class=nv>BL64_OS_ERROR_INVALID_OS_TAG</span><span class=o>=</span><span class=m>201</span>
@@ -650,13 +686,72 @@
 <span class=normal>541</span>
 <span class=normal>542</span>
 <span class=normal>543</span>
-<span class=normal>544</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>544</span>
+<span class=normal>545</span>
+<span class=normal>546</span>
+<span class=normal>547</span>
+<span class=normal>548</span>
+<span class=normal>549</span>
+<span class=normal>550</span>
+<span class=normal>551</span>
+<span class=normal>552</span>
+<span class=normal>553</span>
+<span class=normal>554</span>
+<span class=normal>555</span>
+<span class=normal>556</span>
+<span class=normal>557</span>
+<span class=normal>558</span>
+<span class=normal>559</span>
+<span class=normal>560</span>
+<span class=normal>561</span>
+<span class=normal>562</span>
+<span class=normal>563</span>
+<span class=normal>564</span>
+<span class=normal>565</span>
+<span class=normal>566</span>
+<span class=normal>567</span>
+<span class=normal>568</span>
+<span class=normal>569</span>
+<span class=normal>570</span>
+<span class=normal>571</span>
+<span class=normal>572</span>
+<span class=normal>573</span>
+<span class=normal>574</span>
+<span class=normal>575</span>
+<span class=normal>576</span>
+<span class=normal>577</span>
+<span class=normal>578</span>
+<span class=normal>579</span>
+<span class=normal>580</span>
+<span class=normal>581</span>
+<span class=normal>582</span>
+<span class=normal>583</span>
+<span class=normal>584</span>
+<span class=normal>585</span>
+<span class=normal>586</span>
+<span class=normal>587</span>
+<span class=normal>588</span>
+<span class=normal>589</span>
+<span class=normal>590</span>
+<span class=normal>591</span>
+<span class=normal>592</span>
+<span class=normal>593</span>
+<span class=normal>594</span>
+<span class=normal>595</span>
+<span class=normal>596</span>
+<span class=normal>597</span>
+<span class=normal>598</span>
+<span class=normal>599</span>
+<span class=normal>600</span>
+<span class=normal>601</span>
+<span class=normal>602</span>
+<span class=normal>603</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / OS / Identify OS attributes and provide command aliases</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.8.0</span>
+<span class=c1># Version: 1.9.0</span>
 <span class=c1>#######################################</span>
 
 <span class=k>function</span> _bl64_os_match<span class=o>()</span> <span class=o>{</span>
@@ -702,6 +797,7 @@
     <span class=s1>&#39;CNT&#39;</span> <span class=p>|</span> CNT-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_CNT</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
     <span class=s1>&#39;DEB&#39;</span> <span class=p>|</span> DEB-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_DEB</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
     <span class=s1>&#39;FD&#39;</span> <span class=p>|</span> FD-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_FD</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
+    <span class=s1>&#39;MCOS&#39;</span> <span class=p>|</span> MCOS-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_MCOS</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
     <span class=s1>&#39;OL&#39;</span> <span class=p>|</span> OL-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_OL</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
     <span class=s1>&#39;RHEL&#39;</span> <span class=p>|</span> RHEL-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_RHEL</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
     <span class=s1>&#39;UB&#39;</span> <span class=p>|</span> UB-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_UB</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
@@ -719,16 +815,6 @@
 <span class=c1># * Target format: OOO-V.V</span>
 <span class=c1>#   * OOO: OS short name (tag)</span>
 <span class=c1>#   * V.V: Version (Major, Minor)</span>
-<span class=c1># * OS tags:</span>
-<span class=c1>#   * ALM   -&gt; AlmaLinux</span>
-<span class=c1>#   * ALP   -&gt; Alpine Linux</span>
-<span class=c1>#   * AMZ   -&gt; Amazon Linux</span>
-<span class=c1>#   * CNT   -&gt; CentOS</span>
-<span class=c1>#   * DEB   -&gt; Debian</span>
-<span class=c1>#   * FD    -&gt; Fedora</span>
-<span class=c1>#   * OL    -&gt; OracleLinux</span>
-<span class=c1>#   * RHEL  -&gt; RedHat Enterprise Linux</span>
-<span class=c1>#   * UB    -&gt; Ubuntu</span>
 <span class=c1>#</span>
 <span class=c1># Arguments:</span>
 <span class=c1>#   None</span>
@@ -736,17 +822,38 @@
 <span class=c1>#   STDOUT: None</span>
 <span class=c1>#   STDERR: None</span>
 <span class=c1># Returns:</span>
-<span class=c1>#   0: ok</span>
-<span class=c1>#   BL64_OS_ERROR_UNKNOWN_OS: os not supported</span>
+<span class=c1>#   0: always ok, even when the OS is not supported</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_os_get_distro<span class=o>()</span> <span class=o>{</span>
-
   <span class=k>if</span> <span class=o>[[</span> -r <span class=s1>&#39;/etc/os-release&#39;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    <span class=c1># shellcheck disable=SC1091</span>
-    <span class=nb>source</span> <span class=s1>&#39;/etc/os-release&#39;</span>
-    <span class=k>if</span> <span class=o>[[</span> -n <span class=s2>&quot;</span><span class=nv>$ID</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> -n <span class=s2>&quot;</span><span class=nv>$VERSION_ID</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-      <span class=nv>BL64_OS_DISTRO</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>ID</span><span class=p>^^</span><span class=si>}</span><span class=s2>-</span><span class=si>${</span><span class=nv>VERSION_ID</span><span class=si>}</span><span class=s2>&quot;</span>
-    <span class=k>fi</span>
+    _bl64_os_get_distro_from_os_release
+  <span class=k>else</span>
+    _bl64_os_get_distro_from_uname
+  <span class=k>fi</span>
+
+  <span class=c1># Do not use return as this function gets sourced</span>
+<span class=o>}</span>
+
+<span class=k>function</span> _bl64_os_get_distro_from_uname<span class=o>()</span> <span class=o>{</span>
+  <span class=nb>local</span> <span class=nv>os_type</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
+  <span class=nb>local</span> <span class=nv>os_version</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
+  <span class=nb>local</span> <span class=nv>cmd_sw_vers</span><span class=o>=</span><span class=s1>&#39;/usr/bin/sw_vers&#39;</span>
+
+  <span class=nv>os_type</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$(</span>uname<span class=k>)</span><span class=s2>&quot;</span>
+  <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$os_type</span><span class=s2>&quot;</span> <span class=k>in</span>
+  <span class=s1>&#39;Darwin&#39;</span><span class=o>)</span>
+    <span class=nv>os_version</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$(</span><span class=s2>&quot;</span><span class=nv>$cmd_sw_vers</span><span class=s2>&quot;</span> -productVersion<span class=k>)</span><span class=s2>&quot;</span>
+    <span class=nv>BL64_OS_DISTRO</span><span class=o>=</span><span class=s2>&quot;DARWIN-</span><span class=si>${</span><span class=nv>os_version</span><span class=si>}</span><span class=s2>&quot;</span>
+    <span class=p>;;</span>
+  *<span class=o>)</span> <span class=nv>BL64_OS_DISTRO</span><span class=o>=</span><span class=s1>&#39;UNKNOWN&#39;</span> <span class=p>;;</span>
+  <span class=k>esac</span>
+<span class=o>}</span>
+
+<span class=k>function</span> _bl64_os_get_distro_from_os_release<span class=o>()</span> <span class=o>{</span>
+  <span class=c1># shellcheck disable=SC1091</span>
+  <span class=nb>source</span> <span class=s1>&#39;/etc/os-release&#39;</span>
+  <span class=k>if</span> <span class=o>[[</span> -n <span class=s2>&quot;</span><span class=nv>$ID</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> -n <span class=s2>&quot;</span><span class=nv>$VERSION_ID</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+    <span class=nv>BL64_OS_DISTRO</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>ID</span><span class=p>^^</span><span class=si>}</span><span class=s2>-</span><span class=si>${</span><span class=nv>VERSION_ID</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=k>fi</span>
 
   <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=k>in</span>
@@ -763,13 +870,8 @@
   <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-8*<span class=o>)</span> : <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_RHEL</span><span class=si>}</span>-8*<span class=o>)</span> : <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_UB</span><span class=si>}</span>-20* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_UB</span><span class=si>}</span>-21*<span class=o>)</span> : <span class=p>;;</span>
-  *<span class=o>)</span>
-    <span class=nv>BL64_OS_DISTRO</span><span class=o>=</span><span class=s1>&#39;UNKNOWN&#39;</span>
-    <span class=c1># shellcheck disable=SC2086</span>
-    <span class=k>return</span> <span class=nv>$BL64_OS_ERROR_UNKNOWN_OS</span>
-    <span class=p>;;</span>
+  *<span class=o>)</span> <span class=nv>BL64_OS_DISTRO</span><span class=o>=</span><span class=s1>&#39;UNKNOWN&#39;</span> <span class=p>;;</span>
   <span class=k>esac</span>
-  <span class=c1># Do not use return as this function gets sourced</span>
 <span class=o>}</span>
 
 <span class=c1>#######################################</span>
@@ -794,6 +896,7 @@
     <span class=nv>BL64_OS_CMD_CHOWN</span><span class=o>=</span><span class=s1>&#39;/bin/chown&#39;</span>
     <span class=nv>BL64_OS_CMD_CP</span><span class=o>=</span><span class=s1>&#39;/bin/cp&#39;</span>
     <span class=nv>BL64_OS_CMD_DATE</span><span class=o>=</span><span class=s2>&quot;/bin/date&quot;</span>
+    <span class=nv>BL64_OS_CMD_FALSE</span><span class=o>=</span><span class=s2>&quot;/usr/bin/false&quot;</span>
     <span class=nv>BL64_OS_CMD_GAWK</span><span class=o>=</span><span class=s1>&#39;/usr/bin/gawk&#39;</span>
     <span class=nv>BL64_OS_CMD_GREP</span><span class=o>=</span><span class=s1>&#39;/bin/grep&#39;</span>
     <span class=nv>BL64_OS_CMD_HOSTNAME</span><span class=o>=</span><span class=s1>&#39;/bin/hostname&#39;</span>
@@ -805,6 +908,8 @@
     <span class=nv>BL64_OS_CMD_MV</span><span class=o>=</span><span class=s1>&#39;/bin/mv&#39;</span>
     <span class=nv>BL64_OS_CMD_RM</span><span class=o>=</span><span class=s1>&#39;/bin/rm&#39;</span>
     <span class=nv>BL64_OS_CMD_TAR</span><span class=o>=</span><span class=s1>&#39;/bin/tar&#39;</span>
+    <span class=nv>BL64_OS_CMD_TRUE</span><span class=o>=</span><span class=s2>&quot;/usr/bin/true&quot;</span>
+    <span class=nv>BL64_OS_CMD_UNAME</span><span class=o>=</span><span class=s1>&#39;/bin/uname&#39;</span>
     <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_RHEL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_ALM</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=nv>BL64_OS_CMD_AWK</span><span class=o>=</span><span class=s1>&#39;/usr/bin/awk&#39;</span>
@@ -813,6 +918,7 @@
     <span class=nv>BL64_OS_CMD_CHOWN</span><span class=o>=</span><span class=s1>&#39;/usr/bin/chown&#39;</span>
     <span class=nv>BL64_OS_CMD_CP</span><span class=o>=</span><span class=s1>&#39;/usr/bin/cp&#39;</span>
     <span class=nv>BL64_OS_CMD_DATE</span><span class=o>=</span><span class=s2>&quot;/usr/bin/date&quot;</span>
+    <span class=nv>BL64_OS_CMD_FALSE</span><span class=o>=</span><span class=s2>&quot;/usr/bin/false&quot;</span>
     <span class=nv>BL64_OS_CMD_GAWK</span><span class=o>=</span><span class=s1>&#39;/usr/bin/gawk&#39;</span>
     <span class=nv>BL64_OS_CMD_GREP</span><span class=o>=</span><span class=s1>&#39;/usr/bin/grep&#39;</span>
     <span class=nv>BL64_OS_CMD_HOSTNAME</span><span class=o>=</span><span class=s1>&#39;/usr/bin/hostname&#39;</span>
@@ -824,6 +930,8 @@
     <span class=nv>BL64_OS_CMD_MV</span><span class=o>=</span><span class=s1>&#39;/usr/bin/mv&#39;</span>
     <span class=nv>BL64_OS_CMD_RM</span><span class=o>=</span><span class=s1>&#39;/usr/bin/rm&#39;</span>
     <span class=nv>BL64_OS_CMD_TAR</span><span class=o>=</span><span class=s1>&#39;/bin/tar&#39;</span>
+    <span class=nv>BL64_OS_CMD_TRUE</span><span class=o>=</span><span class=s2>&quot;/usr/bin/true&quot;</span>
+    <span class=nv>BL64_OS_CMD_UNAME</span><span class=o>=</span><span class=s1>&#39;/bin/uname&#39;</span>
     <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_ALP</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=nv>BL64_OS_CMD_AWK</span><span class=o>=</span><span class=s1>&#39;/usr/bin/awk&#39;</span>
@@ -832,6 +940,7 @@
     <span class=nv>BL64_OS_CMD_CHOWN</span><span class=o>=</span><span class=s1>&#39;/bin/chown&#39;</span>
     <span class=nv>BL64_OS_CMD_CP</span><span class=o>=</span><span class=s1>&#39;/bin/cp&#39;</span>
     <span class=nv>BL64_OS_CMD_DATE</span><span class=o>=</span><span class=s2>&quot;/bin/date&quot;</span>
+    <span class=nv>BL64_OS_CMD_FALSE</span><span class=o>=</span><span class=s2>&quot;/usr/bin/false&quot;</span>
     <span class=nv>BL64_OS_CMD_GAWK</span><span class=o>=</span><span class=s1>&#39;/usr/bin/gawk&#39;</span>
     <span class=nv>BL64_OS_CMD_GREP</span><span class=o>=</span><span class=s1>&#39;/bin/grep&#39;</span>
     <span class=nv>BL64_OS_CMD_HOSTNAME</span><span class=o>=</span><span class=s1>&#39;/bin/hostname&#39;</span>
@@ -843,6 +952,30 @@
     <span class=nv>BL64_OS_CMD_MV</span><span class=o>=</span><span class=s1>&#39;/bin/mv&#39;</span>
     <span class=nv>BL64_OS_CMD_RM</span><span class=o>=</span><span class=s1>&#39;/bin/rm&#39;</span>
     <span class=nv>BL64_OS_CMD_TAR</span><span class=o>=</span><span class=s1>&#39;/bin/tar&#39;</span>
+    <span class=nv>BL64_OS_CMD_TRUE</span><span class=o>=</span><span class=s2>&quot;/usr/bin/true&quot;</span>
+    <span class=nv>BL64_OS_CMD_UNAME</span><span class=o>=</span><span class=s1>&#39;/bin/uname&#39;</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_OS_CMD_AWK</span><span class=o>=</span><span class=s1>&#39;/usr/bin/awk&#39;</span>
+    <span class=nv>BL64_OS_CMD_CAT</span><span class=o>=</span><span class=s1>&#39;/bin/cat&#39;</span>
+    <span class=nv>BL64_OS_CMD_CHMOD</span><span class=o>=</span><span class=s1>&#39;/bin/chmod&#39;</span>
+    <span class=nv>BL64_OS_CMD_CHOWN</span><span class=o>=</span><span class=s1>&#39;/usr/sbin/chown&#39;</span>
+    <span class=nv>BL64_OS_CMD_CP</span><span class=o>=</span><span class=s1>&#39;/bin/cp&#39;</span>
+    <span class=nv>BL64_OS_CMD_DATE</span><span class=o>=</span><span class=s2>&quot;/bin/date&quot;</span>
+    <span class=nv>BL64_OS_CMD_FALSE</span><span class=o>=</span><span class=s2>&quot;/usr/bin/false&quot;</span>
+    <span class=nv>BL64_OS_CMD_GAWK</span><span class=o>=</span><span class=s1>&#39;/usr/bin/gawk&#39;</span>
+    <span class=nv>BL64_OS_CMD_GREP</span><span class=o>=</span><span class=s1>&#39;/usr/bin/grep&#39;</span>
+    <span class=nv>BL64_OS_CMD_HOSTNAME</span><span class=o>=</span><span class=s1>&#39;/bin/hostname&#39;</span>
+    <span class=nv>BL64_OS_CMD_ID</span><span class=o>=</span><span class=s1>&#39;/usr/bin/id&#39;</span>
+    <span class=nv>BL64_OS_CMD_LN</span><span class=o>=</span><span class=s1>&#39;/bin/ln&#39;</span>
+    <span class=nv>BL64_OS_CMD_LS</span><span class=o>=</span><span class=s1>&#39;/bin/ls&#39;</span>
+    <span class=nv>BL64_OS_CMD_MKDIR</span><span class=o>=</span><span class=s1>&#39;/bin/mkdir&#39;</span>
+    <span class=nv>BL64_OS_CMD_MKTEMP</span><span class=o>=</span><span class=s1>&#39;/usr/bin/mktemp&#39;</span>
+    <span class=nv>BL64_OS_CMD_MV</span><span class=o>=</span><span class=s1>&#39;/bin/mv&#39;</span>
+    <span class=nv>BL64_OS_CMD_RM</span><span class=o>=</span><span class=s1>&#39;/bin/rm&#39;</span>
+    <span class=nv>BL64_OS_CMD_TAR</span><span class=o>=</span><span class=s1>&#39;/usr/bin/tar&#39;</span>
+    <span class=nv>BL64_OS_CMD_TRUE</span><span class=o>=</span><span class=s2>&quot;/usr/bin/true&quot;</span>
+    <span class=nv>BL64_OS_CMD_UNAME</span><span class=o>=</span><span class=s1>&#39;/usr/bin/uname&#39;</span>
     <span class=p>;;</span>
   <span class=k>esac</span>
 <span class=o>}</span>
@@ -899,6 +1032,21 @@
     <span class=nv>BL64_OS_ALIAS_MV</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_MV</span><span class=s2> -f&quot;</span>
     <span class=nv>BL64_OS_ALIAS_RM_FILE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_RM</span><span class=s2> -f&quot;</span>
     <span class=nv>BL64_OS_ALIAS_RM_FULL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_RM</span><span class=s2> -f -R&quot;</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_OS_ALIAS_AWK</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_AWK</span><span class=s2>&quot;</span>
+    <span class=nv>BL64_OS_ALIAS_CHOWN_DIR</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_CHOWN</span><span class=s2> -v -R&quot;</span>
+    <span class=nv>BL64_OS_ALIAS_CP_DIR</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_CP</span><span class=s2> -v -f -R&quot;</span>
+    <span class=nv>BL64_OS_ALIAS_CP_FILE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_CP</span><span class=s2> -v -f&quot;</span>
+    <span class=nv>BL64_OS_ALIAS_ID_USER</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_ID</span><span class=s2> -u -n&quot;</span>
+    <span class=nv>BL64_OS_ALIAS_LN_SYMBOLIC</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_LN</span><span class=s2> -v -s&quot;</span>
+    <span class=nv>BL64_OS_ALIAS_LS_FILES</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_LS</span><span class=s2> --color=never&quot;</span>
+    <span class=nv>BL64_OS_ALIAS_MKDIR_FULL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_MKDIR</span><span class=s2> -v -p&quot;</span>
+    <span class=nv>BL64_OS_ALIAS_MKTEMP_DIR</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_MKTEMP</span><span class=s2> -d&quot;</span>
+    <span class=nv>BL64_OS_ALIAS_MKTEMP_FILE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_MKTEMP</span><span class=s2>&quot;</span>
+    <span class=nv>BL64_OS_ALIAS_MV</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_MV</span><span class=s2> -v -f&quot;</span>
+    <span class=nv>BL64_OS_ALIAS_RM_FILE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_RM</span><span class=s2> -v -f&quot;</span>
+    <span class=nv>BL64_OS_ALIAS_RM_FULL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_RM</span><span class=s2> -v -f -R&quot;</span>
     <span class=p>;;</span>
   <span class=k>esac</span>
 <span class=o>}</span>
@@ -982,11 +1130,17 @@
   <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=k>in</span>
   <span class=si>${</span><span class=nv>BL64_OS_UB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_RHEL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_ALM</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=nv>$BL64_OS_ALIAS_CP_DIR</span> --no-target-directory <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$target</span><span class=s2>&quot;</span>
+    <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_MACOS</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=c1># shellcheck disable=SC2086</span>
+    <span class=nv>$BL64_OS_ALIAS_CP_DIR</span> <span class=si>${</span><span class=nv>source</span><span class=si>}</span>/ <span class=s2>&quot;</span><span class=nv>$target</span><span class=s2>&quot;</span>
+    <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
     <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_ALP</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=nb>shopt</span> -sq dotglob
     <span class=c1># shellcheck disable=SC2086</span>
-    <span class=nv>$BL64_OS_ALIAS_CP_DIR</span> <span class=nv>$source</span>/* -t <span class=s2>&quot;</span><span class=nv>$target</span><span class=s2>&quot;</span>
+    <span class=nv>$BL64_OS_ALIAS_CP_DIR</span> <span class=si>${</span><span class=nv>source</span><span class=si>}</span>/* -t <span class=s2>&quot;</span><span class=nv>$target</span><span class=s2>&quot;</span>
     <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
     <span class=nb>shopt</span> -uq dotglob
     <span class=p>;;</span>

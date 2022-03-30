@@ -19,28 +19,34 @@
 <span class=normal>19</span>
 <span class=normal>20</span>
 <span class=normal>21</span>
-<span class=normal>22</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>22</span>
+<span class=normal>23</span>
+<span class=normal>24</span>
+<span class=normal>25</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Manage native OS packages</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.1.0</span>
+<span class=c1># Version: 1.3.0</span>
 <span class=c1>#######################################</span>
 
-<span class=nb>readonly</span> <span class=nv>BL64_PKG_CMD_APT</span><span class=o>=</span><span class=s1>&#39;/usr/bin/apt-get&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_PKG_CMD_DNF</span><span class=o>=</span><span class=s1>&#39;/usr/bin/dnf&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_PKG_CMD_YUM</span><span class=o>=</span><span class=s1>&#39;/usr/bin/yum&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_PKG_CMD_APK</span><span class=o>=</span><span class=s1>&#39;/sbin/apk&#39;</span>
+<span class=nb>export</span> BL64_PKG_CMD_APT
+<span class=nb>export</span> BL64_PKG_CMD_DNF
+<span class=nb>export</span> BL64_PKG_CMD_YUM
+<span class=nb>export</span> BL64_PKG_CMD_APK
+<span class=nb>export</span> BL64_PKG_CMD_BRW
 
-<span class=nb>readonly</span> <span class=nv>BL64_PKG_ALIAS_APT_UPDATE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_APT</span><span class=s2> update&quot;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_PKG_ALIAS_APT_INSTALL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_APT</span><span class=s2> --assume-yes install&quot;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_PKG_ALIAS_APT_CLEAN</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_APT</span><span class=s2> clean&quot;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_PKG_ALIAS_DNF_CACHE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_DNF</span><span class=s2> --color=never makecache&quot;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_PKG_ALIAS_DNF_INSTALL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_DNF</span><span class=s2> --color=never --nodocs --assumeyes install&quot;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_PKG_ALIAS_DNF_CLEAN</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_DNF</span><span class=s2> clean all&quot;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_PKG_ALIAS_APK_INSTALL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_APK</span><span class=s2> add --verbose&quot;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_PKG_ALIAS_APK_UPDATE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_APK</span><span class=s2> update&quot;</span>
+<span class=nb>export</span> BL64_PKG_ALIAS_APT_UPDATE
+<span class=nb>export</span> BL64_PKG_ALIAS_APT_INSTALL
+<span class=nb>export</span> BL64_PKG_ALIAS_APT_CLEAN
+<span class=nb>export</span> BL64_PKG_ALIAS_DNF_CACHE
+<span class=nb>export</span> BL64_PKG_ALIAS_DNF_INSTALL
+<span class=nb>export</span> BL64_PKG_ALIAS_DNF_CLEAN
+<span class=nb>export</span> BL64_PKG_ALIAS_APK_INSTALL
+<span class=nb>export</span> BL64_PKG_ALIAS_APK_UPDATE
+<span class=nb>export</span> BL64_PKG_ALIAS_BRW_INSTALL
+<span class=nb>export</span> BL64_PKG_ALIAS_BRW_CLEAN
 </code></pre></div> </td></tr></table> <h2 id=source-code>Source Code<a class=headerlink href=#source-code title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>  1</span>
 <span class=normal>  2</span>
 <span class=normal>  3</span>
@@ -151,14 +157,170 @@
 <span class=normal>108</span>
 <span class=normal>109</span>
 <span class=normal>110</span>
-<span class=normal>111</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>111</span>
+<span class=normal>112</span>
+<span class=normal>113</span>
+<span class=normal>114</span>
+<span class=normal>115</span>
+<span class=normal>116</span>
+<span class=normal>117</span>
+<span class=normal>118</span>
+<span class=normal>119</span>
+<span class=normal>120</span>
+<span class=normal>121</span>
+<span class=normal>122</span>
+<span class=normal>123</span>
+<span class=normal>124</span>
+<span class=normal>125</span>
+<span class=normal>126</span>
+<span class=normal>127</span>
+<span class=normal>128</span>
+<span class=normal>129</span>
+<span class=normal>130</span>
+<span class=normal>131</span>
+<span class=normal>132</span>
+<span class=normal>133</span>
+<span class=normal>134</span>
+<span class=normal>135</span>
+<span class=normal>136</span>
+<span class=normal>137</span>
+<span class=normal>138</span>
+<span class=normal>139</span>
+<span class=normal>140</span>
+<span class=normal>141</span>
+<span class=normal>142</span>
+<span class=normal>143</span>
+<span class=normal>144</span>
+<span class=normal>145</span>
+<span class=normal>146</span>
+<span class=normal>147</span>
+<span class=normal>148</span>
+<span class=normal>149</span>
+<span class=normal>150</span>
+<span class=normal>151</span>
+<span class=normal>152</span>
+<span class=normal>153</span>
+<span class=normal>154</span>
+<span class=normal>155</span>
+<span class=normal>156</span>
+<span class=normal>157</span>
+<span class=normal>158</span>
+<span class=normal>159</span>
+<span class=normal>160</span>
+<span class=normal>161</span>
+<span class=normal>162</span>
+<span class=normal>163</span>
+<span class=normal>164</span>
+<span class=normal>165</span>
+<span class=normal>166</span>
+<span class=normal>167</span>
+<span class=normal>168</span>
+<span class=normal>169</span>
+<span class=normal>170</span>
+<span class=normal>171</span>
+<span class=normal>172</span>
+<span class=normal>173</span>
+<span class=normal>174</span>
+<span class=normal>175</span>
+<span class=normal>176</span>
+<span class=normal>177</span>
+<span class=normal>178</span>
+<span class=normal>179</span>
+<span class=normal>180</span>
+<span class=normal>181</span>
+<span class=normal>182</span>
+<span class=normal>183</span>
+<span class=normal>184</span>
+<span class=normal>185</span>
+<span class=normal>186</span>
+<span class=normal>187</span>
+<span class=normal>188</span>
+<span class=normal>189</span>
+<span class=normal>190</span>
+<span class=normal>191</span>
+<span class=normal>192</span>
+<span class=normal>193</span>
+<span class=normal>194</span>
+<span class=normal>195</span>
+<span class=normal>196</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Manage native OS packages</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.3.0</span>
+<span class=c1># Version: 1.5.0</span>
 <span class=c1>#######################################</span>
+
+<span class=c1>#######################################</span>
+<span class=c1># Identify and normalize commands</span>
+<span class=c1>#</span>
+<span class=c1># * Commands are exported as variables with full path</span>
+<span class=c1># * The caller function is responsible for checking that the target command is present (installed)</span>
+<span class=c1>#</span>
+<span class=c1># Arguments:</span>
+<span class=c1>#   None</span>
+<span class=c1># Outputs:</span>
+<span class=c1>#   STDOUT: None</span>
+<span class=c1>#   STDERR: None</span>
+<span class=c1># Returns:</span>
+<span class=c1>#   0: always ok</span>
+<span class=c1>#######################################</span>
+<span class=k>function</span> bl64_pkb_set_command<span class=o>()</span> <span class=o>{</span>
+  <span class=c1># shellcheck disable=SC2034</span>
+  <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=k>in</span>
+  <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_RHEL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_ALM</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_PKG_CMD_DNF</span><span class=o>=</span><span class=s1>&#39;/usr/bin/dnf&#39;</span>
+    <span class=nv>BL64_PKG_CMD_YUM</span><span class=o>=</span><span class=s1>&#39;/usr/bin/yum&#39;</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_UB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_PKG_CMD_APT</span><span class=o>=</span><span class=s1>&#39;/usr/bin/apt-get&#39;</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_ALP</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_PKG_CMD_APK</span><span class=o>=</span><span class=s1>&#39;/sbin/apk&#39;</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_PKG_CMD_BRW</span><span class=o>=</span><span class=s1>&#39;/opt/homebrew/bin/brew&#39;</span>
+    <span class=p>;;</span>
+  <span class=k>esac</span>
+<span class=o>}</span>
+
+<span class=c1>#######################################</span>
+<span class=c1># Create command aliases for common use cases</span>
+<span class=c1>#</span>
+<span class=c1># * Aliases are presented as regular shell variables for easy inclusion in complex commands</span>
+<span class=c1># * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command</span>
+<span class=c1>#</span>
+<span class=c1># Arguments:</span>
+<span class=c1>#   None</span>
+<span class=c1># Outputs:</span>
+<span class=c1>#   STDOUT: None</span>
+<span class=c1>#   STDERR: None</span>
+<span class=c1># Returns:</span>
+<span class=c1>#   0: always ok</span>
+<span class=c1>#######################################</span>
+<span class=k>function</span> bl64_pkb_set_alias<span class=o>()</span> <span class=o>{</span>
+  <span class=c1># shellcheck disable=SC2034</span>
+  <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=k>in</span>
+  <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_RHEL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_ALM</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_PKG_ALIAS_DNF_CACHE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_DNF</span><span class=s2> --color=never makecache&quot;</span>
+    <span class=nv>BL64_PKG_ALIAS_DNF_INSTALL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_DNF</span><span class=s2> --color=never --nodocs --assumeyes install&quot;</span>
+    <span class=nv>BL64_PKG_ALIAS_DNF_CLEAN</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_DNF</span><span class=s2> clean all&quot;</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_UB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_PKG_ALIAS_APT_UPDATE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_APT</span><span class=s2> update&quot;</span>
+    <span class=nv>BL64_PKG_ALIAS_APT_INSTALL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_APT</span><span class=s2> --assume-yes install&quot;</span>
+    <span class=nv>BL64_PKG_ALIAS_APT_CLEAN</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_APT</span><span class=s2> clean&quot;</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_ALP</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_PKG_ALIAS_APK_INSTALL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_APK</span><span class=s2> add --verbose&quot;</span>
+    <span class=nv>BL64_PKG_ALIAS_APK_UPDATE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_APK</span><span class=s2> update&quot;</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_PKG_ALIAS_BRW_INSTALL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_BRW</span><span class=s2> install&quot;</span>
+    <span class=nv>BL64_PKG_ALIAS_BRW_CLEAN</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_BRW</span><span class=s2> cleanup --prune=all -s&quot;</span>
+    <span class=p>;;</span>
+  <span class=k>esac</span>
+<span class=o>}</span>
 
 <span class=c1>#######################################</span>
 <span class=c1># Install packages</span>
@@ -203,11 +365,17 @@
   <span class=si>${</span><span class=nv>BL64_OS_ALP</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=nv>$BL64_PKG_ALIAS_APK_UPDATE</span>
     <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
+    :
+    <span class=p>;;</span>
   <span class=k>esac</span>
 <span class=o>}</span>
 
 <span class=c1>#######################################</span>
 <span class=c1># Install packages</span>
+<span class=c1>#</span>
+<span class=c1># * Assume yes</span>
+<span class=c1># * Avoid installing docs (man) when possible</span>
 <span class=c1>#</span>
 <span class=c1># Arguments:</span>
 <span class=c1>#   package list, separated by spaces (expanded with $@)</span>
@@ -229,11 +397,16 @@
   <span class=si>${</span><span class=nv>BL64_OS_ALP</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=nv>$BL64_PKG_ALIAS_APK_INSTALL</span> -- <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
     <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>$BL64_PKG_ALIAS_BRW_INSTALL</span> <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+    <span class=p>;;</span>
   <span class=k>esac</span>
 <span class=o>}</span>
 
 <span class=c1>#######################################</span>
 <span class=c1># Clean up the package manager run-time environment</span>
+<span class=c1>#</span>
+<span class=c1># * Warning: removes cache contents</span>
 <span class=c1>#</span>
 <span class=c1># Arguments:</span>
 <span class=c1>#   None</span>
@@ -259,6 +432,9 @@
     <span class=k>if</span> <span class=o>[[</span> -d <span class=s2>&quot;</span><span class=nv>$target</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
       <span class=nv>$BL64_OS_ALIAS_RM_FULL</span> <span class=si>${</span><span class=nv>target</span><span class=si>}</span>/<span class=o>[[</span>:alpha:<span class=o>]]</span>*
     <span class=k>fi</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>$BL64_PKG_ALIAS_BRW_CLEAN</span>
     <span class=p>;;</span>
   <span class=k>esac</span>
 <span class=o>}</span>
