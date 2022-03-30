@@ -130,6 +130,9 @@ function bl64_pkg_prepare() {
 #######################################
 # Install packages
 #
+# * Assume yes
+# * Avoid installing docs (man) when possible
+#
 # Arguments:
 #   package list, separated by spaces (expanded with $@)
 # Outputs:
@@ -151,7 +154,7 @@ function bl64_pkg_install() {
     $BL64_PKG_ALIAS_APK_INSTALL -- "$@"
     ;;
   ${BL64_OS_MCOS}-*)
-    $BL64_PKG_ALIAS_BRW_INSTALL
+    $BL64_PKG_ALIAS_BRW_INSTALL "$@"
     ;;
   esac
 }
