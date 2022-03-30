@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 function _bl64_os_match() {
@@ -50,6 +50,7 @@ function bl64_os_match() {
     'CNT' | CNT-*) _bl64_os_match "$BL64_OS_CNT" "$item" && return ;;
     'DEB' | DEB-*) _bl64_os_match "$BL64_OS_DEB" "$item" && return ;;
     'FD' | FD-*) _bl64_os_match "$BL64_OS_FD" "$item" && return ;;
+    'MCOS' | MCOS-*) _bl64_os_match "$BL64_OS_MCOS" "$item" && return ;;
     'OL' | OL-*) _bl64_os_match "$BL64_OS_OL" "$item" && return ;;
     'RHEL' | RHEL-*) _bl64_os_match "$BL64_OS_RHEL" "$item" && return ;;
     'UB' | UB-*) _bl64_os_match "$BL64_OS_UB" "$item" && return ;;
@@ -67,16 +68,6 @@ function bl64_os_match() {
 # * Target format: OOO-V.V
 #   * OOO: OS short name (tag)
 #   * V.V: Version (Major, Minor)
-# * OS tags:
-#   * ALM   -> AlmaLinux
-#   * ALP   -> Alpine Linux
-#   * AMZ   -> Amazon Linux
-#   * CNT   -> CentOS
-#   * DEB   -> Debian
-#   * FD    -> Fedora
-#   * OL    -> OracleLinux
-#   * RHEL  -> RedHat Enterprise Linux
-#   * UB    -> Ubuntu
 #
 # Arguments:
 #   None
@@ -84,17 +75,38 @@ function bl64_os_match() {
 #   STDOUT: None
 #   STDERR: None
 # Returns:
-#   0: ok
-#   BL64_OS_ERROR_UNKNOWN_OS: os not supported
+#   0: always ok, even when the OS is not supported
 #######################################
 function bl64_os_get_distro() {
-
   if [[ -r '/etc/os-release' ]]; then
-    # shellcheck disable=SC1091
-    source '/etc/os-release'
-    if [[ -n "$ID" && -n "$VERSION_ID" ]]; then
-      BL64_OS_DISTRO="${ID^^}-${VERSION_ID}"
-    fi
+    _bl64_os_get_distro_from_os_release
+  else
+    _bl64_os_get_distro_from_uname
+  fi
+
+  # Do not use return as this function gets sourced
+}
+
+function _bl64_os_get_distro_from_uname() {
+  local os_type=''
+  local os_version=''
+  local cmd_sw_vers='/usr/bin/sw_vers'
+
+  os_type="$(uname)"
+  case "$os_type" in
+  'Darwin')
+    os_version="$("$cmd_sw_vers" -productVersion)"
+    BL64_OS_DISTRO="DARWIN-${os_version}"
+    ;;
+  *) BL64_OS_DISTRO='UNKNOWN' ;;
+  esac
+}
+
+function _bl64_os_get_distro_from_os_release() {
+  # shellcheck disable=SC1091
+  source '/etc/os-release'
+  if [[ -n "$ID" && -n "$VERSION_ID" ]]; then
+    BL64_OS_DISTRO="${ID^^}-${VERSION_ID}"
   fi
 
   case "$BL64_OS_DISTRO" in
@@ -111,13 +123,8 @@ function bl64_os_get_distro() {
   ${BL64_OS_OL}-8*) : ;;
   ${BL64_OS_RHEL}-8*) : ;;
   ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
-  *)
-    BL64_OS_DISTRO='UNKNOWN'
-    # shellcheck disable=SC2086
-    return $BL64_OS_ERROR_UNKNOWN_OS
-    ;;
+  *) BL64_OS_DISTRO='UNKNOWN' ;;
   esac
-  # Do not use return as this function gets sourced
 }
 
 #######################################
@@ -142,6 +149,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/bin/chown'
     BL64_OS_CMD_CP='/bin/cp'
     BL64_OS_CMD_DATE="/bin/date"
+    BL64_OS_CMD_FALSE="/usr/bin/false"
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
@@ -153,6 +161,8 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
+    BL64_OS_CMD_TRUE="/usr/bin/true"
+    BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
@@ -161,6 +171,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/usr/bin/chown'
     BL64_OS_CMD_CP='/usr/bin/cp'
     BL64_OS_CMD_DATE="/usr/bin/date"
+    BL64_OS_CMD_FALSE="/usr/bin/false"
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/usr/bin/grep'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
@@ -172,6 +183,8 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/usr/bin/mv'
     BL64_OS_CMD_RM='/usr/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
+    BL64_OS_CMD_TRUE="/usr/bin/true"
+    BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
@@ -180,6 +193,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/bin/chown'
     BL64_OS_CMD_CP='/bin/cp'
     BL64_OS_CMD_DATE="/bin/date"
+    BL64_OS_CMD_FALSE="/usr/bin/false"
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
@@ -191,6 +205,30 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
+    BL64_OS_CMD_TRUE="/usr/bin/true"
+    BL64_OS_CMD_UNAME='/bin/uname'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_OS_CMD_AWK='/usr/bin/awk'
+    BL64_OS_CMD_CAT='/bin/cat'
+    BL64_OS_CMD_CHMOD='/bin/chmod'
+    BL64_OS_CMD_CHOWN='/usr/sbin/chown'
+    BL64_OS_CMD_CP='/bin/cp'
+    BL64_OS_CMD_DATE="/bin/date"
+    BL64_OS_CMD_FALSE="/usr/bin/false"
+    BL64_OS_CMD_GAWK='/usr/bin/gawk'
+    BL64_OS_CMD_GREP='/usr/bin/grep'
+    BL64_OS_CMD_HOSTNAME='/bin/hostname'
+    BL64_OS_CMD_ID='/usr/bin/id'
+    BL64_OS_CMD_LN='/bin/ln'
+    BL64_OS_CMD_LS='/bin/ls'
+    BL64_OS_CMD_MKDIR='/bin/mkdir'
+    BL64_OS_CMD_MKTEMP='/usr/bin/mktemp'
+    BL64_OS_CMD_MV='/bin/mv'
+    BL64_OS_CMD_RM='/bin/rm'
+    BL64_OS_CMD_TAR='/usr/bin/tar'
+    BL64_OS_CMD_TRUE="/usr/bin/true"
+    BL64_OS_CMD_UNAME='/usr/bin/uname'
     ;;
   esac
 }
@@ -247,6 +285,21 @@ function bl64_os_set_alias() {
     BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV -f"
     BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM -f"
     BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM -f -R"
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_OS_ALIAS_AWK="$BL64_OS_CMD_AWK"
+    BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN -v -R"
+    BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP -v -f -R"
+    BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP -v -f"
+    BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
+    BL64_OS_ALIAS_LN_SYMBOLIC="$BL64_OS_CMD_LN -v -s"
+    BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
+    BL64_OS_ALIAS_MKDIR_FULL="$BL64_OS_CMD_MKDIR -v -p"
+    BL64_OS_ALIAS_MKTEMP_DIR="$BL64_OS_CMD_MKTEMP -d"
+    BL64_OS_ALIAS_MKTEMP_FILE="$BL64_OS_CMD_MKTEMP"
+    BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV -v -f"
+    BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM -v -f"
+    BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM -v -f -R"
     ;;
   esac
 }
@@ -330,11 +383,17 @@ function bl64_os_merge_dir() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     $BL64_OS_ALIAS_CP_DIR --no-target-directory "$source" "$target"
+    status=$?
+    ;;
+  ${BL64_OS_MACOS}-*)
+    # shellcheck disable=SC2086
+    $BL64_OS_ALIAS_CP_DIR ${source}/ "$target"
+    status=$?
     ;;
   ${BL64_OS_ALP}-*)
     shopt -sq dotglob
     # shellcheck disable=SC2086
-    $BL64_OS_ALIAS_CP_DIR $source/* -t "$target"
+    $BL64_OS_ALIAS_CP_DIR ${source}/* -t "$target"
     status=$?
     shopt -uq dotglob
     ;;

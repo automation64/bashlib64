@@ -14,6 +14,7 @@ setup() {
   assert_not_equal "${BL64_OS_CMD_CHOWN}" ''
   assert_not_equal "${BL64_OS_CMD_CP}" ''
   assert_not_equal "${BL64_OS_CMD_DATE}" ''
+  assert_not_equal "${BL64_OS_CMD_FALSE}" ''
   assert_not_equal "${BL64_OS_CMD_GAWK}" ''
   assert_not_equal "${BL64_OS_CMD_GREP}" ''
   assert_not_equal "${BL64_OS_CMD_HOSTNAME}" ''
@@ -25,6 +26,8 @@ setup() {
   assert_not_equal "${BL64_OS_CMD_MV}" ''
   assert_not_equal "${BL64_OS_CMD_RM}" ''
   assert_not_equal "${BL64_OS_CMD_TAR}" ''
+  assert_not_equal "${BL64_OS_CMD_TRUE}" ''
+  assert_not_equal "${BL64_OS_CMD_UNAME}" ''
 
 }
 
@@ -36,6 +39,7 @@ setup() {
   assert_file_executable "${BL64_OS_CMD_CHOWN}"
   assert_file_executable "${BL64_OS_CMD_CP}"
   assert_file_executable "${BL64_OS_CMD_DATE}"
+  assert_file_executable "${BL64_OS_CMD_FALSE}"
   assert_file_executable "${BL64_OS_CMD_GAWK}"
   assert_file_executable "${BL64_OS_CMD_GREP}"
   assert_file_executable "${BL64_OS_CMD_HOSTNAME}"
@@ -47,5 +51,7 @@ setup() {
   assert_file_executable "${BL64_OS_CMD_MV}"
   assert_file_executable "${BL64_OS_CMD_RM}"
   assert_file_executable "${BL64_OS_CMD_TAR}"
+  assert_file_executable "${BL64_OS_CMD_TRUE}"
+  assert_file_executable "${BL64_OS_CMD_UNAME}"
 
 }

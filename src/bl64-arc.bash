@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -12,6 +12,7 @@
 #
 # * Preserves permissions but not ownership
 # * Overwrites destination
+# * Ignore ACLs and extended attributes
 #
 # Arguments:
 #   $1: Full path to the source file
@@ -64,6 +65,17 @@ function bl64_arc_open_tar() {
       -f "$source" \
       -o \
       -v
+    status=$?
+    ;;
+  ${BL64_OS_MCOS}-*)
+    "$BL64_OS_CMD_TAR" \
+      --extract \
+      --no-same-owner \
+      --preserve-permissions \
+      --no-acls \
+      --verbose \
+      --auto-compress \
+      --file="$source"
     status=$?
     ;;
   esac
