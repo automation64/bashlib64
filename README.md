@@ -49,6 +49,7 @@ The library has been tested on the following operating systems:
 - Debian11
 - Fedora33
 - Fedora35
+- MacOS12
 - OracleLinux8
 - RedHatLinux8
 - Ubuntu20
