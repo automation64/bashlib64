@@ -149,6 +149,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/bin/chown'
     BL64_OS_CMD_CP='/bin/cp'
     BL64_OS_CMD_DATE="/bin/date"
+    BL64_OS_CMD_FALSE="/usr/bin/false"
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
@@ -160,6 +161,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
+    BL64_OS_CMD_TRUE="/usr/bin/true"
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
@@ -169,6 +171,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/usr/bin/chown'
     BL64_OS_CMD_CP='/usr/bin/cp'
     BL64_OS_CMD_DATE="/usr/bin/date"
+    BL64_OS_CMD_FALSE="/usr/bin/false"
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/usr/bin/grep'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
@@ -180,6 +183,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/usr/bin/mv'
     BL64_OS_CMD_RM='/usr/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
+    BL64_OS_CMD_TRUE="/usr/bin/true"
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_ALP}-*)
@@ -189,6 +193,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/bin/chown'
     BL64_OS_CMD_CP='/bin/cp'
     BL64_OS_CMD_DATE="/bin/date"
+    BL64_OS_CMD_FALSE="/usr/bin/false"
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
@@ -200,6 +205,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
+    BL64_OS_CMD_TRUE="/usr/bin/true"
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_MCOS}-*)
@@ -209,6 +215,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/usr/sbin/chown'
     BL64_OS_CMD_CP='/bin/cp'
     BL64_OS_CMD_DATE="/bin/date"
+    BL64_OS_CMD_FALSE="/usr/bin/false"
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/usr/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
@@ -220,6 +227,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/usr/bin/tar'
+    BL64_OS_CMD_TRUE="/usr/bin/true"
     BL64_OS_CMD_UNAME='/usr/bin/uname'
     ;;
   esac
