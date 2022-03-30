@@ -50,6 +50,7 @@ function bl64_os_match() {
     'CNT' | CNT-*) _bl64_os_match "$BL64_OS_CNT" "$item" && return ;;
     'DEB' | DEB-*) _bl64_os_match "$BL64_OS_DEB" "$item" && return ;;
     'FD' | FD-*) _bl64_os_match "$BL64_OS_FD" "$item" && return ;;
+    'MCOS' | MCOS-*) _bl64_os_match "$BL64_OS_MCOS" "$item" && return ;;
     'OL' | OL-*) _bl64_os_match "$BL64_OS_OL" "$item" && return ;;
     'RHEL' | RHEL-*) _bl64_os_match "$BL64_OS_RHEL" "$item" && return ;;
     'UB' | UB-*) _bl64_os_match "$BL64_OS_UB" "$item" && return ;;
@@ -67,16 +68,6 @@ function bl64_os_match() {
 # * Target format: OOO-V.V
 #   * OOO: OS short name (tag)
 #   * V.V: Version (Major, Minor)
-# * OS tags:
-#   * ALM   -> AlmaLinux
-#   * ALP   -> Alpine Linux
-#   * AMZ   -> Amazon Linux
-#   * CNT   -> CentOS
-#   * DEB   -> Debian
-#   * FD    -> Fedora
-#   * OL    -> OracleLinux
-#   * RHEL  -> RedHat Enterprise Linux
-#   * UB    -> Ubuntu
 #
 # Arguments:
 #   None
@@ -88,15 +79,36 @@ function bl64_os_match() {
 #   BL64_OS_ERROR_UNKNOWN_OS: os not supported
 #######################################
 function bl64_os_get_distro() {
-
   if [[ -r '/etc/os-release' ]]; then
     # shellcheck disable=SC1091
     source '/etc/os-release'
     if [[ -n "$ID" && -n "$VERSION_ID" ]]; then
       BL64_OS_DISTRO="${ID^^}-${VERSION_ID}"
     fi
+    _bl64_os_get_distro_from_os_release
+  else
+    _bl64_os_get_distro_from_uname
   fi
 
+  # Do not use return as this function gets sourced
+}
+
+function _bl64_os_get_distro_from_uname() {
+  local os_type=''
+  local os_version=''
+  local cmd_sw_vers='/usr/bin/sw_vers'
+
+  os_type="$(uname)"
+  case "$os_type" in
+  'Darwin')
+    os_version="$("$cmd_sw_vers" -productVersion)"
+    BL64_OS_DISTRO="DARWIN-${os_version}"
+    ;;
+  *) BL64_OS_DISTRO='UNKNOWN' ;;
+  esac
+}
+
+function _bl64_os_get_distro_from_os_release() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_ALM}-8*) : ;;
   ${BL64_OS_ALP}-3*) : ;;
@@ -117,7 +129,6 @@ function bl64_os_get_distro() {
     return $BL64_OS_ERROR_UNKNOWN_OS
     ;;
   esac
-  # Do not use return as this function gets sourced
 }
 
 #######################################
