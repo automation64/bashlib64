@@ -91,6 +91,7 @@ nav:
   - API:
     - "bl64-arc.md"
     - "bl64-check.md"
+    - "bl64-dbg.md"
     - "bl64-lib.md"
     - "bl64-fmt.md"
     - "bl64-iam.md"
