@@ -202,6 +202,26 @@ function bl64_os_set_command() {
     BL64_OS_CMD_TAR='/bin/tar'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_OS_CMD_AWK='/usr/bin/awk'
+    BL64_OS_CMD_CAT='/bin/cat'
+    BL64_OS_CMD_CHMOD='/bin/chmod'
+    BL64_OS_CMD_CHOWN='/usr/sbin/chown'
+    BL64_OS_CMD_CP='/bin/cp'
+    BL64_OS_CMD_DATE="/bin/date"
+    BL64_OS_CMD_GAWK='/usr/bin/gawk'
+    BL64_OS_CMD_GREP='/usr/bin/grep'
+    BL64_OS_CMD_HOSTNAME='/bin/hostname'
+    BL64_OS_CMD_ID='/usr/bin/id'
+    BL64_OS_CMD_LN='/bin/ln'
+    BL64_OS_CMD_LS='/bin/ls'
+    BL64_OS_CMD_MKDIR='/bin/mkdir'
+    BL64_OS_CMD_MKTEMP='/usr/bin/mktemp'
+    BL64_OS_CMD_MV='/bin/mv'
+    BL64_OS_CMD_RM='/bin/rm'
+    BL64_OS_CMD_TAR='/usr/bin/tar'
+    BL64_OS_CMD_UNAME='/usr/bin/uname'
+    ;;
   esac
 }
 
@@ -257,6 +277,21 @@ function bl64_os_set_alias() {
     BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV -f"
     BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM -f"
     BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM -f -R"
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_OS_ALIAS_AWK="$BL64_OS_CMD_AWK"
+    BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN -v -R"
+    BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP -v -f -R"
+    BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP -v -f"
+    BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
+    BL64_OS_ALIAS_LN_SYMBOLIC="$BL64_OS_CMD_LN -v -s"
+    BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
+    BL64_OS_ALIAS_MKDIR_FULL="$BL64_OS_CMD_MKDIR -v -p"
+    BL64_OS_ALIAS_MKTEMP_DIR="$BL64_OS_CMD_MKTEMP -d"
+    BL64_OS_ALIAS_MKTEMP_FILE="$BL64_OS_CMD_MKTEMP"
+    BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV -v -f"
+    BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM -v -f"
+    BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM -v -f -R"
     ;;
   esac
 }
@@ -340,11 +375,17 @@ function bl64_os_merge_dir() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     $BL64_OS_ALIAS_CP_DIR --no-target-directory "$source" "$target"
+    status=$?
+    ;;
+  ${BL64_OS_MACOS}-*)
+    # shellcheck disable=SC2086
+    $BL64_OS_ALIAS_CP_DIR ${source}/ "$target"
+    status=$?
     ;;
   ${BL64_OS_ALP}-*)
     shopt -sq dotglob
     # shellcheck disable=SC2086
-    $BL64_OS_ALIAS_CP_DIR $source/* -t "$target"
+    $BL64_OS_ALIAS_CP_DIR ${source}/* -t "$target"
     status=$?
     shopt -uq dotglob
     ;;
