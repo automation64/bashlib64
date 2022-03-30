@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -33,6 +33,9 @@ function bl64_pkb_set_command() {
     ;;
   ${BL64_OS_ALP}-*)
     BL64_PKG_CMD_APK='/sbin/apk'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_PKG_CMD_BRW='/opt/homebrew/bin/brew'
     ;;
   esac
 }
@@ -67,6 +70,10 @@ function bl64_pkb_set_alias() {
   ${BL64_OS_ALP}-*)
     BL64_PKG_ALIAS_APK_INSTALL="$BL64_PKG_CMD_APK add --verbose"
     BL64_PKG_ALIAS_APK_UPDATE="$BL64_PKG_CMD_APK update"
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_PKG_ALIAS_BRW_INSTALL="$BL64_PKG_CMD_BRW install"
+    BL64_PKG_ALIAS_BRW_CLEAN="$BL64_PKG_CMD_BRW cleanup --prune=all -s"
     ;;
   esac
 }
@@ -114,6 +121,9 @@ function bl64_pkg_prepare() {
   ${BL64_OS_ALP}-*)
     $BL64_PKG_ALIAS_APK_UPDATE
     ;;
+  ${BL64_OS_MCOS}-*)
+    :
+    ;;
   esac
 }
 
@@ -140,11 +150,16 @@ function bl64_pkg_install() {
   ${BL64_OS_ALP}-*)
     $BL64_PKG_ALIAS_APK_INSTALL -- "$@"
     ;;
+  ${BL64_OS_MCOS}-*)
+    $BL64_PKG_ALIAS_BRW_INSTALL
+    ;;
   esac
 }
 
 #######################################
 # Clean up the package manager run-time environment
+#
+# * Warning: removes cache contents
 #
 # Arguments:
 #   None
@@ -170,6 +185,9 @@ function bl64_pkg_cleanup() {
     if [[ -d "$target" ]]; then
       $BL64_OS_ALIAS_RM_FULL ${target}/[[:alpha:]]*
     fi
+    ;;
+  ${BL64_OS_MCOS}-*)
+    $BL64_PKG_ALIAS_BRW_CLEAN
     ;;
   esac
 }
