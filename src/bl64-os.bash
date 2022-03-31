@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 function _bl64_os_match() {
@@ -149,7 +149,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/bin/chown'
     BL64_OS_CMD_CP='/bin/cp'
     BL64_OS_CMD_DATE="/bin/date"
-    BL64_OS_CMD_FALSE="/usr/bin/false"
+    BL64_OS_CMD_FALSE="/bin/false"
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
@@ -161,7 +161,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
-    BL64_OS_CMD_TRUE="/usr/bin/true"
+    BL64_OS_CMD_TRUE="/bin/true"
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
@@ -193,7 +193,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/bin/chown'
     BL64_OS_CMD_CP='/bin/cp'
     BL64_OS_CMD_DATE="/bin/date"
-    BL64_OS_CMD_FALSE="/usr/bin/false"
+    BL64_OS_CMD_FALSE="/bin/false"
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
@@ -205,7 +205,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
-    BL64_OS_CMD_TRUE="/usr/bin/true"
+    BL64_OS_CMD_TRUE="/bin/true"
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_MCOS}-*)
