@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 #######################################
@@ -24,8 +24,13 @@
 function bl64_pkb_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    ;;
+  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+    BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    ;;
+  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
     BL64_PKG_CMD_YUM='/usr/bin/yum'
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -57,10 +62,20 @@ function bl64_pkb_set_command() {
 function bl64_pkb_set_alias() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
     BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF --color=never makecache"
     BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF --color=never --nodocs --assumeyes install"
     BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
+    ;;
+  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+    BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF --color=never makecache"
+    BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF --color=never --nodocs --assumeyes install"
+    BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
+    ;;
+  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+    BL64_PKG_ALIAS_YUM_CACHE="$BL64_PKG_CMD_YUM --color=never makecache"
+    BL64_PKG_ALIAS_YUM_INSTALL="$BL64_PKG_CMD_YUM --color=never --assumeyes install"
+    BL64_PKG_ALIAS_YUM_CLEAN="$BL64_PKG_CMD_YUM clean all"
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_PKG_ALIAS_APT_UPDATE="$BL64_PKG_CMD_APT update"
@@ -111,12 +126,18 @@ function bl64_pkg_deploy() {
 #######################################
 function bl64_pkg_prepare() {
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+    $BL64_PKG_ALIAS_DNF_CACHE
+    ;;
+  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+    $BL64_PKG_ALIAS_DNF_CACHE
+    ;;
+  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+    $BL64_PKG_ALIAS_YUM_CACHE
+    ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     export DEBIAN_FRONTEND="noninteractive"
     $BL64_PKG_ALIAS_APT_UPDATE
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    $BL64_PKG_ALIAS_DNF_CACHE
     ;;
   ${BL64_OS_ALP}-*)
     $BL64_PKG_ALIAS_APK_UPDATE
@@ -143,12 +164,18 @@ function bl64_pkg_prepare() {
 #######################################
 function bl64_pkg_install() {
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+    $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
+    ;;
+  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+    $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
+    ;;
+  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+    $BL64_PKG_ALIAS_YUM_INSTALL -- "$@"
+    ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     export DEBIAN_FRONTEND="noninteractive"
     $BL64_PKG_ALIAS_APT_INSTALL -- "$@"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
     ;;
   ${BL64_OS_ALP}-*)
     $BL64_PKG_ALIAS_APK_INSTALL -- "$@"
@@ -176,12 +203,18 @@ function bl64_pkg_cleanup() {
   local target=''
 
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+    $BL64_PKG_ALIAS_DNF_CLEAN
+    ;;
+  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+    $BL64_PKG_ALIAS_DNF_CLEAN
+    ;;
+  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+    $BL64_PKG_ALIAS_YUM_CLEAN
+    ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     export DEBIAN_FRONTEND="noninteractive"
     $BL64_PKG_ALIAS_APT_CLEAN
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    $BL64_PKG_ALIAS_DNF_CLEAN
     ;;
   ${BL64_OS_ALP}-*)
     target='/var/cache/apk'
