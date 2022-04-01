@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.20.0
+# Version: 1.21.0
 #######################################
 
 # Enable library and app tracing
@@ -177,6 +177,9 @@ export BL64_PKG_ALIAS_APT_CLEAN
 export BL64_PKG_ALIAS_DNF_CACHE
 export BL64_PKG_ALIAS_DNF_INSTALL
 export BL64_PKG_ALIAS_DNF_CLEAN
+export BL64_PKG_ALIAS_YUM_CACHE
+export BL64_PKG_ALIAS_YUM_INSTALL
+export BL64_PKG_ALIAS_YUM_CLEAN
 export BL64_PKG_ALIAS_APK_INSTALL
 export BL64_PKG_ALIAS_APK_UPDATE
 export BL64_PKG_ALIAS_BRW_INSTALL
@@ -897,17 +900,18 @@ function _bl64_os_match() {
 function bl64_os_match() {
   local item=''
 
+  bl64_dbg_lib_show "[OSList=${*}}] / [BL64_OS_DISTRO=${BL64_OS_DISTRO}]"
   for item in "$@"; do
     case "$item" in
-    'ALM' | ALM-*) _bl64_os_match "$BL64_OS_ALM" "$item" && return ;;
-    'ALP' | ALP-*) _bl64_os_match "$BL64_OS_ALP" "$item" && return ;;
-    'CNT' | CNT-*) _bl64_os_match "$BL64_OS_CNT" "$item" && return ;;
-    'DEB' | DEB-*) _bl64_os_match "$BL64_OS_DEB" "$item" && return ;;
-    'FD' | FD-*) _bl64_os_match "$BL64_OS_FD" "$item" && return ;;
-    'MCOS' | MCOS-*) _bl64_os_match "$BL64_OS_MCOS" "$item" && return ;;
-    'OL' | OL-*) _bl64_os_match "$BL64_OS_OL" "$item" && return ;;
-    'RHEL' | RHEL-*) _bl64_os_match "$BL64_OS_RHEL" "$item" && return ;;
-    'UB' | UB-*) _bl64_os_match "$BL64_OS_UB" "$item" && return ;;
+    'ALM' | ALM-*) _bl64_os_match "$BL64_OS_ALM" "$item" && return 0 ;;
+    'ALP' | ALP-*) _bl64_os_match "$BL64_OS_ALP" "$item" && return 0 ;;
+    'CNT' | CNT-*) _bl64_os_match "$BL64_OS_CNT" "$item" && return 0 ;;
+    'DEB' | DEB-*) _bl64_os_match "$BL64_OS_DEB" "$item" && return 0 ;;
+    'FD' | FD-*) _bl64_os_match "$BL64_OS_FD" "$item" && return 0 ;;
+    'MCOS' | MCOS-*) _bl64_os_match "$BL64_OS_MCOS" "$item" && return 0 ;;
+    'OL' | OL-*) _bl64_os_match "$BL64_OS_OL" "$item" && return 0 ;;
+    'RHEL' | RHEL-*) _bl64_os_match "$BL64_OS_RHEL" "$item" && return 0 ;;
+    'UB' | UB-*) _bl64_os_match "$BL64_OS_UB" "$item" && return 0 ;;
     *) return $BL64_OS_ERROR_INVALID_OS_TAG ;;
     esac
   done
@@ -948,15 +952,18 @@ function _bl64_os_get_distro_from_os_release() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_ALM}-8*) : ;;
   ${BL64_OS_ALP}-3*) : ;;
-  ${BL64_OS_CNT}-8*) : ;;
+  ${BL64_OS_CNT}-7* | ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9*) : ;;
+  ${BL64_OS_DEB}-9*)
+    [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-9" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-9.0"
+    ;;
   ${BL64_OS_DEB}-10*)
     [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-10" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-10.0"
     ;;
   ${BL64_OS_DEB}-11*)
     [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-11" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-11.0"
     ;;
-  ${BL64_OS_FD}-33* | ${BL64_OS_FD}-35*) : ;;
-  ${BL64_OS_OL}-8*) : ;;
+  ${BL64_OS_FD}-33* | ${BL64_OS_FD}-34* | ${BL64_OS_FD}-35*) : ;;
+  ${BL64_OS_OL}-7* | ${BL64_OS_OL}-8*) : ;;
   ${BL64_OS_RHEL}-8*) : ;;
   ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
   *) BL64_OS_DISTRO='UNKNOWN' ;;
@@ -972,7 +979,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/bin/chown'
     BL64_OS_CMD_CP='/bin/cp'
     BL64_OS_CMD_DATE="/bin/date"
-    BL64_OS_CMD_FALSE="/usr/bin/false"
+    BL64_OS_CMD_FALSE="/bin/false"
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
@@ -984,7 +991,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
-    BL64_OS_CMD_TRUE="/usr/bin/true"
+    BL64_OS_CMD_TRUE="/bin/true"
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
@@ -1016,7 +1023,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/bin/chown'
     BL64_OS_CMD_CP='/bin/cp'
     BL64_OS_CMD_DATE="/bin/date"
-    BL64_OS_CMD_FALSE="/usr/bin/false"
+    BL64_OS_CMD_FALSE="/bin/false"
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
@@ -1028,7 +1035,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
-    BL64_OS_CMD_TRUE="/usr/bin/true"
+    BL64_OS_CMD_TRUE="/bin/true"
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_MCOS}-*)
@@ -1218,8 +1225,13 @@ function bl64_os_cleanup_full() {
 
 function bl64_pkb_set_command() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    ;;
+  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+    BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    ;;
+  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
     BL64_PKG_CMD_YUM='/usr/bin/yum'
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -1236,10 +1248,20 @@ function bl64_pkb_set_command() {
 
 function bl64_pkb_set_alias() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
     BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF --color=never makecache"
     BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF --color=never --nodocs --assumeyes install"
     BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
+    ;;
+  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+    BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF --color=never makecache"
+    BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF --color=never --nodocs --assumeyes install"
+    BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
+    ;;
+  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+    BL64_PKG_ALIAS_YUM_CACHE="$BL64_PKG_CMD_YUM --color=never makecache"
+    BL64_PKG_ALIAS_YUM_INSTALL="$BL64_PKG_CMD_YUM --color=never --assumeyes install"
+    BL64_PKG_ALIAS_YUM_CLEAN="$BL64_PKG_CMD_YUM clean all"
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_PKG_ALIAS_APT_UPDATE="$BL64_PKG_CMD_APT update"
@@ -1265,12 +1287,18 @@ function bl64_pkg_deploy() {
 
 function bl64_pkg_prepare() {
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+    $BL64_PKG_ALIAS_DNF_CACHE
+    ;;
+  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+    $BL64_PKG_ALIAS_DNF_CACHE
+    ;;
+  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+    $BL64_PKG_ALIAS_YUM_CACHE
+    ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     export DEBIAN_FRONTEND="noninteractive"
     $BL64_PKG_ALIAS_APT_UPDATE
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    $BL64_PKG_ALIAS_DNF_CACHE
     ;;
   ${BL64_OS_ALP}-*)
     $BL64_PKG_ALIAS_APK_UPDATE
@@ -1283,12 +1311,18 @@ function bl64_pkg_prepare() {
 
 function bl64_pkg_install() {
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+    $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
+    ;;
+  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+    $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
+    ;;
+  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+    $BL64_PKG_ALIAS_YUM_INSTALL -- "$@"
+    ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     export DEBIAN_FRONTEND="noninteractive"
     $BL64_PKG_ALIAS_APT_INSTALL -- "$@"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
     ;;
   ${BL64_OS_ALP}-*)
     $BL64_PKG_ALIAS_APK_INSTALL -- "$@"
@@ -1303,12 +1337,18 @@ function bl64_pkg_cleanup() {
   local target=''
 
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+    $BL64_PKG_ALIAS_DNF_CLEAN
+    ;;
+  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+    $BL64_PKG_ALIAS_DNF_CLEAN
+    ;;
+  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+    $BL64_PKG_ALIAS_YUM_CLEAN
+    ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     export DEBIAN_FRONTEND="noninteractive"
     $BL64_PKG_ALIAS_APT_CLEAN
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    $BL64_PKG_ALIAS_DNF_CLEAN
     ;;
   ${BL64_OS_ALP}-*)
     target='/var/cache/apk'
@@ -1420,7 +1460,7 @@ function bl64_rxtx_set_alias() {
     BL64_RXTX_SET_CURL_OUTPUT='--output'
     BL64_RXTX_SET_WGET_OUTPUT='--output-document'
     ;;
-  ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_DEB}-10.*)
+  ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_DEB}-9.* | ${BL64_OS_DEB}-10.*)
     BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL --config /dev/null"
     BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET --no-config"
     BL64_RXTX_SET_CURL_VERBOSE='--verbose'
@@ -1653,11 +1693,13 @@ function bl64_vcs_git_clone() {
 }
 
 function bl64_vcs_git_sparse() {
+  bl64_dbg_lib_trace_start
   local source="${1}"
   local destination="${2}"
   local branch="${3:-main}"
   local pattern="${4}"
   local item=''
+  local status=0
 
   bl64_check_command "$BL64_VCS_CMD_GIT" || return $BL64_VCS_ERROR_MISSING_COMMAND
 
@@ -1670,7 +1712,7 @@ function bl64_vcs_git_sparse() {
 
   cd "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
 
-  if bl64_os_match 'DEB-10' 'UB-20'; then
+  if bl64_os_match 'DEB-9' 'DEB-10' 'UB-20' 'OL-7' 'CNT-7'; then
     $BL64_VCS_ALIAS_GIT init &&
       $BL64_VCS_ALIAS_GIT remote add origin "$source" &&
       $BL64_VCS_ALIAS_GIT config core.sparseCheckout true &&
@@ -1690,6 +1732,10 @@ function bl64_vcs_git_sparse() {
       $BL64_VCS_ALIAS_GIT remote add origin "$source" &&
       $BL64_VCS_ALIAS_GIT pull --depth 1 origin "$branch"
   fi
+  status=$?
+
+  bl64_dbg_lib_trace_stop
+  return $status
 }
 
 function bl64_xsv_dump() {
@@ -1840,8 +1886,9 @@ if [[ "$BL64_LIB_LANG" == '1' ]]; then
 fi
 
 bl64_os_get_distro
-if [[ "$BL64_OS_DISTRO" == 'UNKNOWN' ]]; then
-  printf '%s\n' "Fatal: BashLib64 is not supported in the current OS" >&2
+
+if [[ "$BL64_OS_DISTRO" == 'UNKNOWN' || ("${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5') ]]; then
+  printf '%s\n' "Fatal: BashLib64 is not supported in the current OS ($(uname -a)) or Bash version ($BASH_VERSION)" >&2
   false
 else
   bl64_os_set_command
