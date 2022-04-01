@@ -44,12 +44,18 @@ The library has been tested on the following operating systems:
 
 - AlmaLinux8
 - Alpine3
+- CentOS7
 - CentOS8
+- CentOS9
+- Debian9
 - Debian10
 - Debian11
 - Fedora33
+- Fedora34
 - Fedora35
 - MacOS12
+  - Requires Bash5 (e.g. homebrew install bash)
+- OracleLinux7
 - OracleLinux8
 - RedHatLinux8
 - Ubuntu20
@@ -57,7 +63,7 @@ The library has been tested on the following operating systems:
 
 ### Prerequisites
 
-- Minimum Bash version: 5
+- Minimum Bash version: 4
 
 ### Installation
 

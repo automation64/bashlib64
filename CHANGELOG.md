@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.21.0]
+
+### Added
+
+- lib
+  - Bash version check
+- os
+  - Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
+- pkg
+  - Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
+- rxtx
+  - Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
+- vcs
+  - Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
+
+### Fixed
+
+- os
+  - false,true paths on DEB-_|UB-_
+
 ## [1.20.0]
 
 ### Added
@@ -90,7 +110,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - os
-  - OS tags (BL64_OS_*)
+  - OS tags (BL64*OS*\*)
   - AlmaLinux compatibility
   - RedHatLinux compatibility
 - arc
@@ -118,19 +138,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - arc
-  - use BL64_OS_* for OS id
+  - use BL64*OS*\* for OS id
 - iam
-  - use BL64_OS_* for OS id
+  - use BL64*OS*\* for OS id
 - os
-  - use BL64_OS_* for OS id
+  - use BL64*OS*\* for OS id
 - pkg
-  - use BL64_OS_* for OS id
+  - use BL64*OS*\* for OS id
 - rxtx
-  - use BL64_OS_* for OS id
+  - use BL64*OS*\* for OS id
 - sudo
-  - use BL64_OS_* for OS id
+  - use BL64*OS*\* for OS id
 - vcs
-  - use BL64_OS_* for OS id
+  - use BL64*OS*\* for OS id
 
 ## [1.16.0]
 
@@ -182,7 +202,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[Unreleased]: https://github.com/serdigital64/bashlib64/compare/1.20.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/1.21.0...HEAD
+[1.21.0]: https://github.com/serdigital64/bashlib64/compare/1.20.0...1.21.0
 [1.20.0]: https://github.com/serdigital64/bashlib64/compare/1.19.0...1.20.0
 [1.19.0]: https://github.com/serdigital64/bashlib64/compare/1.18.0...1.19.0
 [1.18.0]: https://github.com/serdigital64/bashlib64/compare/1.17.0...1.18.0
