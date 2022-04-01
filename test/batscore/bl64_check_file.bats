@@ -22,8 +22,14 @@ setup() {
 }
 
 @test "bl64_check_file: file is not readable" {
+  local test_file=''
+  if bl64_os_match 'MCOS'; then
+    test_file='/etc/master.passwd'
+  else
+    test_file='/etc/shadow'
+  fi
+  run bl64_check_file "$test_file"
 
-  run bl64_check_file '/etc/shadow'
   assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_READ && \
   [[ "$output" == *${_BL64_CHECK_TXT_FILE_NOT_EXECUTABLE}* ]]
 

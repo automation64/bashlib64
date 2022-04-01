@@ -96,10 +96,6 @@ function devbl_list_cases() {
 function devbl_run_tests_check() {
 
   bl64_check_command "$DEVBL_CMD_BATS" || return 1
-  bl64_check_command "$DEVBL_CMD_PODMAN" || return 1
-
-  bl64_check_file "${DEVBL_BUILD}/bashlib64.bash" || return 1
-
   :
 
 }

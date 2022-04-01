@@ -8,10 +8,20 @@ setup() {
 
 @test "bl64_pkg_set_alias: alias are set" {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
     assert_equal "$BL64_PKG_ALIAS_DNF_CACHE" "$BL64_PKG_CMD_DNF --color=never makecache"
     assert_equal "$BL64_PKG_ALIAS_DNF_INSTALL" "$BL64_PKG_CMD_DNF --color=never --nodocs --assumeyes install"
     assert_equal "$BL64_PKG_ALIAS_DNF_CLEAN" "$BL64_PKG_CMD_DNF clean all"
+    ;;
+  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+    assert_equal "$BL64_PKG_ALIAS_DNF_CACHE" "$BL64_PKG_CMD_DNF --color=never makecache"
+    assert_equal "$BL64_PKG_ALIAS_DNF_INSTALL" "$BL64_PKG_CMD_DNF --color=never --nodocs --assumeyes install"
+    assert_equal "$BL64_PKG_ALIAS_DNF_CLEAN" "$BL64_PKG_CMD_DNF clean all"
+    ;;
+  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+    assert_equal "$BL64_PKG_ALIAS_YUM_CACHE" "$BL64_PKG_CMD_YUM --color=never makecache"
+    assert_equal "$BL64_PKG_ALIAS_YUM_INSTALL" "$BL64_PKG_CMD_YUM --color=never --assumeyes install"
+    assert_equal "$BL64_PKG_ALIAS_YUM_CLEAN" "$BL64_PKG_CMD_YUM clean all"
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     assert_equal "$BL64_PKG_ALIAS_APT_UPDATE" "$BL64_PKG_CMD_APT update"

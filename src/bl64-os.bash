@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 function _bl64_os_match() {
@@ -42,18 +42,19 @@ function _bl64_os_match() {
 function bl64_os_match() {
   local item=''
 
+  bl64_dbg_lib_show "[OSList=${*}}] / [BL64_OS_DISTRO=${BL64_OS_DISTRO}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
     case "$item" in
-    'ALM' | ALM-*) _bl64_os_match "$BL64_OS_ALM" "$item" && return ;;
-    'ALP' | ALP-*) _bl64_os_match "$BL64_OS_ALP" "$item" && return ;;
-    'CNT' | CNT-*) _bl64_os_match "$BL64_OS_CNT" "$item" && return ;;
-    'DEB' | DEB-*) _bl64_os_match "$BL64_OS_DEB" "$item" && return ;;
-    'FD' | FD-*) _bl64_os_match "$BL64_OS_FD" "$item" && return ;;
-    'MCOS' | MCOS-*) _bl64_os_match "$BL64_OS_MCOS" "$item" && return ;;
-    'OL' | OL-*) _bl64_os_match "$BL64_OS_OL" "$item" && return ;;
-    'RHEL' | RHEL-*) _bl64_os_match "$BL64_OS_RHEL" "$item" && return ;;
-    'UB' | UB-*) _bl64_os_match "$BL64_OS_UB" "$item" && return ;;
+    'ALM' | ALM-*) _bl64_os_match "$BL64_OS_ALM" "$item" && return 0 ;;
+    'ALP' | ALP-*) _bl64_os_match "$BL64_OS_ALP" "$item" && return 0 ;;
+    'CNT' | CNT-*) _bl64_os_match "$BL64_OS_CNT" "$item" && return 0 ;;
+    'DEB' | DEB-*) _bl64_os_match "$BL64_OS_DEB" "$item" && return 0 ;;
+    'FD' | FD-*) _bl64_os_match "$BL64_OS_FD" "$item" && return 0 ;;
+    'MCOS' | MCOS-*) _bl64_os_match "$BL64_OS_MCOS" "$item" && return 0 ;;
+    'OL' | OL-*) _bl64_os_match "$BL64_OS_OL" "$item" && return 0 ;;
+    'RHEL' | RHEL-*) _bl64_os_match "$BL64_OS_RHEL" "$item" && return 0 ;;
+    'UB' | UB-*) _bl64_os_match "$BL64_OS_UB" "$item" && return 0 ;;
     *) return $BL64_OS_ERROR_INVALID_OS_TAG ;;
     esac
   done
@@ -112,15 +113,18 @@ function _bl64_os_get_distro_from_os_release() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_ALM}-8*) : ;;
   ${BL64_OS_ALP}-3*) : ;;
-  ${BL64_OS_CNT}-8*) : ;;
+  ${BL64_OS_CNT}-7* | ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9*) : ;;
+  ${BL64_OS_DEB}-9*)
+    [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-9" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-9.0"
+    ;;
   ${BL64_OS_DEB}-10*)
     [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-10" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-10.0"
     ;;
   ${BL64_OS_DEB}-11*)
     [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-11" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-11.0"
     ;;
-  ${BL64_OS_FD}-33* | ${BL64_OS_FD}-35*) : ;;
-  ${BL64_OS_OL}-8*) : ;;
+  ${BL64_OS_FD}-33* | ${BL64_OS_FD}-34* | ${BL64_OS_FD}-35*) : ;;
+  ${BL64_OS_OL}-7* | ${BL64_OS_OL}-8*) : ;;
   ${BL64_OS_RHEL}-8*) : ;;
   ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
   *) BL64_OS_DISTRO='UNKNOWN' ;;
@@ -149,7 +153,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/bin/chown'
     BL64_OS_CMD_CP='/bin/cp'
     BL64_OS_CMD_DATE="/bin/date"
-    BL64_OS_CMD_FALSE="/usr/bin/false"
+    BL64_OS_CMD_FALSE="/bin/false"
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
@@ -161,7 +165,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
-    BL64_OS_CMD_TRUE="/usr/bin/true"
+    BL64_OS_CMD_TRUE="/bin/true"
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
@@ -193,7 +197,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_CHOWN='/bin/chown'
     BL64_OS_CMD_CP='/bin/cp'
     BL64_OS_CMD_DATE="/bin/date"
-    BL64_OS_CMD_FALSE="/usr/bin/false"
+    BL64_OS_CMD_FALSE="/bin/false"
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
@@ -205,7 +209,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_MV='/bin/mv'
     BL64_OS_CMD_RM='/bin/rm'
     BL64_OS_CMD_TAR='/bin/tar'
-    BL64_OS_CMD_TRUE="/usr/bin/true"
+    BL64_OS_CMD_TRUE="/bin/true"
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_MCOS}-*)
