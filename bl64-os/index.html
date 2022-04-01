@@ -745,13 +745,17 @@
 <span class=normal>600</span>
 <span class=normal>601</span>
 <span class=normal>602</span>
-<span class=normal>603</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>603</span>
+<span class=normal>604</span>
+<span class=normal>605</span>
+<span class=normal>606</span>
+<span class=normal>607</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / OS / Identify OS attributes and provide command aliases</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.9.0</span>
+<span class=c1># Version: 1.10.0</span>
 <span class=c1>#######################################</span>
 
 <span class=k>function</span> _bl64_os_match<span class=o>()</span> <span class=o>{</span>
@@ -789,18 +793,19 @@
 <span class=k>function</span> bl64_os_match<span class=o>()</span> <span class=o>{</span>
   <span class=nb>local</span> <span class=nv>item</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 
+  bl64_dbg_lib_show <span class=s2>&quot;[OSList=</span><span class=si>${</span><span class=p>*</span><span class=si>}</span><span class=s2>}] / [BL64_OS_DISTRO=</span><span class=si>${</span><span class=nv>BL64_OS_DISTRO</span><span class=si>}</span><span class=s2>]&quot;</span>
   <span class=c1># shellcheck disable=SC2086</span>
   <span class=k>for</span> item <span class=k>in</span> <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span><span class=p>;</span> <span class=k>do</span>
     <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=k>in</span>
-    <span class=s1>&#39;ALM&#39;</span> <span class=p>|</span> ALM-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_ALM</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
-    <span class=s1>&#39;ALP&#39;</span> <span class=p>|</span> ALP-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_ALP</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
-    <span class=s1>&#39;CNT&#39;</span> <span class=p>|</span> CNT-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_CNT</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
-    <span class=s1>&#39;DEB&#39;</span> <span class=p>|</span> DEB-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_DEB</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
-    <span class=s1>&#39;FD&#39;</span> <span class=p>|</span> FD-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_FD</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
-    <span class=s1>&#39;MCOS&#39;</span> <span class=p>|</span> MCOS-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_MCOS</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
-    <span class=s1>&#39;OL&#39;</span> <span class=p>|</span> OL-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_OL</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
-    <span class=s1>&#39;RHEL&#39;</span> <span class=p>|</span> RHEL-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_RHEL</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
-    <span class=s1>&#39;UB&#39;</span> <span class=p>|</span> UB-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_UB</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=p>;;</span>
+    <span class=s1>&#39;ALM&#39;</span> <span class=p>|</span> ALM-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_ALM</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=m>0</span> <span class=p>;;</span>
+    <span class=s1>&#39;ALP&#39;</span> <span class=p>|</span> ALP-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_ALP</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=m>0</span> <span class=p>;;</span>
+    <span class=s1>&#39;CNT&#39;</span> <span class=p>|</span> CNT-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_CNT</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=m>0</span> <span class=p>;;</span>
+    <span class=s1>&#39;DEB&#39;</span> <span class=p>|</span> DEB-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_DEB</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=m>0</span> <span class=p>;;</span>
+    <span class=s1>&#39;FD&#39;</span> <span class=p>|</span> FD-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_FD</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=m>0</span> <span class=p>;;</span>
+    <span class=s1>&#39;MCOS&#39;</span> <span class=p>|</span> MCOS-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_MCOS</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=m>0</span> <span class=p>;;</span>
+    <span class=s1>&#39;OL&#39;</span> <span class=p>|</span> OL-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_OL</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=m>0</span> <span class=p>;;</span>
+    <span class=s1>&#39;RHEL&#39;</span> <span class=p>|</span> RHEL-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_RHEL</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=m>0</span> <span class=p>;;</span>
+    <span class=s1>&#39;UB&#39;</span> <span class=p>|</span> UB-*<span class=o>)</span> _bl64_os_match <span class=s2>&quot;</span><span class=nv>$BL64_OS_UB</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$item</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=m>0</span> <span class=p>;;</span>
     *<span class=o>)</span> <span class=k>return</span> <span class=nv>$BL64_OS_ERROR_INVALID_OS_TAG</span> <span class=p>;;</span>
     <span class=k>esac</span>
   <span class=k>done</span>
@@ -859,15 +864,18 @@
   <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=k>in</span>
   <span class=si>${</span><span class=nv>BL64_OS_ALM</span><span class=si>}</span>-8*<span class=o>)</span> : <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_ALP</span><span class=si>}</span>-3*<span class=o>)</span> : <span class=p>;;</span>
-  <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-8*<span class=o>)</span> : <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-7* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-8* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-9*<span class=o>)</span> : <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-9*<span class=o>)</span>
+    <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span><span class=s2>-9&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>BL64_OS_DISTRO</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span><span class=s2>-9.0&quot;</span>
+    <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-10*<span class=o>)</span>
     <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span><span class=s2>-10&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>BL64_OS_DISTRO</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span><span class=s2>-10.0&quot;</span>
     <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-11*<span class=o>)</span>
     <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span><span class=s2>-11&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>BL64_OS_DISTRO</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span><span class=s2>-11.0&quot;</span>
     <span class=p>;;</span>
-  <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-33* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-35*<span class=o>)</span> : <span class=p>;;</span>
-  <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-8*<span class=o>)</span> : <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-33* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-34* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-35*<span class=o>)</span> : <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-7* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-8*<span class=o>)</span> : <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_RHEL</span><span class=si>}</span>-8*<span class=o>)</span> : <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_UB</span><span class=si>}</span>-20* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_UB</span><span class=si>}</span>-21*<span class=o>)</span> : <span class=p>;;</span>
   *<span class=o>)</span> <span class=nv>BL64_OS_DISTRO</span><span class=o>=</span><span class=s1>&#39;UNKNOWN&#39;</span> <span class=p>;;</span>
@@ -896,7 +904,7 @@
     <span class=nv>BL64_OS_CMD_CHOWN</span><span class=o>=</span><span class=s1>&#39;/bin/chown&#39;</span>
     <span class=nv>BL64_OS_CMD_CP</span><span class=o>=</span><span class=s1>&#39;/bin/cp&#39;</span>
     <span class=nv>BL64_OS_CMD_DATE</span><span class=o>=</span><span class=s2>&quot;/bin/date&quot;</span>
-    <span class=nv>BL64_OS_CMD_FALSE</span><span class=o>=</span><span class=s2>&quot;/usr/bin/false&quot;</span>
+    <span class=nv>BL64_OS_CMD_FALSE</span><span class=o>=</span><span class=s2>&quot;/bin/false&quot;</span>
     <span class=nv>BL64_OS_CMD_GAWK</span><span class=o>=</span><span class=s1>&#39;/usr/bin/gawk&#39;</span>
     <span class=nv>BL64_OS_CMD_GREP</span><span class=o>=</span><span class=s1>&#39;/bin/grep&#39;</span>
     <span class=nv>BL64_OS_CMD_HOSTNAME</span><span class=o>=</span><span class=s1>&#39;/bin/hostname&#39;</span>
@@ -908,7 +916,7 @@
     <span class=nv>BL64_OS_CMD_MV</span><span class=o>=</span><span class=s1>&#39;/bin/mv&#39;</span>
     <span class=nv>BL64_OS_CMD_RM</span><span class=o>=</span><span class=s1>&#39;/bin/rm&#39;</span>
     <span class=nv>BL64_OS_CMD_TAR</span><span class=o>=</span><span class=s1>&#39;/bin/tar&#39;</span>
-    <span class=nv>BL64_OS_CMD_TRUE</span><span class=o>=</span><span class=s2>&quot;/usr/bin/true&quot;</span>
+    <span class=nv>BL64_OS_CMD_TRUE</span><span class=o>=</span><span class=s2>&quot;/bin/true&quot;</span>
     <span class=nv>BL64_OS_CMD_UNAME</span><span class=o>=</span><span class=s1>&#39;/bin/uname&#39;</span>
     <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_RHEL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_ALM</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-*<span class=o>)</span>
@@ -940,7 +948,7 @@
     <span class=nv>BL64_OS_CMD_CHOWN</span><span class=o>=</span><span class=s1>&#39;/bin/chown&#39;</span>
     <span class=nv>BL64_OS_CMD_CP</span><span class=o>=</span><span class=s1>&#39;/bin/cp&#39;</span>
     <span class=nv>BL64_OS_CMD_DATE</span><span class=o>=</span><span class=s2>&quot;/bin/date&quot;</span>
-    <span class=nv>BL64_OS_CMD_FALSE</span><span class=o>=</span><span class=s2>&quot;/usr/bin/false&quot;</span>
+    <span class=nv>BL64_OS_CMD_FALSE</span><span class=o>=</span><span class=s2>&quot;/bin/false&quot;</span>
     <span class=nv>BL64_OS_CMD_GAWK</span><span class=o>=</span><span class=s1>&#39;/usr/bin/gawk&#39;</span>
     <span class=nv>BL64_OS_CMD_GREP</span><span class=o>=</span><span class=s1>&#39;/bin/grep&#39;</span>
     <span class=nv>BL64_OS_CMD_HOSTNAME</span><span class=o>=</span><span class=s1>&#39;/bin/hostname&#39;</span>
@@ -952,7 +960,7 @@
     <span class=nv>BL64_OS_CMD_MV</span><span class=o>=</span><span class=s1>&#39;/bin/mv&#39;</span>
     <span class=nv>BL64_OS_CMD_RM</span><span class=o>=</span><span class=s1>&#39;/bin/rm&#39;</span>
     <span class=nv>BL64_OS_CMD_TAR</span><span class=o>=</span><span class=s1>&#39;/bin/tar&#39;</span>
-    <span class=nv>BL64_OS_CMD_TRUE</span><span class=o>=</span><span class=s2>&quot;/usr/bin/true&quot;</span>
+    <span class=nv>BL64_OS_CMD_TRUE</span><span class=o>=</span><span class=s2>&quot;/bin/true&quot;</span>
     <span class=nv>BL64_OS_CMD_UNAME</span><span class=o>=</span><span class=s1>&#39;/bin/uname&#39;</span>
     <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>

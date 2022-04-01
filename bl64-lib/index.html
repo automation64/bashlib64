@@ -200,7 +200,9 @@
 <span class=normal> 97</span>
 <span class=normal> 98</span>
 <span class=normal> 99</span>
-<span class=normal>100</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>100</span>
+<span class=normal>101</span>
+<span class=normal>102</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Setup script run-time environment</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
@@ -272,8 +274,10 @@
 
 <span class=c1># Detect current OS</span>
 bl64_os_get_distro
-<span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;UNKNOWN&#39;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-  <span class=nb>printf</span> <span class=s1>&#39;%s\n&#39;</span> <span class=s2>&quot;Fatal: BashLib64 is not supported in the current OS&quot;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+
+<span class=c1># Verify lib compatibility</span>
+<span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;UNKNOWN&#39;</span> <span class=o>||</span> <span class=o>(</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BASH_VERSINFO</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s1>&#39;4&#39;</span> <span class=o>&amp;&amp;</span> <span class=s2>&quot;</span><span class=si>${</span><span class=nv>BASH_VERSINFO</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s1>&#39;5&#39;</span><span class=o>)</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+  <span class=nb>printf</span> <span class=s1>&#39;%s\n&#39;</span> <span class=s2>&quot;Fatal: BashLib64 is not supported in the current OS (</span><span class=k>$(</span>uname -a<span class=k>)</span><span class=s2>) or Bash version (</span><span class=nv>$BASH_VERSION</span><span class=s2>)&quot;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
   <span class=nb>false</span>
 <span class=k>else</span>
   <span class=c1># Load commands and aliases</span>
