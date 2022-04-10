@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #######################################
 # BashLib64
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.21.0
+# Version: 1.22.0
 #######################################
 
 # Enable library and app tracing
@@ -31,6 +31,8 @@ readonly BL64_CHECK_ERROR_PARAMETER_EMPTY=7
 readonly BL64_CHECK_ERROR_EXPORT_EMPTY=8
 readonly BL64_CHECK_ERROR_EXPORT_SET=9
 
+readonly BL64_CHECK_ERROR_PATH_NOT_RELATIVE=10
+
 
 readonly _BL64_CHECK_TXT_MISSING_PARAMETER='required parameter is missing'
 
@@ -46,14 +48,21 @@ readonly _BL64_CHECK_TXT_DIRECTORY_NOT_READABLE='required directory is present b
 readonly _BL64_CHECK_TXT_EXPORT_EMPTY='required shell exported variable is empty'
 readonly _BL64_CHECK_TXT_EXPORT_SET='required shell exported variable is not set'
 
+readonly _BL64_CHECK_TXT_PATH_NOT_RELATIVE='path is not relative'
 
-readonly BL64_DBG_TARGET_NONE='0'
-readonly BL64_DBG_TARGET_CMD='1'
-readonly BL64_DBG_TARGET_ALL_TRACE='2'
-readonly BL64_DBG_TARGET_APP_TRACE='3'
-readonly BL64_DBG_TARGET_APP_TASK='4'
-readonly BL64_DBG_TARGET_LIB_TRACE='5'
-readonly BL64_DBG_TARGET_LIB_TASK='6'
+
+export BL64_DBG_TARGET_NONE='0'
+export BL64_DBG_TARGET_APP_TRACE='1'
+export BL64_DBG_TARGET_APP_TASK='2'
+export BL64_DBG_TARGET_APP_CMD='3'
+export BL64_DBG_TARGET_APP_ALL='4'
+export BL64_DBG_TARGET_LIB_TRACE='5'
+export BL64_DBG_TARGET_LIB_TASK='6'
+export BL64_DBG_TARGET_LIB_CMD='7'
+export BL64_DBG_TARGET_LIB_ALL='8'
+
+readonly _BL64_DBG_TXT_FUNCTION_START='function tracing started'
+readonly _BL64_DBG_TXT_FUNCTION_STOP='function tracing stopped'
 
 export BL64_IAM_CMD_USERADD
 
@@ -106,9 +115,9 @@ readonly _BL64_MSG_TXT_DEBUG='Debug'
 readonly _BL64_MSG_TXT_WARNING='Warning'
 readonly _BL64_MSG_TXT_BATCH='Process'
 readonly _BL64_MSG_TXT_INVALID_FORMAT='invalid format. Please use one of BL64_MSG_FORMAT_*'
-readonly _BL64_MSG_TXT_BATCH_START='start executing command'
-readonly _BL64_MSG_TXT_BATCH_FINISH_OK='command executed successfully'
-readonly _BL64_MSG_TXT_BATCH_FINISH_ERROR='command executed with errors'
+readonly _BL64_MSG_TXT_BATCH_START='started'
+readonly _BL64_MSG_TXT_BATCH_FINISH_OK='finished successfully'
+readonly _BL64_MSG_TXT_BATCH_FINISH_ERROR='finished with errors'
 
 export BL64_MSG_FORMAT="${BL64_MSG_FORMAT:-$BL64_MSG_FORMAT_FULL}"
 
@@ -183,6 +192,7 @@ export BL64_PKG_ALIAS_YUM_CLEAN
 export BL64_PKG_ALIAS_APK_INSTALL
 export BL64_PKG_ALIAS_APK_UPDATE
 export BL64_PKG_ALIAS_BRW_INSTALL
+export BL64_PKG_ALIAS_BRW_UPDATE
 export BL64_PKG_ALIAS_BRW_CLEAN
 
 readonly BL64_RND_LENGTH_1=1
@@ -225,6 +235,8 @@ readonly BL64_RXTX_ERROR_MISSING_COMMAND=201
 
 readonly _BL64_RXTX_TXT_MISSING_PARAMETER='required parameter is missing'
 readonly _BL64_RXTX_TXT_MISSING_COMMAND='no web transfer command was found on the system'
+readonly _BL64_RXTX_TXT_EXISTING_DESTINATION='destination path is not empty. No action taken.'
+readonly _BL64_RXTX_TXT_CREATION_PROBLEM='unable to create temporary git repo'
 
 readonly _BL64_RXTX_BACKUP_POSTFIX='._bl64_rxtx_backup'
 
@@ -354,7 +366,7 @@ function bl64_check_command() {
     bl64_msg_show_error "$_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE (${path})"
     return $BL64_CHECK_ERROR_FILE_NOT_EXECUTE
   fi
-  :
+  return 0
 }
 
 function bl64_check_file() {
@@ -373,7 +385,7 @@ function bl64_check_file() {
     bl64_msg_show_error "$_BL64_CHECK_TXT_FILE_NOT_READABLE (${path})"
     return $BL64_CHECK_ERROR_FILE_NOT_READ
   fi
-  :
+  return 0
 }
 
 function bl64_check_directory() {
@@ -392,7 +404,7 @@ function bl64_check_directory() {
     bl64_msg_show_error "$_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE (${path})"
     return $BL64_CHECK_ERROR_DIRECTORY_NOT_READ
   fi
-  :
+  return 0
 }
 
 function bl64_check_parameter() {
@@ -408,7 +420,7 @@ function bl64_check_parameter() {
     bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (${description})"
     return $BL64_CHECK_ERROR_PARAMETER_EMPTY
   fi
-  :
+  return 0
 }
 
 function bl64_check_export() {
@@ -429,38 +441,55 @@ function bl64_check_export() {
     bl64_msg_show_error "$_BL64_CHECK_TXT_EXPORT_EMPTY (${description})"
     return $BL64_CHECK_ERROR_EXPORT_EMPTY
   fi
-  :
+  return 0
+}
+
+function bl64_check_path_relative() {
+  local path="$1"
+  local message="${2:-$_BL64_CHECK_TXT_PATH_NOT_RELATIVE}"
+
+  if [[ -z "$path" ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (path)"
+    return $BL64_CHECK_ERROR_MISSING_PARAMETER
+  fi
+  if [[ "$path" == '/' || "$path" == /* ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
+    return $BL64_CHECK_ERROR_PATH_NOT_RELATIVE
+  fi
+  return 0
 }
 
 function bl64_dbg_app_trace_stop() {
-  set +x
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]] &&
+    set +x
+  return 0
 }
 
 function bl64_dbg_app_trace_start() {
-  set +x
-
-  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL_TRACE" ]] && set -x
-
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]] &&
+    set -x
   return 0
 }
 
 function bl64_dbg_lib_trace_stop() {
-  set +x
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]] &&
+    set +x &&
+    bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
+  return 0
 }
 
 function bl64_dbg_lib_trace_start() {
-  set +x
-
-  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL_TRACE" ]] && set -x
-
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]] &&
+    bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_FUNCTION_START}" &&
+    set -x
   return 0
 }
 
 function bl64_dbg_lib_show() {
   local message="$1"
 
-  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_TASK" ]] && return 0
-  bl64_msg_show_debug "[${FUNCNAME[1]}] $message"
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TASK" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]] &&
+    bl64_msg_show_debug "[${FUNCNAME[1]}] $message"
 
   return 0
 }
@@ -468,8 +497,8 @@ function bl64_dbg_lib_show() {
 function bl64_dbg_app_show() {
   local message="$1"
 
-  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_TASK" ]] && return 0
-  bl64_msg_show_debug "[${FUNCNAME[1]}] $message"
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TASK" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]] &&
+    bl64_msg_show_debug "[${FUNCNAME[1]}] $message"
 
   return 0
 }
@@ -1147,7 +1176,7 @@ function bl64_os_merge_dir() {
     $BL64_OS_ALIAS_CP_DIR --no-target-directory "$source" "$target"
     status=$?
     ;;
-  ${BL64_OS_MACOS}-*)
+  ${BL64_OS_MCOS}-*)
     $BL64_OS_ALIAS_CP_DIR ${source}/ "$target"
     status=$?
     ;;
@@ -1275,6 +1304,7 @@ function bl64_pkb_set_alias() {
   ${BL64_OS_MCOS}-*)
     BL64_PKG_ALIAS_BRW_INSTALL="$BL64_PKG_CMD_BRW install"
     BL64_PKG_ALIAS_BRW_CLEAN="$BL64_PKG_CMD_BRW cleanup --prune=all -s"
+    BL64_PKG_ALIAS_BRW_UPDATE="$BL64_PKG_CMD_BRW update"
     ;;
   esac
 }
@@ -1304,7 +1334,7 @@ function bl64_pkg_prepare() {
     $BL64_PKG_ALIAS_APK_UPDATE
     ;;
   ${BL64_OS_MCOS}-*)
-    :
+    $BL64_PKG_ALIAS_BRW_UPDATE
     ;;
   esac
 }
@@ -1529,26 +1559,85 @@ function bl64_rxtx_web_get_file() {
 }
 
 function bl64_rxtx_git_get_dir() {
+  bl64_dbg_lib_trace_start
   local source_url="${1}"
   local source_path="${2}"
   local destination="${3}"
   local replace="${4:-$BL64_LIB_VAR_OFF}"
   local branch="${5:-main}"
-  local repo=''
-  local target=''
-  local source=''
   local status=0
+  bl64_dbg_lib_trace_stop
 
   bl64_check_parameter 'source_url' 'git repository' &&
     bl64_check_parameter 'source_path' 'source path' &&
-    bl64_check_parameter 'destination' 'target destination' ||
-    return $BL64_RXTX_ERROR_MISSING_PARAMETER
+    bl64_check_parameter 'destination' 'target destination' &&
+    bl64_check_path_relative "$source_path" ||
+    return $?
 
-  [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]] && return $BL64_LIB_VAR_OK
-  _bl64_rxtx_backup "$destination" >/dev/null || return $?
+  if [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]]; then
+    bl64_msg_show_warning "$_BL64_RXTX_TXT_EXISTING_DESTINATION"
+    return $BL64_LIB_VAR_OK
+  else
+    _bl64_rxtx_backup "$destination" >/dev/null || return $?
+  fi
+
+  if [[ "$source_path" == '.' || "$source_path" == './' ]]; then
+    bl64_dbg_lib_show 'process full repo'
+    _bl64_rxtx_git_get_dir_root "$source_url" "$destination" "$branch"
+  else
+    bl64_dbg_lib_show 'process repo subdirectory'
+    _bl64_rxtx_git_get_dir_sub "$source_url" "$source_path" "$destination" "$branch"
+  fi
+  status=$?
+
+  if [[ -d "${destination}/.git" ]]; then
+    cd "$destination"
+    bl64_os_rm_full '.git' >/dev/null
+  fi
+
+  _bl64_rxtx_restore "$destination" "$status" >/dev/null || return $?
+  return $status
+}
+
+function _bl64_rxtx_git_get_dir_root() {
+  local source_url="${1}"
+  local destination="${2}"
+  local branch="${3:-main}"
+  local status=0
+  local repo=''
+  local git_name=''
+  local transition=''
 
   repo="$($BL64_OS_ALIAS_MKTEMP_DIR)"
-  bl64_check_directory "$repo" 'unable to create temporary git repo' || return $BL64_RXTX_ERROR_TEMPORARY_REPO
+  bl64_check_directory "$repo" "$_BL64_RXTX_TXT_CREATION_PROBLEM" || return $BL64_RXTX_ERROR_TEMPORARY_REPO
+
+  git_name="$(bl64_fmt_basename "$source_url")"
+  git_name="${git_name/.git/}"
+  transition="${repo}/${git_name}"
+  bl64_dbg_lib_show "temporary local git path: transition=[$transition]"
+
+  bl64_vcs_git_clone "$source_url" "$repo" "$branch" && \
+  [[ -d "$transition" ]] &&
+  bl64_os_mv "$transition" "$destination"
+  status=$?
+
+  [[ -d "$repo" ]] && bl64_os_rm_full "$repo" >/dev/null
+  return $status
+}
+
+function _bl64_rxtx_git_get_dir_sub() {
+  local source_url="${1}"
+  local source_path="${2}"
+  local destination="${3}"
+  local branch="${4:-main}"
+  local status=0
+  local repo=''
+  local target=''
+  local source=''
+  local transition=''
+
+  repo="$($BL64_OS_ALIAS_MKTEMP_DIR)"
+  bl64_check_directory "$repo" "$_BL64_RXTX_TXT_CREATION_PROBLEM" || return $BL64_RXTX_ERROR_TEMPORARY_REPO
 
   source="${repo}/${source_path}"
   target="$(bl64_fmt_basename "$destination")"
@@ -1561,9 +1650,7 @@ function bl64_rxtx_git_get_dir() {
     bl64_os_mv "${transition}" "$destination" >/dev/null
   status=$?
 
-  _bl64_rxtx_restore "$destination" "$status" >/dev/null || return $?
   [[ -d "$repo" ]] && bl64_os_rm_full "$repo" >/dev/null
-
   return $status
 }
 
@@ -1700,6 +1787,7 @@ function bl64_vcs_git_sparse() {
   local pattern="${4}"
   local item=''
   local status=0
+  bl64_dbg_lib_trace_stop
 
   bl64_check_command "$BL64_VCS_CMD_GIT" || return $BL64_VCS_ERROR_MISSING_COMMAND
 
@@ -1734,7 +1822,6 @@ function bl64_vcs_git_sparse() {
   fi
   status=$?
 
-  bl64_dbg_lib_trace_stop
   return $status
 }
 
@@ -1904,7 +1991,7 @@ else
   bl64_rxtx_set_command
   bl64_rxtx_set_alias
 
-  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL_TRACE" ]] && set -x
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]] && set -x
 
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
     "$@"
