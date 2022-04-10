@@ -91,7 +91,7 @@ else
   bl64_rxtx_set_alias
 
   # Enable shell tracing
-  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL_TRACE" ]] && set -x
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]] && set -x
 
   # Enable command mode: the library can be used as a stand-alone script to run embeded functions
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
