@@ -17,7 +17,6 @@ setup() {
 
   run bl64_check_command '/fake/command'
   assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_FOUND
-  assert_output --partial "${_BL64_CHECK_TXT_COMMAND_NOT_FOUND}"
 
 }
 
@@ -25,7 +24,6 @@ setup() {
 
   run bl64_check_command '/etc/hosts'
   assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_EXECUTE
-  assert_output --partial "${_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE}"
 
 }
 
@@ -33,6 +31,5 @@ setup() {
 
   run bl64_check_command
   assert_equal "$status" $BL64_CHECK_ERROR_MISSING_PARAMETER
-  assert_output --partial "${_BL64_CHECK_TXT_MISSING_PARAMETER}"
 
 }

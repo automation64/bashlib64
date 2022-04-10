@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #######################################
 # Create the BashLib64 stand-alone distributable file
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 [[ -z "$DEVBL_BIN" ]] && echo "Error: prepare the dev environment before executing this file" && exit 1
@@ -17,7 +17,9 @@ function devbl_run_tests_bats() {
   local debug="$1"
   local case="$2"
   local target=''
-  local verbose=''
+  local bats_verbose=''
+  export BATSLIB_TEMP_PRESERVE_ON_FAILURE
+  export BATSLIB_TEMP_PRESERVE
 
   if [[ "$case" != 'all' ]]; then
     target="${DEVBL_TEST_BATSCORE}/${case}.bats"
@@ -26,13 +28,18 @@ function devbl_run_tests_bats() {
   fi
 
   if [[ "$debug" == '1' ]]; then
-    verbose='--timing --trace --verbose-run'
+    bats_verbose='--timing --verbose-run --no-tempdir-cleanup --print-output-on-failure'
+    BL64_LIB_DEBUG="$BL64_DBG_TARGET_LIB_ALL"
+    BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
+    BATSLIB_TEMP_PRESERVE=1
   else
-    verbose='--formatter tap'
+    bats_verbose='--formatter tap'
+    # shellcheck disable=SC2034
+    BL64_LIB_DEBUG="$BL64_DBG_TARGET_NONE"
   fi
 
   # shellcheck disable=SC2086
-  "$DEVBL_CMD_BATS" $verbose "$target"
+  "$DEVBL_CMD_BATS" $bats_verbose "$target"
 
 }
 
@@ -44,8 +51,10 @@ function devbl_run_tests_bats_container() {
   local registry="$4"
   local container=''
   local target=''
-  local verbose=''
-  local loglevel=''
+  local bats_verbose=''
+  local podman_loglevel=''
+  export BATSLIB_TEMP_PRESERVE_ON_FAILURE
+  export BATSLIB_TEMP_PRESERVE
 
   [[ -z "$image" ]] && bl64_msg_show_error "missing parameter (image)" && return 1
 
@@ -56,11 +65,18 @@ function devbl_run_tests_bats_container() {
   fi
 
   if [[ "$debug" == '1' ]]; then
-    verbose='--timing --trace --verbose-run'
-    loglevel='--log-level=debug'
+    bats_verbose='--timing --verbose-run --no-tempdir-cleanup --print-output-on-failure'
+    podman_loglevel='--log-level=debug'
+    BL64_LIB_DEBUG="$BL64_DBG_TARGET_LIB_ALL"
+    BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
+    BATSLIB_TEMP_PRESERVE=1
   else
-    verbose='--formatter tap'
-    loglevel=''
+    bats_verbose='--formatter tap'
+    podman_loglevel=''
+    # shellcheck disable=SC2034
+    BL64_LIB_DEBUG="$BL64_DBG_TARGET_NONE"
+    BATSLIB_TEMP_PRESERVE_ON_FAILURE=0
+    BATSLIB_TEMP_PRESERVE=0
   fi
 
   IFS=' '
@@ -69,17 +85,20 @@ function devbl_run_tests_bats_container() {
     bl64_msg_show_task "run test cases on the container image: $container"
     # shellcheck disable=SC2086
     "$DEVBL_CMD_PODMAN" \
-      $loglevel \
+      $podman_loglevel \
       run \
       --rm \
       --user "$DEVBL_TEST_USR" \
+      --env BL64_LIB_DEBUG \
       --env DEVBL_TEST='/test' \
       --env DEVBL_SAMPLES='/test/samples' \
       --env DEVBL_TEST_BASHLIB64='/test/lib/bashlib64.bash' \
-      --env DEVBL_BATS_HELPER="$DEVBL_BATS_HELPER" \
+      --env DEVBL_BATS_HELPER \
+      --env BATSLIB_TEMP_PRESERVE_ON_FAILURE \
+      --env BATSLIB_TEMP_PRESERVE \
       --volume "${DEVBL_TEST}:/test" \
       "${registry}/${container}" \
-      $verbose \
+      $bats_verbose \
       "$target"
   done
 

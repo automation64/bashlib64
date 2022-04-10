@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 #######################################
@@ -41,7 +41,7 @@ function bl64_check_command() {
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_FILE_NOT_EXECUTE
   fi
-  :
+  return 0
 }
 
 #######################################
@@ -78,7 +78,7 @@ function bl64_check_file() {
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_FILE_NOT_READ
   fi
-  :
+  return 0
 }
 
 #######################################
@@ -115,7 +115,7 @@ function bl64_check_directory() {
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_DIRECTORY_NOT_READ
   fi
-  :
+  return 0
 }
 
 #######################################
@@ -148,7 +148,7 @@ function bl64_check_parameter() {
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_PARAMETER_EMPTY
   fi
-  :
+  return 0
 }
 
 #######################################
@@ -189,5 +189,39 @@ function bl64_check_export() {
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_EXPORT_EMPTY
   fi
-  :
+  return 0
+}
+
+#######################################
+# Check that the given path is relative
+#
+# * String check only
+# * Path is not tested for existance
+#
+# Arguments:
+#   $1: Path string
+#   $2: Failed check error message. Default: _BL64_CHECK_TXT_PATH_NOT_RELATIVE
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: File found
+#   $BL64_CHECK_ERROR_MISSING_PARAMETER
+#   $BL64_CHECK_ERROR_PATH_NOT_RELATIVE
+#######################################
+function bl64_check_path_relative() {
+  local path="$1"
+  local message="${2:-$_BL64_CHECK_TXT_PATH_NOT_RELATIVE}"
+
+  if [[ -z "$path" ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (path)"
+    # shellcheck disable=SC2086
+    return $BL64_CHECK_ERROR_MISSING_PARAMETER
+  fi
+  if [[ "$path" == '/' || "$path" == /* ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
+    # shellcheck disable=SC2086
+    return $BL64_CHECK_ERROR_PATH_NOT_RELATIVE
+  fi
+  return 0
 }

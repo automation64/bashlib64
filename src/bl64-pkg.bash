@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -89,12 +89,13 @@ function bl64_pkb_set_alias() {
   ${BL64_OS_MCOS}-*)
     BL64_PKG_ALIAS_BRW_INSTALL="$BL64_PKG_CMD_BRW install"
     BL64_PKG_ALIAS_BRW_CLEAN="$BL64_PKG_CMD_BRW cleanup --prune=all -s"
+    BL64_PKG_ALIAS_BRW_UPDATE="$BL64_PKG_CMD_BRW update"
     ;;
   esac
 }
 
 #######################################
-# Install packages
+# Deploy packages
 #
 # * Before installation: prepares the package manager environment and cache
 # * After installation: removes cache and temporary files
@@ -143,7 +144,7 @@ function bl64_pkg_prepare() {
     $BL64_PKG_ALIAS_APK_UPDATE
     ;;
   ${BL64_OS_MCOS}-*)
-    :
+    $BL64_PKG_ALIAS_BRW_UPDATE
     ;;
   esac
 }

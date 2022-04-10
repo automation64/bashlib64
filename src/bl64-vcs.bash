@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 #######################################
@@ -127,6 +127,7 @@ function bl64_vcs_git_sparse() {
   local pattern="${4}"
   local item=''
   local status=0
+  bl64_dbg_lib_trace_stop
 
   # shellcheck disable=SC2086
   bl64_check_command "$BL64_VCS_CMD_GIT" || return $BL64_VCS_ERROR_MISSING_COMMAND
@@ -167,6 +168,5 @@ function bl64_vcs_git_sparse() {
   fi
   status=$?
 
-  bl64_dbg_lib_trace_stop
   return $status
 }
