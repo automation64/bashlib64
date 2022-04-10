@@ -7,46 +7,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.0]
+
+### Added
+
+- check:
+  - bl64_check_path_relative: new function
+- pkg
+  - Added Brew update
+- rxtx
+  - bl64_rxtx_git_get_dir: allow full repo copy (source path: .)
+
+### Fixed
+
+- os
+  - bl64_os_merge_dir: fixed typo
+
 ## [1.21.0]
 
 ### Added
 
 - lib
-  - Bash version check
+  - Added Bash version check
 - os
-  - Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
+  - Added Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
 - pkg
-  - Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
+  - Added Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
 - rxtx
-  - Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
+  - Added Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
 - vcs
-  - Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
+  - Added Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
 
 ### Fixed
 
 - os
-  - false,true paths on DEB-_|UB-_
+  - fixed false,true paths on DEB-_|UB-_
 
 ## [1.20.0]
 
 ### Added
 
 - os
-  - uname, true, false commands
-  - MacOS support
+  - Added uname, true, false commands
+  - Added MacOS support
 - sudo
-  - MacOS support
+  - Added MacOS support
 - vcs
-  - MacOS support
+  - Added MacOS support
 - arc
-  - MacOS support
+  - Added MacOS support
 - rxtx
-  - MacOS support
+  - Added MacOS support
 - iam
-  - MacOS support
+  - Added MacOS support
 - pkg
-  - MacOS support
-  - Aliases and commands setter
+  - Added MacOS support
+  - Added aliases and commands setter
 
 ### Fixed
 
@@ -58,19 +74,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - dbg
-  - new module
+  - New module
 - core
-  - verbose flag (BL64_LIB_VERBOSE)
-  - move debug flags to module dbg
+  - Added verbose flag (BL64_LIB_VERBOSE)
 - xsv
   - bl64_xsv_dump: new function
-  - use dbg flags
+  - Use dbg flags
 - msg
-  - verbose flag
+  - Added verbose flag
 
 ### Changed
 
 - core
+  - Moved debug flags to module dbg
   - Renamed module to lib
 - msg
   - Optimize batch message
@@ -80,9 +96,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - core
-  - shtop defaults
+  - Added shtop defaults
 - check
-  - bl64_check_parameter: check for placeholder (BL64_LIB_VAR_TBD)
+  - bl64_check_parameter: added check for placeholder (BL64_LIB_VAR_TBD)
 - os
   - bl64_os_merge_dir: new function
   - bl64_os_match: new function
@@ -92,7 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_rxtx_set_alias: new function
 - vcs
   - bl64_vcs_set_alias: new function
-  - bl64_vcs_git_sparse: support for git with no sparse-checkout command
+  - bl64_vcs_git_sparse: added support for git with no sparse-checkout command
 
 ### Changed
 
@@ -138,51 +154,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - arc
-  - use BL64*OS*\* for OS id
+  - Use BL64*OS*\* for OS id
 - iam
-  - use BL64*OS*\* for OS id
+  - Use BL64*OS*\* for OS id
 - os
-  - use BL64*OS*\* for OS id
+  - Use BL64*OS*\* for OS id
 - pkg
-  - use BL64*OS*\* for OS id
+  - Use BL64*OS*\* for OS id
 - rxtx
-  - use BL64*OS*\* for OS id
+  - Use BL64*OS*\* for OS id
 - sudo
-  - use BL64*OS*\* for OS id
+  - Use BL64*OS*\* for OS id
 - vcs
-  - use BL64*OS*\* for OS id
+  - Use BL64*OS*\* for OS id
 
 ## [1.16.0]
 
 ### Added
 
 - xsv
-  - new module
+  - New module
 - rxtx
-  - new module
+  - New module
 - core
   - BL64_LIB_DEBUG_CMD debug mode
-  - command set for: vcs, sudo, rxtx
+  - Added command set for: vcs, sudo, rxtx
 - vcs
-  - bl64_vcs_git_clone: command check
+  - bl64_vcs_git_clone: added command check
   - bl64_vcs_set_command: new function
   - bl64_vcs_git_sparse: new function
 - sudo
   - bl64_sudo_set_command: new function
 - os
-  - bl64_os_set_alias: awk, cp dir
-  - bl64_os_set_command: gawk
+  - bl64_os_set_alias: added awk, cp dir
+  - bl64_os_set_command: added gawk
   - bl64_os_cp_dir: new function
 - check
-  - bl64_check_command: optional error message
-  - bl64_check_file: optional error message
-  - bl64_check_directory: optional error message
+  - bl64_check_command: added optional error message
+  - bl64_check_file: added optional error message
+  - bl64_check_directory: added optional error message
 - fmt
   - bl64_fmt_strip_starting_slash: new function
   - bl64_fmt_strip_ending_slash: new function
 - os
-  - bl64_os_set_command: gawk
-  - bl64_os_set_alias: awk alias using gawk in traditional mode
+  - bl64_os_set_command: added gawk
+  - bl64_os_set_alias: added awk alias using gawk in traditional mode
 
 ### Changed
 
@@ -200,9 +216,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - iam
-  - alias for useradd
+  - Added alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/1.21.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/1.22.0...HEAD
+[1.22.0]: https://github.com/serdigital64/bashlib64/compare/1.21.0...1.22.0
 [1.21.0]: https://github.com/serdigital64/bashlib64/compare/1.20.0...1.21.0
 [1.20.0]: https://github.com/serdigital64/bashlib64/compare/1.19.0...1.20.0
 [1.19.0]: https://github.com/serdigital64/bashlib64/compare/1.18.0...1.19.0
