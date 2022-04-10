@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #######################################
 # Create the BashLib64 stand-alone distributable file
 #

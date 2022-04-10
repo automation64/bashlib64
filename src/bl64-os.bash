@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.10.0
+# Version: 1.11.0
 #######################################
 
 function _bl64_os_match() {
@@ -389,7 +389,7 @@ function bl64_os_merge_dir() {
     $BL64_OS_ALIAS_CP_DIR --no-target-directory "$source" "$target"
     status=$?
     ;;
-  ${BL64_OS_MACOS}-*)
+  ${BL64_OS_MCOS}-*)
     # shellcheck disable=SC2086
     $BL64_OS_ALIAS_CP_DIR ${source}/ "$target"
     status=$?

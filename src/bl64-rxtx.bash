@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 function _bl64_rxtx_backup() {
@@ -186,14 +186,16 @@ function bl64_rxtx_web_get_file() {
 }
 
 #######################################
-# Pull directory structure from git repo
+# Pull directory contents from git repo
 #
+# * Content of source path is downloaded into destination (source_path/* --> destionation/). Source path itself is not created
 # * If the destination is already present no update is done unless $3=$BL64_LIB_VAR_ON
+# * If asked to replace destination, temporary backup is done in case git fails by moving the destination to a temp name
 # * Warning: git repo info is removed after pull (.git)
 #
 # Arguments:
 #   $1: URL to the GIT repository
-#   $2: source path. Format: relative to the repo URL
+#   $2: source path. Format: relative to the repo URL. Use '.' to download the full repo
 #   $3: destination path. Format: full path
 #   $3: branch name. Default: main
 #   $5: replace existing content. Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)
@@ -206,29 +208,97 @@ function bl64_rxtx_web_get_file() {
 #   command error status
 #######################################
 function bl64_rxtx_git_get_dir() {
+  bl64_dbg_lib_trace_start
   local source_url="${1}"
   local source_path="${2}"
   local destination="${3}"
   local replace="${4:-$BL64_LIB_VAR_OFF}"
   local branch="${5:-main}"
-  local repo=''
-  local target=''
-  local source=''
   local status=0
+  bl64_dbg_lib_trace_stop
 
   # shellcheck disable=SC2086
   bl64_check_parameter 'source_url' 'git repository' &&
     bl64_check_parameter 'source_path' 'source path' &&
-    bl64_check_parameter 'destination' 'target destination' ||
-    return $BL64_RXTX_ERROR_MISSING_PARAMETER
+    bl64_check_parameter 'destination' 'target destination' &&
+    bl64_check_path_relative "$source_path" ||
+    return $?
 
-  # shellcheck disable=SC2086
-  [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]] && return $BL64_LIB_VAR_OK
-  _bl64_rxtx_backup "$destination" >/dev/null || return $?
+  # Check if destination is already present
+  if [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]]; then
+    bl64_msg_show_warning "$_BL64_RXTX_TXT_EXISTING_DESTINATION"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_VAR_OK
+  else
+    # Asked to replace, backup first
+    _bl64_rxtx_backup "$destination" >/dev/null || return $?
+  fi
+
+  # Detect what type of path is requested
+  if [[ "$source_path" == '.' || "$source_path" == './' ]]; then
+    bl64_dbg_lib_show 'process full repo'
+    _bl64_rxtx_git_get_dir_root "$source_url" "$destination" "$branch"
+  else
+    bl64_dbg_lib_show 'process repo subdirectory'
+    _bl64_rxtx_git_get_dir_sub "$source_url" "$source_path" "$destination" "$branch"
+  fi
+  status=$?
+
+  # Remove GIT repo metadata
+  if [[ -d "${destination}/.git" ]]; then
+    # shellcheck disable=SC2164
+    cd "$destination"
+    bl64_os_rm_full '.git' >/dev/null
+  fi
+
+  # Check if restore is needed
+  _bl64_rxtx_restore "$destination" "$status" >/dev/null || return $?
+  return $status
+}
+
+function _bl64_rxtx_git_get_dir_root() {
+  local source_url="${1}"
+  local destination="${2}"
+  local branch="${3:-main}"
+  local status=0
+  local repo=''
+  local git_name=''
+  local transition=''
 
   repo="$($BL64_OS_ALIAS_MKTEMP_DIR)"
   # shellcheck disable=SC2086
-  bl64_check_directory "$repo" 'unable to create temporary git repo' || return $BL64_RXTX_ERROR_TEMPORARY_REPO
+  bl64_check_directory "$repo" "$_BL64_RXTX_TXT_CREATION_PROBLEM" || return $BL64_RXTX_ERROR_TEMPORARY_REPO
+
+  git_name="$(bl64_fmt_basename "$source_url")"
+  git_name="${git_name/.git/}"
+  transition="${repo}/${git_name}"
+  bl64_dbg_lib_show "temporary local git path: transition=[$transition]"
+
+  # Clone the repo
+  bl64_vcs_git_clone "$source_url" "$repo" "$branch" && \
+  [[ -d "$transition" ]] &&
+  # Promote to destination
+  bl64_os_mv "$transition" "$destination"
+  status=$?
+
+  [[ -d "$repo" ]] && bl64_os_rm_full "$repo" >/dev/null
+  return $status
+}
+
+function _bl64_rxtx_git_get_dir_sub() {
+  local source_url="${1}"
+  local source_path="${2}"
+  local destination="${3}"
+  local branch="${4:-main}"
+  local status=0
+  local repo=''
+  local target=''
+  local source=''
+  local transition=''
+
+  repo="$($BL64_OS_ALIAS_MKTEMP_DIR)"
+  # shellcheck disable=SC2086
+  bl64_check_directory "$repo" "$_BL64_RXTX_TXT_CREATION_PROBLEM" || return $BL64_RXTX_ERROR_TEMPORARY_REPO
 
   # Use transition path to get to the final target path
   source="${repo}/${source_path}"
@@ -242,8 +312,6 @@ function bl64_rxtx_git_get_dir() {
     bl64_os_mv "${transition}" "$destination" >/dev/null
   status=$?
 
-  _bl64_rxtx_restore "$destination" "$status" >/dev/null || return $?
   [[ -d "$repo" ]] && bl64_os_rm_full "$repo" >/dev/null
-
   return $status
 }

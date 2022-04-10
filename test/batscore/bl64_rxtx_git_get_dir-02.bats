@@ -4,7 +4,7 @@ setup() {
   . "${DEVBL_BATS_HELPER}/bats-assert/load.bash"
   . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
 
-  _bl64_rxtx_git_get_dir_destination="$(mktemp -d)"
+  _bl64_rxtx_git_get_dir_destination="$(temp_make)"
   _bl64_rxtx_git_get_dir_source='https://github.com/serdigital64/bashlib64.git'
   export _bl64_rxtx_git_get_dir_destination
   export _bl64_rxtx_git_get_dir_source
@@ -13,7 +13,7 @@ setup() {
 
 teardown() {
 
-  [[ -d "$_bl64_rxtx_git_get_dir_destination" ]] && rm -Rf "$_bl64_rxtx_git_get_dir_destination"
+  temp_del "$_bl64_rxtx_git_get_dir_destination"
 
 }
 
@@ -29,6 +29,6 @@ teardown() {
     "$BL64_LIB_VAR_ON"
   assert_success
 
-  assert_dir_exists "${test_dir}"
+  assert_file_exists "${test_dir}/bashlib64.bash"
 
 }
