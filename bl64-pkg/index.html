@@ -25,13 +25,14 @@
 <span class=normal>25</span>
 <span class=normal>26</span>
 <span class=normal>27</span>
-<span class=normal>28</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>28</span>
+<span class=normal>29</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Manage native OS packages</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.4.0</span>
+<span class=c1># Version: 1.5.0</span>
 <span class=c1>#######################################</span>
 
 <span class=nb>export</span> BL64_PKG_CMD_APT
@@ -52,6 +53,7 @@
 <span class=nb>export</span> BL64_PKG_ALIAS_APK_INSTALL
 <span class=nb>export</span> BL64_PKG_ALIAS_APK_UPDATE
 <span class=nb>export</span> BL64_PKG_ALIAS_BRW_INSTALL
+<span class=nb>export</span> BL64_PKG_ALIAS_BRW_UPDATE
 <span class=nb>export</span> BL64_PKG_ALIAS_BRW_CLEAN
 </code></pre></div> </td></tr></table> <h2 id=source-code>Source Code<a class=headerlink href=#source-code title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>  1</span>
 <span class=normal>  2</span>
@@ -281,13 +283,14 @@
 <span class=normal>226</span>
 <span class=normal>227</span>
 <span class=normal>228</span>
-<span class=normal>229</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>229</span>
+<span class=normal>230</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Manage native OS packages</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.6.0</span>
+<span class=c1># Version: 1.7.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -372,12 +375,13 @@
   <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=nv>BL64_PKG_ALIAS_BRW_INSTALL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_BRW</span><span class=s2> install&quot;</span>
     <span class=nv>BL64_PKG_ALIAS_BRW_CLEAN</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_BRW</span><span class=s2> cleanup --prune=all -s&quot;</span>
+    <span class=nv>BL64_PKG_ALIAS_BRW_UPDATE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_BRW</span><span class=s2> update&quot;</span>
     <span class=p>;;</span>
   <span class=k>esac</span>
 <span class=o>}</span>
 
 <span class=c1>#######################################</span>
-<span class=c1># Install packages</span>
+<span class=c1># Deploy packages</span>
 <span class=c1>#</span>
 <span class=c1># * Before installation: prepares the package manager environment and cache</span>
 <span class=c1># * After installation: removes cache and temporary files</span>
@@ -426,7 +430,7 @@
     <span class=nv>$BL64_PKG_ALIAS_APK_UPDATE</span>
     <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
-    :
+    <span class=nv>$BL64_PKG_ALIAS_BRW_UPDATE</span>
     <span class=p>;;</span>
   <span class=k>esac</span>
 <span class=o>}</span>

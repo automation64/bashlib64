@@ -24,33 +24,49 @@
 <span class=normal>24</span>
 <span class=normal>25</span>
 <span class=normal>26</span>
-<span class=normal>27</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>27</span>
+<span class=normal>28</span>
+<span class=normal>29</span>
+<span class=normal>30</span>
+<span class=normal>31</span>
+<span class=normal>32</span>
+<span class=normal>33</span>
+<span class=normal>34</span>
+<span class=normal>35</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Show shell debugging information</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.0.0</span>
+<span class=c1># Version: 1.1.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#</span>
 <span class=c1># Debug targets. Use to select what to debug and how</span>
 <span class=c1>#</span>
-<span class=c1># * CMD: External commands: enable command specific debugging options</span>
 <span class=c1># * ALL_TRACE: Shell tracing for the application and bashlib64</span>
 <span class=c1># * APP_TRACE: Shell tracing for selected application functions</span>
 <span class=c1># * APP_TASK: Debugging messages from selected application functions</span>
+<span class=c1># * APP_CMD: External commands: enable command specific debugging options used in the app</span>
+<span class=c1># * APP_ALL: Enable full app debugging (task,trace,cmd)</span>
 <span class=c1># * LIB_TRACE: Shell tracing for selected bashlib64 functions</span>
 <span class=c1># * LIB_TASK: Debugging messages from selected bashlib64 functions</span>
+<span class=c1># * LIB_CMD: External commands: enable command specific debugging options used in bashlib64</span>
+<span class=c1># * LIB_ALL: Enable full bashlib64 debugging (task,trace,cmd)</span>
 <span class=c1>#</span>
 
-<span class=nb>readonly</span> <span class=nv>BL64_DBG_TARGET_NONE</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_DBG_TARGET_CMD</span><span class=o>=</span><span class=s1>&#39;1&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_DBG_TARGET_ALL_TRACE</span><span class=o>=</span><span class=s1>&#39;2&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_DBG_TARGET_APP_TRACE</span><span class=o>=</span><span class=s1>&#39;3&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_DBG_TARGET_APP_TASK</span><span class=o>=</span><span class=s1>&#39;4&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_DBG_TARGET_LIB_TRACE</span><span class=o>=</span><span class=s1>&#39;5&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_DBG_TARGET_LIB_TASK</span><span class=o>=</span><span class=s1>&#39;6&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_DBG_TARGET_NONE</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_DBG_TARGET_APP_TRACE</span><span class=o>=</span><span class=s1>&#39;1&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_DBG_TARGET_APP_TASK</span><span class=o>=</span><span class=s1>&#39;2&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_DBG_TARGET_APP_CMD</span><span class=o>=</span><span class=s1>&#39;3&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_DBG_TARGET_APP_ALL</span><span class=o>=</span><span class=s1>&#39;4&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_DBG_TARGET_LIB_TRACE</span><span class=o>=</span><span class=s1>&#39;5&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_DBG_TARGET_LIB_TASK</span><span class=o>=</span><span class=s1>&#39;6&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_DBG_TARGET_LIB_CMD</span><span class=o>=</span><span class=s1>&#39;7&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_DBG_TARGET_LIB_ALL</span><span class=o>=</span><span class=s1>&#39;8&#39;</span>
+
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_FUNCTION_START</span><span class=o>=</span><span class=s1>&#39;function tracing started&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_FUNCTION_STOP</span><span class=o>=</span><span class=s1>&#39;function tracing stopped&#39;</span>
 </code></pre></div> </td></tr></table> <h2 id=source-code>Source Code<a class=headerlink href=#source-code title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>  1</span>
 <span class=normal>  2</span>
 <span class=normal>  3</span>
@@ -166,13 +182,15 @@
 <span class=normal>113</span>
 <span class=normal>114</span>
 <span class=normal>115</span>
-<span class=normal>116</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>116</span>
+<span class=normal>117</span>
+<span class=normal>118</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Show shell debugging information</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.0.0</span>
+<span class=c1># Version: 1.1.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -187,7 +205,9 @@
 <span class=c1>#   0: always ok</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_dbg_app_trace_stop<span class=o>()</span> <span class=o>{</span>
-  <span class=nb>set</span> +x
+  <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_APP_TRACE</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_APP_ALL</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span>
+    <span class=nb>set</span> +x
+  <span class=k>return</span> <span class=m>0</span>
 <span class=o>}</span>
 
 <span class=c1>#######################################</span>
@@ -202,10 +222,8 @@
 <span class=c1>#   0: always ok</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_dbg_app_trace_start<span class=o>()</span> <span class=o>{</span>
-  <span class=nb>set</span> +x
-
-  <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_APP_TRACE</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_ALL_TRACE</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nb>set</span> -x
-
+  <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_APP_TRACE</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_APP_ALL</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span>
+    <span class=nb>set</span> -x
   <span class=k>return</span> <span class=m>0</span>
 <span class=o>}</span>
 
@@ -221,7 +239,10 @@
 <span class=c1>#   0: always ok</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_dbg_lib_trace_stop<span class=o>()</span> <span class=o>{</span>
-  <span class=nb>set</span> +x
+  <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_LIB_TRACE</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_LIB_ALL</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span>
+    <span class=nb>set</span> +x <span class=o>&amp;&amp;</span>
+    bl64_msg_show_debug <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_FUNCTION_STOP</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=k>return</span> <span class=m>0</span>
 <span class=o>}</span>
 
 <span class=c1>#######################################</span>
@@ -236,10 +257,9 @@
 <span class=c1>#   0: always ok</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_dbg_lib_trace_start<span class=o>()</span> <span class=o>{</span>
-  <span class=nb>set</span> +x
-
-  <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_LIB_TRACE</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_ALL_TRACE</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nb>set</span> -x
-
+  <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_LIB_TRACE</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_LIB_ALL</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span>
+    bl64_msg_show_debug <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_FUNCTION_START</span><span class=si>}</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span>
+    <span class=nb>set</span> -x
   <span class=k>return</span> <span class=m>0</span>
 <span class=o>}</span>
 
@@ -257,8 +277,8 @@
 <span class=k>function</span> bl64_dbg_lib_show<span class=o>()</span> <span class=o>{</span>
   <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
 
-  <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_LIB_TASK</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=m>0</span>
-  bl64_msg_show_debug <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=nv>$message</span><span class=s2>&quot;</span>
+  <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_LIB_TASK</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_LIB_ALL</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span>
+    bl64_msg_show_debug <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=nv>$message</span><span class=s2>&quot;</span>
 
   <span class=k>return</span> <span class=m>0</span>
 <span class=o>}</span>
@@ -277,8 +297,8 @@
 <span class=k>function</span> bl64_dbg_app_show<span class=o>()</span> <span class=o>{</span>
   <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
 
-  <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_APP_TASK</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=m>0</span>
-  bl64_msg_show_debug <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=nv>$message</span><span class=s2>&quot;</span>
+  <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_APP_TASK</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_APP_ALL</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span>
+    bl64_msg_show_debug <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=nv>$message</span><span class=s2>&quot;</span>
 
   <span class=k>return</span> <span class=m>0</span>
 <span class=o>}</span>

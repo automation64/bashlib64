@@ -295,7 +295,7 @@ bl64_os_get_distro
   bl64_rxtx_set_alias
 
   <span class=c1># Enable shell tracing</span>
-  <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_ALL_TRACE</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nb>set</span> -x
+  <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_APP_ALL</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nb>set</span> -x
 
   <span class=c1># Enable command mode: the library can be used as a stand-alone script to run embeded functions</span>
   <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_CMD</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_ON</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
