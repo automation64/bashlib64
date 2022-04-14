@@ -1,10 +1,10 @@
 #######################################
-# BashLib64 / Manage sudo configuration
+# BashLib64 / Manage sudo
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -148,4 +148,38 @@ function bl64_sudo_set_alias() {
     BL64_SUDO_ALIAS_SUDO_ENV="$BL64_SUDO_CMD_SUDO --preserve-env --set-home"
     ;;
   esac
+}
+
+#######################################
+# Run privileged OS command using Sudo if needed
+#
+# Arguments:
+#   $@: command and arguments to run
+# Outputs:
+#   STDOUT: command or sudo output
+#   STDERR: command or sudo error
+# Returns:
+#   command or sudo exit status
+#######################################
+function bl64_sudo_run_command() {
+  local -i status=0
+
+  # shellcheck disable=SC2086
+  (($# == 0)) && return $BL64_SUDO_ERROR_MISSING_PARAMETER
+  # shellcheck disable=SC2086
+  bl64_check_command "$BL64_SUDO_CMD_SUDO" || return $BL64_SUDO_ERROR_MISSING_SUDO
+  bl64_dbg_lib_trace_start
+
+  # Check the effective user id
+  if [[ "$EUID" == '0' ]]; then
+    # Already root, execute command directly
+    "$@"
+  else
+    # Current user is regular, use SUDO
+    $BL64_SUDO_ALIAS_SUDO_ENV "$@"
+  fi
+  status=$?
+
+  bl64_dbg_lib_trace_stop
+  return $status
 }
