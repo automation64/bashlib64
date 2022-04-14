@@ -37,7 +37,6 @@ shopt -qu \
   nocaseglob \
   nocasematch \
   nullglob \
-  nullglob \
   xpg_echo
 shopt -qs \
   extquote
