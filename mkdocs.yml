@@ -94,6 +94,7 @@ nav:
     - "bl64-dbg.md"
     - "bl64-lib.md"
     - "bl64-fmt.md"
+    - "bl64-fs.md"
     - "bl64-iam.md"
     - "bl64-log.md"
     - "bl64-msg.md"
