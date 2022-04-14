@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -222,6 +222,40 @@ function bl64_check_path_relative() {
     bl64_msg_show_error "$_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_PATH_NOT_RELATIVE
+  fi
+  return 0
+}
+
+#######################################
+# Check that the given path is absolute
+#
+# * String check only
+# * Path is not tested for existance
+#
+# Arguments:
+#   $1: Path string
+#   $2: Failed check error message. Default: _BL64_CHECK_TXT_PATH_NOT_ABSOLUTE
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: File found
+#   $BL64_CHECK_ERROR_MISSING_PARAMETER
+#   $BL64_CHECK_ERROR_PATH_NOT_ABSOLUTE
+#######################################
+function bl64_check_path_absolute() {
+  local path="$1"
+  local message="${2:-$_BL64_CHECK_TXT_PATH_NOT_ABSOLUTE}"
+
+  if [[ -z "$path" ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (path)"
+    # shellcheck disable=SC2086
+    return $BL64_CHECK_ERROR_MISSING_PARAMETER
+  fi
+  if [[ "$path" != '/' && "$path" != /* ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
+    # shellcheck disable=SC2086
+    return $BL64_CHECK_ERROR_PATH_NOT_ABSOLUTE
   fi
   return 0
 }
