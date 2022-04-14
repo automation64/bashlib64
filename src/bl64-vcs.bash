@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -84,7 +84,7 @@ function bl64_vcs_git_clone() {
     bl64_check_parameter 'destination' 'repository destination' ||
     return $BL64_VCS_ERROR_MISSING_PARAMETER
 
-  [[ ! -d "$destination" ]] && bl64_os_mkdir_full "$destination"
+  [[ ! -d "$destination" ]] && bl64_fs_mkdir_full "$destination"
   # shellcheck disable=SC2086
   bl64_check_directory "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
 
@@ -137,7 +137,7 @@ function bl64_vcs_git_sparse() {
     bl64_check_parameter 'destination' 'repository destination' &&
     bl64_check_parameter 'pattern' 'pattern list' || return $BL64_VCS_ERROR_MISSING_PARAMETER
 
-  [[ ! -d "$destination" ]] && bl64_os_mkdir_full "$destination"
+  [[ ! -d "$destination" ]] && bl64_fs_mkdir_full "$destination"
   # shellcheck disable=SC2086
   bl64_check_directory "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
 
