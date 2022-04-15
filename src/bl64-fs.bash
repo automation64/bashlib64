@@ -346,7 +346,13 @@ function bl64_fs_mkdir() {
 #   command exit status
 #######################################
 function bl64_fs_mkdir_full() {
-  $BL64_OS_ALIAS_MKDIR_FULL "$@"
+  local verbose=''
+
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_MKDIR_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_OS_CMD_MKDIR" $verbose "$BL64_OS_SET_MKDIR_PARENTS" "$@"
 }
 
 #######################################
@@ -361,7 +367,13 @@ function bl64_fs_mkdir_full() {
 #   command exit status
 #######################################
 function bl64_fs_mv() {
-  $BL64_OS_ALIAS_MV "$@"
+  local verbose=''
+
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_MV_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_OS_CMD_MV" $verbose "$BL64_OS_SET_MV_FORCE" "$@"
 }
 
 #######################################
@@ -376,7 +388,13 @@ function bl64_fs_mv() {
 #   command exit status
 #######################################
 function bl64_fs_rm_file() {
-  $BL64_OS_ALIAS_RM_FILE "$@"
+  local verbose=''
+
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_RM_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_OS_CMD_RM" $verbose "$BL64_OS_SET_RM_FORCE" "$@"
 }
 
 #######################################
@@ -391,7 +409,13 @@ function bl64_fs_rm_file() {
 #   command exit status
 #######################################
 function bl64_fs_rm_full() {
-  $BL64_OS_ALIAS_RM_FULL "$@"
+  local verbose=''
+
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_RM_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_OS_CMD_RM" $verbose "$BL64_OS_SET_RM_FORCE" "$BL64_OS_SET_RM_RECURSIVE" "$@"
 }
 
 #######################################
