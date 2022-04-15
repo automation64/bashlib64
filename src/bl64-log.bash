@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -107,10 +107,13 @@ function bl64_log_setup() {
     return $BL64_LOG_ERROR_INVALID_VERBOSE
   fi
 
-  BL64_LOG_PATH="${path}" && \
-  BL64_LOG_VERBOSE="${verbose}" && \
-  BL64_LOG_TYPE="${type}" && \
+  bl64_dbg_lib_trace_start
+  BL64_LOG_PATH="${path}"
+  BL64_LOG_VERBOSE="${verbose}"
+  BL64_LOG_TYPE="${type}"
   BL64_LOG_FS="${fs}"
+  bl64_dbg_lib_trace_stop
+  return 0
 }
 
 #######################################
