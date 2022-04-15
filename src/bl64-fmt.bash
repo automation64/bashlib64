@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -115,16 +115,22 @@ function bl64_fmt_strip_ending_slash() {
 #   >0: printf error
 #######################################
 function bl64_fmt_basename() {
+  bl64_dbg_lib_trace_start
   local path="$1"
+  local base=''
 
-  # shellcheck disable=SC2086
-  if [[ -z "$path" ]]; then
-    return $BL64_LIB_VAR_OK
-  elif [[ "$path" == '/' ]]; then
-    return $BL64_LIB_VAR_OK
-  else
-    printf '%s' "${path##*/}"
+  if [[ -n "$path" && "$path" != '/' ]]; then
+    base="${path##*/}"
   fi
+
+  if [[ -z "$base" || "$base" == */* ]]; then
+    # shellcheck disable=SC2086
+    return $BL64_FMT_ERROR_NO_BASENAME
+  else
+    printf '%s' "$base"
+  fi
+  bl64_dbg_lib_trace_stop
+  return 0
 }
 
 #######################################
