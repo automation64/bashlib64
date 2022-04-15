@@ -13,6 +13,7 @@ setup() {
 @test "bl64_arc_open_tar: both parameters are not present" {
 
   run bl64_arc_open_tar
+  assert_failure
   assert_equal "$status" $BL64_ARC_ERROR_MISSING_PARAMETER
 
 }
@@ -20,6 +21,7 @@ setup() {
 @test "bl64_arc_open_tar: destination parameter is not present" {
 
   run bl64_arc_open_tar '/dev/null'
+  assert_failure
   assert_equal "$status" $BL64_ARC_ERROR_MISSING_PARAMETER
 
 }
@@ -27,6 +29,7 @@ setup() {
 @test "bl64_arc_open_tar: destination is invalid" {
 
   run bl64_arc_open_tar '/dev/null' '/dev/null'
+  assert_failure
   assert_equal "$status" $BL64_ARC_ERROR_INVALID_DESTINATION
 
 }

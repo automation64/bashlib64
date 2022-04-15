@@ -18,7 +18,7 @@ setup() {
   mkdir "$dest" &&
   ls /etc > "$source/file"
   run bl64_fs_cp_dir "$source" "$dest"
-  assert_equal "$status" '0'
+  assert_success
   assert_dir_exist "${dest}/source"
 }
 

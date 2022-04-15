@@ -16,8 +16,8 @@ setup() {
 @test "bl64_check_file: file is not present" {
 
   run bl64_check_file '/fake/file'
-  assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_FOUND && \
-  [[ "$output" == *${_BL64_CHECK_TXT_FILE_NOT_FOUND}* ]]
+  assert_failure
+  assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_FOUND
 
 }
 
@@ -29,16 +29,15 @@ setup() {
     test_file='/etc/shadow'
   fi
   run bl64_check_file "$test_file"
-
-  assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_READ && \
-  [[ "$output" == *${_BL64_CHECK_TXT_FILE_NOT_EXECUTABLE}* ]]
+  assert_failure
+  assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_READ
 
 }
 
 @test "bl64_check_file: file parameter is not present" {
 
   run bl64_check_file
-  assert_equal "$status" $BL64_CHECK_ERROR_MISSING_PARAMETER && \
-  [[ "$output" == *${_BL64_CHECK_TXT_MISSING_PARAMETER}* ]]
+  assert_failure
+  assert_equal "$status" $BL64_CHECK_ERROR_MISSING_PARAMETER
 
 }

@@ -11,6 +11,6 @@ setup() {
     skip 'this case can only be tested inside a container'
   fi
   set +u # to avoid IFS missing error in run function
-  run /usr/bin/sudo /bin/bash -c ". $DEVBL_TEST_BASHLIB64 bl64_pkg_deploy file"
+  run $BL64_RBAC_ALIAS_SUDO_ENV /bin/bash -c "source $DEVBL_TEST_BASHLIB64; bl64_pkg_deploy file"
   assert_success
 }

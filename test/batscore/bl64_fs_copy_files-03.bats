@@ -9,14 +9,22 @@ setup() {
 
   TEST_SANDBOX="$(temp_make)"
   TEST_SOURCE="$DEVBL_SAMPLES"
-  TEST_FILE='text_01.txt'
+  TEST_FILE1='text_01.txt'
+  TEST_FILE2='text_02.txt'
 }
 
-@test "bl64_fs_cp_file: copy file" {
+@test "bl64_fs_copy_files: copy files + perm" {
   set +u # to avoid IFS missing error in run function
-  run bl64_fs_cp_file "${TEST_SOURCE}/${TEST_FILE}" "$TEST_SANDBOX"
+  run bl64_fs_copy_files \
+    "0600" \
+    "$BL64_LIB_VAR_TBD" \
+    "$BL64_LIB_VAR_TBD" \
+    "$TEST_SANDBOX" \
+    "${TEST_SOURCE}/${TEST_FILE1}" \
+    "${TEST_SOURCE}/${TEST_FILE2}"
   assert_success
-  assert_file_exist "${TEST_SANDBOX}/${TEST_FILE}"
+  assert_file_exist "${TEST_SANDBOX}/${TEST_FILE1}"
+  assert_file_exist "${TEST_SANDBOX}/${TEST_FILE2}"
 }
 
 teardown() {

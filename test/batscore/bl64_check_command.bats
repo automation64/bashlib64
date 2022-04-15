@@ -16,6 +16,7 @@ setup() {
 @test "bl64_check_command: command is not present" {
 
   run bl64_check_command '/fake/command'
+  assert_failure
   assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_FOUND
 
 }
@@ -23,6 +24,7 @@ setup() {
 @test "bl64_check_command: command is not executable" {
 
   run bl64_check_command '/etc/hosts'
+  assert_failure
   assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_EXECUTE
 
 }
@@ -30,6 +32,7 @@ setup() {
 @test "bl64_check_command: command parameter is not present" {
 
   run bl64_check_command
+  assert_failure
   assert_equal "$status" $BL64_CHECK_ERROR_MISSING_PARAMETER
 
 }

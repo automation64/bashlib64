@@ -6,17 +6,16 @@ setup() {
   set +u # to avoid IFS missing error in run function
 }
 
-@test "bl64_log_setup: type format" {
+@test "bl64_check_privilege_root: is not root" {
 
-  run bl64_log_setup '/dev/null' '1' 'INVALID_TYPE'
+  run bl64_check_privilege_root
   assert_failure
-  assert_equal "$status" $BL64_LOG_ERROR_INVALID_TYPE
 
 }
 
-@test "bl64_log_setup: set type" {
+@test "bl64_check_privilege_root: is root" {
 
-  run bl64_log_setup '/dev/null' '1' "$BL64_LOG_TYPE_FILE"
+  run $BL64_RBAC_ALIAS_SUDO_ENV /bin/bash -c "source $DEVBL_TEST_BASHLIB64; bl64_check_privilege_root"
   assert_success
 
 }

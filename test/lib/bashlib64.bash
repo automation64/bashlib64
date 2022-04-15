@@ -5,34 +5,37 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.22.0
+# Version: 1.23.0
 #######################################
 
 # Enable library and app tracing
 [[ "$BL64_LIB_DEBUG" == '1' ]] && set -x
 
-readonly BL64_ARC_ERROR_MISSING_PARAMETER=200
-readonly BL64_ARC_ERROR_INVALID_DESTINATION=201
+declare -rig BL64_ARC_ERROR_MISSING_PARAMETER=200
+declare -rig BL64_ARC_ERROR_INVALID_DESTINATION=201
 
 readonly _BL64_ARC_TXT_MISSING_PARAMETER='required parameter is missing'
 readonly _BL64_ARC_TXT_DST_NOT_DIRECTORY='the destination is not a directory'
 
-readonly BL64_CHECK_ERROR_MISSING_PARAMETER=1
+declare -rig BL64_CHECK_ERROR_MISSING_PARAMETER=1
 
-readonly BL64_CHECK_ERROR_FILE_NOT_FOUND=2
-readonly BL64_CHECK_ERROR_FILE_NOT_READ=3
-readonly BL64_CHECK_ERROR_FILE_NOT_EXECUTE=4
+declare -rig BL64_CHECK_ERROR_FILE_NOT_FOUND=2
+declare -rig BL64_CHECK_ERROR_FILE_NOT_READ=3
+declare -rig BL64_CHECK_ERROR_FILE_NOT_EXECUTE=4
 
-readonly BL64_CHECK_ERROR_DIRECTORY_NOT_FOUND=5
-readonly BL64_CHECK_ERROR_DIRECTORY_NOT_READ=6
+declare -rig BL64_CHECK_ERROR_DIRECTORY_NOT_FOUND=5
+declare -rig BL64_CHECK_ERROR_DIRECTORY_NOT_READ=6
 
-readonly BL64_CHECK_ERROR_PARAMETER_EMPTY=7
+declare -rig BL64_CHECK_ERROR_PARAMETER_EMPTY=7
 
-readonly BL64_CHECK_ERROR_EXPORT_EMPTY=8
-readonly BL64_CHECK_ERROR_EXPORT_SET=9
+declare -rig BL64_CHECK_ERROR_EXPORT_EMPTY=8
+declare -rig BL64_CHECK_ERROR_EXPORT_SET=9
 
-readonly BL64_CHECK_ERROR_PATH_NOT_RELATIVE=10
+declare -rig BL64_CHECK_ERROR_PATH_NOT_RELATIVE=10
+declare -rig BL64_CHECK_ERROR_PATH_NOT_ABSOLUTE=11
 
+declare -rig BL64_CHECK_ERROR_PRIVILEGE_IS_ROOT=12
+declare -rig BL64_CHECK_ERROR_PRIVILEGE_IS_NOT_ROOT=13
 
 readonly _BL64_CHECK_TXT_MISSING_PARAMETER='required parameter is missing'
 
@@ -49,6 +52,10 @@ readonly _BL64_CHECK_TXT_EXPORT_EMPTY='required shell exported variable is empty
 readonly _BL64_CHECK_TXT_EXPORT_SET='required shell exported variable is not set'
 
 readonly _BL64_CHECK_TXT_PATH_NOT_RELATIVE='path is not relative'
+readonly _BL64_CHECK_TXT_PATH_NOT_ABSOLUTE='path is not absolute'
+
+readonly _BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT='the task requires root privilege. Please run the script as root or with SUDO'
+readonly _BL64_CHECK_TXT_PRIVILEGE_IS_ROOT='the task should not be run with root privilege. Please run the script as a regular user and not using SUDO'
 
 
 export BL64_DBG_TARGET_NONE='0'
@@ -63,13 +70,18 @@ export BL64_DBG_TARGET_LIB_ALL='8'
 
 readonly _BL64_DBG_TXT_FUNCTION_START='function tracing started'
 readonly _BL64_DBG_TXT_FUNCTION_STOP='function tracing stopped'
+readonly _BL64_DBG_TXT_SHELL_VAR='shell variable'
+
+declare -rig BL64_FS_ERROR_MISSING_PARAMETER=50
+
+declare -rig BL64_FMT_ERROR_NO_BASENAME=50
 
 export BL64_IAM_CMD_USERADD
 
 export BL64_IAM_ALIAS_USERADD
 
-readonly BL64_IAM_ERROR_MISSING_PARAMETER=200
-readonly BL64_IAM_ERROR_MISSING_USER_ADD=201
+declare -rig BL64_IAM_ERROR_MISSING_PARAMETER=200
+declare -rig BL64_IAM_ERROR_MISSING_USER_ADD=201
 
 readonly _BL64_IAM_TXT_MISSING_PARAMETER='required parameter is missing'
 
@@ -81,10 +93,10 @@ readonly BL64_LOG_CATEGORY_WARNING='warning'
 readonly BL64_LOG_CATEGORY_ERROR='error'
 readonly BL64_LOG_CATEGORY_RECORD='record'
 
-readonly BL64_LOG_ERROR_MISSING_PARAMETER=200
-readonly BL64_LOG_ERROR_INVALID_TYPE=201
-readonly BL64_LOG_ERROR_INVALID_VERBOSE=202
-readonly BL64_LOG_ERROR_NOT_SETUP=203
+declare -rig BL64_LOG_ERROR_MISSING_PARAMETER=200
+declare -rig BL64_LOG_ERROR_INVALID_TYPE=201
+declare -rig BL64_LOG_ERROR_INVALID_VERBOSE=202
+declare -rig BL64_LOG_ERROR_NOT_SETUP=203
 
 readonly _BL64_LOG_TXT_NOT_SETUP='missing setup information. Please use the bl64_log_setup function before calling bl64_log_* functions'
 readonly _BL64_LOG_TXT_MISSING_PARAMETER='required parameter is missing'
@@ -102,7 +114,7 @@ readonly BL64_MSG_FORMAT_TIME='T'
 readonly BL64_MSG_FORMAT_CALLER='C'
 readonly BL64_MSG_FORMAT_FULL='F'
 
-readonly BL64_MSG_ERROR_INVALID_FORMAT=200
+declare -rig BL64_MSG_ERROR_INVALID_FORMAT=200
 
 readonly _BL64_MSG_TXT_USAGE='Usage'
 readonly _BL64_MSG_TXT_COMMANDS='Commands'
@@ -156,6 +168,15 @@ export BL64_OS_ALIAS_MV
 export BL64_OS_ALIAS_RM_FILE
 export BL64_OS_ALIAS_RM_FULL
 
+export BL64_OS_SET_MKDIR_VERBOSE
+export BL64_OS_SET_CHOWN_VERBOSE
+export BL64_OS_SET_CHOWN_RECURSIVE
+export BL64_OS_SET_CP_VERBOSE
+export BL64_OS_SET_CP_RECURSIVE
+export BL64_OS_SET_CP_FORCE
+export BL64_OS_SET_CHMOD_VERBOSE
+export BL64_OS_SET_CHMOD_RECURSIVE
+
 readonly BL64_OS_TAGS='ALM ALP AMZ CNT DEB FD MCOS OL RHEL UB'; export BL64_OS_TAGS
 
 readonly BL64_OS_ALM='ALMALINUX'; export BL64_OS_ALM
@@ -170,9 +191,9 @@ readonly BL64_OS_RHEL='RHEL'; export BL64_OS_RHEL
 readonly BL64_OS_UB='UBUNTU'; export BL64_OS_UB
 readonly BL64_OS_UNK='UNKNOWN'; export BL64_OS_UNK
 
-readonly BL64_OS_ERROR_NO_OS_MATCH=200
-readonly BL64_OS_ERROR_INVALID_OS_TAG=201
-readonly BL64_OS_ERROR_UNKNOWN_OS=202
+declare -rig BL64_OS_ERROR_NO_OS_MATCH=200
+declare -rig BL64_OS_ERROR_INVALID_OS_TAG=201
+declare -rig BL64_OS_ERROR_UNKNOWN_OS=202
 
 export BL64_PKG_CMD_APT
 export BL64_PKG_CMD_DNF
@@ -195,11 +216,28 @@ export BL64_PKG_ALIAS_BRW_INSTALL
 export BL64_PKG_ALIAS_BRW_UPDATE
 export BL64_PKG_ALIAS_BRW_CLEAN
 
-readonly BL64_RND_LENGTH_1=1
-readonly BL64_RND_LENGTH_20=20
-readonly BL64_RND_LENGTH_100=100
-readonly BL64_RND_RANDOM_MIN=0
-readonly BL64_RND_RANDOM_MAX=32767
+export BL64_RBAC_CMD_SUDO
+export BL64_RBAC_CMD_VISUDO
+export BL64_RBAC_FILE_SUDOERS
+
+declare -rig BL64_RBAC_ERROR_MISSING_PARAMETER=200
+declare -rig BL64_RBAC_ERROR_MISSING_AWK=201
+declare -rig BL64_RBAC_ERROR_MISSING_SUDOERS=202
+declare -rig BL64_RBAC_ERROR_MISSING_VISUDO=203
+declare -rig BL64_RBAC_ERROR_MISSING_SUDO=204
+declare -rig BL64_RBAC_ERROR_UPDATE_FAILED=210
+declare -rig BL64_RBAC_ERROR_INVALID_SUDOERS=211
+
+readonly _BL64_RBAC_TXT_MISSING_PARAMETER='required parameter is missing'
+readonly _BL64_RBAC_TXT_INVALID_SUDOERS='the sudoers file is corrupt or invalid'
+
+export BL64_RBAC_ALIAS_SUDO_ENV
+
+declare -rig BL64_RND_LENGTH_1=1
+declare -rig BL64_RND_LENGTH_20=20
+declare -rig BL64_RND_LENGTH_100=100
+declare -rig BL64_RND_RANDOM_MIN=0
+declare -rig BL64_RND_RANDOM_MAX=32767
 
 readonly BL64_RND_POOL_UPPERCASE="$(printf '%b' $(printf '\\%o' {65..90}))"
 readonly BL64_RND_POOL_UPPERCASE_MAX_IDX="$(( ${#BL64_RND_POOL_UPPERCASE} - 1 ))"
@@ -210,8 +248,8 @@ readonly BL64_RND_POOL_DIGITS_MAX_IDX="$(( ${#BL64_RND_POOL_DIGITS} - 1 ))"
 readonly BL64_RND_POOL_ALPHANUMERIC="${BL64_RND_POOL_UPPERCASE}${BL64_RND_POOL_LOWERCASE}${BL64_RND_POOL_DIGITS}"
 readonly BL64_RND_POOL_ALPHANUMERIC_MAX_IDX="$(( ${#BL64_RND_POOL_ALPHANUMERIC} - 1 ))"
 
-readonly BL64_RND_ERROR_MIN=1
-readonly BL64_RND_ERROR_MAX=2
+declare -rig BL64_RND_ERROR_MIN=1
+declare -rig BL64_RND_ERROR_MAX=2
 
 readonly _BL64_RND_TXT_LENGHT_MIN='length can not be less than'
 readonly _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
@@ -227,11 +265,11 @@ export BL64_RXTX_SET_WGET_VERBOSE
 export BL64_RXTX_SET_CURL_OUTPUT
 export BL64_RXTX_SET_WGET_OUTPUT
 
-readonly BL64_RXTX_ERROR_BACKUP=197
-readonly BL64_RXTX_ERROR_RESTORE=198
-readonly BL64_RXTX_ERROR_TEMPORARY_REPO=199
-readonly BL64_RXTX_ERROR_MISSING_PARAMETER=200
-readonly BL64_RXTX_ERROR_MISSING_COMMAND=201
+declare -rig BL64_RXTX_ERROR_BACKUP=197
+declare -rig BL64_RXTX_ERROR_RESTORE=198
+declare -rig BL64_RXTX_ERROR_TEMPORARY_REPO=199
+declare -rig BL64_RXTX_ERROR_MISSING_PARAMETER=200
+declare -rig BL64_RXTX_ERROR_MISSING_COMMAND=201
 
 readonly _BL64_RXTX_TXT_MISSING_PARAMETER='required parameter is missing'
 readonly _BL64_RXTX_TXT_MISSING_COMMAND='no web transfer command was found on the system'
@@ -240,33 +278,17 @@ readonly _BL64_RXTX_TXT_CREATION_PROBLEM='unable to create temporary git repo'
 
 readonly _BL64_RXTX_BACKUP_POSTFIX='._bl64_rxtx_backup'
 
-export BL64_SUDO_CMD_SUDO
-export BL64_SUDO_CMD_VISUDO
-export BL64_SUDO_FILE_SUDOERS
-
-readonly BL64_SUDO_ERROR_MISSING_PARAMETER=200
-readonly BL64_SUDO_ERROR_MISSING_AWK=201
-readonly BL64_SUDO_ERROR_MISSING_SUDOERS=202
-readonly BL64_SUDO_ERROR_MISSING_VISUDO=203
-readonly BL64_SUDO_ERROR_UPDATE_FAILED=210
-readonly BL64_SUDO_ERROR_INVALID_SUDOERS=211
-
-readonly _BL64_SUDO_TXT_MISSING_PARAMETER='required parameter is missing'
-readonly _BL64_SUDO_TXT_INVALID_SUDOERS='the sudoers file is corrupt or invalid'
-
-export BL64_SUDO_ALIAS_SUDO_ENV
-
 export BL64_VCS_CMD_GIT
 
 export BL64_VCS_ALIAS_GIT
 
-readonly BL64_VCS_ERROR_MISSING_PARAMETER=200
-readonly BL64_VCS_ERROR_DESTINATION_ERROR=201
-readonly BL64_VCS_ERROR_MISSING_COMMAND=202
+declare -rig BL64_VCS_ERROR_MISSING_PARAMETER=200
+declare -rig BL64_VCS_ERROR_DESTINATION_ERROR=201
+declare -rig BL64_VCS_ERROR_MISSING_COMMAND=202
 
-readonly BL64_XSV_ERROR_SEARCH_VALUES=199
-readonly BL64_XSV_ERROR_MISSING_PARAMETER=200
-readonly BL64_XSV_ERROR_MISSING_COMMAND=201
+declare -rig BL64_XSV_ERROR_SEARCH_VALUES=199
+declare -rig BL64_XSV_ERROR_MISSING_PARAMETER=200
+declare -rig BL64_XSV_ERROR_MISSING_COMMAND=201
 
 readonly BL64_XSV_FS='_@64@_'       # Custom
 readonly BL64_XSV_FS_SPACE=' '
@@ -459,14 +481,49 @@ function bl64_check_path_relative() {
   return 0
 }
 
+function bl64_check_path_absolute() {
+  local path="$1"
+  local message="${2:-$_BL64_CHECK_TXT_PATH_NOT_ABSOLUTE}"
+
+  if [[ -z "$path" ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (path)"
+    return $BL64_CHECK_ERROR_MISSING_PARAMETER
+  fi
+  if [[ "$path" != '/' && "$path" != /* ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
+    return $BL64_CHECK_ERROR_PATH_NOT_ABSOLUTE
+  fi
+  return 0
+}
+
+function bl64_check_privilege_root() {
+  bl64_dbg_lib_show_vars 'EUID'
+  if [[ "$EUID" != '0' ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT (EUID: $EUID)"
+    return $BL64_CHECK_ERROR_PRIVILEGE_IS_NOT_ROOT
+  fi
+  return 0
+}
+
+function bl64_check_privilege_not_root() {
+  bl64_dbg_lib_show_vars 'EUID'
+  if [[ "$EUID" == '0' ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_PRIVILEGE_IS_ROOT"
+    return $BL64_CHECK_ERROR_PRIVILEGE_IS_ROOT
+  fi
+  return 0
+}
+
 function bl64_dbg_app_trace_stop() {
   [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]] &&
-    set +x
+    set +x &&
+    bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
   return 0
 }
 
 function bl64_dbg_app_trace_start() {
   [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]] &&
+    bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_FUNCTION_START}" &&
     set -x
   return 0
 }
@@ -485,7 +542,7 @@ function bl64_dbg_lib_trace_start() {
   return 0
 }
 
-function bl64_dbg_lib_show() {
+function bl64_dbg_lib_show_info() {
   local message="$1"
 
   [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TASK" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]] &&
@@ -494,11 +551,254 @@ function bl64_dbg_lib_show() {
   return 0
 }
 
-function bl64_dbg_app_show() {
+function bl64_dbg_app_show_info() {
   local message="$1"
 
   [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TASK" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]] &&
     bl64_msg_show_debug "[${FUNCNAME[1]}] $message"
+
+  return 0
+}
+
+function bl64_dbg_lib_show_vars() {
+  local variable=''
+
+  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_TASK" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_ALL" && "$#" == '0' ]] &&
+    return 0
+
+  for variable in "$@"; do
+    eval "bl64_msg_show_debug \"[${FUNCNAME[1]}] ${_BL64_DBG_TXT_SHELL_VAR} ${variable}=\$${variable}\""
+  done
+
+  return 0
+}
+
+function bl64_dbg_app_show_vars() {
+  local variable=''
+
+  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_TASK" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_ALL" && "$#" == '0' ]] &&
+    return 0
+
+  for variable in "$@"; do
+    eval "bl64_msg_show_debug \"[${FUNCNAME[1]}] ${_BL64_DBG_TXT_SHELL_VAR} ${variable}=\$${variable}\""
+  done
+
+  return 0
+}
+
+function bl64_fs_create_dir() {
+  local mode="${1:-"$BL64_LIB_VAR_TBD"}"
+  local user="${2:-"$BL64_LIB_VAR_TBD"}"
+  local group="${3:-"$BL64_LIB_VAR_TBD"}"
+  local path=''
+  local -i status=0
+
+  bl64_dbg_lib_show_info "parameters:[${*}]"
+  shift
+  shift
+  shift
+
+  (($# == 0)) && return $BL64_FS_ERROR_MISSING_PARAMETER
+  bl64_dbg_lib_show_info "parameters:[${*}]"
+
+  for path in "$@"; do
+
+    bl64_check_path_absolute "$path" &&
+      bl64_fs_mkdir "$path"
+    status=$?
+    ((status != 0)) && break
+
+    if [[ "$mode" != "$BL64_LIB_VAR_TBD" ]]; then
+      bl64_fs_chmod "$mode" "$path"
+      status=$?
+      ((status != 0)) && break
+    fi
+
+    if [[ "$user" != "$BL64_LIB_VAR_TBD" && "$group" != "$BL64_LIB_VAR_TBD" ]]; then
+      bl64_fs_chown "${user}:${group}" "$path"
+      status=$?
+      ((status != 0)) && break
+    fi
+
+  done
+
+  return $status
+}
+
+function bl64_fs_copy_files() {
+  local mode="${1:-"$BL64_LIB_VAR_TBD"}"
+  local user="${2:-"$BL64_LIB_VAR_TBD"}"
+  local group="${3:-"$BL64_LIB_VAR_TBD"}"
+  local destination="${4:-"$BL64_LIB_VAR_TBD"}"
+  local path=''
+  local target=''
+  local -i status=0
+
+  bl64_check_directory "$destination" || return $?
+
+  bl64_dbg_lib_show_info "parameters:[${*}]"
+  shift
+  shift
+  shift
+  shift
+
+  (($# == 0)) && return $BL64_FS_ERROR_MISSING_PARAMETER
+  bl64_dbg_lib_show_info "parameters:[${*}]"
+
+  for path in "$@"; do
+
+    target=''
+    bl64_check_path_absolute "$path" &&
+      target="${destination}/$(bl64_fmt_basename "$path")" &&
+      bl64_fs_cp_file "$path" "$target" || return $?
+
+    if [[ "$mode" != "$BL64_LIB_VAR_TBD" ]]; then
+      bl64_fs_chmod "$mode" "$target" || return $?
+    fi
+
+    if [[ "$user" != "$BL64_LIB_VAR_TBD" && "$group" != "$BL64_LIB_VAR_TBD" ]]; then
+      bl64_fs_chown "${user}:${group}" "$target" || return $?
+    fi
+
+  done
+
+  return $status
+}
+
+function bl64_fs_merge_dir() {
+  local source="${1:-${BL64_LIB_VAR_TBD}}"
+  local target="${2:-${BL64_LIB_VAR_TBD}}"
+  local -i status=0
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'target' &&
+    bl64_check_directory "$source" &&
+    bl64_check_directory "$target" ||
+    return 1
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+    bl64_fs_cp_dir --no-target-directory "$source" "$target"
+    status=$?
+    ;;
+  ${BL64_OS_MCOS}-*)
+    bl64_fs_cp_dir ${source}/ "$target"
+    status=$?
+    ;;
+  ${BL64_OS_ALP}-*)
+    shopt -sq dotglob
+    bl64_fs_cp_dir ${source}/* -t "$target"
+    status=$?
+    shopt -uq dotglob
+    ;;
+  esac
+
+  return $status
+}
+
+function bl64_fs_chown() {
+  local verbose=''
+
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_CHOWN_VERBOSE"
+
+  "$BL64_OS_CMD_CHOWN" $verbose "$@"
+}
+
+function bl64_fs_chmod() {
+  local verbose=''
+
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_CHMOD_VERBOSE"
+
+  "$BL64_OS_CMD_CHMOD" $verbose "$@"
+}
+
+function bl64_fs_chown_dir() {
+  local verbose=''
+
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_CHMOD_VERBOSE"
+
+  "$BL64_OS_CMD_CHMOD" $verbose "$BL64_OS_SET_CHOWN_RECURSIVE" "$@"
+}
+
+function bl64_fs_cp_file() {
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_CP_VERBOSE"
+
+  "$BL64_OS_CMD_CP" $verbose "$BL64_OS_SET_CP_FORCE" "$@"
+}
+
+function bl64_fs_cp_dir() {
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_CP_VERBOSE"
+
+  "$BL64_OS_CMD_CP" $verbose "$BL64_OS_SET_CP_FORCE" "$BL64_OS_SET_CP_RECURSIVE" "$@"
+}
+
+function bl64_fs_ln_symbolic() {
+  $BL64_OS_ALIAS_LN_SYMBOLIC "$@"
+}
+
+function bl64_fs_ls_files() {
+  $BL64_OS_ALIAS_LS_FILES "$@"
+}
+
+function bl64_fs_mkdir() {
+  local verbose=''
+
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_MKDIR_VERBOSE"
+
+  "$BL64_OS_CMD_MKDIR" $verbose "$@"
+}
+
+function bl64_fs_mkdir_full() {
+  $BL64_OS_ALIAS_MKDIR_FULL "$@"
+}
+
+function bl64_fs_mv() {
+  $BL64_OS_ALIAS_MV "$@"
+}
+
+function bl64_fs_rm_file() {
+  $BL64_OS_ALIAS_RM_FILE "$@"
+}
+
+function bl64_fs_rm_full() {
+  $BL64_OS_ALIAS_RM_FULL "$@"
+}
+
+function bl64_fs_cleanup_tmps() {
+  $BL64_OS_ALIAS_RM_FULL -- /tmp/[[:alnum:]]*
+  $BL64_OS_ALIAS_RM_FULL -- /var/tmp/[[:alnum:]]*
+  return 0
+}
+
+function bl64_fs_cleanup_logs() {
+  local target='/var/log'
+
+  if [[ -d "$target" ]]; then
+    $BL64_OS_ALIAS_RM_FULL ${target}/[[:alnum:]]*
+  fi
+  return 0
+}
+
+function bl64_fs_cleanup_caches() {
+  local target='/var/cache/man'
+
+  if [[ -d "$target" ]]; then
+    $BL64_OS_ALIAS_RM_FULL ${target}/[[:alnum:]]*
+  fi
+  return 0
+}
+
+function bl64_fs_cleanup_full() {
+  bl64_pkg_cleanup
+  bl64_fs_cleanup_tmps
+  bl64_fs_cleanup_logs
+  bl64_fs_cleanup_caches
 
   return 0
 }
@@ -538,15 +838,21 @@ function bl64_fmt_strip_ending_slash() {
 }
 
 function bl64_fmt_basename() {
+  bl64_dbg_lib_trace_start
   local path="$1"
+  local base=''
 
-  if [[ -z "$path" ]]; then
-    return $BL64_LIB_VAR_OK
-  elif [[ "$path" == '/' ]]; then
-    return $BL64_LIB_VAR_OK
-  else
-    printf '%s' "${path##*/}"
+  if [[ -n "$path" && "$path" != '/' ]]; then
+    base="${path##*/}"
   fi
+
+  if [[ -z "$base" || "$base" == */* ]]; then
+    return $BL64_FMT_ERROR_NO_BASENAME
+  else
+    printf '%s' "$base"
+  fi
+  bl64_dbg_lib_trace_stop
+  return 0
 }
 
 function bl64_fmt_dirname() {
@@ -680,10 +986,13 @@ function bl64_log_setup() {
     return $BL64_LOG_ERROR_INVALID_VERBOSE
   fi
 
-  BL64_LOG_PATH="${path}" && \
-  BL64_LOG_VERBOSE="${verbose}" && \
-  BL64_LOG_TYPE="${type}" && \
+  bl64_dbg_lib_trace_start
+  BL64_LOG_PATH="${path}"
+  BL64_LOG_VERBOSE="${verbose}"
+  BL64_LOG_TYPE="${type}"
   BL64_LOG_FS="${fs}"
+  bl64_dbg_lib_trace_stop
+  return 0
 }
 
 function bl64_log_info() {
@@ -925,38 +1234,6 @@ function _bl64_os_match() {
   fi
 }
 
-
-function bl64_os_match() {
-  local item=''
-
-  bl64_dbg_lib_show "[OSList=${*}}] / [BL64_OS_DISTRO=${BL64_OS_DISTRO}]"
-  for item in "$@"; do
-    case "$item" in
-    'ALM' | ALM-*) _bl64_os_match "$BL64_OS_ALM" "$item" && return 0 ;;
-    'ALP' | ALP-*) _bl64_os_match "$BL64_OS_ALP" "$item" && return 0 ;;
-    'CNT' | CNT-*) _bl64_os_match "$BL64_OS_CNT" "$item" && return 0 ;;
-    'DEB' | DEB-*) _bl64_os_match "$BL64_OS_DEB" "$item" && return 0 ;;
-    'FD' | FD-*) _bl64_os_match "$BL64_OS_FD" "$item" && return 0 ;;
-    'MCOS' | MCOS-*) _bl64_os_match "$BL64_OS_MCOS" "$item" && return 0 ;;
-    'OL' | OL-*) _bl64_os_match "$BL64_OS_OL" "$item" && return 0 ;;
-    'RHEL' | RHEL-*) _bl64_os_match "$BL64_OS_RHEL" "$item" && return 0 ;;
-    'UB' | UB-*) _bl64_os_match "$BL64_OS_UB" "$item" && return 0 ;;
-    *) return $BL64_OS_ERROR_INVALID_OS_TAG ;;
-    esac
-  done
-
-  return $BL64_OS_ERROR_NO_OS_MATCH
-}
-
-function bl64_os_get_distro() {
-  if [[ -r '/etc/os-release' ]]; then
-    _bl64_os_get_distro_from_os_release
-  else
-    _bl64_os_get_distro_from_uname
-  fi
-
-}
-
 function _bl64_os_get_distro_from_uname() {
   local os_type=''
   local os_version=''
@@ -970,6 +1247,8 @@ function _bl64_os_get_distro_from_uname() {
     ;;
   *) BL64_OS_DISTRO='UNKNOWN' ;;
   esac
+
+  return 0
 }
 
 function _bl64_os_get_distro_from_os_release() {
@@ -997,6 +1276,40 @@ function _bl64_os_get_distro_from_os_release() {
   ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
   *) BL64_OS_DISTRO='UNKNOWN' ;;
   esac
+
+  return 0
+}
+
+
+function bl64_os_match() {
+  local item=''
+
+  bl64_dbg_lib_show_info "[OSList=${*}}] / [BL64_OS_DISTRO=${BL64_OS_DISTRO}]"
+  for item in "$@"; do
+    case "$item" in
+    'ALM' | ALM-*) _bl64_os_match "$BL64_OS_ALM" "$item" && return 0 ;;
+    'ALP' | ALP-*) _bl64_os_match "$BL64_OS_ALP" "$item" && return 0 ;;
+    'CNT' | CNT-*) _bl64_os_match "$BL64_OS_CNT" "$item" && return 0 ;;
+    'DEB' | DEB-*) _bl64_os_match "$BL64_OS_DEB" "$item" && return 0 ;;
+    'FD' | FD-*) _bl64_os_match "$BL64_OS_FD" "$item" && return 0 ;;
+    'MCOS' | MCOS-*) _bl64_os_match "$BL64_OS_MCOS" "$item" && return 0 ;;
+    'OL' | OL-*) _bl64_os_match "$BL64_OS_OL" "$item" && return 0 ;;
+    'RHEL' | RHEL-*) _bl64_os_match "$BL64_OS_RHEL" "$item" && return 0 ;;
+    'UB' | UB-*) _bl64_os_match "$BL64_OS_UB" "$item" && return 0 ;;
+    *) return $BL64_OS_ERROR_INVALID_OS_TAG ;;
+    esac
+  done
+
+  return $BL64_OS_ERROR_NO_OS_MATCH
+}
+
+function bl64_os_get_distro() {
+  if [[ -r '/etc/os-release' ]]; then
+    _bl64_os_get_distro_from_os_release
+  else
+    _bl64_os_get_distro_from_uname
+  fi
+
 }
 
 function bl64_os_set_command() {
@@ -1090,6 +1403,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_UNAME='/usr/bin/uname'
     ;;
   esac
+
 }
 
 function bl64_os_set_alias() {
@@ -1097,164 +1411,87 @@ function bl64_os_set_alias() {
 
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+    BL64_OS_SET_MKDIR_VERBOSE='--verbose'
+    BL64_OS_SET_CHOWN_VERBOSE='--verbose'
+    BL64_OS_SET_CHOWN_RECURSIVE='--recursive'
+    BL64_OS_SET_CP_VERBOSE='--verbose'
+    BL64_OS_SET_CP_RECURSIVE='--recursive'
+    BL64_OS_SET_CP_FORCE='--force'
+    BL64_OS_SET_CHMOD_VERBOSE='--verbose'
+    BL64_OS_SET_CHMOD_RECURSIVE='--recursive'
+
     if [[ -x "$cmd_mawk" ]]; then
       BL64_OS_ALIAS_AWK="$cmd_mawk"
     else
       BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
     fi
-    BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN --verbose --recursive"
-    BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP --verbose --force --recursive"
-    BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP --verbose --force"
-    BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
-    BL64_OS_ALIAS_LN_SYMBOLIC="$BL64_OS_CMD_LN --verbose --symbolic"
-    BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
-    BL64_OS_ALIAS_MKDIR_FULL="$BL64_OS_CMD_MKDIR --parents --verbose"
-    BL64_OS_ALIAS_MKTEMP_DIR="$BL64_OS_CMD_MKTEMP -d"
-    BL64_OS_ALIAS_MKTEMP_FILE="$BL64_OS_CMD_MKTEMP"
-    BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV --force --verbose"
-    BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM --verbose --force --one-file-system"
-    BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM --verbose --force --one-file-system --recursive"
+    BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
+    BL64_OS_ALIAS_LN_SYMBOLIC="${BL64_OS_CMD_LN} --verbose --symbolic"
+    BL64_OS_ALIAS_LS_FILES="${BL64_OS_CMD_LS} --color=never"
+    BL64_OS_ALIAS_MKDIR_FULL="${BL64_OS_CMD_MKDIR} ${BL64_OS_SET_MKDIR_VERBOSE} --parents"
+    BL64_OS_ALIAS_MKTEMP_DIR="${BL64_OS_CMD_MKTEMP} -d"
+    BL64_OS_ALIAS_MKTEMP_FILE="${BL64_OS_CMD_MKTEMP}"
+    BL64_OS_ALIAS_MV="${BL64_OS_CMD_MV} --force --verbose"
+    BL64_OS_ALIAS_RM_FILE="${BL64_OS_CMD_RM} --verbose --force --one-file-system"
+    BL64_OS_ALIAS_RM_FULL="${BL64_OS_CMD_RM} --verbose --force --one-file-system --recursive"
     ;;
   ${BL64_OS_ALP}-*)
+    BL64_OS_SET_MKDIR_VERBOSE=' '
+    BL64_OS_SET_CHOWN_VERBOSE='-v'
+    BL64_OS_SET_CHOWN_RECURSIVE='-R'
+    BL64_OS_SET_CP_VERBOSE='-v'
+    BL64_OS_SET_CP_RECURSIVE='-R'
+    BL64_OS_SET_CP_FORCE='-f'
+    BL64_OS_SET_CHMOD_VERBOSE='-v'
+    BL64_OS_SET_CHMOD_RECURSIVE='-R'
+
     BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
-    BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN -v -R"
-    BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP -v -f -R"
-    BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP -v -f"
-    BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
-    BL64_OS_ALIAS_LN_SYMBOLIC="$BL64_OS_CMD_LN -v -s"
-    BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
-    BL64_OS_ALIAS_MKDIR_FULL="$BL64_OS_CMD_MKDIR -p"
-    BL64_OS_ALIAS_MKTEMP_DIR="$BL64_OS_CMD_MKTEMP -d"
-    BL64_OS_ALIAS_MKTEMP_FILE="$BL64_OS_CMD_MKTEMP"
-    BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV -f"
-    BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM -f"
-    BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM -f -R"
+    BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
+    BL64_OS_ALIAS_LN_SYMBOLIC="${BL64_OS_CMD_LN} -v -s"
+    BL64_OS_ALIAS_LS_FILES="${BL64_OS_CMD_LS} --color=never"
+    BL64_OS_ALIAS_MKDIR_FULL="${BL64_OS_CMD_MKDIR} -p"
+    BL64_OS_ALIAS_MKTEMP_DIR="${BL64_OS_CMD_MKTEMP} -d"
+    BL64_OS_ALIAS_MKTEMP_FILE="${BL64_OS_CMD_MKTEMP}"
+    BL64_OS_ALIAS_MV="${BL64_OS_CMD_MV} -f"
+    BL64_OS_ALIAS_RM_FILE="${BL64_OS_CMD_RM} -f"
+    BL64_OS_ALIAS_RM_FULL="${BL64_OS_CMD_RM} -f -R"
     ;;
   ${BL64_OS_MCOS}-*)
+    BL64_OS_SET_MKDIR_VERBOSE='-v'
+    BL64_OS_SET_CHOWN_VERBOSE='-v'
+    BL64_OS_SET_CHOWN_RECURSIVE='-R'
+    BL64_OS_SET_CP_VERBOSE='-v'
+    BL64_OS_SET_CP_RECURSIVE='-R'
+    BL64_OS_SET_CP_FORCE='-f'
+    BL64_OS_SET_CHMOD_VERBOSE='-v'
+    BL64_OS_SET_CHMOD_RECURSIVE='-R'
+
     BL64_OS_ALIAS_AWK="$BL64_OS_CMD_AWK"
-    BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN -v -R"
-    BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP -v -f -R"
-    BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP -v -f"
-    BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
-    BL64_OS_ALIAS_LN_SYMBOLIC="$BL64_OS_CMD_LN -v -s"
-    BL64_OS_ALIAS_LS_FILES="$BL64_OS_CMD_LS --color=never"
-    BL64_OS_ALIAS_MKDIR_FULL="$BL64_OS_CMD_MKDIR -v -p"
-    BL64_OS_ALIAS_MKTEMP_DIR="$BL64_OS_CMD_MKTEMP -d"
-    BL64_OS_ALIAS_MKTEMP_FILE="$BL64_OS_CMD_MKTEMP"
-    BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV -v -f"
-    BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM -v -f"
-    BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM -v -f -R"
-    ;;
-  esac
-}
-
-function bl64_os_chown_dir() {
-  $BL64_OS_ALIAS_CHOWN_DIR "$@"
-}
-
-function bl64_os_cp_file() {
-  $BL64_OS_ALIAS_CP_FILE "$@"
-}
-
-function bl64_os_cp_dir() {
-  $BL64_OS_ALIAS_CP_DIR "$@"
-}
-
-function bl64_os_merge_dir() {
-  local source="${1:-${BL64_LIB_VAR_TBD}}"
-  local target="${2:-${BL64_LIB_VAR_TBD}}"
-  local status=0
-
-  bl64_check_parameter 'source' &&
-    bl64_check_parameter 'target' &&
-    bl64_check_directory "$source" &&
-    bl64_check_directory "$target" ||
-    return 1
-
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    $BL64_OS_ALIAS_CP_DIR --no-target-directory "$source" "$target"
-    status=$?
-    ;;
-  ${BL64_OS_MCOS}-*)
-    $BL64_OS_ALIAS_CP_DIR ${source}/ "$target"
-    status=$?
-    ;;
-  ${BL64_OS_ALP}-*)
-    shopt -sq dotglob
-    $BL64_OS_ALIAS_CP_DIR ${source}/* -t "$target"
-    status=$?
-    shopt -uq dotglob
+    BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
+    BL64_OS_ALIAS_LN_SYMBOLIC="${BL64_OS_CMD_LN} -v -s"
+    BL64_OS_ALIAS_LS_FILES="${BL64_OS_CMD_LS} --color=never"
+    BL64_OS_ALIAS_MKDIR_FULL="${BL64_OS_CMD_MKDIR} ${BL64_OS_SET_MKDIR_VERBOSE} -p"
+    BL64_OS_ALIAS_MKTEMP_DIR="${BL64_OS_CMD_MKTEMP} -d"
+    BL64_OS_ALIAS_MKTEMP_FILE="${BL64_OS_CMD_MKTEMP}"
+    BL64_OS_ALIAS_MV="${BL64_OS_CMD_MV} -v -f"
+    BL64_OS_ALIAS_RM_FILE="${BL64_OS_CMD_RM} -v -f"
+    BL64_OS_ALIAS_RM_FULL="${BL64_OS_CMD_RM} -v -f -R"
     ;;
   esac
 
-  return $status
+  BL64_OS_ALIAS_CHOWN_DIR="${BL64_OS_CMD_CHOWN} ${BL64_OS_SET_CHOWN_VERBOSE} ${BL64_OS_SET_CHOWN_RECURSIVE}"
+  BL64_OS_ALIAS_CP_DIR="${BL64_OS_CMD_CP} ${BL64_OS_SET_CP_VERBOSE} ${BL64_OS_SET_CP_FORCE} ${BL64_OS_SET_CP_RECURSIVE}"
+  BL64_OS_ALIAS_CP_FILE="${BL64_OS_CMD_CP} ${BL64_OS_SET_CP_VERBOSE} ${BL64_OS_SET_CP_FORCE}"
+
 }
 
 function bl64_os_id_user() {
   $BL64_OS_ALIAS_ID_USER "$@"
 }
 
-function bl64_os_ln_symbolic() {
-  $BL64_OS_ALIAS_LN_SYMBOLIC "$@"
-}
-
-function bl64_os_ls_files() {
-  $BL64_OS_ALIAS_LS_FILES "$@"
-}
-
-function bl64_os_mkdir_full() {
-  $BL64_OS_ALIAS_MKDIR_FULL "$@"
-}
-
-function bl64_os_mv() {
-  $BL64_OS_ALIAS_MV "$@"
-}
-
-function bl64_os_rm_file() {
-  $BL64_OS_ALIAS_RM_FILE "$@"
-}
-
-function bl64_os_rm_full() {
-  $BL64_OS_ALIAS_RM_FULL "$@"
-}
-
-function bl64_os_cleanup_tmps() {
-  $BL64_OS_ALIAS_RM_FULL -- /tmp/[[:alnum:]]*
-  $BL64_OS_ALIAS_RM_FULL -- /var/tmp/[[:alnum:]]*
-  return 0
-}
-
-function bl64_os_cleanup_logs() {
-  local target='/var/log'
-
-  if [[ -d "$target" ]]; then
-    $BL64_OS_ALIAS_RM_FULL ${target}/[[:alnum:]]*
-  fi
-  return 0
-}
-
-function bl64_os_cleanup_caches() {
-  local target='/var/cache/man'
-
-  if [[ -d "$target" ]]; then
-    $BL64_OS_ALIAS_RM_FULL ${target}/[[:alnum:]]*
-  fi
-  return 0
-}
-
-function bl64_os_cleanup_full() {
-  bl64_pkg_cleanup
-  bl64_os_cleanup_tmps
-  bl64_os_cleanup_logs
-  bl64_os_cleanup_caches
-
-  return 0
-}
-
 function bl64_pkb_set_command() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
   ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
@@ -1277,7 +1514,7 @@ function bl64_pkb_set_command() {
 
 function bl64_pkb_set_alias() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
     BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF --color=never makecache"
     BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF --color=never --nodocs --assumeyes install"
     BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
@@ -1316,8 +1553,10 @@ function bl64_pkg_deploy() {
 }
 
 function bl64_pkg_prepare() {
+  bl64_check_privilege_root || return $?
+
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
     $BL64_PKG_ALIAS_DNF_CACHE
     ;;
   ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
@@ -1340,8 +1579,10 @@ function bl64_pkg_prepare() {
 }
 
 function bl64_pkg_install() {
+  bl64_check_privilege_root || return $?
+
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
     $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
     ;;
   ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
@@ -1366,8 +1607,10 @@ function bl64_pkg_install() {
 function bl64_pkg_cleanup() {
   local target=''
 
+  bl64_check_privilege_root || return $?
+
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
     $BL64_PKG_ALIAS_DNF_CLEAN
     ;;
   ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
@@ -1390,6 +1633,102 @@ function bl64_pkg_cleanup() {
     $BL64_PKG_ALIAS_BRW_CLEAN
     ;;
   esac
+}
+
+function bl64_rbac_add_root() {
+  local user="$1"
+  local status=$BL64_RBAC_ERROR_UPDATE_FAILED
+  local new_sudoers="${BL64_RBAC_FILE_SUDOERS}.bl64_new"
+  local old_sudoers="${BL64_RBAC_FILE_SUDOERS}.bl64_old"
+
+  if [[ -z "$user" ]]; then
+    bl64_msg_show_error "$_BL64_RBAC_TXT_MISSING_PARAMETER (user)"
+    return $BL64_RBAC_ERROR_MISSING_PARAMETER
+  fi
+
+  bl64_check_command "$BL64_OS_CMD_AWK" || return $BL64_RBAC_ERROR_MISSING_AWK
+  bl64_check_file "$BL64_RBAC_FILE_SUDOERS" || return $BL64_RBAC_ERROR_MISSING_SUDOERS
+  bl64_rbac_check_sudoers "$BL64_RBAC_FILE_SUDOERS" || return $BL64_RBAC_ERROR_INVALID_SUDOERS
+
+  umask 0266
+  $BL64_OS_ALIAS_AWK \
+    -v ControlUsr="$user" \
+    '
+      BEGIN { Found = 0 }
+      ControlUsr " ALL=(ALL) NOPASSWD: ALL" == $0 { Found = 1 }
+      { print $0 }
+      END {
+        if( Found == 0) {
+          print( ControlUsr " ALL=(ALL) NOPASSWD: ALL" )
+        }
+      }
+    ' \
+    "$BL64_RBAC_FILE_SUDOERS" >"$new_sudoers"
+
+  if [[ -s "$new_sudoers" ]]; then
+    bl64_fs_cp_file "${BL64_RBAC_FILE_SUDOERS}" "$old_sudoers"
+  fi
+  if [[ -s "$new_sudoers" && -s "$old_sudoers" ]]; then
+    "$BL64_OS_CMD_CAT" "${BL64_RBAC_FILE_SUDOERS}.bl64_new" >"${BL64_RBAC_FILE_SUDOERS}" &&
+      bl64_rbac_check_sudoers "$BL64_RBAC_FILE_SUDOERS"
+    status=$?
+  fi
+
+  return $status
+}
+
+function bl64_rbac_check_sudoers() {
+  local sudoers="$1"
+  local status=0
+
+  bl64_check_command "$BL64_RBAC_CMD_VISUDO" || return $BL64_RBAC_ERROR_MISSING_VISUDO
+
+  "$BL64_RBAC_CMD_VISUDO" \
+    --check \
+    --file "$sudoers"
+  status=$?
+
+  if ((status != 0)); then
+    bl64_msg_show_error "$_BL64_RBAC_TXT_INVALID_SUDOERS ($sudoers)"
+  fi
+
+  return $status
+}
+
+function bl64_rbac_set_command() {
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
+    BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
+    BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
+    BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
+    ;;
+  esac
+}
+
+function bl64_rbac_set_alias() {
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
+    BL64_RBAC_ALIAS_SUDO_ENV="$BL64_RBAC_CMD_SUDO --preserve-env --set-home"
+    ;;
+  esac
+}
+
+function bl64_rbac_run_command() {
+  local -i status=0
+
+  (($# == 0)) && return $BL64_RBAC_ERROR_MISSING_PARAMETER
+  bl64_check_command "$BL64_RBAC_CMD_SUDO" || return $BL64_RBAC_ERROR_MISSING_SUDO
+  bl64_dbg_lib_trace_start
+
+  if [[ "$EUID" == '0' ]]; then
+    "$@"
+  else
+    $BL64_RBAC_ALIAS_SUDO_ENV "$@"
+  fi
+  status=$?
+
+  bl64_dbg_lib_trace_stop
+  return $status
 }
 
 function bl64_rnd_get_range() {
@@ -1443,7 +1782,7 @@ function _bl64_rxtx_backup() {
   local status=0
 
   if [[ -e "$destination" ]]; then
-    bl64_os_mv "$destination" "$backup"
+    bl64_fs_mv "$destination" "$backup"
     status=$?
   fi
 
@@ -1458,13 +1797,13 @@ function _bl64_rxtx_restore() {
   local status=0
 
   if [[ "$result" == "$BL64_LIB_VAR_OK" ]]; then
-    [[ -e "$backup" ]] && bl64_os_rm_full "$backup"
+    [[ -e "$backup" ]] && bl64_fs_rm_full "$backup"
     return $BL64_LIB_VAR_OK
   fi
 
-  [[ -e "$destination" ]] && bl64_os_rm_full "$destination"
+  [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
 
-  bl64_os_mv "$backup" "$destination"
+  bl64_fs_mv "$backup" "$destination"
   status=$?
 
   ((status != 0)) && status=$BL64_RXTX_ERROR_RESTORE
@@ -1582,17 +1921,17 @@ function bl64_rxtx_git_get_dir() {
   fi
 
   if [[ "$source_path" == '.' || "$source_path" == './' ]]; then
-    bl64_dbg_lib_show 'process full repo'
+    bl64_dbg_lib_show_info 'process full repo'
     _bl64_rxtx_git_get_dir_root "$source_url" "$destination" "$branch"
   else
-    bl64_dbg_lib_show 'process repo subdirectory'
+    bl64_dbg_lib_show_info 'process repo subdirectory'
     _bl64_rxtx_git_get_dir_sub "$source_url" "$source_path" "$destination" "$branch"
   fi
   status=$?
 
   if [[ -d "${destination}/.git" ]]; then
     cd "$destination"
-    bl64_os_rm_full '.git' >/dev/null
+    bl64_fs_rm_full '.git' >/dev/null
   fi
 
   _bl64_rxtx_restore "$destination" "$status" >/dev/null || return $?
@@ -1614,14 +1953,14 @@ function _bl64_rxtx_git_get_dir_root() {
   git_name="$(bl64_fmt_basename "$source_url")"
   git_name="${git_name/.git/}"
   transition="${repo}/${git_name}"
-  bl64_dbg_lib_show "temporary local git path: transition=[$transition]"
+  bl64_dbg_lib_show_info "temporary local git path: transition=[$transition]"
 
   bl64_vcs_git_clone "$source_url" "$repo" "$branch" && \
   [[ -d "$transition" ]] &&
-  bl64_os_mv "$transition" "$destination"
+  bl64_fs_mv "$transition" "$destination"
   status=$?
 
-  [[ -d "$repo" ]] && bl64_os_rm_full "$repo" >/dev/null
+  [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
   return $status
 }
 
@@ -1645,91 +1984,13 @@ function _bl64_rxtx_git_get_dir_sub() {
 
   bl64_vcs_git_sparse "$source_url" "$repo" "$branch" "$source_path" &&
     [[ -d "$source" ]] &&
-    bl64_os_mkdir_full "${repo}/transition" &&
-    bl64_os_mv "$source" "$transition" >/dev/null &&
-    bl64_os_mv "${transition}" "$destination" >/dev/null
+    bl64_fs_mkdir_full "${repo}/transition" &&
+    bl64_fs_mv "$source" "$transition" >/dev/null &&
+    bl64_fs_mv "${transition}" "$destination" >/dev/null
   status=$?
 
-  [[ -d "$repo" ]] && bl64_os_rm_full "$repo" >/dev/null
+  [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
   return $status
-}
-
-function bl64_sudo_add_root() {
-  local user="$1"
-  local status=$BL64_SUDO_ERROR_UPDATE_FAILED
-  local new_sudoers="${BL64_SUDO_FILE_SUDOERS}.bl64_new"
-  local old_sudoers="${BL64_SUDO_FILE_SUDOERS}.bl64_old"
-
-  if [[ -z "$user" ]]; then
-    bl64_msg_show_error "$_BL64_SUDO_TXT_MISSING_PARAMETER (user)"
-    return $BL64_SUDO_ERROR_MISSING_PARAMETER
-  fi
-
-  bl64_check_command "$BL64_OS_CMD_AWK" || return $BL64_SUDO_ERROR_MISSING_AWK
-  bl64_check_file "$BL64_SUDO_FILE_SUDOERS" || return $BL64_SUDO_ERROR_MISSING_SUDOERS
-  bl64_sudo_check_sudoers "$BL64_SUDO_FILE_SUDOERS" || return $BL64_SUDO_ERROR_INVALID_SUDOERS
-
-  umask 0266
-  $BL64_OS_ALIAS_AWK \
-    -v ControlUsr="$user" \
-    '
-      BEGIN { Found = 0 }
-      ControlUsr " ALL=(ALL) NOPASSWD: ALL" == $0 { Found = 1 }
-      { print $0 }
-      END {
-        if( Found == 0) {
-          print( ControlUsr " ALL=(ALL) NOPASSWD: ALL" )
-        }
-      }
-    ' \
-    "$BL64_SUDO_FILE_SUDOERS" >"$new_sudoers"
-
-  if [[ -s "$new_sudoers" ]]; then
-    $BL64_OS_ALIAS_CP_FILE "${BL64_SUDO_FILE_SUDOERS}" "$old_sudoers"
-  fi
-  if [[ -s "$new_sudoers" && -s "$old_sudoers" ]]; then
-    "$BL64_OS_CMD_CAT" "${BL64_SUDO_FILE_SUDOERS}.bl64_new" >"${BL64_SUDO_FILE_SUDOERS}" &&
-      bl64_sudo_check_sudoers "$BL64_SUDO_FILE_SUDOERS"
-    status=$?
-  fi
-
-  return $status
-}
-
-function bl64_sudo_check_sudoers() {
-  local sudoers="$1"
-  local status=0
-
-  bl64_check_command "$BL64_SUDO_CMD_VISUDO" || return $BL64_SUDO_ERROR_MISSING_VISUDO
-
-  "$BL64_SUDO_CMD_VISUDO" \
-    --check \
-    --file "$sudoers"
-  status=$?
-
-  if ((status != 0)); then
-    bl64_msg_show_error "$_BL64_SUDO_TXT_INVALID_SUDOERS ($sudoers)"
-  fi
-
-  return $status
-}
-
-function bl64_sudo_set_command() {
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
-    BL64_SUDO_CMD_SUDO='/usr/bin/sudo'
-    BL64_SUDO_CMD_VISUDO='/usr/sbin/visudo'
-    BL64_SUDO_FILE_SUDOERS='/etc/sudoers'
-    ;;
-  esac
-}
-
-function bl64_sudo_set_alias() {
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
-    BL64_SUDO_ALIAS_SUDO_ENV="$BL64_SUDO_CMD_SUDO --preserve-env --set-home"
-    ;;
-  esac
 }
 
 function bl64_txt_search_line() {
@@ -1766,7 +2027,7 @@ function bl64_vcs_git_clone() {
     bl64_check_parameter 'destination' 'repository destination' ||
     return $BL64_VCS_ERROR_MISSING_PARAMETER
 
-  [[ ! -d "$destination" ]] && bl64_os_mkdir_full "$destination"
+  [[ ! -d "$destination" ]] && bl64_fs_mkdir_full "$destination"
   bl64_check_directory "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
 
   cd "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
@@ -1795,7 +2056,7 @@ function bl64_vcs_git_sparse() {
     bl64_check_parameter 'destination' 'repository destination' &&
     bl64_check_parameter 'pattern' 'pattern list' || return $BL64_VCS_ERROR_MISSING_PARAMETER
 
-  [[ ! -d "$destination" ]] && bl64_os_mkdir_full "$destination"
+  [[ ! -d "$destination" ]] && bl64_fs_mkdir_full "$destination"
   bl64_check_directory "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
 
   cd "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
@@ -1917,9 +2178,11 @@ export BL64_SCRIPT_PATH="${BL64_SCRIPT_PATH:-${BASH_SOURCE[0]%/*}}/"
 
 export BL64_SCRIPT_SID="${BASHPID}"
 
-readonly BL64_LIB_VAR_TBD='TBD'
 
-readonly BL64_LIB_VAR_NULL='__s64__'
+readonly BL64_LIB_VAR_TBD='_'
+
+readonly BL64_LIB_VAR_NULL='__'
+
 readonly BL64_LIB_VAR_TRUE='0'
 readonly BL64_LIB_VAR_FALSE='1'
 readonly BL64_LIB_VAR_ON='1'
@@ -1948,7 +2211,6 @@ shopt -qu \
   login_shell \
   nocaseglob \
   nocasematch \
-  nullglob \
   nullglob \
   xpg_echo
 shopt -qs \
@@ -1984,8 +2246,8 @@ else
   bl64_iam_set_alias
   bl64_pkb_set_command
   bl64_pkb_set_alias
-  bl64_sudo_set_command
-  bl64_sudo_set_alias
+  bl64_rbac_set_command
+  bl64_rbac_set_alias
   bl64_vcs_set_command
   bl64_vcs_set_alias
   bl64_rxtx_set_command

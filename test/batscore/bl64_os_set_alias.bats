@@ -11,7 +11,7 @@ setup() {
   assert_not_equal "$BL64_OS_ALIAS_AWK" ''
   assert_not_equal "$BL64_OS_ALIAS_CHOWN_DIR" ''
   assert_not_equal "$BL64_OS_ALIAS_CP_DIR" ''
-  assert_not_equal "$BL64_OS_ALIAS_CP_FILE" ''
+  assert_not_equal "bl64_fs_cp_file" ''
   assert_not_equal "$BL64_OS_ALIAS_ID_USER" ''
   assert_not_equal "$BL64_OS_ALIAS_LN_SYMBOLIC" ''
   assert_not_equal "$BL64_OS_ALIAS_LS_FILES" ''
@@ -27,5 +27,12 @@ setup() {
 @test "bl64_os_set_alias: common sets are defined" {
 
   assert_not_equal "$BL64_OS_SET_MKDIR_VERBOSE" ''
+  assert_not_equal "$BL64_OS_SET_CHOWN_VERBOSE" ''
+  assert_not_equal "$BL64_OS_SET_CHOWN_RECURSIVE" ''
+  assert_not_equal "$BL64_OS_SET_CP_VERBOSE" ''
+  assert_not_equal "$BL64_OS_SET_CP_RECURSIVE" ''
+  assert_not_equal "$BL64_OS_SET_CP_FORCE" ''
+  assert_not_equal "$BL64_OS_SET_CHMOD_VERBOSE" ''
+  assert_not_equal "$BL64_OS_SET_CHMOD_RECURSIVE" ''
 
 }

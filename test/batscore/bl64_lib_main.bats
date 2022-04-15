@@ -20,6 +20,6 @@ setup() {
   assert_equal "$BL64_LIB_SIGNAL_HUP" '-'
   assert_equal "$BL64_LIB_SIGNAL_STOP" '-'
   assert_equal "$BL64_LIB_SIGNAL_QUIT" '-'
-  assert_equal "$BL64_LIB_VAR_NULL" '__s64__'
-  assert_equal "$BL64_LIB_VAR_TBD" 'TBD'
+  assert_equal "$BL64_LIB_VAR_NULL" '__'
+  assert_equal "$BL64_LIB_VAR_TBD" '_'
 }
