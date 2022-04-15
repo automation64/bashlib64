@@ -27,11 +27,10 @@
 #   command dependant
 #######################################
 function bl64_fs_create_dir() {
-  local mode="${1:-"$BL64_LIB_VAR_TBD"}"
-  local user="${2:-"$BL64_LIB_VAR_TBD"}"
-  local group="${3:-"$BL64_LIB_VAR_TBD"}"
+  local mode="${1:-"$BL64_LIB_DEFAULT"}"
+  local user="${2:-"$BL64_LIB_DEFAULT"}"
+  local group="${3:-"$BL64_LIB_DEFAULT"}"
   local path=''
-  local -i status=0
 
   # Remove consumed parameters
   bl64_dbg_lib_show_info "parameters:[${*}]"
@@ -46,27 +45,21 @@ function bl64_fs_create_dir() {
   for path in "$@"; do
 
     bl64_check_path_absolute "$path" &&
-      bl64_fs_mkdir "$path"
-    status=$?
-    ((status != 0)) && break
+      bl64_fs_mkdir "$path" || return $?
 
     # Determine if mode needs to be set
-    if [[ "$mode" != "$BL64_LIB_VAR_TBD" ]]; then
-      bl64_fs_chmod "$mode" "$path"
-      status=$?
-      ((status != 0)) && break
+    if [[ "$mode" != "$BL64_LIB_DEFAULT" ]]; then
+      bl64_fs_chmod "$mode" "$path" || return $?
     fi
 
     # Determine if owner needs to be set
-    if [[ "$user" != "$BL64_LIB_VAR_TBD" && "$group" != "$BL64_LIB_VAR_TBD" ]]; then
-      bl64_fs_chown "${user}:${group}" "$path"
-      status=$?
-      ((status != 0)) && break
+    if [[ "$user" != "$BL64_LIB_DEFAULT" && "$group" != "$BL64_LIB_DEFAULT" ]]; then
+      bl64_fs_chown "${user}:${group}" "$path" || return $?
     fi
 
   done
 
-  return $status
+  return 0
 }
 
 #######################################
@@ -90,13 +83,12 @@ function bl64_fs_create_dir() {
 #   command dependant
 #######################################
 function bl64_fs_copy_files() {
-  local mode="${1:-"$BL64_LIB_VAR_TBD"}"
-  local user="${2:-"$BL64_LIB_VAR_TBD"}"
-  local group="${3:-"$BL64_LIB_VAR_TBD"}"
-  local destination="${4:-"$BL64_LIB_VAR_TBD"}"
+  local mode="${1:-"$BL64_LIB_DEFAULT"}"
+  local user="${2:-"$BL64_LIB_DEFAULT"}"
+  local group="${3:-"$BL64_LIB_DEFAULT"}"
+  local destination="${4:-"$BL64_LIB_DEFAULT"}"
   local path=''
   local target=''
-  local -i status=0
 
   bl64_check_directory "$destination" || return $?
 
@@ -119,18 +111,88 @@ function bl64_fs_copy_files() {
       bl64_fs_cp_file "$path" "$target" || return $?
 
     # Determine if mode needs to be set
-    if [[ "$mode" != "$BL64_LIB_VAR_TBD" ]]; then
+    if [[ "$mode" != "$BL64_LIB_DEFAULT" ]]; then
       bl64_fs_chmod "$mode" "$target" || return $?
     fi
 
     # Determine if owner needs to be set
-    if [[ "$user" != "$BL64_LIB_VAR_TBD" && "$group" != "$BL64_LIB_VAR_TBD" ]]; then
+    if [[ "$user" != "$BL64_LIB_DEFAULT" && "$group" != "$BL64_LIB_DEFAULT" ]]; then
       bl64_fs_chown "${user}:${group}" "$target" || return $?
     fi
 
   done
 
-  return $status
+  return 0
+}
+
+#######################################
+# Merge 2 or more files into a new one, then set owner and permissions
+#
+# * Will not overwrite if already existing
+#
+# Requirements:
+#   * root privilege (sudo) if paths are restricted or change owner is requested
+# Arguments:
+#   $1: permissions. Regular chown format accepted. Default: umask defined
+#   $2: user name. Default: root
+#   $3: group name. Default: root (or equivalent)
+#   $4: destination file. Full path
+#   $@: source files. Full path
+# Outputs:
+#   STDOUT: command dependant
+#   STDERR: command dependant
+# Returns:
+#   command dependant
+#   $BL64_FS_ERROR_EXISTING_FILE
+#   $BL64_FS_ERROR_MERGE_FILE
+#######################################
+function bl64_fs_merge_files() {
+  local mode="${1:-"$BL64_LIB_DEFAULT"}"
+  local user="${2:-"$BL64_LIB_DEFAULT"}"
+  local group="${3:-"$BL64_LIB_DEFAULT"}"
+  local destination="${4:-"$BL64_LIB_DEFAULT"}"
+  local path=''
+  local -i status_cat=0
+  local -i status_file=0
+
+  bl64_check_parameter "$destination" || return $?
+  bl64_check_overwrite "$destination" || return $?
+
+  # Remove consumed parameters
+  bl64_dbg_lib_show_info "parameters:[${*}]"
+  shift
+  shift
+  shift
+  shift
+
+  # shellcheck disable=SC2086
+  (($# == 0)) && return $BL64_FS_ERROR_MISSING_PARAMETER
+  bl64_dbg_lib_show_info "parameters:[${*}]"
+
+  for path in "$@"; do
+    bl64_check_path_absolute "$path" &&
+      "$BL64_OS_CMD_CAT" "$path"
+      status_cat=$?
+      (( status_cat != 0 )) && break || :
+  done >> "$destination"
+  status_file=$?
+
+  # Determine if mode needs to be set
+  if [[ "$status_file" == '0' && "$status_cat" == '0' && "$mode" != "$BL64_LIB_DEFAULT" ]]; then
+    bl64_fs_chmod "$mode" "$destination" || return $?
+  fi
+
+  # Determine if owner needs to be set
+  if [[ "$status_file" == '0' && "$status_cat" == '0' && "$user" != "$BL64_LIB_DEFAULT" && "$group" != "$BL64_LIB_DEFAULT" ]]; then
+    bl64_fs_chown "${user}:${group}" "$destination" || return $?
+  fi
+
+  # Rollback if error
+  # shellcheck disable=SC2030
+  (( status_cat != 0 || status_file != 0)) && (BL64_LIB_VERBOSE="$BL64_LIB_VAR_OFF"; bl64_fs_rm_file "$destination")
+
+  # shellcheck disable=SC2086
+  return $BL64_FS_ERROR_MERGE_FILE
 }
 
 #######################################
@@ -150,8 +212,8 @@ function bl64_fs_copy_files() {
 #   command exit status
 #######################################
 function bl64_fs_merge_dir() {
-  local source="${1:-${BL64_LIB_VAR_TBD}}"
-  local target="${2:-${BL64_LIB_VAR_TBD}}"
+  local source="${1:-${BL64_LIB_DEFAULT}}"
+  local target="${2:-${BL64_LIB_DEFAULT}}"
   local -i status=0
 
   bl64_check_parameter 'source' &&
