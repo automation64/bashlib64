@@ -6,11 +6,11 @@ setup() {
 
 }
 
-@test "bl64_pkg_deploy: deploy package" {
+@test "bl64_pkg_deploy: deploy package + no root" {
   if [[ ! -f '/run/.containerenv' ]]; then
     skip 'this case can only be tested inside a container'
   fi
   set +u # to avoid IFS missing error in run function
   run bl64_pkg_deploy file
-  assert_success
+  assert_failure
 }
