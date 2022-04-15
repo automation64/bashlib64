@@ -143,7 +143,7 @@ function bl64_check_parameter() {
     return $BL64_CHECK_ERROR_MISSING_PARAMETER
   fi
 
-  if eval "[[ -z \"\$${parameter}\" || \"\$${parameter}\" == '${BL64_LIB_VAR_TBD}' ]]"; then
+  if eval "[[ -z \"\$${parameter}\" || \"\$${parameter}\" == '${BL64_LIB_DEFAULT}' ]]"; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (${description})"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_PARAMETER_EMPTY
@@ -301,5 +301,42 @@ function bl64_check_privilege_not_root() {
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_PRIVILEGE_IS_ROOT
   fi
+  return 0
+}
+
+#######################################
+# Check file/dir overwrite condition
+#
+# Arguments:
+#   $1: Full path to the object
+#   $2: Error message
+#   $3: Overwrite flag. Must be ON(1) or OFF(0). Default: OFF
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: check ok
+#   $BL64_CHECK_ERROR_MISSING_PARAMETER
+#   $BL64_CHECK_ERROR_OVERWRITE_NOT_PERMITED
+#######################################
+function bl64_check_overwrite() {
+  local path="$1"
+  local message="${2:-$_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}"
+  local overwrite="${3:-"$BL64_LIB_VAR_OFF"}"
+
+  if [[ -z "$path" ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (object path)"
+    # shellcheck disable=SC2086
+    return $BL64_CHECK_ERROR_MISSING_PARAMETER
+  fi
+
+  if [[ "$overwrite" == "$BL64_LIB_VAR_OFF" ]]; then
+    if [[ -e "$path" ]]; then
+      bl64_msg_show_error "${message} (${path})"
+      # shellcheck disable=SC2086
+      return $BL64_CHECK_ERROR_OVERWRITE_NOT_PERMITED
+    fi
+  fi
+
   return 0
 }
