@@ -8,63 +8,13 @@
 #######################################
 
 #######################################
-# Change directory ownership with verbose and recursive flags
-#
-# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
-#
-# Arguments:
-#   $@: arguments are passed as is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_fs_chown_dir() {
-  $BL64_OS_ALIAS_CHOWN_DIR "$@"
-}
-
-#######################################
-# Copy files with verbose and force flags
-#
-# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
-#
-# Arguments:
-#   $@: arguments are passed as is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_fs_cp_file() {
-  $BL64_OS_ALIAS_CP_FILE "$@"
-}
-
-#######################################
-# Copy directory recursively with verbose and force flags
-#
-# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
-#
-# Arguments:
-#   $@: arguments are passed as is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_fs_cp_dir() {
-  $BL64_OS_ALIAS_CP_DIR "$@"
-}
-
-#######################################
-# Create one ore more directories, set owner and permissions
+# Create one ore more directories, then set owner and permissions
 #
 # Requirements:
-#   * root privilege (sudo)
+#   * root privilege (sudo) if paths are restricted or change owner is requested
 # Limitations:
 #   * Parent directories are not created
+#   * No rollback in case of errors. The process will not remove already created paths
 # Arguments:
 #   $1: permissions. Regular chown format accepted. Default: umask defined
 #   $2: user name. Default: root
@@ -77,8 +27,6 @@ function bl64_fs_cp_dir() {
 #   command dependant
 #######################################
 function bl64_fs_create_dir() {
-  bl64_dbg_lib_show "parameters:[${*}]"
-  bl64_dbg_lib_trace_start
   local mode="${1:-"$BL64_LIB_VAR_TBD"}"
   local user="${2:-"$BL64_LIB_VAR_TBD"}"
   local group="${3:-"$BL64_LIB_VAR_TBD"}"
@@ -86,47 +34,110 @@ function bl64_fs_create_dir() {
   local -i status=0
 
   # Remove consumed parameters
+  bl64_dbg_lib_show_info "parameters:[${*}]"
   shift
   shift
   shift
 
   # shellcheck disable=SC2086
   (($# == 0)) && return $BL64_FS_ERROR_MISSING_PARAMETER
-  bl64_dbg_lib_show "parameters:[${*}]"
+  bl64_dbg_lib_show_info "parameters:[${*}]"
 
   for path in "$@"; do
 
-    bl64_check_path_absolute "$path"
-    status=$?
-    ((status != 0)) && break
-
-    "$BL64_OS_CMD_MKDIR" "$BL64_OS_SET_MKDIR_VERBOSE" "$path"
+    bl64_check_path_absolute "$path" &&
+      bl64_fs_mkdir "$path"
     status=$?
     ((status != 0)) && break
 
     # Determine if mode needs to be set
     if [[ "$mode" != "$BL64_LIB_VAR_TBD" ]]; then
-      "$BL64_OS_CMD_CHMOD" "$mode" "$path"
+      bl64_fs_chmod "$mode" "$path"
       status=$?
       ((status != 0)) && break
     fi
 
     # Determine if owner needs to be set
     if [[ "$user" != "$BL64_LIB_VAR_TBD" && "$group" != "$BL64_LIB_VAR_TBD" ]]; then
-      "$BL64_OS_CMD_CHOWN" "${user}:${group}" "$path"
+      bl64_fs_chown "${user}:${group}" "$path"
       status=$?
       ((status != 0)) && break
     fi
 
   done
 
-  bl64_dbg_lib_trace_stop
+  return $status
+}
+
+#######################################
+# Copy one ore more files to a single destination, then set owner and permissions
+#
+# Requirements:
+#   * Destination path should be present
+#   * root privilege (sudo) if paths are restricted or change owner is requested
+# Limitations:
+#   * No rollback in case of errors. The process will not remove already copied files
+# Arguments:
+#   $1: permissions. Regular chown format accepted. Default: umask defined
+#   $2: user name. Default: root
+#   $3: group name. Default: root (or equivalent)
+#   $4: destination path
+#   $@: full file paths
+# Outputs:
+#   STDOUT: command dependant
+#   STDERR: command dependant
+# Returns:
+#   command dependant
+#######################################
+function bl64_fs_copy_files() {
+  local mode="${1:-"$BL64_LIB_VAR_TBD"}"
+  local user="${2:-"$BL64_LIB_VAR_TBD"}"
+  local group="${3:-"$BL64_LIB_VAR_TBD"}"
+  local destination="${4:-"$BL64_LIB_VAR_TBD"}"
+  local path=''
+  local target=''
+  local -i status=0
+
+  bl64_check_directory "$destination" || return $?
+
+  # Remove consumed parameters
+  bl64_dbg_lib_show_info "parameters:[${*}]"
+  shift
+  shift
+  shift
+  shift
+
+  # shellcheck disable=SC2086
+  (($# == 0)) && return $BL64_FS_ERROR_MISSING_PARAMETER
+  bl64_dbg_lib_show_info "parameters:[${*}]"
+
+  for path in "$@"; do
+
+    target=''
+    bl64_check_path_absolute "$path" &&
+      target="${destination}/$(bl64_fmt_basename "$path")" &&
+      bl64_fs_cp_file "$path" "$target" || return $?
+
+    # Determine if mode needs to be set
+    if [[ "$mode" != "$BL64_LIB_VAR_TBD" ]]; then
+      bl64_fs_chmod "$mode" "$target" || return $?
+    fi
+
+    # Determine if owner needs to be set
+    if [[ "$user" != "$BL64_LIB_VAR_TBD" && "$group" != "$BL64_LIB_VAR_TBD" ]]; then
+      bl64_fs_chown "${user}:${group}" "$target" || return $?
+    fi
+
+  done
+
   return $status
 }
 
 #######################################
 # Merge contents from source directory to target
 #
+# Requirements:
+#   * root privilege (sudo) if the files are restricted
 # Arguments:
 #   $1: source path
 #   $2: target path
@@ -151,18 +162,18 @@ function bl64_fs_merge_dir() {
 
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    $BL64_OS_ALIAS_CP_DIR --no-target-directory "$source" "$target"
+    bl64_fs_cp_dir --no-target-directory "$source" "$target"
     status=$?
     ;;
   ${BL64_OS_MCOS}-*)
     # shellcheck disable=SC2086
-    $BL64_OS_ALIAS_CP_DIR ${source}/ "$target"
+    bl64_fs_cp_dir ${source}/ "$target"
     status=$?
     ;;
   ${BL64_OS_ALP}-*)
     shopt -sq dotglob
     # shellcheck disable=SC2086
-    $BL64_OS_ALIAS_CP_DIR ${source}/* -t "$target"
+    bl64_fs_cp_dir ${source}/* -t "$target"
     status=$?
     shopt -uq dotglob
     ;;
@@ -172,12 +183,111 @@ function bl64_fs_merge_dir() {
 }
 
 #######################################
-# Create a symbolic link with verbose flag
-#
-# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+# Change object ownership with verbose flag
 #
 # Arguments:
-#   $@: arguments are passed as is to the command
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_chown() {
+  local verbose=''
+
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_CHOWN_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_OS_CMD_CHOWN" $verbose "$@"
+}
+
+#######################################
+# Change object permission with verbose flag
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_chmod() {
+  local verbose=''
+
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_CHMOD_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_OS_CMD_CHMOD" $verbose "$@"
+}
+
+#######################################
+# Change directory ownership with verbose and recursive flags
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_chown_dir() {
+  local verbose=''
+
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_CHMOD_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_OS_CMD_CHMOD" $verbose "$BL64_OS_SET_CHOWN_RECURSIVE" "$@"
+}
+
+#######################################
+# Copy files with verbose and force flags
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_cp_file() {
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_CP_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_OS_CMD_CP" $verbose "$BL64_OS_SET_CP_FORCE" "$@"
+}
+
+#######################################
+# Copy directory recursively with verbose and force flags
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_cp_dir() {
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_CP_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_OS_CMD_CP" $verbose "$BL64_OS_SET_CP_FORCE" "$BL64_OS_SET_CP_RECURSIVE" "$@"
+}
+
+#######################################
+# Create a symbolic link with verbose flag
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -191,10 +301,8 @@ function bl64_fs_ln_symbolic() {
 #######################################
 # List files with nocolor flag
 #
-# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
-#
 # Arguments:
-#   $@: arguments are passed as is to the command
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -208,10 +316,29 @@ function bl64_fs_ls_files() {
 #######################################
 # Create full path including parents. Uses verbose flag
 #
-# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_mkdir() {
+  local verbose=''
+
+  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
+    verbose="$BL64_OS_SET_MKDIR_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_OS_CMD_MKDIR" $verbose "$@"
+}
+
+#######################################
+# Create full path including parents. Uses verbose flag
 #
 # Arguments:
-#   $@: arguments are passed as is to the command
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -225,10 +352,8 @@ function bl64_fs_mkdir_full() {
 #######################################
 # Move files using the verbose and force flags
 #
-# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
-#
 # Arguments:
-#   $@: arguments are passed as is to the command
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -242,10 +367,8 @@ function bl64_fs_mv() {
 #######################################
 # Remove files using the verbose and force flags. Limited to current filesystem
 #
-# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
-#
 # Arguments:
-#   $@: arguments are passed as is to the command
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -259,10 +382,8 @@ function bl64_fs_rm_file() {
 #######################################
 # Remove directories using the verbose and force flags. Limited to current filesystem
 #
-# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
-#
 # Arguments:
-#   $@: arguments are passed as is to the command
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
