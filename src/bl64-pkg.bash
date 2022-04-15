@@ -128,6 +128,8 @@ function bl64_pkg_deploy() {
 #   n: package manager exist status
 #######################################
 function bl64_pkg_prepare() {
+  bl64_check_privilege_root || return $?
+
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
@@ -169,6 +171,8 @@ function bl64_pkg_prepare() {
 #   n: package manager exist status
 #######################################
 function bl64_pkg_install() {
+  bl64_check_privilege_root || return $?
+
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
@@ -210,6 +214,8 @@ function bl64_pkg_install() {
 #######################################
 function bl64_pkg_cleanup() {
   local target=''
+
+  bl64_check_privilege_root || return $?
 
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
