@@ -236,10 +236,10 @@ function bl64_rxtx_git_get_dir() {
 
   # Detect what type of path is requested
   if [[ "$source_path" == '.' || "$source_path" == './' ]]; then
-    bl64_dbg_lib_show 'process full repo'
+    bl64_dbg_lib_show_info 'process full repo'
     _bl64_rxtx_git_get_dir_root "$source_url" "$destination" "$branch"
   else
-    bl64_dbg_lib_show 'process repo subdirectory'
+    bl64_dbg_lib_show_info 'process repo subdirectory'
     _bl64_rxtx_git_get_dir_sub "$source_url" "$source_path" "$destination" "$branch"
   fi
   status=$?
@@ -272,7 +272,7 @@ function _bl64_rxtx_git_get_dir_root() {
   git_name="$(bl64_fmt_basename "$source_url")"
   git_name="${git_name/.git/}"
   transition="${repo}/${git_name}"
-  bl64_dbg_lib_show "temporary local git path: transition=[$transition]"
+  bl64_dbg_lib_show_info "temporary local git path: transition=[$transition]"
 
   # Clone the repo
   bl64_vcs_git_clone "$source_url" "$repo" "$branch" && \
