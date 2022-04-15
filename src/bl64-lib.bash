@@ -82,8 +82,8 @@ else
   bl64_iam_set_alias
   bl64_pkb_set_command
   bl64_pkb_set_alias
-  bl64_sudo_set_command
-  bl64_sudo_set_alias
+  bl64_rbac_set_command
+  bl64_rbac_set_alias
   bl64_vcs_set_command
   bl64_vcs_set_alias
   bl64_rxtx_set_command
