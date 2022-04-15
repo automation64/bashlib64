@@ -18,5 +18,6 @@ setup() {
   assert_equal $BL64_CHECK_ERROR_EXPORT_EMPTY 8
   assert_equal $BL64_CHECK_ERROR_EXPORT_SET 9
   assert_equal $BL64_CHECK_ERROR_PATH_NOT_RELATIVE 10
+  assert_equal $BL64_CHECK_ERROR_PATH_NOT_ABSOLUTE 11
 
 }

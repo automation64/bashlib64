@@ -23,3 +23,9 @@ setup() {
   assert_not_equal "$BL64_OS_ALIAS_RM_FULL" ''
 
 }
+
+@test "bl64_os_set_alias: common sets are defined" {
+
+  assert_not_equal "$BL64_OS_SET_MKDIR_VERBOSE" ''
+
+}

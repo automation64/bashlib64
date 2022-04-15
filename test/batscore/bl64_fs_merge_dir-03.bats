@@ -10,16 +10,15 @@ setup() {
   TEST_SANDBOX="$(temp_make)"
 }
 
-@test "bl64_os_merge_dir: copy dir + file names with spaces + subdirs" {
-  source="$DEVBL_SAMPLES/dir_04"
+@test "bl64_fs_merge_dir: copy dir + dot names + subdirs" {
+  source="$DEVBL_SAMPLES/dir_02"
   target="$TEST_SANDBOX/target"
   mkdir "$target"
   set +u # to avoid IFS missing error in run function
-  run bl64_os_merge_dir "$source" "$target"
+  run bl64_fs_merge_dir "$source" "$target"
   assert_success
-  assert_dir_exist "${target}/dir with spaces/"
-  assert_file_exist "${target}/dir with spaces/random_04_01.txt"
-  assert_file_exist "${target}/file with spaces.txt"
+  assert_dir_exist "${target}/.dir_02_03"
+  assert_file_exist "${target}/.dir_02_03/random_02_03_01.txt"
 }
 
 teardown() {

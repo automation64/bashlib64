@@ -10,15 +10,16 @@ setup() {
   TEST_SANDBOX="$(temp_make)"
 }
 
-@test "bl64_os_merge_dir: copy dir + dot names + subdirs" {
-  source="$DEVBL_SAMPLES/dir_02"
-  target="$TEST_SANDBOX/target"
-  mkdir "$target"
+@test "bl64_fs_cp_dir: copy dir" {
   set +u # to avoid IFS missing error in run function
-  run bl64_os_merge_dir "$source" "$target"
-  assert_success
-  assert_dir_exist "${target}/.dir_02_03"
-  assert_file_exist "${target}/.dir_02_03/random_02_03_01.txt"
+  source="${TEST_SANDBOX}/source"
+  dest="${TEST_SANDBOX}/dest"
+  mkdir "$source" &&
+  mkdir "$dest" &&
+  ls /etc > "$source/file"
+  run bl64_fs_cp_dir "$source" "$dest"
+  assert_equal "$status" '0'
+  assert_dir_exist "${dest}/source"
 }
 
 teardown() {

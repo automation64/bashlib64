@@ -8,18 +8,15 @@ setup() {
   BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
 
   TEST_SANDBOX="$(temp_make)"
+  TEST_SOURCE='/etc'
+  TEST_FILE='group'
 }
 
-@test "bl64_os_cp_dir: copy dir" {
+@test "bl64_fs_cp_file: copy file" {
   set +u # to avoid IFS missing error in run function
-  source="${TEST_SANDBOX}/source"
-  dest="${TEST_SANDBOX}/dest"
-  mkdir "$source" &&
-  mkdir "$dest" &&
-  ls /etc > "$source/file"
-  run bl64_os_cp_dir "$source" "$dest"
+  run bl64_fs_cp_file "${TEST_SOURCE}/${TEST_FILE}" "$TEST_SANDBOX"
   assert_equal "$status" '0'
-  assert_dir_exist "${dest}/source"
+  assert_file_exist "${TEST_SANDBOX}/${TEST_FILE}"
 }
 
 teardown() {

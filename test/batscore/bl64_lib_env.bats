@@ -16,6 +16,7 @@ setup() {
   assert_not_equal "$BL64_LIB_VERBOSE" ''
   assert_not_equal "$BL64_SCRIPT_NAME" ''
   assert_not_equal "$BL64_SCRIPT_SID" ''
+
 }
 
 @test "bl64_lib_env: public constants are set" {
