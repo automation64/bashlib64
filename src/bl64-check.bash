@@ -273,7 +273,7 @@ function bl64_check_path_absolute() {
 #   $BL64_CHECK_ERROR_PRIVILEGE_IS_ROOT
 #######################################
 function bl64_check_privilege_root() {
-
+  bl64_dbg_lib_show_vars 'EUID'
   if [[ "$EUID" != '0' ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT (EUID: $EUID)"
     # shellcheck disable=SC2086
@@ -295,7 +295,7 @@ function bl64_check_privilege_root() {
 #   $BL64_CHECK_ERROR_PRIVILEGE_IS_NOT_ROOT
 #######################################
 function bl64_check_privilege_not_root() {
-
+  bl64_dbg_lib_show_vars 'EUID'
   if [[ "$EUID" == '0' ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_PRIVILEGE_IS_ROOT"
     # shellcheck disable=SC2086
