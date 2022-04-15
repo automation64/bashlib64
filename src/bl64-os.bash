@@ -42,7 +42,7 @@ function _bl64_os_match() {
 function bl64_os_match() {
   local item=''
 
-  bl64_dbg_lib_show "[OSList=${*}}] / [BL64_OS_DISTRO=${BL64_OS_DISTRO}]"
+  bl64_dbg_lib_show_info "[OSList=${*}}] / [BL64_OS_DISTRO=${BL64_OS_DISTRO}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
     case "$item" in
@@ -251,20 +251,21 @@ function bl64_os_set_command() {
 # Returns:
 #   0: always ok
 #######################################
+# shellcheck disable=SC2034
 function bl64_os_set_alias() {
   local cmd_mawk='/usr/bin/mawk'
 
-  # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     BL64_OS_SET_MKDIR_VERBOSE='--verbose'
+    BL64_OS_SET_CHOWN_VERBOSE='--verbose'
+    BL64_OS_SET_CHOWN_RECURSIVE='--recursive'
 
     if [[ -x "$cmd_mawk" ]]; then
       BL64_OS_ALIAS_AWK="$cmd_mawk"
     else
       BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
     fi
-    BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN --verbose --recursive"
     BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP --verbose --force --recursive"
     BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP --verbose --force"
     BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
@@ -276,13 +277,13 @@ function bl64_os_set_alias() {
     BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV --force --verbose"
     BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM --verbose --force --one-file-system"
     BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM --verbose --force --one-file-system --recursive"
-
     ;;
   ${BL64_OS_ALP}-*)
     BL64_OS_SET_MKDIR_VERBOSE=' '
+    BL64_OS_SET_CHOWN_VERBOSE='-v'
+    BL64_OS_SET_CHOWN_RECURSIVE='-R'
 
     BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
-    BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN -v -R"
     BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP -v -f -R"
     BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP -v -f"
     BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
@@ -294,13 +295,13 @@ function bl64_os_set_alias() {
     BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV -f"
     BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM -f"
     BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM -f -R"
-
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_OS_SET_MKDIR_VERBOSE='-v'
+    BL64_OS_SET_CHOWN_VERBOSE='-v'
+    BL64_OS_SET_CHOWN_RECURSIVE='-R'
 
     BL64_OS_ALIAS_AWK="$BL64_OS_CMD_AWK"
-    BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN -v -R"
     BL64_OS_ALIAS_CP_DIR="$BL64_OS_CMD_CP -v -f -R"
     BL64_OS_ALIAS_CP_FILE="$BL64_OS_CMD_CP -v -f"
     BL64_OS_ALIAS_ID_USER="$BL64_OS_CMD_ID -u -n"
@@ -312,9 +313,11 @@ function bl64_os_set_alias() {
     BL64_OS_ALIAS_MV="$BL64_OS_CMD_MV -v -f"
     BL64_OS_ALIAS_RM_FILE="$BL64_OS_CMD_RM -v -f"
     BL64_OS_ALIAS_RM_FULL="$BL64_OS_CMD_RM -v -f -R"
-
     ;;
   esac
+
+  BL64_OS_ALIAS_CHOWN_DIR="$BL64_OS_CMD_CHOWN ${BL64_OS_SET_CHOWN_VERBOSE} ${BL64_OS_SET_CHOWN_RECURSIVE}"
+
 }
 
 #######################################
