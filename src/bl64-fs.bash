@@ -61,10 +61,10 @@ function bl64_fs_cp_dir() {
 #######################################
 # Create one ore more directories, set owner and permissions
 #
-# Limitations:
-#   * Parent directories are not created
 # Requirements:
 #   * root privilege (sudo)
+# Limitations:
+#   * Parent directories are not created
 # Arguments:
 #   $1: permissions. Regular chown format accepted. Default: umask defined
 #   $2: user name. Default: root
@@ -100,20 +100,20 @@ function bl64_fs_create_dir() {
     status=$?
     ((status != 0)) && break
 
-    bl64_sudo_run_command "$BL64_OS_CMD_MKDIR" "$BL64_OS_SET_MKDIR_VERBOSE" "$path"
+    "$BL64_OS_CMD_MKDIR" "$BL64_OS_SET_MKDIR_VERBOSE" "$path"
     status=$?
     ((status != 0)) && break
 
     # Determine if mode needs to be set
     if [[ "$mode" != "$BL64_LIB_VAR_TBD" ]]; then
-      bl64_sudo_run_command "$BL64_OS_CMD_CHMOD" "$mode" "$path"
+      "$BL64_OS_CMD_CHMOD" "$mode" "$path"
       status=$?
       ((status != 0)) && break
     fi
 
     # Determine if owner needs to be set
     if [[ "$user" != "$BL64_LIB_VAR_TBD" && "$group" != "$BL64_LIB_VAR_TBD" ]]; then
-      bl64_sudo_run_command "$BL64_OS_CMD_CHOWN" "${user}:${group}" "$path"
+      "$BL64_OS_CMD_CHOWN" "${user}:${group}" "$path"
       status=$?
       ((status != 0)) && break
     fi
@@ -141,7 +141,7 @@ function bl64_fs_create_dir() {
 function bl64_fs_merge_dir() {
   local source="${1:-${BL64_LIB_VAR_TBD}}"
   local target="${2:-${BL64_LIB_VAR_TBD}}"
-  local status=0
+  local -i status=0
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'target' &&

@@ -131,23 +131,23 @@ function bl64_pkg_prepare() {
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
-    bl64_sudo_run_command $BL64_PKG_ALIAS_DNF_CACHE
+    $BL64_PKG_ALIAS_DNF_CACHE
     ;;
   ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
-    bl64_sudo_run_command $BL64_PKG_ALIAS_DNF_CACHE
+    $BL64_PKG_ALIAS_DNF_CACHE
     ;;
   ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
-    bl64_sudo_run_command $BL64_PKG_ALIAS_YUM_CACHE
+    $BL64_PKG_ALIAS_YUM_CACHE
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     export DEBIAN_FRONTEND="noninteractive"
-    bl64_sudo_run_command $BL64_PKG_ALIAS_APT_UPDATE
+    $BL64_PKG_ALIAS_APT_UPDATE
     ;;
   ${BL64_OS_ALP}-*)
-    bl64_sudo_run_command $BL64_PKG_ALIAS_APK_UPDATE
+    $BL64_PKG_ALIAS_APK_UPDATE
     ;;
   ${BL64_OS_MCOS}-*)
-    bl64_sudo_run_command $BL64_PKG_ALIAS_BRW_UPDATE
+    $BL64_PKG_ALIAS_BRW_UPDATE
     ;;
   esac
 }
@@ -172,23 +172,23 @@ function bl64_pkg_install() {
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
-    bl64_sudo_run_command $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
+    $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
     ;;
   ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
-    bl64_sudo_run_command $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
+    $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
     ;;
   ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
-    bl64_sudo_run_command $BL64_PKG_ALIAS_YUM_INSTALL -- "$@"
+    $BL64_PKG_ALIAS_YUM_INSTALL -- "$@"
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     export DEBIAN_FRONTEND="noninteractive"
-    bl64_sudo_run_command $BL64_PKG_ALIAS_APT_INSTALL -- "$@"
+    $BL64_PKG_ALIAS_APT_INSTALL -- "$@"
     ;;
   ${BL64_OS_ALP}-*)
-    bl64_sudo_run_command $BL64_PKG_ALIAS_APK_INSTALL -- "$@"
+    $BL64_PKG_ALIAS_APK_INSTALL -- "$@"
     ;;
   ${BL64_OS_MCOS}-*)
-    bl64_sudo_run_command $BL64_PKG_ALIAS_BRW_INSTALL "$@"
+    $BL64_PKG_ALIAS_BRW_INSTALL "$@"
     ;;
   esac
 }
@@ -214,26 +214,26 @@ function bl64_pkg_cleanup() {
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
-    bl64_sudo_run_command $BL64_PKG_ALIAS_DNF_CLEAN
+    $BL64_PKG_ALIAS_DNF_CLEAN
     ;;
   ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
-    bl64_sudo_run_command $BL64_PKG_ALIAS_DNF_CLEAN
+    $BL64_PKG_ALIAS_DNF_CLEAN
     ;;
   ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
-    bl64_sudo_run_command $BL64_PKG_ALIAS_YUM_CLEAN
+    $BL64_PKG_ALIAS_YUM_CLEAN
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     export DEBIAN_FRONTEND="noninteractive"
-    bl64_sudo_run_command $BL64_PKG_ALIAS_APT_CLEAN
+    $BL64_PKG_ALIAS_APT_CLEAN
     ;;
   ${BL64_OS_ALP}-*)
     target='/var/cache/apk'
     if [[ -d "$target" ]]; then
-      bl64_sudo_run_command $BL64_OS_ALIAS_RM_FULL ${target}/[[:alpha:]]*
+      $BL64_OS_ALIAS_RM_FULL ${target}/[[:alpha:]]*
     fi
     ;;
   ${BL64_OS_MCOS}-*)
-    bl64_sudo_run_command $BL64_PKG_ALIAS_BRW_CLEAN
+    $BL64_PKG_ALIAS_BRW_CLEAN
     ;;
   esac
 }
