@@ -259,3 +259,47 @@ function bl64_check_path_absolute() {
   fi
   return 0
 }
+
+#######################################
+# Check that the effective user running the current process is root
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: check ok
+#   $BL64_CHECK_ERROR_PRIVILEGE_IS_ROOT
+#######################################
+function bl64_check_privilege_root() {
+
+  if [[ "$EUID" != '0' ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT (EUID: $EUID)"
+    # shellcheck disable=SC2086
+    return $BL64_CHECK_ERROR_PRIVILEGE_IS_NOT_ROOT
+  fi
+  return 0
+}
+
+#######################################
+# Check that the effective user running the current process is not root
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: check ok
+#   $BL64_CHECK_ERROR_PRIVILEGE_IS_NOT_ROOT
+#######################################
+function bl64_check_privilege_not_root() {
+
+  if [[ "$EUID" == '0' ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_PRIVILEGE_IS_ROOT"
+    # shellcheck disable=SC2086
+    return $BL64_CHECK_ERROR_PRIVILEGE_IS_ROOT
+  fi
+  return 0
+}
