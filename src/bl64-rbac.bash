@@ -60,7 +60,7 @@ function bl64_rbac_add_root() {
     "$BL64_RBAC_FILE_SUDOERS" >"$new_sudoers"
 
   if [[ -s "$new_sudoers" ]]; then
-    $BL64_OS_ALIAS_CP_FILE "${BL64_RBAC_FILE_SUDOERS}" "$old_sudoers"
+    bl64_fs_cp_file "${BL64_RBAC_FILE_SUDOERS}" "$old_sudoers"
   fi
   if [[ -s "$new_sudoers" && -s "$old_sudoers" ]]; then
     "$BL64_OS_CMD_CAT" "${BL64_RBAC_FILE_SUDOERS}.bl64_new" >"${BL64_RBAC_FILE_SUDOERS}" &&
