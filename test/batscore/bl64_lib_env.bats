@@ -25,6 +25,6 @@ setup() {
   assert_equal "$BL64_LIB_VAR_OFF" '0'
   assert_equal "$BL64_LIB_VAR_OK" '0'
   assert_equal "$BL64_LIB_VAR_ON" '1'
-  assert_equal "$BL64_LIB_VAR_TBD" '_'
+  assert_equal "$BL64_LIB_DEFAULT" '_'
   assert_equal "$BL64_LIB_VAR_TRUE" '0'
 }

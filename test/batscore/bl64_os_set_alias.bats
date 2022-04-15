@@ -34,5 +34,10 @@ setup() {
   assert_not_equal "$BL64_OS_SET_CP_FORCE" ''
   assert_not_equal "$BL64_OS_SET_CHMOD_VERBOSE" ''
   assert_not_equal "$BL64_OS_SET_CHMOD_RECURSIVE" ''
+  assert_not_equal "$BL64_OS_SET_MV_VERBOSE" ''
+  assert_not_equal "$BL64_OS_SET_MV_FORCE" ''
+  assert_not_equal "$BL64_OS_SET_RM_VERBOSE" ''
+  assert_not_equal "$BL64_OS_SET_RM_FORCE" ''
+  assert_not_equal "$BL64_OS_SET_RM_RECURSIVE" ''
 
 }

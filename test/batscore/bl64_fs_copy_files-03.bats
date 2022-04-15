@@ -17,8 +17,8 @@ setup() {
   set +u # to avoid IFS missing error in run function
   run bl64_fs_copy_files \
     "0600" \
-    "$BL64_LIB_VAR_TBD" \
-    "$BL64_LIB_VAR_TBD" \
+    "$BL64_LIB_DEFAULT" \
+    "$BL64_LIB_DEFAULT" \
     "$TEST_SANDBOX" \
     "${TEST_SOURCE}/${TEST_FILE1}" \
     "${TEST_SOURCE}/${TEST_FILE2}"

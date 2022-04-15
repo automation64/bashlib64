@@ -21,5 +21,5 @@ setup() {
   assert_equal "$BL64_LIB_SIGNAL_STOP" '-'
   assert_equal "$BL64_LIB_SIGNAL_QUIT" '-'
   assert_equal "$BL64_LIB_VAR_NULL" '__'
-  assert_equal "$BL64_LIB_VAR_TBD" '_'
+  assert_equal "$BL64_LIB_DEFAULT" '_'
 }

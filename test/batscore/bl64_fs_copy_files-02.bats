@@ -16,9 +16,9 @@ setup() {
 @test "bl64_fs_copy_files: copy files" {
   set +u # to avoid IFS missing error in run function
   run bl64_fs_copy_files \
-    "$BL64_LIB_VAR_TBD" \
-    "$BL64_LIB_VAR_TBD" \
-    "$BL64_LIB_VAR_TBD" \
+    "$BL64_LIB_DEFAULT" \
+    "$BL64_LIB_DEFAULT" \
+    "$BL64_LIB_DEFAULT" \
     "$TEST_SANDBOX" \
     "${TEST_SOURCE}/${TEST_FILE1}" \
     "${TEST_SOURCE}/${TEST_FILE2}"
@@ -30,9 +30,9 @@ setup() {
 @test "bl64_fs_copy_files: copy files + missing target" {
   set +u # to avoid IFS missing error in run function
   run bl64_fs_copy_files \
-    "$BL64_LIB_VAR_TBD" \
-    "$BL64_LIB_VAR_TBD" \
-    "$BL64_LIB_VAR_TBD" \
+    "$BL64_LIB_DEFAULT" \
+    "$BL64_LIB_DEFAULT" \
+    "$BL64_LIB_DEFAULT" \
     "/fake/destination" \
     "${TEST_SOURCE}/${TEST_FILE1}" \
     "${TEST_SOURCE}/${TEST_FILE2}"
@@ -42,9 +42,9 @@ setup() {
 @test "bl64_fs_copy_files: copy files + missing source" {
   set +u # to avoid IFS missing error in run function
   run bl64_fs_copy_files \
-    "$BL64_LIB_VAR_TBD" \
-    "$BL64_LIB_VAR_TBD" \
-    "$BL64_LIB_VAR_TBD" \
+    "$BL64_LIB_DEFAULT" \
+    "$BL64_LIB_DEFAULT" \
+    "$BL64_LIB_DEFAULT" \
     "$TEST_SANDBOX" \
     "/fake/source" \
     "${TEST_SOURCE}/${TEST_FILE2}"

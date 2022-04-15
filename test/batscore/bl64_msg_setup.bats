@@ -24,7 +24,7 @@ setup() {
 
 @test "bl64_msg_setup: set format" {
 
-  bl64_msg_setup "$BL64_MSG_FORMAT_CALLER"
+  run bl64_msg_setup "$BL64_MSG_FORMAT_CALLER"
   assert_success
 
 }

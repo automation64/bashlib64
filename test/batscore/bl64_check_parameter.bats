@@ -32,7 +32,7 @@ setup() {
 
 @test "bl64_check_parameter: parameter is not present + using default value" {
 
-  TEST_PARAMETER="$BL64_LIB_VAR_TBD"
+  TEST_PARAMETER="$BL64_LIB_DEFAULT"
   run bl64_check_parameter 'TEST_PARAMETER'
   assert_failure
   assert_equal "$status" $BL64_CHECK_ERROR_PARAMETER_EMPTY
