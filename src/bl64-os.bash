@@ -50,9 +50,9 @@ function _bl64_os_get_distro_from_os_release() {
   fi
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_ALM}-8*) : ;;
-  ${BL64_OS_ALP}-3*) : ;;
-  ${BL64_OS_CNT}-7* | ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9*) : ;;
+  ${BL64_OS_ALM}-8.*) : ;;
+  ${BL64_OS_ALP}-3.*) : ;;
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.*) : ;;
   ${BL64_OS_DEB}-9*)
     [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-9" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-9.0"
     ;;
@@ -62,10 +62,10 @@ function _bl64_os_get_distro_from_os_release() {
   ${BL64_OS_DEB}-11*)
     [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-11" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-11.0"
     ;;
-  ${BL64_OS_FD}-33* | ${BL64_OS_FD}-34* | ${BL64_OS_FD}-35*) : ;;
-  ${BL64_OS_OL}-7* | ${BL64_OS_OL}-8*) : ;;
-  ${BL64_OS_RHEL}-8*) : ;;
-  ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
+  ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.* | ${BL64_OS_FD}-35.*) : ;;
+  ${BL64_OS_OL}-7.* | ${BL64_OS_OL}-8.*) : ;;
+  ${BL64_OS_RHEL}-8.*) : ;;
+  ${BL64_OS_UB}-20.* | ${BL64_OS_UB}-21.*) : ;;
   *) BL64_OS_DISTRO='UNKNOWN' ;;
   esac
 
@@ -244,6 +244,73 @@ function bl64_os_set_command() {
 }
 
 #######################################
+# Create command sets for common options
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+# shellcheck disable=SC2034
+function bl64_os_set_options() {
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+    BL64_OS_SET_MKDIR_VERBOSE='--verbose'
+    BL64_OS_SET_MKDIR_PARENTS='--parents'
+    BL64_OS_SET_CHOWN_VERBOSE='--verbose'
+    BL64_OS_SET_CHOWN_RECURSIVE='--recursive'
+    BL64_OS_SET_CP_VERBOSE='--verbose'
+    BL64_OS_SET_CP_RECURSIVE='--recursive'
+    BL64_OS_SET_CP_FORCE='--force'
+    BL64_OS_SET_CHMOD_VERBOSE='--verbose'
+    BL64_OS_SET_CHMOD_RECURSIVE='--recursive'
+    BL64_OS_SET_MV_VERBOSE='--verbose'
+    BL64_OS_SET_MV_FORCE='--force'
+    BL64_OS_SET_RM_VERBOSE='--verbose'
+    BL64_OS_SET_RM_FORCE='--force'
+    BL64_OS_SET_RM_RECURSIVE='--recursive'
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_OS_SET_MKDIR_VERBOSE=' '
+    BL64_OS_SET_MKDIR_PARENTS='-p'
+    BL64_OS_SET_CHOWN_VERBOSE='-v'
+    BL64_OS_SET_CHOWN_RECURSIVE='-R'
+    BL64_OS_SET_CP_VERBOSE='-v'
+    BL64_OS_SET_CP_RECURSIVE='-R'
+    BL64_OS_SET_CP_FORCE='-f'
+    BL64_OS_SET_CHMOD_VERBOSE='-v'
+    BL64_OS_SET_CHMOD_RECURSIVE='-R'
+    BL64_OS_SET_MV_VERBOSE=' '
+    BL64_OS_SET_MV_FORCE='-f'
+    BL64_OS_SET_RM_VERBOSE=' '
+    BL64_OS_SET_RM_FORCE='-f'
+    BL64_OS_SET_RM_RECURSIVE='-R'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_OS_SET_MKDIR_VERBOSE='-v'
+    BL64_OS_SET_MKDIR_PARENTS='-p'
+    BL64_OS_SET_CHOWN_VERBOSE='-v'
+    BL64_OS_SET_CHOWN_RECURSIVE='-R'
+    BL64_OS_SET_CP_VERBOSE='-v'
+    BL64_OS_SET_CP_RECURSIVE='-R'
+    BL64_OS_SET_CP_FORCE='-f'
+    BL64_OS_SET_CHMOD_VERBOSE='-v'
+    BL64_OS_SET_CHMOD_RECURSIVE='-R'
+    BL64_OS_SET_MV_VERBOSE='-v'
+    BL64_OS_SET_MV_FORCE='-f'
+    BL64_OS_SET_RM_VERBOSE='-v'
+    BL64_OS_SET_RM_FORCE='-f'
+    BL64_OS_SET_RM_RECURSIVE='-R'
+    ;;
+  esac
+
+  # Do not use return as this function gets sourced
+}
+
+#######################################
 # Create command aliases for common use cases
 #
 # * Aliases are presented as regular shell variables for easy inclusion in complex commands
@@ -263,21 +330,6 @@ function bl64_os_set_alias() {
 
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    BL64_OS_SET_MKDIR_VERBOSE='--verbose'
-    BL64_OS_SET_MKDIR_PARENTS='--parents'
-    BL64_OS_SET_CHOWN_VERBOSE='--verbose'
-    BL64_OS_SET_CHOWN_RECURSIVE='--recursive'
-    BL64_OS_SET_CP_VERBOSE='--verbose'
-    BL64_OS_SET_CP_RECURSIVE='--recursive'
-    BL64_OS_SET_CP_FORCE='--force'
-    BL64_OS_SET_CHMOD_VERBOSE='--verbose'
-    BL64_OS_SET_CHMOD_RECURSIVE='--recursive'
-    BL64_OS_SET_MV_VERBOSE='--verbose'
-    BL64_OS_SET_MV_FORCE='--force'
-    BL64_OS_SET_RM_VERBOSE='--verbose'
-    BL64_OS_SET_RM_FORCE='--force'
-    BL64_OS_SET_RM_RECURSIVE='--recursive'
-
     if [[ -x "$cmd_mawk" ]]; then
       BL64_OS_ALIAS_AWK="$cmd_mawk"
     else
@@ -290,21 +342,6 @@ function bl64_os_set_alias() {
     BL64_OS_ALIAS_MKTEMP_FILE="${BL64_OS_CMD_MKTEMP}"
     ;;
   ${BL64_OS_ALP}-*)
-    BL64_OS_SET_MKDIR_VERBOSE=' '
-    BL64_OS_SET_MKDIR_PARENTS='-p'
-    BL64_OS_SET_CHOWN_VERBOSE='-v'
-    BL64_OS_SET_CHOWN_RECURSIVE='-R'
-    BL64_OS_SET_CP_VERBOSE='-v'
-    BL64_OS_SET_CP_RECURSIVE='-R'
-    BL64_OS_SET_CP_FORCE='-f'
-    BL64_OS_SET_CHMOD_VERBOSE='-v'
-    BL64_OS_SET_CHMOD_RECURSIVE='-R'
-    BL64_OS_SET_MV_VERBOSE=' '
-    BL64_OS_SET_MV_FORCE='-f'
-    BL64_OS_SET_RM_VERBOSE=' '
-    BL64_OS_SET_RM_FORCE='-f'
-    BL64_OS_SET_RM_RECURSIVE='-R'
-
     BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
     BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
     BL64_OS_ALIAS_LN_SYMBOLIC="${BL64_OS_CMD_LN} -v -s"
@@ -313,21 +350,6 @@ function bl64_os_set_alias() {
     BL64_OS_ALIAS_MKTEMP_FILE="${BL64_OS_CMD_MKTEMP}"
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_OS_SET_MKDIR_VERBOSE='-v'
-    BL64_OS_SET_MKDIR_PARENTS='-p'
-    BL64_OS_SET_CHOWN_VERBOSE='-v'
-    BL64_OS_SET_CHOWN_RECURSIVE='-R'
-    BL64_OS_SET_CP_VERBOSE='-v'
-    BL64_OS_SET_CP_RECURSIVE='-R'
-    BL64_OS_SET_CP_FORCE='-f'
-    BL64_OS_SET_CHMOD_VERBOSE='-v'
-    BL64_OS_SET_CHMOD_RECURSIVE='-R'
-    BL64_OS_SET_MV_VERBOSE='-v'
-    BL64_OS_SET_MV_FORCE='-f'
-    BL64_OS_SET_RM_VERBOSE='-v'
-    BL64_OS_SET_RM_FORCE='-f'
-    BL64_OS_SET_RM_RECURSIVE='-R'
-
     BL64_OS_ALIAS_AWK="$BL64_OS_CMD_AWK"
     BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
     BL64_OS_ALIAS_LN_SYMBOLIC="${BL64_OS_CMD_LN} -v -s"

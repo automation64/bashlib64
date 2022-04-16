@@ -27,10 +27,10 @@ function bl64_pkb_set_command() {
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
-  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
-  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     BL64_PKG_CMD_YUM='/usr/bin/yum'
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -67,12 +67,12 @@ function bl64_pkb_set_alias() {
     BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF --color=never --nodocs --assumeyes install"
     BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
     ;;
-  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
     BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF --color=never makecache"
     BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF --color=never --nodocs --assumeyes install"
     BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
     ;;
-  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     BL64_PKG_ALIAS_YUM_CACHE="$BL64_PKG_CMD_YUM --color=never makecache"
     BL64_PKG_ALIAS_YUM_INSTALL="$BL64_PKG_CMD_YUM --color=never --assumeyes install"
     BL64_PKG_ALIAS_YUM_CLEAN="$BL64_PKG_CMD_YUM clean all"
@@ -135,10 +135,10 @@ function bl64_pkg_prepare() {
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
     $BL64_PKG_ALIAS_DNF_CACHE
     ;;
-  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
     $BL64_PKG_ALIAS_DNF_CACHE
     ;;
-  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     $BL64_PKG_ALIAS_YUM_CACHE
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -178,10 +178,10 @@ function bl64_pkg_install() {
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
     $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
     ;;
-  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
     $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
     ;;
-  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     $BL64_PKG_ALIAS_YUM_INSTALL -- "$@"
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -222,10 +222,10 @@ function bl64_pkg_cleanup() {
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
     $BL64_PKG_ALIAS_DNF_CLEAN
     ;;
-  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
     $BL64_PKG_ALIAS_DNF_CLEAN
     ;;
-  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     $BL64_PKG_ALIAS_YUM_CLEAN
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
