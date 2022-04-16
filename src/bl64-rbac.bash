@@ -18,7 +18,6 @@
 # Returns:
 #   0: rule added
 #   >0: failed command exit status
-#   BL64_RBAC_ERROR_MISSING_PARAMETER
 #   BL64_RBAC_ERROR_MISSING_SUDOERS
 #   BL64_RBAC_ERROR_MISSING_AWK
 #   BL64_RBAC_ERROR_UPDATE_FAILED
@@ -30,11 +29,8 @@ function bl64_rbac_add_root() {
   local new_sudoers="${BL64_RBAC_FILE_SUDOERS}.bl64_new"
   local old_sudoers="${BL64_RBAC_FILE_SUDOERS}.bl64_old"
 
-  if [[ -z "$user" ]]; then
-    bl64_msg_show_error "$_BL64_RBAC_TXT_MISSING_PARAMETER (user)"
-    # shellcheck disable=SC2086
-    return $BL64_RBAC_ERROR_MISSING_PARAMETER
-  fi
+  bl64_check_privilege_root || return $?
+  bl64_check_parameter 'user' || return $?
 
   # shellcheck disable=SC2086
   bl64_check_command "$BL64_OS_CMD_AWK" || return $BL64_RBAC_ERROR_MISSING_AWK
@@ -88,6 +84,7 @@ function bl64_rbac_check_sudoers() {
   local sudoers="$1"
   local status=0
 
+  bl64_check_privilege_root || return $?
   # shellcheck disable=SC2086
   bl64_check_command "$BL64_RBAC_CMD_VISUDO" || return $BL64_RBAC_ERROR_MISSING_VISUDO
 
@@ -124,6 +121,7 @@ function bl64_rbac_set_command() {
     BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
     BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
   # Do not use return as this function gets sourced
 }
@@ -148,6 +146,7 @@ function bl64_rbac_set_alias() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
     BL64_RBAC_ALIAS_SUDO_ENV="$BL64_RBAC_CMD_SUDO --preserve-env --set-home"
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 }
 
