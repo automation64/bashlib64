@@ -36,13 +36,15 @@ function _bl64_os_get_distro_from_uname() {
     os_version="$("$cmd_sw_vers" -productVersion)"
     BL64_OS_DISTRO="DARWIN-${os_version}"
     ;;
-  *) BL64_OS_DISTRO='UNKNOWN' ;;
+  *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;
   esac
 
   return 0
 }
 
 function _bl64_os_get_distro_from_os_release() {
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]] && set -x
+
   # shellcheck disable=SC1091
   source '/etc/os-release'
   if [[ -n "$ID" && -n "$VERSION_ID" ]]; then
@@ -50,9 +52,12 @@ function _bl64_os_get_distro_from_os_release() {
   fi
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_ALM}-8.*) : ;;
-  ${BL64_OS_ALP}-3.*) : ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.*) : ;;
+  ${BL64_OS_ALM}-8*) : ;;
+  ${BL64_OS_ALP}-3*) : ;;
+  ${BL64_OS_CNT}-7*)
+    [[ "$BL64_OS_DISTRO" == "${BL64_OS_CNT}-7" ]] && BL64_OS_DISTRO="${BL64_OS_CNT}-7.0"
+    ;;
+  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9.*) : ;;
   ${BL64_OS_DEB}-9*)
     [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-9" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-9.0"
     ;;
@@ -63,12 +68,13 @@ function _bl64_os_get_distro_from_os_release() {
     [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-11" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-11.0"
     ;;
   ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.* | ${BL64_OS_FD}-35.*) : ;;
-  ${BL64_OS_OL}-7.* | ${BL64_OS_OL}-8.*) : ;;
-  ${BL64_OS_RHEL}-8.*) : ;;
-  ${BL64_OS_UB}-20.* | ${BL64_OS_UB}-21.*) : ;;
-  *) BL64_OS_DISTRO='UNKNOWN' ;;
+  ${BL64_OS_OL}-7* | ${BL64_OS_OL}-8.*) : ;;
+  ${BL64_OS_RHEL}-8*) : ;;
+  ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
+  *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;
   esac
 
+  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]] && set +x
   return 0
 }
 

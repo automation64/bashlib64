@@ -42,7 +42,7 @@ bl64_os_get_distro
 
 # Verify lib compatibility
 if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" || ("${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5') ]]; then
-  printf '%s\n' "Fatal: BashLib64 is not supported in the current OS ($(uname -a)) or Bash version ($BASH_VERSION)" >&2
+  printf '%s\n' "Fatal: BashLib64 is not supported in the current OS (distro:[${BL64_OS_DISTRO}] / bash:[${BASH_VERSION}] / uname:[$(uname -a))])" >&2
   false
 else
   # Load commands and aliases
