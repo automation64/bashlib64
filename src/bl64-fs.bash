@@ -172,9 +172,9 @@ function bl64_fs_merge_files() {
   for path in "$@"; do
     bl64_check_path_absolute "$path" &&
       "$BL64_OS_CMD_CAT" "$path"
-      status_cat=$?
-      (( status_cat != 0 )) && break || :
-  done >> "$destination"
+    status_cat=$?
+    ((status_cat != 0)) && break || :
+  done >>"$destination"
   status_file=$?
 
   # Determine if mode needs to be set
@@ -189,7 +189,10 @@ function bl64_fs_merge_files() {
 
   # Rollback if error
   # shellcheck disable=SC2030 # BL64_LIB_VERBOSE is temporary modified in a subshell to avoid changing the global setting
-  (( status_cat != 0 || status_file != 0)) && (BL64_LIB_VERBOSE="$BL64_LIB_VAR_OFF"; bl64_fs_rm_file "$destination")
+  ((status_cat != 0 || status_file != 0)) && (
+    BL64_LIB_VERBOSE="$BL64_LIB_VAR_OFF"
+    bl64_fs_rm_file "$destination"
+  )
 
   # shellcheck disable=SC2086
   return $BL64_FS_ERROR_MERGE_FILE
@@ -239,6 +242,7 @@ function bl64_fs_merge_dir() {
     status=$?
     shopt -uq dotglob
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 
   return $status
