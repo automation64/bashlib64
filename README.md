@@ -29,7 +29,8 @@ BashLib64 is a **Bash** library that provides a simple abstraction layer for dev
 | [bl64-msg](https://serdigital64.github.io/bashlib64/bl64-msg/)     | Display messages                                   |
 | [bl64-os](https://serdigital64.github.io/bashlib64/bl64-os/)       | Identify OS attributes and provide command aliases |
 | [bl64-pkg](https://serdigital64.github.io/bashlib64/bl64-pkg/)     | Manage native OS packages                          |
-| [bl64-rbac](https://serdigital64.github.io/bashlib64/bl64-rbac/)   | Manage sudo                                        |
+| [bl64-py](https://serdigital64.github.io/bashlib64/bl64-py/)       | Interact with system-wide Python                   |
+| [bl64-rbac](https://serdigital64.github.io/bashlib64/bl64-rbac/)   | Manage role based access service                   |
 | [bl64-rnd](https://serdigital64.github.io/bashlib64/bl64-rnd/)     | Generate random data                               |
 | [bl64-rxtx](https://serdigital64.github.io/bashlib64/bl64-rxtx/)   | Transfer and Receive data over the network         |
 | [bl64-txt](https://serdigital64.github.io/bashlib64/bl64-txt/)     | Manipulate text files content                      |

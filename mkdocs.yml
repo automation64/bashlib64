@@ -100,6 +100,7 @@ nav:
     - "bl64-msg.md"
     - "bl64-os.md"
     - "bl64-pkg.md"
+    - "bl64-py.md"
     - "bl64-rnd.md"
     - "bl64-rxtx.md"
     - "bl64-rbac.md"
