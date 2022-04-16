@@ -77,6 +77,7 @@ if [[ "$BL64_OS_DISTRO" == 'UNKNOWN' || ("${BASH_VERSINFO[0]}" != '4' && "${BASH
 else
   # Load commands and aliases
   bl64_os_set_command
+  bl64_os_set_options
   bl64_os_set_alias
   bl64_iam_set_command
   bl64_iam_set_alias
@@ -84,6 +85,8 @@ else
   bl64_pkb_set_alias
   bl64_rbac_set_command
   bl64_rbac_set_alias
+  bl64_py_set_command
+  bl64_py_set_options
   bl64_vcs_set_command
   bl64_vcs_set_alias
   bl64_rxtx_set_command
