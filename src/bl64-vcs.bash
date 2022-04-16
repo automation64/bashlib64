@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 #######################################
@@ -26,6 +26,7 @@ function bl64_vcs_set_command() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
     BL64_VCS_CMD_GIT='/usr/bin/git'
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
   # Do not use return as this function gets sourced
 }
@@ -50,6 +51,7 @@ function bl64_vcs_set_alias() {
     # shellcheck disable=SC2034
     BL64_VCS_ALIAS_GIT="$BL64_VCS_CMD_GIT"
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 }
 

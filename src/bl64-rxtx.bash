@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 function _bl64_rxtx_backup() {
@@ -69,6 +69,7 @@ function bl64_rxtx_set_command() {
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
     BL64_RXTX_CMD_WGET='/usr/bin/wget'
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
   # Do not use return as this function gets sourced
 }
@@ -122,6 +123,7 @@ function bl64_rxtx_set_alias() {
     BL64_RXTX_SET_CURL_OUTPUT='--output'
     BL64_RXTX_SET_WGET_OUTPUT='--output-document'
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 }
 

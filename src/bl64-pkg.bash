@@ -42,6 +42,7 @@ function bl64_pkb_set_command() {
   ${BL64_OS_MCOS}-*)
     BL64_PKG_CMD_BRW='/opt/homebrew/bin/brew'
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
   # Do not use return as this function gets sourced
 }
@@ -92,6 +93,7 @@ function bl64_pkb_set_alias() {
     BL64_PKG_ALIAS_BRW_CLEAN="$BL64_PKG_CMD_BRW cleanup --prune=all -s"
     BL64_PKG_ALIAS_BRW_UPDATE="$BL64_PKG_CMD_BRW update"
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 }
 
@@ -152,6 +154,7 @@ function bl64_pkg_prepare() {
   ${BL64_OS_MCOS}-*)
     $BL64_PKG_ALIAS_BRW_UPDATE
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 }
 
@@ -195,6 +198,7 @@ function bl64_pkg_install() {
   ${BL64_OS_MCOS}-*)
     $BL64_PKG_ALIAS_BRW_INSTALL "$@"
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 }
 
@@ -242,5 +246,6 @@ function bl64_pkg_cleanup() {
   ${BL64_OS_MCOS}-*)
     $BL64_PKG_ALIAS_BRW_CLEAN
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 }
