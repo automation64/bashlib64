@@ -188,7 +188,7 @@ function bl64_fs_merge_files() {
   fi
 
   # Rollback if error
-  # shellcheck disable=SC2030
+  # shellcheck disable=SC2030 # BL64_LIB_VERBOSE is temporary modified in a subshell to avoid changing the global setting
   (( status_cat != 0 || status_file != 0)) && (BL64_LIB_VERBOSE="$BL64_LIB_VAR_OFF"; bl64_fs_rm_file "$destination")
 
   # shellcheck disable=SC2086
@@ -492,8 +492,8 @@ function bl64_fs_rm_full() {
 #   0: always ok
 #######################################
 function bl64_fs_cleanup_tmps() {
-  $BL64_OS_ALIAS_RM_FULL -- /tmp/[[:alnum:]]*
-  $BL64_OS_ALIAS_RM_FULL -- /var/tmp/[[:alnum:]]*
+  bl64_fs_rm_full -- /tmp/[[:alnum:]]*
+  bl64_fs_rm_full -- /var/tmp/[[:alnum:]]*
   return 0
 }
 
@@ -512,7 +512,7 @@ function bl64_fs_cleanup_logs() {
   local target='/var/log'
 
   if [[ -d "$target" ]]; then
-    $BL64_OS_ALIAS_RM_FULL ${target}/[[:alnum:]]*
+    bl64_fs_rm_full ${target}/[[:alnum:]]*
   fi
   return 0
 }
@@ -532,7 +532,7 @@ function bl64_fs_cleanup_caches() {
   local target='/var/cache/man'
 
   if [[ -d "$target" ]]; then
-    $BL64_OS_ALIAS_RM_FULL ${target}/[[:alnum:]]*
+    bl64_fs_rm_full ${target}/[[:alnum:]]*
   fi
   return 0
 }
