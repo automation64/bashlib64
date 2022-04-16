@@ -29,7 +29,7 @@ function bl64_check_command() {
   bl64_check_parameter 'path' || return $?
 
   if [[ "$path" == "$BL64_LIB_VAR_NULL" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_SUPPORTED} (os: ${BL64_OS_DISTRO} / command: ${path})"
+    bl64_msg_show_unsupported "$path"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_FILE_NOT_FOUND
   fi
