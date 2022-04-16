@@ -56,7 +56,6 @@ setup() {
 
   run bl64_check_path_absolute
   assert_failure
-  assert_equal "$status" $BL64_CHECK_ERROR_MISSING_PARAMETER
 
 }
 

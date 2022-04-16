@@ -38,6 +38,5 @@ setup() {
 
   run bl64_check_file
   assert_failure
-  assert_equal "$status" $BL64_CHECK_ERROR_MISSING_PARAMETER
 
 }

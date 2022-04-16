@@ -31,10 +31,9 @@ setup() {
 
 }
 
-@test "bl64_check_export: function export is not present" {
+@test "bl64_check_export: parameter export is not present" {
 
   run bl64_check_export
   assert_failure
-  assert_equal "$status" $BL64_CHECK_ERROR_MISSING_PARAMETER
 
 }

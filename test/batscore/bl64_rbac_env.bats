@@ -6,12 +6,6 @@ setup() {
 
 }
 
-@test "bl64_rbac_env: commands are set" {
-  assert_equal "$BL64_RBAC_CMD_SUDO" '/usr/bin/sudo'
-  assert_equal "$BL64_RBAC_CMD_VISUDO" '/usr/sbin/visudo'
-  assert_equal "$BL64_RBAC_FILE_SUDOERS" '/etc/sudoers'
-}
-
 @test "bl64_rbac_env: public constants are set" {
   assert_equal $BL64_RBAC_ERROR_MISSING_PARAMETER 200
   assert_equal $BL64_RBAC_ERROR_MISSING_AWK 201
