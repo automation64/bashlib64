@@ -26,10 +26,12 @@ function bl64_check_command() {
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_COMMAND_NOT_FOUND}"
 
-  if [[ -z "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (command path)"
+  bl64_check_parameter 'path' || return $?
+
+  if [[ "$path" == "$BL64_LIB_VAR_NULL" ]]; then
+    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_SUPPORTED} (os: ${BL64_OS_DISTRO} / command: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_MISSING_PARAMETER
+    return $BL64_CHECK_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -f "$path" ]]; then
     bl64_msg_show_error "${message} (${path})"
@@ -63,11 +65,7 @@ function bl64_check_file() {
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_FILE_NOT_FOUND}"
 
-  if [[ -z "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (file path)"
-    # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_MISSING_PARAMETER
-  fi
+  bl64_check_parameter 'path' || return $?
   if [[ ! -f "$path" ]]; then
     bl64_msg_show_error "${message} (${path})"
     # shellcheck disable=SC2086
@@ -100,11 +98,7 @@ function bl64_check_directory() {
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND}"
 
-  if [[ -z "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (directory path)"
-    # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_MISSING_PARAMETER
-  fi
+  bl64_check_parameter 'path' || return $?
   if [[ ! -d "$path" ]]; then
     bl64_msg_show_error "${message} (${path})"
     # shellcheck disable=SC2086
@@ -172,11 +166,7 @@ function bl64_check_export() {
   local export_name="$1"
   local description="${2:-export_name $export_name}"
 
-  if [[ -z "$export_name" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (export name)"
-    # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_MISSING_PARAMETER
-  fi
+  bl64_check_parameter 'export_name' || return $?
 
   if [[ ! -v "$export_name" ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_EXPORT_SET (${description})"
@@ -213,11 +203,7 @@ function bl64_check_path_relative() {
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_PATH_NOT_RELATIVE}"
 
-  if [[ -z "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (path)"
-    # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_MISSING_PARAMETER
-  fi
+  bl64_check_parameter 'path' || return $?
   if [[ "$path" == '/' || "$path" == /* ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
     # shellcheck disable=SC2086
@@ -247,11 +233,7 @@ function bl64_check_path_absolute() {
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_PATH_NOT_ABSOLUTE}"
 
-  if [[ -z "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (path)"
-    # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_MISSING_PARAMETER
-  fi
+  bl64_check_parameter 'path' || return $?
   if [[ "$path" != '/' && "$path" != /* ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
     # shellcheck disable=SC2086
@@ -324,11 +306,7 @@ function bl64_check_overwrite() {
   local message="${2:-$_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}"
   local overwrite="${3:-"$BL64_LIB_VAR_OFF"}"
 
-  if [[ -z "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (object path)"
-    # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_MISSING_PARAMETER
-  fi
+  bl64_check_parameter 'path' || return $?
 
   if [[ "$overwrite" == "$BL64_LIB_VAR_OFF" ]]; then
     if [[ -e "$path" ]]; then
