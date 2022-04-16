@@ -133,7 +133,7 @@ function bl64_dbg_app_show_info() {
 function bl64_dbg_lib_show_vars() {
   local variable=''
 
-  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_TASK" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_ALL" && "$#" == '0' ]] &&
+  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_TASK" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_ALL" || "$#" == '0' ]] &&
     return 0
 
   for variable in "$@"; do
@@ -157,7 +157,7 @@ function bl64_dbg_lib_show_vars() {
 function bl64_dbg_app_show_vars() {
   local variable=''
 
-  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_TASK" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_ALL" && "$#" == '0' ]] &&
+  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_TASK" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_ALL" || "$#" == '0' ]] &&
     return 0
 
   for variable in "$@"; do
