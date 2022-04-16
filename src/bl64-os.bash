@@ -57,7 +57,12 @@ function _bl64_os_get_distro_from_os_release() {
   ${BL64_OS_CNT}-7*)
     [[ "$BL64_OS_DISTRO" == "${BL64_OS_CNT}-7" ]] && BL64_OS_DISTRO="${BL64_OS_CNT}-7.0"
     ;;
-  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9.*) : ;;
+  ${BL64_OS_CNT}-8*)
+    [[ "$BL64_OS_DISTRO" == "${BL64_OS_CNT}-8" ]] && BL64_OS_DISTRO="${BL64_OS_CNT}-8.0"
+    ;;
+  ${BL64_OS_CNT}-9*)
+    [[ "$BL64_OS_DISTRO" == "${BL64_OS_CNT}-9" ]] && BL64_OS_DISTRO="${BL64_OS_CNT}-9.0"
+    ;;
   ${BL64_OS_DEB}-9*)
     [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-9" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-9.0"
     ;;
@@ -67,8 +72,8 @@ function _bl64_os_get_distro_from_os_release() {
   ${BL64_OS_DEB}-11*)
     [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-11" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-11.0"
     ;;
-  ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.* | ${BL64_OS_FD}-35.*) : ;;
-  ${BL64_OS_OL}-7* | ${BL64_OS_OL}-8.*) : ;;
+  ${BL64_OS_FD}-33* | ${BL64_OS_FD}-34* | ${BL64_OS_FD}-35*) : ;;
+  ${BL64_OS_OL}-7* | ${BL64_OS_OL}-8*) : ;;
   ${BL64_OS_RHEL}-8*) : ;;
   ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
   *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;
@@ -244,6 +249,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_TRUE="/usr/bin/true"
     BL64_OS_CMD_UNAME='/usr/bin/uname'
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 
   # Do not use return as this function gets sourced
@@ -311,6 +317,7 @@ function bl64_os_set_options() {
     BL64_OS_SET_RM_FORCE='-f'
     BL64_OS_SET_RM_RECURSIVE='-R'
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 
   # Do not use return as this function gets sourced
@@ -363,6 +370,7 @@ function bl64_os_set_alias() {
     BL64_OS_ALIAS_MKTEMP_DIR="${BL64_OS_CMD_MKTEMP} -d"
     BL64_OS_ALIAS_MKTEMP_FILE="${BL64_OS_CMD_MKTEMP}"
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 
   BL64_OS_ALIAS_CHOWN_DIR="${BL64_OS_CMD_CHOWN} ${BL64_OS_SET_CHOWN_VERBOSE} ${BL64_OS_SET_CHOWN_RECURSIVE}"
