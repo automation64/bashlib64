@@ -125,6 +125,7 @@ function bl64_rbac_set_command() {
     BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
     ;;
   esac
+  # Do not use return as this function gets sourced
 }
 
 #######################################

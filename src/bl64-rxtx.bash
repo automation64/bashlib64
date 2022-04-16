@@ -70,6 +70,7 @@ function bl64_rxtx_set_command() {
     BL64_RXTX_CMD_WGET='/usr/bin/wget'
     ;;
   esac
+  # Do not use return as this function gets sourced
 }
 
 #######################################

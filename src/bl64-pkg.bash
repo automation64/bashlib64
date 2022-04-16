@@ -43,6 +43,7 @@ function bl64_pkb_set_command() {
     BL64_PKG_CMD_BRW='/opt/homebrew/bin/brew'
     ;;
   esac
+  # Do not use return as this function gets sourced
 }
 
 #######################################

@@ -34,6 +34,7 @@ function bl64_iam_set_command() {
     BL64_IAM_CMD_USERADD='/usr/bin/dscl'
     ;;
   esac
+  # Do not use return as this function gets sourced
 }
 
 #######################################

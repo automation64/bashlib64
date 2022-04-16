@@ -27,6 +27,7 @@ function bl64_vcs_set_command() {
     BL64_VCS_CMD_GIT='/usr/bin/git'
     ;;
   esac
+  # Do not use return as this function gets sourced
 }
 
 #######################################
