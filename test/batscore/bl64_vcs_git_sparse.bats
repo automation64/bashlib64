@@ -18,6 +18,7 @@ teardown() {
 @test "bl64_vcs_git_sparse: parameter 1 is not present" {
 
   run bl64_vcs_git_sparse
+  assert_failure
   assert_equal "$status" $BL64_VCS_ERROR_MISSING_PARAMETER
 
 }
@@ -25,6 +26,7 @@ teardown() {
 @test "bl64_vcs_git_sparse: parameter 2 is not present" {
 
   run bl64_vcs_git_sparse 'source'
+  assert_failure
   assert_equal "$status" $BL64_VCS_ERROR_MISSING_PARAMETER
 
 }
@@ -32,6 +34,7 @@ teardown() {
 @test "bl64_vcs_git_sparse: parameter 4 is not present" {
 
   run bl64_vcs_git_sparse 'source' "$_bl64_vcs_git_sparse_destination" 'main'
+  assert_failure
   assert_equal "$status" $BL64_VCS_ERROR_MISSING_PARAMETER
 
 }

@@ -14,27 +14,27 @@ setup() {
   mkdir "$target"
 }
 
-@test "bl64_os_merge_dir: missing source" {
+@test "bl64_fs_merge_dir: missing source" {
   set +u # to avoid IFS missing error in run function
-  run bl64_os_merge_dir
+  run bl64_fs_merge_dir
   assert_failure
 }
 
-@test "bl64_os_merge_dir: missing target" {
+@test "bl64_fs_merge_dir: missing target" {
   set +u # to avoid IFS missing error in run function
-  run bl64_os_merge_dir
+  run bl64_fs_merge_dir
   assert_failure "$source"
 }
 
-@test "bl64_os_merge_dir: missing source directory" {
+@test "bl64_fs_merge_dir: missing source directory" {
   set +u # to avoid IFS missing error in run function
-  run bl64_os_merge_dir
+  run bl64_fs_merge_dir
   assert_failure "/fake/dir" "$target"
 }
 
-@test "bl64_os_merge_dir: missing target directory" {
+@test "bl64_fs_merge_dir: missing target directory" {
   set +u # to avoid IFS missing error in run function
-  run bl64_os_merge_dir
+  run bl64_fs_merge_dir
   assert_failure "$source" "/fake/dir"
 }
 

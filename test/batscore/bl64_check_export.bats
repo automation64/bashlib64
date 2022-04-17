@@ -17,8 +17,8 @@ setup() {
 @test "bl64_check_export: export is not present" {
 
   run bl64_check_export 'FAKE_EXPORTED_VARIABLE'
+  assert_failure
   assert_equal "$status" $BL64_CHECK_ERROR_EXPORT_SET
-  assert_output --partial "${_BL64_CHECK_TXT_EXPORT_SET}"
 
 }
 
@@ -26,15 +26,14 @@ setup() {
 
   export TEST_EXPORTED_VARIABLE2=''
   run bl64_check_export 'TEST_EXPORTED_VARIABLE2'
+  assert_failure
   assert_equal "$status" $BL64_CHECK_ERROR_EXPORT_EMPTY
-  assert_output --partial "${_BL64_CHECK_TXT_EXPORT_EMPTY}"
 
 }
 
-@test "bl64_check_export: function export is not present" {
+@test "bl64_check_export: parameter export is not present" {
 
   run bl64_check_export
-  assert_equal "$status" $BL64_CHECK_ERROR_MISSING_PARAMETER
-  assert_output --partial "${_BL64_CHECK_TXT_MISSING_PARAMETER}"
+  assert_failure
 
 }

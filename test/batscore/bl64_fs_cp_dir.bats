@@ -10,15 +10,15 @@ setup() {
   TEST_SANDBOX="$(temp_make)"
 }
 
-@test "bl64_os_cp_dir: copy dir" {
+@test "bl64_fs_cp_dir: copy dir" {
   set +u # to avoid IFS missing error in run function
   source="${TEST_SANDBOX}/source"
   dest="${TEST_SANDBOX}/dest"
   mkdir "$source" &&
   mkdir "$dest" &&
   ls /etc > "$source/file"
-  run bl64_os_cp_dir "$source" "$dest"
-  assert_equal "$status" '0'
+  run bl64_fs_cp_dir "$source" "$dest"
+  assert_success
   assert_dir_exist "${dest}/source"
 }
 

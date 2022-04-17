@@ -12,6 +12,7 @@ setup() {
   local value='testing task msg'
 
   run bl64_msg_show_task "$value"
+  assert_success
 
   assert_output --partial "${BL64_SCRIPT_NAME}"
   assert_output --partial "${HOSTNAME}"

@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -26,10 +26,12 @@ function bl64_check_command() {
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_COMMAND_NOT_FOUND}"
 
-  if [[ -z "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (command path)"
+  bl64_check_parameter 'path' || return $?
+
+  if [[ "$path" == "$BL64_LIB_VAR_NULL" ]]; then
+    bl64_msg_show_unsupported "$path"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_MISSING_PARAMETER
+    return $BL64_CHECK_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -f "$path" ]]; then
     bl64_msg_show_error "${message} (${path})"
@@ -63,11 +65,7 @@ function bl64_check_file() {
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_FILE_NOT_FOUND}"
 
-  if [[ -z "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (file path)"
-    # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_MISSING_PARAMETER
-  fi
+  bl64_check_parameter 'path' || return $?
   if [[ ! -f "$path" ]]; then
     bl64_msg_show_error "${message} (${path})"
     # shellcheck disable=SC2086
@@ -100,11 +98,7 @@ function bl64_check_directory() {
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND}"
 
-  if [[ -z "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (directory path)"
-    # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_MISSING_PARAMETER
-  fi
+  bl64_check_parameter 'path' || return $?
   if [[ ! -d "$path" ]]; then
     bl64_msg_show_error "${message} (${path})"
     # shellcheck disable=SC2086
@@ -143,7 +137,7 @@ function bl64_check_parameter() {
     return $BL64_CHECK_ERROR_MISSING_PARAMETER
   fi
 
-  if eval "[[ -z \"\$${parameter}\" || \"\$${parameter}\" == '${BL64_LIB_VAR_TBD}' ]]"; then
+  if eval "[[ -z \"\$${parameter}\" || \"\$${parameter}\" == '${BL64_LIB_DEFAULT}' ]]"; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (${description})"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_PARAMETER_EMPTY
@@ -172,11 +166,7 @@ function bl64_check_export() {
   local export_name="$1"
   local description="${2:-export_name $export_name}"
 
-  if [[ -z "$export_name" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (export name)"
-    # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_MISSING_PARAMETER
-  fi
+  bl64_check_parameter 'export_name' || return $?
 
   if [[ ! -v "$export_name" ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_EXPORT_SET (${description})"
@@ -213,15 +203,118 @@ function bl64_check_path_relative() {
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_PATH_NOT_RELATIVE}"
 
-  if [[ -z "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (path)"
-    # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_MISSING_PARAMETER
-  fi
+  bl64_check_parameter 'path' || return $?
   if [[ "$path" == '/' || "$path" == /* ]]; then
     bl64_msg_show_error "$_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
     # shellcheck disable=SC2086
     return $BL64_CHECK_ERROR_PATH_NOT_RELATIVE
   fi
+  return 0
+}
+
+#######################################
+# Check that the given path is absolute
+#
+# * String check only
+# * Path is not tested for existance
+#
+# Arguments:
+#   $1: Path string
+#   $2: Failed check error message. Default: _BL64_CHECK_TXT_PATH_NOT_ABSOLUTE
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: File found
+#   $BL64_CHECK_ERROR_MISSING_PARAMETER
+#   $BL64_CHECK_ERROR_PATH_NOT_ABSOLUTE
+#######################################
+function bl64_check_path_absolute() {
+  local path="$1"
+  local message="${2:-$_BL64_CHECK_TXT_PATH_NOT_ABSOLUTE}"
+
+  bl64_check_parameter 'path' || return $?
+  if [[ "$path" != '/' && "$path" != /* ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
+    # shellcheck disable=SC2086
+    return $BL64_CHECK_ERROR_PATH_NOT_ABSOLUTE
+  fi
+  return 0
+}
+
+#######################################
+# Check that the effective user running the current process is root
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: check ok
+#   $BL64_CHECK_ERROR_PRIVILEGE_IS_ROOT
+#######################################
+function bl64_check_privilege_root() {
+  bl64_dbg_lib_show_vars 'EUID'
+  if [[ "$EUID" != '0' ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT (EUID: $EUID)"
+    # shellcheck disable=SC2086
+    return $BL64_CHECK_ERROR_PRIVILEGE_IS_NOT_ROOT
+  fi
+  return 0
+}
+
+#######################################
+# Check that the effective user running the current process is not root
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: check ok
+#   $BL64_CHECK_ERROR_PRIVILEGE_IS_NOT_ROOT
+#######################################
+function bl64_check_privilege_not_root() {
+  bl64_dbg_lib_show_vars 'EUID'
+  if [[ "$EUID" == '0' ]]; then
+    bl64_msg_show_error "$_BL64_CHECK_TXT_PRIVILEGE_IS_ROOT"
+    # shellcheck disable=SC2086
+    return $BL64_CHECK_ERROR_PRIVILEGE_IS_ROOT
+  fi
+  return 0
+}
+
+#######################################
+# Check file/dir overwrite condition
+#
+# Arguments:
+#   $1: Full path to the object
+#   $2: Error message
+#   $3: Overwrite flag. Must be ON(1) or OFF(0). Default: OFF
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: check ok
+#   $BL64_CHECK_ERROR_MISSING_PARAMETER
+#   $BL64_CHECK_ERROR_OVERWRITE_NOT_PERMITED
+#######################################
+function bl64_check_overwrite() {
+  local path="$1"
+  local message="${2:-$_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}"
+  local overwrite="${3:-"$BL64_LIB_VAR_OFF"}"
+
+  bl64_check_parameter 'path' || return $?
+
+  if [[ "$overwrite" == "$BL64_LIB_VAR_OFF" ]]; then
+    if [[ -e "$path" ]]; then
+      bl64_msg_show_error "${message} (${path})"
+      # shellcheck disable=SC2086
+      return $BL64_CHECK_ERROR_OVERWRITE_NOT_PERMITED
+    fi
+  fi
+
   return 0
 }

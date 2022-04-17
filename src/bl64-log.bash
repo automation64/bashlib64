@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -28,12 +28,7 @@ function _bl64_log_register() {
   local category="$2"
   local payload="$3"
 
-  if [[
-    -z "$BL64_LOG_PATH" || \
-    -z "$BL64_LOG_VERBOSE" || \
-    -z "$BL64_LOG_TYPE" || \
-    -z "$BL64_LOG_FS"
-  ]]; then
+  if [[ -z "$BL64_LOG_PATH" || -z "$BL64_LOG_VERBOSE" || -z "$BL64_LOG_TYPE" || -z "$BL64_LOG_FS" ]]; then
     bl64_msg_show_error "$_BL64_LOG_TXT_NOT_SETUP"
     return $BL64_LOG_ERROR_NOT_SETUP
   fi
@@ -58,6 +53,7 @@ function _bl64_log_register() {
   *)
     bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
     return $BL64_LOG_ERROR_INVALID_TYPE
+    ;;
   esac
 }
 
@@ -84,33 +80,27 @@ function bl64_log_setup() {
   local type="${3:-$BL64_LOG_TYPE_FILE}"
   local fs="${4:-:}"
 
-  # shellcheck disable=SC2086
-  if [[ -z "$path" ]]; then
-    bl64_msg_show_error "$_BL64_LOG_TXT_MISSING_PARAMETER"
-    return $BL64_LOG_ERROR_MISSING_PARAMETER
-  fi
+  bl64_check_parameter "$path" || return $?
 
   # shellcheck disable=SC2086
-  if [[
-    "$type" != "$BL64_LOG_TYPE_FILE"
-  ]]; then
+  if [[ "$type" != "$BL64_LOG_TYPE_FILE" ]]; then
     bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
     return $BL64_LOG_ERROR_INVALID_TYPE
   fi
 
   # shellcheck disable=SC2086
-  if [[
-    "$verbose" != '0' && \
-    "$verbose" != '1'
-  ]]; then
+  if [[ "$verbose" != '0' && "$verbose" != '1' ]]; then
     bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_VERBOSE"
     return $BL64_LOG_ERROR_INVALID_VERBOSE
   fi
 
-  BL64_LOG_PATH="${path}" && \
-  BL64_LOG_VERBOSE="${verbose}" && \
-  BL64_LOG_TYPE="${type}" && \
+  bl64_dbg_lib_trace_start
+  BL64_LOG_PATH="${path}"
+  BL64_LOG_VERBOSE="${verbose}"
+  BL64_LOG_TYPE="${type}"
   BL64_LOG_FS="${fs}"
+  bl64_dbg_lib_trace_stop
+  return 0
 }
 
 #######################################

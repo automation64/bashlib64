@@ -13,12 +13,12 @@ setup() {
     assert_equal "$BL64_PKG_ALIAS_DNF_INSTALL" "$BL64_PKG_CMD_DNF --color=never --nodocs --assumeyes install"
     assert_equal "$BL64_PKG_ALIAS_DNF_CLEAN" "$BL64_PKG_CMD_DNF clean all"
     ;;
-  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
     assert_equal "$BL64_PKG_ALIAS_DNF_CACHE" "$BL64_PKG_CMD_DNF --color=never makecache"
     assert_equal "$BL64_PKG_ALIAS_DNF_INSTALL" "$BL64_PKG_CMD_DNF --color=never --nodocs --assumeyes install"
     assert_equal "$BL64_PKG_ALIAS_DNF_CLEAN" "$BL64_PKG_CMD_DNF clean all"
     ;;
-  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     assert_equal "$BL64_PKG_ALIAS_YUM_CACHE" "$BL64_PKG_CMD_YUM --color=never makecache"
     assert_equal "$BL64_PKG_ALIAS_YUM_INSTALL" "$BL64_PKG_CMD_YUM --color=never --assumeyes install"
     assert_equal "$BL64_PKG_ALIAS_YUM_CLEAN" "$BL64_PKG_CMD_YUM clean all"

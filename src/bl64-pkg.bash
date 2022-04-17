@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 #######################################
@@ -24,13 +24,13 @@
 function bl64_pkb_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
-  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
-  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     BL64_PKG_CMD_YUM='/usr/bin/yum'
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -42,7 +42,9 @@ function bl64_pkb_set_command() {
   ${BL64_OS_MCOS}-*)
     BL64_PKG_CMD_BRW='/opt/homebrew/bin/brew'
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
+  # Do not use return as this function gets sourced
 }
 
 #######################################
@@ -62,17 +64,17 @@ function bl64_pkb_set_command() {
 function bl64_pkb_set_alias() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
     BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF --color=never makecache"
     BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF --color=never --nodocs --assumeyes install"
     BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
     ;;
-  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
     BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF --color=never makecache"
     BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF --color=never --nodocs --assumeyes install"
     BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
     ;;
-  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     BL64_PKG_ALIAS_YUM_CACHE="$BL64_PKG_CMD_YUM --color=never makecache"
     BL64_PKG_ALIAS_YUM_INSTALL="$BL64_PKG_CMD_YUM --color=never --assumeyes install"
     BL64_PKG_ALIAS_YUM_CLEAN="$BL64_PKG_CMD_YUM clean all"
@@ -91,6 +93,7 @@ function bl64_pkb_set_alias() {
     BL64_PKG_ALIAS_BRW_CLEAN="$BL64_PKG_CMD_BRW cleanup --prune=all -s"
     BL64_PKG_ALIAS_BRW_UPDATE="$BL64_PKG_CMD_BRW update"
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 }
 
@@ -117,6 +120,8 @@ function bl64_pkg_deploy() {
 #######################################
 # Initialize the package manager for installations
 #
+# Requirements:
+#   * root privilege (sudo)
 # Arguments:
 #   None
 # Outputs:
@@ -126,14 +131,18 @@ function bl64_pkg_deploy() {
 #   n: package manager exist status
 #######################################
 function bl64_pkg_prepare() {
+  bl64_check_privilege_root || return $?
+
+  bl64_msg_show_task "$_BL64_PKG_TXT_PREPARE"
+  # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
     $BL64_PKG_ALIAS_DNF_CACHE
     ;;
-  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
     $BL64_PKG_ALIAS_DNF_CACHE
     ;;
-  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     $BL64_PKG_ALIAS_YUM_CACHE
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -146,6 +155,7 @@ function bl64_pkg_prepare() {
   ${BL64_OS_MCOS}-*)
     $BL64_PKG_ALIAS_BRW_UPDATE
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 }
 
@@ -155,6 +165,8 @@ function bl64_pkg_prepare() {
 # * Assume yes
 # * Avoid installing docs (man) when possible
 #
+# Requirements:
+#   * root privilege (sudo)
 # Arguments:
 #   package list, separated by spaces (expanded with $@)
 # Outputs:
@@ -164,14 +176,18 @@ function bl64_pkg_prepare() {
 #   n: package manager exist status
 #######################################
 function bl64_pkg_install() {
+  bl64_check_privilege_root || return $?
+
+  bl64_msg_show_task "$_BL64_PKG_TXT_INSTALL"
+  # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
     $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
     ;;
-  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
     $BL64_PKG_ALIAS_DNF_INSTALL -- "$@"
     ;;
-  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     $BL64_PKG_ALIAS_YUM_INSTALL -- "$@"
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -184,6 +200,7 @@ function bl64_pkg_install() {
   ${BL64_OS_MCOS}-*)
     $BL64_PKG_ALIAS_BRW_INSTALL "$@"
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 }
 
@@ -192,6 +209,8 @@ function bl64_pkg_install() {
 #
 # * Warning: removes cache contents
 #
+# Requirements:
+#   * root privilege (sudo)
 # Arguments:
 #   None
 # Outputs:
@@ -203,14 +222,18 @@ function bl64_pkg_install() {
 function bl64_pkg_cleanup() {
   local target=''
 
+  bl64_check_privilege_root || return $?
+
+  bl64_msg_show_task "$_BL64_PKG_TXT_CLEAN"
+  # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* )
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
     $BL64_PKG_ALIAS_DNF_CLEAN
     ;;
-  ${BL64_OS_CNT}-8* | ${BL64_OS_CNT}-9* | ${BL64_OS_OL}-8*)
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
     $BL64_PKG_ALIAS_DNF_CLEAN
     ;;
-  ${BL64_OS_CNT}-7* | ${BL64_OS_OL}-7*)
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     $BL64_PKG_ALIAS_YUM_CLEAN
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -226,5 +249,6 @@ function bl64_pkg_cleanup() {
   ${BL64_OS_MCOS}-*)
     $BL64_PKG_ALIAS_BRW_CLEAN
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 }

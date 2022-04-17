@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -78,6 +78,7 @@ function bl64_arc_open_tar() {
       --file="$source"
     status=$?
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 
   ((status == 0)) && $BL64_OS_ALIAS_RM_FILE "$source"

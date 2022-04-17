@@ -11,37 +11,6 @@
 # Main
 #
 
-# Ensure pipeline exit status is failed when any cmd fails
-set -o pipefail
-
-# Do not inherit aliases and commands
-unset -f unalias
-\unalias -a
-unset -f command
-
-# Do not inherit sensitive environment variables
-unset MAIL
-unset ENV
-unset IFS
-
-# Normalize shtop defaults
-shopt -qu \
-  dotglob \
-  extdebug \
-  failglob \
-  globstar \
-  gnu_errfmt \
-  huponexit \
-  lastpipe \
-  login_shell \
-  nocaseglob \
-  nocasematch \
-  nullglob \
-  nullglob \
-  xpg_echo
-shopt -qs \
-  extquote
-
 # Set strict mode for enhanced security
 if [[ "$BL64_LIB_STRICT" == '1' ]]; then
   set -u
@@ -72,23 +41,26 @@ fi
 bl64_os_get_distro
 
 # Verify lib compatibility
-if [[ "$BL64_OS_DISTRO" == 'UNKNOWN' || ("${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5') ]]; then
-  printf '%s\n' "Fatal: BashLib64 is not supported in the current OS ($(uname -a)) or Bash version ($BASH_VERSION)" >&2
+if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" || ("${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5') ]]; then
+  printf '%s\n' "Fatal: BashLib64 is not supported in the current OS (distro:[${BL64_OS_DISTRO}] / bash:[${BASH_VERSION}] / uname:[$(uname -a))])" >&2
   false
 else
   # Load commands and aliases
   bl64_os_set_command
+  bl64_os_set_options
   bl64_os_set_alias
   bl64_iam_set_command
   bl64_iam_set_alias
   bl64_pkb_set_command
   bl64_pkb_set_alias
-  bl64_sudo_set_command
-  bl64_sudo_set_alias
+  bl64_rbac_set_command
+  bl64_rbac_set_alias
   bl64_vcs_set_command
   bl64_vcs_set_alias
   bl64_rxtx_set_command
   bl64_rxtx_set_alias
+  bl64_py_set_command
+  bl64_py_set_options
 
   # Enable shell tracing
   [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]] && set -x
