@@ -5,17 +5,14 @@ setup() {
   . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
 }
 
-@test "bl64_iam_user_add: function parameter missing" {
-  set +u # to avoid IFS missing error in run function
-  run bl64_iam_user_add
-  assert_failure
-}
-
-@test "bl64_iam_user_add: add regular user" {
+@test "bl64_py_pip_usr_prepare: run prepare" {
   if [[ ! -f '/run/.containerenv' ]]; then
     skip 'this case can only be tested inside a container'
   fi
+
   set +u # to avoid IFS missing error in run function
-  run $BL64_RBAC_ALIAS_SUDO_ENV /bin/bash -c "source $DEVBL_TEST_BASHLIB64; bl64_iam_user_add testusr"
+  run bl64_py_pip_usr_prepare
+  set -u
+
   assert_success
 }

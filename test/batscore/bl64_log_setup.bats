@@ -10,7 +10,6 @@ setup() {
 
   run bl64_log_setup '/dev/null' '1' 'INVALID_TYPE'
   assert_failure
-  assert_equal "$status" $BL64_LOG_ERROR_INVALID_TYPE
 
 }
 

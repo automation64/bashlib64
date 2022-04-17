@@ -6,7 +6,9 @@ setup() {
 
 }
 
-@test "bl64_iam_env: public constants are set" {
+@test "bl64_msg_show_unsupported: syntax" {
 
-  assert_equal $BL64_IAM_ERROR_MISSING_USER_ADD 50
+  set +u # to avoid IFS missing error in run function
+  run bl64_msg_show_unsupported 'test'
+  assert_success
 }

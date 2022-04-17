@@ -7,7 +7,6 @@ setup() {
 }
 
 @test "bl64_rbac_env: public constants are set" {
-  assert_equal $BL64_RBAC_ERROR_MISSING_PARAMETER 200
   assert_equal $BL64_RBAC_ERROR_MISSING_AWK 201
   assert_equal $BL64_RBAC_ERROR_MISSING_SUDOERS 202
   assert_equal $BL64_RBAC_ERROR_MISSING_VISUDO 203

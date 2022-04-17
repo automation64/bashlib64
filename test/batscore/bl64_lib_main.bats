@@ -14,7 +14,6 @@ setup() {
 
 @test "bl64_lib_main: default flags are set" {
   assert_equal "$BL64_LIB_CMD" '0'
-  assert_equal "$BL64_LIB_DEBUG" '0'
   assert_equal "$BL64_LIB_STRICT" '1'
   assert_equal "$BL64_LIB_LANG" '1'
   assert_equal "$BL64_LIB_SIGNAL_HUP" '-'
@@ -22,4 +21,5 @@ setup() {
   assert_equal "$BL64_LIB_SIGNAL_QUIT" '-'
   assert_equal "$BL64_LIB_VAR_NULL" '__'
   assert_equal "$BL64_LIB_DEFAULT" '_'
+  assert_not_equal "$BL64_LIB_DEBUG" ''
 }
