@@ -83,11 +83,8 @@ function bl64_iam_set_alias() {
 function bl64_iam_user_add() {
   local login="$1"
 
-  if [[ -z "$login" ]]; then
-    bl64_msg_show_error "$_BL64_IAM_TXT_MISSING_PARAMETER (login)"
-    # shellcheck disable=SC2086
-    return $BL64_IAM_ERROR_MISSING_PARAMETER
-  fi
+  bl64_check_privilege_root || return $?
+  bl64_check_parameter 'login' || return $?
 
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
