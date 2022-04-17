@@ -133,6 +133,7 @@ function bl64_pkg_deploy() {
 function bl64_pkg_prepare() {
   bl64_check_privilege_root || return $?
 
+  bl64_msg_show_task "$_BL64_PKG_TXT_PREPARE"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
@@ -177,6 +178,7 @@ function bl64_pkg_prepare() {
 function bl64_pkg_install() {
   bl64_check_privilege_root || return $?
 
+  bl64_msg_show_task "$_BL64_PKG_TXT_INSTALL"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
@@ -222,6 +224,7 @@ function bl64_pkg_cleanup() {
 
   bl64_check_privilege_root || return $?
 
+  bl64_msg_show_task "$_BL64_PKG_TXT_CLEAN"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
