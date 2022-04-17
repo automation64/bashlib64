@@ -27,6 +27,9 @@ function devbl_build_standalone() {
   bl64_msg_show_task "creating stand-alone library: $lib"
   "$BL64_OS_CMD_CAT" "$DEVBL_SRC/bl64-lib.header" >"$lib"
 
+  # Add core constants
+  bl64_fmt_strip_comments "$DEVBL_SRC/bl64-lib.env" >>"$lib"
+
   # Add global variables
   for file in $DEVBL_MODULES; do
     bl64_msg_show_task "adding module $file environment"
@@ -41,7 +44,6 @@ function devbl_build_standalone() {
 
   # Add remaining modules
   bl64_msg_show_task 'adding core'
-  bl64_fmt_strip_comments "$DEVBL_SRC/bl64-lib.env" >>"$lib"
   bl64_fmt_strip_comments "$DEVBL_SRC/bl64-lib.bash" >>"$lib"
   status=$?
 
