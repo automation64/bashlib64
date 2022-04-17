@@ -6,8 +6,7 @@ setup() {
 
 }
 
-@test "bl64_log_env: public constants are set" {
+@test "bl64_iam_env: public constants are set" {
 
-  assert_equal $BL64_IAM_ERROR_MISSING_PARAMETER 200
-  assert_equal $BL64_IAM_ERROR_MISSING_USER_ADD 201
+  assert_equal $BL64_IAM_ERROR_MISSING_USER_ADD 50
 }

@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.1
+# Version: 1.1.0
 #######################################
 
 [[ -z "$DEVBL_BIN" ]] && echo "Error: prepare the dev environment before executing this file" && exit 1
@@ -21,11 +21,14 @@ function devbl_build_standalone() {
   local lib="$DEVBL_BUILD/bashlib64.bash"
 
 
-  bl64_dbg_app_show "DEVBL_MODULES='${DEVBL_MODULES}'"
+  bl64_dbg_app_show_info "DEVBL_MODULES='${DEVBL_MODULES}'"
 
   # Create header
   bl64_msg_show_task "creating stand-alone library: $lib"
   "$BL64_OS_CMD_CAT" "$DEVBL_SRC/bl64-lib.header" >"$lib"
+
+  # Add core constants
+  bl64_fmt_strip_comments "$DEVBL_SRC/bl64-lib.env" >>"$lib"
 
   # Add global variables
   for file in $DEVBL_MODULES; do
@@ -41,18 +44,17 @@ function devbl_build_standalone() {
 
   # Add remaining modules
   bl64_msg_show_task 'adding core'
-  bl64_fmt_strip_comments "$DEVBL_SRC/bl64-lib.env" >>"$lib"
   bl64_fmt_strip_comments "$DEVBL_SRC/bl64-lib.bash" >>"$lib"
   status=$?
 
   if [[ "$status" == '0' && "$promote" == '1' ]]; then
     bl64_msg_show_task 'promoting library'
-    $BL64_OS_ALIAS_CP_FILE "$lib" "$DEVBL_ROOT"
+    bl64_fs_cp_file "$lib" "$DEVBL_ROOT"
   fi
 
   if [[ "$status" == '0' && "$test" == '1' ]]; then
     bl64_msg_show_task 'updating test library'
-    $BL64_OS_ALIAS_CP_FILE "$lib" "$DEVBL_TEST_BASHLIB64"
+    bl64_fs_cp_file "$lib" "$DEVBL_TEST_BASHLIB64"
   fi
 
   return $status

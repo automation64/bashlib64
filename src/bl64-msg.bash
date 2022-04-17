@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 #######################################
@@ -110,27 +110,27 @@ function bl64_msg_setup() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_usage() {
-  local usage="${1:-$BL64_LIB_VAR_TBD}"
-  local description="${2:-$BL64_LIB_VAR_TBD}"
-  local commands="${3:-$BL64_LIB_VAR_TBD}"
-  local flags="${4:-$BL64_LIB_VAR_TBD}"
-  local parameters="${5:-$BL64_LIB_VAR_TBD}"
+  local usage="${1:-$BL64_LIB_DEFAULT}"
+  local description="${2:-$BL64_LIB_DEFAULT}"
+  local commands="${3:-$BL64_LIB_DEFAULT}"
+  local flags="${4:-$BL64_LIB_DEFAULT}"
+  local parameters="${5:-$BL64_LIB_DEFAULT}"
 
   printf '\n%s: %s %s\n\n' "$_BL64_MSG_TXT_USAGE" "$BL64_SCRIPT_NAME" "$usage"
 
-  if [[ "$description" != "$BL64_LIB_VAR_TBD" ]]; then
+  if [[ "$description" != "$BL64_LIB_DEFAULT" ]]; then
     printf '%s\n\n' "$description"
   fi
 
-  if [[ "$commands" != "$BL64_LIB_VAR_TBD" ]]; then
+  if [[ "$commands" != "$BL64_LIB_DEFAULT" ]]; then
     printf '%s\n%s\n' "$_BL64_MSG_TXT_COMMANDS" "$commands"
   fi
 
-  if [[ "$flags" != "$BL64_LIB_VAR_TBD" ]]; then
+  if [[ "$flags" != "$BL64_LIB_DEFAULT" ]]; then
     printf '%s\n%s\n' "$_BL64_MSG_TXT_FLAGS" "$flags"
   fi
 
-  if [[ "$parameters" != "$BL64_LIB_VAR_TBD" ]]; then
+  if [[ "$parameters" != "$BL64_LIB_DEFAULT" ]]; then
     printf '%s\n%s\n' "$_BL64_MSG_TXT_PARAMETERS" "$parameters"
   fi
 
@@ -150,7 +150,7 @@ function bl64_msg_show_usage() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_error() {
-  local message="${1-$BL64_LIB_VAR_TBD}"
+  local message="${1-$BL64_LIB_DEFAULT}"
 
   _bl64_msg_show "$_BL64_MSG_TXT_ERROR" "$message" >&2
 }
@@ -168,7 +168,7 @@ function bl64_msg_show_error() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_warning() {
-  local message="${1-$BL64_LIB_VAR_TBD}"
+  local message="${1-$BL64_LIB_DEFAULT}"
 
   _bl64_msg_show "$_BL64_MSG_TXT_WARNING" "$message" >&2
 }
@@ -186,7 +186,7 @@ function bl64_msg_show_warning() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_info() {
-  local message="${1-$BL64_LIB_VAR_TBD}"
+  local message="${1-$BL64_LIB_DEFAULT}"
 
   [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
 
@@ -206,7 +206,7 @@ function bl64_msg_show_info() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_task() {
-  local message="${1-$BL64_LIB_VAR_TBD}"
+  local message="${1-$BL64_LIB_DEFAULT}"
 
   [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
 
@@ -226,7 +226,7 @@ function bl64_msg_show_task() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_debug() {
-  local message="${1-$BL64_LIB_VAR_TBD}"
+  local message="${1-$BL64_LIB_DEFAULT}"
 
   _bl64_msg_show "$_BL64_MSG_TXT_DEBUG" "$message" >&2
 }
@@ -244,7 +244,7 @@ function bl64_msg_show_debug() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_text() {
-  local message="${1-$BL64_LIB_VAR_TBD}"
+  local message="${1-$BL64_LIB_DEFAULT}"
 
   [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
 
@@ -264,7 +264,7 @@ function bl64_msg_show_text() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_batch_start() {
-  local message="${1-$BL64_LIB_VAR_TBD}"
+  local message="${1-$BL64_LIB_DEFAULT}"
 
   [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
 
@@ -286,7 +286,7 @@ function bl64_msg_show_batch_start() {
 #######################################
 function bl64_msg_show_batch_finish() {
   local status="$1"
-  local message="${2-$BL64_LIB_VAR_TBD}"
+  local message="${2-$BL64_LIB_DEFAULT}"
 
   [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
 
@@ -297,3 +297,20 @@ function bl64_msg_show_batch_finish() {
   fi
 }
 
+#######################################
+# Display unsupported platform message
+#
+# Arguments:
+#   $1: target (function name, command path, etc)
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_unsupported() {
+  local target="${1:-"${FUNCNAME[1]}"}"
+
+  bl64_msg_show_error "${_BL64_MSG_TXT_INCOMPATIBLE} (os: ${BL64_OS_DISTRO} / target: ${target})"
+}

@@ -5,14 +5,14 @@ setup() {
   . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
 }
 
-function _test_bl64_dbg_lib_show() {
-  bl64_dbg_lib_show 'TEST_VAR=1'
+function _test_bl64_dbg_lib_show_info() {
+  bl64_dbg_lib_show_info 'TEST_VAR=1'
 }
 
-@test "bl64_dbg_lib_show: start dbg" {
+@test "bl64_dbg_lib_show_info: start dbg" {
 
   set +u # to avoid IFS missing error in run function
-  run _test_bl64_dbg_lib_show
+  run _test_bl64_dbg_lib_show_info
 
   assert_success
 

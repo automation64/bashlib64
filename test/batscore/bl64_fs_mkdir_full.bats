@@ -11,9 +11,9 @@ setup() {
   TEST_TARGET="${TEST_SANDBOX}/test-dir"
 }
 
-@test "bl64_os_mkdir_full: create dir" {
+@test "bl64_fs_mkdir_full: create dir" {
   set +u # to avoid IFS missing error in run function
-  run bl64_os_mkdir_full "$TEST_TARGET"
+  run bl64_fs_mkdir_full "$TEST_TARGET"
   assert_equal "$status" '0'
   assert_dir_exist "$TEST_TARGET"
 }

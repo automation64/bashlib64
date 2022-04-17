@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.6.0
+# Version: 1.8.0
 #######################################
 
 function _bl64_rxtx_backup() {
@@ -14,7 +14,7 @@ function _bl64_rxtx_backup() {
   local status=0
 
   if [[ -e "$destination" ]]; then
-    bl64_os_mv "$destination" "$backup"
+    bl64_fs_mv "$destination" "$backup"
     status=$?
   fi
 
@@ -32,16 +32,16 @@ function _bl64_rxtx_restore() {
   # Check if restore is needed based on the operation result
   if [[ "$result" == "$BL64_LIB_VAR_OK" ]]; then
     # Operation was ok, backup no longer needed
-    [[ -e "$backup" ]] && bl64_os_rm_full "$backup"
+    [[ -e "$backup" ]] && bl64_fs_rm_full "$backup"
     # shellcheck disable=SC2086
     return $BL64_LIB_VAR_OK
   fi
 
   # Remove invalid content
-  [[ -e "$destination" ]] && bl64_os_rm_full "$destination"
+  [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
 
   # Restore content from backup
-  bl64_os_mv "$backup" "$destination"
+  bl64_fs_mv "$backup" "$destination"
   status=$?
 
   ((status != 0)) && status=$BL64_RXTX_ERROR_RESTORE
@@ -69,7 +69,9 @@ function bl64_rxtx_set_command() {
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
     BL64_RXTX_CMD_WGET='/usr/bin/wget'
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
+  # Do not use return as this function gets sourced
 }
 
 #######################################
@@ -121,6 +123,7 @@ function bl64_rxtx_set_alias() {
     BL64_RXTX_SET_CURL_OUTPUT='--output'
     BL64_RXTX_SET_WGET_OUTPUT='--output-document'
     ;;
+  *) bl64_msg_show_unsupported ;;
   esac
 }
 
@@ -236,10 +239,10 @@ function bl64_rxtx_git_get_dir() {
 
   # Detect what type of path is requested
   if [[ "$source_path" == '.' || "$source_path" == './' ]]; then
-    bl64_dbg_lib_show 'process full repo'
+    bl64_dbg_lib_show_info 'process full repo'
     _bl64_rxtx_git_get_dir_root "$source_url" "$destination" "$branch"
   else
-    bl64_dbg_lib_show 'process repo subdirectory'
+    bl64_dbg_lib_show_info 'process repo subdirectory'
     _bl64_rxtx_git_get_dir_sub "$source_url" "$source_path" "$destination" "$branch"
   fi
   status=$?
@@ -248,7 +251,7 @@ function bl64_rxtx_git_get_dir() {
   if [[ -d "${destination}/.git" ]]; then
     # shellcheck disable=SC2164
     cd "$destination"
-    bl64_os_rm_full '.git' >/dev/null
+    bl64_fs_rm_full '.git' >/dev/null
   fi
 
   # Check if restore is needed
@@ -272,16 +275,16 @@ function _bl64_rxtx_git_get_dir_root() {
   git_name="$(bl64_fmt_basename "$source_url")"
   git_name="${git_name/.git/}"
   transition="${repo}/${git_name}"
-  bl64_dbg_lib_show "temporary local git path: transition=[$transition]"
+  bl64_dbg_lib_show_info "temporary local git path: transition=[$transition]"
 
   # Clone the repo
   bl64_vcs_git_clone "$source_url" "$repo" "$branch" && \
   [[ -d "$transition" ]] &&
   # Promote to destination
-  bl64_os_mv "$transition" "$destination"
+  bl64_fs_mv "$transition" "$destination"
   status=$?
 
-  [[ -d "$repo" ]] && bl64_os_rm_full "$repo" >/dev/null
+  [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
   return $status
 }
 
@@ -307,11 +310,11 @@ function _bl64_rxtx_git_get_dir_sub() {
 
   bl64_vcs_git_sparse "$source_url" "$repo" "$branch" "$source_path" &&
     [[ -d "$source" ]] &&
-    bl64_os_mkdir_full "${repo}/transition" &&
-    bl64_os_mv "$source" "$transition" >/dev/null &&
-    bl64_os_mv "${transition}" "$destination" >/dev/null
+    bl64_fs_mkdir_full "${repo}/transition" &&
+    bl64_fs_mv "$source" "$transition" >/dev/null &&
+    bl64_fs_mv "${transition}" "$destination" >/dev/null
   status=$?
 
-  [[ -d "$repo" ]] && bl64_os_rm_full "$repo" >/dev/null
+  [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
   return $status
 }

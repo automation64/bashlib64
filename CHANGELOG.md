@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.23.0]
+
+### Added
+
+- check
+  - bl64_check_path_absolute: new function
+  - bl64_check_privilege_not_root: new function
+  - bl64_check_privilege_root: new function
+  - bl64_check_overwrite: new function
+  - bl64_check_command: detect unsupported command
+- py
+  - New module
+- fs
+  - New module
+- sudo
+  - bl64_sudo_run_command: new function
+- dbg
+  - bl64_dbg_app_show_vars: new function
+  - bl64_dbg_lib_show_vars: new function
+- os
+  - OS command flags aliases
+- msg
+  - bl64_msg_show_unsupported: new function
+
+### Changed
+
+- all
+  - Declare numeric constants as integers
+  - Renamed constant BL64_LIB_VAR_TBD to BL64_LIB_DEFAULT
+- os
+  - Migrated fs related functions to module fs
+- sudo
+  - Module renamed to rbac
+- fmt
+  - bl64_fmt_basename: return error when unable to determine basename
+
 ## [1.22.0]
 
 ### Added
@@ -14,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check:
   - bl64_check_path_relative: new function
 - pkg
-  - Added Brew update
+  - Brew update
 - rxtx
   - bl64_rxtx_git_get_dir: allow full repo copy (source path: .)
 
@@ -28,15 +64,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - lib
-  - Added Bash version check
+  - Bash version check
 - os
-  - Added Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
+  - Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
 - pkg
-  - Added Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
+  - Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
 - rxtx
-  - Added Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
+  - Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
 - vcs
-  - Added Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
+  - Fedora34, Debian9, OracleLinux7, Centos7, Centos9 support
 
 ### Fixed
 
@@ -48,21 +84,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - os
-  - Added uname, true, false commands
-  - Added MacOS support
+  - uname, true, false commands
+  - MacOS support
 - sudo
-  - Added MacOS support
+  - MacOS support
 - vcs
-  - Added MacOS support
+  - MacOS support
 - arc
-  - Added MacOS support
+  - MacOS support
 - rxtx
-  - Added MacOS support
+  - MacOS support
 - iam
-  - Added MacOS support
+  - MacOS support
 - pkg
-  - Added MacOS support
-  - Added aliases and commands setter
+  - MacOS support
+  - aliases and commands setter
 
 ### Fixed
 
@@ -76,12 +112,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - dbg
   - New module
 - core
-  - Added verbose flag (BL64_LIB_VERBOSE)
+  - verbose flag (BL64_LIB_VERBOSE)
 - xsv
   - bl64_xsv_dump: new function
   - Use dbg flags
 - msg
-  - Added verbose flag
+  - verbose flag
 
 ### Changed
 
@@ -96,7 +132,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - core
-  - Added shtop defaults
+  - shtop defaults
 - check
   - bl64_check_parameter: added check for placeholder (BL64_LIB_VAR_TBD)
 - os
@@ -126,7 +162,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - os
-  - OS tags (BL64*OS*\*)
+  - OS tags (`BL64*OS*`)
   - AlmaLinux compatibility
   - RedHatLinux compatibility
 - arc
@@ -153,20 +189,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- arc
-  - Use BL64*OS*\* for OS id
-- iam
-  - Use BL64*OS*\* for OS id
-- os
-  - Use BL64*OS*\* for OS id
-- pkg
-  - Use BL64*OS*\* for OS id
-- rxtx
-  - Use BL64*OS*\* for OS id
-- sudo
-  - Use BL64*OS*\* for OS id
-- vcs
-  - Use BL64*OS*\* for OS id
+- Use `BL64*OS*` for OS id
 
 ## [1.16.0]
 
@@ -178,7 +201,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - New module
 - core
   - BL64_LIB_DEBUG_CMD debug mode
-  - Added command set for: vcs, sudo, rxtx
+  - command set for: vcs, sudo, rxtx
 - vcs
   - bl64_vcs_git_clone: added command check
   - bl64_vcs_set_command: new function
@@ -216,9 +239,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - iam
-  - Added alias for useradd
+  - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/1.22.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/1.23.0...HEAD
+[1.23.0]: https://github.com/serdigital64/bashlib64/compare/1.22.0...1.23.0
 [1.22.0]: https://github.com/serdigital64/bashlib64/compare/1.21.0...1.22.0
 [1.21.0]: https://github.com/serdigital64/bashlib64/compare/1.20.0...1.21.0
 [1.20.0]: https://github.com/serdigital64/bashlib64/compare/1.19.0...1.20.0

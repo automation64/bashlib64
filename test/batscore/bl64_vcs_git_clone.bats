@@ -18,6 +18,7 @@ teardown() {
 @test "bl64_vcs_git_clone: parameter 1 is not present" {
 
   run bl64_vcs_git_clone
+  assert_failure
   assert_equal "$status" $BL64_VCS_ERROR_MISSING_PARAMETER
 
 }
@@ -25,6 +26,7 @@ teardown() {
 @test "bl64_vcs_git_clone: parameter 2 is not present" {
 
   run bl64_vcs_git_clone 'source'
+  assert_failure
   assert_equal "$status" $BL64_VCS_ERROR_MISSING_PARAMETER
 
 }

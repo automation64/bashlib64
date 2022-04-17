@@ -16,14 +16,15 @@ setup() {
   assert_not_equal "$BL64_LIB_VERBOSE" ''
   assert_not_equal "$BL64_SCRIPT_NAME" ''
   assert_not_equal "$BL64_SCRIPT_SID" ''
+
 }
 
 @test "bl64_lib_env: public constants are set" {
   assert_equal "$BL64_LIB_VAR_FALSE" '1'
-  assert_equal "$BL64_LIB_VAR_NULL" '__s64__'
+  assert_equal "$BL64_LIB_VAR_NULL" '__'
   assert_equal "$BL64_LIB_VAR_OFF" '0'
   assert_equal "$BL64_LIB_VAR_OK" '0'
   assert_equal "$BL64_LIB_VAR_ON" '1'
-  assert_equal "$BL64_LIB_VAR_TBD" 'TBD'
+  assert_equal "$BL64_LIB_DEFAULT" '_'
   assert_equal "$BL64_LIB_VAR_TRUE" '0'
 }
