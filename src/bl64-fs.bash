@@ -39,7 +39,7 @@ function bl64_fs_create_dir() {
   shift
 
   # shellcheck disable=SC2086
-  (($# == 0)) && return $BL64_FS_ERROR_MISSING_PARAMETER
+  (($# == 0)) && bl64_msg_show_error "$_BL64_FS_TXT_MISSING_PARAMETER" && return $BL64_FS_ERROR_MISSING_PARAMETER
   bl64_dbg_lib_show_info "parameters:[${*}]"
 
   for path in "$@"; do
@@ -100,7 +100,7 @@ function bl64_fs_copy_files() {
   shift
 
   # shellcheck disable=SC2086
-  (($# == 0)) && return $BL64_FS_ERROR_MISSING_PARAMETER
+  (($# == 0)) && bl64_msg_show_error "$_BL64_FS_TXT_MISSING_PARAMETER" && return $BL64_FS_ERROR_MISSING_PARAMETER
   bl64_dbg_lib_show_info "parameters:[${*}]"
 
   for path in "$@"; do
@@ -166,7 +166,7 @@ function bl64_fs_merge_files() {
   shift
 
   # shellcheck disable=SC2086
-  (($# == 0)) && return $BL64_FS_ERROR_MISSING_PARAMETER
+  (($# == 0)) && bl64_msg_show_error "$_BL64_FS_TXT_MISSING_PARAMETER" && return $BL64_FS_ERROR_MISSING_PARAMETER
   bl64_dbg_lib_show_info "parameters:[${*}]"
 
   for path in "$@"; do
@@ -189,13 +189,13 @@ function bl64_fs_merge_files() {
 
   # Rollback if error
   # shellcheck disable=SC2030 # BL64_LIB_VERBOSE is temporary modified in a subshell to avoid changing the global setting
-  ((status_cat != 0 || status_file != 0)) && (
+  if ((status_cat != 0 || status_file != 0)); then
     BL64_LIB_VERBOSE="$BL64_LIB_VAR_OFF"
     bl64_fs_rm_file "$destination"
-  )
-
-  # shellcheck disable=SC2086
-  return $BL64_FS_ERROR_MERGE_FILE
+    # shellcheck disable=SC2086
+    return $BL64_FS_ERROR_MERGE_FILE
+  fi
+  return 0
 }
 
 #######################################
@@ -220,10 +220,9 @@ function bl64_fs_merge_dir() {
   local -i status=0
 
   bl64_check_parameter 'source' &&
-    bl64_check_parameter 'target' &&
-    bl64_check_directory "$source" &&
-    bl64_check_directory "$target" ||
-    return 1
+    bl64_check_parameter 'target' || return $?
+  bl64_check_directory "$source" &&
+    bl64_check_directory "$target" || return $?
 
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
