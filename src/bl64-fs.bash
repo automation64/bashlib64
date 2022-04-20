@@ -4,14 +4,14 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
 # Create one ore more directories, then set owner and permissions
 #
-# Requirements:
-#   * root privilege (sudo) if paths are restricted or change owner is requested
+#  Features:
+#   * If the new path is already present nothing is done. No error or warning is presented
 # Limitations:
 #   * Parent directories are not created
 #   * No rollback in case of errors. The process will not remove already created paths
@@ -44,8 +44,9 @@ function bl64_fs_create_dir() {
 
   for path in "$@"; do
 
-    bl64_check_path_absolute "$path" &&
-      bl64_fs_mkdir "$path" || return $?
+    bl64_check_path_absolute "$path" || return $?
+    [[ -d "$path" ]] && continue
+    bl64_fs_mkdir "$path" || return $?
 
     # Determine if mode needs to be set
     if [[ "$mode" != "$BL64_LIB_DEFAULT" ]]; then

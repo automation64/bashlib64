@@ -62,9 +62,6 @@ else
   bl64_py_set_command
   bl64_py_set_options
 
-  # Enable shell tracing
-  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]] && set -x
-
   # Enable command mode: the library can be used as a stand-alone script to run embeded functions
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
     "$@"
