@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.24.0]
+
+### Added
+
+- fs: bl64_fs_create_dir skip actions if path is already present
+
 ## [1.23.0]
 
 ### Added
@@ -241,7 +247,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/1.23.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/1.24.0...HEAD
+[1.24.0]: https://github.com/serdigital64/bashlib64/compare/1.23.0...1.24.0
 [1.23.0]: https://github.com/serdigital64/bashlib64/compare/1.22.0...1.23.0
 [1.22.0]: https://github.com/serdigital64/bashlib64/compare/1.21.0...1.22.0
 [1.21.0]: https://github.com/serdigital64/bashlib64/compare/1.20.0...1.21.0
