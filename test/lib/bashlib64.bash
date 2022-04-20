@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.23.0
+# Version: 1.24.0
 #######################################
 
 # Ensure pipeline exit status is failed when any cmd fails
@@ -698,8 +698,9 @@ function bl64_fs_create_dir() {
 
   for path in "$@"; do
 
-    bl64_check_path_absolute "$path" &&
-      bl64_fs_mkdir "$path" || return $?
+    bl64_check_path_absolute "$path" || return $?
+    [[ -d "$path" ]] && continue
+    bl64_fs_mkdir "$path" || return $?
 
     if [[ "$mode" != "$BL64_LIB_DEFAULT" ]]; then
       bl64_fs_chmod "$mode" "$path" || return $?
@@ -2515,8 +2516,6 @@ else
   bl64_rxtx_set_alias
   bl64_py_set_command
   bl64_py_set_options
-
-  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]] && set -x
 
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
     "$@"
