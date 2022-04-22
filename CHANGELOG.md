@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.25.0]
+
+### Added
+
+- core:
+  - debugging of EXIT trap
+- dbg:
+  - bl64_dbg_runtime_show: new function
+- chk:
+  - added function caller info
+
 ## [1.24.0]
 
 ### Added

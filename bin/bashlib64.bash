@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.24.0
+# Version: 1.25.0
 #######################################
 
 # Ensure pipeline exit status is failed when any cmd fails
@@ -475,11 +475,11 @@ function bl64_check_command() {
     return $BL64_CHECK_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -f "$path" ]]; then
-    bl64_msg_show_error "${message} (${path})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${message} (${path})"
     return $BL64_CHECK_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -x "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE (${path})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE (${path})"
     return $BL64_CHECK_ERROR_FILE_NOT_EXECUTE
   fi
   return 0
@@ -491,11 +491,11 @@ function bl64_check_file() {
 
   bl64_check_parameter 'path' || return $?
   if [[ ! -f "$path" ]]; then
-    bl64_msg_show_error "${message} (${path})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${message} (${path})"
     return $BL64_CHECK_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -r "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_FILE_NOT_READABLE (${path})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_FILE_NOT_READABLE (${path})"
     return $BL64_CHECK_ERROR_FILE_NOT_READ
   fi
   return 0
@@ -507,11 +507,11 @@ function bl64_check_directory() {
 
   bl64_check_parameter 'path' || return $?
   if [[ ! -d "$path" ]]; then
-    bl64_msg_show_error "${message} (${path})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${message} (${path})"
     return $BL64_CHECK_ERROR_DIRECTORY_NOT_FOUND
   fi
   if [[ ! -r "$path" || ! -x "$path" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE (${path})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE (${path})"
     return $BL64_CHECK_ERROR_DIRECTORY_NOT_READ
   fi
   return 0
@@ -522,12 +522,12 @@ function bl64_check_parameter() {
   local description="${2:-parameter $parameter}"
 
   if [[ -z "$parameter" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (parameter name)"
+    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_MISSING_PARAMETER (parameter name)"
     return $BL64_CHECK_ERROR_MISSING_PARAMETER
   fi
 
   if eval "[[ -z \"\$${parameter}\" || \"\$${parameter}\" == '${BL64_LIB_DEFAULT}' ]]"; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_MISSING_PARAMETER (${description})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_MISSING_PARAMETER (${description})"
     return $BL64_CHECK_ERROR_PARAMETER_EMPTY
   fi
   return 0
@@ -540,12 +540,12 @@ function bl64_check_export() {
   bl64_check_parameter 'export_name' || return $?
 
   if [[ ! -v "$export_name" ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_EXPORT_SET (${description})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_EXPORT_SET (${description})"
     return $BL64_CHECK_ERROR_EXPORT_SET
   fi
 
   if eval "[[ -z \$${export_name} ]]"; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_EXPORT_EMPTY (${description})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_EXPORT_EMPTY (${description})"
     return $BL64_CHECK_ERROR_EXPORT_EMPTY
   fi
   return 0
@@ -557,7 +557,7 @@ function bl64_check_path_relative() {
 
   bl64_check_parameter 'path' || return $?
   if [[ "$path" == '/' || "$path" == /* ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
+    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
     return $BL64_CHECK_ERROR_PATH_NOT_RELATIVE
   fi
   return 0
@@ -569,7 +569,7 @@ function bl64_check_path_absolute() {
 
   bl64_check_parameter 'path' || return $?
   if [[ "$path" != '/' && "$path" != /* ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
+    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
     return $BL64_CHECK_ERROR_PATH_NOT_ABSOLUTE
   fi
   return 0
@@ -578,7 +578,7 @@ function bl64_check_path_absolute() {
 function bl64_check_privilege_root() {
   bl64_dbg_lib_show_vars 'EUID'
   if [[ "$EUID" != '0' ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT (EUID: $EUID)"
+    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT (EUID: $EUID)"
     return $BL64_CHECK_ERROR_PRIVILEGE_IS_NOT_ROOT
   fi
   return 0
@@ -587,7 +587,7 @@ function bl64_check_privilege_root() {
 function bl64_check_privilege_not_root() {
   bl64_dbg_lib_show_vars 'EUID'
   if [[ "$EUID" == '0' ]]; then
-    bl64_msg_show_error "$_BL64_CHECK_TXT_PRIVILEGE_IS_ROOT"
+    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_PRIVILEGE_IS_ROOT"
     return $BL64_CHECK_ERROR_PRIVILEGE_IS_ROOT
   fi
   return 0
@@ -602,12 +602,38 @@ function bl64_check_overwrite() {
 
   if [[ "$overwrite" == "$BL64_LIB_VAR_OFF" ]]; then
     if [[ -e "$path" ]]; then
-      bl64_msg_show_error "${message} (${path})"
+      bl64_msg_show_error "[${FUNCNAME[1]}] ${message} (${path})"
       return $BL64_CHECK_ERROR_OVERWRITE_NOT_PERMITED
     fi
   fi
 
   return 0
+}
+
+function bl64_dbg_runtime_show() {
+  local -i last_status=$?
+
+  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_TASK" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_ALL" ]] &&
+    return 0
+
+  bl64_msg_show_debug "Bash / Interpreter path: [${BASH}]"
+  bl64_msg_show_debug "Bash / Options: [${BASHOPTS:-NONE}]"
+  bl64_msg_show_debug "Bash / Temporary path: [${TMPDIR:-NONE}]"
+  bl64_msg_show_debug "Bash / Version: [${BASH_VERSION}]"
+  bl64_msg_show_debug "Bash / Detected OS: [${OSTYPE:-NONE}]"
+  bl64_msg_show_debug "Shell / Locale setting: [${LC_ALL:-NONE}]"
+  bl64_msg_show_debug "Shell / Home directory: [${HOME:-EMPTY}]"
+  bl64_msg_show_debug "Shell / Search path: [${PATH:-EMPTY}]"
+  bl64_msg_show_debug "Shell / Hostname: [${HOSTNAME:-EMPTY}]"
+  bl64_msg_show_debug "Script / User ID: [${EUID}]"
+  bl64_msg_show_debug "Script / Effective User ID: [${UID}]"
+  bl64_msg_show_debug "Script / Arguments: [${BASH_ARGV[*]:-NONE}]"
+  bl64_msg_show_debug "Script / Latest exit status: [${last_status}]"
+  bl64_msg_show_debug "Script / Last executed function(1): [${BASH_LINENO[1]:-}:${FUNCNAME[1]:-NONE}]"
+  bl64_msg_show_debug "Script / Last executed function(2): [${BASH_LINENO[2]:-}:${FUNCNAME[2]:-NONE}]"
+  bl64_msg_show_debug "Script / Last executed function(3): [${BASH_LINENO[3]:-}:${FUNCNAME[3]:-NONE}]"
+
+  return $last_status
 }
 
 function bl64_dbg_app_trace_stop() {
@@ -1270,11 +1296,11 @@ function bl64_msg_setup() {
 }
 
 function bl64_msg_show_usage() {
-  local usage="${1:-$BL64_LIB_DEFAULT}"
-  local description="${2:-$BL64_LIB_DEFAULT}"
-  local commands="${3:-$BL64_LIB_DEFAULT}"
-  local flags="${4:-$BL64_LIB_DEFAULT}"
-  local parameters="${5:-$BL64_LIB_DEFAULT}"
+  local usage="${1:-${BL64_LIB_DEFAULT}}"
+  local description="${2:-${BL64_LIB_DEFAULT}}"
+  local commands="${3:-${BL64_LIB_DEFAULT}}"
+  local flags="${4:-${BL64_LIB_DEFAULT}}"
+  local parameters="${5:-${BL64_LIB_DEFAULT}}"
 
   printf '\n%s: %s %s\n\n' "$_BL64_MSG_TXT_USAGE" "$BL64_SCRIPT_NAME" "$usage"
 
@@ -1298,19 +1324,19 @@ function bl64_msg_show_usage() {
 }
 
 function bl64_msg_show_error() {
-  local message="${1-$BL64_LIB_DEFAULT}"
+  local message="${1-${BL64_LIB_DEFAULT}}"
 
   _bl64_msg_show "$_BL64_MSG_TXT_ERROR" "$message" >&2
 }
 
 function bl64_msg_show_warning() {
-  local message="${1-$BL64_LIB_DEFAULT}"
+  local message="${1-${BL64_LIB_DEFAULT}}"
 
   _bl64_msg_show "$_BL64_MSG_TXT_WARNING" "$message" >&2
 }
 
 function bl64_msg_show_info() {
-  local message="${1-$BL64_LIB_DEFAULT}"
+  local message="${1-${BL64_LIB_DEFAULT}}"
 
   [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
 
@@ -1318,7 +1344,7 @@ function bl64_msg_show_info() {
 }
 
 function bl64_msg_show_task() {
-  local message="${1-$BL64_LIB_DEFAULT}"
+  local message="${1-${BL64_LIB_DEFAULT}}"
 
   [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
 
@@ -1326,13 +1352,13 @@ function bl64_msg_show_task() {
 }
 
 function bl64_msg_show_debug() {
-  local message="${1-$BL64_LIB_DEFAULT}"
+  local message="${1-${BL64_LIB_DEFAULT}}"
 
   _bl64_msg_show "$_BL64_MSG_TXT_DEBUG" "$message" >&2
 }
 
 function bl64_msg_show_text() {
-  local message="${1-$BL64_LIB_DEFAULT}"
+  local message="${1-${BL64_LIB_DEFAULT}}"
 
   [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
 
@@ -1340,7 +1366,7 @@ function bl64_msg_show_text() {
 }
 
 function bl64_msg_show_batch_start() {
-  local message="${1-$BL64_LIB_DEFAULT}"
+  local message="${1-${BL64_LIB_DEFAULT}}"
 
   [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
 
@@ -1349,7 +1375,7 @@ function bl64_msg_show_batch_start() {
 
 function bl64_msg_show_batch_finish() {
   local status="$1"
-  local message="${2-$BL64_LIB_DEFAULT}"
+  local message="${2-${BL64_LIB_DEFAULT}}"
 
   [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_OFF" ]] && return 0
 
@@ -1361,7 +1387,7 @@ function bl64_msg_show_batch_finish() {
 }
 
 function bl64_msg_show_unsupported() {
-  local target="${1:-"${FUNCNAME[1]}"}"
+  local target="${1:-${FUNCNAME[1]}}"
 
   bl64_msg_show_error "${_BL64_MSG_TXT_INCOMPATIBLE} (os: ${BL64_OS_DISTRO} / target: ${target})"
 }
@@ -2516,6 +2542,8 @@ else
   bl64_rxtx_set_alias
   bl64_py_set_command
   bl64_py_set_options
+
+  trap 'bl64_dbg_runtime_show' EXIT
 
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
     "$@"
