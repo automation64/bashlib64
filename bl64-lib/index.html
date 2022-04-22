@@ -1,4 +1,4 @@
-<!doctype html><html lang=en class=no-js> <head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="BashLib64 is a **Bash** library that provides a simple abstraction layer for developing multi-platform scripts"><meta name=author content=SerDigital64><link href=https://serdigital64.github.io/bashlib64/bl64-lib/ rel=canonical><link rel=icon href=../assets/images/favicon.png><meta name=generator content="mkdocs-1.2.3, mkdocs-material-8.2.1"><title>module: bl64-lib - BashLib64 Project</title><link rel=stylesheet href=../assets/stylesheets/main.e8d9bf0c.min.css><link rel=stylesheet href=../assets/stylesheets/palette.e6a45f82.min.css><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback"><style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style><link rel=stylesheet href=../css/pygments-tango.css><script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script><script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-KMX4RGXREV"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&gtag("event","search",{search_term:this.value})}),"undefined"!=typeof location$&&location$.subscribe(function(e){gtag("config","G-KMX4RGXREV",{page_path:e.pathname})})})</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-KMX4RGXREV"></script></head> <body dir=ltr data-md-color-scheme=default data-md-color-primary data-md-color-accent> <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script> <input class=md-toggle data-md-toggle=drawer type=checkbox id=__drawer autocomplete=off> <input class=md-toggle data-md-toggle=search type=checkbox id=__search autocomplete=off> <label class=md-overlay for=__drawer></label> <div data-md-component=skip> <a href=#module-bl64-lib class=md-skip> Skip to content </a> </div> <div data-md-component=announce> </div> <header class=md-header data-md-component=header> <nav class="md-header__inner md-grid" aria-label=Header> <a href=.. title="BashLib64 Project" class="md-header__button md-logo" aria-label="BashLib64 Project" data-md-component=logo> <img src=../images/SerDigital64-Font:ANSIShadow-circle.png alt=logo> </a> <label class="md-header__button md-icon" for=__drawer> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg> </label> <div class=md-header__title data-md-component=header-title> <div class=md-header__ellipsis> <div class=md-header__topic> <span class=md-ellipsis> BashLib64 Project </span> </div> <div class=md-header__topic data-md-component=header-topic> <span class=md-ellipsis> module: bl64-lib </span> </div> </div> </div> <form class=md-header__option data-md-component=palette> <input class=md-option data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme=default data-md-color-primary data-md-color-accent aria-label="Switch to dark mode" type=radio name=__palette id=__palette_1> <label class="md-header__button md-icon" title="Switch to dark mode" for=__palette_2 hidden> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg> </label> <input class=md-option data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme=slate data-md-color-primary data-md-color-accent aria-label="Switch to light mode" type=radio name=__palette id=__palette_2> <label class="md-header__button md-icon" title="Switch to light mode" for=__palette_1 hidden> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3z"/></svg> </label> </form> <label class="md-header__button md-icon" for=__search> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg> </label> <div class=md-search data-md-component=search role=dialog> <label class=md-search__overlay for=__search></label> <div class=md-search__inner role=search> <form class=md-search__form name=search> <input type=text class=md-search__input name=query aria-label=Search placeholder=Search autocapitalize=off autocorrect=off autocomplete=off spellcheck=false data-md-component=search-query required> <label class="md-search__icon md-icon" for=__search> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg> </label> <nav class=md-search__options aria-label=Search> <button type=reset class="md-search__icon md-icon" aria-label=Clear tabindex=-1> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg> </button> </nav> </form> <div class=md-search__output> <div class=md-search__scrollwrap data-md-scrollfix> <div class=md-search-result data-md-component=search-result> <div class=md-search-result__meta> Initializing search </div> <ol class=md-search-result__list></ol> </div> </div> </div> </div> </div> <div class=md-header__source> <a href=https://github.com/serdigital64/bashlib64/ title="Go to repository" class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 448 512"><!-- Font Awesome Free 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg> </div> <div class=md-source__repository> GitHub </div> </a> </div> </nav> </header> <div class=md-container data-md-component=container> <main class=md-main data-md-component=main> <div class="md-main__inner md-grid"> <div class="md-sidebar md-sidebar--primary" data-md-component=sidebar data-md-type=navigation> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--primary md-nav--integrated" aria-label=Navigation data-md-level=0> <label class=md-nav__title for=__drawer> <a href=.. title="BashLib64 Project" class="md-nav__button md-logo" aria-label="BashLib64 Project" data-md-component=logo> <img src=../images/SerDigital64-Font:ANSIShadow-circle.png alt=logo> </a> BashLib64 Project </label> <div class=md-nav__source> <a href=https://github.com/serdigital64/bashlib64/ title="Go to repository" class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 448 512"><!-- Font Awesome Free 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg> </div> <div class=md-source__repository> GitHub </div> </a> </div> <ul class=md-nav__list data-md-scrollfix> <li class=md-nav__item> <a href=.. class=md-nav__link> Home </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested"> <input class="md-nav__toggle md-toggle" data-md-toggle=__nav_2 type=checkbox id=__nav_2 checked> <label class=md-nav__link for=__nav_2> API <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav aria-label=API data-md-level=1> <label class=md-nav__title for=__nav_2> <span class="md-nav__icon md-icon"></span> API </label> <ul class=md-nav__list data-md-scrollfix> <li class=md-nav__item> <a href=../bl64-arc/ class=md-nav__link> module: bl64-arc </a> </li> <li class=md-nav__item> <a href=../bl64-check/ class=md-nav__link> module: bl64-check </a> </li> <li class=md-nav__item> <a href=../bl64-dbg/ class=md-nav__link> module: bl64-dbg </a> </li> <li class="md-nav__item md-nav__item--active"> <input class="md-nav__toggle md-toggle" data-md-toggle=toc type=checkbox id=__toc> <label class="md-nav__link md-nav__link--active" for=__toc> module: bl64-lib <span class="md-nav__icon md-icon"></span> </label> <a href=./ class="md-nav__link md-nav__link--active"> module: bl64-lib </a> <nav class="md-nav md-nav--secondary" aria-label="Table of contents"> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> Table of contents </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#header class=md-nav__link> Header </a> </li> <li class=md-nav__item> <a href=#source-code class=md-nav__link> Source Code </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=../bl64-fmt/ class=md-nav__link> module: bl64-fmt </a> </li> <li class=md-nav__item> <a href=../bl64-iam/ class=md-nav__link> module: bl64-iam </a> </li> <li class=md-nav__item> <a href=../bl64-log/ class=md-nav__link> module: bl64-log </a> </li> <li class=md-nav__item> <a href=../bl64-msg/ class=md-nav__link> module: bl64-msg </a> </li> <li class=md-nav__item> <a href=../bl64-os/ class=md-nav__link> module: bl64-os </a> </li> <li class=md-nav__item> <a href=../bl64-pkg/ class=md-nav__link> module: bl64-pkg </a> </li> <li class=md-nav__item> <a href=../bl64-rnd/ class=md-nav__link> module: bl64-rnd </a> </li> <li class=md-nav__item> <a href=../bl64-rxtx/ class=md-nav__link> module: bl64-rxtx </a> </li> <li class=md-nav__item> <a href=../bl64-sudo/ class=md-nav__link> module: bl64-sudo </a> </li> <li class=md-nav__item> <a href=../bl64-txt/ class=md-nav__link> module: bl64-txt </a> </li> <li class=md-nav__item> <a href=../bl64-vcs/ class=md-nav__link> module: bl64-vcs </a> </li> <li class=md-nav__item> <a href=../bl64-xsv/ class=md-nav__link> module: bl64-xsv </a> </li> </ul> </nav> </li> </ul> </nav> </div> </div> </div> <div class=md-content data-md-component=content> <article class="md-content__inner md-typeset"> <a href=https://github.com/serdigital64/bashlib64/edit/master/docs/bl64-lib.md title="Edit this page" class="md-content__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg> </a> <h1 id=module-bl64-lib>module: bl64-lib<a class=headerlink href=#module-bl64-lib title="Permanent link">&para;</a></h1> <h2 id=header>Header<a class=headerlink href=#header title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal> 1</span>
+<!doctype html><html lang=en class=no-js> <head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="BashLib64 is a **Bash** library that provides a simple abstraction layer for developing multi-platform scripts"><meta name=author content=SerDigital64><link href=https://serdigital64.github.io/bashlib64/bl64-lib/ rel=canonical><link rel=icon href=../assets/images/favicon.png><meta name=generator content="mkdocs-1.2.3, mkdocs-material-8.2.1"><title>module: bl64-lib - BashLib64 Project</title><link rel=stylesheet href=../assets/stylesheets/main.e8d9bf0c.min.css><link rel=stylesheet href=../assets/stylesheets/palette.e6a45f82.min.css><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback"><style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style><link rel=stylesheet href=../css/pygments-tango.css><script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script><script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-KMX4RGXREV"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&gtag("event","search",{search_term:this.value})}),"undefined"!=typeof location$&&location$.subscribe(function(e){gtag("config","G-KMX4RGXREV",{page_path:e.pathname})})})</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-KMX4RGXREV"></script></head> <body dir=ltr data-md-color-scheme=default data-md-color-primary data-md-color-accent> <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script> <input class=md-toggle data-md-toggle=drawer type=checkbox id=__drawer autocomplete=off> <input class=md-toggle data-md-toggle=search type=checkbox id=__search autocomplete=off> <label class=md-overlay for=__drawer></label> <div data-md-component=skip> <a href=#module-bl64-lib class=md-skip> Skip to content </a> </div> <div data-md-component=announce> </div> <header class=md-header data-md-component=header> <nav class="md-header__inner md-grid" aria-label=Header> <a href=.. title="BashLib64 Project" class="md-header__button md-logo" aria-label="BashLib64 Project" data-md-component=logo> <img src=../images/SerDigital64-Font:ANSIShadow-circle.png alt=logo> </a> <label class="md-header__button md-icon" for=__drawer> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg> </label> <div class=md-header__title data-md-component=header-title> <div class=md-header__ellipsis> <div class=md-header__topic> <span class=md-ellipsis> BashLib64 Project </span> </div> <div class=md-header__topic data-md-component=header-topic> <span class=md-ellipsis> module: bl64-lib </span> </div> </div> </div> <form class=md-header__option data-md-component=palette> <input class=md-option data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme=default data-md-color-primary data-md-color-accent aria-label="Switch to dark mode" type=radio name=__palette id=__palette_1> <label class="md-header__button md-icon" title="Switch to dark mode" for=__palette_2 hidden> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg> </label> <input class=md-option data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme=slate data-md-color-primary data-md-color-accent aria-label="Switch to light mode" type=radio name=__palette id=__palette_2> <label class="md-header__button md-icon" title="Switch to light mode" for=__palette_1 hidden> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3z"/></svg> </label> </form> <label class="md-header__button md-icon" for=__search> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg> </label> <div class=md-search data-md-component=search role=dialog> <label class=md-search__overlay for=__search></label> <div class=md-search__inner role=search> <form class=md-search__form name=search> <input type=text class=md-search__input name=query aria-label=Search placeholder=Search autocapitalize=off autocorrect=off autocomplete=off spellcheck=false data-md-component=search-query required> <label class="md-search__icon md-icon" for=__search> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg> </label> <nav class=md-search__options aria-label=Search> <button type=reset class="md-search__icon md-icon" aria-label=Clear tabindex=-1> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg> </button> </nav> </form> <div class=md-search__output> <div class=md-search__scrollwrap data-md-scrollfix> <div class=md-search-result data-md-component=search-result> <div class=md-search-result__meta> Initializing search </div> <ol class=md-search-result__list></ol> </div> </div> </div> </div> </div> <div class=md-header__source> <a href=https://github.com/serdigital64/bashlib64/ title="Go to repository" class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 448 512"><!-- Font Awesome Free 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg> </div> <div class=md-source__repository> GitHub </div> </a> </div> </nav> </header> <div class=md-container data-md-component=container> <main class=md-main data-md-component=main> <div class="md-main__inner md-grid"> <div class="md-sidebar md-sidebar--primary" data-md-component=sidebar data-md-type=navigation> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--primary md-nav--integrated" aria-label=Navigation data-md-level=0> <label class=md-nav__title for=__drawer> <a href=.. title="BashLib64 Project" class="md-nav__button md-logo" aria-label="BashLib64 Project" data-md-component=logo> <img src=../images/SerDigital64-Font:ANSIShadow-circle.png alt=logo> </a> BashLib64 Project </label> <div class=md-nav__source> <a href=https://github.com/serdigital64/bashlib64/ title="Go to repository" class=md-source data-md-component=source> <div class="md-source__icon md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 448 512"><!-- Font Awesome Free 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg> </div> <div class=md-source__repository> GitHub </div> </a> </div> <ul class=md-nav__list data-md-scrollfix> <li class=md-nav__item> <a href=.. class=md-nav__link> Home </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested"> <input class="md-nav__toggle md-toggle" data-md-toggle=__nav_2 type=checkbox id=__nav_2 checked> <label class=md-nav__link for=__nav_2> API <span class="md-nav__icon md-icon"></span> </label> <nav class=md-nav aria-label=API data-md-level=1> <label class=md-nav__title for=__nav_2> <span class="md-nav__icon md-icon"></span> API </label> <ul class=md-nav__list data-md-scrollfix> <li class=md-nav__item> <a href=../bl64-arc/ class=md-nav__link> module: bl64-arc </a> </li> <li class=md-nav__item> <a href=../bl64-check/ class=md-nav__link> module: bl64-check </a> </li> <li class=md-nav__item> <a href=../bl64-dbg/ class=md-nav__link> module: bl64-dbg </a> </li> <li class="md-nav__item md-nav__item--active"> <input class="md-nav__toggle md-toggle" data-md-toggle=toc type=checkbox id=__toc> <label class="md-nav__link md-nav__link--active" for=__toc> module: bl64-lib <span class="md-nav__icon md-icon"></span> </label> <a href=./ class="md-nav__link md-nav__link--active"> module: bl64-lib </a> <nav class="md-nav md-nav--secondary" aria-label="Table of contents"> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> Table of contents </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#header class=md-nav__link> Header </a> </li> <li class=md-nav__item> <a href=#source-code class=md-nav__link> Source Code </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=../bl64-fmt/ class=md-nav__link> module: bl64-fmt </a> </li> <li class=md-nav__item> <a href=../bl64-fs/ class=md-nav__link> module: bl64-fs </a> </li> <li class=md-nav__item> <a href=../bl64-iam/ class=md-nav__link> module: bl64-iam </a> </li> <li class=md-nav__item> <a href=../bl64-log/ class=md-nav__link> module: bl64-log </a> </li> <li class=md-nav__item> <a href=../bl64-msg/ class=md-nav__link> module: bl64-msg </a> </li> <li class=md-nav__item> <a href=../bl64-os/ class=md-nav__link> module: bl64-os </a> </li> <li class=md-nav__item> <a href=../bl64-pkg/ class=md-nav__link> module: bl64-pkg </a> </li> <li class=md-nav__item> <a href=../bl64-py/ class=md-nav__link> module: bl64-py </a> </li> <li class=md-nav__item> <a href=../bl64-rnd/ class=md-nav__link> module: bl64-rnd </a> </li> <li class=md-nav__item> <a href=../bl64-rxtx/ class=md-nav__link> module: bl64-rxtx </a> </li> <li class=md-nav__item> <a href=../bl64-rbac/ class=md-nav__link> module: bl64-rbac </a> </li> <li class=md-nav__item> <a href=../bl64-txt/ class=md-nav__link> module: bl64-txt </a> </li> <li class=md-nav__item> <a href=../bl64-vcs/ class=md-nav__link> module: bl64-vcs </a> </li> <li class=md-nav__item> <a href=../bl64-xsv/ class=md-nav__link> module: bl64-xsv </a> </li> </ul> </nav> </li> </ul> </nav> </div> </div> </div> <div class=md-content data-md-component=content> <article class="md-content__inner md-typeset"> <a href=https://github.com/serdigital64/bashlib64/edit/master/docs/bl64-lib.md title="Edit this page" class="md-content__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg> </a> <h1 id=module-bl64-lib>module: bl64-lib<a class=headerlink href=#module-bl64-lib title="Permanent link">&para;</a></h1> <h2 id=header>Header<a class=headerlink href=#header title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal> 1</span>
 <span class=normal> 2</span>
 <span class=normal> 3</span>
 <span class=normal> 4</span>
@@ -49,7 +49,14 @@
 <span class=normal>49</span>
 <span class=normal>50</span>
 <span class=normal>51</span>
-<span class=normal>52</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>52</span>
+<span class=normal>53</span>
+<span class=normal>54</span>
+<span class=normal>55</span>
+<span class=normal>56</span>
+<span class=normal>57</span>
+<span class=normal>58</span>
+<span class=normal>59</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Setup script run-time environment</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
@@ -58,193 +65,141 @@
 <span class=c1># Version: 1.4.0</span>
 <span class=c1>#######################################</span>
 
+<span class=c1># Declare locale variables</span>
 <span class=nb>export</span> LANG
 <span class=nb>export</span> LC_ALL
 <span class=nb>export</span> LANGUAGE
 
-<span class=c1># Command flag</span>
+<span class=c1># Set Command flag (On/Off)</span>
 <span class=nb>export</span> <span class=nv>BL64_LIB_CMD</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_CMD</span><span class=k>:-</span><span class=nv>0</span><span class=si>}</span><span class=s2>&quot;</span>
 
-<span class=c1># Verbosity flag</span>
+<span class=c1># Set Verbosity flag (On/Off)</span>
 <span class=nb>export</span> <span class=nv>BL64_LIB_VERBOSE</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_VERBOSE</span><span class=k>:-</span><span class=nv>1</span><span class=si>}</span><span class=s2>&quot;</span>
 
-<span class=c1># Debug flag</span>
+<span class=c1># Set Debug flag (On/Off)</span>
 <span class=nb>export</span> <span class=nv>BL64_LIB_DEBUG</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_DEBUG</span><span class=k>:-</span><span class=nv>0</span><span class=si>}</span><span class=s2>&quot;</span>
 
-<span class=c1># Strict flag</span>
+<span class=c1># Set Strict flag (On/Off)</span>
 <span class=nb>export</span> <span class=nv>BL64_LIB_STRICT</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_STRICT</span><span class=k>:-</span><span class=nv>1</span><span class=si>}</span><span class=s2>&quot;</span>
 
-<span class=c1># Normalize locale flag</span>
+<span class=c1># Set Normalize locale flag</span>
 <span class=nb>export</span> <span class=nv>BL64_LIB_LANG</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_LANG</span><span class=k>:-</span><span class=nv>1</span><span class=si>}</span><span class=s2>&quot;</span>
 
-<span class=c1># Signal trap</span>
+<span class=c1># Set Signal traps</span>
 <span class=nb>export</span> <span class=nv>BL64_LIB_SIGNAL_HUP</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_SIGNAL_HUP</span><span class=k>:-</span><span class=p>-</span><span class=si>}</span><span class=s2>&quot;</span>
 <span class=nb>export</span> <span class=nv>BL64_LIB_SIGNAL_STOP</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_SIGNAL_STOP</span><span class=k>:-</span><span class=p>-</span><span class=si>}</span><span class=s2>&quot;</span>
 <span class=nb>export</span> <span class=nv>BL64_LIB_SIGNAL_QUIT</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_SIGNAL_QUIT</span><span class=k>:-</span><span class=p>-</span><span class=si>}</span><span class=s2>&quot;</span>
 
-<span class=c1># Script name</span>
+<span class=c1># Capture script name</span>
 <span class=nb>export</span> <span class=nv>BL64_SCRIPT_NAME</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_SCRIPT_NAME</span><span class=k>:-</span><span class=si>${</span><span class=nv>0</span><span class=p>##*/</span><span class=si>}}</span><span class=s2>&quot;</span>
 
-<span class=c1># Script path</span>
+<span class=c1># Capture script path</span>
 <span class=nb>export</span> <span class=nv>BL64_SCRIPT_PATH</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_SCRIPT_PATH</span><span class=k>:-</span><span class=si>${</span><span class=nv>BASH_SOURCE</span><span class=p>[0]%/*</span><span class=si>}}</span><span class=s2>/&quot;</span>
 
-<span class=c1># Script PID</span>
+<span class=c1># Define session ID for the current script</span>
 <span class=nb>export</span> <span class=nv>BL64_SCRIPT_SID</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BASHPID</span><span class=si>}</span><span class=s2>&quot;</span>
 
-<span class=c1># Use as default value for mandatory parameters</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_TBD</span><span class=o>=</span><span class=s1>&#39;TBD&#39;</span>
-
+<span class=c1>#</span>
 <span class=c1># Common values</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_NULL</span><span class=o>=</span><span class=s1>&#39;__s64__&#39;</span>
+<span class=c1>#</span>
+
+<span class=c1># Default value for parameters</span>
+<span class=nb>readonly</span> <span class=nv>BL64_LIB_DEFAULT</span><span class=o>=</span><span class=s1>&#39;_&#39;</span>
+
+<span class=c1># Pseudo null value</span>
+<span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_NULL</span><span class=o>=</span><span class=s1>&#39;__&#39;</span>
+
+<span class=c1># Pseudo logical values</span>
 <span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_TRUE</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
 <span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_FALSE</span><span class=o>=</span><span class=s1>&#39;1&#39;</span>
 <span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_ON</span><span class=o>=</span><span class=s1>&#39;1&#39;</span>
 <span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_OFF</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
 <span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_OK</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
-</code></pre></div> </td></tr></table> <h2 id=source-code>Source Code<a class=headerlink href=#source-code title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>  1</span>
-<span class=normal>  2</span>
-<span class=normal>  3</span>
-<span class=normal>  4</span>
-<span class=normal>  5</span>
-<span class=normal>  6</span>
-<span class=normal>  7</span>
-<span class=normal>  8</span>
-<span class=normal>  9</span>
-<span class=normal> 10</span>
-<span class=normal> 11</span>
-<span class=normal> 12</span>
-<span class=normal> 13</span>
-<span class=normal> 14</span>
-<span class=normal> 15</span>
-<span class=normal> 16</span>
-<span class=normal> 17</span>
-<span class=normal> 18</span>
-<span class=normal> 19</span>
-<span class=normal> 20</span>
-<span class=normal> 21</span>
-<span class=normal> 22</span>
-<span class=normal> 23</span>
-<span class=normal> 24</span>
-<span class=normal> 25</span>
-<span class=normal> 26</span>
-<span class=normal> 27</span>
-<span class=normal> 28</span>
-<span class=normal> 29</span>
-<span class=normal> 30</span>
-<span class=normal> 31</span>
-<span class=normal> 32</span>
-<span class=normal> 33</span>
-<span class=normal> 34</span>
-<span class=normal> 35</span>
-<span class=normal> 36</span>
-<span class=normal> 37</span>
-<span class=normal> 38</span>
-<span class=normal> 39</span>
-<span class=normal> 40</span>
-<span class=normal> 41</span>
-<span class=normal> 42</span>
-<span class=normal> 43</span>
-<span class=normal> 44</span>
-<span class=normal> 45</span>
-<span class=normal> 46</span>
-<span class=normal> 47</span>
-<span class=normal> 48</span>
-<span class=normal> 49</span>
-<span class=normal> 50</span>
-<span class=normal> 51</span>
-<span class=normal> 52</span>
-<span class=normal> 53</span>
-<span class=normal> 54</span>
-<span class=normal> 55</span>
-<span class=normal> 56</span>
-<span class=normal> 57</span>
-<span class=normal> 58</span>
-<span class=normal> 59</span>
-<span class=normal> 60</span>
-<span class=normal> 61</span>
-<span class=normal> 62</span>
-<span class=normal> 63</span>
-<span class=normal> 64</span>
-<span class=normal> 65</span>
-<span class=normal> 66</span>
-<span class=normal> 67</span>
-<span class=normal> 68</span>
-<span class=normal> 69</span>
-<span class=normal> 70</span>
-<span class=normal> 71</span>
-<span class=normal> 72</span>
-<span class=normal> 73</span>
-<span class=normal> 74</span>
-<span class=normal> 75</span>
-<span class=normal> 76</span>
-<span class=normal> 77</span>
-<span class=normal> 78</span>
-<span class=normal> 79</span>
-<span class=normal> 80</span>
-<span class=normal> 81</span>
-<span class=normal> 82</span>
-<span class=normal> 83</span>
-<span class=normal> 84</span>
-<span class=normal> 85</span>
-<span class=normal> 86</span>
-<span class=normal> 87</span>
-<span class=normal> 88</span>
-<span class=normal> 89</span>
-<span class=normal> 90</span>
-<span class=normal> 91</span>
-<span class=normal> 92</span>
-<span class=normal> 93</span>
-<span class=normal> 94</span>
-<span class=normal> 95</span>
-<span class=normal> 96</span>
-<span class=normal> 97</span>
-<span class=normal> 98</span>
-<span class=normal> 99</span>
-<span class=normal>100</span>
-<span class=normal>101</span>
-<span class=normal>102</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+</code></pre></div> </td></tr></table> <h2 id=source-code>Source Code<a class=headerlink href=#source-code title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal> 1</span>
+<span class=normal> 2</span>
+<span class=normal> 3</span>
+<span class=normal> 4</span>
+<span class=normal> 5</span>
+<span class=normal> 6</span>
+<span class=normal> 7</span>
+<span class=normal> 8</span>
+<span class=normal> 9</span>
+<span class=normal>10</span>
+<span class=normal>11</span>
+<span class=normal>12</span>
+<span class=normal>13</span>
+<span class=normal>14</span>
+<span class=normal>15</span>
+<span class=normal>16</span>
+<span class=normal>17</span>
+<span class=normal>18</span>
+<span class=normal>19</span>
+<span class=normal>20</span>
+<span class=normal>21</span>
+<span class=normal>22</span>
+<span class=normal>23</span>
+<span class=normal>24</span>
+<span class=normal>25</span>
+<span class=normal>26</span>
+<span class=normal>27</span>
+<span class=normal>28</span>
+<span class=normal>29</span>
+<span class=normal>30</span>
+<span class=normal>31</span>
+<span class=normal>32</span>
+<span class=normal>33</span>
+<span class=normal>34</span>
+<span class=normal>35</span>
+<span class=normal>36</span>
+<span class=normal>37</span>
+<span class=normal>38</span>
+<span class=normal>39</span>
+<span class=normal>40</span>
+<span class=normal>41</span>
+<span class=normal>42</span>
+<span class=normal>43</span>
+<span class=normal>44</span>
+<span class=normal>45</span>
+<span class=normal>46</span>
+<span class=normal>47</span>
+<span class=normal>48</span>
+<span class=normal>49</span>
+<span class=normal>50</span>
+<span class=normal>51</span>
+<span class=normal>52</span>
+<span class=normal>53</span>
+<span class=normal>54</span>
+<span class=normal>55</span>
+<span class=normal>56</span>
+<span class=normal>57</span>
+<span class=normal>58</span>
+<span class=normal>59</span>
+<span class=normal>60</span>
+<span class=normal>61</span>
+<span class=normal>62</span>
+<span class=normal>63</span>
+<span class=normal>64</span>
+<span class=normal>65</span>
+<span class=normal>66</span>
+<span class=normal>67</span>
+<span class=normal>68</span>
+<span class=normal>69</span>
+<span class=normal>70</span>
+<span class=normal>71</span>
+<span class=normal>72</span>
+<span class=normal>73</span>
+<span class=normal>74</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Setup script run-time environment</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.7.0</span>
+<span class=c1># Version: 1.8.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#</span>
 <span class=c1># Main</span>
 <span class=c1>#</span>
-
-<span class=c1># Ensure pipeline exit status is failed when any cmd fails</span>
-<span class=nb>set</span> -o pipefail
-
-<span class=c1># Do not inherit aliases and commands</span>
-<span class=nb>unset</span> -f <span class=nb>unalias</span>
-<span class=se>\u</span>nalias -a
-<span class=nb>unset</span> -f <span class=nb>command</span>
-
-<span class=c1># Do not inherit sensitive environment variables</span>
-<span class=nb>unset</span> MAIL
-<span class=nb>unset</span> ENV
-<span class=nb>unset</span> IFS
-
-<span class=c1># Normalize shtop defaults</span>
-<span class=nb>shopt</span> -qu <span class=se>\</span>
-  dotglob <span class=se>\</span>
-  extdebug <span class=se>\</span>
-  failglob <span class=se>\</span>
-  globstar <span class=se>\</span>
-  gnu_errfmt <span class=se>\</span>
-  huponexit <span class=se>\</span>
-  lastpipe <span class=se>\</span>
-  login_shell <span class=se>\</span>
-  nocaseglob <span class=se>\</span>
-  nocasematch <span class=se>\</span>
-  nullglob <span class=se>\</span>
-  nullglob <span class=se>\</span>
-  xpg_echo
-<span class=nb>shopt</span> -qs <span class=se>\</span>
-  extquote
 
 <span class=c1># Set strict mode for enhanced security</span>
 <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_STRICT</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;1&#39;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
@@ -276,26 +231,29 @@
 bl64_os_get_distro
 
 <span class=c1># Verify lib compatibility</span>
-<span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;UNKNOWN&#39;</span> <span class=o>||</span> <span class=o>(</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BASH_VERSINFO</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s1>&#39;4&#39;</span> <span class=o>&amp;&amp;</span> <span class=s2>&quot;</span><span class=si>${</span><span class=nv>BASH_VERSINFO</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s1>&#39;5&#39;</span><span class=o>)</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-  <span class=nb>printf</span> <span class=s1>&#39;%s\n&#39;</span> <span class=s2>&quot;Fatal: BashLib64 is not supported in the current OS (</span><span class=k>$(</span>uname -a<span class=k>)</span><span class=s2>) or Bash version (</span><span class=nv>$BASH_VERSION</span><span class=s2>)&quot;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+<span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_UNK</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=o>(</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BASH_VERSINFO</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s1>&#39;4&#39;</span> <span class=o>&amp;&amp;</span> <span class=s2>&quot;</span><span class=si>${</span><span class=nv>BASH_VERSINFO</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s1>&#39;5&#39;</span><span class=o>)</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+  <span class=nb>printf</span> <span class=s1>&#39;%s\n&#39;</span> <span class=s2>&quot;Fatal: BashLib64 is not supported in the current OS (distro:[</span><span class=si>${</span><span class=nv>BL64_OS_DISTRO</span><span class=si>}</span><span class=s2>] / bash:[</span><span class=si>${</span><span class=nv>BASH_VERSION</span><span class=si>}</span><span class=s2>] / uname:[</span><span class=k>$(</span>uname -a<span class=k>)</span><span class=s2>)])&quot;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
   <span class=nb>false</span>
 <span class=k>else</span>
   <span class=c1># Load commands and aliases</span>
   bl64_os_set_command
+  bl64_os_set_options
   bl64_os_set_alias
   bl64_iam_set_command
   bl64_iam_set_alias
   bl64_pkb_set_command
   bl64_pkb_set_alias
-  bl64_sudo_set_command
-  bl64_sudo_set_alias
+  bl64_rbac_set_command
+  bl64_rbac_set_alias
   bl64_vcs_set_command
   bl64_vcs_set_alias
   bl64_rxtx_set_command
   bl64_rxtx_set_alias
+  bl64_py_set_command
+  bl64_py_set_options
 
-  <span class=c1># Enable shell tracing</span>
-  <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_APP_ALL</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nb>set</span> -x
+  <span class=c1># Enable exit debug</span>
+  <span class=nb>trap</span> <span class=s1>&#39;bl64_dbg_runtime_show&#39;</span> EXIT
 
   <span class=c1># Enable command mode: the library can be used as a stand-alone script to run embeded functions</span>
   <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_CMD</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_ON</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
