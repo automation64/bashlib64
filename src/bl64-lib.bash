@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 #
@@ -61,6 +61,9 @@ else
   bl64_rxtx_set_alias
   bl64_py_set_command
   bl64_py_set_options
+
+  # Enable exit debug
+  trap 'bl64_dbg_runtime_show' EXIT
 
   # Enable command mode: the library can be used as a stand-alone script to run embeded functions
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
