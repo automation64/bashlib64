@@ -17,5 +17,3 @@ fi
 
 # Load global variables
 . ./.env
-
-set | grep 'DEVBL_'
