@@ -617,9 +617,9 @@
 <span class=c1>#   command dependant</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_fs_create_dir<span class=o>()</span> <span class=o>{</span>
-  <span class=nb>local</span> <span class=nv>mode</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>user</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>group</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>mode</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>user</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>group</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 
   <span class=c1># Remove consumed parameters</span>
@@ -674,10 +674,10 @@
 <span class=c1>#   command dependant</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_fs_copy_files<span class=o>()</span> <span class=o>{</span>
-  <span class=nb>local</span> <span class=nv>mode</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>user</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>group</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>4</span><span class=k>:-</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>mode</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>user</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>group</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>4</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
   <span class=nb>local</span> <span class=nv>target</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 
@@ -738,15 +738,15 @@
 <span class=c1>#   $BL64_FS_ERROR_MERGE_FILE</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_fs_merge_files<span class=o>()</span> <span class=o>{</span>
-  <span class=nb>local</span> <span class=nv>mode</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>user</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>group</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>4</span><span class=k>:-</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>mode</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>user</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>group</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>4</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
   <span class=nb>local</span> -i <span class=nv>status_cat</span><span class=o>=</span><span class=m>0</span>
   <span class=nb>local</span> -i <span class=nv>status_file</span><span class=o>=</span><span class=m>0</span>
 
-  bl64_check_parameter <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  bl64_check_parameter <span class=s1>&#39;destination&#39;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
   bl64_check_overwrite <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=c1># Remove consumed parameters</span>

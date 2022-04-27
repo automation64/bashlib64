@@ -29,13 +29,15 @@
 <span class=normal>29</span>
 <span class=normal>30</span>
 <span class=normal>31</span>
-<span class=normal>32</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>32</span>
+<span class=normal>33</span>
+<span class=normal>34</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Transfer and Receive data over the network</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.2.0</span>
+<span class=c1># Version: 1.4.0</span>
 <span class=c1>#######################################</span>
 
 <span class=nb>export</span> BL64_RXTX_CMD_CURL
@@ -45,17 +47,19 @@
 <span class=nb>export</span> BL64_RXTX_ALIAS_WGET
 
 <span class=nb>export</span> BL64_RXTX_SET_CURL_VERBOSE
-<span class=nb>export</span> BL64_RXTX_SET_WGET_VERBOSE
 <span class=nb>export</span> BL64_RXTX_SET_CURL_OUTPUT
+<span class=nb>export</span> BL64_RXTX_SET_CURL_SILENT
+<span class=nb>export</span> BL64_RXTX_SET_CURL_REDIRECT
+<span class=nb>export</span> BL64_RXTX_SET_CURL_SECURE
+<span class=nb>export</span> BL64_RXTX_SET_WGET_VERBOSE
 <span class=nb>export</span> BL64_RXTX_SET_WGET_OUTPUT
+<span class=nb>export</span> BL64_RXTX_SET_WGET_SECURE
 
 <span class=nb>declare</span> -rig <span class=nv>BL64_RXTX_ERROR_BACKUP</span><span class=o>=</span><span class=m>197</span>
 <span class=nb>declare</span> -rig <span class=nv>BL64_RXTX_ERROR_RESTORE</span><span class=o>=</span><span class=m>198</span>
 <span class=nb>declare</span> -rig <span class=nv>BL64_RXTX_ERROR_TEMPORARY_REPO</span><span class=o>=</span><span class=m>199</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_RXTX_ERROR_MISSING_PARAMETER</span><span class=o>=</span><span class=m>200</span>
 <span class=nb>declare</span> -rig <span class=nv>BL64_RXTX_ERROR_MISSING_COMMAND</span><span class=o>=</span><span class=m>201</span>
 
-<span class=nb>readonly</span> <span class=nv>_BL64_RXTX_TXT_MISSING_PARAMETER</span><span class=o>=</span><span class=s1>&#39;required parameter is missing&#39;</span>
 <span class=nb>readonly</span> <span class=nv>_BL64_RXTX_TXT_MISSING_COMMAND</span><span class=o>=</span><span class=s1>&#39;no web transfer command was found on the system&#39;</span>
 <span class=nb>readonly</span> <span class=nv>_BL64_RXTX_TXT_EXISTING_DESTINATION</span><span class=o>=</span><span class=s1>&#39;destination path is not empty. No action taken.&#39;</span>
 <span class=nb>readonly</span> <span class=nv>_BL64_RXTX_TXT_CREATION_PROBLEM</span><span class=o>=</span><span class=s1>&#39;unable to create temporary git repo&#39;</span>
@@ -380,56 +384,37 @@
 <span class=normal>317</span>
 <span class=normal>318</span>
 <span class=normal>319</span>
-<span class=normal>320</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>320</span>
+<span class=normal>321</span>
+<span class=normal>322</span>
+<span class=normal>323</span>
+<span class=normal>324</span>
+<span class=normal>325</span>
+<span class=normal>326</span>
+<span class=normal>327</span>
+<span class=normal>328</span>
+<span class=normal>329</span>
+<span class=normal>330</span>
+<span class=normal>331</span>
+<span class=normal>332</span>
+<span class=normal>333</span>
+<span class=normal>334</span>
+<span class=normal>335</span>
+<span class=normal>336</span>
+<span class=normal>337</span>
+<span class=normal>338</span>
+<span class=normal>339</span>
+<span class=normal>340</span>
+<span class=normal>341</span>
+<span class=normal>342</span>
+<span class=normal>343</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Transfer and Receive data over the network</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.8.0</span>
+<span class=c1># Version: 1.9.0</span>
 <span class=c1>#######################################</span>
-
-<span class=k>function</span> _bl64_rxtx_backup<span class=o>()</span> <span class=o>{</span>
-
-  <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>backup</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>destination</span><span class=si>}${</span><span class=nv>_BL64_RXTX_BACKUP_POSTFIX</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
-
-  <span class=k>if</span> <span class=o>[[</span> -e <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    bl64_fs_mv <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span>
-    <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
-  <span class=k>fi</span>
-
-  <span class=o>((</span>status !<span class=o>=</span> <span class=m>0</span><span class=o>))</span> <span class=o>&amp;&amp;</span> <span class=nv>status</span><span class=o>=</span><span class=nv>$BL64_RXTX_ERROR_BACKUP</span>
-  <span class=c1># shellcheck disable=SC2086</span>
-  <span class=k>return</span> <span class=nv>$status</span>
-<span class=o>}</span>
-
-<span class=k>function</span> _bl64_rxtx_restore<span class=o>()</span> <span class=o>{</span>
-  <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>result</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$2</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>backup</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>destination</span><span class=si>}${</span><span class=nv>_BL64_RXTX_BACKUP_POSTFIX</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
-
-  <span class=c1># Check if restore is needed based on the operation result</span>
-  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$result</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OK</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    <span class=c1># Operation was ok, backup no longer needed</span>
-    <span class=o>[[</span> -e <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> bl64_fs_rm_full <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span>
-    <span class=c1># shellcheck disable=SC2086</span>
-    <span class=k>return</span> <span class=nv>$BL64_LIB_VAR_OK</span>
-  <span class=k>fi</span>
-
-  <span class=c1># Remove invalid content</span>
-  <span class=o>[[</span> -e <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> bl64_fs_rm_full <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>
-
-  <span class=c1># Restore content from backup</span>
-  bl64_fs_mv <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>
-  <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
-
-  <span class=o>((</span>status !<span class=o>=</span> <span class=m>0</span><span class=o>))</span> <span class=o>&amp;&amp;</span> <span class=nv>status</span><span class=o>=</span><span class=nv>$BL64_RXTX_ERROR_RESTORE</span>
-  <span class=c1># shellcheck disable=SC2086</span>
-  <span class=k>return</span> <span class=nv>$status</span>
-<span class=o>}</span>
 
 <span class=c1>#######################################</span>
 <span class=c1># Identify and normalize commands</span>
@@ -457,6 +442,65 @@
 <span class=o>}</span>
 
 <span class=c1>#######################################</span>
+<span class=c1># Create command sets for common options</span>
+<span class=c1>#</span>
+<span class=c1># Arguments:</span>
+<span class=c1>#   None</span>
+<span class=c1># Outputs:</span>
+<span class=c1>#   STDOUT: None</span>
+<span class=c1>#   STDERR: None</span>
+<span class=c1># Returns:</span>
+<span class=c1>#   0: always ok</span>
+<span class=c1>#######################################</span>
+<span class=c1># shellcheck disable=SC2034</span>
+<span class=k>function</span> bl64_rxtx_set_options<span class=o>()</span> <span class=o>{</span>
+  <span class=c1># shellcheck disable=SC2034</span>
+  <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=k>in</span>
+  <span class=si>${</span><span class=nv>BL64_OS_UB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-11.* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_RXTX_SET_CURL_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_SILENT</span><span class=o>=</span><span class=s1>&#39;--silent --no-progress-meter&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_SECURE</span><span class=o>=</span><span class=s1>&#39;--config /dev/null&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_REDIRECT</span><span class=o>=</span><span class=s1>&#39;--location&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output-document&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_SECURE</span><span class=o>=</span><span class=s1>&#39;--no-config&#39;</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_RHEL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_ALM</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-9.* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-10.*<span class=o>)</span>
+    <span class=nv>BL64_RXTX_SET_CURL_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_SILENT</span><span class=o>=</span><span class=s1>&#39;--silent&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_SECURE</span><span class=o>=</span><span class=s1>&#39;--config /dev/null&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_REDIRECT</span><span class=o>=</span><span class=s1>&#39;--location&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output-document&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_SECURE</span><span class=o>=</span><span class=s1>&#39;--no-config&#39;</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_ALP</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_RXTX_SET_CURL_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_SILENT</span><span class=o>=</span><span class=s1>&#39;--silent&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_SECURE</span><span class=o>=</span><span class=s1>&#39;--config /dev/null&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_REDIRECT</span><span class=o>=</span><span class=s1>&#39;--location&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_OUTPUT</span><span class=o>=</span><span class=s1>&#39;-O&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_SECURE</span><span class=o>=</span><span class=s1>&#39; &#39;</span>
+    <span class=p>;;</span>
+  <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
+    <span class=nv>BL64_RXTX_SET_CURL_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_SILENT</span><span class=o>=</span><span class=s1>&#39;--silent --no-progress-meter&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_SECURE</span><span class=o>=</span><span class=s1>&#39;--config /dev/null&#39;</span>
+    <span class=nv>BL64_RXTX_SET_CURL_REDIRECT</span><span class=o>=</span><span class=s1>&#39;--location&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output-document&#39;</span>
+    <span class=nv>BL64_RXTX_SET_WGET_SECURE</span><span class=o>=</span><span class=s1>&#39;--no-config&#39;</span>
+    <span class=p>;;</span>
+  *<span class=o>)</span> bl64_msg_show_unsupported <span class=p>;;</span>
+  <span class=k>esac</span>
+<span class=o>}</span>
+
+<span class=c1>#######################################</span>
 <span class=c1># Create command aliases for common use cases</span>
 <span class=c1>#</span>
 <span class=c1># * Aliases are presented as regular shell variables for easy inclusion in complex commands</span>
@@ -471,42 +515,8 @@
 <span class=c1>#   0: always ok</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_rxtx_set_alias<span class=o>()</span> <span class=o>{</span>
-  <span class=c1># shellcheck disable=SC2034</span>
-  <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=k>in</span>
-  <span class=si>${</span><span class=nv>BL64_OS_UB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-11.* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-*<span class=o>)</span>
-    <span class=nv>BL64_RXTX_ALIAS_CURL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_CURL</span><span class=s2> --no-progress-meter  --config /dev/null&quot;</span>
-    <span class=nv>BL64_RXTX_ALIAS_WGET</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_WGET</span><span class=s2> --no-config&quot;</span>
-    <span class=nv>BL64_RXTX_SET_CURL_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
-    <span class=nv>BL64_RXTX_SET_WGET_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
-    <span class=nv>BL64_RXTX_SET_CURL_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output&#39;</span>
-    <span class=nv>BL64_RXTX_SET_WGET_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output-document&#39;</span>
-    <span class=p>;;</span>
-  <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_RHEL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_ALM</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-9.* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-10.*<span class=o>)</span>
-    <span class=nv>BL64_RXTX_ALIAS_CURL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_CURL</span><span class=s2> --config /dev/null&quot;</span>
-    <span class=nv>BL64_RXTX_ALIAS_WGET</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_WGET</span><span class=s2> --no-config&quot;</span>
-    <span class=nv>BL64_RXTX_SET_CURL_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
-    <span class=nv>BL64_RXTX_SET_WGET_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
-    <span class=nv>BL64_RXTX_SET_CURL_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output&#39;</span>
-    <span class=nv>BL64_RXTX_SET_WGET_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output-document&#39;</span>
-    <span class=p>;;</span>
-  <span class=si>${</span><span class=nv>BL64_OS_ALP</span><span class=si>}</span>-*<span class=o>)</span>
-    <span class=nv>BL64_RXTX_ALIAS_CURL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_CURL</span><span class=s2>&quot;</span>
-    <span class=nv>BL64_RXTX_ALIAS_WGET</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_WGET</span><span class=s2>&quot;</span>
-    <span class=nv>BL64_RXTX_SET_CURL_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
-    <span class=nv>BL64_RXTX_SET_WGET_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
-    <span class=nv>BL64_RXTX_SET_CURL_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output&#39;</span>
-    <span class=nv>BL64_RXTX_SET_WGET_OUTPUT</span><span class=o>=</span><span class=s1>&#39;-O&#39;</span>
-    <span class=p>;;</span>
-  <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
-    <span class=nv>BL64_RXTX_ALIAS_CURL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_CURL</span><span class=s2> --no-progress-meter  --config /dev/null&quot;</span>
-    <span class=nv>BL64_RXTX_ALIAS_WGET</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_WGET</span><span class=s2> --no-config&quot;</span>
-    <span class=nv>BL64_RXTX_SET_CURL_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
-    <span class=nv>BL64_RXTX_SET_WGET_VERBOSE</span><span class=o>=</span><span class=s1>&#39;--verbose&#39;</span>
-    <span class=nv>BL64_RXTX_SET_CURL_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output&#39;</span>
-    <span class=nv>BL64_RXTX_SET_WGET_OUTPUT</span><span class=o>=</span><span class=s1>&#39;--output-document&#39;</span>
-    <span class=p>;;</span>
-  *<span class=o>)</span> bl64_msg_show_unsupported <span class=p>;;</span>
-  <span class=k>esac</span>
+  <span class=nv>BL64_RXTX_ALIAS_CURL</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_CURL</span><span class=s2> </span><span class=si>${</span><span class=nv>BL64_RXTX_SET_CURL_SECURE</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nv>BL64_RXTX_ALIAS_WGET</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_WGET</span><span class=s2> </span><span class=si>${</span><span class=nv>BL64_RXTX_SET_WGET_SECURE</span><span class=si>}</span><span class=s2>&quot;</span>
 <span class=o>}</span>
 
 <span class=c1>#######################################</span>
@@ -518,44 +528,37 @@
 <span class=c1>#   $1: Source URL</span>
 <span class=c1>#   $2: Full path to the destination file</span>
 <span class=c1>#   $3: replace existing content Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)</span>
+<span class=c1>#   $4: permissions. Regular chown format accepted. Default: umask defined</span>
 <span class=c1># Outputs:</span>
-<span class=c1>#   STDOUT: None unless BL64_DBG_TARGET_CMD</span>
+<span class=c1>#   STDOUT: None unless BL64_DBG_TARGET_LIB_CMD</span>
 <span class=c1>#   STDERR: command error</span>
 <span class=c1># Returns:</span>
-<span class=c1>#   BL64_RXTX_ERROR_MISSING_PARAMETER</span>
 <span class=c1>#   BL64_RXTX_ERROR_MISSING_COMMAND</span>
 <span class=c1>#   command error status</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_rxtx_web_get_file<span class=o>()</span> <span class=o>{</span>
   <span class=nb>local</span> <span class=nv>source</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$2</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>replace</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>verbose</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
-  <span class=nb>local</span> <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
+  <span class=nb>local</span> <span class=nv>replace</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_VAR_OFF</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>mode</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>4</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>verbose</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_SET_CURL_SILENT</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> -i <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
 
-  <span class=k>if</span> <span class=o>[[</span> -z <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_RXTX_TXT_MISSING_PARAMETER</span><span class=s2> (source url)&quot;</span>
-    <span class=c1># shellcheck disable=SC2086</span>
-    <span class=k>return</span> <span class=nv>$BL64_RXTX_ERROR_MISSING_PARAMETER</span>
-  <span class=k>fi</span>
-
-  <span class=k>if</span> <span class=o>[[</span> -z <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_RXTX_TXT_MISSING_PARAMETER</span><span class=s2> (source url)&quot;</span>
-    <span class=c1># shellcheck disable=SC2086</span>
-    <span class=k>return</span> <span class=nv>$BL64_RXTX_ERROR_MISSING_PARAMETER</span>
-  <span class=k>fi</span>
+  bl64_check_parameter <span class=s1>&#39;source&#39;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  bl64_check_parameter <span class=s1>&#39;destination&#39;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$replace</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> -e <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=m>0</span>
   _bl64_rxtx_backup <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=k>if</span> <span class=o>[[</span> -x <span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_CURL</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_CMD</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>verbose</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_SET_CURL_VERBOSE</span><span class=s2>&quot;</span>
+    <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_LIB_CMD</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>verbose</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_SET_CURL_VERBOSE</span><span class=s2>&quot;</span>
     <span class=nv>$BL64_RXTX_ALIAS_CURL</span> <span class=nv>$verbose</span> <span class=se>\</span>
+      <span class=nv>$BL64_RXTX_SET_CURL_REDIRECT</span> <span class=se>\</span>
       <span class=nv>$BL64_RXTX_SET_CURL_OUTPUT</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=se>\</span>
       <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span>
     <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
   <span class=k>elif</span> <span class=o>[[</span> -x <span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_WGET</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_CMD</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>verbose</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_SET_WGET_VERBOSE</span><span class=s2>&quot;</span>
+    <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEBUG</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_DBG_TARGET_LIB_CMD</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>verbose</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_SET_WGET_VERBOSE</span><span class=s2>&quot;</span>
     <span class=nv>$BL64_RXTX_ALIAS_WGET</span> <span class=nv>$verbose</span> <span class=se>\</span>
       <span class=nv>$BL64_RXTX_SET_WGET_OUTPUT</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=se>\</span>
       <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span>
@@ -565,6 +568,13 @@
     bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_RXTX_TXT_MISSING_COMMAND</span><span class=s2> (wget or curl)&quot;</span> <span class=o>&amp;&amp;</span>
       <span class=k>return</span> <span class=nv>$BL64_RXTX_ERROR_MISSING_COMMAND</span>
   <span class=k>fi</span>
+
+  <span class=c1># Determine if mode needs to be set</span>
+  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$status</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;0&#39;</span> <span class=o>&amp;&amp;</span> <span class=s2>&quot;</span><span class=nv>$mode</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+    bl64_fs_chmod <span class=s2>&quot;</span><span class=nv>$mode</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>
+    <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
+  <span class=k>fi</span>
+
   _bl64_rxtx_restore <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$status</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=k>return</span> <span class=nv>$status</span>
@@ -593,14 +603,12 @@
 <span class=c1>#   command error status</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_rxtx_git_get_dir<span class=o>()</span> <span class=o>{</span>
-  bl64_dbg_lib_trace_start
   <span class=nb>local</span> <span class=nv>source_url</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>source_path</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>replace</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>4</span><span class=k>:-</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>replace</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>4</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_VAR_OFF</span><span class=si>}}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>branch</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>5</span><span class=k>:-</span><span class=nv>main</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
-  bl64_dbg_lib_trace_stop
+  <span class=nb>local</span> -i <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
 
   <span class=c1># shellcheck disable=SC2086</span>
   bl64_check_parameter <span class=s1>&#39;source_url&#39;</span> <span class=s1>&#39;git repository&#39;</span> <span class=o>&amp;&amp;</span>
@@ -645,7 +653,7 @@
   <span class=nb>local</span> <span class=nv>source_url</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>branch</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=nv>main</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
+  <span class=nb>local</span> -i <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
   <span class=nb>local</span> <span class=nv>repo</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
   <span class=nb>local</span> <span class=nv>git_name</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
   <span class=nb>local</span> <span class=nv>transition</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
@@ -675,7 +683,7 @@
   <span class=nb>local</span> <span class=nv>source_path</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>branch</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>4</span><span class=k>:-</span><span class=nv>main</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
+  <span class=nb>local</span> -i <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
   <span class=nb>local</span> <span class=nv>repo</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
   <span class=nb>local</span> <span class=nv>target</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
   <span class=nb>local</span> <span class=nv>source</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
@@ -698,6 +706,48 @@
   <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
 
   <span class=o>[[</span> -d <span class=s2>&quot;</span><span class=nv>$repo</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> bl64_fs_rm_full <span class=s2>&quot;</span><span class=nv>$repo</span><span class=s2>&quot;</span> &gt;/dev/null
+  <span class=k>return</span> <span class=nv>$status</span>
+<span class=o>}</span>
+
+<span class=k>function</span> _bl64_rxtx_backup<span class=o>()</span> <span class=o>{</span>
+
+  <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>backup</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>destination</span><span class=si>}${</span><span class=nv>_BL64_RXTX_BACKUP_POSTFIX</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> -i <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
+
+  <span class=k>if</span> <span class=o>[[</span> -e <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+    bl64_fs_mv <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span>
+    <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
+  <span class=k>fi</span>
+
+  <span class=o>((</span>status !<span class=o>=</span> <span class=m>0</span><span class=o>))</span> <span class=o>&amp;&amp;</span> <span class=nv>status</span><span class=o>=</span><span class=nv>$BL64_RXTX_ERROR_BACKUP</span>
+  <span class=c1># shellcheck disable=SC2086</span>
+  <span class=k>return</span> <span class=nv>$status</span>
+<span class=o>}</span>
+
+<span class=k>function</span> _bl64_rxtx_restore<span class=o>()</span> <span class=o>{</span>
+  <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>result</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$2</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>backup</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>destination</span><span class=si>}${</span><span class=nv>_BL64_RXTX_BACKUP_POSTFIX</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> -i <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
+
+  <span class=c1># Check if restore is needed based on the operation result</span>
+  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$result</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OK</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+    <span class=c1># Operation was ok, backup no longer needed</span>
+    <span class=o>[[</span> -e <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> bl64_fs_rm_full <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span>
+    <span class=c1># shellcheck disable=SC2086</span>
+    <span class=k>return</span> <span class=nv>$BL64_LIB_VAR_OK</span>
+  <span class=k>fi</span>
+
+  <span class=c1># Remove invalid content</span>
+  <span class=o>[[</span> -e <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> bl64_fs_rm_full <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>
+
+  <span class=c1># Restore content from backup</span>
+  bl64_fs_mv <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>
+  <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
+
+  <span class=o>((</span>status !<span class=o>=</span> <span class=m>0</span><span class=o>))</span> <span class=o>&amp;&amp;</span> <span class=nv>status</span><span class=o>=</span><span class=nv>$BL64_RXTX_ERROR_RESTORE</span>
+  <span class=c1># shellcheck disable=SC2086</span>
   <span class=k>return</span> <span class=nv>$status</span>
 <span class=o>}</span>
 </code></pre></div> </td></tr></table> </article> </div> </div> <a href=# class="md-top md-icon" data-md-component=top data-md-state=hidden> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg> Back to top </a> </main> <footer class=md-footer> <nav class="md-footer__inner md-grid" aria-label=Footer> <a href=../bl64-rnd/ class="md-footer__link md-footer__link--prev" aria-label="Previous: module: bl64-rnd" rel=prev> <div class="md-footer__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg> </div> <div class=md-footer__title> <div class=md-ellipsis> <span class=md-footer__direction> Previous </span> module: bl64-rnd </div> </div> </a> <a href=../bl64-rbac/ class="md-footer__link md-footer__link--next" aria-label="Next: module: bl64-rbac" rel=next> <div class=md-footer__title> <div class=md-ellipsis> <span class=md-footer__direction> Next </span> module: bl64-rbac </div> </div> <div class="md-footer__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg> </div> </a> </nav> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class=md-copyright> <div class=md-copyright__highlight> GPL-3.0-or-later </div> Made with <a href=https://squidfunk.github.io/mkdocs-material/ target=_blank rel=noopener> Material for MkDocs </a> </div> </div> </div> </footer> </div> <div class=md-dialog data-md-component=dialog> <div class="md-dialog__inner md-typeset"></div> </div> <script id=__config type=application/json>{"base": "..", "features": ["navigation.instant", "navigation.sections", "navigation.expand", "navigation.indexes", "toc.integrate", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.bd0b6b67.min.js"}</script> <script src=../assets/javascripts/bundle.8aa65030.min.js></script> </body> </html>

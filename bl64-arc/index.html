@@ -117,7 +117,7 @@
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.4.0</span>
+<span class=c1># Version: 1.4.1</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -141,7 +141,7 @@
 <span class=k>function</span> bl64_arc_open_tar<span class=o>()</span> <span class=o>{</span>
   <span class=nb>local</span> <span class=nv>source</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$2</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
+  <span class=nb>local</span> -i <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
 
   <span class=k>if</span> <span class=o>[[</span> -z <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span> <span class=o>||</span> -z <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
     bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_ARC_TXT_MISSING_PARAMETER</span><span class=s2> (source,destination)&quot;</span>
