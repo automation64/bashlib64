@@ -17,8 +17,9 @@ teardown() {
 
 }
 
-@test "bl64_rxtx_web_get_file: function parameter missing" {
-  set +u # to avoid IFS missing error in run function
-  run bl64_rxtx_web_get_file
-  assert_equal "$status" $BL64_RXTX_ERROR_MISSING_PARAMETER
+@test "bl64_rxtx_web_get_file: download file + replace off + no old content + set perm" {
+
+  run bl64_rxtx_web_get_file "$_bl64_rxtx_web_get_file_source" "${_bl64_rxtx_web_get_file_destination}/test" "$BL64_LIB_VAR_OFF" '0600'
+  assert_success
+
 }
