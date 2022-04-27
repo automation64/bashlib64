@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.0
+# Version: 1.5.1
 #######################################
 
 #######################################
@@ -82,7 +82,7 @@ function bl64_rbac_add_root() {
 #######################################
 function bl64_rbac_check_sudoers() {
   local sudoers="$1"
-  local status=0
+  local -i status=0
 
   bl64_check_privilege_root || return $?
   # shellcheck disable=SC2086
