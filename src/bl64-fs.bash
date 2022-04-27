@@ -27,9 +27,9 @@
 #   command dependant
 #######################################
 function bl64_fs_create_dir() {
-  local mode="${1:-"$BL64_LIB_DEFAULT"}"
-  local user="${2:-"$BL64_LIB_DEFAULT"}"
-  local group="${3:-"$BL64_LIB_DEFAULT"}"
+  local mode="${1:-${BL64_LIB_DEFAULT}}"
+  local user="${2:-${BL64_LIB_DEFAULT}}"
+  local group="${3:-${BL64_LIB_DEFAULT}}"
   local path=''
 
   # Remove consumed parameters
@@ -84,10 +84,10 @@ function bl64_fs_create_dir() {
 #   command dependant
 #######################################
 function bl64_fs_copy_files() {
-  local mode="${1:-"$BL64_LIB_DEFAULT"}"
-  local user="${2:-"$BL64_LIB_DEFAULT"}"
-  local group="${3:-"$BL64_LIB_DEFAULT"}"
-  local destination="${4:-"$BL64_LIB_DEFAULT"}"
+  local mode="${1:-${BL64_LIB_DEFAULT}}"
+  local user="${2:-${BL64_LIB_DEFAULT}}"
+  local group="${3:-${BL64_LIB_DEFAULT}}"
+  local destination="${4:-${BL64_LIB_DEFAULT}}"
   local path=''
   local target=''
 
@@ -148,15 +148,15 @@ function bl64_fs_copy_files() {
 #   $BL64_FS_ERROR_MERGE_FILE
 #######################################
 function bl64_fs_merge_files() {
-  local mode="${1:-"$BL64_LIB_DEFAULT"}"
-  local user="${2:-"$BL64_LIB_DEFAULT"}"
-  local group="${3:-"$BL64_LIB_DEFAULT"}"
-  local destination="${4:-"$BL64_LIB_DEFAULT"}"
+  local mode="${1:-${BL64_LIB_DEFAULT}}"
+  local user="${2:-${BL64_LIB_DEFAULT}}"
+  local group="${3:-${BL64_LIB_DEFAULT}}"
+  local destination="${4:-${BL64_LIB_DEFAULT}}"
   local path=''
   local -i status_cat=0
   local -i status_file=0
 
-  bl64_check_parameter "$destination" || return $?
+  bl64_check_parameter 'destination' || return $?
   bl64_check_overwrite "$destination" || return $?
 
   # Remove consumed parameters

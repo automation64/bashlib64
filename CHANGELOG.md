@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.26.0]
+
+### Added
+
+- rxtx
+  - bl64_rxtx_set_options: added options
+  - bl64_rxtx_web_get_file: added option to set file permissions
+
+### Fixed
+
+- rxtx:
+  - Fixed wrong variable name
+- arc,rbac,vcs
+  - Fixed status var declaration type
+
 ## [1.25.0]
 
 ### Added

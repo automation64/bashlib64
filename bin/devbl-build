@@ -8,9 +8,8 @@
 # Version: 1.1.0
 #######################################
 
-[[ -z "$DEVBL_BIN" ]] && echo "Error: prepare the dev environment before executing this file" && exit 1
-# shellcheck disable=SC1090
-source "$DEVBL_BASHLIB64" || exit 1
+source './bin/devbl-set' || { echo 'unable to load dev env'; exit 1; }
+source "$DEVBL_LIB_BASHLIB64" || exit 1
 
 function devbl_build_standalone() {
 
