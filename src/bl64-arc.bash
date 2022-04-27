@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.4.0
+# Version: 1.4.1
 #######################################
 
 #######################################
@@ -28,7 +28,7 @@
 function bl64_arc_open_tar() {
   local source="$1"
   local destination="$2"
-  local status=0
+  local -i status=0
 
   if [[ -z "$source" || -z "$destination" ]]; then
     bl64_msg_show_error "$_BL64_ARC_TXT_MISSING_PARAMETER (source,destination)"
