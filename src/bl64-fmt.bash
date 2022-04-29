@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -23,6 +23,7 @@
 #   >0: grep command exit status
 #######################################
 function bl64_fmt_strip_comments() {
+  bl64_dbg_lib_show_function "$@"
   local source="${1:--}"
 
   "$BL64_OS_CMD_GREP" -v -E '^#.*$|^ *#.*$' "$source"
@@ -43,6 +44,7 @@ function bl64_fmt_strip_comments() {
 #   >0: printf error
 #######################################
 function bl64_fmt_strip_starting_slash() {
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
 
   # shellcheck disable=SC2086
@@ -72,6 +74,7 @@ function bl64_fmt_strip_starting_slash() {
 #   >0: printf error
 #######################################
 function bl64_fmt_strip_ending_slash() {
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
 
   # shellcheck disable=SC2086
@@ -115,7 +118,7 @@ function bl64_fmt_strip_ending_slash() {
 #   >0: printf error
 #######################################
 function bl64_fmt_basename() {
-  bl64_dbg_lib_trace_start
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
   local base=''
 
@@ -125,11 +128,10 @@ function bl64_fmt_basename() {
 
   if [[ -z "$base" || "$base" == */* ]]; then
     # shellcheck disable=SC2086
-    return $BL64_FMT_ERROR_NO_BASENAME
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
   else
     printf '%s' "$base"
   fi
-  bl64_dbg_lib_trace_stop
   return 0
 }
 
@@ -158,6 +160,7 @@ function bl64_fmt_basename() {
 #   >0: printf error
 #######################################
 function bl64_fmt_dirname() {
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
 
   # shellcheck disable=SC2086

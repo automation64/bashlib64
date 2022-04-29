@@ -5,35 +5,27 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.26.0
+# Version: 2.0.0
 #######################################
-
-# Ensure pipeline exit status is failed when any cmd fails
-set -o pipefail
 
 # Do not inherit aliases and commands
 unset -f unalias
 \unalias -a
 unset -f command
 
-# Do not inherit sensitive environment variables
-unset MAIL
-unset ENV
-unset IFS
-
 # Normalize shtop defaults
 shopt -qu \
-  dotglob \
-  extdebug \
-  failglob \
-  globstar \
-  gnu_errfmt \
-  huponexit \
-  lastpipe \
-  login_shell \
-  nocaseglob \
-  nocasematch \
-  nullglob \
-  xpg_echo
+  'dotglob' \
+  'extdebug' \
+  'failglob' \
+  'globstar' \
+  'gnu_errfmt' \
+  'huponexit' \
+  'lastpipe' \
+  'login_shell' \
+  'nocaseglob' \
+  'nocasematch' \
+  'nullglob' \
+  'xpg_echo'
 shopt -qs \
-  extquote
+  'extquote'

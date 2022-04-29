@@ -18,7 +18,7 @@
 #   STDERR: message when type is error or warning
 # Returns:
 #   printf exit status
-#   BL64_MSG_ERROR_INVALID_FORMAT
+#   BL64_LIB_ERROR_MODULE_SETUP_INVALID
 #######################################
 function _bl64_msg_show() {
   local type="$1"
@@ -59,7 +59,7 @@ function _bl64_msg_show() {
   *)
     bl64_msg_show_error "$_BL64_MSG_TXT_INVALID_FORMAT"
     # shellcheck disable=SC2086
-    return $BL64_MSG_ERROR_INVALID_FORMAT
+    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
   esac
 }
 
@@ -73,7 +73,7 @@ function _bl64_msg_show() {
 #   STDERR: None
 # Returns:
 #   0: successfull execution
-#   BL64_MSG_ERROR_INVALID_FORMAT
+#   BL64_LIB_ERROR_MODULE_SETUP_INVALID
 #######################################
 function bl64_msg_setup() {
   local format="$1"
@@ -87,7 +87,7 @@ function bl64_msg_setup() {
     "$format" != "$BL64_MSG_FORMAT_FULL"
   ]]; then
     bl64_msg_show_error "$_BL64_MSG_TXT_INVALID_FORMAT"
-    return $BL64_MSG_ERROR_INVALID_FORMAT
+    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
   fi
 
   BL64_MSG_FORMAT="$format"

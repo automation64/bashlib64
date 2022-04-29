@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -17,15 +17,14 @@
 #   STDERR: Error messages
 # Returns:
 #   0: successfull execution
-#   BL64_CHECK_ERROR_MISSING_PARAMETER
-#   BL64_CHECK_ERROR_FILE_*
+#   BL64_LIB_ERROR_FILE_*
 #######################################
 function bl64_xsv_dump() {
-
+  bl64_dbg_lib_show_function "$@"
   local source="$1"
 
-  bl64_check_parameter 'source' || return $?
-  bl64_check_file "$source" "$_BL64_XSV_TXT_SOURCE_NOT_FOUND" || return $?
+  bl64_check_parameter 'source' &&
+    bl64_check_file "$source" "$_BL64_XSV_TXT_SOURCE_NOT_FOUND" || return $?
 
   "$BL64_OS_CMD_GREP" -v -E '^#.*$|^$' "$source"
 
@@ -47,11 +46,11 @@ function bl64_xsv_dump() {
 # Returns:
 #   0: successfull execution
 #   BL64_XSV_ERROR_MISSING_COMMAND
-#   BL64_XSV_ERROR_MISSING_PARAMETER
 #   BL64_XSV_ERROR_SEARCH_VALUES
 #   >0: awk command exit status
 #######################################
 function bl64_xsv_search_records() {
+  bl64_dbg_lib_show_function "$@"
   local values="$1"
   local source="${2:--}"
   local keys="${3:-1}"
@@ -60,11 +59,8 @@ function bl64_xsv_search_records() {
   local fs_out="${6:-$BL64_XSV_FS_COLON}"
 
   # shellcheck disable=SC2086
-  bl64_check_command "$BL64_OS_CMD_AWK" || return $BL64_XSV_ERROR_MISSING_COMMAND
-
-  # shellcheck disable=SC2086
-  bl64_check_parameter 'values' 'search value' ||
-    return $BL64_XSV_ERROR_MISSING_PARAMETER
+  bl64_check_command "$BL64_OS_CMD_AWK" &&
+    bl64_check_parameter 'values' 'search value' || return $?
 
   # shellcheck disable=SC2016
   $BL64_OS_ALIAS_AWK \

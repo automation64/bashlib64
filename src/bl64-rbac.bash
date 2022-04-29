@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.1
+# Version: 1.6.0
 #######################################
 
 #######################################
@@ -18,26 +18,20 @@
 # Returns:
 #   0: rule added
 #   >0: failed command exit status
-#   BL64_RBAC_ERROR_MISSING_SUDOERS
-#   BL64_RBAC_ERROR_MISSING_AWK
-#   BL64_RBAC_ERROR_UPDATE_FAILED
-#   BL64_RBAC_ERROR_INVALID_SUDOERS
 #######################################
 function bl64_rbac_add_root() {
+  bl64_dbg_lib_show_function "$@"
   local user="$1"
   local status=$BL64_RBAC_ERROR_UPDATE_FAILED
   local new_sudoers="${BL64_RBAC_FILE_SUDOERS}.bl64_new"
   local old_sudoers="${BL64_RBAC_FILE_SUDOERS}.bl64_old"
 
-  bl64_check_privilege_root || return $?
-  bl64_check_parameter 'user' || return $?
-
-  # shellcheck disable=SC2086
-  bl64_check_command "$BL64_OS_CMD_AWK" || return $BL64_RBAC_ERROR_MISSING_AWK
-  # shellcheck disable=SC2086
-  bl64_check_file "$BL64_RBAC_FILE_SUDOERS" || return $BL64_RBAC_ERROR_MISSING_SUDOERS
-  # shellcheck disable=SC2086
-  bl64_rbac_check_sudoers "$BL64_RBAC_FILE_SUDOERS" || return $BL64_RBAC_ERROR_INVALID_SUDOERS
+  bl64_check_privilege_root &&
+    bl64_check_parameter 'user' &&
+    bl64_check_command "$BL64_OS_CMD_AWK" &&
+    bl64_check_file "$BL64_RBAC_FILE_SUDOERS" &&
+    bl64_rbac_check_sudoers "$BL64_RBAC_FILE_SUDOERS" ||
+    return $?
 
   umask 0266
   # shellcheck disable=SC2016
@@ -77,16 +71,15 @@ function bl64_rbac_add_root() {
 #   STDERR: None
 # Returns:
 #   0: sudoers sintax ok
-#   BL64_RBAC_ERROR_MISSING_VISUDO
 #   visudo exit status
 #######################################
 function bl64_rbac_check_sudoers() {
+  bl64_dbg_lib_show_function "$@"
   local sudoers="$1"
   local -i status=0
 
-  bl64_check_privilege_root || return $?
-  # shellcheck disable=SC2086
-  bl64_check_command "$BL64_RBAC_CMD_VISUDO" || return $BL64_RBAC_ERROR_MISSING_VISUDO
+  bl64_check_privilege_root &&
+    bl64_check_command "$BL64_RBAC_CMD_VISUDO" || $?
 
   "$BL64_RBAC_CMD_VISUDO" \
     --check \
@@ -114,7 +107,9 @@ function bl64_rbac_check_sudoers() {
 # Returns:
 #   0: always ok
 #######################################
+# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_rbac_set_command() {
+  bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
     BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
@@ -123,7 +118,6 @@ function bl64_rbac_set_command() {
     ;;
   *) bl64_msg_show_unsupported ;;
   esac
-  # Do not use return as this function gets sourced
 }
 
 #######################################
@@ -140,7 +134,9 @@ function bl64_rbac_set_command() {
 # Returns:
 #   0: always ok
 #######################################
+# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_rbac_set_alias() {
+  bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
@@ -162,13 +158,13 @@ function bl64_rbac_set_alias() {
 #   command or sudo exit status
 #######################################
 function bl64_rbac_run_command() {
+  bl64_dbg_lib_show_function "$@"
   local -i status=0
 
   # shellcheck disable=SC2086
   (($# == 0)) && return $BL64_RBAC_ERROR_MISSING_PARAMETER
   # shellcheck disable=SC2086
   bl64_check_command "$BL64_RBAC_CMD_SUDO" || return $BL64_RBAC_ERROR_MISSING_SUDO
-  bl64_dbg_lib_trace_start
 
   # Check the effective user id
   if [[ "$EUID" == '0' ]]; then
@@ -180,6 +176,5 @@ function bl64_rbac_run_command() {
   fi
   status=$?
 
-  bl64_dbg_lib_trace_stop
   return $status
 }

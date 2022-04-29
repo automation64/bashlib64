@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 #######################################
@@ -21,7 +21,9 @@
 # Returns:
 #   0: always ok
 #######################################
+# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_pkb_set_command() {
+  bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
@@ -44,7 +46,6 @@ function bl64_pkb_set_command() {
     ;;
   *) bl64_msg_show_unsupported ;;
   esac
-  # Do not use return as this function gets sourced
 }
 
 #######################################
@@ -61,7 +62,9 @@ function bl64_pkb_set_command() {
 # Returns:
 #   0: always ok
 #######################################
+# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_pkb_set_alias() {
+  bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-*)
@@ -112,6 +115,7 @@ function bl64_pkb_set_alias() {
 #   n: process exist status
 #######################################
 function bl64_pkg_deploy() {
+  bl64_dbg_lib_show_function "$@"
   bl64_pkg_prepare &&
     bl64_pkg_install "$@" &&
     bl64_pkg_cleanup
@@ -131,6 +135,7 @@ function bl64_pkg_deploy() {
 #   n: package manager exist status
 #######################################
 function bl64_pkg_prepare() {
+  bl64_dbg_lib_show_function
   bl64_check_privilege_root || return $?
 
   bl64_msg_show_task "$_BL64_PKG_TXT_PREPARE"
@@ -155,7 +160,12 @@ function bl64_pkg_prepare() {
   ${BL64_OS_MCOS}-*)
     $BL64_PKG_ALIAS_BRW_UPDATE
     ;;
-  *) bl64_msg_show_unsupported ;;
+  *)
+    bl64_msg_show_unsupported
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    ;;
+
   esac
 }
 
@@ -176,6 +186,7 @@ function bl64_pkg_prepare() {
 #   n: package manager exist status
 #######################################
 function bl64_pkg_install() {
+  bl64_dbg_lib_show_function "$@"
   bl64_check_privilege_root || return $?
 
   bl64_msg_show_task "$_BL64_PKG_TXT_INSTALL"
@@ -200,7 +211,12 @@ function bl64_pkg_install() {
   ${BL64_OS_MCOS}-*)
     $BL64_PKG_ALIAS_BRW_INSTALL "$@"
     ;;
-  *) bl64_msg_show_unsupported ;;
+  *)
+    bl64_msg_show_unsupported
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    ;;
+
   esac
 }
 
@@ -220,6 +236,7 @@ function bl64_pkg_install() {
 #   n: package manager exist status
 #######################################
 function bl64_pkg_cleanup() {
+  bl64_dbg_lib_show_function
   local target=''
 
   bl64_check_privilege_root || return $?
@@ -249,6 +266,11 @@ function bl64_pkg_cleanup() {
   ${BL64_OS_MCOS}-*)
     $BL64_PKG_ALIAS_BRW_CLEAN
     ;;
-  *) bl64_msg_show_unsupported ;;
+  *)
+    bl64_msg_show_unsupported
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    ;;
+
   esac
 }
