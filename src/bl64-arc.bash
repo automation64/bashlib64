@@ -71,10 +71,14 @@ function bl64_arc_open_tar() {
       --file="$source"
     status=$?
     ;;
-  *) bl64_msg_show_unsupported ;;
+  *)
+    bl64_msg_show_unsupported
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    ;;
   esac
 
-  ((status == 0)) && $BL64_OS_ALIAS_RM_FILE "$source"
+  ((status == 0)) && bl64_fs_rm_file "$source"
 
   return $status
 }
