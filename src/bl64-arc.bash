@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.4.1
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -21,26 +21,19 @@
 #   STDOUT: None
 #   STDERR: tar or lib error messages
 # Returns:
-#   BL64_ARC_ERROR_MISSING_PARAMETER
 #   BL64_ARC_ERROR_INVALID_DESTINATION
 #   tar error status
 #######################################
 function bl64_arc_open_tar() {
+  bl64_dbg_lib_show_function "$@"
   local source="$1"
   local destination="$2"
   local -i status=0
 
-  if [[ -z "$source" || -z "$destination" ]]; then
-    bl64_msg_show_error "$_BL64_ARC_TXT_MISSING_PARAMETER (source,destination)"
-    # shellcheck disable=SC2086
-    return $BL64_ARC_ERROR_MISSING_PARAMETER
-  fi
-
-  if [[ ! -d "$destination" ]]; then
-    bl64_msg_show_error "$_BL64_ARC_TXT_DST_NOT_DIRECTORY ($destination)"
-    # shellcheck disable=SC2086
-    return $BL64_ARC_ERROR_INVALID_DESTINATION
-  fi
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'destination' &&
+    bl64_check_directory "$destination" ||
+    return $?
 
   cd "$destination" || return 1
 
