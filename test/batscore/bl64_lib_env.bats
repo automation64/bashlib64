@@ -6,12 +6,10 @@ setup() {
   assert_not_equal "$BL64_LIB_CMD" ''
   assert_not_equal "$BL64_LIB_DEBUG" ''
   assert_not_equal "$BL64_LIB_LANG" ''
-  assert_not_equal "$BL64_LIB_SIGNAL_HUP" ''
-  assert_not_equal "$BL64_LIB_SIGNAL_QUIT" ''
-  assert_not_equal "$BL64_LIB_SIGNAL_STOP" ''
   assert_not_equal "$BL64_LIB_STRICT" ''
   assert_not_equal "$BL64_LIB_VERBOSE" ''
   assert_not_equal "$BL64_SCRIPT_NAME" ''
+  assert_not_equal "$BL64_SCRIPT_PATH" ''
   assert_not_equal "$BL64_SCRIPT_SID" ''
 
 }

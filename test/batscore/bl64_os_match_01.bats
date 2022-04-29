@@ -7,7 +7,7 @@ setup() {
   export BL64_OS_DISTRO="${BL64_OS_ALM}-8.5"
   run bl64_os_match 'CNT'
   assert_failure
-  assert_equal $status $BL64_OS_ERROR_NO_OS_MATCH
+  assert_equal $status $BL64_LIB_ERROR_OS_NOT_MATCH
 
 }
 
@@ -16,7 +16,7 @@ setup() {
   export BL64_OS_DISTRO="${BL64_OS_ALM}-8.5"
   run bl64_os_match 'XXX'
   assert_failure
-  assert_equal $status $BL64_OS_ERROR_INVALID_OS_TAG
+  assert_equal $status $BL64_LIB_ERROR_OS_TAG_INVALID
 
 }
 

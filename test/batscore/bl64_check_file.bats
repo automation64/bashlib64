@@ -13,7 +13,7 @@ setup() {
 
   run bl64_check_file '/fake/file'
   assert_failure
-  assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_FOUND
+  assert_equal "$status" $BL64_LIB_ERROR_FILE_NOT_FOUND
 
 }
 
@@ -26,7 +26,7 @@ setup() {
   fi
   run bl64_check_file "$test_file"
   assert_failure
-  assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_READ
+  assert_equal "$status" $BL64_LIB_ERROR_FILE_NOT_READ
 
 }
 

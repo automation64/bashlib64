@@ -39,7 +39,7 @@ setup() {
   export BL64_OS_DISTRO="${BL64_OS_ALM}-8.5"
   run bl64_os_match 'ALM-9' 'RHEL-10'
   assert_failure
-  assert_equal $status $BL64_OS_ERROR_NO_OS_MATCH
+  assert_equal $status $BL64_LIB_ERROR_OS_NOT_MATCH
 
 }
 
@@ -48,7 +48,7 @@ setup() {
   export BL64_OS_DISTRO="${BL64_OS_ALM}-8.5"
   run bl64_os_match 'ALM-9.5' 'RHEL-10.1'
   assert_failure
-  assert_equal $status $BL64_OS_ERROR_NO_OS_MATCH
+  assert_equal $status $BL64_LIB_ERROR_OS_NOT_MATCH
 
 }
 
@@ -57,6 +57,6 @@ setup() {
   export BL64_OS_DISTRO="${BL64_OS_ALM}-8.5"
   run bl64_os_match 'CNT-8.5' 'RHEL-10.1' 'XXX'
   assert_failure
-  assert_equal $status $BL64_OS_ERROR_INVALID_OS_TAG
+  assert_equal $status $BL64_LIB_ERROR_OS_TAG_INVALID
 
 }

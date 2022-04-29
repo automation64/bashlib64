@@ -20,9 +20,6 @@ setup() {
   assert_equal "$BL64_RND_POOL_DIGITS" "$test_BL64_RND_POOL_DIGITS"
   assert_equal "$BL64_RND_POOL_ALPHANUMERIC" "${BL64_RND_POOL_UPPERCASE}${BL64_RND_POOL_LOWERCASE}${BL64_RND_POOL_DIGITS}"
 
-  assert_equal "$BL64_RND_ERROR_MIN" 1
-  assert_equal "$BL64_RND_ERROR_MAX" 2
-
 }
 
 @test "bl64_rnd_env: BL64_RND_POOL_UPPERCASE content" {

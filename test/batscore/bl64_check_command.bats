@@ -13,7 +13,7 @@ setup() {
 
   run bl64_check_command '/fake/command'
   assert_failure
-  assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_FOUND
+  assert_equal "$status" $BL64_LIB_ERROR_FILE_NOT_FOUND
 
 }
 
@@ -21,7 +21,7 @@ setup() {
 
   run bl64_check_command '/etc/hosts'
   assert_failure
-  assert_equal "$status" $BL64_CHECK_ERROR_FILE_NOT_EXECUTE
+  assert_equal "$status" $BL64_LIB_ERROR_FILE_NOT_EXECUTE
 
 }
 

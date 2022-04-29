@@ -14,7 +14,7 @@ setup() {
 
   run bl64_check_export 'FAKE_EXPORTED_VARIABLE'
   assert_failure
-  assert_equal "$status" $BL64_CHECK_ERROR_EXPORT_SET
+  assert_equal "$status" $BL64_LIB_ERROR_EXPORT_SET
 
 }
 
@@ -23,7 +23,7 @@ setup() {
   export TEST_EXPORTED_VARIABLE2=''
   run bl64_check_export 'TEST_EXPORTED_VARIABLE2'
   assert_failure
-  assert_equal "$status" $BL64_CHECK_ERROR_EXPORT_EMPTY
+  assert_equal "$status" $BL64_LIB_ERROR_EXPORT_EMPTY
 
 }
 

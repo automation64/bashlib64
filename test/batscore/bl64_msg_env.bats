@@ -10,6 +10,5 @@ setup() {
   assert_equal "$BL64_MSG_FORMAT_TIME" 'T'
   assert_equal "$BL64_MSG_FORMAT_CALLER" 'C'
   assert_equal "$BL64_MSG_FORMAT_FULL" 'F'
-  assert_equal "$BL64_MSG_ERROR_INVALID_FORMAT" 200
 
 }

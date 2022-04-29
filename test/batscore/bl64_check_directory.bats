@@ -13,7 +13,7 @@ setup() {
 
   run bl64_check_directory '/fake/dir'
   assert_failure
-  assert_equal "$status" $BL64_CHECK_ERROR_DIRECTORY_NOT_FOUND
+  assert_equal "$status" $BL64_LIB_ERROR_DIRECTORY_NOT_FOUND
 
 }
 

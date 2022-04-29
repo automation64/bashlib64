@@ -17,9 +17,3 @@ setup() {
   assert_equal "$BL64_OS_UB" 'UBUNTU'
   assert_equal "$BL64_OS_UNK" 'UNKNOWN'
 }
-
-@test "bl64_os_env: error constants are set" {
-  assert_equal "$BL64_OS_ERROR_NO_OS_MATCH" 200
-  assert_equal "$BL64_OS_ERROR_INVALID_OS_TAG" 201
-}
-

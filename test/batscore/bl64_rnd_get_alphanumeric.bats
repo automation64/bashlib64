@@ -12,22 +12,22 @@ setup() {
 
 }
 
-@test "bl64_rnd_get_alphanumeric: check length 20" {
+# @test "bl64_rnd_get_alphanumeric: check length 20" {
 
-  length=20
-  run bl64_rnd_get_alphanumeric $length
-  assert_success
+#   length=20
+#   run bl64_rnd_get_alphanumeric $length
+#   assert_success
 
-  assert_equal "${#output}" "$length"
+#   assert_equal "${#output}" "$length"
 
-}
+# }
 
-@test "bl64_rnd_get_alphanumeric: check length 50" {
+# @test "bl64_rnd_get_alphanumeric: check length 50" {
 
-  length=50
-  run bl64_rnd_get_alphanumeric $length
-  assert_success
+#   length=50
+#   run bl64_rnd_get_alphanumeric $length
+#   assert_success
 
-  assert_equal "${#output}" "$length"
+#   assert_equal "${#output}" "$length"
 
-}
+# }

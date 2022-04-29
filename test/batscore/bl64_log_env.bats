@@ -13,8 +13,4 @@ setup() {
   assert_equal "$BL64_LOG_CATEGORY_ERROR" 'error'
   assert_equal "$BL64_LOG_CATEGORY_RECORD" 'record'
 
-  assert_equal $BL64_LOG_ERROR_INVALID_TYPE 201
-  assert_equal $BL64_LOG_ERROR_INVALID_VERBOSE 202
-  assert_equal $BL64_LOG_ERROR_NOT_SETUP 203
-
 }
