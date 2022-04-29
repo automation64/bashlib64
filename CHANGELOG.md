@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0]
+
+### Added
+
+- lib
+  - Reset bash set options to default
+  - Enable error tracing bash set options
+  - Signal traps for ERR,DEBUG,EXIT
+- dbg
+  - bl64_dbg_callstack_show
+  - bl64_dbg_lib_show_function
+  - bl64_dbg_app_show_function
+
+### Changed
+
+- all
+  - Optimized code to use new bashlib64 functions
+
 ## [1.26.0]
 
 ### Added
