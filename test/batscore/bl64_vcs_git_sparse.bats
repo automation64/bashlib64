@@ -1,12 +1,8 @@
 setup() {
-  . "$DEVBL_TEST_BASHLIB64"
-  . "${DEVBL_BATS_HELPER}/bats-support/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-assert/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
+  . "$DEVBL_TEST_SETUP"
 
   _bl64_vcs_git_sparse_destination="$(mktemp -d)"
   export _bl64_vcs_git_sparse_destination
-  set +u # to avoid IFS missing error in run function
 }
 
 teardown() {
@@ -19,7 +15,6 @@ teardown() {
 
   run bl64_vcs_git_sparse
   assert_failure
-  assert_equal "$status" $BL64_VCS_ERROR_MISSING_PARAMETER
 
 }
 
@@ -27,7 +22,6 @@ teardown() {
 
   run bl64_vcs_git_sparse 'source'
   assert_failure
-  assert_equal "$status" $BL64_VCS_ERROR_MISSING_PARAMETER
 
 }
 
@@ -35,7 +29,6 @@ teardown() {
 
   run bl64_vcs_git_sparse 'source' "$_bl64_vcs_git_sparse_destination" 'main'
   assert_failure
-  assert_equal "$status" $BL64_VCS_ERROR_MISSING_PARAMETER
 
 }
 

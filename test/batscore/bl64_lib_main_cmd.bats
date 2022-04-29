@@ -1,7 +1,7 @@
 setup() {
-  . "${DEVBL_BATS_HELPER}/bats-support/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-assert/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
+  . "${DEVBL_BATS_HELPER_SUPPORT}/load.bash"
+  . "${DEVBL_BATS_HELPER_ASSERT}/load.bash"
+  . "${DEVBL_BATS_HELPER_FILE}/load.bash"
 
 }
 

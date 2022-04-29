@@ -1,15 +1,11 @@
 setup() {
-  . "$DEVBL_TEST_BASHLIB64"
-  . "${DEVBL_BATS_HELPER}/bats-support/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-assert/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
-  set +u # to avoid IFS missing error in run function
+  . "$DEVBL_TEST_SETUP"
 }
 
 @test "bl64_xsv_search_records: command parameter is not present" {
 
   run bl64_xsv_search_records
-  assert_equal "$status" $BL64_XSV_ERROR_MISSING_PARAMETER
+  assert_failure
 
 }
 

@@ -1,9 +1,5 @@
 setup() {
-  . "$DEVBL_TEST_BASHLIB64"
-  . "${DEVBL_BATS_HELPER}/bats-support/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-assert/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
-  set +u # to avoid IFS missing error in run function
+  . "$DEVBL_TEST_SETUP"
 }
 
 @test "bl64_txt_search_line: line is present" {

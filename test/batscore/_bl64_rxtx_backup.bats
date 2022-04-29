@@ -1,12 +1,8 @@
 setup() {
-  . "$DEVBL_TEST_BASHLIB64"
-  . "${DEVBL_BATS_HELPER}/bats-support/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-assert/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
+  . "$DEVBL_TEST_SETUP"
 
   __bl64_rxtx_backup_destination="$(mktemp -d)"
   export __bl64_rxtx_backup_destination
-  set +u # to avoid IFS missing error in run function
 }
 
 teardown() {

@@ -1,14 +1,10 @@
 setup() {
-  . "$DEVBL_TEST_BASHLIB64"
-  . "${DEVBL_BATS_HELPER}/bats-support/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-assert/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
+  . "$DEVBL_TEST_SETUP"
 
   _bl64_rxtx_git_get_dir_destination="$(temp_make)"
   _bl64_rxtx_git_get_dir_source='https://github.com/serdigital64/bashlib64.git'
   export _bl64_rxtx_git_get_dir_destination
   export _bl64_rxtx_git_get_dir_source
-  set +u # to avoid IFS missing error in run function
 }
 
 teardown() {
@@ -25,6 +21,6 @@ teardown() {
     "$test_dir"
   assert_success
 
-  assert_file_exists "${test_dir}/bashlib64.bash"
+  assert_file_exists "${test_dir}/devbl-set"
 
 }

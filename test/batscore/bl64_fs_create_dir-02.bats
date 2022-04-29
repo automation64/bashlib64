@@ -1,8 +1,5 @@
 setup() {
-  . "$DEVBL_TEST_BASHLIB64"
-  . "${DEVBL_BATS_HELPER}/bats-support/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-assert/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
+  . "$DEVBL_TEST_SETUP"
 
   BATSLIB_TEMP_PRESERVE=0
   BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
@@ -19,7 +16,6 @@ setup() {
   target1="$TEST_SANDBOX/target1"
   target2="$TEST_SANDBOX/target2"
 
-  set +u # to avoid IFS missing error in run function
   run bl64_fs_create_dir "$BL64_LIB_DEFAULT" "$BL64_LIB_DEFAULT" "$BL64_LIB_DEFAULT" "$target1" "$target2"
   assert_success
   assert_dir_exist "${target1}"
@@ -35,7 +31,6 @@ setup() {
   target1="$TEST_SANDBOX/target3"
   target2="$TEST_SANDBOX/target4"
 
-  set +u # to avoid IFS missing error in run function
   run bl64_fs_create_dir '0777' "$BL64_LIB_DEFAULT" "$BL64_LIB_DEFAULT" "$target1" "$target2"
   assert_success
   assert_dir_exist "${target1}"

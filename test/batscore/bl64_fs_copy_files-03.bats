@@ -1,8 +1,5 @@
 setup() {
-  . "$DEVBL_TEST_BASHLIB64"
-  . "${DEVBL_BATS_HELPER}/bats-support/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-assert/load.bash"
-  . "${DEVBL_BATS_HELPER}/bats-file/load.bash"
+  . "$DEVBL_TEST_SETUP"
 
   BATSLIB_TEMP_PRESERVE=0
   BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
@@ -14,7 +11,6 @@ setup() {
 }
 
 @test "bl64_fs_copy_files: copy files + perm" {
-  set +u # to avoid IFS missing error in run function
   run bl64_fs_copy_files \
     "0600" \
     "$BL64_LIB_DEFAULT" \
