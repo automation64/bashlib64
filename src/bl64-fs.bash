@@ -334,6 +334,8 @@ function bl64_fs_chown_dir() {
 #######################################
 function bl64_fs_cp_file() {
   bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
   bl64_dbg_lib_command_enabled && verbose="$BL64_OS_SET_CP_VERBOSE"
 
   # shellcheck disable=SC2086
@@ -353,6 +355,8 @@ function bl64_fs_cp_file() {
 #######################################
 function bl64_fs_cp_dir() {
   bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
   bl64_dbg_lib_command_enabled && verbose="$BL64_OS_SET_CP_VERBOSE"
 
   # shellcheck disable=SC2086

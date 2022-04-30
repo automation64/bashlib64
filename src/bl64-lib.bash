@@ -76,6 +76,7 @@ else
   bl64_iam_set_command
   bl64_iam_set_alias
   bl64_pkb_set_command
+  bl64_pkg_set_options
   bl64_pkb_set_alias
   bl64_rbac_set_command
   bl64_rbac_set_alias

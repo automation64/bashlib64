@@ -22,9 +22,9 @@
 function bl64_rbac_add_root() {
   bl64_dbg_lib_show_function "$@"
   local user="$1"
-  local status=$BL64_RBAC_ERROR_UPDATE_FAILED
   local new_sudoers="${BL64_RBAC_FILE_SUDOERS}.bl64_new"
   local old_sudoers="${BL64_RBAC_FILE_SUDOERS}.bl64_old"
+  local -i status=0
 
   bl64_check_privilege_root &&
     bl64_check_parameter 'user' &&
@@ -56,6 +56,8 @@ function bl64_rbac_add_root() {
     "$BL64_OS_CMD_CAT" "${BL64_RBAC_FILE_SUDOERS}.bl64_new" >"${BL64_RBAC_FILE_SUDOERS}" &&
       bl64_rbac_check_sudoers "$BL64_RBAC_FILE_SUDOERS"
     status=$?
+  else
+    status=$BL64_LIB_ERROR_TASK_FAILED
   fi
 
   return $status

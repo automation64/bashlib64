@@ -26,21 +26,22 @@ function bl64_dbg_lib_command_enabled { [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGE
 function bl64_dbg_runtime_show() {
   local -i last_status=$?
 
-  bl64_dbg_app_task_enabled || return 0
-
-  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH}: [${BASH}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_BASHOPTS}: [${BASHOPTS:-NONE}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_VERSION}: [${BASH_VERSION}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_OSTYPE}: [${OSTYPE:-NONE}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_LC_ALL}: [${LC_ALL:-NONE}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_HOSTNAME}: [${HOSTNAME:-EMPTY}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_EUID}: [${EUID}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_UID}: [${UID}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_ARGV}: [${BASH_ARGV[*]:-NONE}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_STATUS}: [${last_status}]"
+  if bl64_dbg_app_task_enabled; then
+    bl64_msg_show_debug "${_BL64_DBG_TXT_BASH}: [${BASH}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_BASHOPTS}: [${BASHOPTS:-NONE}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_VERSION}: [${BASH_VERSION}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_OSTYPE}: [${OSTYPE:-NONE}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_LC_ALL}: [${LC_ALL:-NONE}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_HOSTNAME}: [${HOSTNAME:-EMPTY}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_EUID}: [${EUID}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_UID}: [${UID}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_ARGV}: [${BASH_ARGV[*]:-NONE}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_STATUS}: [${last_status}]"
+  fi
+  bl64_dbg_callstack_show
 
   return $last_status
 }
@@ -57,16 +58,12 @@ function bl64_dbg_runtime_show() {
 #   latest exit status (before function call)
 #######################################
 function bl64_dbg_callstack_show() {
-  local -i last_status=$?
 
   bl64_dbg_app_task_enabled || return 0
+  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(1): [${FUNCNAME[1]:-NONE}:${BASH_LINENO[1]:-0}]"
+  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(2): [${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
+  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(3): [${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
 
-  bl64_msg_show_debug "${_BL64_DBG_TXT_STATUS}: [${last_status}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(1): [${BASH_LINENO[1]:-}:${FUNCNAME[1]:-NONE}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(2): [${BASH_LINENO[2]:-}:${FUNCNAME[2]:-NONE}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(3): [${BASH_LINENO[3]:-}:${FUNCNAME[3]:-NONE}]"
-
-  return $last_status
 }
 
 #######################################
