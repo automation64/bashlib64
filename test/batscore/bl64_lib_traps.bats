@@ -9,6 +9,6 @@ setup() {
   assert_equal "$BL64_LIB_SIGNAL_QUIT" "-"
   assert_equal "$BL64_LIB_SIGNAL_DEBUG" "-"
   assert_equal "$BL64_LIB_SIGNAL_EXIT" "bl64_dbg_runtime_show"
-  assert_equal "$BL64_LIB_SIGNAL_ERR" "bl64_dbg_callstack_show"
+  assert_equal "$BL64_LIB_SIGNAL_ERR" "-"
 
 }
