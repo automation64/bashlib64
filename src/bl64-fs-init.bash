@@ -1,0 +1,185 @@
+#######################################
+# BashLib64 / Manage local filesystem
+#
+# Author: serdigital64 (https://github.com/serdigital64)
+# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
+# Repository: https://github.com/serdigital64/bashlib64
+# Version: 1.0.0
+#######################################
+
+#######################################
+# Identify and normalize common *nix OS commands
+# Commands are exported as variables with full path
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok, even when the OS is not supported
+#######################################
+# Warning: bootstrap function: use pure bash, no return, no exit
+function bl64_fs_set_command() {
+  # shellcheck disable=SC2034
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_FS_CMD_CHMOD='/bin/chmod'
+    BL64_FS_CMD_CHOWN='/bin/chown'
+    BL64_FS_CMD_CP='/bin/cp'
+    BL64_FS_CMD_LN='/bin/ln'
+    BL64_FS_CMD_LS='/bin/ls'
+    BL64_FS_CMD_MKDIR='/bin/mkdir'
+    BL64_FS_CMD_MKTEMP='/bin/mktemp'
+    BL64_FS_CMD_MV='/bin/mv'
+    BL64_FS_CMD_RM='/bin/rm'
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+    BL64_FS_CMD_CHMOD='/usr/bin/chmod'
+    BL64_FS_CMD_CHOWN='/usr/bin/chown'
+    BL64_FS_CMD_CP='/usr/bin/cp'
+    BL64_FS_CMD_LN='/bin/ln'
+    BL64_FS_CMD_LS='/usr/bin/ls'
+    BL64_FS_CMD_MKDIR='/usr/bin/mkdir'
+    BL64_FS_CMD_MKTEMP='/usr/bin/mktemp'
+    BL64_FS_CMD_MV='/usr/bin/mv'
+    BL64_FS_CMD_RM='/usr/bin/rm'
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_FS_CMD_CHMOD='/bin/chmod'
+    BL64_FS_CMD_CHOWN='/bin/chown'
+    BL64_FS_CMD_CP='/bin/cp'
+    BL64_FS_CMD_LN='/bin/ln'
+    BL64_FS_CMD_LS='/bin/ls'
+    BL64_FS_CMD_MKDIR='/bin/mkdir'
+    BL64_FS_CMD_MKTEMP='/bin/mktemp'
+    BL64_FS_CMD_MV='/bin/mv'
+    BL64_FS_CMD_RM='/bin/rm'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_FS_CMD_CHMOD='/bin/chmod'
+    BL64_FS_CMD_CHOWN='/usr/sbin/chown'
+    BL64_FS_CMD_CP='/bin/cp'
+    BL64_FS_CMD_LN='/bin/ln'
+    BL64_FS_CMD_LS='/bin/ls'
+    BL64_FS_CMD_MKDIR='/bin/mkdir'
+    BL64_FS_CMD_MKTEMP='/usr/bin/mktemp'
+    BL64_FS_CMD_MV='/bin/mv'
+    BL64_FS_CMD_RM='/bin/rm'
+    ;;
+  *) bl64_msg_show_unsupported ;;
+  esac
+}
+
+#######################################
+# Create command sets for common options
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+# Warning: bootstrap function: use pure bash, no return, no exit
+function bl64_fs_set_options() {
+  # shellcheck disable=SC2034
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+    BL64_FS_SET_MKDIR_VERBOSE='--verbose'
+    BL64_FS_SET_MKDIR_PARENTS='--parents'
+    BL64_FS_SET_CHOWN_VERBOSE='--verbose'
+    BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
+    BL64_FS_SET_CP_VERBOSE='--verbose'
+    BL64_FS_SET_CP_RECURSIVE='--recursive'
+    BL64_FS_SET_CP_FORCE='--force'
+    BL64_FS_SET_CHMOD_VERBOSE='--verbose'
+    BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
+    BL64_FS_SET_MV_VERBOSE='--verbose'
+    BL64_FS_SET_MV_FORCE='--force'
+    BL64_FS_SET_RM_VERBOSE='--verbose'
+    BL64_FS_SET_RM_FORCE='--force'
+    BL64_FS_SET_RM_RECURSIVE='--recursive'
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_FS_SET_MKDIR_VERBOSE=' '
+    BL64_FS_SET_MKDIR_PARENTS='-p'
+    BL64_FS_SET_CHOWN_VERBOSE='-v'
+    BL64_FS_SET_CHOWN_RECURSIVE='-R'
+    BL64_FS_SET_CP_VERBOSE='-v'
+    BL64_FS_SET_CP_RECURSIVE='-R'
+    BL64_FS_SET_CP_FORCE='-f'
+    BL64_FS_SET_CHMOD_VERBOSE='-v'
+    BL64_FS_SET_CHMOD_RECURSIVE='-R'
+    BL64_FS_SET_MV_VERBOSE=' '
+    BL64_FS_SET_MV_FORCE='-f'
+    BL64_FS_SET_RM_VERBOSE=' '
+    BL64_FS_SET_RM_FORCE='-f'
+    BL64_FS_SET_RM_RECURSIVE='-R'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_FS_SET_MKDIR_VERBOSE='-v'
+    BL64_FS_SET_MKDIR_PARENTS='-p'
+    BL64_FS_SET_CHOWN_VERBOSE='-v'
+    BL64_FS_SET_CHOWN_RECURSIVE='-R'
+    BL64_FS_SET_CP_VERBOSE='-v'
+    BL64_FS_SET_CP_RECURSIVE='-R'
+    BL64_FS_SET_CP_FORCE='-f'
+    BL64_FS_SET_CHMOD_VERBOSE='-v'
+    BL64_FS_SET_CHMOD_RECURSIVE='-R'
+    BL64_FS_SET_MV_VERBOSE='-v'
+    BL64_FS_SET_MV_FORCE='-f'
+    BL64_FS_SET_RM_VERBOSE='-v'
+    BL64_FS_SET_RM_FORCE='-f'
+    BL64_FS_SET_RM_RECURSIVE='-R'
+    ;;
+  *) bl64_msg_show_unsupported ;;
+  esac
+}
+
+#######################################
+# Create command aliases for common use cases
+#
+# * Aliases are presented as regular shell variables for easy inclusion in complex commands
+# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+# Warning: bootstrap function: use pure bash, no return, no exit
+# shellcheck disable=SC2034
+function bl64_fs_set_alias() {
+  local cmd_mawk='/usr/bin/mawk'
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+    BL64_FS_ALIAS_LN_SYMBOLIC="${BL64_FS_CMD_LN} --verbose --symbolic"
+    BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} --color=never"
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_FS_ALIAS_LN_SYMBOLIC="${BL64_FS_CMD_LN} -v -s"
+    BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} --color=never"
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_FS_ALIAS_LN_SYMBOLIC="${BL64_FS_CMD_LN} -v -s"
+    BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} --color=never"
+    ;;
+  *) bl64_msg_show_unsupported ;;
+  esac
+
+  BL64_FS_ALIAS_MKTEMP_DIR="${BL64_FS_CMD_MKTEMP} -d"
+  BL64_FS_ALIAS_MKTEMP_FILE="${BL64_FS_CMD_MKTEMP}"
+  BL64_FS_ALIAS_CHOWN_DIR="${BL64_FS_CMD_CHOWN} ${BL64_FS_SET_CHOWN_VERBOSE} ${BL64_FS_SET_CHOWN_RECURSIVE}"
+  BL64_FS_ALIAS_CP_DIR="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE} ${BL64_FS_SET_CP_RECURSIVE}"
+  BL64_FS_ALIAS_CP_FILE="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE}"
+  BL64_FS_ALIAS_MKDIR_FULL="${BL64_FS_CMD_MKDIR} ${BL64_FS_SET_MKDIR_VERBOSE} ${BL64_FS_SET_MKDIR_PARENTS}"
+  BL64_FS_ALIAS_MV="${BL64_FS_CMD_MV} ${BL64_FS_SET_MV_VERBOSE} ${BL64_FS_SET_MV_FORCE}"
+  BL64_FS_ALIAS_RM_FILE="${BL64_FS_CMD_RM} ${BL64_FS_SET_RM_VERBOSE} ${BL64_FS_SET_RM_FORCE}"
+  BL64_FS_ALIAS_RM_FULL="${BL64_FS_CMD_RM} ${BL64_FS_SET_RM_VERBOSE} ${BL64_FS_SET_RM_FORCE} ${BL64_FS_SET_RM_RECURSIVE}"
+}

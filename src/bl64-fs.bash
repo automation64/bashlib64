@@ -273,10 +273,10 @@ function bl64_fs_chown() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_OS_SET_CHOWN_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHOWN_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_CHOWN" $verbose "$@"
+  "$BL64_FS_CMD_CHOWN" $verbose "$@"
 }
 
 #######################################
@@ -294,10 +294,10 @@ function bl64_fs_chmod() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_OS_SET_CHMOD_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_CHMOD" $verbose "$@"
+  "$BL64_FS_CMD_CHMOD" $verbose "$@"
 }
 
 #######################################
@@ -315,10 +315,10 @@ function bl64_fs_chown_dir() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_OS_SET_CHMOD_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_CHMOD" $verbose "$BL64_OS_SET_CHOWN_RECURSIVE" "$@"
+  "$BL64_FS_CMD_CHMOD" $verbose "$BL64_FS_SET_CHOWN_RECURSIVE" "$@"
 }
 
 #######################################
@@ -336,10 +336,10 @@ function bl64_fs_cp_file() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_OS_SET_CP_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_CP" $verbose "$BL64_OS_SET_CP_FORCE" "$@"
+  "$BL64_FS_CMD_CP" $verbose "$BL64_FS_SET_CP_FORCE" "$@"
 }
 
 #######################################
@@ -357,10 +357,10 @@ function bl64_fs_cp_dir() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_OS_SET_CP_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_CP" $verbose "$BL64_OS_SET_CP_FORCE" "$BL64_OS_SET_CP_RECURSIVE" "$@"
+  "$BL64_FS_CMD_CP" $verbose "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" "$@"
 }
 
 #######################################
@@ -376,7 +376,7 @@ function bl64_fs_cp_dir() {
 #######################################
 function bl64_fs_ln_symbolic() {
   bl64_dbg_lib_show_function "$@"
-  $BL64_OS_ALIAS_LN_SYMBOLIC "$@"
+  $BL64_FS_ALIAS_LN_SYMBOLIC "$@"
 }
 
 #######################################
@@ -392,7 +392,7 @@ function bl64_fs_ln_symbolic() {
 #######################################
 function bl64_fs_ls_files() {
   bl64_dbg_lib_show_function "$@"
-  $BL64_OS_ALIAS_LS_FILES "$@"
+  $BL64_FS_ALIAS_LS_FILES "$@"
 }
 
 #######################################
@@ -410,10 +410,10 @@ function bl64_fs_mkdir() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_OS_SET_MKDIR_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_MKDIR" $verbose "$@"
+  "$BL64_FS_CMD_MKDIR" $verbose "$@"
 }
 
 #######################################
@@ -431,10 +431,10 @@ function bl64_fs_mkdir_full() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_OS_SET_MKDIR_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_MKDIR" $verbose "$BL64_OS_SET_MKDIR_PARENTS" "$@"
+  "$BL64_FS_CMD_MKDIR" $verbose "$BL64_FS_SET_MKDIR_PARENTS" "$@"
 }
 
 #######################################
@@ -452,10 +452,10 @@ function bl64_fs_mv() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_OS_SET_MV_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MV_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_MV" $verbose "$BL64_OS_SET_MV_FORCE" "$@"
+  "$BL64_FS_CMD_MV" $verbose "$BL64_FS_SET_MV_FORCE" "$@"
 }
 
 #######################################
@@ -473,10 +473,10 @@ function bl64_fs_rm_file() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_OS_SET_RM_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_RM_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_RM" $verbose "$BL64_OS_SET_RM_FORCE" "$@"
+  "$BL64_FS_CMD_RM" $verbose "$BL64_FS_SET_RM_FORCE" "$@"
 }
 
 #######################################
@@ -494,10 +494,10 @@ function bl64_fs_rm_full() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_OS_SET_RM_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_RM_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_RM" $verbose "$BL64_OS_SET_RM_FORCE" "$BL64_OS_SET_RM_RECURSIVE" "$@"
+  "$BL64_FS_CMD_RM" $verbose "$BL64_FS_SET_RM_FORCE" "$BL64_FS_SET_RM_RECURSIVE" "$@"
 }
 
 #######################################

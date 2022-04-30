@@ -73,6 +73,9 @@ else
   bl64_os_set_command
   bl64_os_set_options
   bl64_os_set_alias
+  bl64_fs_set_command
+  bl64_fs_set_options
+  bl64_fs_set_alias
   bl64_iam_set_command
   bl64_iam_set_alias
   bl64_pkb_set_command
