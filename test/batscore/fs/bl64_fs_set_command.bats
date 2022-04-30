@@ -8,6 +8,7 @@ setup() {
   assert_not_equal "${BL64_FS_CMD_CHMOD}" ''
   assert_not_equal "${BL64_FS_CMD_CHOWN}" ''
   assert_not_equal "${BL64_FS_CMD_CP}" ''
+  assert_not_equal "${BL64_FS_CMD_FIND}" ''
   assert_not_equal "${BL64_FS_CMD_LN}" ''
   assert_not_equal "${BL64_FS_CMD_LS}" ''
   assert_not_equal "${BL64_FS_CMD_MKDIR}" ''
@@ -22,6 +23,7 @@ setup() {
   assert_file_executable "${BL64_FS_CMD_CHMOD}"
   assert_file_executable "${BL64_FS_CMD_CHOWN}"
   assert_file_executable "${BL64_FS_CMD_CP}"
+  assert_file_executable "${BL64_FS_CMD_FIND}"
   assert_file_executable "${BL64_FS_CMD_LN}"
   assert_file_executable "${BL64_FS_CMD_LS}"
   assert_file_executable "${BL64_FS_CMD_MKDIR}"
