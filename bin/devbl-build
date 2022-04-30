@@ -5,10 +5,13 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
-source './bin/devbl-set' || { echo 'unable to load dev env'; exit 1; }
+source './bin/devbl-set' || {
+  echo 'unable to load dev env'
+  exit 1
+}
 source "$DEVBL_LIB_BASHLIB64" || exit 1
 
 function devbl_build_standalone() {
@@ -18,7 +21,6 @@ function devbl_build_standalone() {
   local status=1
   local file=''
   local lib="$DEVBL_BUILD/bashlib64.bash"
-
 
   bl64_dbg_app_show_info "DEVBL_MODULES='${DEVBL_MODULES}'"
 
@@ -32,13 +34,14 @@ function devbl_build_standalone() {
   # Add global variables
   for file in $DEVBL_MODULES; do
     bl64_msg_show_task "adding module $file environment"
-    bl64_fmt_strip_comments "${DEVBL_SRC}/bl64-${file}.env" >>"$lib" || true
+    bl64_fmt_strip_comments "${DEVBL_SRC}/bl64-${file}.env" >>"$lib"
   done
 
   # Add core module
   for file in $DEVBL_MODULES; do
     bl64_msg_show_task "adding module $file code"
-    bl64_fmt_strip_comments "${DEVBL_SRC}/bl64-${file}.bash" >>"$lib" || true
+    bl64_fmt_strip_comments "${DEVBL_SRC}/bl64-${file}-init.bash" >>"$lib"
+    bl64_fmt_strip_comments "${DEVBL_SRC}/bl64-${file}.bash" >>"$lib"
   done
 
   # Add remaining modules
@@ -61,6 +64,7 @@ function devbl_build_standalone() {
 }
 
 function devbl_build_check() {
+  [[ -z "$devbl_build_command" ]] && devbl_build_help return 1
   bl64_check_directory "$DEVBL_SRC" || return 1
 }
 
@@ -98,7 +102,6 @@ while getopts ':bpth' devbl_build_option; do
   \?) devbl_build_help && exit 1 ;;
   esac
 done
-[[ -z "$devbl_build_command" ]] && devbl_build_help && exit 1
 devbl_build_check || exit 1
 
 bl64_msg_show_batch_start "$devbl_build_command_tag"
