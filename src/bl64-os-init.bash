@@ -32,7 +32,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_TAR='/bin/tar'
+    BL64_ARC_CMD_TAR='/bin/tar'
     BL64_OS_CMD_TRUE="/bin/true"
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
@@ -45,7 +45,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_GREP='/usr/bin/grep'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_TAR='/bin/tar'
+    BL64_ARC_CMD_TAR='/bin/tar'
     BL64_OS_CMD_TRUE="/usr/bin/true"
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
@@ -58,7 +58,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_TAR='/bin/tar'
+    BL64_ARC_CMD_TAR='/bin/tar'
     BL64_OS_CMD_TRUE="/bin/true"
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
@@ -71,7 +71,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_GREP='/usr/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_TAR='/usr/bin/tar'
+    BL64_ARC_CMD_TAR='/usr/bin/tar'
     BL64_OS_CMD_TRUE="/usr/bin/true"
     BL64_OS_CMD_UNAME='/usr/bin/uname'
     ;;

@@ -27,6 +27,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_CHMOD='/bin/chmod'
     BL64_FS_CMD_CHOWN='/bin/chown'
     BL64_FS_CMD_CP='/bin/cp'
+    BL64_FS_CMD_FIND='/usr/bin/find'
     BL64_FS_CMD_LN='/bin/ln'
     BL64_FS_CMD_LS='/bin/ls'
     BL64_FS_CMD_MKDIR='/bin/mkdir'
@@ -38,6 +39,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_CHMOD='/usr/bin/chmod'
     BL64_FS_CMD_CHOWN='/usr/bin/chown'
     BL64_FS_CMD_CP='/usr/bin/cp'
+    BL64_FS_CMD_FIND='/usr/bin/find'
     BL64_FS_CMD_LN='/bin/ln'
     BL64_FS_CMD_LS='/usr/bin/ls'
     BL64_FS_CMD_MKDIR='/usr/bin/mkdir'
@@ -49,6 +51,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_CHMOD='/bin/chmod'
     BL64_FS_CMD_CHOWN='/bin/chown'
     BL64_FS_CMD_CP='/bin/cp'
+    BL64_FS_CMD_FIND='/usr/bin/find'
     BL64_FS_CMD_LN='/bin/ln'
     BL64_FS_CMD_LS='/bin/ls'
     BL64_FS_CMD_MKDIR='/bin/mkdir'
@@ -60,6 +63,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_CHMOD='/bin/chmod'
     BL64_FS_CMD_CHOWN='/usr/sbin/chown'
     BL64_FS_CMD_CP='/bin/cp'
+    BL64_FS_CMD_FIND='/usr/bin/find'
     BL64_FS_CMD_LN='/bin/ln'
     BL64_FS_CMD_LS='/bin/ls'
     BL64_FS_CMD_MKDIR='/bin/mkdir'
@@ -177,7 +181,9 @@ function bl64_fs_set_alias() {
   BL64_FS_ALIAS_MKTEMP_FILE="${BL64_FS_CMD_MKTEMP}"
   BL64_FS_ALIAS_CHOWN_DIR="${BL64_FS_CMD_CHOWN} ${BL64_FS_SET_CHOWN_VERBOSE} ${BL64_FS_SET_CHOWN_RECURSIVE}"
   BL64_FS_ALIAS_CP_DIR="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE} ${BL64_FS_SET_CP_RECURSIVE}"
+  BL64_FS_ALIAS_CP_DFIND="/usr/bin/find"
   BL64_FS_ALIAS_CP_FILE="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE}"
+  BL64_FS_ALIAS_CP_FIFIND="/usr/bin/find"
   BL64_FS_ALIAS_MKDIR_FULL="${BL64_FS_CMD_MKDIR} ${BL64_FS_SET_MKDIR_VERBOSE} ${BL64_FS_SET_MKDIR_PARENTS}"
   BL64_FS_ALIAS_MV="${BL64_FS_CMD_MV} ${BL64_FS_SET_MV_VERBOSE} ${BL64_FS_SET_MV_FORCE}"
   BL64_FS_ALIAS_RM_FILE="${BL64_FS_CMD_RM} ${BL64_FS_SET_RM_VERBOSE} ${BL64_FS_SET_RM_FORCE}"

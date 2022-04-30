@@ -39,7 +39,7 @@ function bl64_arc_open_tar() {
 
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    "$BL64_OS_CMD_TAR" \
+    "$BL64_ARC_CMD_TAR" \
       --overwrite \
       --extract \
       --no-same-owner \
@@ -52,7 +52,7 @@ function bl64_arc_open_tar() {
     status=$?
     ;;
   ${BL64_OS_ALP}-*)
-    "$BL64_OS_CMD_TAR" \
+    "$BL64_ARC_CMD_TAR" \
       x \
       --overwrite \
       -f "$source" \
@@ -61,7 +61,7 @@ function bl64_arc_open_tar() {
     status=$?
     ;;
   ${BL64_OS_MCOS}-*)
-    "$BL64_OS_CMD_TAR" \
+    "$BL64_ARC_CMD_TAR" \
       --extract \
       --no-same-owner \
       --preserve-permissions \
