@@ -584,3 +584,52 @@ function bl64_fs_cleanup_full() {
 
   return 0
 }
+
+#######################################
+# OS command wrapper: find
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_find() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_command "$BL64_FS_CMD_FIND" || return $?
+
+  "$BL64_FS_CMD_FIND" "$@"
+}
+
+#######################################
+# Find files and report as list
+#
+# Arguments:
+#   $1: search path
+#   $2: search pattern. Format: find -name options
+# Outputs:
+#   STDOUT: file list. One path per line
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_find_files() {
+  bl64_dbg_lib_show_function "$@"
+  local path="$1"
+  local pattern="${2:-}"
+
+  bl64_check_parameter 'path' &&
+    bl64_check_directory "$path" || return $?
+
+  [[ -n "$pattern" ]] && pattern="-name $pattern"
+
+  # shellcheck disable=SC2086
+  bl64_fs_find \
+    "$path" \
+    -type f \
+    $pattern \
+    -print
+}
