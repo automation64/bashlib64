@@ -7,6 +7,4 @@ setup() {
   true
   run bl64_dbg_runtime_show
 
-  assert_success
-
 }

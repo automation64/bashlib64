@@ -4,7 +4,7 @@ setup() {
 
 @test "bl64_check_command: command is present" {
 
-  run bl64_check_command "$BL64_OS_CMD_CP"
+  run bl64_check_command "$BL64_FS_CMD_CP"
   assert_success
 
 }
