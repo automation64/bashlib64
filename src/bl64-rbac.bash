@@ -28,14 +28,13 @@ function bl64_rbac_add_root() {
 
   bl64_check_privilege_root &&
     bl64_check_parameter 'user' &&
-    bl64_check_command "$BL64_OS_CMD_AWK" &&
     bl64_check_file "$BL64_RBAC_FILE_SUDOERS" &&
     bl64_rbac_check_sudoers "$BL64_RBAC_FILE_SUDOERS" ||
     return $?
 
   umask 0266
   # shellcheck disable=SC2016
-  $BL64_OS_ALIAS_AWK \
+  bl64_os_awk \
     -v ControlUsr="$user" \
     '
       BEGIN { Found = 0 }
@@ -81,7 +80,8 @@ function bl64_rbac_check_sudoers() {
   local -i status=0
 
   bl64_check_privilege_root &&
-    bl64_check_command "$BL64_RBAC_CMD_VISUDO" || $?
+    bl64_check_command "$BL64_RBAC_CMD_VISUDO" ||
+    return $?
 
   "$BL64_RBAC_CMD_VISUDO" \
     --check \

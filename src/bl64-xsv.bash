@@ -59,11 +59,10 @@ function bl64_xsv_search_records() {
   local fs_out="${6:-$BL64_XSV_FS_COLON}"
 
   # shellcheck disable=SC2086
-  bl64_check_command "$BL64_OS_CMD_AWK" &&
-    bl64_check_parameter 'values' 'search value' || return $?
+  bl64_check_parameter 'values' 'search value' || return $?
 
   # shellcheck disable=SC2016
-  $BL64_OS_ALIAS_AWK \
+  bl64_os_awk \
     -F "$fs_src" \
     -v VALUES="${values}" \
     -v KEYS="$keys" \

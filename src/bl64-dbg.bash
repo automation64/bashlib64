@@ -35,6 +35,7 @@ function bl64_dbg_runtime_show() {
     bl64_msg_show_debug "${_BL64_DBG_TXT_LC_ALL}: [${LC_ALL:-NONE}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_PWD}: [${PWD:-EMPTY}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_HOSTNAME}: [${HOSTNAME:-EMPTY}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_EUID}: [${EUID}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_UID}: [${UID}]"

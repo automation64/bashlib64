@@ -177,7 +177,8 @@ function bl64_fs_merge_files() {
     bl64_check_path_absolute "$path" &&
       "$BL64_OS_CMD_CAT" "$path"
     status_cat=$?
-    ((status_cat != 0)) && break || :
+    ((status_cat != 0)) && break
+    :
   done >>"$destination"
   status_file=$?
 
@@ -607,6 +608,8 @@ function bl64_fs_find() {
 #######################################
 # Find files and report as list
 #
+# * Not using bl64_fs_find to avoid file expansion for -name
+#
 # Arguments:
 #   $1: search path
 #   $2: search pattern. Format: find -name options
@@ -618,18 +621,16 @@ function bl64_fs_find() {
 #######################################
 function bl64_fs_find_files() {
   bl64_dbg_lib_show_function "$@"
-  local path="$1"
+  local path="${1:-.}"
   local pattern="${2:-}"
 
-  bl64_check_parameter 'path' &&
+  bl64_check_command "$BL64_FS_CMD_FIND" &&
     bl64_check_directory "$path" || return $?
 
-  [[ -n "$pattern" ]] && pattern="-name $pattern"
-
   # shellcheck disable=SC2086
-  bl64_fs_find \
+  "$BL64_FS_CMD_FIND" \
     "$path" \
     -type f \
-    $pattern \
+    ${pattern:+-name "${pattern}"} \
     -print
 }

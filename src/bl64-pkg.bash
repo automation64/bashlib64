@@ -77,7 +77,6 @@ function bl64_pkg_prepare() {
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
     ;;
-
   esac
 }
 
