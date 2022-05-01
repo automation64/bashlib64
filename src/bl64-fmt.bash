@@ -178,3 +178,47 @@ function bl64_fmt_dirname() {
     printf '%s' '/'
   fi
 }
+
+#######################################
+# Convert list to string. Optionally add prefix, postfix to each field
+#
+# * list: lines separated by \n
+# * string: same as original list but with \n replaced with space
+#
+# Arguments:
+#   $1: output field separator. Default: space
+#   $2: prefix. Format: string
+#   $3: postfix. Format: string
+# Inputs:
+#   STDIN: list
+# Outputs:
+#   STDOUT: string
+#   STDERR: None
+# Returns:
+#   always ok
+#######################################
+function bl64_fmt_list_to_string() {
+  bl64_dbg_lib_show_function
+  local field_separator="${1:-${BL64_LIB_DEFAULT}}"
+  local prefix="${2:-${BL64_LIB_DEFAULT}}"
+  local postfix="${3:-${BL64_LIB_DEFAULT}}"
+
+  [[ "$field_separator" == "$BL64_LIB_DEFAULT" ]] && field_separator=' '
+  [[ "$prefix" == "$BL64_LIB_DEFAULT" ]] && prefix=''
+  [[ "$postfix" == "$BL64_LIB_DEFAULT" ]] && postfix=''
+
+  bl64_os_awk \
+    -v field_separator="$field_separator" \
+    -v prefix="$prefix" \
+    -v postfix="$postfix" \
+    '
+    BEGIN {
+      joined_string = ""
+      RS="\n"
+    }
+    {
+      joined_string = ( joined_string == "" ? "" : joined_string field_separator ) prefix $0 postfix
+    }
+    END { print joined_string }
+  '
+}

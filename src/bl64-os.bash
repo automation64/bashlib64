@@ -173,3 +173,57 @@ function bl64_os_id_user() {
   bl64_dbg_lib_show_function "$@"
   $BL64_OS_ALIAS_ID_USER "$@"
 }
+
+#######################################
+# OS command wrapper: awk
+#
+# * Detects OS provided awk and selects the best match
+# * The selected awk app is configured for POSIX compatibility and traditional regexp
+# * If gawk is required use the BL64_OS_CMD_GAWK variable instead of this function
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_os_awk() {
+  bl64_dbg_lib_show_function "$@"
+  local awk_cmd='/usr/bin/awk'
+  local awk_flags=' '
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    if [[ -x '/usr/bin/gawk' ]]; then
+      awk_cmd='/usr/bin/gawk'
+      awk_flags='--posix'
+    elif [[ -x '/usr/bin/mawk' ]]; then
+      awk_cmd='/usr/bin/mawk'
+    fi
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+    awk_cmd='/usr/bin/gawk'
+    awk_flags='--posix'
+    ;;
+  ${BL64_OS_ALP}-*)
+    if [[ -x '/usr/bin/gawk' ]]; then
+      awk_cmd='/usr/bin/gawk'
+      awk_flags='--posix'
+    fi
+    ;;
+  ${BL64_OS_MCOS}-*)
+    awk_cmd='/usr/bin/awk'
+    ;;
+  *)
+    bl64_msg_show_unsupported
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    ;;
+  esac
+  bl64_check_command "$awk_cmd" || return $?
+
+  # shellcheck disable=SC2086
+  "$awk_cmd" $awk_flags "$@"
+}
