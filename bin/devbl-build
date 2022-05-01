@@ -8,17 +8,18 @@
 # Version: 1.2.0
 #######################################
 
+# shellcheck disable=SC1091
 source './bin/devbl-set' || {
   echo 'unable to load dev env'
   exit 1
 }
+# shellcheck disable=SC1090
 source "$DEVBL_LIB_BASHLIB64" || exit 1
 
 function devbl_build_standalone() {
 
   local promote="$1"
   local test="$2"
-  local status=1
   local file=''
   local lib="$DEVBL_BUILD/bashlib64.bash"
 
@@ -26,41 +27,47 @@ function devbl_build_standalone() {
 
   # Create header
   bl64_msg_show_task "creating stand-alone library: $lib"
-  "$BL64_OS_CMD_CAT" "$DEVBL_SRC/bl64-lib.header" >"$lib"
-
-  # Add core constants
-  bl64_fmt_strip_comments "$DEVBL_SRC/bl64-lib.env" >>"$lib"
+  {
+    "$BL64_OS_CMD_CAT" "$DEVBL_SRC/bl64-lib.header" &&
+      echo '' &&
+      "$BL64_OS_CMD_CAT" "$DEVBL_SRC/bl64-lib.env" ||
+      return $?
+  } >"$lib"
 
   # Add global variables
   for file in $DEVBL_MODULES; do
     bl64_msg_show_task "adding module $file environment"
-    bl64_fmt_strip_comments "${DEVBL_SRC}/bl64-${file}.env" >>"$lib"
+    "$BL64_OS_CMD_CAT" "${DEVBL_SRC}/bl64-${file}.env" >>"$lib" &&
+      echo '' >>"$lib" ||
+      return $?
   done
 
   # Add core module
   for file in $DEVBL_MODULES; do
     bl64_msg_show_task "adding module $file code"
-    bl64_fmt_strip_comments "${DEVBL_SRC}/bl64-${file}-init.bash" >>"$lib"
-    bl64_fmt_strip_comments "${DEVBL_SRC}/bl64-${file}.bash" >>"$lib"
+    {
+      "$BL64_OS_CMD_CAT" "${DEVBL_SRC}/bl64-${file}-init.bash" &&
+        echo '' &&
+        "$BL64_OS_CMD_CAT" "${DEVBL_SRC}/bl64-${file}.bash" &&
+        echo '' ||
+        return $?
+    } >>"$lib"
   done
 
   # Add remaining modules
   bl64_msg_show_task 'adding core'
-  bl64_fmt_strip_comments "$DEVBL_SRC/bl64-lib.bash" >>"$lib"
-  status=$?
+  "$BL64_OS_CMD_CAT" "$DEVBL_SRC/bl64-lib.bash" >>"$lib" || return $?
 
-  if [[ "$status" == '0' && "$promote" == '1' ]]; then
+  if [[ "$promote" == '1' ]]; then
     bl64_msg_show_task 'promoting library'
-    bl64_fs_cp_file "$lib" "$DEVBL_ROOT"
+    bl64_fmt_strip_comments "$lib" >"$DEVBL_ROOT" || return $?
   fi
 
-  if [[ "$status" == '0' && "$test" == '1' ]]; then
+  if [[ "$test" == '1' ]]; then
     bl64_msg_show_task 'updating test library'
-    bl64_fs_cp_file "$lib" "$DEVBL_TEST_BASHLIB64"
+    bl64_fs_cp_file "$lib" "$DEVBL_TEST_BASHLIB64" || return $?
   fi
-
-  return $status
-
+  return 0
 }
 
 function devbl_build_check() {
