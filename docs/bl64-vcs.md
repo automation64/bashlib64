@@ -1,4 +1,4 @@
-# module: bl64-vcs
+# Module: vcs
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-vcs.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-vcs.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-vcs.bash" %}

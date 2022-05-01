@@ -1,4 +1,4 @@
-# module: bl64-fs
+# Module: fs
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-fs.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-fs.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-fs.bash" %}

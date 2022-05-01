@@ -1,4 +1,4 @@
-# module: bl64-rxtx
+# Module: rxtx
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-rxtx.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-rxtx.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-rxtx.bash" %}

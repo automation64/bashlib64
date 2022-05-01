@@ -1,4 +1,4 @@
-# module: bl64-dbg
+# Module: dbg
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-dbg.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-dbg.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-dbg.bash" %}

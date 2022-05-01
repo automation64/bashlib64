@@ -1,4 +1,4 @@
-# module: bl64-rbac
+# Module: rbac
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-rbac.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-rbac.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-rbac.bash" %}
