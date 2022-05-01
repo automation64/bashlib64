@@ -16,14 +16,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enable error tracing bash set options
   - Signal traps for ERR,DEBUG,EXIT
 - dbg
-  - bl64_dbg_callstack_show
-  - bl64_dbg_lib_show_function
-  - bl64_dbg_app_show_function
+  - bl64_dbg_callstack_show: new function
+  - bl64_dbg_lib_show_function: new function
+  - bl64_dbg_app_show_function: new function
+- fs
+  - bl64_fs_find_files: new function
+- os
+  - bl64_os_awk: new function
+- fmt
+  - bl64_fmt_list_to_string: new function
 
 ### Changed
 
 - all
   - Optimized code to use new bashlib64 functions
+  - **Breaking change** Centralized error codes
+- os
+  - **Breaking change** Migrated fs related functions to the fs module
+  - **Breaking change** Migrated archive related functions to the arc module
 
 ## [1.26.0]
 
