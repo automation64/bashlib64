@@ -249,7 +249,7 @@ function bl64_fs_merge_dir() {
     shopt -uq dotglob
     ;;
   *)
-    bl64_msg_show_unsupported
+    bl64_check_show_unsupported
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
     ;;

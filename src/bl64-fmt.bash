@@ -222,3 +222,23 @@ function bl64_fmt_list_to_string() {
     END { print joined_string }
   '
 }
+
+#######################################
+# Build a separator line with optional payload
+#
+# * Separator format: payload + \n
+#
+# Arguments:
+#   $1: Separator payload. Format: string
+# Outputs:
+#   STDOUT: separator line
+#   STDERR: grep Error message
+# Returns:
+#   printf exit status
+#######################################
+function bl64_fmt_separator_line() {
+  bl64_dbg_lib_show_function "$@"
+  local payload="${1:-}"
+
+  printf '%s\n' "$payload"
+}

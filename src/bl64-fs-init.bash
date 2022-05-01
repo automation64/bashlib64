@@ -71,7 +71,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_MV='/bin/mv'
     BL64_FS_CMD_RM='/bin/rm'
     ;;
-  *) bl64_msg_show_unsupported ;;
+  *) bl64_check_show_unsupported ;;
   esac
 }
 
@@ -138,7 +138,7 @@ function bl64_fs_set_options() {
     BL64_FS_SET_RM_FORCE='-f'
     BL64_FS_SET_RM_RECURSIVE='-R'
     ;;
-  *) bl64_msg_show_unsupported ;;
+  *) bl64_check_show_unsupported ;;
   esac
 }
 
@@ -174,7 +174,7 @@ function bl64_fs_set_alias() {
     BL64_FS_ALIAS_LN_SYMBOLIC="${BL64_FS_CMD_LN} -v -s"
     BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} --color=never"
     ;;
-  *) bl64_msg_show_unsupported ;;
+  *) bl64_check_show_unsupported ;;
   esac
 
   BL64_FS_ALIAS_MKTEMP_DIR="${BL64_FS_CMD_MKTEMP} -d"

@@ -65,7 +65,7 @@ function bl64_py_set_command() {
   ${BL64_OS_MCOS}-12.*)
     BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
     ;;
-  *) bl64_msg_show_unsupported ;;
+  *) bl64_check_show_unsupported ;;
   esac
 
   # Select best match for default python or leave default if no better option found

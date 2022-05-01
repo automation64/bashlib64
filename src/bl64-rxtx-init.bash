@@ -29,7 +29,7 @@ function bl64_rxtx_set_command() {
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
     BL64_RXTX_CMD_WGET='/usr/bin/wget'
     ;;
-  *) bl64_msg_show_unsupported ;;
+  *) bl64_check_show_unsupported ;;
   esac
 }
 
@@ -89,7 +89,7 @@ function bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_OUTPUT='--output-document'
     BL64_RXTX_SET_WGET_SECURE='--no-config'
     ;;
-  *) bl64_msg_show_unsupported ;;
+  *) bl64_check_show_unsupported ;;
   esac
 }
 

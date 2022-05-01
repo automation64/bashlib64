@@ -217,7 +217,7 @@ function bl64_os_awk() {
     awk_cmd='/usr/bin/awk'
     ;;
   *)
-    bl64_msg_show_unsupported
+    bl64_check_show_unsupported
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
     ;;

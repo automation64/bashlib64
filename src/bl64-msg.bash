@@ -296,21 +296,3 @@ function bl64_msg_show_batch_finish() {
     _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: exit-status-${status}"
   fi
 }
-
-#######################################
-# Display unsupported platform message
-#
-# Arguments:
-#   $1: target (function name, command path, etc)
-# Outputs:
-#   STDOUT: none
-#   STDERR: message
-# Returns:
-#   0: successfull execution
-#   >0: printf error
-#######################################
-function bl64_msg_show_unsupported() {
-  local target="${1:-${FUNCNAME[1]}}"
-
-  bl64_msg_show_error "${_BL64_MSG_TXT_INCOMPATIBLE} (os: ${BL64_OS_DISTRO} / target: ${target})"
-}

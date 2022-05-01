@@ -73,7 +73,7 @@ function bl64_pkg_prepare() {
     "$BL64_PKG_CMD_BRW" update $verbose
     ;;
   *)
-    bl64_msg_show_unsupported
+    bl64_check_show_unsupported
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
     ;;
@@ -128,7 +128,7 @@ function bl64_pkg_install() {
     "$BL64_PKG_CMD_BRW" install $verbose "$@"
     ;;
   *)
-    bl64_msg_show_unsupported
+    bl64_check_show_unsupported
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
     ;;
@@ -188,7 +188,7 @@ function bl64_pkg_cleanup() {
     "$BL64_PKG_CMD_BRW" cleanup $verbose --prune=all -s
     ;;
   *)
-    bl64_msg_show_unsupported
+    bl64_check_show_unsupported
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
     ;;

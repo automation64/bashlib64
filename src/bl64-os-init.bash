@@ -75,7 +75,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_TRUE="/usr/bin/true"
     BL64_OS_CMD_UNAME='/usr/bin/uname'
     ;;
-  *) bl64_msg_show_unsupported ;;
+  *) bl64_check_show_unsupported ;;
   esac
 }
 
@@ -131,6 +131,6 @@ function bl64_os_set_alias() {
     BL64_OS_ALIAS_AWK="$BL64_OS_CMD_AWK"
     BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
     ;;
-  *) bl64_msg_show_unsupported ;;
+  *) bl64_check_show_unsupported ;;
   esac
 }

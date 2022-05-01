@@ -30,7 +30,7 @@ function bl64_check_command() {
   bl64_check_parameter 'path' || return $?
 
   if [[ "$path" == "$BL64_LIB_VAR_NULL" ]]; then
-    bl64_msg_show_unsupported "$path"
+    bl64_check_show_unsupported "$path"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_FOUND
   fi
@@ -327,4 +327,42 @@ function bl64_check_overwrite() {
   fi
 
   return 0
+}
+
+#######################################
+# Raise unsupported platform error
+#
+# Arguments:
+#   $1: target (function name, command path, etc)
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_OS_INCOMPATIBLE
+#######################################
+function bl64_check_show_unsupported() {
+  local target="${1:-${FUNCNAME[1]}}"
+
+  bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (os: ${BL64_OS_DISTRO} / target: ${target})"
+  return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+}
+
+#######################################
+# Raise undefined command error
+#
+# * Commonly used in the default branch of case statements to catch undefined options
+#
+# Arguments:
+#   $1: command
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_TASK_UNDEFINED
+#######################################
+function bl64_check_show_undefined() {
+  local target="${1:-}"
+
+  bl64_msg_show_error "${_BL64_CHECK_TXT_UNDEFINED} ${target:+(${target})}"
+  return $BL64_LIB_ERROR_TASK_UNDEFINED
 }
