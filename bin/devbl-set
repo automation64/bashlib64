@@ -10,10 +10,13 @@ if test $? -ne 0; then
 fi
 
 # Load local variables
+# shellcheck source-path=SCRIPTDIR/..
 . ./.local
 
 # Load secrets
+# shellcheck source-path=SCRIPTDIR/..
 . ./.secrets
 
 # Load global variables
+# shellcheck source-path=SCRIPTDIR/..
 . ./.env
