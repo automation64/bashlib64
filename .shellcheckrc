@@ -1,13 +1,7 @@
-# Do not open external sources
-external-sources=false
-
-#
-# Optional checks
-#
-
+external-sources=true
 enable=add-default-case
 enable=avoid-nullary-conditions
 enable=check-unassigned-uppercase
 enable=deprecate-which
 enable=quote-safe-variables
-enable=require-variable-braces
+#enable=require-variable-braces
