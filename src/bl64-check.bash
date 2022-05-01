@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 #######################################
@@ -18,30 +18,31 @@
 #   STDERR: Error message
 # Returns:
 #   0: Command found
-#   $BL64_CHECK_ERROR_MISSING_PARAMETER
-#   $BL64_CHECK_ERROR_FILE_NOT_FOUND
-#   $BL64_CHECK_ERROR_FILE_NOT_EXECUTE
+#   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   $BL64_LIB_ERROR_FILE_NOT_FOUND
+#   $BL64_LIB_ERROR_FILE_NOT_EXECUTE
 #######################################
 function bl64_check_command() {
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_COMMAND_NOT_FOUND}"
 
   bl64_check_parameter 'path' || return $?
 
   if [[ "$path" == "$BL64_LIB_VAR_NULL" ]]; then
-    bl64_msg_show_unsupported "$path"
+    bl64_check_show_unsupported "$path"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_FILE_NOT_FOUND
+    return $BL64_LIB_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -f "$path" ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] ${message} (${path})"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_FILE_NOT_FOUND
+    return $BL64_LIB_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -x "$path" ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE (${path})"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_FILE_NOT_EXECUTE
+    return $BL64_LIB_ERROR_FILE_NOT_EXECUTE
   fi
   return 0
 }
@@ -57,11 +58,12 @@ function bl64_check_command() {
 #   STDERR: Error message
 # Returns:
 #   0: File found
-#   $BL64_CHECK_ERROR_MISSING_PARAMETER
-#   $BL64_CHECK_ERROR_FILE_NOT_FOUND
-#   $BL64_CHECK_ERROR_FILE_NOT_READ
+#   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   $BL64_LIB_ERROR_FILE_NOT_FOUND
+#   $BL64_LIB_ERROR_FILE_NOT_READ
 #######################################
 function bl64_check_file() {
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_FILE_NOT_FOUND}"
 
@@ -69,12 +71,12 @@ function bl64_check_file() {
   if [[ ! -f "$path" ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] ${message} (${path})"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_FILE_NOT_FOUND
+    return $BL64_LIB_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -r "$path" ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_FILE_NOT_READABLE (${path})"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_FILE_NOT_READ
+    return $BL64_LIB_ERROR_FILE_NOT_READ
   fi
   return 0
 }
@@ -90,11 +92,12 @@ function bl64_check_file() {
 #   STDERR: Error message
 # Returns:
 #   0: File found
-#   $BL64_CHECK_ERROR_MISSING_PARAMETER
-#   $BL64_CHECK_ERROR_DIRECTORY_NOT_FOUND
-#   $BL64_CHECK_ERROR_DIRECTORY_NOT_READ
+#   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   $BL64_LIB_ERROR_DIRECTORY_NOT_FOUND
+#   $BL64_LIB_ERROR_DIRECTORY_NOT_READ
 #######################################
 function bl64_check_directory() {
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND}"
 
@@ -102,12 +105,12 @@ function bl64_check_directory() {
   if [[ ! -d "$path" ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] ${message} (${path})"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_DIRECTORY_NOT_FOUND
+    return $BL64_LIB_ERROR_DIRECTORY_NOT_FOUND
   fi
   if [[ ! -r "$path" || ! -x "$path" ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE (${path})"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_DIRECTORY_NOT_READ
+    return $BL64_LIB_ERROR_DIRECTORY_NOT_READ
   fi
   return 0
 }
@@ -124,23 +127,24 @@ function bl64_check_directory() {
 #   STDERR: Error message
 # Returns:
 #   0: Check ok
-#   $BL64_CHECK_ERROR_MISSING_PARAMETER
-#   $BL64_CHECK_ERROR_PARAMETER_EMPTY
+#   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   $BL64_LIB_ERROR_PARAMETER_EMPTY
 #######################################
 function bl64_check_parameter() {
+  bl64_dbg_lib_show_function "$@"
   local parameter="$1"
   local description="${2:-parameter $parameter}"
 
   if [[ -z "$parameter" ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_MISSING_PARAMETER (parameter name)"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_MISSING_PARAMETER
+    return $BL64_LIB_ERROR_PARAMETER_MISSING
   fi
 
   if eval "[[ -z \"\$${parameter}\" || \"\$${parameter}\" == '${BL64_LIB_DEFAULT}' ]]"; then
     bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_MISSING_PARAMETER (${description})"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_PARAMETER_EMPTY
+    return $BL64_LIB_ERROR_PARAMETER_EMPTY
   fi
   return 0
 }
@@ -158,11 +162,12 @@ function bl64_check_parameter() {
 #   STDERR: Error message
 # Returns:
 #   0: Check ok
-#   $BL64_CHECK_ERROR_MISSING_PARAMETER
-#   $BL64_CHECK_ERROR_EXPORT_EMPTY
-#   $BL64_CHECK_ERROR_EXPORT_SET
+#   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   $BL64_LIB_ERROR_EXPORT_EMPTY
+#   $BL64_LIB_ERROR_EXPORT_SET
 #######################################
 function bl64_check_export() {
+  bl64_dbg_lib_show_function "$@"
   local export_name="$1"
   local description="${2:-export_name $export_name}"
 
@@ -171,13 +176,13 @@ function bl64_check_export() {
   if [[ ! -v "$export_name" ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_EXPORT_SET (${description})"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_EXPORT_SET
+    return $BL64_LIB_ERROR_EXPORT_SET
   fi
 
   if eval "[[ -z \$${export_name} ]]"; then
     bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_EXPORT_EMPTY (${description})"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_EXPORT_EMPTY
+    return $BL64_LIB_ERROR_EXPORT_EMPTY
   fi
   return 0
 }
@@ -196,10 +201,11 @@ function bl64_check_export() {
 #   STDERR: Error message
 # Returns:
 #   0: File found
-#   $BL64_CHECK_ERROR_MISSING_PARAMETER
-#   $BL64_CHECK_ERROR_PATH_NOT_RELATIVE
+#   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   $BL64_LIB_ERROR_PATH_NOT_RELATIVE
 #######################################
 function bl64_check_path_relative() {
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_PATH_NOT_RELATIVE}"
 
@@ -207,7 +213,7 @@ function bl64_check_path_relative() {
   if [[ "$path" == '/' || "$path" == /* ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_PATH_NOT_RELATIVE
+    return $BL64_LIB_ERROR_PATH_NOT_RELATIVE
   fi
   return 0
 }
@@ -226,10 +232,11 @@ function bl64_check_path_relative() {
 #   STDERR: Error message
 # Returns:
 #   0: File found
-#   $BL64_CHECK_ERROR_MISSING_PARAMETER
-#   $BL64_CHECK_ERROR_PATH_NOT_ABSOLUTE
+#   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
 #######################################
 function bl64_check_path_absolute() {
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_PATH_NOT_ABSOLUTE}"
 
@@ -237,7 +244,7 @@ function bl64_check_path_absolute() {
   if [[ "$path" != '/' && "$path" != /* ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_PATH_NOT_ABSOLUTE
+    return $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
   fi
   return 0
 }
@@ -252,14 +259,15 @@ function bl64_check_path_absolute() {
 #   STDERR: Error message
 # Returns:
 #   0: check ok
-#   $BL64_CHECK_ERROR_PRIVILEGE_IS_ROOT
+#   $BL64_LIB_ERROR_PRIVILEGE_IS_ROOT
 #######################################
 function bl64_check_privilege_root() {
+  bl64_dbg_lib_show_function
   bl64_dbg_lib_show_vars 'EUID'
   if [[ "$EUID" != '0' ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT (EUID: $EUID)"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_PRIVILEGE_IS_NOT_ROOT
+    return $BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT
   fi
   return 0
 }
@@ -274,14 +282,15 @@ function bl64_check_privilege_root() {
 #   STDERR: Error message
 # Returns:
 #   0: check ok
-#   $BL64_CHECK_ERROR_PRIVILEGE_IS_NOT_ROOT
+#   $BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT
 #######################################
 function bl64_check_privilege_not_root() {
+  bl64_dbg_lib_show_function "$@"
   bl64_dbg_lib_show_vars 'EUID'
   if [[ "$EUID" == '0' ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_PRIVILEGE_IS_ROOT"
     # shellcheck disable=SC2086
-    return $BL64_CHECK_ERROR_PRIVILEGE_IS_ROOT
+    return $BL64_LIB_ERROR_PRIVILEGE_IS_ROOT
   fi
   return 0
 }
@@ -298,10 +307,11 @@ function bl64_check_privilege_not_root() {
 #   STDERR: Error message
 # Returns:
 #   0: check ok
-#   $BL64_CHECK_ERROR_MISSING_PARAMETER
-#   $BL64_CHECK_ERROR_OVERWRITE_NOT_PERMITED
+#   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
 #######################################
 function bl64_check_overwrite() {
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
   local message="${2:-$_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}"
   local overwrite="${3:-"$BL64_LIB_VAR_OFF"}"
@@ -312,9 +322,47 @@ function bl64_check_overwrite() {
     if [[ -e "$path" ]]; then
       bl64_msg_show_error "[${FUNCNAME[1]}] ${message} (${path})"
       # shellcheck disable=SC2086
-      return $BL64_CHECK_ERROR_OVERWRITE_NOT_PERMITED
+      return $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
     fi
   fi
 
   return 0
+}
+
+#######################################
+# Raise unsupported platform error
+#
+# Arguments:
+#   $1: target (function name, command path, etc)
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_OS_INCOMPATIBLE
+#######################################
+function bl64_check_show_unsupported() {
+  local target="${1:-${FUNCNAME[1]}}"
+
+  bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (os: ${BL64_OS_DISTRO} / target: ${target})"
+  return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+}
+
+#######################################
+# Raise undefined command error
+#
+# * Commonly used in the default branch of case statements to catch undefined options
+#
+# Arguments:
+#   $1: command
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_TASK_UNDEFINED
+#######################################
+function bl64_check_show_undefined() {
+  local target="${1:-}"
+
+  bl64_msg_show_error "${_BL64_CHECK_TXT_UNDEFINED} ${target:+(${target})}"
+  return $BL64_LIB_ERROR_TASK_UNDEFINED
 }

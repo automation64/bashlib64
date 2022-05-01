@@ -1,4 +1,4 @@
-# module: bl64-arc
+# Module: arc
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-arc.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-arc.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-arc.bash" %}

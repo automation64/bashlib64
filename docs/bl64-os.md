@@ -1,4 +1,4 @@
-# module: bl64-os
+# Module: os
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-os.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-os.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-os.bash" %}

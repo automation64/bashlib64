@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0]
+
+### Added
+
+- lib
+  - Reset bash set options to default
+  - Enable error tracing bash set options
+  - Signal traps for ERR,DEBUG,EXIT
+- dbg
+  - bl64_dbg_callstack_show: new function
+  - bl64_dbg_lib_show_function: new function
+  - bl64_dbg_app_show_function: new function
+- fs
+  - bl64_fs_find_files: new function
+- os
+  - bl64_os_awk: new function
+- fmt
+  - bl64_fmt_list_to_string: new function
+  - bl64_fmt_separator_line: new function
+- check
+  - bl64_check_show_undefined: new function
+- cnt
+  - new module
+
+### Changed
+
+- all
+  - Optimized code to use new bashlib64 functions
+  - **Breaking change** Centralized error codes
+- os
+  - **Breaking change** Migrated fs related functions to the fs module
+  - **Breaking change** Migrated archive related functions to the arc module
+- msg
+  - **Breaking change** moved bl64_msg_show_unsupported to check module
+
 ## [1.26.0]
 
 ### Added
@@ -273,7 +308,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/1.24.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.0.0...HEAD
+[2.0.0]: https://github.com/serdigital64/bashlib64/compare/1.24.0...2.0.0
 [1.24.0]: https://github.com/serdigital64/bashlib64/compare/1.23.0...1.24.0
 [1.23.0]: https://github.com/serdigital64/bashlib64/compare/1.22.0...1.23.0
 [1.22.0]: https://github.com/serdigital64/bashlib64/compare/1.21.0...1.22.0

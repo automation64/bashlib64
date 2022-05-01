@@ -1,4 +1,4 @@
-# module: bl64-iam
+# Module: iam
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-iam.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-iam.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-iam.bash" %}

@@ -1,4 +1,4 @@
-# module: bl64-pkg
+# Module: pkg
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-pkg.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-pkg.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-pkg.bash" %}

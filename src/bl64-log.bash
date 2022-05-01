@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -20,17 +20,18 @@
 # Returns:
 #   0: log record successfully saved
 #   >0: failed to save the log record
-#   BL64_LOG_ERROR_NOT_SETUP
-#   BL64_LOG_ERROR_INVALID_TYPE
+#   BL64_LIB_ERROR_MODULE_SETUP_MISSING
+#   BL64_LIB_ERROR_MODULE_SETUP_INVALID
 #######################################
 function _bl64_log_register() {
+  bl64_dbg_lib_show_function "$@"
   local source="$1"
   local category="$2"
   local payload="$3"
 
   if [[ -z "$BL64_LOG_PATH" || -z "$BL64_LOG_VERBOSE" || -z "$BL64_LOG_TYPE" || -z "$BL64_LOG_FS" ]]; then
     bl64_msg_show_error "$_BL64_LOG_TXT_NOT_SETUP"
-    return $BL64_LOG_ERROR_NOT_SETUP
+    return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
   fi
 
   case "$BL64_LOG_TYPE" in
@@ -52,7 +53,7 @@ function _bl64_log_register() {
     ;;
   *)
     bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
-    return $BL64_LOG_ERROR_INVALID_TYPE
+    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
     ;;
   esac
 }
@@ -70,11 +71,11 @@ function _bl64_log_register() {
 #   STDERR: None
 # Returns:
 #   0: setup ok
-#   BL64_LOG_ERROR_MISSING_PARAMETER
-#   BL64_LOG_ERROR_INVALID_TYPE
-#   BL64_LOG_ERROR_INVALID_VERBOSE
+#   BL64_LIB_ERROR_MODULE_SETUP_INVALID
+#   BL64_LIB_ERROR_MODULE_SETUP_INVALID
 #######################################
 function bl64_log_setup() {
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
   local verbose="${2:-1}"
   local type="${3:-$BL64_LOG_TYPE_FILE}"
@@ -85,21 +86,19 @@ function bl64_log_setup() {
   # shellcheck disable=SC2086
   if [[ "$type" != "$BL64_LOG_TYPE_FILE" ]]; then
     bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
-    return $BL64_LOG_ERROR_INVALID_TYPE
+    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
   fi
 
   # shellcheck disable=SC2086
   if [[ "$verbose" != '0' && "$verbose" != '1' ]]; then
     bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_VERBOSE"
-    return $BL64_LOG_ERROR_INVALID_VERBOSE
+    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
   fi
 
-  bl64_dbg_lib_trace_start
   BL64_LOG_PATH="${path}"
   BL64_LOG_VERBOSE="${verbose}"
   BL64_LOG_TYPE="${type}"
   BL64_LOG_FS="${fs}"
-  bl64_dbg_lib_trace_stop
   return 0
 }
 
@@ -118,6 +117,7 @@ function bl64_log_setup() {
 #   >0: failed to save the log record
 #######################################
 function bl64_log_info() {
+  bl64_dbg_lib_show_function "$@"
   local payload="$1"
   local source="${2:-${FUNCNAME[1]}}"
 
@@ -146,6 +146,7 @@ function bl64_log_info() {
 #   >0: failed to save the log record
 #######################################
 function bl64_log_task() {
+  bl64_dbg_lib_show_function "$@"
   local payload="$1"
   local source="${2:-${FUNCNAME[1]}}"
 
@@ -174,6 +175,7 @@ function bl64_log_task() {
 #   >0: failed to save the log record
 #######################################
 function bl64_log_error() {
+  bl64_dbg_lib_show_function "$@"
   local payload="$1"
   local source="${2:-${FUNCNAME[1]}}"
 
@@ -202,6 +204,7 @@ function bl64_log_error() {
 #   >0: failed to save the log record
 #######################################
 function bl64_log_warning() {
+  bl64_dbg_lib_show_function "$@"
   local payload="$1"
   local source="${2:-${FUNCNAME[1]}}"
 
@@ -230,6 +233,7 @@ function bl64_log_warning() {
 #   >0: failed to save the stream
 #######################################
 function bl64_log_record() {
+  bl64_dbg_lib_show_function "$@"
   local tag="${1:-tag}"
   local source="${2:-${FUNCNAME[1]}}"
   local input_log_line=''
