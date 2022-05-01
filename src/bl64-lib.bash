@@ -92,6 +92,7 @@ else
   bl64_rxtx_set_alias
   bl64_py_set_command
   bl64_py_set_options
+  bl64_cnt_set_command
 
   # Set signal handlers
   # shellcheck disable=SC2064
