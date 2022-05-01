@@ -25,6 +25,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_os_awk: new function
 - fmt
   - bl64_fmt_list_to_string: new function
+  - bl64_fmt_separator_line: new function
+- check
+  - bl64_check_show_undefined: new function
+- cnt
+  - new module
 
 ### Changed
 
@@ -34,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - os
   - **Breaking change** Migrated fs related functions to the fs module
   - **Breaking change** Migrated archive related functions to the arc module
+- msg
+  - **Breaking change** moved bl64_msg_show_unsupported to check module
 
 ## [1.26.0]
 

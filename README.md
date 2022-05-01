@@ -21,6 +21,7 @@ BashLib64 is a **Bash** library that provides a simple abstraction layer for dev
 | ------------------------------------------------------------------ | -------------------------------------------------- |
 | [bl64-arc](https://serdigital64.github.io/bashlib64/bl64-arc/)     | Manage archive files                               |
 | [bl64-check](https://serdigital64.github.io/bashlib64/bl64-check/) | Check for conditions and report status             |
+| [bl64-cnt](https://serdigital64.github.io/bashlib64/bl64-cnt/)     | Interact with container engines                    |
 | [bl64-dbg](https://serdigital64.github.io/bashlib64/bl64-dbg/)     | Show shell debugging information                   |
 | [bl64-fmt](https://serdigital64.github.io/bashlib64/bl64-fmt/)     | Format text data                                   |
 | [bl64-iam](https://serdigital64.github.io/bashlib64/bl64-iam/)     | Manage OS identity and access service              |
@@ -81,47 +82,12 @@ The library has been tested on the following operating systems:
   source "<PROJECT_DIR>/bashlib64.bash"
   ```
 
-## Development
-
-### Environment
-
-- Prepare dev tools
-  - Install GIT
-  - Install Podman: container based testing
-  - Install ShellCheck code linting
-  - Install Bats-Core: code testing
-- Clone GIT repository
-
-  ```shell
-  git clone https://github.com/serdigital64/bashlib64.git
-  ```
-
-- Adjust environment variables to reflect your configuration:
-
-  ```shell
-  # Copy environment definition files from templates:
-  cp dot.local .local
-  cp dot.secrets .secrets
-  # Review and update content for both files
-  ```
-
-- Initialize dev environment variables
-
-  ```shell
-  source bin/devbl-set
-  ```
-
-### Repositories
-
-- Project GIT repository: [https://github.com/serdigital64/bashlib64](https://github.com/serdigital64/bashlib64)
-- Project Documentation: [https://serdigital64.github.io/bashlib64/](https://serdigital64.github.io/bashlib64/)
-- Release history: [CHANGELOG](CHANGELOG.md)
-
 ## Contributing
 
 Help on implementing new features and maintaining the code base is welcomed.
 
-[Contributor Covenant Code of Conduct](https://github.com/serdigital64/bashlib64/blob/main/CODE_OF_CONDUCT.md)
+- [Guidelines](https://github.com/serdigital64/bashlib64/blob/main/CONTRIBUTING.md)
+- [Contributor Covenant Code of Conduct](https://github.com/serdigital64/bashlib64/blob/main/CODE_OF_CONDUCT.md)
 
 ## License
 

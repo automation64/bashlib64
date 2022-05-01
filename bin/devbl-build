@@ -165,7 +165,7 @@ devbl_build_check_requirements || exit 1
 bl64_msg_show_batch_start "$devbl_build_command_tag"
 case "$devbl_build_command" in
 'devbl_build_standalone' | 'devbl_build_docs' | 'devbl_promote_test' | 'devbl_promote_prod') "$devbl_build_command" ;;
-*) bl64_msg_show_error_undefined "$devbl_build_command" ;;
+*) bl64_check_show_undefined "$devbl_build_command" ;;
 esac
 devbl_build_status=$?
 
