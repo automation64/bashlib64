@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -27,6 +27,7 @@
 #   command dependant
 #######################################
 function bl64_fs_create_dir() {
+  bl64_dbg_lib_show_function "$@"
   local mode="${1:-${BL64_LIB_DEFAULT}}"
   local user="${2:-${BL64_LIB_DEFAULT}}"
   local group="${3:-${BL64_LIB_DEFAULT}}"
@@ -39,8 +40,8 @@ function bl64_fs_create_dir() {
   shift
 
   # shellcheck disable=SC2086
-  (($# == 0)) && bl64_msg_show_error "$_BL64_FS_TXT_MISSING_PARAMETER" && return $BL64_FS_ERROR_MISSING_PARAMETER
-  bl64_dbg_lib_show_info "parameters:[${*}]"
+  (($# == 0)) && bl64_msg_show_error "$_BL64_FS_TXT_MISSING_PARAMETER" && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  bl64_dbg_lib_show_info "paths:[${*}]"
 
   for path in "$@"; do
 
@@ -84,6 +85,7 @@ function bl64_fs_create_dir() {
 #   command dependant
 #######################################
 function bl64_fs_copy_files() {
+  bl64_dbg_lib_show_function "$@"
   local mode="${1:-${BL64_LIB_DEFAULT}}"
   local user="${2:-${BL64_LIB_DEFAULT}}"
   local group="${3:-${BL64_LIB_DEFAULT}}"
@@ -101,8 +103,8 @@ function bl64_fs_copy_files() {
   shift
 
   # shellcheck disable=SC2086
-  (($# == 0)) && bl64_msg_show_error "$_BL64_FS_TXT_MISSING_PARAMETER" && return $BL64_FS_ERROR_MISSING_PARAMETER
-  bl64_dbg_lib_show_info "parameters:[${*}]"
+  (($# == 0)) && bl64_msg_show_error "$_BL64_FS_TXT_MISSING_PARAMETER" && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  bl64_dbg_lib_show_info "paths:[${*}]"
 
   for path in "$@"; do
 
@@ -145,9 +147,10 @@ function bl64_fs_copy_files() {
 # Returns:
 #   command dependant
 #   $BL64_FS_ERROR_EXISTING_FILE
-#   $BL64_FS_ERROR_MERGE_FILE
+#   $BL64_LIB_ERROR_TASK_FAILED
 #######################################
 function bl64_fs_merge_files() {
+  bl64_dbg_lib_show_function "$@"
   local mode="${1:-${BL64_LIB_DEFAULT}}"
   local user="${2:-${BL64_LIB_DEFAULT}}"
   local group="${3:-${BL64_LIB_DEFAULT}}"
@@ -167,14 +170,15 @@ function bl64_fs_merge_files() {
   shift
 
   # shellcheck disable=SC2086
-  (($# == 0)) && bl64_msg_show_error "$_BL64_FS_TXT_MISSING_PARAMETER" && return $BL64_FS_ERROR_MISSING_PARAMETER
-  bl64_dbg_lib_show_info "parameters:[${*}]"
+  (($# == 0)) && bl64_msg_show_error "$_BL64_FS_TXT_MISSING_PARAMETER" && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  bl64_dbg_lib_show_info "paths:[${*}]"
 
   for path in "$@"; do
     bl64_check_path_absolute "$path" &&
       "$BL64_OS_CMD_CAT" "$path"
     status_cat=$?
-    ((status_cat != 0)) && break || :
+    ((status_cat != 0)) && break
+    :
   done >>"$destination"
   status_file=$?
 
@@ -194,7 +198,7 @@ function bl64_fs_merge_files() {
     BL64_LIB_VERBOSE="$BL64_LIB_VAR_OFF"
     bl64_fs_rm_file "$destination"
     # shellcheck disable=SC2086
-    return $BL64_FS_ERROR_MERGE_FILE
+    return $BL64_LIB_ERROR_TASK_FAILED
   fi
   return 0
 }
@@ -216,14 +220,16 @@ function bl64_fs_merge_files() {
 #   command exit status
 #######################################
 function bl64_fs_merge_dir() {
+  bl64_dbg_lib_show_function "$@"
   local source="${1:-${BL64_LIB_DEFAULT}}"
   local target="${2:-${BL64_LIB_DEFAULT}}"
   local -i status=0
 
   bl64_check_parameter 'source' &&
-    bl64_check_parameter 'target' || return $?
-  bl64_check_directory "$source" &&
-    bl64_check_directory "$target" || return $?
+    bl64_check_parameter 'target' &&
+    bl64_check_directory "$source" &&
+    bl64_check_directory "$target" ||
+    return $?
 
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
@@ -242,7 +248,12 @@ function bl64_fs_merge_dir() {
     status=$?
     shopt -uq dotglob
     ;;
-  *) bl64_msg_show_unsupported ;;
+  *)
+    bl64_check_show_unsupported
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    ;;
+
   esac
 
   return $status
@@ -260,13 +271,13 @@ function bl64_fs_merge_dir() {
 #   command exit status
 #######################################
 function bl64_fs_chown() {
+  bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
-    verbose="$BL64_OS_SET_CHOWN_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHOWN_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_CHOWN" $verbose "$@"
+  "$BL64_FS_CMD_CHOWN" $verbose "$@"
 }
 
 #######################################
@@ -281,13 +292,13 @@ function bl64_fs_chown() {
 #   command exit status
 #######################################
 function bl64_fs_chmod() {
+  bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
-    verbose="$BL64_OS_SET_CHMOD_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_CHMOD" $verbose "$@"
+  "$BL64_FS_CMD_CHMOD" $verbose "$@"
 }
 
 #######################################
@@ -302,13 +313,13 @@ function bl64_fs_chmod() {
 #   command exit status
 #######################################
 function bl64_fs_chown_dir() {
+  bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
-    verbose="$BL64_OS_SET_CHMOD_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_CHMOD" $verbose "$BL64_OS_SET_CHOWN_RECURSIVE" "$@"
+  "$BL64_FS_CMD_CHMOD" $verbose "$BL64_FS_SET_CHOWN_RECURSIVE" "$@"
 }
 
 #######################################
@@ -323,11 +334,13 @@ function bl64_fs_chown_dir() {
 #   command exit status
 #######################################
 function bl64_fs_cp_file() {
-  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
-    verbose="$BL64_OS_SET_CP_VERBOSE"
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_CP" $verbose "$BL64_OS_SET_CP_FORCE" "$@"
+  "$BL64_FS_CMD_CP" $verbose "$BL64_FS_SET_CP_FORCE" "$@"
 }
 
 #######################################
@@ -342,11 +355,13 @@ function bl64_fs_cp_file() {
 #   command exit status
 #######################################
 function bl64_fs_cp_dir() {
-  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
-    verbose="$BL64_OS_SET_CP_VERBOSE"
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_CP" $verbose "$BL64_OS_SET_CP_FORCE" "$BL64_OS_SET_CP_RECURSIVE" "$@"
+  "$BL64_FS_CMD_CP" $verbose "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" "$@"
 }
 
 #######################################
@@ -361,7 +376,8 @@ function bl64_fs_cp_dir() {
 #   command exit status
 #######################################
 function bl64_fs_ln_symbolic() {
-  $BL64_OS_ALIAS_LN_SYMBOLIC "$@"
+  bl64_dbg_lib_show_function "$@"
+  $BL64_FS_ALIAS_LN_SYMBOLIC "$@"
 }
 
 #######################################
@@ -376,7 +392,8 @@ function bl64_fs_ln_symbolic() {
 #   command exit status
 #######################################
 function bl64_fs_ls_files() {
-  $BL64_OS_ALIAS_LS_FILES "$@"
+  bl64_dbg_lib_show_function "$@"
+  $BL64_FS_ALIAS_LS_FILES "$@"
 }
 
 #######################################
@@ -391,13 +408,13 @@ function bl64_fs_ls_files() {
 #   command exit status
 #######################################
 function bl64_fs_mkdir() {
+  bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
-    verbose="$BL64_OS_SET_MKDIR_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_MKDIR" $verbose "$@"
+  "$BL64_FS_CMD_MKDIR" $verbose "$@"
 }
 
 #######################################
@@ -412,13 +429,13 @@ function bl64_fs_mkdir() {
 #   command exit status
 #######################################
 function bl64_fs_mkdir_full() {
+  bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
-    verbose="$BL64_OS_SET_MKDIR_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_MKDIR" $verbose "$BL64_OS_SET_MKDIR_PARENTS" "$@"
+  "$BL64_FS_CMD_MKDIR" $verbose "$BL64_FS_SET_MKDIR_PARENTS" "$@"
 }
 
 #######################################
@@ -433,13 +450,13 @@ function bl64_fs_mkdir_full() {
 #   command exit status
 #######################################
 function bl64_fs_mv() {
+  bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
-    verbose="$BL64_OS_SET_MV_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MV_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_MV" $verbose "$BL64_OS_SET_MV_FORCE" "$@"
+  "$BL64_FS_CMD_MV" $verbose "$BL64_FS_SET_MV_FORCE" "$@"
 }
 
 #######################################
@@ -454,13 +471,13 @@ function bl64_fs_mv() {
 #   command exit status
 #######################################
 function bl64_fs_rm_file() {
+  bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
-    verbose="$BL64_OS_SET_RM_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_RM_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_RM" $verbose "$BL64_OS_SET_RM_FORCE" "$@"
+  "$BL64_FS_CMD_RM" $verbose "$BL64_FS_SET_RM_FORCE" "$@"
 }
 
 #######################################
@@ -475,13 +492,13 @@ function bl64_fs_rm_file() {
 #   command exit status
 #######################################
 function bl64_fs_rm_full() {
+  bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  [[ "$BL64_LIB_VERBOSE" == "$BL64_LIB_VAR_ON" ]] &&
-    verbose="$BL64_OS_SET_RM_VERBOSE"
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_RM_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_OS_CMD_RM" $verbose "$BL64_OS_SET_RM_FORCE" "$BL64_OS_SET_RM_RECURSIVE" "$@"
+  "$BL64_FS_CMD_RM" $verbose "$BL64_FS_SET_RM_FORCE" "$BL64_FS_SET_RM_RECURSIVE" "$@"
 }
 
 #######################################
@@ -496,6 +513,7 @@ function bl64_fs_rm_full() {
 #   0: always ok
 #######################################
 function bl64_fs_cleanup_tmps() {
+  bl64_dbg_lib_show_function
   bl64_fs_rm_full -- /tmp/[[:alnum:]]*
   bl64_fs_rm_full -- /var/tmp/[[:alnum:]]*
   return 0
@@ -513,6 +531,7 @@ function bl64_fs_cleanup_tmps() {
 #   0: always ok
 #######################################
 function bl64_fs_cleanup_logs() {
+  bl64_dbg_lib_show_function
   local target='/var/log'
 
   if [[ -d "$target" ]]; then
@@ -533,6 +552,7 @@ function bl64_fs_cleanup_logs() {
 #   0: always ok
 #######################################
 function bl64_fs_cleanup_caches() {
+  bl64_dbg_lib_show_function
   local target='/var/cache/man'
 
   if [[ -d "$target" ]]; then
@@ -557,10 +577,60 @@ function bl64_fs_cleanup_caches() {
 #   0: always ok
 #######################################
 function bl64_fs_cleanup_full() {
+  bl64_dbg_lib_show_function "$@"
   bl64_pkg_cleanup
   bl64_fs_cleanup_tmps
   bl64_fs_cleanup_logs
   bl64_fs_cleanup_caches
 
   return 0
+}
+
+#######################################
+# OS command wrapper: find
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_find() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_command "$BL64_FS_CMD_FIND" || return $?
+
+  "$BL64_FS_CMD_FIND" "$@"
+}
+
+#######################################
+# Find files and report as list
+#
+# * Not using bl64_fs_find to avoid file expansion for -name
+#
+# Arguments:
+#   $1: search path
+#   $2: search pattern. Format: find -name options
+# Outputs:
+#   STDOUT: file list. One path per line
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_find_files() {
+  bl64_dbg_lib_show_function "$@"
+  local path="${1:-.}"
+  local pattern="${2:-}"
+
+  bl64_check_command "$BL64_FS_CMD_FIND" &&
+    bl64_check_directory "$path" || return $?
+
+  # shellcheck disable=SC2086
+  "$BL64_FS_CMD_FIND" \
+    "$path" \
+    -type f \
+    ${pattern:+-name "${pattern}"} \
+    -print
 }

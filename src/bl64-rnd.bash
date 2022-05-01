@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.1
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -19,22 +19,25 @@
 # Returns:
 #   0: no error
 #   >0: printf error
-#   BL64_RND_ERROR_MIN
-#   BL64_RND_ERROR_MAX
+#   BL64_LIB_ERROR_PARAMETER_RANGE
+#   BL64_LIB_ERROR_PARAMETER_RANGE
 #######################################
 function bl64_rnd_get_range() {
-  local min="${1:-$BL64_RND_RANDOM_MIN}"
-  local max="${2:-$BL64_RND_RANDOM_MAX}"
+  bl64_dbg_lib_show_function "$@"
+  local min="${1:-${BL64_RND_RANDOM_MIN}}"
+  local max="${2:-${BL64_RND_RANDOM_MAX}}"
   local modulo=0
 
   # shellcheck disable=SC2086
-  (( min < BL64_RND_RANDOM_MIN )) && bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MIN $BL64_RND_RANDOM_MIN" && return $BL64_RND_ERROR_MIN
+  ((min < BL64_RND_RANDOM_MIN)) &&
+    bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MIN $BL64_RND_RANDOM_MIN" && return $BL64_LIB_ERROR_PARAMETER_RANGE
   # shellcheck disable=SC2086
-  (( max > BL64_RND_RANDOM_MAX )) && bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MAX $BL64_RND_RANDOM_MAX" && return $BL64_RND_ERROR_MAX
+  ((max > BL64_RND_RANDOM_MAX)) &&
+    bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MAX $BL64_RND_RANDOM_MAX" && return $BL64_LIB_ERROR_PARAMETER_RANGE
 
-  modulo=$(( max - min + 1))
+  modulo=$((max - min + 1))
 
-  printf '%s' "$(( min + (RANDOM % modulo) ))"
+  printf '%s' "$((min + (RANDOM % modulo)))"
 }
 
 #######################################
@@ -48,17 +51,20 @@ function bl64_rnd_get_range() {
 # Returns:
 #   0: no error
 #   >0: printf error
-#   BL64_RND_ERROR_MIN
-#   BL64_RND_ERROR_MAX
+#   BL64_LIB_ERROR_PARAMETER_RANGE
+#   BL64_LIB_ERROR_PARAMETER_RANGE
 #######################################
 function bl64_rnd_get_numeric() {
-  local length="${1:-$BL64_RND_LENGTH_1}"
+  bl64_dbg_lib_show_function "$@"
+  local length="${1:-${BL64_RND_LENGTH_1}}"
   local seed=''
 
   # shellcheck disable=SC2086
-  (( length < BL64_RND_LENGTH_1 )) && bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MIN $BL64_RND_LENGTH_1" && return $BL64_RND_ERROR_MIN
+  ((length < BL64_RND_LENGTH_1)) &&
+    bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MIN $BL64_RND_LENGTH_1" && return $BL64_LIB_ERROR_PARAMETER_RANGE
   # shellcheck disable=SC2086
-  (( length > BL64_RND_LENGTH_20 )) && bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MAX $BL64_RND_LENGTH_20" && return $BL64_RND_ERROR_MAX
+  ((length > BL64_RND_LENGTH_20)) &&
+    bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MAX $BL64_RND_LENGTH_20" && return $BL64_LIB_ERROR_PARAMETER_RANGE
 
   seed="${RANDOM}${RANDOM}${RANDOM}${RANDOM}${RANDOM}"
   printf '%s' "${seed:0:$length}"
@@ -76,26 +82,27 @@ function bl64_rnd_get_numeric() {
 # Returns:
 #   0: no error
 #   >0: printf error
-#   BL64_RND_ERROR_MIN
-#   BL64_RND_ERROR_MAX
+#   BL64_LIB_ERROR_PARAMETER_RANGE
+#   BL64_LIB_ERROR_PARAMETER_RANGE
 #######################################
 function bl64_rnd_get_alphanumeric() {
-  local length="${1:-BL64_RND_LENGTH_1}"
+  bl64_dbg_lib_show_function "$@"
+  local length="${1:-${BL64_RND_LENGTH_1}}"
   local output=''
   local item=''
   local index=0
   local count=0
 
-  # shellcheck disable=SC2086
-  (( length < BL64_RND_LENGTH_1 )) && bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MIN $BL64_RND_LENGTH_1" && return $BL64_RND_ERROR_MIN
-  # shellcheck disable=SC2086
-  (( length > BL64_RND_LENGTH_100 )) && bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MAX $BL64_RND_LENGTH_100" && return $BL64_RND_ERROR_MAX
+  ((length < BL64_RND_LENGTH_1)) &&
+    bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MIN $BL64_RND_LENGTH_1" && return $BL64_LIB_ERROR_PARAMETER_RANGE
+  ((length > BL64_RND_LENGTH_100)) &&
+    bl64_msg_show_error "$_BL64_RND_TXT_LENGHT_MAX $BL64_RND_LENGTH_100" && return $BL64_LIB_ERROR_PARAMETER_RANGE
 
-  while (( count < length )); do
-    index=$( bl64_rnd_get_range '0' "$BL64_RND_POOL_ALPHANUMERIC_MAX_IDX" )
-    item="$( printf '%s' "${BL64_RND_POOL_ALPHANUMERIC:$index:1}" )"
+  while ((count < length)); do
+    index=$(bl64_rnd_get_range '0' "$BL64_RND_POOL_ALPHANUMERIC_MAX_IDX")
+    item="$(printf '%s' "${BL64_RND_POOL_ALPHANUMERIC:$index:1}")"
     output="${output}${item}"
-    (( count++ ))
+    ((count++))
   done
 
   printf '%s' "$output"

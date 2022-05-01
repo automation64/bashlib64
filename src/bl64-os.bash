@@ -8,7 +8,7 @@
 #######################################
 
 function _bl64_os_match() {
-
+  bl64_dbg_lib_show_function "$@"
   local os="$1"
   local item="$2"
   local version="${item##*-}"
@@ -26,6 +26,7 @@ function _bl64_os_match() {
 }
 
 function _bl64_os_get_distro_from_uname() {
+  bl64_dbg_lib_show_function
   local os_type=''
   local os_version=''
   local cmd_sw_vers='/usr/bin/sw_vers'
@@ -42,8 +43,8 @@ function _bl64_os_get_distro_from_uname() {
   return 0
 }
 
+# Warning: bootstrap function: use pure bash, no return, no exit
 function _bl64_os_get_distro_from_os_release() {
-  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]] && set -x
 
   # shellcheck disable=SC1091
   source '/etc/os-release'
@@ -87,7 +88,6 @@ function _bl64_os_get_distro_from_os_release() {
   *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;
   esac
 
-  [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]] && set +x
   return 0
 }
 
@@ -101,11 +101,12 @@ function _bl64_os_get_distro_from_os_release() {
 #   STDERR: None
 # Returns:
 #   0: os match
-#   BL64_OS_ERROR_NO_OS_MATCH
-#   BL64_OS_ERROR_INVALID_OS_TAG
+#   BL64_LIB_ERROR_OS_NOT_MATCH
+#   BL64_LIB_ERROR_OS_TAG_INVALID
 #######################################
 
 function bl64_os_match() {
+  bl64_dbg_lib_show_function "$@"
   local item=''
 
   bl64_dbg_lib_show_info "[OSList=${*}}] / [BL64_OS_DISTRO=${BL64_OS_DISTRO}]"
@@ -121,12 +122,12 @@ function bl64_os_match() {
     'OL' | OL-*) _bl64_os_match "$BL64_OS_OL" "$item" && return 0 ;;
     'RHEL' | RHEL-*) _bl64_os_match "$BL64_OS_RHEL" "$item" && return 0 ;;
     'UB' | UB-*) _bl64_os_match "$BL64_OS_UB" "$item" && return 0 ;;
-    *) return $BL64_OS_ERROR_INVALID_OS_TAG ;;
+    *) return $BL64_LIB_ERROR_OS_TAG_INVALID ;;
     esac
   done
 
   # shellcheck disable=SC2086
-  return $BL64_OS_ERROR_NO_OS_MATCH
+  return $BL64_LIB_ERROR_OS_NOT_MATCH
 }
 
 #######################################
@@ -144,250 +145,13 @@ function bl64_os_match() {
 # Returns:
 #   0: always ok, even when the OS is not supported
 #######################################
+# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_os_get_distro() {
   if [[ -r '/etc/os-release' ]]; then
     _bl64_os_get_distro_from_os_release
   else
     _bl64_os_get_distro_from_uname
   fi
-
-  # Do not use return as this function gets sourced
-}
-
-#######################################
-# Identify and normalize common *nix OS commands
-# Commands are exported as variables with full path
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok, even when the OS is not supported
-#######################################
-function bl64_os_set_command() {
-  # shellcheck disable=SC2034
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_OS_CMD_AWK='/usr/bin/awk'
-    BL64_OS_CMD_CAT='/bin/cat'
-    BL64_OS_CMD_CHMOD='/bin/chmod'
-    BL64_OS_CMD_CHOWN='/bin/chown'
-    BL64_OS_CMD_CP='/bin/cp'
-    BL64_OS_CMD_DATE="/bin/date"
-    BL64_OS_CMD_FALSE="/bin/false"
-    BL64_OS_CMD_GAWK='/usr/bin/gawk'
-    BL64_OS_CMD_GREP='/bin/grep'
-    BL64_OS_CMD_HOSTNAME='/bin/hostname'
-    BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_LN='/bin/ln'
-    BL64_OS_CMD_LS='/bin/ls'
-    BL64_OS_CMD_MKDIR='/bin/mkdir'
-    BL64_OS_CMD_MKTEMP='/bin/mktemp'
-    BL64_OS_CMD_MV='/bin/mv'
-    BL64_OS_CMD_RM='/bin/rm'
-    BL64_OS_CMD_TAR='/bin/tar'
-    BL64_OS_CMD_TRUE="/bin/true"
-    BL64_OS_CMD_UNAME='/bin/uname'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    BL64_OS_CMD_AWK='/usr/bin/awk'
-    BL64_OS_CMD_CAT='/usr/bin/cat'
-    BL64_OS_CMD_CHMOD='/usr/bin/chmod'
-    BL64_OS_CMD_CHOWN='/usr/bin/chown'
-    BL64_OS_CMD_CP='/usr/bin/cp'
-    BL64_OS_CMD_DATE="/usr/bin/date"
-    BL64_OS_CMD_FALSE="/usr/bin/false"
-    BL64_OS_CMD_GAWK='/usr/bin/gawk'
-    BL64_OS_CMD_GREP='/usr/bin/grep'
-    BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
-    BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_LN='/bin/ln'
-    BL64_OS_CMD_LS='/usr/bin/ls'
-    BL64_OS_CMD_MKDIR='/usr/bin/mkdir'
-    BL64_OS_CMD_MKTEMP='/usr/bin/mktemp'
-    BL64_OS_CMD_MV='/usr/bin/mv'
-    BL64_OS_CMD_RM='/usr/bin/rm'
-    BL64_OS_CMD_TAR='/bin/tar'
-    BL64_OS_CMD_TRUE="/usr/bin/true"
-    BL64_OS_CMD_UNAME='/bin/uname'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_OS_CMD_AWK='/usr/bin/awk'
-    BL64_OS_CMD_CAT='/bin/cat'
-    BL64_OS_CMD_CHMOD='/bin/chmod'
-    BL64_OS_CMD_CHOWN='/bin/chown'
-    BL64_OS_CMD_CP='/bin/cp'
-    BL64_OS_CMD_DATE="/bin/date"
-    BL64_OS_CMD_FALSE="/bin/false"
-    BL64_OS_CMD_GAWK='/usr/bin/gawk'
-    BL64_OS_CMD_GREP='/bin/grep'
-    BL64_OS_CMD_HOSTNAME='/bin/hostname'
-    BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_LN='/bin/ln'
-    BL64_OS_CMD_LS='/bin/ls'
-    BL64_OS_CMD_MKDIR='/bin/mkdir'
-    BL64_OS_CMD_MKTEMP='/bin/mktemp'
-    BL64_OS_CMD_MV='/bin/mv'
-    BL64_OS_CMD_RM='/bin/rm'
-    BL64_OS_CMD_TAR='/bin/tar'
-    BL64_OS_CMD_TRUE="/bin/true"
-    BL64_OS_CMD_UNAME='/bin/uname'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_OS_CMD_AWK='/usr/bin/awk'
-    BL64_OS_CMD_CAT='/bin/cat'
-    BL64_OS_CMD_CHMOD='/bin/chmod'
-    BL64_OS_CMD_CHOWN='/usr/sbin/chown'
-    BL64_OS_CMD_CP='/bin/cp'
-    BL64_OS_CMD_DATE="/bin/date"
-    BL64_OS_CMD_FALSE="/usr/bin/false"
-    BL64_OS_CMD_GAWK='/usr/bin/gawk'
-    BL64_OS_CMD_GREP='/usr/bin/grep'
-    BL64_OS_CMD_HOSTNAME='/bin/hostname'
-    BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_OS_CMD_LN='/bin/ln'
-    BL64_OS_CMD_LS='/bin/ls'
-    BL64_OS_CMD_MKDIR='/bin/mkdir'
-    BL64_OS_CMD_MKTEMP='/usr/bin/mktemp'
-    BL64_OS_CMD_MV='/bin/mv'
-    BL64_OS_CMD_RM='/bin/rm'
-    BL64_OS_CMD_TAR='/usr/bin/tar'
-    BL64_OS_CMD_TRUE="/usr/bin/true"
-    BL64_OS_CMD_UNAME='/usr/bin/uname'
-    ;;
-  *) bl64_msg_show_unsupported ;;
-  esac
-
-  # Do not use return as this function gets sourced
-}
-
-#######################################
-# Create command sets for common options
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-# shellcheck disable=SC2034
-function bl64_os_set_options() {
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    BL64_OS_SET_MKDIR_VERBOSE='--verbose'
-    BL64_OS_SET_MKDIR_PARENTS='--parents'
-    BL64_OS_SET_CHOWN_VERBOSE='--verbose'
-    BL64_OS_SET_CHOWN_RECURSIVE='--recursive'
-    BL64_OS_SET_CP_VERBOSE='--verbose'
-    BL64_OS_SET_CP_RECURSIVE='--recursive'
-    BL64_OS_SET_CP_FORCE='--force'
-    BL64_OS_SET_CHMOD_VERBOSE='--verbose'
-    BL64_OS_SET_CHMOD_RECURSIVE='--recursive'
-    BL64_OS_SET_MV_VERBOSE='--verbose'
-    BL64_OS_SET_MV_FORCE='--force'
-    BL64_OS_SET_RM_VERBOSE='--verbose'
-    BL64_OS_SET_RM_FORCE='--force'
-    BL64_OS_SET_RM_RECURSIVE='--recursive'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_OS_SET_MKDIR_VERBOSE=' '
-    BL64_OS_SET_MKDIR_PARENTS='-p'
-    BL64_OS_SET_CHOWN_VERBOSE='-v'
-    BL64_OS_SET_CHOWN_RECURSIVE='-R'
-    BL64_OS_SET_CP_VERBOSE='-v'
-    BL64_OS_SET_CP_RECURSIVE='-R'
-    BL64_OS_SET_CP_FORCE='-f'
-    BL64_OS_SET_CHMOD_VERBOSE='-v'
-    BL64_OS_SET_CHMOD_RECURSIVE='-R'
-    BL64_OS_SET_MV_VERBOSE=' '
-    BL64_OS_SET_MV_FORCE='-f'
-    BL64_OS_SET_RM_VERBOSE=' '
-    BL64_OS_SET_RM_FORCE='-f'
-    BL64_OS_SET_RM_RECURSIVE='-R'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_OS_SET_MKDIR_VERBOSE='-v'
-    BL64_OS_SET_MKDIR_PARENTS='-p'
-    BL64_OS_SET_CHOWN_VERBOSE='-v'
-    BL64_OS_SET_CHOWN_RECURSIVE='-R'
-    BL64_OS_SET_CP_VERBOSE='-v'
-    BL64_OS_SET_CP_RECURSIVE='-R'
-    BL64_OS_SET_CP_FORCE='-f'
-    BL64_OS_SET_CHMOD_VERBOSE='-v'
-    BL64_OS_SET_CHMOD_RECURSIVE='-R'
-    BL64_OS_SET_MV_VERBOSE='-v'
-    BL64_OS_SET_MV_FORCE='-f'
-    BL64_OS_SET_RM_VERBOSE='-v'
-    BL64_OS_SET_RM_FORCE='-f'
-    BL64_OS_SET_RM_RECURSIVE='-R'
-    ;;
-  *) bl64_msg_show_unsupported ;;
-  esac
-
-  # Do not use return as this function gets sourced
-}
-
-#######################################
-# Create command aliases for common use cases
-#
-# * Aliases are presented as regular shell variables for easy inclusion in complex commands
-# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-# shellcheck disable=SC2034
-function bl64_os_set_alias() {
-  local cmd_mawk='/usr/bin/mawk'
-
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    if [[ -x "$cmd_mawk" ]]; then
-      BL64_OS_ALIAS_AWK="$cmd_mawk"
-    else
-      BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
-    fi
-    BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
-    BL64_OS_ALIAS_LN_SYMBOLIC="${BL64_OS_CMD_LN} --verbose --symbolic"
-    BL64_OS_ALIAS_LS_FILES="${BL64_OS_CMD_LS} --color=never"
-    BL64_OS_ALIAS_MKTEMP_DIR="${BL64_OS_CMD_MKTEMP} -d"
-    BL64_OS_ALIAS_MKTEMP_FILE="${BL64_OS_CMD_MKTEMP}"
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
-    BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
-    BL64_OS_ALIAS_LN_SYMBOLIC="${BL64_OS_CMD_LN} -v -s"
-    BL64_OS_ALIAS_LS_FILES="${BL64_OS_CMD_LS} --color=never"
-    BL64_OS_ALIAS_MKTEMP_DIR="${BL64_OS_CMD_MKTEMP} -d"
-    BL64_OS_ALIAS_MKTEMP_FILE="${BL64_OS_CMD_MKTEMP}"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_OS_ALIAS_AWK="$BL64_OS_CMD_AWK"
-    BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
-    BL64_OS_ALIAS_LN_SYMBOLIC="${BL64_OS_CMD_LN} -v -s"
-    BL64_OS_ALIAS_LS_FILES="${BL64_OS_CMD_LS} --color=never"
-    BL64_OS_ALIAS_MKTEMP_DIR="${BL64_OS_CMD_MKTEMP} -d"
-    BL64_OS_ALIAS_MKTEMP_FILE="${BL64_OS_CMD_MKTEMP}"
-    ;;
-  *) bl64_msg_show_unsupported ;;
-  esac
-
-  BL64_OS_ALIAS_CHOWN_DIR="${BL64_OS_CMD_CHOWN} ${BL64_OS_SET_CHOWN_VERBOSE} ${BL64_OS_SET_CHOWN_RECURSIVE}"
-  BL64_OS_ALIAS_CP_DIR="${BL64_OS_CMD_CP} ${BL64_OS_SET_CP_VERBOSE} ${BL64_OS_SET_CP_FORCE} ${BL64_OS_SET_CP_RECURSIVE}"
-  BL64_OS_ALIAS_CP_FILE="${BL64_OS_CMD_CP} ${BL64_OS_SET_CP_VERBOSE} ${BL64_OS_SET_CP_FORCE}"
-  BL64_OS_ALIAS_MKDIR_FULL="${BL64_OS_CMD_MKDIR} ${BL64_OS_SET_MKDIR_VERBOSE} ${BL64_OS_SET_MKDIR_PARENTS}"
-  BL64_OS_ALIAS_MV="${BL64_OS_CMD_MV} ${BL64_OS_SET_MV_VERBOSE} ${BL64_OS_SET_MV_FORCE}"
-  BL64_OS_ALIAS_RM_FILE="${BL64_OS_CMD_RM} ${BL64_OS_SET_RM_VERBOSE} ${BL64_OS_SET_RM_FORCE}"
-  BL64_OS_ALIAS_RM_FULL="${BL64_OS_CMD_RM} ${BL64_OS_SET_RM_VERBOSE} ${BL64_OS_SET_RM_FORCE} ${BL64_OS_SET_RM_RECURSIVE}"
 
   # Do not use return as this function gets sourced
 }
@@ -406,5 +170,60 @@ function bl64_os_set_alias() {
 #   command exit status
 #######################################
 function bl64_os_id_user() {
+  bl64_dbg_lib_show_function "$@"
   $BL64_OS_ALIAS_ID_USER "$@"
+}
+
+#######################################
+# OS command wrapper: awk
+#
+# * Detects OS provided awk and selects the best match
+# * The selected awk app is configured for POSIX compatibility and traditional regexp
+# * If gawk is required use the BL64_OS_CMD_GAWK variable instead of this function
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_os_awk() {
+  bl64_dbg_lib_show_function "$@"
+  local awk_cmd='/usr/bin/awk'
+  local awk_flags=' '
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    if [[ -x '/usr/bin/gawk' ]]; then
+      awk_cmd='/usr/bin/gawk'
+      awk_flags='--posix'
+    elif [[ -x '/usr/bin/mawk' ]]; then
+      awk_cmd='/usr/bin/mawk'
+    fi
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+    awk_cmd='/usr/bin/gawk'
+    awk_flags='--posix'
+    ;;
+  ${BL64_OS_ALP}-*)
+    if [[ -x '/usr/bin/gawk' ]]; then
+      awk_cmd='/usr/bin/gawk'
+      awk_flags='--posix'
+    fi
+    ;;
+  ${BL64_OS_MCOS}-*)
+    awk_cmd='/usr/bin/awk'
+    ;;
+  *)
+    bl64_check_show_unsupported
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    ;;
+  esac
+  bl64_check_command "$awk_cmd" || return $?
+
+  # shellcheck disable=SC2086
+  "$awk_cmd" $awk_flags "$@"
 }

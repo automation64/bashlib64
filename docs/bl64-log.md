@@ -1,4 +1,4 @@
-# module: bl64-log
+# Module: log
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-log.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-log.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-log.bash" %}

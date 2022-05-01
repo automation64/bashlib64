@@ -1,12 +1,6 @@
-# module: bl64-fmt
+# Module: fmt
 
-## Header
-
-```shell
-{% include "../src/bl64-fmt.env" %}
-```
-
-## Source Code
+## Code
 
 ```shell
 {% include "../src/bl64-fmt.bash" %}

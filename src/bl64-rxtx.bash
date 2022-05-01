@@ -4,111 +4,8 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
-
-#######################################
-# Identify and normalize commands
-#
-# * Commands are exported as variables with full path
-# * The caller function is responsible for checking that the target command is present (installed)
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function bl64_rxtx_set_command() {
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
-    BL64_RXTX_CMD_CURL='/usr/bin/curl'
-    BL64_RXTX_CMD_WGET='/usr/bin/wget'
-    ;;
-  *) bl64_msg_show_unsupported ;;
-  esac
-  # Do not use return as this function gets sourced
-}
-
-#######################################
-# Create command sets for common options
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-# shellcheck disable=SC2034
-function bl64_rxtx_set_options() {
-  # shellcheck disable=SC2034
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-11.* | ${BL64_OS_FD}-*)
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_CURL_SILENT='--silent --no-progress-meter'
-    BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
-    BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
-    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
-    BL64_RXTX_SET_WGET_SECURE='--no-config'
-    ;;
-  ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_DEB}-9.* | ${BL64_OS_DEB}-10.*)
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_CURL_SILENT='--silent'
-    BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
-    BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
-    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
-    BL64_RXTX_SET_WGET_SECURE='--no-config'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_CURL_SILENT='--silent'
-    BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
-    BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
-    BL64_RXTX_SET_WGET_OUTPUT='-O'
-    BL64_RXTX_SET_WGET_SECURE=' '
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_CURL_SILENT='--silent --no-progress-meter'
-    BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
-    BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
-    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
-    BL64_RXTX_SET_WGET_SECURE='--no-config'
-    ;;
-  *) bl64_msg_show_unsupported ;;
-  esac
-}
-
-#######################################
-# Create command aliases for common use cases
-#
-# * Aliases are presented as regular shell variables for easy inclusion in complex commands
-# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function bl64_rxtx_set_alias() {
-  BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
-  BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
-}
 
 #######################################
 # Pull data from web server
@@ -124,10 +21,11 @@ function bl64_rxtx_set_alias() {
 #   STDOUT: None unless BL64_DBG_TARGET_LIB_CMD
 #   STDERR: command error
 # Returns:
-#   BL64_RXTX_ERROR_MISSING_COMMAND
+#   BL64_LIB_ERROR_APP_MISSING
 #   command error status
 #######################################
 function bl64_rxtx_web_get_file() {
+  bl64_dbg_lib_show_function "$@"
   local source="$1"
   local destination="$2"
   local replace="${3:-${BL64_LIB_VAR_OFF}}"
@@ -135,21 +33,21 @@ function bl64_rxtx_web_get_file() {
   local verbose="$BL64_RXTX_SET_CURL_SILENT"
   local -i status=0
 
-  bl64_check_parameter 'source' || return $?
-  bl64_check_parameter 'destination' || return $?
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'destination' || return $?
 
   [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]] && return 0
   _bl64_rxtx_backup "$destination" >/dev/null || return $?
 
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
-    [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_CMD" ]] && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
+    bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
     $BL64_RXTX_ALIAS_CURL $verbose \
       $BL64_RXTX_SET_CURL_REDIRECT \
       $BL64_RXTX_SET_CURL_OUTPUT "$destination" \
       "$source"
     status=$?
   elif [[ -x "$BL64_RXTX_CMD_WGET" ]]; then
-    [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_CMD" ]] && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
+    bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
     $BL64_RXTX_ALIAS_WGET $verbose \
       $BL64_RXTX_SET_WGET_OUTPUT "$destination" \
       "$source"
@@ -157,7 +55,7 @@ function bl64_rxtx_web_get_file() {
   else
     # shellcheck disable=SC2086
     bl64_msg_show_error "$_BL64_RXTX_TXT_MISSING_COMMAND (wget or curl)" &&
-      return $BL64_RXTX_ERROR_MISSING_COMMAND
+      return $BL64_LIB_ERROR_APP_MISSING
   fi
 
   # Determine if mode needs to be set
@@ -189,11 +87,11 @@ function bl64_rxtx_web_get_file() {
 #   STDOUT: command stdout
 #   STDERR: command error
 # Returns:
-#   BL64_RXTX_ERROR_MISSING_PARAMETER
-#   BL64_RXTX_ERROR_TEMPORARY_REPO
+#   BL64_LIB_ERROR_TASK_TEMP
 #   command error status
 #######################################
 function bl64_rxtx_git_get_dir() {
+  bl64_dbg_lib_show_function "$@"
   local source_url="${1}"
   local source_path="${2}"
   local destination="${3}"
@@ -202,9 +100,9 @@ function bl64_rxtx_git_get_dir() {
   local -i status=0
 
   # shellcheck disable=SC2086
-  bl64_check_parameter 'source_url' 'git repository' &&
-    bl64_check_parameter 'source_path' 'source path' &&
-    bl64_check_parameter 'destination' 'target destination' &&
+  bl64_check_parameter 'source_url' &&
+    bl64_check_parameter 'source_path' &&
+    bl64_check_parameter 'destination' &&
     bl64_check_path_relative "$source_path" ||
     return $?
 
@@ -220,16 +118,15 @@ function bl64_rxtx_git_get_dir() {
 
   # Detect what type of path is requested
   if [[ "$source_path" == '.' || "$source_path" == './' ]]; then
-    bl64_dbg_lib_show_info 'process full repo'
     _bl64_rxtx_git_get_dir_root "$source_url" "$destination" "$branch"
   else
-    bl64_dbg_lib_show_info 'process repo subdirectory'
     _bl64_rxtx_git_get_dir_sub "$source_url" "$source_path" "$destination" "$branch"
   fi
   status=$?
 
   # Remove GIT repo metadata
   if [[ -d "${destination}/.git" ]]; then
+    bl64_dbg_lib_show_info 'remove git metadata'
     # shellcheck disable=SC2164
     cd "$destination"
     bl64_fs_rm_full '.git' >/dev/null
@@ -241,6 +138,7 @@ function bl64_rxtx_git_get_dir() {
 }
 
 function _bl64_rxtx_git_get_dir_root() {
+  bl64_dbg_lib_show_function "$@"
   local source_url="${1}"
   local destination="${2}"
   local branch="${3:-main}"
@@ -249,20 +147,21 @@ function _bl64_rxtx_git_get_dir_root() {
   local git_name=''
   local transition=''
 
-  repo="$($BL64_OS_ALIAS_MKTEMP_DIR)"
+  repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
   # shellcheck disable=SC2086
-  bl64_check_directory "$repo" "$_BL64_RXTX_TXT_CREATION_PROBLEM" || return $BL64_RXTX_ERROR_TEMPORARY_REPO
+  bl64_check_directory "$repo" "$_BL64_RXTX_TXT_CREATION_PROBLEM" || return $BL64_LIB_ERROR_TASK_TEMP
 
   git_name="$(bl64_fmt_basename "$source_url")"
   git_name="${git_name/.git/}"
   transition="${repo}/${git_name}"
-  bl64_dbg_lib_show_info "temporary local git path: transition=[$transition]"
+  bl64_dbg_lib_show_vars 'git_name' 'transition'
 
   # Clone the repo
-  bl64_vcs_git_clone "$source_url" "$repo" "$branch" && \
-  [[ -d "$transition" ]] &&
-  # Promote to destination
-  bl64_fs_mv "$transition" "$destination"
+  bl64_vcs_git_clone "$source_url" "$repo" "$branch" &&
+    # Promote to destination
+    [[ -d "$transition" ]] &&
+    bl64_dbg_lib_show_info 'promote to destination' &&
+    bl64_fs_mv "$transition" "$destination"
   status=$?
 
   [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
@@ -270,6 +169,7 @@ function _bl64_rxtx_git_get_dir_root() {
 }
 
 function _bl64_rxtx_git_get_dir_sub() {
+  bl64_dbg_lib_show_function "$@"
   local source_url="${1}"
   local source_path="${2}"
   local destination="${3}"
@@ -280,14 +180,15 @@ function _bl64_rxtx_git_get_dir_sub() {
   local source=''
   local transition=''
 
-  repo="$($BL64_OS_ALIAS_MKTEMP_DIR)"
+  repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
   # shellcheck disable=SC2086
-  bl64_check_directory "$repo" "$_BL64_RXTX_TXT_CREATION_PROBLEM" || return $BL64_RXTX_ERROR_TEMPORARY_REPO
+  bl64_check_directory "$repo" "$_BL64_RXTX_TXT_CREATION_PROBLEM" || return $BL64_LIB_ERROR_TASK_TEMP
 
   # Use transition path to get to the final target path
   source="${repo}/${source_path}"
   target="$(bl64_fmt_basename "$destination")"
   transition="${repo}/transition/${target}"
+  bl64_dbg_lib_show_vars 'source' 'target' 'transition'
 
   bl64_vcs_git_sparse "$source_url" "$repo" "$branch" "$source_path" &&
     [[ -d "$source" ]] &&
@@ -301,7 +202,7 @@ function _bl64_rxtx_git_get_dir_sub() {
 }
 
 function _bl64_rxtx_backup() {
-
+  bl64_dbg_lib_show_function "$@"
   local destination="$1"
   local backup="${destination}${_BL64_RXTX_BACKUP_POSTFIX}"
   local -i status=0
@@ -311,12 +212,13 @@ function _bl64_rxtx_backup() {
     status=$?
   fi
 
-  ((status != 0)) && status=$BL64_RXTX_ERROR_BACKUP
+  ((status != 0)) && status=$BL64_LIB_ERROR_TASK_BACKUP
   # shellcheck disable=SC2086
   return $status
 }
 
 function _bl64_rxtx_restore() {
+  bl64_dbg_lib_show_function "$@"
   local destination="$1"
   local result="$2"
   local backup="${destination}${_BL64_RXTX_BACKUP_POSTFIX}"
@@ -337,7 +239,7 @@ function _bl64_rxtx_restore() {
   bl64_fs_mv "$backup" "$destination"
   status=$?
 
-  ((status != 0)) && status=$BL64_RXTX_ERROR_RESTORE
+  ((status != 0)) && status=$BL64_LIB_ERROR_TASK_RESTORE
   # shellcheck disable=SC2086
   return $status
 }

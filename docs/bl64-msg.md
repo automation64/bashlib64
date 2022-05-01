@@ -1,4 +1,4 @@
-# module: bl64-msg
+# Module: msg
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-msg.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-msg.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-msg.bash" %}

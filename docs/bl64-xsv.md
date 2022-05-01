@@ -1,4 +1,4 @@
-# module: bl64-xsv
+# Module: xsv
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-xsv.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-xsv.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-xsv.bash" %}

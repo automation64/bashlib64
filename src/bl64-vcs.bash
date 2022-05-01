@@ -4,55 +4,30 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.8.1
+# Version: 1.9.0
 #######################################
 
 #######################################
-# Identify and normalize commands
-#
-# * Commands are exported as variables with full path
-# * The caller function is responsible for checking that the target command is present (installed)
+# GIT CLI wrapper with verbose, debug and common options
 #
 # Arguments:
-#   None
+#   $@: arguments are passed as-is to the command
 # Outputs:
-#   STDOUT: None
-#   STDERR: None
+#   STDOUT: command output
+#   STDERR: command stderr
 # Returns:
-#   0: always ok
+#   command exit status
 #######################################
-function bl64_vcs_set_command() {
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
-    BL64_VCS_CMD_GIT='/usr/bin/git'
-    ;;
-  *) bl64_msg_show_unsupported ;;
-  esac
-  # Do not use return as this function gets sourced
-}
+function bl64_vcs_run_git() {
+  bl64_dbg_lib_show_function "$@"
+  local debug="$BL64_VCS_SET_GIT_QUIET"
 
-#######################################
-# Create command aliases for common use cases
-#
-# * Aliases are presented as regular shell variables for easy inclusion in complex commands
-# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function bl64_vcs_set_alias() {
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
-    # shellcheck disable=SC2034
-    BL64_VCS_ALIAS_GIT="$BL64_VCS_CMD_GIT"
-    ;;
-  *) bl64_msg_show_unsupported ;;
-  esac
+  bl64_dbg_lib_command_enabled && debug=''
+
+  # shellcheck disable=SC2086
+  bl64_dbg_lib_show_info "$BL64_VCS_CMD_GIT" $debug $BL64_VCS_SET_GIT_NO_PAGER "$@"
+  # shellcheck disable=SC2086
+  "$BL64_VCS_CMD_GIT" $debug $BL64_VCS_SET_GIT_NO_PAGER "$@"
 }
 
 #######################################
@@ -70,31 +45,24 @@ function bl64_vcs_set_alias() {
 #   STDERR: git stderr
 # Returns:
 #   n: git exit status
-#   BL64_VCS_ERROR_MISSING_PARAMETER
-#   BL64_VCS_ERROR_DESTINATION_ERROR
-#   BL64_VCS_ERROR_MISSING_COMMAND
 #######################################
 function bl64_vcs_git_clone() {
+  bl64_dbg_lib_show_function "$@"
   local source="${1}"
   local destination="${2}"
   local branch="${3:-main}"
 
-  # shellcheck disable=SC2086
-  bl64_check_command "$BL64_VCS_CMD_GIT" || return $BL64_VCS_ERROR_MISSING_COMMAND
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'destination' &&
+    bl64_check_command "$BL64_VCS_CMD_GIT" ||
+    return $?
 
-  # shellcheck disable=SC2086
-  bl64_check_parameter 'source' 'repository source' &&
-    bl64_check_parameter 'destination' 'repository destination' ||
-    return $BL64_VCS_ERROR_MISSING_PARAMETER
+  bl64_fs_create_dir "${BL64_LIB_DEFAULT}" "${BL64_LIB_DEFAULT}" "${BL64_LIB_DEFAULT}" "$destination" || returnn $?
 
-  [[ ! -d "$destination" ]] && bl64_fs_mkdir_full "$destination"
-  # shellcheck disable=SC2086
-  bl64_check_directory "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
+  # shellcheck disable=SC2164
+  cd "$destination"
 
-  # shellcheck disable=SC2086
-  cd "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
-
-  $BL64_VCS_ALIAS_GIT \
+  bl64_vcs_run_git \
     clone \
     --depth 1 \
     --single-branch \
@@ -118,56 +86,47 @@ function bl64_vcs_git_clone() {
 #   STDERR: git stderr
 # Returns:
 #   n: git exit status
-#   BL64_VCS_ERROR_MISSING_PARAMETER
-#   BL64_VCS_ERROR_DESTINATION_ERROR
-#   BL64_VCS_ERROR_MISSING_COMMAND
 #######################################
 function bl64_vcs_git_sparse() {
-  bl64_dbg_lib_trace_start
+  bl64_dbg_lib_show_function "$@"
   local source="${1}"
   local destination="${2}"
   local branch="${3:-main}"
   local pattern="${4}"
   local item=''
   local -i status=0
-  bl64_dbg_lib_trace_stop
 
-  # shellcheck disable=SC2086
-  bl64_check_command "$BL64_VCS_CMD_GIT" || return $BL64_VCS_ERROR_MISSING_COMMAND
+  bl64_check_command "$BL64_VCS_CMD_GIT" &&
+    bl64_check_parameter 'source' &&
+    bl64_check_parameter 'destination' &&
+    bl64_check_parameter 'pattern' || return $?
 
-  # shellcheck disable=SC2086
-  bl64_check_parameter 'source' 'repository source' &&
-    bl64_check_parameter 'destination' 'repository destination' &&
-    bl64_check_parameter 'pattern' 'pattern list' || return $BL64_VCS_ERROR_MISSING_PARAMETER
+  bl64_fs_create_dir "${BL64_LIB_DEFAULT}" "${BL64_LIB_DEFAULT}" "${BL64_LIB_DEFAULT}" "$destination" || returnn $?
 
-  [[ ! -d "$destination" ]] && bl64_fs_mkdir_full "$destination"
-  # shellcheck disable=SC2086
-  bl64_check_directory "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
-
-  # shellcheck disable=SC2086
-  cd "$destination" || return $BL64_VCS_ERROR_DESTINATION_ERROR
+  # shellcheck disable=SC2164
+  cd "$destination"
 
   if bl64_os_match 'DEB-9' 'DEB-10' 'UB-20' 'OL-7' 'CNT-7'; then
     # shellcheck disable=SC2086
-    $BL64_VCS_ALIAS_GIT init &&
-      $BL64_VCS_ALIAS_GIT remote add origin "$source" &&
-      $BL64_VCS_ALIAS_GIT config core.sparseCheckout true &&
+    bl64_vcs_run_git init &&
+      bl64_vcs_run_git remote add origin "$source" &&
+      bl64_vcs_run_git config core.sparseCheckout true &&
       {
         IFS=' '
         for item in $pattern; do echo "$item" >>'.git/info/sparse-checkout'; done
         unset IFS
       } &&
-      $BL64_VCS_ALIAS_GIT pull --depth 1 origin "$branch"
+      bl64_vcs_run_git pull --depth 1 origin "$branch"
   else
     # shellcheck disable=SC2086
-    $BL64_VCS_ALIAS_GIT init &&
-      $BL64_VCS_ALIAS_GIT sparse-checkout set &&
+    bl64_vcs_run_git init &&
+      bl64_vcs_run_git sparse-checkout set &&
       {
         IFS=' '
-        for item in $pattern; do echo "$item"; done | $BL64_VCS_ALIAS_GIT sparse-checkout add --stdin
+        for item in $pattern; do echo "$item"; done | bl64_vcs_run_git sparse-checkout add --stdin
       } &&
-      $BL64_VCS_ALIAS_GIT remote add origin "$source" &&
-      $BL64_VCS_ALIAS_GIT pull --depth 1 origin "$branch"
+      bl64_vcs_run_git remote add origin "$source" &&
+      bl64_vcs_run_git pull --depth 1 origin "$branch"
   fi
   status=$?
 

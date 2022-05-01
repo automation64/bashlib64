@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -23,6 +23,7 @@
 #   >0: grep command exit status
 #######################################
 function bl64_fmt_strip_comments() {
+  bl64_dbg_lib_show_function "$@"
   local source="${1:--}"
 
   "$BL64_OS_CMD_GREP" -v -E '^#.*$|^ *#.*$' "$source"
@@ -43,6 +44,7 @@ function bl64_fmt_strip_comments() {
 #   >0: printf error
 #######################################
 function bl64_fmt_strip_starting_slash() {
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
 
   # shellcheck disable=SC2086
@@ -72,6 +74,7 @@ function bl64_fmt_strip_starting_slash() {
 #   >0: printf error
 #######################################
 function bl64_fmt_strip_ending_slash() {
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
 
   # shellcheck disable=SC2086
@@ -115,7 +118,7 @@ function bl64_fmt_strip_ending_slash() {
 #   >0: printf error
 #######################################
 function bl64_fmt_basename() {
-  bl64_dbg_lib_trace_start
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
   local base=''
 
@@ -125,11 +128,10 @@ function bl64_fmt_basename() {
 
   if [[ -z "$base" || "$base" == */* ]]; then
     # shellcheck disable=SC2086
-    return $BL64_FMT_ERROR_NO_BASENAME
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
   else
     printf '%s' "$base"
   fi
-  bl64_dbg_lib_trace_stop
   return 0
 }
 
@@ -158,6 +160,7 @@ function bl64_fmt_basename() {
 #   >0: printf error
 #######################################
 function bl64_fmt_dirname() {
+  bl64_dbg_lib_show_function "$@"
   local path="$1"
 
   # shellcheck disable=SC2086
@@ -174,4 +177,68 @@ function bl64_fmt_dirname() {
   elif [[ "$path" == /* && "${path:1}" != */* ]]; then
     printf '%s' '/'
   fi
+}
+
+#######################################
+# Convert list to string. Optionally add prefix, postfix to each field
+#
+# * list: lines separated by \n
+# * string: same as original list but with \n replaced with space
+#
+# Arguments:
+#   $1: output field separator. Default: space
+#   $2: prefix. Format: string
+#   $3: postfix. Format: string
+# Inputs:
+#   STDIN: list
+# Outputs:
+#   STDOUT: string
+#   STDERR: None
+# Returns:
+#   always ok
+#######################################
+function bl64_fmt_list_to_string() {
+  bl64_dbg_lib_show_function
+  local field_separator="${1:-${BL64_LIB_DEFAULT}}"
+  local prefix="${2:-${BL64_LIB_DEFAULT}}"
+  local postfix="${3:-${BL64_LIB_DEFAULT}}"
+
+  [[ "$field_separator" == "$BL64_LIB_DEFAULT" ]] && field_separator=' '
+  [[ "$prefix" == "$BL64_LIB_DEFAULT" ]] && prefix=''
+  [[ "$postfix" == "$BL64_LIB_DEFAULT" ]] && postfix=''
+
+  bl64_os_awk \
+    -v field_separator="$field_separator" \
+    -v prefix="$prefix" \
+    -v postfix="$postfix" \
+    '
+    BEGIN {
+      joined_string = ""
+      RS="\n"
+    }
+    {
+      joined_string = ( joined_string == "" ? "" : joined_string field_separator ) prefix $0 postfix
+    }
+    END { print joined_string }
+  '
+}
+
+#######################################
+# Build a separator line with optional payload
+#
+# * Separator format: payload + \n
+#
+# Arguments:
+#   $1: Separator payload. Format: string
+# Outputs:
+#   STDOUT: separator line
+#   STDERR: grep Error message
+# Returns:
+#   printf exit status
+#######################################
+function bl64_fmt_separator_line() {
+  bl64_dbg_lib_show_function "$@"
+  local payload="${1:-}"
+
+  printf '%s\n' "$payload"
 }

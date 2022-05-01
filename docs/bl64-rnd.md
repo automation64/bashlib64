@@ -1,4 +1,4 @@
-# module: bl64-rnd
+# Module: rnd
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-rnd.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-rnd.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-rnd.bash" %}

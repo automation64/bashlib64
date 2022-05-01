@@ -1,4 +1,4 @@
-# module: bl64-py
+# Module: py
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-py.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-py.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-py.bash" %}

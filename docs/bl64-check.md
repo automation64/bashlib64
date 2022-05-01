@@ -1,4 +1,4 @@
-# module: bl64-check
+# Module: check
 
 ## Header
 
@@ -6,7 +6,13 @@
 {% include "../src/bl64-check.env" %}
 ```
 
-## Source Code
+## Setup
+
+```shell
+{% include "../src/bl64-check.init" %}
+```
+
+## Code
 
 ```shell
 {% include "../src/bl64-check.bash" %}
