@@ -95,12 +95,10 @@ function bl64_log_setup() {
     return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
   fi
 
-  bl64_dbg_lib_trace_start
   BL64_LOG_PATH="${path}"
   BL64_LOG_VERBOSE="${verbose}"
   BL64_LOG_TYPE="${type}"
   BL64_LOG_FS="${fs}"
-  bl64_dbg_lib_trace_stop
   return 0
 }
 
