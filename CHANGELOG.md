@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0]
+
+### Added
+
+- cnt
+  - bl64_cnt_login: new function
+  - bl64_cnt_build: new function
+  - bl64_cnt_push: new function
+  - bl64_cnt_pull: new function
+- dbg
+  - bl64_dbg_runtime_get_script_path: new function
+
 ## [2.0.0]
 
 ### Added
@@ -16,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enable error tracing bash set options
   - Signal traps for ERR,DEBUG,EXIT
 - dbg
-  - bl64_dbg_callstack_show: new function
+  - bl64_dbg_runtime_show_callstack: new function
   - bl64_dbg_lib_show_function: new function
   - bl64_dbg_app_show_function: new function
 - fs

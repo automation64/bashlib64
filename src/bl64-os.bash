@@ -25,6 +25,7 @@ function _bl64_os_match() {
   fi
 }
 
+# Warning: bootstrap function
 function _bl64_os_get_distro_from_uname() {
   bl64_dbg_lib_show_function
   local os_type=''
@@ -43,7 +44,7 @@ function _bl64_os_get_distro_from_uname() {
   return 0
 }
 
-# Warning: bootstrap function: use pure bash, no return, no exit
+# Warning: bootstrap function
 function _bl64_os_get_distro_from_os_release() {
 
   # shellcheck disable=SC1091

@@ -106,6 +106,9 @@ else
     trap "$BL64_LIB_SIGNAL_ERR" 'ERR'
   fi
 
+  # Capture script path
+  bl64_dbg_runtime_get_script_path
+
   # Enable command mode: the library can be used as a stand-alone script to run embeded functions
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
     "$@"
