@@ -8,7 +8,43 @@
 #######################################
 
 #######################################
-# Logins the container engine to a container registry
+# Logins the container engine to a container registry. The password is stored in a regular file
+#
+# Arguments:
+#   $1: user
+#   $2: file
+#   $3: registry
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_cnt_login_file() {
+  bl64_dbg_lib_show_function "$@"
+  local user="$1"
+  local file="$2"
+  local registry="$3"
+
+  bl64_check_parameter 'user' &&
+    bl64_check_parameter 'file' &&
+    bl64_check_parameter 'registry' &&
+    bl64_check_file 'file' ||
+    return $?
+
+  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
+    bl64_cnt_docker_login "$user" "$BL64_LIB_DEFAULT" "$file" "$registry"
+  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
+    bl64_cnt_podman_login "$user" "$BL64_LIB_DEFAULT" "$file" "$registry"
+  else
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_MISSING
+  fi
+}
+
+#######################################
+# Logins the container engine to a container. The password is passed as parameter
 #
 # Arguments:
 #   $1: user
@@ -32,9 +68,9 @@ function bl64_cnt_login() {
     return $?
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_login "$user" "$password" "$registry"
+    bl64_cnt_docker_login "$user" "$password" "$BL64_LIB_DEFAULT" "$registry"
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_login "$user" "$password" "$registry"
+    bl64_cnt_podman_login "$user" "$password" "$BL64_LIB_DEFAULT" "$registry"
   else
     bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
     # shellcheck disable=SC2086
@@ -48,7 +84,8 @@ function bl64_cnt_login() {
 # Arguments:
 #   $1: user
 #   $2: password
-#   $3: registry
+#   $3: file
+#   $4: registry
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -60,9 +97,10 @@ function bl64_cnt_docker_login() {
   bl64_dbg_lib_show_function "$@"
   local user="$1"
   local password="$2"
-  local registry="$3"
+  local file="$3"
+  local registry="$4"
 
-  printf '%s\n' "$password" |
+  _bl64_cnt_login_put_password "$password" "$file" |
     bl64_cnt_run_docker \
       login \
       --username "$user" \
@@ -76,7 +114,8 @@ function bl64_cnt_docker_login() {
 # Arguments:
 #   $1: user
 #   $2: password
-#   $3: registry
+#   $3: file
+#   $4: registry
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -88,9 +127,10 @@ function bl64_cnt_podman_login() {
   bl64_dbg_lib_show_function "$@"
   local user="$1"
   local password="$2"
-  local registry="$3"
+  local file="$3"
+  local registry="$4"
 
-  printf '%s\n' "$password" |
+  _bl64_cnt_login_put_password "$password" "$file" |
     bl64_cnt_run_podman \
       login \
       --username "$user" \
@@ -475,4 +515,16 @@ function bl64_cnt_podman_pull() {
   bl64_cnt_run_podman \
     pull \
     "${source}"
+}
+
+function _bl64_cnt_login_put_password() {
+  local password="$1"
+  local file="$2"
+
+  if [[ "$password" != "$BL64_LIB_DEFAULT" ]]; then
+    printf '%s\n' "$password"
+  elif [[ "$file" != "$BL64_LIB_DEFAULT" ]]; then
+    "$BL64_OS_CMD_CAT" "$file"
+  fi
+
 }
