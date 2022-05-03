@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.0
+# Version: 1.1.1
 #######################################
 
 #######################################
@@ -29,7 +29,7 @@ function bl64_cnt_login_file() {
   bl64_check_parameter 'user' &&
     bl64_check_parameter 'file' &&
     bl64_check_parameter 'registry' &&
-    bl64_check_file 'file' ||
+    bl64_check_file "$file" ||
     return $?
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
@@ -37,7 +37,7 @@ function bl64_cnt_login_file() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     bl64_cnt_podman_login "$user" "$BL64_LIB_DEFAULT" "$file" "$registry"
   else
-    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -72,7 +72,7 @@ function bl64_cnt_login() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     bl64_cnt_podman_login "$user" "$password" "$BL64_LIB_DEFAULT" "$registry"
   else
-    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -161,7 +161,7 @@ function bl64_cnt_run_interactive() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     bl64_cnt_podman_run_interactive "$@"
   else
-    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -303,7 +303,7 @@ function bl64_cnt_build() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     bl64_cnt_podman_build "$file" "$tag"
   else
-    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -393,7 +393,7 @@ function bl64_cnt_push() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     bl64_cnt_podman_push "$source" "$destination"
   else
-    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -469,7 +469,7 @@ function bl64_cnt_pull() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     bl64_cnt_podman_pull "$source"
   else
-    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi

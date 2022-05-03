@@ -36,7 +36,7 @@ shopt -qs \
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 # Declare imported variables
@@ -86,6 +86,9 @@ declare BL64_SCRIPT_SID="${BASHPID}"
 
 # Default value for parameters
 readonly BL64_LIB_DEFAULT='_'
+
+# Flag for incompatible command
+readonly BL64_LIB_INCOMPATIBLE='_X_'
 
 # Pseudo null value
 readonly BL64_LIB_VAR_NULL='__'
@@ -478,17 +481,17 @@ readonly _BL64_PKG_TXT_PREPARE='initialize package manager'
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 # Define placeholders for optional distro native python versions
-export BL64_PY_CMD_PYTHON3="$BL64_LIB_VAR_NULL"
-export BL64_PY_CMD_PYTHON35="$BL64_LIB_VAR_NULL"
-export BL64_PY_CMD_PYTHON36="$BL64_LIB_VAR_NULL"
-export BL64_PY_CMD_PYTHON37="$BL64_LIB_VAR_NULL"
-export BL64_PY_CMD_PYTHON38="$BL64_LIB_VAR_NULL"
-export BL64_PY_CMD_PYTHON39="$BL64_LIB_VAR_NULL"
-export BL64_PY_CMD_PYTHON310="$BL64_LIB_VAR_NULL"
+export BL64_PY_CMD_PYTHON3="$BL64_LIB_INCOMPATIBLE"
+export BL64_PY_CMD_PYTHON35="$BL64_LIB_INCOMPATIBLE"
+export BL64_PY_CMD_PYTHON36="$BL64_LIB_INCOMPATIBLE"
+export BL64_PY_CMD_PYTHON37="$BL64_LIB_INCOMPATIBLE"
+export BL64_PY_CMD_PYTHON38="$BL64_LIB_INCOMPATIBLE"
+export BL64_PY_CMD_PYTHON39="$BL64_LIB_INCOMPATIBLE"
+export BL64_PY_CMD_PYTHON310="$BL64_LIB_INCOMPATIBLE"
 
 export BL64_PY_SET_PIP_VERBOSE=''
 export BL64_PY_SET_PIP_VERSION=''
@@ -758,7 +761,7 @@ function bl64_arc_open_tar() {
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 #######################################
@@ -773,6 +776,7 @@ function bl64_arc_open_tar() {
 # Returns:
 #   0: Command found
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   $BL64_LIB_ERROR_APP_INCOMPATIBLE
 #   $BL64_LIB_ERROR_FILE_NOT_FOUND
 #   $BL64_LIB_ERROR_FILE_NOT_EXECUTE
 #######################################
@@ -783,21 +787,24 @@ function bl64_check_command() {
 
   bl64_check_parameter 'path' || return $?
 
-  if [[ "$path" == "$BL64_LIB_VAR_NULL" ]]; then
+  if [[ "$path" == "$BL64_LIB_INCOMPATIBLE" ]]; then
     bl64_check_show_unsupported "$path"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
+
   if [[ ! -f "$path" ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] ${message} (${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_FOUND
   fi
+
   if [[ ! -x "$path" ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE (${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_EXECUTE
   fi
+
   return 0
 }
 
@@ -1127,7 +1134,7 @@ function bl64_check_show_undefined() {
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -1149,9 +1156,15 @@ function bl64_cnt_set_command() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-*)
     BL64_CNT_CMD_PODMAN='/usr/bin/podman'
     BL64_CNT_CMD_DOCKER='/usr/bin/docker'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    # Podman is not available for MacOS
+    BL64_CNT_CMD_PODMAN="$BL64_LIB_INCOMPATIBLE"
+    # Docker is available using docker-desktop
+    BL64_CNT_CMD_DOCKER='/usr/local/bin/docker'
     ;;
   *) bl64_check_show_unsupported ;;
   esac
@@ -1163,7 +1176,7 @@ function bl64_cnt_set_command() {
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.0
+# Version: 1.1.1
 #######################################
 
 #######################################
@@ -1188,7 +1201,7 @@ function bl64_cnt_login_file() {
   bl64_check_parameter 'user' &&
     bl64_check_parameter 'file' &&
     bl64_check_parameter 'registry' &&
-    bl64_check_file 'file' ||
+    bl64_check_file "$file" ||
     return $?
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
@@ -1196,7 +1209,7 @@ function bl64_cnt_login_file() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     bl64_cnt_podman_login "$user" "$BL64_LIB_DEFAULT" "$file" "$registry"
   else
-    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -1231,7 +1244,7 @@ function bl64_cnt_login() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     bl64_cnt_podman_login "$user" "$password" "$BL64_LIB_DEFAULT" "$registry"
   else
-    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -1320,7 +1333,7 @@ function bl64_cnt_run_interactive() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     bl64_cnt_podman_run_interactive "$@"
   else
-    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -1462,7 +1475,7 @@ function bl64_cnt_build() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     bl64_cnt_podman_build "$file" "$tag"
   else
-    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -1552,7 +1565,7 @@ function bl64_cnt_push() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     bl64_cnt_podman_push "$source" "$destination"
   else
-    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -1628,7 +1641,7 @@ function bl64_cnt_pull() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     bl64_cnt_podman_pull "$source"
   else
-    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi

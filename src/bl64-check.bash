@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 #######################################
@@ -19,6 +19,7 @@
 # Returns:
 #   0: Command found
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   $BL64_LIB_ERROR_APP_INCOMPATIBLE
 #   $BL64_LIB_ERROR_FILE_NOT_FOUND
 #   $BL64_LIB_ERROR_FILE_NOT_EXECUTE
 #######################################
@@ -29,21 +30,24 @@ function bl64_check_command() {
 
   bl64_check_parameter 'path' || return $?
 
-  if [[ "$path" == "$BL64_LIB_VAR_NULL" ]]; then
+  if [[ "$path" == "$BL64_LIB_INCOMPATIBLE" ]]; then
     bl64_check_show_unsupported "$path"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
+
   if [[ ! -f "$path" ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] ${message} (${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_FOUND
   fi
+
   if [[ ! -x "$path" ]]; then
     bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE (${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_EXECUTE
   fi
+
   return 0
 }
 
