@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
 
 # Do not inherit aliases and commands
@@ -36,7 +36,7 @@ shopt -qs \
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 # Declare imported variables
@@ -64,21 +64,21 @@ export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-1}"
 export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
 
 # Set Signal traps
-export BL64_LIB_SIGNAL_HUP="${BL64_LIB_SIGNAL_HUP:--}"
-export BL64_LIB_SIGNAL_STOP="${BL64_LIB_SIGNAL_STOP:--}"
-export BL64_LIB_SIGNAL_QUIT="${BL64_LIB_SIGNAL_QUIT:--}"
-export BL64_LIB_SIGNAL_DEBUG="${BL64_LIB_SIGNAL_DEBUG:--}"
-export BL64_LIB_SIGNAL_ERR="${BL64_LIB_SIGNAL_ERR:--}"
-export BL64_LIB_SIGNAL_EXIT="${BL64_LIB_SIGNAL_EXIT:-bl64_dbg_runtime_show}"
+declare BL64_LIB_SIGNAL_HUP="${BL64_LIB_SIGNAL_HUP:--}"
+declare BL64_LIB_SIGNAL_STOP="${BL64_LIB_SIGNAL_STOP:--}"
+declare BL64_LIB_SIGNAL_QUIT="${BL64_LIB_SIGNAL_QUIT:--}"
+declare BL64_LIB_SIGNAL_DEBUG="${BL64_LIB_SIGNAL_DEBUG:--}"
+declare BL64_LIB_SIGNAL_ERR="${BL64_LIB_SIGNAL_ERR:--}"
+declare BL64_LIB_SIGNAL_EXIT="${BL64_LIB_SIGNAL_EXIT:-bl64_dbg_runtime_show}"
 
 # Capture script name
-export BL64_SCRIPT_NAME="${BL64_SCRIPT_NAME:-${0##*/}}"
+declare BL64_SCRIPT_NAME="${BL64_SCRIPT_NAME:-${0##*/}}"
 
 # Capture script path
-export BL64_SCRIPT_PATH="${BL64_SCRIPT_PATH:-${BASH_SOURCE[0]%/*}}/"
+declare BL64_SCRIPT_PATH=''
 
 # Define session ID for the current script
-export BL64_SCRIPT_SID="${BASHPID}"
+declare BL64_SCRIPT_SID="${BASHPID}"
 
 #
 # Common values
@@ -240,19 +240,23 @@ readonly _BL64_DBG_TXT_FUNCTION_STOP='function tracing stopped'
 readonly _BL64_DBG_TXT_SHELL_VAR='shell variable'
 
 readonly _BL64_DBG_TXT_BASH="Bash / Interpreter path"
-readonly _BL64_DBG_TXT_BASHOPTS="Bash / Options"
+readonly _BL64_DBG_TXT_BASHOPTS="Bash / ShOpt Options"
+readonly _BL64_DBG_TXT_SHELLOPTS="Bash / Set -o Options"
 readonly _BL64_DBG_TXT_TMPDIR="Bash / Temporary path"
 readonly _BL64_DBG_TXT_BASH_VERSION="Bash / Version"
 readonly _BL64_DBG_TXT_OSTYPE="Bash / Detected OS"
 readonly _BL64_DBG_TXT_LC_ALL="Shell / Locale setting"
 readonly _BL64_DBG_TXT_HOME="Shell / Home directory"
-readonly _BL64_DBG_TXT_PWD="Shell / Current working directory (PWD)"
+readonly _BL64_DBG_TXT_PWD="Shell / Current working directory (pwd command)"
+readonly _BL64_DBG_TXT_CD_PWD="Shell / Current cd working directory (PWD)"
+readonly _BL64_DBG_TXT_CD_OLDPWD="Shell / Previous cd working directory (OLDPWD)"
 readonly _BL64_DBG_TXT_PATH="Shell / Search path"
 readonly _BL64_DBG_TXT_HOSTNAME="Shell / Hostname"
 readonly _BL64_DBG_TXT_EUID="Script / User ID"
 readonly _BL64_DBG_TXT_UID="Script / Effective User ID"
 readonly _BL64_DBG_TXT_BASH_ARGV="Script / Arguments"
-readonly _BL64_DBG_TXT_STATUS="Script / Latest exit status"
+readonly _BL64_DBG_TXT_COMMAND="Script / Last executed command"
+readonly _BL64_DBG_TXT_STATUS="Script / Last exit status"
 readonly _BL64_DBG_TXT_BASH_LINENO="Script / Last executed function"
 readonly _BL64_DBG_TXT_SCRIPT_FATAL="the script is unable to contine due to a critical error"
 
@@ -1159,13 +1163,144 @@ function bl64_cnt_set_command() {
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
-# Runs a container image using interactive settings
+# Logins the container engine to a container registry. The password is stored in a regular file
 #
-# * Uses best match for container engine (docker, podman)
+# Arguments:
+#   $1: user
+#   $2: file
+#   $3: registry
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_cnt_login_file() {
+  bl64_dbg_lib_show_function "$@"
+  local user="$1"
+  local file="$2"
+  local registry="$3"
+
+  bl64_check_parameter 'user' &&
+    bl64_check_parameter 'file' &&
+    bl64_check_parameter 'registry' &&
+    bl64_check_file 'file' ||
+    return $?
+
+  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
+    bl64_cnt_docker_login "$user" "$BL64_LIB_DEFAULT" "$file" "$registry"
+  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
+    bl64_cnt_podman_login "$user" "$BL64_LIB_DEFAULT" "$file" "$registry"
+  else
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_MISSING
+  fi
+}
+
+#######################################
+# Logins the container engine to a container. The password is passed as parameter
+#
+# Arguments:
+#   $1: user
+#   $2: password
+#   $3: registry
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_cnt_login() {
+  bl64_dbg_lib_show_function "$@"
+  local user="$1"
+  local password="$2"
+  local registry="$3"
+
+  bl64_check_parameter 'user' &&
+    bl64_check_parameter 'password' &&
+    bl64_check_parameter 'registry' ||
+    return $?
+
+  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
+    bl64_cnt_docker_login "$user" "$password" "$BL64_LIB_DEFAULT" "$registry"
+  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
+    bl64_cnt_podman_login "$user" "$password" "$BL64_LIB_DEFAULT" "$registry"
+  else
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_MISSING
+  fi
+}
+
+#######################################
+# Command wrapper: docker login
+#
+# Arguments:
+#   $1: user
+#   $2: password
+#   $3: file
+#   $4: registry
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_docker_login() {
+  bl64_dbg_lib_show_function "$@"
+  local user="$1"
+  local password="$2"
+  local file="$3"
+  local registry="$4"
+
+  _bl64_cnt_login_put_password "$password" "$file" |
+    bl64_cnt_run_docker \
+      login \
+      --username "$user" \
+      --password-stdin \
+      "$registry"
+}
+
+#######################################
+# Command wrapper: podman login
+#
+# Arguments:
+#   $1: user
+#   $2: password
+#   $3: file
+#   $4: registry
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_podman_login() {
+  bl64_dbg_lib_show_function "$@"
+  local user="$1"
+  local password="$2"
+  local file="$3"
+  local registry="$4"
+
+  _bl64_cnt_login_put_password "$password" "$file" |
+    bl64_cnt_run_podman \
+      login \
+      --username "$user" \
+      --password-stdin \
+      "$registry"
+}
+
+#######################################
+
+# Runs a container source using interactive settings
+#
 # * Allows signals
 # * Attaches tty
 #
@@ -1186,6 +1321,7 @@ function bl64_cnt_run_interactive() {
     bl64_cnt_podman_run_interactive "$@"
   else
     bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
 }
@@ -1244,7 +1380,7 @@ function bl64_cnt_docker_run_interactive() {
 #######################################
 # Command wrapper: podman
 #
-# * Provides verbose and debug support
+# * Provides debug support
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -1257,16 +1393,21 @@ function bl64_cnt_docker_run_interactive() {
 
 function bl64_cnt_run_podman() {
   bl64_dbg_lib_show_function "$@"
+  local verbose='error'
 
   bl64_check_command "$BL64_CNT_CMD_PODMAN" || return $?
+  bl64_dbg_lib_command_enabled && verbose="debug"
+  bl64_dbg_runtime_show_paths
 
-  "$BL64_CNT_CMD_PODMAN" "$@"
+  "$BL64_CNT_CMD_PODMAN" \
+    --log-level "$verbose" \
+    "$@"
 }
 
 #######################################
 # Command wrapper: docker
 #
-# * Provides verbose and debug support
+# * Provides debug support
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -1279,10 +1420,272 @@ function bl64_cnt_run_podman() {
 
 function bl64_cnt_run_docker() {
   bl64_dbg_lib_show_function "$@"
+  local verbose='error'
 
   bl64_check_command "$BL64_CNT_CMD_DOCKER" || return $?
+  bl64_dbg_lib_command_enabled && verbose="debug"
+  bl64_dbg_runtime_show_paths
 
-  "$BL64_CNT_CMD_DOCKER" "$@"
+  "$BL64_CNT_CMD_DOCKER" \
+    --log-level "$verbose" \
+    "$@"
+}
+
+#######################################
+# Builds a container source
+#
+# Arguments:
+#   $1: build context. Format: full path
+#   $2: dockerfile path. Format: relative to the build context
+#   $3: tag to be applied to the resulting source. Format: docker tag
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_cnt_build() {
+  bl64_dbg_lib_show_function "$@"
+  local context="$1"
+  local file="${2:-Dockerfile}"
+  local tag="${3:-latest}"
+
+  bl64_check_parameter 'context' &&
+    bl64_check_directory "$context" &&
+    bl64_check_file "${context}/${file}" ||
+    return $?
+
+  cd "${context}"
+
+  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
+    bl64_cnt_docker_build "$file" "$tag"
+  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
+    bl64_cnt_podman_build "$file" "$tag"
+  else
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_MISSING
+  fi
+}
+
+#######################################
+# Command wrapper: docker build
+#
+# Arguments:
+#   $1: context
+#   $2: file
+#   $3: tag
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_docker_build() {
+  bl64_dbg_lib_show_function "$@"
+  local file="$1"
+  local tag="$2"
+
+  bl64_cnt_run_docker \
+    build \
+    --no-cache \
+    --rm \
+    --tag "$tag" \
+    --file "$file" \
+    .
+}
+
+#######################################
+# Command wrapper: podman build
+#
+# Arguments:
+#   $1: context
+#   $2: file
+#   $3: tag
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_podman_build() {
+  bl64_dbg_lib_show_function "$@"
+  local file="$1"
+  local tag="$2"
+
+  bl64_cnt_run_podman \
+    build \
+    --no-cache \
+    --rm \
+    --tag "$tag" \
+    --file "$file" \
+    .
+}
+
+#######################################
+# Push a local source to the target container registry
+#
+# * Image is already present in the local destination
+#
+# Arguments:
+#   $1: source. Format: IMAGE:TAG
+#   $2: destination. Format: REPOSITORY/IMAGE:TAG
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_cnt_push() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local destination="$2"
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'destination' ||
+    return $?
+
+  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
+    bl64_cnt_docker_push "$source" "$destination"
+  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
+    bl64_cnt_podman_push "$source" "$destination"
+  else
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_MISSING
+  fi
+}
+
+#######################################
+# Command wrapper: docker push
+#
+# Arguments:
+#   $1: source
+#   $2: destination
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_docker_push() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local destination="$2"
+
+  bl64_cnt_run_docker \
+    push \
+    "${destination}"
+}
+
+#######################################
+# Command wrapper: podman push
+#
+# Arguments:
+#   $1: source
+#   $2: destination
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_podman_push() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local destination="$2"
+
+  bl64_cnt_run_podman \
+    push \
+    "localhost/${source}" \
+    "${destination}"
+}
+
+#######################################
+# Pull a remote container image to the local registry
+#
+# Arguments:
+#   $1: source. Format: [REPOSITORY/]IMAGE:TAG
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_cnt_pull() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+
+  bl64_check_parameter 'source' ||
+    return $?
+
+  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
+    bl64_cnt_docker_pull "$source"
+  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
+    bl64_cnt_podman_pull "$source"
+  else
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI ($BL64_CNT_CMD_DOCKER. $BL64_CNT_CMD_PODMAN)"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_MISSING
+  fi
+}
+
+#######################################
+# Command wrapper: docker pull
+#
+# Arguments:
+#   $1: source
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_docker_pull() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+
+  bl64_cnt_run_docker \
+    pull \
+    "${source}"
+}
+
+#######################################
+# Command wrapper: podman pull
+#
+# Arguments:
+#   $1: source
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_podman_pull() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+
+  bl64_cnt_run_podman \
+    pull \
+    "${source}"
+}
+
+function _bl64_cnt_login_put_password() {
+  local password="$1"
+  local file="$2"
+
+  if [[ "$password" != "$BL64_LIB_DEFAULT" ]]; then
+    printf '%s\n' "$password"
+  elif [[ "$file" != "$BL64_LIB_DEFAULT" ]]; then
+    "$BL64_OS_CMD_CAT" "$file"
+  fi
+
 }
 
 #######################################
@@ -1310,32 +1713,55 @@ function bl64_dbg_lib_command_enabled { [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGE
 # Returns:
 #   latest exit status (before function call)
 #######################################
+function bl64_dbg_runtime_get_script_path() {
+  BL64_SCRIPT_PATH="$(
+    cd "${BASH_SOURCE[0]%/*}" >/dev/null 2>&1 &&
+      pwd
+  )"
+}
+
+#######################################
+# Show runtime info
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: runtime info
+# Returns:
+#   latest exit status (before function call)
+#######################################
 function bl64_dbg_runtime_show() {
   local -i last_status=$?
 
   if bl64_dbg_app_task_enabled; then
     bl64_msg_show_debug "${_BL64_DBG_TXT_BASH}: [${BASH}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_BASHOPTS}: [${BASHOPTS:-NONE}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_SHELLOPTS}: [${SHELLOPTS:-NONE}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_VERSION}: [${BASH_VERSION}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_OSTYPE}: [${OSTYPE:-NONE}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_LC_ALL}: [${LC_ALL:-NONE}]"
-    bl64_msg_show_debug "${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
-    bl64_msg_show_debug "${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
-    bl64_msg_show_debug "${_BL64_DBG_TXT_PWD}: [${PWD:-EMPTY}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_HOSTNAME}: [${HOSTNAME:-EMPTY}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_EUID}: [${EUID}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_UID}: [${UID}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_ARGV}: [${BASH_ARGV[*]:-NONE}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_COMMAND}: [${BASH_COMMAND:-NONE}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_STATUS}: [${last_status}]"
-  fi
-  bl64_dbg_callstack_show
 
+    bl64_dbg_runtime_show_paths
+
+    bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(1): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[1]:-NONE}:${BASH_LINENO[1]:-0}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(2): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
+    bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(3): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
+  fi
+
+  # shellcheck disable=SC2248
   return $last_status
 }
 
 #######################################
-# Show call stack
+# Show runtime call stack
 #
 # Arguments:
 #   None
@@ -1345,12 +1771,34 @@ function bl64_dbg_runtime_show() {
 # Returns:
 #   latest exit status (before function call)
 #######################################
-function bl64_dbg_callstack_show() {
+function bl64_dbg_runtime_show_callstack() {
 
-  bl64_dbg_app_task_enabled || return 0
-  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(1): [${FUNCNAME[1]:-NONE}:${BASH_LINENO[1]:-0}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(2): [${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(3): [${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
+  bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
+  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(1): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[1]:-NONE}:${BASH_LINENO[1]:-0}]"
+  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(2): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
+  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(3): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
+
+}
+
+#######################################
+# Show runtime paths
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: callstack
+# Returns:
+#   latest exit status (before function call)
+#######################################
+function bl64_dbg_runtime_show_paths() {
+
+  bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
+  bl64_msg_show_debug "${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
+  bl64_msg_show_debug "${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
+  bl64_msg_show_debug "${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
+  bl64_msg_show_debug "${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
+  bl64_msg_show_debug "${_BL64_DBG_TXT_PWD}: [$(pwd)]"
 
 }
 
@@ -3454,6 +3902,7 @@ function _bl64_os_match() {
   fi
 }
 
+# Warning: bootstrap function
 function _bl64_os_get_distro_from_uname() {
   bl64_dbg_lib_show_function
   local os_type=''
@@ -3472,7 +3921,7 @@ function _bl64_os_get_distro_from_uname() {
   return 0
 }
 
-# Warning: bootstrap function: use pure bash, no return, no exit
+# Warning: bootstrap function
 function _bl64_os_get_distro_from_os_release() {
 
   # shellcheck disable=SC1091
@@ -5349,6 +5798,9 @@ else
     trap "$BL64_LIB_SIGNAL_EXIT" 'EXIT'
     trap "$BL64_LIB_SIGNAL_ERR" 'ERR'
   fi
+
+  # Capture script path
+  bl64_dbg_runtime_get_script_path
 
   # Enable command mode: the library can be used as a stand-alone script to run embeded functions
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
