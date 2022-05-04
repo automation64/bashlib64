@@ -7,12 +7,6 @@
 {% include "../src/bl64-lib.env" %}
 ```
 
-## Setup
-
-```shell
-{% include "../src/bl64-lib.init" %}
-```
-
 ## Code
 
 ```shell
