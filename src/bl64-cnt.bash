@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.1
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -237,7 +237,7 @@ function bl64_cnt_run_podman() {
   local verbose='error'
 
   bl64_check_command "$BL64_CNT_CMD_PODMAN" || return $?
-  bl64_dbg_lib_command_enabled && verbose="debug"
+  bl64_dbg_lib_command_enabled && verbose='debug'
   bl64_dbg_runtime_show_paths
 
   "$BL64_CNT_CMD_PODMAN" \
@@ -262,13 +262,18 @@ function bl64_cnt_run_podman() {
 function bl64_cnt_run_docker() {
   bl64_dbg_lib_show_function "$@"
   local verbose='error'
+  local debug=' '
 
   bl64_check_command "$BL64_CNT_CMD_DOCKER" || return $?
-  bl64_dbg_lib_command_enabled && verbose="debug"
+  if bl64_dbg_lib_command_enabled; then
+    verbose='debug'
+    debug='--debug'
+  fi
   bl64_dbg_runtime_show_paths
 
   "$BL64_CNT_CMD_DOCKER" \
     --log-level "$verbose" \
+    $debug \
     "$@"
 }
 
@@ -418,8 +423,13 @@ function bl64_cnt_docker_push() {
   local destination="$2"
 
   bl64_cnt_run_docker \
+    tag \
+    "$source" \
+    "$destination"
+
+  bl64_cnt_run_docker \
     push \
-    "${destination}"
+    "$destination"
 }
 
 #######################################
@@ -443,7 +453,7 @@ function bl64_cnt_podman_push() {
   bl64_cnt_run_podman \
     push \
     "localhost/${source}" \
-    "${destination}"
+    "$destination"
 }
 
 #######################################
