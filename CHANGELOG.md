@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.1.1]
+## [2.2.0]
 
 ### Added
 
@@ -320,8 +320,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.1.1...HEAD
-[2.1.1]: https://github.com/serdigital64/bashlib64/compare/2.0.0...2.1.1
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.2.0...HEAD
+[2.2.0]: https://github.com/serdigital64/bashlib64/compare/2.0.0...2.2.0
 [2.0.0]: https://github.com/serdigital64/bashlib64/compare/1.24.0...2.0.0
 [1.24.0]: https://github.com/serdigital64/bashlib64/compare/1.23.0...1.24.0
 [1.23.0]: https://github.com/serdigital64/bashlib64/compare/1.22.0...1.23.0
