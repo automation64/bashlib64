@@ -327,7 +327,8 @@
 <span class=normal>226</span>
 <span class=normal>227</span>
 <span class=normal>228</span>
-<span class=normal>229</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>229</span>
+<span class=normal>230</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / OS / Identify OS attributes and provide command aliases</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
@@ -354,6 +355,7 @@
   <span class=k>fi</span>
 <span class=o>}</span>
 
+<span class=c1># Warning: bootstrap function</span>
 <span class=k>function</span> _bl64_os_get_distro_from_uname<span class=o>()</span> <span class=o>{</span>
   bl64_dbg_lib_show_function
   <span class=nb>local</span> <span class=nv>os_type</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
@@ -372,7 +374,7 @@
   <span class=k>return</span> <span class=m>0</span>
 <span class=o>}</span>
 
-<span class=c1># Warning: bootstrap function: use pure bash, no return, no exit</span>
+<span class=c1># Warning: bootstrap function</span>
 <span class=k>function</span> _bl64_os_get_distro_from_os_release<span class=o>()</span> <span class=o>{</span>
 
   <span class=c1># shellcheck disable=SC1091</span>

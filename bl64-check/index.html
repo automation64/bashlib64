@@ -430,13 +430,17 @@
 <span class=normal>365</span>
 <span class=normal>366</span>
 <span class=normal>367</span>
-<span class=normal>368</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>368</span>
+<span class=normal>369</span>
+<span class=normal>370</span>
+<span class=normal>371</span>
+<span class=normal>372</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Check for conditions and report status</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.9.0</span>
+<span class=c1># Version: 1.10.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -451,6 +455,7 @@
 <span class=c1># Returns:</span>
 <span class=c1>#   0: Command found</span>
 <span class=c1>#   $BL64_LIB_ERROR_PARAMETER_MISSING</span>
+<span class=c1>#   $BL64_LIB_ERROR_APP_INCOMPATIBLE</span>
 <span class=c1>#   $BL64_LIB_ERROR_FILE_NOT_FOUND</span>
 <span class=c1>#   $BL64_LIB_ERROR_FILE_NOT_EXECUTE</span>
 <span class=c1>#######################################</span>
@@ -461,21 +466,24 @@
 
   bl64_check_parameter <span class=s1>&#39;path&#39;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
-  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$path</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_NULL</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$path</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_INCOMPATIBLE</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
     bl64_check_show_unsupported <span class=s2>&quot;</span><span class=nv>$path</span><span class=s2>&quot;</span>
     <span class=c1># shellcheck disable=SC2086</span>
-    <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_FILE_NOT_FOUND</span>
+    <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_APP_INCOMPATIBLE</span>
   <span class=k>fi</span>
+
   <span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&quot;</span><span class=nv>$path</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
     bl64_msg_show_error <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=si>${</span><span class=nv>message</span><span class=si>}</span><span class=s2> (</span><span class=si>${</span><span class=nv>path</span><span class=si>}</span><span class=s2>)&quot;</span>
     <span class=c1># shellcheck disable=SC2086</span>
     <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_FILE_NOT_FOUND</span>
   <span class=k>fi</span>
+
   <span class=k>if</span> <span class=o>[[</span> ! -x <span class=s2>&quot;</span><span class=nv>$path</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
     bl64_msg_show_error <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=nv>$_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE</span><span class=s2> (</span><span class=si>${</span><span class=nv>path</span><span class=si>}</span><span class=s2>)&quot;</span>
     <span class=c1># shellcheck disable=SC2086</span>
     <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_FILE_NOT_EXECUTE</span>
   <span class=k>fi</span>
+
   <span class=k>return</span> <span class=m>0</span>
 <span class=o>}</span>
 
