@@ -4,7 +4,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 function bl64_dbg_app_task_enabled { [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TASK" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]]; }
@@ -59,11 +59,15 @@ function bl64_dbg_runtime_show() {
     bl64_msg_show_debug "${_BL64_DBG_TXT_COMMAND}: [${BASH_COMMAND:-NONE}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_STATUS}: [${last_status}]"
 
-    bl64_dbg_runtime_show_paths
+    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
+    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
+    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
+    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
+    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
 
-    bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(1): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[1]:-NONE}:${BASH_LINENO[1]:-0}]"
-    bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(2): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
-    bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(3): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
+    bl64_msg_show_debug "Script / ${_BL64_DBG_TXT_CALLSTACK}(1): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[1]:-NONE}:${BASH_LINENO[1]:-0}]"
+    bl64_msg_show_debug "Script / ${_BL64_DBG_TXT_CALLSTACK}(2): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
+    bl64_msg_show_debug "Script / ${_BL64_DBG_TXT_CALLSTACK}(3): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
   fi
 
   # shellcheck disable=SC2248
@@ -72,6 +76,8 @@ function bl64_dbg_runtime_show() {
 
 #######################################
 # Show runtime call stack
+#
+# * Show previous 3 functions from the current caller
 #
 # Arguments:
 #   None
@@ -84,9 +90,9 @@ function bl64_dbg_runtime_show() {
 function bl64_dbg_runtime_show_callstack() {
 
   bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
-  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(1): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[1]:-NONE}:${BASH_LINENO[1]:-0}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(2): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_LINENO}(3): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_CALLSTACK}(2): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_CALLSTACK}(3): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_CALLSTACK}(4): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[4]:-NONE}:${BASH_LINENO[4]:-0}]"
 
 }
 
@@ -104,11 +110,11 @@ function bl64_dbg_runtime_show_callstack() {
 function bl64_dbg_runtime_show_paths() {
 
   bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
-  bl64_msg_show_debug "${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
-  bl64_msg_show_debug "${_BL64_DBG_TXT_PWD}: [$(pwd)]"
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
 
 }
 
@@ -126,7 +132,7 @@ function bl64_dbg_runtime_show_paths() {
 function bl64_dbg_app_trace_stop() {
   [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]] &&
     set +x &&
-    bl64_msg_show_debug "[${FUNCNAME[1]}:${BASH_LINENO[1]}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
+    bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
   return 0
 }
 
@@ -143,7 +149,7 @@ function bl64_dbg_app_trace_stop() {
 #######################################
 function bl64_dbg_app_trace_start() {
   [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]] &&
-    bl64_msg_show_debug "[${FUNCNAME[1]}:${BASH_LINENO[1]}] ${_BL64_DBG_TXT_FUNCTION_START}" &&
+    bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_FUNCTION_START}" &&
     set -x
   return 0
 }
@@ -162,7 +168,7 @@ function bl64_dbg_app_trace_start() {
 function bl64_dbg_lib_trace_stop() {
   [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]] &&
     set +x &&
-    bl64_msg_show_debug "[${FUNCNAME[1]}:${BASH_LINENO[1]}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
+    bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
   return 0
 }
 
@@ -179,7 +185,7 @@ function bl64_dbg_lib_trace_stop() {
 #######################################
 function bl64_dbg_lib_trace_start() {
   [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]] &&
-    bl64_msg_show_debug "[${FUNCNAME[1]}:${BASH_LINENO[1]}] ${_BL64_DBG_TXT_FUNCTION_START}" &&
+    bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_FUNCTION_START}" &&
     set -x
   return 0
 }
@@ -198,7 +204,7 @@ function bl64_dbg_lib_trace_start() {
 function bl64_dbg_lib_show_info() {
   [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_TASK" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_ALL" || "$#" == '0' ]] &&
     return 0
-  bl64_msg_show_debug "[${FUNCNAME[1]}:${BASH_LINENO[1]}] ${*}"
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${*}"
 
   return 0
 }
@@ -218,7 +224,7 @@ function bl64_dbg_app_show_info() {
 
   [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_TASK" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_ALL" || "$#" == '0' ]] &&
     return 0
-  bl64_msg_show_debug "[${FUNCNAME[1]}:${BASH_LINENO[1]}] ${*}"
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${*}"
 
   return 0
 }
@@ -241,7 +247,7 @@ function bl64_dbg_lib_show_vars() {
     return 0
 
   for variable in "$@"; do
-    eval "bl64_msg_show_debug \"[${FUNCNAME[1]}:${BASH_LINENO[1]}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=\$${variable}]\""
+    eval "bl64_msg_show_debug \"[${FUNCNAME[1]}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=\$${variable}]\""
   done
 
   return 0
@@ -265,7 +271,7 @@ function bl64_dbg_app_show_vars() {
     return 0
 
   for variable in "$@"; do
-    eval "bl64_msg_show_debug \"[${FUNCNAME[1]}:${BASH_LINENO[1]}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=\$${variable}]\""
+    eval "bl64_msg_show_debug \"[${FUNCNAME[1]}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=\$${variable}]\""
   done
 
   return 0
@@ -286,7 +292,7 @@ function bl64_dbg_lib_show_function() {
 
   bl64_dbg_lib_task_enabled || return 0
 
-  bl64_msg_show_debug "[${FUNCNAME[1]}:${BASH_LINENO[1]}] ${_BL64_DBG_TXT_FUNCTION_RUN}: [${*}]"
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_FUNCTION_RUN}: [${*}]"
   return 0
 }
 
@@ -305,6 +311,6 @@ function bl64_dbg_app_show_function() {
 
   bl64_dbg_app_task_enabled || return 0
 
-  bl64_msg_show_debug "[${FUNCNAME[1]}:${BASH_LINENO[1]}] ${_BL64_DBG_TXT_FUNCTION_RUN}: [${*}]"
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_FUNCTION_RUN}: [${*}]"
   return 0
 }
