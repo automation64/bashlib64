@@ -1,10 +1,7 @@
 #######################################
-# BashLib64 / OS / Identify OS attributes and provide command aliases
+# BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.12.0
+# Version: 1.13.0
 #######################################
 
 function _bl64_os_match() {
@@ -190,9 +187,9 @@ function bl64_os_id_user() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_os_awk() {
+function bl64_os_run_awk() {
   bl64_dbg_lib_show_function "$@"
-  local awk_cmd='/usr/bin/awk'
+  local awk_cmd="$BL64_LIB_INCOMPATIBLE"
   local awk_flags=' '
 
   case "$BL64_OS_DISTRO" in
@@ -217,11 +214,7 @@ function bl64_os_awk() {
   ${BL64_OS_MCOS}-*)
     awk_cmd='/usr/bin/awk'
     ;;
-  *)
-    bl64_check_show_unsupported
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
-    ;;
+  *) bl64_check_show_unsupported ;;
   esac
   bl64_check_command "$awk_cmd" || return $?
 
