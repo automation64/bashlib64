@@ -1,8 +1,6 @@
 # Contributing
 
-## Development
-
-### Environment
+## Prepare Development Environment
 
 - Prepare dev tools
   - Install GIT
@@ -28,7 +26,30 @@
   source bin/devbl-set
   ```
 
-## Testing
+## Update source code
+
+- Add/Edit source code in: `src/`
+- Build production library and refresh docs:
+
+```shell
+ ./bin/devbl-build -p
+ ./bin/devbl-build -d
+```
+
+## Test source code
+
+- Add/update test-cases in: `test/batscore`
+- Build testing library:
+
+```shell
+ ./bin/devbl-build -t
+```
+
+- Run test-cases using container images bundled with the `testmansh` tool
+
+```shell
+testmansh -b -o
+```
 
 ## Repositories
 

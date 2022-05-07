@@ -1,11 +1,32 @@
 #######################################
-# BashLib64 / Manage archive files
+# BashLib64 / Module / Functions / Manage archive files
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
+
+#######################################
+# Tar wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_arc_run_tar() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_command "$BL64_ARC_CMD_TAR" || return $?
+  bl64_dbg_lib_command_enabled && verbose="$BL64_ARC_SET_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_ARC_CMD_TAR" \
+    $verbose \
+    "$@"
+}
 
 #######################################
 # Open tar files and remove the source after extraction
@@ -39,44 +60,35 @@ function bl64_arc_open_tar() {
 
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    "$BL64_ARC_CMD_TAR" \
+    bl64_arc_run_tar \
       --overwrite \
       --extract \
       --no-same-owner \
       --preserve-permissions \
       --no-acls \
       --force-local \
-      --verbose \
       --auto-compress \
       --file="$source"
-    status=$?
     ;;
   ${BL64_OS_ALP}-*)
-    "$BL64_ARC_CMD_TAR" \
+    bl64_arc_run_tar \
       x \
       --overwrite \
       -f "$source" \
-      -o \
-      -v
-    status=$?
+      -o
     ;;
   ${BL64_OS_MCOS}-*)
-    "$BL64_ARC_CMD_TAR" \
+    bl64_arc_run_tar \
       --extract \
       --no-same-owner \
       --preserve-permissions \
       --no-acls \
-      --verbose \
       --auto-compress \
       --file="$source"
-    status=$?
     ;;
-  *)
-    bl64_check_show_unsupported
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
-    ;;
+  *) bl64_check_show_unsupported ;;
   esac
+  status=$?
 
   ((status == 0)) && bl64_fs_rm_file "$source"
 

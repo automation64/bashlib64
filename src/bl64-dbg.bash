@@ -1,9 +1,6 @@
 #######################################
-# BashLib64 / Show shell debugging information
+# BashLib64 / Module / Functions / Show shell debugging information
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.6.0
 #######################################
 
@@ -48,7 +45,6 @@ function bl64_dbg_runtime_show() {
     bl64_msg_show_debug "${_BL64_DBG_TXT_BASH}: [${BASH}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_BASHOPTS}: [${BASHOPTS:-NONE}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_SHELLOPTS}: [${SHELLOPTS:-NONE}]"
-    bl64_msg_show_debug "${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_VERSION}: [${BASH_VERSION}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_OSTYPE}: [${OSTYPE:-NONE}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_LC_ALL}: [${LC_ALL:-NONE}]"
@@ -59,11 +55,13 @@ function bl64_dbg_runtime_show() {
     bl64_msg_show_debug "${_BL64_DBG_TXT_COMMAND}: [${BASH_COMMAND:-NONE}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_STATUS}: [${last_status}]"
 
-    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
-    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
-    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
-    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
-    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
+    bl64_msg_show_debug "Paths / ${_BL64_DBG_TXT_SCRIPT_PATH}: [${BL64_SCRIPT_PATH:-EMPTY}]"
+    bl64_msg_show_debug "Paths / ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
+    bl64_msg_show_debug "Paths / ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
+    bl64_msg_show_debug "Paths / ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
+    bl64_msg_show_debug "Paths / ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
+    bl64_msg_show_debug "Paths / ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
+    bl64_msg_show_debug "Paths / ${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
 
     bl64_msg_show_debug "Script / ${_BL64_DBG_TXT_CALLSTACK}(1): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[1]:-NONE}:${BASH_LINENO[1]:-0}]"
     bl64_msg_show_debug "Script / ${_BL64_DBG_TXT_CALLSTACK}(2): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
@@ -109,12 +107,14 @@ function bl64_dbg_runtime_show_callstack() {
 #######################################
 function bl64_dbg_runtime_show_paths() {
 
-  bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
+  bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0  
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_SCRIPT_PATH}: [${BL64_SCRIPT_PATH:-EMPTY}]"
   bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
   bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
   bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
   bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
   bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
 
 }
 

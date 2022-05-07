@@ -1,10 +1,7 @@
 #######################################
-# BashLib64 / Manage role based access service
+# BashLib64 / Module / Functions / Manage role based access service
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -34,7 +31,7 @@ function bl64_rbac_add_root() {
 
   umask 0266
   # shellcheck disable=SC2016
-  bl64_os_awk \
+  bl64_os_run_awk \
     -v ControlUsr="$user" \
     '
       BEGIN { Found = 0 }
@@ -93,4 +90,33 @@ function bl64_rbac_check_sudoers() {
   fi
 
   return $status
+}
+
+#######################################
+# Run privileged OS command using Sudo if needed
+#
+# Arguments:
+#   $@: command and arguments to run
+# Outputs:
+#   STDOUT: command or sudo output
+#   STDERR: command or sudo error
+# Returns:
+#   command or sudo exit status
+#######################################
+function bl64_rbac_run_command() {
+  bl64_dbg_lib_show_function "$@"
+
+  # shellcheck disable=SC2086
+  (($# == 0)) && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  # shellcheck disable=SC2086
+  bl64_check_command "$BL64_RBAC_CMD_SUDO" || return $?
+
+  # Check the effective user id
+  if [[ "$EUID" == '0' ]]; then
+    # Already root, execute command directly
+    "$@"
+  else
+    # Current user is regular, use SUDO
+    $BL64_RBAC_ALIAS_SUDO_ENV "$@"
+  fi
 }

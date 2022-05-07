@@ -1,10 +1,7 @@
 #######################################
-# BashLib64 / Manage native OS packages
+# BashLib64 / Module / Functions / Manage native OS packages
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 #######################################
@@ -72,11 +69,7 @@ function bl64_pkg_prepare() {
   ${BL64_OS_MCOS}-*)
     "$BL64_PKG_CMD_BRW" update $verbose
     ;;
-  *)
-    bl64_check_show_unsupported
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
-    ;;
+  *) bl64_check_show_unsupported ;;
   esac
 }
 
@@ -127,11 +120,7 @@ function bl64_pkg_install() {
   ${BL64_OS_MCOS}-*)
     "$BL64_PKG_CMD_BRW" install $verbose "$@"
     ;;
-  *)
-    bl64_check_show_unsupported
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
-    ;;
+  *) bl64_check_show_unsupported ;;
 
   esac
 }
@@ -187,11 +176,7 @@ function bl64_pkg_cleanup() {
   ${BL64_OS_MCOS}-*)
     "$BL64_PKG_CMD_BRW" cleanup $verbose --prune=all -s
     ;;
-  *)
-    bl64_check_show_unsupported
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
-    ;;
+  *) bl64_check_show_unsupported ;;
 
   esac
 }

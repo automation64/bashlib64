@@ -2,7 +2,7 @@ setup() {
   . "$DEVBL_TEST_SETUP"
 }
 
-@test "bl64_lib_env: error constants are set" {
+@test "bl64_lib_error: error constants are set" {
 
   assert_equal $BL64_LIB_ERROR_PARAMETER_INVALID 3
   assert_equal $BL64_LIB_ERROR_PARAMETER_MISSING 4
@@ -20,8 +20,7 @@ setup() {
 
   assert_equal $BL64_LIB_ERROR_OS_NOT_MATCH 30
   assert_equal $BL64_LIB_ERROR_OS_TAG_INVALID 31
-  assert_equal $BL64_LIB_ERROR_OS_UNKNOWN 32
-  assert_equal $BL64_LIB_ERROR_OS_INCOMPATIBLE 33
+  assert_equal $BL64_LIB_ERROR_OS_INCOMPATIBLE 32
 
   assert_equal $BL64_LIB_ERROR_APP_INCOMPATIBLE 40
   assert_equal $BL64_LIB_ERROR_APP_MISSING 41

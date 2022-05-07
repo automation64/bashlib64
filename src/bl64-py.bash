@@ -1,9 +1,6 @@
 #######################################
-# BashLib64 / Interact with system-wide Python
+# BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.1.0
 #######################################
 
@@ -18,7 +15,7 @@
 # Returns:
 #   PIP exit status
 #######################################
-function bl64_py_pip_run() {
+function bl64_py_run_pip() {
   bl64_dbg_lib_show_function "$@"
   local debug=''
 
@@ -77,7 +74,7 @@ function bl64_py_pip_usr_prepare() {
   local modules_setup='setuptools wheel stevedore'
 
   bl64_msg_show_task "$_BL64_PY_TXT_PIP_PREPARE_PIP"
-  bl64_py_pip_run \
+  bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_UPGRADE \
     $BL64_PY_SET_PIP_USER \
@@ -85,7 +82,7 @@ function bl64_py_pip_usr_prepare() {
 
   bl64_msg_show_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP"
   # shellcheck disable=SC2086
-  bl64_py_pip_run \
+  bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_UPGRADE \
     $BL64_PY_SET_PIP_USER \
@@ -109,7 +106,7 @@ function bl64_py_pip_usr_prepare() {
 function bl64_py_pip_usr_install() {
   bl64_dbg_lib_show_function "$@"
   bl64_msg_show_task "$_BL64_PY_TXT_PIP_INSTALL"
-  bl64_py_pip_run \
+  bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_USER \
     "$@"

@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 2.2.0
+# Version: 2.3.0
 #######################################
 
 # Do not inherit aliases and commands
@@ -31,11 +31,8 @@ shopt -qs \
   'extquote'
 
 #######################################
-# BashLib64 / Setup script run-time environment
+# BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.7.0
 #######################################
 
@@ -44,6 +41,10 @@ export LANG
 export LC_ALL
 export LANGUAGE
 export TERM
+
+#
+# Global flags
+#
 
 # Set Command flag (On/Off)
 export BL64_LIB_CMD="${BL64_LIB_CMD:-0}"
@@ -63,6 +64,76 @@ export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-1}"
 # Set Normalize locale flag
 export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
 
+#
+# Common values
+#
+
+# Default value for parameters
+export BL64_LIB_DEFAULT='_'
+
+# Flag for incompatible command
+export BL64_LIB_INCOMPATIBLE='_X_'
+
+# Pseudo null value
+export BL64_LIB_VAR_NULL='__'
+
+# Logical values
+export BL64_LIB_VAR_TRUE='0'
+export BL64_LIB_VAR_FALSE='1'
+export BL64_LIB_VAR_ON='1'
+export BL64_LIB_VAR_OFF='0'
+export BL64_LIB_VAR_OK='0'
+
+#
+# Common error codes
+#
+
+# Parameters
+declare -ig BL64_LIB_ERROR_PARAMETER_INVALID=3
+declare -ig BL64_LIB_ERROR_PARAMETER_MISSING=4
+declare -ig BL64_LIB_ERROR_PARAMETER_RANGE=5
+declare -ig BL64_LIB_ERROR_PARAMETER_EMPTY=6
+
+# Function operation
+declare -ig BL64_LIB_ERROR_TASK_FAILED=10
+declare -ig BL64_LIB_ERROR_TASK_BACKUP=11
+declare -ig BL64_LIB_ERROR_TASK_RESTORE=12
+declare -ig BL64_LIB_ERROR_TASK_TEMP=13
+declare -ig BL64_LIB_ERROR_TASK_UNDEFINED=14
+
+# Module operation
+declare -ig BL64_LIB_ERROR_MODULE_SETUP_INVALID=20
+declare -ig BL64_LIB_ERROR_MODULE_SETUP_MISSING=21
+
+# OS
+declare -ig BL64_LIB_ERROR_OS_NOT_MATCH=30
+declare -ig BL64_LIB_ERROR_OS_TAG_INVALID=31
+declare -ig BL64_LIB_ERROR_OS_INCOMPATIBLE=32
+
+# External commands
+declare -ig BL64_LIB_ERROR_APP_INCOMPATIBLE=40
+declare -ig BL64_LIB_ERROR_APP_MISSING=41
+
+# Filesystem
+declare -ig BL64_LIB_ERROR_FILE_NOT_FOUND=50
+declare -ig BL64_LIB_ERROR_FILE_NOT_READ=51
+declare -ig BL64_LIB_ERROR_FILE_NOT_EXECUTE=52
+declare -ig BL64_LIB_ERROR_DIRECTORY_NOT_FOUND=53
+declare -ig BL64_LIB_ERROR_DIRECTORY_NOT_READ=54
+declare -ig BL64_LIB_ERROR_PATH_NOT_RELATIVE=55
+declare -ig BL64_LIB_ERROR_PATH_NOT_ABSOLUTE=56
+
+# General
+declare -ig BL64_LIB_ERROR_EXPORT_EMPTY=60
+declare -ig BL64_LIB_ERROR_EXPORT_SET=61
+declare -ig BL64_LIB_ERROR_PRIVILEGE_IS_ROOT=62
+declare -ig BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT=63
+declare -ig BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED=64
+
+#
+# Local values (not exported)
+#
+
 # Set Signal traps
 declare BL64_LIB_SIGNAL_HUP="${BL64_LIB_SIGNAL_HUP:--}"
 declare BL64_LIB_SIGNAL_STOP="${BL64_LIB_SIGNAL_STOP:--}"
@@ -79,90 +150,19 @@ declare BL64_SCRIPT_PATH=''
 
 # Define session ID for the current script
 declare BL64_SCRIPT_SID="${BASHPID}"
-
-#
-# Common values
-#
-
-# Default value for parameters
-readonly BL64_LIB_DEFAULT='_'
-
-# Flag for incompatible command
-readonly BL64_LIB_INCOMPATIBLE='_X_'
-
-# Pseudo null value
-readonly BL64_LIB_VAR_NULL='__'
-
-# Pseudo logical values
-readonly BL64_LIB_VAR_TRUE='0'
-readonly BL64_LIB_VAR_FALSE='1'
-readonly BL64_LIB_VAR_ON='1'
-readonly BL64_LIB_VAR_OFF='0'
-readonly BL64_LIB_VAR_OK='0'
-
-#
-# Common error codes
-#
-
-# Parameters
-declare -rig BL64_LIB_ERROR_PARAMETER_INVALID=3
-declare -rig BL64_LIB_ERROR_PARAMETER_MISSING=4
-declare -rig BL64_LIB_ERROR_PARAMETER_RANGE=5
-declare -rig BL64_LIB_ERROR_PARAMETER_EMPTY=6
-
-# Function operation
-declare -rig BL64_LIB_ERROR_TASK_FAILED=10
-declare -rig BL64_LIB_ERROR_TASK_BACKUP=11
-declare -rig BL64_LIB_ERROR_TASK_RESTORE=12
-declare -rig BL64_LIB_ERROR_TASK_TEMP=13
-declare -rig BL64_LIB_ERROR_TASK_UNDEFINED=14
-
-# Module operation
-declare -rig BL64_LIB_ERROR_MODULE_SETUP_INVALID=20
-declare -rig BL64_LIB_ERROR_MODULE_SETUP_MISSING=21
-
-# OS
-declare -rig BL64_LIB_ERROR_OS_NOT_MATCH=30
-declare -rig BL64_LIB_ERROR_OS_TAG_INVALID=31
-declare -rig BL64_LIB_ERROR_OS_UNKNOWN=32
-declare -rig BL64_LIB_ERROR_OS_INCOMPATIBLE=33
-
-# External commands
-declare -rig BL64_LIB_ERROR_APP_INCOMPATIBLE=40
-declare -rig BL64_LIB_ERROR_APP_MISSING=41
-
-# Filesystem
-declare -rig BL64_LIB_ERROR_FILE_NOT_FOUND=50
-declare -rig BL64_LIB_ERROR_FILE_NOT_READ=51
-declare -rig BL64_LIB_ERROR_FILE_NOT_EXECUTE=52
-declare -rig BL64_LIB_ERROR_DIRECTORY_NOT_FOUND=53
-declare -rig BL64_LIB_ERROR_DIRECTORY_NOT_READ=54
-declare -rig BL64_LIB_ERROR_PATH_NOT_RELATIVE=55
-declare -rig BL64_LIB_ERROR_PATH_NOT_ABSOLUTE=56
-
-# General
-declare -rig BL64_LIB_ERROR_EXPORT_EMPTY=60
-declare -rig BL64_LIB_ERROR_EXPORT_SET=61
-declare -rig BL64_LIB_ERROR_PRIVILEGE_IS_ROOT=62
-declare -rig BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT=63
-declare -rig BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED=64
 #######################################
-# BashLib64 / Manage archive files
+# BashLib64 / Module / Globals / Manage archive files
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 export BL64_ARC_CMD_TAR=''
 
+export BL64_ARC_SET_VERBOSE=''
+
 #######################################
-# BashLib64 / Check for conditions and report status
+# BashLib64 / Module / Globals / Check for conditions and report status
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.6.0
 #######################################
 
@@ -192,11 +192,8 @@ readonly _BL64_CHECK_TXT_INCOMPATIBLE='the requested operation is not supported 
 readonly _BL64_CHECK_TXT_UNDEFINED='requested command is not defined or implemented'
 
 #######################################
-# BashLib64 / Interact with container engines
+# BashLib64 / Module / Globals / Interact with container engines
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.0.0
 #######################################
 
@@ -206,11 +203,8 @@ export BL64_CNT_CMD_DOCKER=''
 readonly _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
 
 #######################################
-# BashLib64 / Show shell debugging information
+# BashLib64 / Module / Globals / Show shell debugging information
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.4.0
 #######################################
 
@@ -242,36 +236,35 @@ readonly _BL64_DBG_TXT_FUNCTION_START='function tracing started'
 readonly _BL64_DBG_TXT_FUNCTION_STOP='function tracing stopped'
 readonly _BL64_DBG_TXT_SHELL_VAR='shell variable'
 
-readonly _BL64_DBG_TXT_BASH="Bash / Interpreter path"
-readonly _BL64_DBG_TXT_BASHOPTS="Bash / ShOpt Options"
-readonly _BL64_DBG_TXT_SHELLOPTS="Bash / Set -o Options"
-readonly _BL64_DBG_TXT_TMPDIR="Bash / Temporary path"
-readonly _BL64_DBG_TXT_BASH_VERSION="Bash / Version"
-readonly _BL64_DBG_TXT_OSTYPE="Bash / Detected OS"
-readonly _BL64_DBG_TXT_LC_ALL="Shell / Locale setting"
-readonly _BL64_DBG_TXT_HOSTNAME="Shell / Hostname"
-readonly _BL64_DBG_TXT_EUID="Script / User ID"
-readonly _BL64_DBG_TXT_UID="Script / Effective User ID"
-readonly _BL64_DBG_TXT_BASH_ARGV="Script / Arguments"
-readonly _BL64_DBG_TXT_COMMAND="Script / Last executed command"
-readonly _BL64_DBG_TXT_STATUS="Script / Last exit status"
-readonly _BL64_DBG_TXT_SCRIPT_FATAL="the script is unable to contine due to a critical error"
+readonly _BL64_DBG_TXT_BASH='Bash / Interpreter path'
+readonly _BL64_DBG_TXT_BASHOPTS='Bash / ShOpt Options'
+readonly _BL64_DBG_TXT_SHELLOPTS='Bash / Set -o Options'
+readonly _BL64_DBG_TXT_BASH_VERSION='Bash / Version'
+readonly _BL64_DBG_TXT_OSTYPE='Bash / Detected OS'
+readonly _BL64_DBG_TXT_LC_ALL='Shell / Locale setting'
+readonly _BL64_DBG_TXT_HOSTNAME='Shell / Hostname'
+readonly _BL64_DBG_TXT_EUID='Script / User ID'
+readonly _BL64_DBG_TXT_UID='Script / Effective User ID'
+readonly _BL64_DBG_TXT_BASH_ARGV='Script / Arguments'
+readonly _BL64_DBG_TXT_COMMAND='Script / Last executed command'
+readonly _BL64_DBG_TXT_STATUS='Script / Last exit status'
+readonly _BL64_DBG_TXT_SCRIPT_FATAL='the script is unable to contine due to a critical error'
 
-readonly _BL64_DBG_TXT_FUNCTION_RUN="run function with parameters"
+readonly _BL64_DBG_TXT_FUNCTION_RUN='run function with parameters'
 
-readonly _BL64_DBG_TXT_CALLSTACK="Last executed function"
+readonly _BL64_DBG_TXT_CALLSTACK='Last executed function'
 
-readonly _BL64_DBG_TXT_HOME="Home directory"
-readonly _BL64_DBG_TXT_PATH="Search path"
-readonly _BL64_DBG_TXT_CD_PWD="Current cd working directory (PWD)"
-readonly _BL64_DBG_TXT_CD_OLDPWD="Previous cd working directory (OLDPWD)"
-readonly _BL64_DBG_TXT_PWD="Current working directory (pwd command)"
+readonly _BL64_DBG_TXT_HOME='Home directory (HOME)'
+readonly _BL64_DBG_TXT_PATH='Search path (PATH)'
+readonly _BL64_DBG_TXT_CD_PWD='Current cd working directory (PWD)'
+readonly _BL64_DBG_TXT_CD_OLDPWD='Previous cd working directory (OLDPWD)'
+readonly _BL64_DBG_TXT_SCRIPT_PATH='Initial script path (BL64_SCRIPT_PATH)'
+readonly _BL64_DBG_TXT_TMPDIR='Temporary path (TMPDIR)'
+readonly _BL64_DBG_TXT_PWD='Current working directory (pwd command)'
+
 #######################################
-# BashLib64 / Manage local filesystem
+# BashLib64 / Module / Globals / Manage local filesystem
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.1.0
 #######################################
 
@@ -312,11 +305,8 @@ export BL64_FS_SET_RM_RECURSIVE=''
 export BL64_FS_SET_RM_VERBOSE=''
 
 #######################################
-# BashLib64 / Manage OS identity and access service
+# BashLib64 / Module / Globals / Manage OS identity and access service
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.3.0
 #######################################
 
@@ -325,21 +315,18 @@ export BL64_IAM_CMD_USERADD=''
 export BL64_IAM_ALIAS_USERADD=''
 
 #######################################
-# BashLib64 / Write messages to logs
+# BashLib64 / Module / Globals / Write messages to logs
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.2.0
 #######################################
 
-readonly BL64_LOG_TYPE_FILE='F'
-readonly BL64_LOG_CATEGORY_INFO='info'
-readonly BL64_LOG_CATEGORY_TASK='task'
-readonly BL64_LOG_CATEGORY_DEBUG='debug'
-readonly BL64_LOG_CATEGORY_WARNING='warning'
-readonly BL64_LOG_CATEGORY_ERROR='error'
-readonly BL64_LOG_CATEGORY_RECORD='record'
+export BL64_LOG_TYPE_FILE='F'
+export BL64_LOG_CATEGORY_INFO='info'
+export BL64_LOG_CATEGORY_TASK='task'
+export BL64_LOG_CATEGORY_DEBUG='debug'
+export BL64_LOG_CATEGORY_WARNING='warning'
+export BL64_LOG_CATEGORY_ERROR='error'
+export BL64_LOG_CATEGORY_RECORD='record'
 
 readonly _BL64_LOG_TXT_NOT_SETUP='missing setup information. Please use the bl64_log_setup function before calling bl64_log_* functions'
 readonly _BL64_LOG_TXT_INVALID_TYPE='invalid log type. Please use any of BL64_LOG_TYPE_*'
@@ -351,19 +338,16 @@ export BL64_LOG_FS=''
 export BL64_LOG_TYPE=''
 
 #######################################
-# BashLib64 / Msg / Display messages
+# BashLib64 / Module / Globals / Msg / Display messages
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.6.0
 #######################################
 
-readonly BL64_MSG_FORMAT_PLAIN='R'
-readonly BL64_MSG_FORMAT_HOST='H'
-readonly BL64_MSG_FORMAT_TIME='T'
-readonly BL64_MSG_FORMAT_CALLER='C'
-readonly BL64_MSG_FORMAT_FULL='F'
+export BL64_MSG_FORMAT_PLAIN='R'
+export BL64_MSG_FORMAT_HOST='H'
+export BL64_MSG_FORMAT_TIME='T'
+export BL64_MSG_FORMAT_CALLER='C'
+export BL64_MSG_FORMAT_FULL='F'
 
 export BL64_MSG_FORMAT="${BL64_MSG_FORMAT:-$BL64_MSG_FORMAT_FULL}"
 
@@ -384,11 +368,8 @@ readonly _BL64_MSG_TXT_BATCH_FINISH_ERROR='finished with errors'
 
 
 #######################################
-# BashLib64 / OS / Identify OS attributes and provide command aliases
+# BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.9.0
 #######################################
 
@@ -420,27 +401,24 @@ export BL64_OS_ALIAS_ID_USER=''
 #   * OL    -> OracleLinux
 #   * RHEL  -> RedHat Enterprise Linux
 #   * UB    -> Ubuntu
-readonly BL64_OS_TAGS='ALM ALP AMZ CNT DEB FD MCOS OL RHEL UB'; export BL64_OS_TAGS
+export BL64_OS_TAGS='ALM ALP AMZ CNT DEB FD MCOS OL RHEL UB'; export BL64_OS_TAGS
 
 # OS tags. Uppercase version of os-release id
-readonly BL64_OS_ALM='ALMALINUX'; export BL64_OS_ALM
-readonly BL64_OS_ALP='ALPINE'; export BL64_OS_ALP
-readonly BL64_OS_AMZ='AMZN'; export BL64_OS_AMZ
-readonly BL64_OS_CNT='CENTOS'; export BL64_OS_CNT
-readonly BL64_OS_DEB='DEBIAN'; export BL64_OS_DEB
-readonly BL64_OS_FD='FEDORA'; export BL64_OS_FD
-readonly BL64_OS_MCOS='DARWIN'; export BL64_OS_MCOS
-readonly BL64_OS_OL='OL'; export BL64_OS_OL
-readonly BL64_OS_RHEL='RHEL'; export BL64_OS_RHEL
-readonly BL64_OS_UB='UBUNTU'; export BL64_OS_UB
-readonly BL64_OS_UNK='UNKNOWN'; export BL64_OS_UNK
+export BL64_OS_ALM='ALMALINUX'; export BL64_OS_ALM
+export BL64_OS_ALP='ALPINE'; export BL64_OS_ALP
+export BL64_OS_AMZ='AMZN'; export BL64_OS_AMZ
+export BL64_OS_CNT='CENTOS'; export BL64_OS_CNT
+export BL64_OS_DEB='DEBIAN'; export BL64_OS_DEB
+export BL64_OS_FD='FEDORA'; export BL64_OS_FD
+export BL64_OS_MCOS='DARWIN'; export BL64_OS_MCOS
+export BL64_OS_OL='OL'; export BL64_OS_OL
+export BL64_OS_RHEL='RHEL'; export BL64_OS_RHEL
+export BL64_OS_UB='UBUNTU'; export BL64_OS_UB
+export BL64_OS_UNK='UNKNOWN'; export BL64_OS_UNK
 
 #######################################
-# BashLib64 / Manage native OS packages
+# BashLib64 / Module / Globals / Manage native OS packages
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.6.0
 #######################################
 
@@ -477,11 +455,8 @@ readonly _BL64_PKG_TXT_PREPARE='initialize package manager'
 
 
 #######################################
-# BashLib64 / Interact with system-wide Python
+# BashLib64 / Module / Globals / Interact with system-wide Python
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.1.0
 #######################################
 
@@ -504,11 +479,8 @@ readonly _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
 readonly _BL64_PY_TXT_PIP_INSTALL='install modules'
 
 #######################################
-# BashLib64 / Manage role based access service
+# BashLib64 / Module / Globals / Manage role based access service
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.3.0
 #######################################
 
@@ -521,38 +493,35 @@ export BL64_RBAC_ALIAS_SUDO_ENV=''
 readonly _BL64_RBAC_TXT_INVALID_SUDOERS='the sudoers file is corrupt or invalid'
 
 #######################################
-# BashLib64 / Generate random data
+# BashLib64 / Module / Globals / Generate random data
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
-declare -rig BL64_RND_LENGTH_1=1
-declare -rig BL64_RND_LENGTH_20=20
-declare -rig BL64_RND_LENGTH_100=100
-declare -rig BL64_RND_RANDOM_MIN=0
-declare -rig BL64_RND_RANDOM_MAX=32767
+declare -ig BL64_RND_LENGTH_1=1
+declare -ig BL64_RND_LENGTH_20=20
+declare -ig BL64_RND_LENGTH_100=100
+declare -ig BL64_RND_RANDOM_MIN=0
+declare -ig BL64_RND_RANDOM_MAX=32767
 
-readonly BL64_RND_POOL_UPPERCASE="$(printf '%b' $(printf '\\%o' {65..90}))"
-readonly BL64_RND_POOL_UPPERCASE_MAX_IDX="$(( ${#BL64_RND_POOL_UPPERCASE} - 1 ))"
-readonly BL64_RND_POOL_LOWERCASE="$(printf '%b' $(printf '\\%o' {97..122}))"
-readonly BL64_RND_POOL_LOWERCASE_MAX_IDX="$(( ${#BL64_RND_POOL_LOWERCASE} - 1 ))"
-readonly BL64_RND_POOL_DIGITS="$(printf '%b' $(printf '\\%o' {48..57}))"
-readonly BL64_RND_POOL_DIGITS_MAX_IDX="$(( ${#BL64_RND_POOL_DIGITS} - 1 ))"
-readonly BL64_RND_POOL_ALPHANUMERIC="${BL64_RND_POOL_UPPERCASE}${BL64_RND_POOL_LOWERCASE}${BL64_RND_POOL_DIGITS}"
-readonly BL64_RND_POOL_ALPHANUMERIC_MAX_IDX="$(( ${#BL64_RND_POOL_ALPHANUMERIC} - 1 ))"
+# shellcheck disable=SC2155
+export BL64_RND_POOL_UPPERCASE="$(printf '%b' "$(printf '\\%o' {65..90})")"
+export BL64_RND_POOL_UPPERCASE_MAX_IDX="$(( ${#BL64_RND_POOL_UPPERCASE} - 1 ))"
+# shellcheck disable=SC2155
+export BL64_RND_POOL_LOWERCASE="$(printf '%b' "$(printf '\\%o' {97..122})")"
+export BL64_RND_POOL_LOWERCASE_MAX_IDX="$(( ${#BL64_RND_POOL_LOWERCASE} - 1 ))"
+# shellcheck disable=SC2155
+export BL64_RND_POOL_DIGITS="$(printf '%b' "$(printf '\\%o' {48..57})")"
+export BL64_RND_POOL_DIGITS_MAX_IDX="$(( ${#BL64_RND_POOL_DIGITS} - 1 ))"
+export BL64_RND_POOL_ALPHANUMERIC="${BL64_RND_POOL_UPPERCASE}${BL64_RND_POOL_LOWERCASE}${BL64_RND_POOL_DIGITS}"
+export BL64_RND_POOL_ALPHANUMERIC_MAX_IDX="$(( ${#BL64_RND_POOL_ALPHANUMERIC} - 1 ))"
 
 readonly _BL64_RND_TXT_LENGHT_MIN='length can not be less than'
 readonly _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
 
 #######################################
-# BashLib64 / Transfer and Receive data over the network
+# BashLib64 / Module / Globals / Transfer and Receive data over the network
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.4.0
 #######################################
 
@@ -578,11 +547,8 @@ readonly _BL64_RXTX_TXT_CREATION_PROBLEM='unable to create temporary git repo'
 readonly _BL64_RXTX_BACKUP_POSTFIX='._bl64_rxtx_backup'
 
 #######################################
-# BashLib64 / Manage Version Control System
+# BashLib64 / Module / Globals / Manage Version Control System
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.3.0
 #######################################
 
@@ -594,49 +560,29 @@ export BL64_VCS_SET_GIT_NO_PAGER=''
 export BL64_VCS_SET_GIT_QUIET=''
 
 #######################################
-# BashLib64 / Manipulate CSV like text files
+# BashLib64 / Module / Globals / Manipulate CSV like text files
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
-declare -rig BL64_XSV_ERROR_SEARCH_VALUES=199
-
 # Field separators
-readonly BL64_XSV_FS='_@64@_'       # Custom
-readonly BL64_XSV_FS_SPACE=' '
-readonly BL64_XSV_FS_TAB='	'
-readonly BL64_XSV_FS_COLON=':'
-readonly BL64_XSV_FS_SEMICOLON=';'
-readonly BL64_XSV_FS_COMMA=','
-readonly BL64_XSV_FS_PIPE='|'
-readonly BL64_XSV_FS_AT='@'
-readonly BL64_XSV_FS_DOLLAR='$'
-readonly BL64_XSV_FS_SLASH='/'
-
-# Exports required to use inside AWK programs
-export BL64_XSV_FS
-export BL64_XSV_FS_SPACE
-export BL64_XSV_FS_TAB
-export BL64_XSV_FS_COLON
-export BL64_XSV_FS_SEMICOLON
-export BL64_XSV_FS_COMMA
-export BL64_XSV_FS_PIPE
-export BL64_XSV_FS_AT
-export BL64_XSV_FS_DOLLAR
-export BL64_XSV_FS_SLASH
+export BL64_XSV_FS='_@64@_'       # Custom
+export BL64_XSV_FS_SPACE=' '
+export BL64_XSV_FS_TAB='	'
+export BL64_XSV_FS_COLON=':'
+export BL64_XSV_FS_SEMICOLON=';'
+export BL64_XSV_FS_COMMA=','
+export BL64_XSV_FS_PIPE='|'
+export BL64_XSV_FS_AT='@'
+export BL64_XSV_FS_DOLLAR='$'
+export BL64_XSV_FS_SLASH='/'
 
 readonly _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
 
 #######################################
-# BashLib64 / Manage archive files
+# BashLib64 / Module / Setup / Manage archive files
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -672,13 +618,58 @@ function bl64_arc_set_command() {
 }
 
 #######################################
-# BashLib64 / Manage archive files
+# Create command sets for common options
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.0
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
 #######################################
+# Warning: bootstrap function: use pure bash, no return, no exit
+function bl64_arc_set_options() {
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_MCOS}-*)
+    BL64_ARC_SET_VERBOSE='--verbose'
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_ARC_SET_VERBOSE='-v'
+    ;;
+  *) bl64_check_show_unsupported ;;
+  esac
+}
+
+#######################################
+# BashLib64 / Module / Functions / Manage archive files
+#
+# Version: 1.6.0
+#######################################
+
+#######################################
+# Tar wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_arc_run_tar() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_command "$BL64_ARC_CMD_TAR" || return $?
+  bl64_dbg_lib_command_enabled && verbose="$BL64_ARC_SET_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_ARC_CMD_TAR" \
+    $verbose \
+    "$@"
+}
 
 #######################################
 # Open tar files and remove the source after extraction
@@ -712,44 +703,35 @@ function bl64_arc_open_tar() {
 
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    "$BL64_ARC_CMD_TAR" \
+    bl64_arc_run_tar \
       --overwrite \
       --extract \
       --no-same-owner \
       --preserve-permissions \
       --no-acls \
       --force-local \
-      --verbose \
       --auto-compress \
       --file="$source"
-    status=$?
     ;;
   ${BL64_OS_ALP}-*)
-    "$BL64_ARC_CMD_TAR" \
+    bl64_arc_run_tar \
       x \
       --overwrite \
       -f "$source" \
-      -o \
-      -v
-    status=$?
+      -o
     ;;
   ${BL64_OS_MCOS}-*)
-    "$BL64_ARC_CMD_TAR" \
+    bl64_arc_run_tar \
       --extract \
       --no-same-owner \
       --preserve-permissions \
       --no-acls \
-      --verbose \
       --auto-compress \
       --file="$source"
-    status=$?
     ;;
-  *)
-    bl64_check_show_unsupported
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
-    ;;
+  *) bl64_check_show_unsupported ;;
   esac
+  status=$?
 
   ((status == 0)) && bl64_fs_rm_file "$source"
 
@@ -757,11 +739,8 @@ function bl64_arc_open_tar() {
 }
 
 #######################################
-# BashLib64 / Check for conditions and report status
+# BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.10.0
 #######################################
 
@@ -1130,11 +1109,8 @@ function bl64_check_show_undefined() {
 }
 
 #######################################
-# BashLib64 / Interact with container engines
+# BashLib64 / Module / Setup / Interact with container engines
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.1.0
 #######################################
 
@@ -1172,11 +1148,8 @@ function bl64_cnt_set_command() {
 }
 
 #######################################
-# BashLib64 / Interact with container engines
+# BashLib64 / Module / Functions / Interact with container engines
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.2.0
 #######################################
 
@@ -1713,11 +1686,8 @@ function _bl64_cnt_login_put_password() {
 }
 
 #######################################
-# BashLib64 / Show shell debugging information
+# BashLib64 / Module / Functions / Show shell debugging information
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.6.0
 #######################################
 
@@ -1762,7 +1732,6 @@ function bl64_dbg_runtime_show() {
     bl64_msg_show_debug "${_BL64_DBG_TXT_BASH}: [${BASH}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_BASHOPTS}: [${BASHOPTS:-NONE}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_SHELLOPTS}: [${SHELLOPTS:-NONE}]"
-    bl64_msg_show_debug "${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_BASH_VERSION}: [${BASH_VERSION}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_OSTYPE}: [${OSTYPE:-NONE}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_LC_ALL}: [${LC_ALL:-NONE}]"
@@ -1773,11 +1742,13 @@ function bl64_dbg_runtime_show() {
     bl64_msg_show_debug "${_BL64_DBG_TXT_COMMAND}: [${BASH_COMMAND:-NONE}]"
     bl64_msg_show_debug "${_BL64_DBG_TXT_STATUS}: [${last_status}]"
 
-    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
-    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
-    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
-    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
-    bl64_msg_show_debug "Shell / ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
+    bl64_msg_show_debug "Paths / ${_BL64_DBG_TXT_SCRIPT_PATH}: [${BL64_SCRIPT_PATH:-EMPTY}]"
+    bl64_msg_show_debug "Paths / ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
+    bl64_msg_show_debug "Paths / ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
+    bl64_msg_show_debug "Paths / ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
+    bl64_msg_show_debug "Paths / ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
+    bl64_msg_show_debug "Paths / ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
+    bl64_msg_show_debug "Paths / ${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
 
     bl64_msg_show_debug "Script / ${_BL64_DBG_TXT_CALLSTACK}(1): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[1]:-NONE}:${BASH_LINENO[1]:-0}]"
     bl64_msg_show_debug "Script / ${_BL64_DBG_TXT_CALLSTACK}(2): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
@@ -1823,12 +1794,14 @@ function bl64_dbg_runtime_show_callstack() {
 #######################################
 function bl64_dbg_runtime_show_paths() {
 
-  bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
+  bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0  
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_SCRIPT_PATH}: [${BL64_SCRIPT_PATH:-EMPTY}]"
   bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
   bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
   bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
   bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
   bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
+  bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
 
 }
 
@@ -2030,11 +2003,8 @@ function bl64_dbg_app_show_function() {
 }
 
 #######################################
-# BashLib64 / Manage local filesystem
+# BashLib64 / Module / Setup / Manage local filesystem
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.0.0
 #######################################
 
@@ -2222,12 +2192,9 @@ function bl64_fs_set_alias() {
 }
 
 #######################################
-# BashLib64 / Manage local filesystem
+# BashLib64 / Module / Functions / Manage local filesystem
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -2446,7 +2413,6 @@ function bl64_fs_merge_dir() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-${BL64_LIB_DEFAULT}}"
   local target="${2:-${BL64_LIB_DEFAULT}}"
-  local -i status=0
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'target' &&
@@ -2457,29 +2423,19 @@ function bl64_fs_merge_dir() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     bl64_fs_cp_dir --no-target-directory "$source" "$target"
-    status=$?
     ;;
   ${BL64_OS_MCOS}-*)
     # shellcheck disable=SC2086
     bl64_fs_cp_dir ${source}/ "$target"
-    status=$?
     ;;
   ${BL64_OS_ALP}-*)
-    shopt -sq dotglob
     # shellcheck disable=SC2086
-    bl64_fs_cp_dir ${source}/* -t "$target"
-    status=$?
-    shopt -uq dotglob
+    shopt -sq dotglob &&
+      bl64_fs_cp_dir ${source}/* -t "$target" &&
+      shopt -uq dotglob
     ;;
-  *)
-    bl64_check_show_unsupported
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
-    ;;
-
+  *) bl64_check_show_unsupported ;;
   esac
-
-  return $status
 }
 
 #######################################
@@ -2820,7 +2776,7 @@ function bl64_fs_cleanup_full() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_fs_find() {
+function bl64_fs_run_find() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_command "$BL64_FS_CMD_FIND" || return $?
@@ -2859,11 +2815,8 @@ function bl64_fs_find_files() {
 }
 
 #######################################
-# BashLib64 / Format text data
+# BashLib64 / Module / Functions / Format text data
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.4.0
 #######################################
 
@@ -3067,7 +3020,7 @@ function bl64_fmt_list_to_string() {
   [[ "$prefix" == "$BL64_LIB_DEFAULT" ]] && prefix=''
   [[ "$postfix" == "$BL64_LIB_DEFAULT" ]] && postfix=''
 
-  bl64_os_awk \
+  bl64_os_run_awk \
     -v field_separator="$field_separator" \
     -v prefix="$prefix" \
     -v postfix="$postfix" \
@@ -3104,11 +3057,8 @@ function bl64_fmt_separator_line() {
 }
 
 #######################################
-# BashLib64 / Manage OS identity and access service
+# BashLib64 / Module / Setup / Manage OS identity and access service
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.0.0
 #######################################
 
@@ -3177,12 +3127,9 @@ function bl64_iam_set_alias() {
 }
 
 #######################################
-# BashLib64 / Manage OS identity and access service
+# BashLib64 / Module / Functions / Manage OS identity and access service
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 #######################################
@@ -3205,25 +3152,17 @@ function bl64_iam_user_add() {
     return $?
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    $BL64_IAM_ALIAS_USERADD "$login"
-    ;;
-  ${BL64_OS_ALP}-*)
-    $BL64_IAM_ALIAS_USERADD -D "$login"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    $BL64_IAM_ALIAS_USERADD "/Users/${login}"
-    ;;
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*) $BL64_IAM_ALIAS_USERADD "$login" ;;
+  ${BL64_OS_ALP}-*) $BL64_IAM_ALIAS_USERADD -D "$login" ;;
+  ${BL64_OS_MCOS}-*) $BL64_IAM_ALIAS_USERADD "/Users/${login}" ;;
+  *) bl64_check_show_unsupported ;;
   esac
 }
 
 #######################################
-# BashLib64 / Write messages to logs
+# BashLib64 / Module / Functions / Write messages to logs
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -3250,6 +3189,7 @@ function _bl64_log_register() {
 
   if [[ -z "$BL64_LOG_PATH" || -z "$BL64_LOG_VERBOSE" || -z "$BL64_LOG_TYPE" || -z "$BL64_LOG_FS" ]]; then
     bl64_msg_show_error "$_BL64_LOG_TXT_NOT_SETUP"
+    # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
   fi
 
@@ -3272,6 +3212,7 @@ function _bl64_log_register() {
     ;;
   *)
     bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
+    # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
     ;;
   esac
@@ -3466,15 +3407,17 @@ function bl64_log_record() {
         "${tag}${BL64_LOG_FS}${input_log_line}"
     done
     ;;
+  *)
+    bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
+    ;;
   esac
 }
 
 #######################################
-# BashLib64 / Msg / Display messages
+# BashLib64 / Module / Functions / Msg / Display messages
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.7.0
 #######################################
 
@@ -3769,11 +3712,8 @@ function bl64_msg_show_batch_finish() {
 }
 
 #######################################
-# BashLib64 / OS / Identify OS attributes and provide command aliases
+# BashLib64 / Module / Setup / OS / Identify OS attributes and provide command aliases
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.0.0
 #######################################
 
@@ -3796,53 +3736,53 @@ function bl64_os_set_command() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_CAT='/bin/cat'
-    BL64_OS_CMD_DATE="/bin/date"
-    BL64_OS_CMD_FALSE="/bin/false"
+    BL64_OS_CMD_DATE='/bin/date'
+    BL64_OS_CMD_FALSE='/bin/false'
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_ARC_CMD_TAR='/bin/tar'
-    BL64_OS_CMD_TRUE="/bin/true"
+    BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_CAT='/usr/bin/cat'
-    BL64_OS_CMD_DATE="/usr/bin/date"
-    BL64_OS_CMD_FALSE="/usr/bin/false"
+    BL64_OS_CMD_DATE=/usr'/bin/date'
+    BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/usr/bin/grep'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_ARC_CMD_TAR='/bin/tar'
-    BL64_OS_CMD_TRUE="/usr/bin/true"
+    BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_CAT='/bin/cat'
-    BL64_OS_CMD_DATE="/bin/date"
-    BL64_OS_CMD_FALSE="/bin/false"
+    BL64_OS_CMD_DATE='/bin/date'
+    BL64_OS_CMD_FALSE='/bin/false'
     BL64_OS_CMD_GAWK='/usr/bin/gawk'
     BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_ARC_CMD_TAR='/bin/tar'
-    BL64_OS_CMD_TRUE="/bin/true"
+    BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_CAT='/bin/cat'
-    BL64_OS_CMD_DATE="/bin/date"
-    BL64_OS_CMD_FALSE="/usr/bin/false"
-    BL64_OS_CMD_GAWK='/usr/bin/gawk'
+    BL64_OS_CMD_DATE='/bin/date'
+    BL64_OS_CMD_FALSE='/usr/bin/false'
+    BL64_OS_CMD_GAWK="$BL64_LIB_INCOMPATIBLE"
     BL64_OS_CMD_GREP='/usr/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_ARC_CMD_TAR='/usr/bin/tar'
-    BL64_OS_CMD_TRUE="/usr/bin/true"
+    BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/usr/bin/uname'
     ;;
   *) bl64_check_show_unsupported ;;
@@ -3906,12 +3846,9 @@ function bl64_os_set_alias() {
 }
 
 #######################################
-# BashLib64 / OS / Identify OS attributes and provide command aliases
+# BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.12.0
+# Version: 1.13.0
 #######################################
 
 function _bl64_os_match() {
@@ -4097,9 +4034,9 @@ function bl64_os_id_user() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_os_awk() {
+function bl64_os_run_awk() {
   bl64_dbg_lib_show_function "$@"
-  local awk_cmd='/usr/bin/awk'
+  local awk_cmd="$BL64_LIB_INCOMPATIBLE"
   local awk_flags=' '
 
   case "$BL64_OS_DISTRO" in
@@ -4124,11 +4061,7 @@ function bl64_os_awk() {
   ${BL64_OS_MCOS}-*)
     awk_cmd='/usr/bin/awk'
     ;;
-  *)
-    bl64_check_show_unsupported
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
-    ;;
+  *) bl64_check_show_unsupported ;;
   esac
   bl64_check_command "$awk_cmd" || return $?
 
@@ -4137,11 +4070,8 @@ function bl64_os_awk() {
 }
 
 #######################################
-# BashLib64 / Manage native OS packages
+# BashLib64 / Module / Setup / Manage native OS packages
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.0.0
 #######################################
 
@@ -4284,12 +4214,9 @@ function bl64_pkb_set_alias() {
   esac
 }
 #######################################
-# BashLib64 / Manage native OS packages
+# BashLib64 / Module / Functions / Manage native OS packages
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 #######################################
@@ -4357,11 +4284,7 @@ function bl64_pkg_prepare() {
   ${BL64_OS_MCOS}-*)
     "$BL64_PKG_CMD_BRW" update $verbose
     ;;
-  *)
-    bl64_check_show_unsupported
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
-    ;;
+  *) bl64_check_show_unsupported ;;
   esac
 }
 
@@ -4412,11 +4335,7 @@ function bl64_pkg_install() {
   ${BL64_OS_MCOS}-*)
     "$BL64_PKG_CMD_BRW" install $verbose "$@"
     ;;
-  *)
-    bl64_check_show_unsupported
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
-    ;;
+  *) bl64_check_show_unsupported ;;
 
   esac
 }
@@ -4472,21 +4391,14 @@ function bl64_pkg_cleanup() {
   ${BL64_OS_MCOS}-*)
     "$BL64_PKG_CMD_BRW" cleanup $verbose --prune=all -s
     ;;
-  *)
-    bl64_check_show_unsupported
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
-    ;;
+  *) bl64_check_show_unsupported ;;
 
   esac
 }
 
 #######################################
-# BashLib64 / Interact with system-wide Python
+# BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.0.0
 #######################################
 
@@ -4589,11 +4501,8 @@ function bl64_py_set_options() {
 }
 
 #######################################
-# BashLib64 / Interact with system-wide Python
+# BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.1.0
 #######################################
 
@@ -4608,7 +4517,7 @@ function bl64_py_set_options() {
 # Returns:
 #   PIP exit status
 #######################################
-function bl64_py_pip_run() {
+function bl64_py_run_pip() {
   bl64_dbg_lib_show_function "$@"
   local debug=''
 
@@ -4667,7 +4576,7 @@ function bl64_py_pip_usr_prepare() {
   local modules_setup='setuptools wheel stevedore'
 
   bl64_msg_show_task "$_BL64_PY_TXT_PIP_PREPARE_PIP"
-  bl64_py_pip_run \
+  bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_UPGRADE \
     $BL64_PY_SET_PIP_USER \
@@ -4675,7 +4584,7 @@ function bl64_py_pip_usr_prepare() {
 
   bl64_msg_show_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP"
   # shellcheck disable=SC2086
-  bl64_py_pip_run \
+  bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_UPGRADE \
     $BL64_PY_SET_PIP_USER \
@@ -4699,18 +4608,15 @@ function bl64_py_pip_usr_prepare() {
 function bl64_py_pip_usr_install() {
   bl64_dbg_lib_show_function "$@"
   bl64_msg_show_task "$_BL64_PY_TXT_PIP_INSTALL"
-  bl64_py_pip_run \
+  bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_USER \
     "$@"
 }
 
 #######################################
-# BashLib64 / Manage role based access service
+# BashLib64 / Module / Setup / Manage role based access service
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.0.0
 #######################################
 
@@ -4768,45 +4674,9 @@ function bl64_rbac_set_alias() {
 }
 
 #######################################
-# Run privileged OS command using Sudo if needed
+# BashLib64 / Module / Functions / Manage role based access service
 #
-# Arguments:
-#   $@: command and arguments to run
-# Outputs:
-#   STDOUT: command or sudo output
-#   STDERR: command or sudo error
-# Returns:
-#   command or sudo exit status
-#######################################
-function bl64_rbac_run_command() {
-  bl64_dbg_lib_show_function "$@"
-  local -i status=0
-
-  # shellcheck disable=SC2086
-  (($# == 0)) && return $BL64_RBAC_ERROR_MISSING_PARAMETER
-  # shellcheck disable=SC2086
-  bl64_check_command "$BL64_RBAC_CMD_SUDO" || return $BL64_RBAC_ERROR_MISSING_SUDO
-
-  # Check the effective user id
-  if [[ "$EUID" == '0' ]]; then
-    # Already root, execute command directly
-    "$@"
-  else
-    # Current user is regular, use SUDO
-    $BL64_RBAC_ALIAS_SUDO_ENV "$@"
-  fi
-  status=$?
-
-  return $status
-}
-
-#######################################
-# BashLib64 / Manage role based access service
-#
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -4836,7 +4706,7 @@ function bl64_rbac_add_root() {
 
   umask 0266
   # shellcheck disable=SC2016
-  bl64_os_awk \
+  bl64_os_run_awk \
     -v ControlUsr="$user" \
     '
       BEGIN { Found = 0 }
@@ -4898,11 +4768,37 @@ function bl64_rbac_check_sudoers() {
 }
 
 #######################################
-# BashLib64 / Generate random data
+# Run privileged OS command using Sudo if needed
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
+# Arguments:
+#   $@: command and arguments to run
+# Outputs:
+#   STDOUT: command or sudo output
+#   STDERR: command or sudo error
+# Returns:
+#   command or sudo exit status
+#######################################
+function bl64_rbac_run_command() {
+  bl64_dbg_lib_show_function "$@"
+
+  # shellcheck disable=SC2086
+  (($# == 0)) && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  # shellcheck disable=SC2086
+  bl64_check_command "$BL64_RBAC_CMD_SUDO" || return $?
+
+  # Check the effective user id
+  if [[ "$EUID" == '0' ]]; then
+    # Already root, execute command directly
+    "$@"
+  else
+    # Current user is regular, use SUDO
+    $BL64_RBAC_ALIAS_SUDO_ENV "$@"
+  fi
+}
+
+#######################################
+# BashLib64 / Module / Functions / Generate random data
+#
 # Version: 1.1.0
 #######################################
 
@@ -5008,11 +4904,8 @@ function bl64_rnd_get_alphanumeric() {
 }
 
 #######################################
-# BashLib64 / Transfer and Receive data over the network
+# BashLib64 / Module / Setup / Transfer and Receive data over the network
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.0.0
 #######################################
 
@@ -5034,9 +4927,13 @@ function bl64_rnd_get_alphanumeric() {
 function bl64_rxtx_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-*)
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
     BL64_RXTX_CMD_WGET='/usr/bin/wget'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_RXTX_CMD_CURL='/usr/bin/curl'
+    BL64_RXTX_CMD_WGET="$BL64_LIB_INCOMPATIBLE"
     ;;
   *) bl64_check_show_unsupported ;;
   esac
@@ -5094,9 +4991,9 @@ function bl64_rxtx_set_options() {
     BL64_RXTX_SET_CURL_OUTPUT='--output'
     BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
     BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
-    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
-    BL64_RXTX_SET_WGET_SECURE='--no-config'
+    BL64_RXTX_SET_WGET_VERBOSE=''
+    BL64_RXTX_SET_WGET_OUTPUT=''
+    BL64_RXTX_SET_WGET_SECURE=''
     ;;
   *) bl64_check_show_unsupported ;;
   esac
@@ -5119,16 +5016,22 @@ function bl64_rxtx_set_options() {
 # Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_rxtx_set_alias() {
   bl64_dbg_lib_show_function
-  BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
-  BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_ALP}-*)
+    BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
+    BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
+    BL64_RXTX_ALIAS_WGET=''
+    ;;
+  *) bl64_check_show_unsupported ;;
+  esac
 }
 
 #######################################
-# BashLib64 / Transfer and Receive data over the network
+# BashLib64 / Module / Functions / Transfer and Receive data over the network
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.10.0
 #######################################
 
@@ -5155,7 +5058,6 @@ function bl64_rxtx_web_get_file() {
   local destination="$2"
   local replace="${3:-${BL64_LIB_VAR_OFF}}"
   local mode="${4:-${BL64_LIB_DEFAULT}}"
-  local verbose="$BL64_RXTX_SET_CURL_SILENT"
   local -i status=0
 
   bl64_check_parameter 'source' &&
@@ -5164,16 +5066,15 @@ function bl64_rxtx_web_get_file() {
   [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]] && return 0
   _bl64_rxtx_backup "$destination" >/dev/null || return $?
 
+  # shellcheck disable=SC2086
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
-    bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
-    $BL64_RXTX_ALIAS_CURL $verbose \
+    bl64_rxtx_run_curl \
       $BL64_RXTX_SET_CURL_REDIRECT \
       $BL64_RXTX_SET_CURL_OUTPUT "$destination" \
       "$source"
     status=$?
   elif [[ -x "$BL64_RXTX_CMD_WGET" ]]; then
-    bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
-    $BL64_RXTX_ALIAS_WGET $verbose \
+    bl64_rxtx_run_wget \
       $BL64_RXTX_SET_WGET_OUTPUT "$destination" \
       "$source"
     status=$?
@@ -5260,6 +5161,57 @@ function bl64_rxtx_git_get_dir() {
   # Check if restore is needed
   _bl64_rxtx_restore "$destination" "$status" >/dev/null || return $?
   return $status
+}
+
+#######################################
+# CURL wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_rxtx_run_curl() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose="$BL64_RXTX_SET_CURL_SILENT"
+
+  bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
+
+  bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_RXTX_CMD_CURL" \
+    $BL64_RXTX_SET_CURL_SECURE \
+    $verbose \
+    "$@"
+}
+
+#######################################
+# WGet wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_rxtx_run_wget() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_command "$BL64_RXTX_CMD_WGET" || return $?
+
+  bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_RXTX_CMD_WGET" \
+    $verbose \
+    "$@"
 }
 
 function _bl64_rxtx_git_get_dir_root() {
@@ -5370,11 +5322,8 @@ function _bl64_rxtx_restore() {
 }
 
 #######################################
-# BashLib64 / Manipulate text files content
+# BashLib64 / Module / Functions / Manipulate text files content
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.1.0
 #######################################
 
@@ -5400,11 +5349,8 @@ function bl64_txt_search_line() {
 }
 
 #######################################
-# BashLib64 / Manage Version Control System
+# BashLib64 / Module / Setup / Manage Version Control System
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.0.0
 #######################################
 
@@ -5479,11 +5425,8 @@ function bl64_vcs_set_options() {
 }
 
 #######################################
-# BashLib64 / Manage Version Control System
+# BashLib64 / Module / Functions / Manage Version Control System
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.9.0
 #######################################
 
@@ -5502,10 +5445,12 @@ function bl64_vcs_run_git() {
   bl64_dbg_lib_show_function "$@"
   local debug="$BL64_VCS_SET_GIT_QUIET"
 
-  bl64_dbg_lib_command_enabled && debug=''
+  bl64_check_command "$BL64_VCS_CMD_GIT" || return $?
 
+  bl64_dbg_lib_command_enabled && debug=''
   # shellcheck disable=SC2086
   bl64_dbg_lib_show_info "$BL64_VCS_CMD_GIT" $debug $BL64_VCS_SET_GIT_NO_PAGER "$@"
+
   # shellcheck disable=SC2086
   "$BL64_VCS_CMD_GIT" $debug $BL64_VCS_SET_GIT_NO_PAGER "$@"
 }
@@ -5614,12 +5559,9 @@ function bl64_vcs_git_sparse() {
 }
 
 #######################################
-# BashLib64 / Manipulate CSV like text files
+# BashLib64 / Module / Functions / Manipulate CSV like text files
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -5677,7 +5619,7 @@ function bl64_xsv_search_records() {
   bl64_check_parameter 'values' 'search value' || return $?
 
   # shellcheck disable=SC2016
-  bl64_os_awk \
+  bl64_os_run_awk \
     -F "$fs_src" \
     -v VALUES="${values}" \
     -v KEYS="$keys" \
@@ -5689,7 +5631,7 @@ function bl64_xsv_search_records() {
         keys_total = split( KEYS, keys_fields, ENVIRON["BL64_XSV_FS_COLON"] )
         values_total = split( VALUES, values_fields, ENVIRON["BL64_XSV_FS"] )
         if( keys_total != values_total ) {
-          exit ENVIRON["BL64_XSV_ERROR_SEARCH_VALUES"]
+          exit ENVIRON["BL64_LIB_ERROR_PARAMETER_INVALID"]
         }
         row_match = ""
         count = 0
@@ -5722,11 +5664,8 @@ function bl64_xsv_search_records() {
 }
 
 #######################################
-# BashLib64 / Setup script run-time environment
+# BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.8.0
 #######################################
 
@@ -5800,6 +5739,7 @@ else
   bl64_fs_set_options
   bl64_fs_set_alias
   bl64_arc_set_command
+  bl64_arc_set_options
   bl64_iam_set_command
   bl64_iam_set_alias
   bl64_pkb_set_command

@@ -6,12 +6,6 @@
 {% include "../src/bl64-rbac.env" %}
 ```
 
-## Setup
-
-```shell
-{% include "../src/bl64-rbac.init" %}
-```
-
 ## Code
 
 ```shell
