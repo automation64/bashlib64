@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0]
+
+### Added
+
+- arc:
+  - bl64_arc_run_tar: new function
+- rxtx:
+  - bl64_rxtx_run_curl: new function
+  - bl64_rxtx_run_wget: new function
+
+### Changed
+
+- os
+  - Update gawk detection
+- rxtx
+  - Update wget detection
+  - Use bl64_rxtx_run_* wrappers
+- arc
+  - Use bl64_arc_run_tar
+- py:
+  - Renamed: bl64_py_pip_run -> bl64_py_run_pip
+
 ## [2.2.0]
 
 ### Added
@@ -320,7 +342,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.2.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.3.0...HEAD
+[2.3.0]: https://github.com/serdigital64/bashlib64/compare/2.2.0...2.3.0
 [2.2.0]: https://github.com/serdigital64/bashlib64/compare/2.0.0...2.2.0
 [2.0.0]: https://github.com/serdigital64/bashlib64/compare/1.24.0...2.0.0
 [1.24.0]: https://github.com/serdigital64/bashlib64/compare/1.23.0...1.24.0
