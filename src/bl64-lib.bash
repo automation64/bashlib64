@@ -1,9 +1,6 @@
 #######################################
-# BashLib64 / Setup script run-time environment
+# BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.8.0
 #######################################
 
@@ -77,6 +74,7 @@ else
   bl64_fs_set_options
   bl64_fs_set_alias
   bl64_arc_set_command
+  bl64_arc_set_options
   bl64_iam_set_command
   bl64_iam_set_alias
   bl64_pkb_set_command
