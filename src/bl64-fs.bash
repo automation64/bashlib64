@@ -1,10 +1,7 @@
 #######################################
-# BashLib64 / Manage local filesystem
+# BashLib64 / Module / Functions / Manage local filesystem
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -223,7 +220,6 @@ function bl64_fs_merge_dir() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-${BL64_LIB_DEFAULT}}"
   local target="${2:-${BL64_LIB_DEFAULT}}"
-  local -i status=0
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'target' &&
@@ -234,29 +230,19 @@ function bl64_fs_merge_dir() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     bl64_fs_cp_dir --no-target-directory "$source" "$target"
-    status=$?
     ;;
   ${BL64_OS_MCOS}-*)
     # shellcheck disable=SC2086
     bl64_fs_cp_dir ${source}/ "$target"
-    status=$?
     ;;
   ${BL64_OS_ALP}-*)
-    shopt -sq dotglob
     # shellcheck disable=SC2086
-    bl64_fs_cp_dir ${source}/* -t "$target"
-    status=$?
-    shopt -uq dotglob
+    shopt -sq dotglob &&
+      bl64_fs_cp_dir ${source}/* -t "$target" &&
+      shopt -uq dotglob
     ;;
-  *)
-    bl64_check_show_unsupported
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
-    ;;
-
+  *) bl64_check_show_unsupported ;;
   esac
-
-  return $status
 }
 
 #######################################
@@ -597,7 +583,7 @@ function bl64_fs_cleanup_full() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_fs_find() {
+function bl64_fs_run_find() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_command "$BL64_FS_CMD_FIND" || return $?

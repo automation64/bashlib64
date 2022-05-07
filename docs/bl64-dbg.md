@@ -6,12 +6,6 @@
 {% include "../src/bl64-dbg.env" %}
 ```
 
-## Setup
-
-```shell
-{% include "../src/bl64-dbg.init" %}
-```
-
 ## Code
 
 ```shell

@@ -14,6 +14,9 @@
 # Builds for prod/dev/test
 build/*
 
+# Dev libs. Dynamic content update at dev time
+lib/*
+
 # Secrets
 .secrets
 

@@ -1,10 +1,7 @@
 #######################################
-# BashLib64 / Manipulate CSV like text files
+# BashLib64 / Module / Functions / Manipulate CSV like text files
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -62,7 +59,7 @@ function bl64_xsv_search_records() {
   bl64_check_parameter 'values' 'search value' || return $?
 
   # shellcheck disable=SC2016
-  bl64_os_awk \
+  bl64_os_run_awk \
     -F "$fs_src" \
     -v VALUES="${values}" \
     -v KEYS="$keys" \
@@ -74,7 +71,7 @@ function bl64_xsv_search_records() {
         keys_total = split( KEYS, keys_fields, ENVIRON["BL64_XSV_FS_COLON"] )
         values_total = split( VALUES, values_fields, ENVIRON["BL64_XSV_FS"] )
         if( keys_total != values_total ) {
-          exit ENVIRON["BL64_XSV_ERROR_SEARCH_VALUES"]
+          exit ENVIRON["BL64_LIB_ERROR_PARAMETER_INVALID"]
         }
         row_match = ""
         count = 0

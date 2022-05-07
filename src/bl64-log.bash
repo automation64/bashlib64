@@ -1,10 +1,7 @@
 #######################################
-# BashLib64 / Write messages to logs
+# BashLib64 / Module / Functions / Write messages to logs
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -31,6 +28,7 @@ function _bl64_log_register() {
 
   if [[ -z "$BL64_LOG_PATH" || -z "$BL64_LOG_VERBOSE" || -z "$BL64_LOG_TYPE" || -z "$BL64_LOG_FS" ]]; then
     bl64_msg_show_error "$_BL64_LOG_TXT_NOT_SETUP"
+    # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
   fi
 
@@ -53,6 +51,7 @@ function _bl64_log_register() {
     ;;
   *)
     bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
+    # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
     ;;
   esac
@@ -246,6 +245,11 @@ function bl64_log_record() {
         "$BL64_LOG_CATEGORY_RECORD" \
         "${tag}${BL64_LOG_FS}${input_log_line}"
     done
+    ;;
+  *)
+    bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
     ;;
   esac
 }

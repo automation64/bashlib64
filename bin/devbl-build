@@ -61,9 +61,9 @@ function devbl_build_docs() {
   for file in lib $DEVBL_MODULES; do
     module_env="bl64-${file}.env"
     [[ ! -f "$module_env" ]] && module_env="$BL64_LIB_VAR_NULL"
-    module_code="bl64-${file}.env"
+    module_code="bl64-${file}.bash"
     [[ ! -f "$module_code" ]] && module_code="$BL64_LIB_VAR_NULL"
-    module_init="bl64-${file}.env"
+    module_init="bl64-${file}.init"
     [[ ! -f "$module_init" ]] && module_init="$BL64_LIB_VAR_NULL"
 
     bl64_msg_show_task "creating document for: ${file}"
