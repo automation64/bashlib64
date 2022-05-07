@@ -1,9 +1,6 @@
 #######################################
-# BashLib64 / Format text data
+# BashLib64 / Module / Functions / Format text data
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.4.0
 #######################################
 
@@ -207,7 +204,7 @@ function bl64_fmt_list_to_string() {
   [[ "$prefix" == "$BL64_LIB_DEFAULT" ]] && prefix=''
   [[ "$postfix" == "$BL64_LIB_DEFAULT" ]] && postfix=''
 
-  bl64_os_awk \
+  bl64_os_run_awk \
     -v field_separator="$field_separator" \
     -v prefix="$prefix" \
     -v postfix="$postfix" \
