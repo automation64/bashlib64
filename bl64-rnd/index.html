@@ -24,28 +24,28 @@
 <span class=normal>24</span>
 <span class=normal>25</span>
 <span class=normal>26</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Generate random data</span>
+<span class=c1># BashLib64 / Module / Globals / Generate random data</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.1.0</span>
+<span class=c1># Version: 1.2.0</span>
 <span class=c1>#######################################</span>
 
-<span class=nb>declare</span> -rig <span class=nv>BL64_RND_LENGTH_1</span><span class=o>=</span><span class=m>1</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_RND_LENGTH_20</span><span class=o>=</span><span class=m>20</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_RND_LENGTH_100</span><span class=o>=</span><span class=m>100</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_RND_RANDOM_MIN</span><span class=o>=</span><span class=m>0</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_RND_RANDOM_MAX</span><span class=o>=</span><span class=m>32767</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_RND_LENGTH_1</span><span class=o>=</span><span class=m>1</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_RND_LENGTH_20</span><span class=o>=</span><span class=m>20</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_RND_LENGTH_100</span><span class=o>=</span><span class=m>100</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_RND_RANDOM_MIN</span><span class=o>=</span><span class=m>0</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_RND_RANDOM_MAX</span><span class=o>=</span><span class=m>32767</span>
 
-<span class=nb>readonly</span> <span class=nv>BL64_RND_POOL_UPPERCASE</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$(</span><span class=nb>printf</span> <span class=s1>&#39;%b&#39;</span> <span class=k>$(</span><span class=nb>printf</span> <span class=s1>&#39;\\%o&#39;</span> <span class=o>{</span><span class=m>65</span>..90<span class=o>}</span><span class=k>))</span><span class=s2>&quot;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_RND_POOL_UPPERCASE_MAX_IDX</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$((</span> <span class=si>${#</span><span class=nv>BL64_RND_POOL_UPPERCASE</span><span class=si>}</span> <span class=o>-</span> <span class=m>1</span> <span class=k>))</span><span class=s2>&quot;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_RND_POOL_LOWERCASE</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$(</span><span class=nb>printf</span> <span class=s1>&#39;%b&#39;</span> <span class=k>$(</span><span class=nb>printf</span> <span class=s1>&#39;\\%o&#39;</span> <span class=o>{</span><span class=m>97</span>..122<span class=o>}</span><span class=k>))</span><span class=s2>&quot;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_RND_POOL_LOWERCASE_MAX_IDX</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$((</span> <span class=si>${#</span><span class=nv>BL64_RND_POOL_LOWERCASE</span><span class=si>}</span> <span class=o>-</span> <span class=m>1</span> <span class=k>))</span><span class=s2>&quot;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_RND_POOL_DIGITS</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$(</span><span class=nb>printf</span> <span class=s1>&#39;%b&#39;</span> <span class=k>$(</span><span class=nb>printf</span> <span class=s1>&#39;\\%o&#39;</span> <span class=o>{</span><span class=m>48</span>..57<span class=o>}</span><span class=k>))</span><span class=s2>&quot;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_RND_POOL_DIGITS_MAX_IDX</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$((</span> <span class=si>${#</span><span class=nv>BL64_RND_POOL_DIGITS</span><span class=si>}</span> <span class=o>-</span> <span class=m>1</span> <span class=k>))</span><span class=s2>&quot;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_RND_POOL_ALPHANUMERIC</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_RND_POOL_UPPERCASE</span><span class=si>}${</span><span class=nv>BL64_RND_POOL_LOWERCASE</span><span class=si>}${</span><span class=nv>BL64_RND_POOL_DIGITS</span><span class=si>}</span><span class=s2>&quot;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_RND_POOL_ALPHANUMERIC_MAX_IDX</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$((</span> <span class=si>${#</span><span class=nv>BL64_RND_POOL_ALPHANUMERIC</span><span class=si>}</span> <span class=o>-</span> <span class=m>1</span> <span class=k>))</span><span class=s2>&quot;</span>
+<span class=c1># shellcheck disable=SC2155</span>
+<span class=nb>export</span> <span class=nv>BL64_RND_POOL_UPPERCASE</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$(</span><span class=nb>printf</span> <span class=s1>&#39;%b&#39;</span> <span class=s2>&quot;</span><span class=k>$(</span><span class=nb>printf</span> <span class=s1>&#39;\\%o&#39;</span> <span class=o>{</span><span class=m>65</span>..90<span class=o>}</span><span class=k>)</span><span class=s2>&quot;</span><span class=k>)</span><span class=s2>&quot;</span>
+<span class=nb>export</span> <span class=nv>BL64_RND_POOL_UPPERCASE_MAX_IDX</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$((</span> <span class=si>${#</span><span class=nv>BL64_RND_POOL_UPPERCASE</span><span class=si>}</span> <span class=o>-</span> <span class=m>1</span> <span class=k>))</span><span class=s2>&quot;</span>
+<span class=c1># shellcheck disable=SC2155</span>
+<span class=nb>export</span> <span class=nv>BL64_RND_POOL_LOWERCASE</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$(</span><span class=nb>printf</span> <span class=s1>&#39;%b&#39;</span> <span class=s2>&quot;</span><span class=k>$(</span><span class=nb>printf</span> <span class=s1>&#39;\\%o&#39;</span> <span class=o>{</span><span class=m>97</span>..122<span class=o>}</span><span class=k>)</span><span class=s2>&quot;</span><span class=k>)</span><span class=s2>&quot;</span>
+<span class=nb>export</span> <span class=nv>BL64_RND_POOL_LOWERCASE_MAX_IDX</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$((</span> <span class=si>${#</span><span class=nv>BL64_RND_POOL_LOWERCASE</span><span class=si>}</span> <span class=o>-</span> <span class=m>1</span> <span class=k>))</span><span class=s2>&quot;</span>
+<span class=c1># shellcheck disable=SC2155</span>
+<span class=nb>export</span> <span class=nv>BL64_RND_POOL_DIGITS</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$(</span><span class=nb>printf</span> <span class=s1>&#39;%b&#39;</span> <span class=s2>&quot;</span><span class=k>$(</span><span class=nb>printf</span> <span class=s1>&#39;\\%o&#39;</span> <span class=o>{</span><span class=m>48</span>..57<span class=o>}</span><span class=k>)</span><span class=s2>&quot;</span><span class=k>)</span><span class=s2>&quot;</span>
+<span class=nb>export</span> <span class=nv>BL64_RND_POOL_DIGITS_MAX_IDX</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$((</span> <span class=si>${#</span><span class=nv>BL64_RND_POOL_DIGITS</span><span class=si>}</span> <span class=o>-</span> <span class=m>1</span> <span class=k>))</span><span class=s2>&quot;</span>
+<span class=nb>export</span> <span class=nv>BL64_RND_POOL_ALPHANUMERIC</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_RND_POOL_UPPERCASE</span><span class=si>}${</span><span class=nv>BL64_RND_POOL_LOWERCASE</span><span class=si>}${</span><span class=nv>BL64_RND_POOL_DIGITS</span><span class=si>}</span><span class=s2>&quot;</span>
+<span class=nb>export</span> <span class=nv>BL64_RND_POOL_ALPHANUMERIC_MAX_IDX</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$((</span> <span class=si>${#</span><span class=nv>BL64_RND_POOL_ALPHANUMERIC</span><span class=si>}</span> <span class=o>-</span> <span class=m>1</span> <span class=k>))</span><span class=s2>&quot;</span>
 
 <span class=nb>readonly</span> <span class=nv>_BL64_RND_TXT_LENGHT_MIN</span><span class=o>=</span><span class=s1>&#39;length can not be less than&#39;</span>
 <span class=nb>readonly</span> <span class=nv>_BL64_RND_TXT_LENGHT_MAX</span><span class=o>=</span><span class=s1>&#39;length can not be greater than&#39;</span>
@@ -154,15 +154,9 @@
 <span class=normal>103</span>
 <span class=normal>104</span>
 <span class=normal>105</span>
-<span class=normal>106</span>
-<span class=normal>107</span>
-<span class=normal>108</span>
-<span class=normal>109</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Generate random data</span>
+<span class=normal>106</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Functions / Generate random data</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
 <span class=c1># Version: 1.1.0</span>
 <span class=c1>#######################################</span>
 

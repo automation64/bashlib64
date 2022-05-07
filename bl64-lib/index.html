@@ -145,14 +145,18 @@
 <span class=normal>145</span>
 <span class=normal>146</span>
 <span class=normal>147</span>
-<span class=normal>148</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=ch>#!/usr/bin/env bash</span>
+<span class=normal>148</span>
+<span class=normal>149</span>
+<span class=normal>150</span>
+<span class=normal>151</span>
+<span class=normal>152</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=ch>#!/usr/bin/env bash</span>
 <span class=c1>#######################################</span>
 <span class=c1># BashLib64</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 2.2.0</span>
+<span class=c1># Version: 2.3.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1># Do not inherit aliases and commands</span>
@@ -178,11 +182,8 @@
   <span class=s1>&#39;extquote&#39;</span>
 
 <span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Setup script run-time environment</span>
+<span class=c1># BashLib64 / Module / Globals / Setup script run-time environment</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
 <span class=c1># Version: 1.7.0</span>
 <span class=c1>#######################################</span>
 
@@ -191,6 +192,10 @@
 <span class=nb>export</span> LC_ALL
 <span class=nb>export</span> LANGUAGE
 <span class=nb>export</span> TERM
+
+<span class=c1>#</span>
+<span class=c1># Global flags</span>
+<span class=c1>#</span>
 
 <span class=c1># Set Command flag (On/Off)</span>
 <span class=nb>export</span> <span class=nv>BL64_LIB_CMD</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_CMD</span><span class=k>:-</span><span class=nv>0</span><span class=si>}</span><span class=s2>&quot;</span>
@@ -210,6 +215,76 @@
 <span class=c1># Set Normalize locale flag</span>
 <span class=nb>export</span> <span class=nv>BL64_LIB_LANG</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_LANG</span><span class=k>:-</span><span class=nv>1</span><span class=si>}</span><span class=s2>&quot;</span>
 
+<span class=c1>#</span>
+<span class=c1># Common values</span>
+<span class=c1>#</span>
+
+<span class=c1># Default value for parameters</span>
+<span class=nb>export</span> <span class=nv>BL64_LIB_DEFAULT</span><span class=o>=</span><span class=s1>&#39;_&#39;</span>
+
+<span class=c1># Flag for incompatible command</span>
+<span class=nb>export</span> <span class=nv>BL64_LIB_INCOMPATIBLE</span><span class=o>=</span><span class=s1>&#39;_X_&#39;</span>
+
+<span class=c1># Pseudo null value</span>
+<span class=nb>export</span> <span class=nv>BL64_LIB_VAR_NULL</span><span class=o>=</span><span class=s1>&#39;__&#39;</span>
+
+<span class=c1># Logical values</span>
+<span class=nb>export</span> <span class=nv>BL64_LIB_VAR_TRUE</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_LIB_VAR_FALSE</span><span class=o>=</span><span class=s1>&#39;1&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_LIB_VAR_ON</span><span class=o>=</span><span class=s1>&#39;1&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_LIB_VAR_OFF</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_LIB_VAR_OK</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
+
+<span class=c1>#</span>
+<span class=c1># Common error codes</span>
+<span class=c1>#</span>
+
+<span class=c1># Parameters</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PARAMETER_INVALID</span><span class=o>=</span><span class=m>3</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PARAMETER_MISSING</span><span class=o>=</span><span class=m>4</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PARAMETER_RANGE</span><span class=o>=</span><span class=m>5</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PARAMETER_EMPTY</span><span class=o>=</span><span class=m>6</span>
+
+<span class=c1># Function operation</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_TASK_FAILED</span><span class=o>=</span><span class=m>10</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_TASK_BACKUP</span><span class=o>=</span><span class=m>11</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_TASK_RESTORE</span><span class=o>=</span><span class=m>12</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_TASK_TEMP</span><span class=o>=</span><span class=m>13</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_TASK_UNDEFINED</span><span class=o>=</span><span class=m>14</span>
+
+<span class=c1># Module operation</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_MODULE_SETUP_INVALID</span><span class=o>=</span><span class=m>20</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_MODULE_SETUP_MISSING</span><span class=o>=</span><span class=m>21</span>
+
+<span class=c1># OS</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_OS_NOT_MATCH</span><span class=o>=</span><span class=m>30</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_OS_TAG_INVALID</span><span class=o>=</span><span class=m>31</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_OS_INCOMPATIBLE</span><span class=o>=</span><span class=m>32</span>
+
+<span class=c1># External commands</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_APP_INCOMPATIBLE</span><span class=o>=</span><span class=m>40</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_APP_MISSING</span><span class=o>=</span><span class=m>41</span>
+
+<span class=c1># Filesystem</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_FILE_NOT_FOUND</span><span class=o>=</span><span class=m>50</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_FILE_NOT_READ</span><span class=o>=</span><span class=m>51</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_FILE_NOT_EXECUTE</span><span class=o>=</span><span class=m>52</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_DIRECTORY_NOT_FOUND</span><span class=o>=</span><span class=m>53</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_DIRECTORY_NOT_READ</span><span class=o>=</span><span class=m>54</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PATH_NOT_RELATIVE</span><span class=o>=</span><span class=m>55</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PATH_NOT_ABSOLUTE</span><span class=o>=</span><span class=m>56</span>
+
+<span class=c1># General</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_EXPORT_EMPTY</span><span class=o>=</span><span class=m>60</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_EXPORT_SET</span><span class=o>=</span><span class=m>61</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PRIVILEGE_IS_ROOT</span><span class=o>=</span><span class=m>62</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT</span><span class=o>=</span><span class=m>63</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED</span><span class=o>=</span><span class=m>64</span>
+
+<span class=c1>#</span>
+<span class=c1># Local values (not exported)</span>
+<span class=c1>#</span>
+
 <span class=c1># Set Signal traps</span>
 <span class=nb>declare</span> <span class=nv>BL64_LIB_SIGNAL_HUP</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_SIGNAL_HUP</span><span class=k>:-</span><span class=p>-</span><span class=si>}</span><span class=s2>&quot;</span>
 <span class=nb>declare</span> <span class=nv>BL64_LIB_SIGNAL_STOP</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_SIGNAL_STOP</span><span class=k>:-</span><span class=p>-</span><span class=si>}</span><span class=s2>&quot;</span>
@@ -226,73 +301,6 @@
 
 <span class=c1># Define session ID for the current script</span>
 <span class=nb>declare</span> <span class=nv>BL64_SCRIPT_SID</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BASHPID</span><span class=si>}</span><span class=s2>&quot;</span>
-
-<span class=c1>#</span>
-<span class=c1># Common values</span>
-<span class=c1>#</span>
-
-<span class=c1># Default value for parameters</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LIB_DEFAULT</span><span class=o>=</span><span class=s1>&#39;_&#39;</span>
-
-<span class=c1># Flag for incompatible command</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LIB_INCOMPATIBLE</span><span class=o>=</span><span class=s1>&#39;_X_&#39;</span>
-
-<span class=c1># Pseudo null value</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_NULL</span><span class=o>=</span><span class=s1>&#39;__&#39;</span>
-
-<span class=c1># Pseudo logical values</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_TRUE</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_FALSE</span><span class=o>=</span><span class=s1>&#39;1&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_ON</span><span class=o>=</span><span class=s1>&#39;1&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_OFF</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LIB_VAR_OK</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
-
-<span class=c1>#</span>
-<span class=c1># Common error codes</span>
-<span class=c1>#</span>
-
-<span class=c1># Parameters</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_PARAMETER_INVALID</span><span class=o>=</span><span class=m>3</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_PARAMETER_MISSING</span><span class=o>=</span><span class=m>4</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_PARAMETER_RANGE</span><span class=o>=</span><span class=m>5</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_PARAMETER_EMPTY</span><span class=o>=</span><span class=m>6</span>
-
-<span class=c1># Function operation</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_TASK_FAILED</span><span class=o>=</span><span class=m>10</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_TASK_BACKUP</span><span class=o>=</span><span class=m>11</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_TASK_RESTORE</span><span class=o>=</span><span class=m>12</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_TASK_TEMP</span><span class=o>=</span><span class=m>13</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_TASK_UNDEFINED</span><span class=o>=</span><span class=m>14</span>
-
-<span class=c1># Module operation</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_MODULE_SETUP_INVALID</span><span class=o>=</span><span class=m>20</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_MODULE_SETUP_MISSING</span><span class=o>=</span><span class=m>21</span>
-
-<span class=c1># OS</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_OS_NOT_MATCH</span><span class=o>=</span><span class=m>30</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_OS_TAG_INVALID</span><span class=o>=</span><span class=m>31</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_OS_UNKNOWN</span><span class=o>=</span><span class=m>32</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_OS_INCOMPATIBLE</span><span class=o>=</span><span class=m>33</span>
-
-<span class=c1># External commands</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_APP_INCOMPATIBLE</span><span class=o>=</span><span class=m>40</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_APP_MISSING</span><span class=o>=</span><span class=m>41</span>
-
-<span class=c1># Filesystem</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_FILE_NOT_FOUND</span><span class=o>=</span><span class=m>50</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_FILE_NOT_READ</span><span class=o>=</span><span class=m>51</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_FILE_NOT_EXECUTE</span><span class=o>=</span><span class=m>52</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_DIRECTORY_NOT_FOUND</span><span class=o>=</span><span class=m>53</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_DIRECTORY_NOT_READ</span><span class=o>=</span><span class=m>54</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_PATH_NOT_RELATIVE</span><span class=o>=</span><span class=m>55</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_PATH_NOT_ABSOLUTE</span><span class=o>=</span><span class=m>56</span>
-
-<span class=c1># General</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_EXPORT_EMPTY</span><span class=o>=</span><span class=m>60</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_EXPORT_SET</span><span class=o>=</span><span class=m>61</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_PRIVILEGE_IS_ROOT</span><span class=o>=</span><span class=m>62</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT</span><span class=o>=</span><span class=m>63</span>
-<span class=nb>declare</span> -rig <span class=nv>BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED</span><span class=o>=</span><span class=m>64</span>
 </code></pre></div> </td></tr></table> <h2 id=code>Code<a class=headerlink href=#code title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>  1</span>
 <span class=normal>  2</span>
 <span class=normal>  3</span>
@@ -408,14 +416,9 @@
 <span class=normal>113</span>
 <span class=normal>114</span>
 <span class=normal>115</span>
-<span class=normal>116</span>
-<span class=normal>117</span>
-<span class=normal>118</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Setup script run-time environment</span>
+<span class=normal>116</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Functions / Setup script run-time environment</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
 <span class=c1># Version: 1.8.0</span>
 <span class=c1>#######################################</span>
 
@@ -489,6 +492,7 @@ bl64_os_get_distro
   bl64_fs_set_options
   bl64_fs_set_alias
   bl64_arc_set_command
+  bl64_arc_set_options
   bl64_iam_set_command
   bl64_iam_set_alias
   bl64_pkb_set_command

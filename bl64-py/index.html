@@ -20,15 +20,9 @@
 <span class=normal>20</span>
 <span class=normal>21</span>
 <span class=normal>22</span>
-<span class=normal>23</span>
-<span class=normal>24</span>
-<span class=normal>25</span>
-<span class=normal>26</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Interact with system-wide Python</span>
+<span class=normal>23</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Globals / Interact with system-wide Python</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
 <span class=c1># Version: 1.1.0</span>
 <span class=c1>#######################################</span>
 
@@ -161,15 +155,9 @@
 <span class=normal>110</span>
 <span class=normal>111</span>
 <span class=normal>112</span>
-<span class=normal>113</span>
-<span class=normal>114</span>
-<span class=normal>115</span>
-<span class=normal>116</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Interact with system-wide Python</span>
+<span class=normal>113</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Functions / Interact with system-wide Python</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
 <span class=c1># Version: 1.1.0</span>
 <span class=c1>#######################################</span>
 
@@ -184,7 +172,7 @@
 <span class=c1># Returns:</span>
 <span class=c1>#   PIP exit status</span>
 <span class=c1>#######################################</span>
-<span class=k>function</span> bl64_py_pip_run<span class=o>()</span> <span class=o>{</span>
+<span class=k>function</span> bl64_py_run_pip<span class=o>()</span> <span class=o>{</span>
   bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>debug</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 
@@ -243,7 +231,7 @@
   <span class=nb>local</span> <span class=nv>modules_setup</span><span class=o>=</span><span class=s1>&#39;setuptools wheel stevedore&#39;</span>
 
   bl64_msg_show_task <span class=s2>&quot;</span><span class=nv>$_BL64_PY_TXT_PIP_PREPARE_PIP</span><span class=s2>&quot;</span>
-  bl64_py_pip_run <span class=se>\</span>
+  bl64_py_run_pip <span class=se>\</span>
     <span class=s1>&#39;install&#39;</span> <span class=se>\</span>
     <span class=nv>$BL64_PY_SET_PIP_UPGRADE</span> <span class=se>\</span>
     <span class=nv>$BL64_PY_SET_PIP_USER</span> <span class=se>\</span>
@@ -251,7 +239,7 @@
 
   bl64_msg_show_task <span class=s2>&quot;</span><span class=nv>$_BL64_PY_TXT_PIP_PREPARE_SETUP</span><span class=s2>&quot;</span>
   <span class=c1># shellcheck disable=SC2086</span>
-  bl64_py_pip_run <span class=se>\</span>
+  bl64_py_run_pip <span class=se>\</span>
     <span class=s1>&#39;install&#39;</span> <span class=se>\</span>
     <span class=nv>$BL64_PY_SET_PIP_UPGRADE</span> <span class=se>\</span>
     <span class=nv>$BL64_PY_SET_PIP_USER</span> <span class=se>\</span>
@@ -275,7 +263,7 @@
 <span class=k>function</span> bl64_py_pip_usr_install<span class=o>()</span> <span class=o>{</span>
   bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
   bl64_msg_show_task <span class=s2>&quot;</span><span class=nv>$_BL64_PY_TXT_PIP_INSTALL</span><span class=s2>&quot;</span>
-  bl64_py_pip_run <span class=se>\</span>
+  bl64_py_run_pip <span class=se>\</span>
     <span class=s1>&#39;install&#39;</span> <span class=se>\</span>
     <span class=nv>$BL64_PY_SET_PIP_USER</span> <span class=se>\</span>
     <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>

@@ -56,14 +56,9 @@
 <span class=normal>56</span>
 <span class=normal>57</span>
 <span class=normal>58</span>
-<span class=normal>59</span>
-<span class=normal>60</span>
-<span class=normal>61</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Show shell debugging information</span>
+<span class=normal>59</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Globals / Show shell debugging information</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
 <span class=c1># Version: 1.4.0</span>
 <span class=c1>#######################################</span>
 
@@ -95,30 +90,31 @@
 <span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_FUNCTION_STOP</span><span class=o>=</span><span class=s1>&#39;function tracing stopped&#39;</span>
 <span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_SHELL_VAR</span><span class=o>=</span><span class=s1>&#39;shell variable&#39;</span>
 
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_BASH</span><span class=o>=</span><span class=s2>&quot;Bash / Interpreter path&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_BASHOPTS</span><span class=o>=</span><span class=s2>&quot;Bash / ShOpt Options&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_SHELLOPTS</span><span class=o>=</span><span class=s2>&quot;Bash / Set -o Options&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_TMPDIR</span><span class=o>=</span><span class=s2>&quot;Bash / Temporary path&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_BASH_VERSION</span><span class=o>=</span><span class=s2>&quot;Bash / Version&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_OSTYPE</span><span class=o>=</span><span class=s2>&quot;Bash / Detected OS&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_LC_ALL</span><span class=o>=</span><span class=s2>&quot;Shell / Locale setting&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_HOSTNAME</span><span class=o>=</span><span class=s2>&quot;Shell / Hostname&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_EUID</span><span class=o>=</span><span class=s2>&quot;Script / User ID&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_UID</span><span class=o>=</span><span class=s2>&quot;Script / Effective User ID&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_BASH_ARGV</span><span class=o>=</span><span class=s2>&quot;Script / Arguments&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_COMMAND</span><span class=o>=</span><span class=s2>&quot;Script / Last executed command&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_STATUS</span><span class=o>=</span><span class=s2>&quot;Script / Last exit status&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_SCRIPT_FATAL</span><span class=o>=</span><span class=s2>&quot;the script is unable to contine due to a critical error&quot;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_BASH</span><span class=o>=</span><span class=s1>&#39;Bash / Interpreter path&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_BASHOPTS</span><span class=o>=</span><span class=s1>&#39;Bash / ShOpt Options&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_SHELLOPTS</span><span class=o>=</span><span class=s1>&#39;Bash / Set -o Options&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_BASH_VERSION</span><span class=o>=</span><span class=s1>&#39;Bash / Version&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_OSTYPE</span><span class=o>=</span><span class=s1>&#39;Bash / Detected OS&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_LC_ALL</span><span class=o>=</span><span class=s1>&#39;Shell / Locale setting&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_HOSTNAME</span><span class=o>=</span><span class=s1>&#39;Shell / Hostname&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_EUID</span><span class=o>=</span><span class=s1>&#39;Script / User ID&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_UID</span><span class=o>=</span><span class=s1>&#39;Script / Effective User ID&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_BASH_ARGV</span><span class=o>=</span><span class=s1>&#39;Script / Arguments&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_COMMAND</span><span class=o>=</span><span class=s1>&#39;Script / Last executed command&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_STATUS</span><span class=o>=</span><span class=s1>&#39;Script / Last exit status&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_SCRIPT_FATAL</span><span class=o>=</span><span class=s1>&#39;the script is unable to contine due to a critical error&#39;</span>
 
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_FUNCTION_RUN</span><span class=o>=</span><span class=s2>&quot;run function with parameters&quot;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_FUNCTION_RUN</span><span class=o>=</span><span class=s1>&#39;run function with parameters&#39;</span>
 
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_CALLSTACK</span><span class=o>=</span><span class=s2>&quot;Last executed function&quot;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_CALLSTACK</span><span class=o>=</span><span class=s1>&#39;Last executed function&#39;</span>
 
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_HOME</span><span class=o>=</span><span class=s2>&quot;Home directory&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_PATH</span><span class=o>=</span><span class=s2>&quot;Search path&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_CD_PWD</span><span class=o>=</span><span class=s2>&quot;Current cd working directory (PWD)&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_CD_OLDPWD</span><span class=o>=</span><span class=s2>&quot;Previous cd working directory (OLDPWD)&quot;</span>
-<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_PWD</span><span class=o>=</span><span class=s2>&quot;Current working directory (pwd command)&quot;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_HOME</span><span class=o>=</span><span class=s1>&#39;Home directory (HOME)&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_PATH</span><span class=o>=</span><span class=s1>&#39;Search path (PATH)&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_CD_PWD</span><span class=o>=</span><span class=s1>&#39;Current cd working directory (PWD)&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_CD_OLDPWD</span><span class=o>=</span><span class=s1>&#39;Previous cd working directory (OLDPWD)&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_SCRIPT_PATH</span><span class=o>=</span><span class=s1>&#39;Initial script path (BL64_SCRIPT_PATH)&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_TMPDIR</span><span class=o>=</span><span class=s1>&#39;Temporary path (TMPDIR)&#39;</span>
+<span class=nb>readonly</span> <span class=nv>_BL64_DBG_TXT_PWD</span><span class=o>=</span><span class=s1>&#39;Current working directory (pwd command)&#39;</span>
 </code></pre></div> </td></tr></table> <h2 id=code>Code<a class=headerlink href=#code title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>  1</span>
 <span class=normal>  2</span>
 <span class=normal>  3</span>
@@ -435,11 +431,8 @@
 <span class=normal>314</span>
 <span class=normal>315</span>
 <span class=normal>316</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Show shell debugging information</span>
+<span class=c1># BashLib64 / Module / Functions / Show shell debugging information</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
 <span class=c1># Version: 1.6.0</span>
 <span class=c1>#######################################</span>
 
@@ -484,7 +477,6 @@
     bl64_msg_show_debug <span class=s2>&quot;</span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_BASH</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>BASH</span><span class=si>}</span><span class=s2>]&quot;</span>
     bl64_msg_show_debug <span class=s2>&quot;</span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_BASHOPTS</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>BASHOPTS</span><span class=k>:-</span><span class=nv>NONE</span><span class=si>}</span><span class=s2>]&quot;</span>
     bl64_msg_show_debug <span class=s2>&quot;</span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_SHELLOPTS</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>SHELLOPTS</span><span class=k>:-</span><span class=nv>NONE</span><span class=si>}</span><span class=s2>]&quot;</span>
-    bl64_msg_show_debug <span class=s2>&quot;</span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_TMPDIR</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>TMPDIR</span><span class=k>:-</span><span class=nv>NONE</span><span class=si>}</span><span class=s2>]&quot;</span>
     bl64_msg_show_debug <span class=s2>&quot;</span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_BASH_VERSION</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>BASH_VERSION</span><span class=si>}</span><span class=s2>]&quot;</span>
     bl64_msg_show_debug <span class=s2>&quot;</span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_OSTYPE</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>OSTYPE</span><span class=k>:-</span><span class=nv>NONE</span><span class=si>}</span><span class=s2>]&quot;</span>
     bl64_msg_show_debug <span class=s2>&quot;</span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_LC_ALL</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>LC_ALL</span><span class=k>:-</span><span class=nv>NONE</span><span class=si>}</span><span class=s2>]&quot;</span>
@@ -495,11 +487,13 @@
     bl64_msg_show_debug <span class=s2>&quot;</span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_COMMAND</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>BASH_COMMAND</span><span class=k>:-</span><span class=nv>NONE</span><span class=si>}</span><span class=s2>]&quot;</span>
     bl64_msg_show_debug <span class=s2>&quot;</span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_STATUS</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>last_status</span><span class=si>}</span><span class=s2>]&quot;</span>
 
-    bl64_msg_show_debug <span class=s2>&quot;Shell / </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_HOME</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>HOME</span><span class=k>:-</span><span class=nv>EMPTY</span><span class=si>}</span><span class=s2>]&quot;</span>
-    bl64_msg_show_debug <span class=s2>&quot;Shell / </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_PATH</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>PATH</span><span class=k>:-</span><span class=nv>EMPTY</span><span class=si>}</span><span class=s2>]&quot;</span>
-    bl64_msg_show_debug <span class=s2>&quot;Shell / </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_CD_PWD</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>PWD</span><span class=k>:-</span><span class=nv>EMPTY</span><span class=si>}</span><span class=s2>]&quot;</span>
-    bl64_msg_show_debug <span class=s2>&quot;Shell / </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_CD_OLDPWD</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>OLDPWD</span><span class=k>:-</span><span class=nv>EMPTY</span><span class=si>}</span><span class=s2>]&quot;</span>
-    bl64_msg_show_debug <span class=s2>&quot;Shell / </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_PWD</span><span class=si>}</span><span class=s2>: [</span><span class=k>$(</span><span class=nb>pwd</span><span class=k>)</span><span class=s2>]&quot;</span>
+    bl64_msg_show_debug <span class=s2>&quot;Paths / </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_SCRIPT_PATH</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>BL64_SCRIPT_PATH</span><span class=k>:-</span><span class=nv>EMPTY</span><span class=si>}</span><span class=s2>]&quot;</span>
+    bl64_msg_show_debug <span class=s2>&quot;Paths / </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_HOME</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>HOME</span><span class=k>:-</span><span class=nv>EMPTY</span><span class=si>}</span><span class=s2>]&quot;</span>
+    bl64_msg_show_debug <span class=s2>&quot;Paths / </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_PATH</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>PATH</span><span class=k>:-</span><span class=nv>EMPTY</span><span class=si>}</span><span class=s2>]&quot;</span>
+    bl64_msg_show_debug <span class=s2>&quot;Paths / </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_CD_PWD</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>PWD</span><span class=k>:-</span><span class=nv>EMPTY</span><span class=si>}</span><span class=s2>]&quot;</span>
+    bl64_msg_show_debug <span class=s2>&quot;Paths / </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_CD_OLDPWD</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>OLDPWD</span><span class=k>:-</span><span class=nv>EMPTY</span><span class=si>}</span><span class=s2>]&quot;</span>
+    bl64_msg_show_debug <span class=s2>&quot;Paths / </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_PWD</span><span class=si>}</span><span class=s2>: [</span><span class=k>$(</span><span class=nb>pwd</span><span class=k>)</span><span class=s2>]&quot;</span>
+    bl64_msg_show_debug <span class=s2>&quot;Paths / </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_TMPDIR</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>TMPDIR</span><span class=k>:-</span><span class=nv>NONE</span><span class=si>}</span><span class=s2>]&quot;</span>
 
     bl64_msg_show_debug <span class=s2>&quot;Script / </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_CALLSTACK</span><span class=si>}</span><span class=s2>(1): [</span><span class=si>${</span><span class=nv>BASH_SOURCE</span><span class=p>[1]</span><span class=k>:-</span><span class=nv>NONE</span><span class=si>}</span><span class=s2>:</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=k>:-</span><span class=nv>NONE</span><span class=si>}</span><span class=s2>:</span><span class=si>${</span><span class=nv>BASH_LINENO</span><span class=p>[1]</span><span class=k>:-</span><span class=nv>0</span><span class=si>}</span><span class=s2>]&quot;</span>
     bl64_msg_show_debug <span class=s2>&quot;Script / </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_CALLSTACK</span><span class=si>}</span><span class=s2>(2): [</span><span class=si>${</span><span class=nv>BASH_SOURCE</span><span class=p>[2]</span><span class=k>:-</span><span class=nv>NONE</span><span class=si>}</span><span class=s2>:</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[2]</span><span class=k>:-</span><span class=nv>NONE</span><span class=si>}</span><span class=s2>:</span><span class=si>${</span><span class=nv>BASH_LINENO</span><span class=p>[2]</span><span class=k>:-</span><span class=nv>0</span><span class=si>}</span><span class=s2>]&quot;</span>
@@ -545,12 +539,14 @@
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_dbg_runtime_show_paths<span class=o>()</span> <span class=o>{</span>
 
-  bl64_dbg_app_task_enabled <span class=o>||</span> bl64_dbg_lib_task_enabled <span class=o>||</span> <span class=k>return</span> <span class=m>0</span>
+  bl64_dbg_app_task_enabled <span class=o>||</span> bl64_dbg_lib_task_enabled <span class=o>||</span> <span class=k>return</span> <span class=m>0</span>  
+  bl64_msg_show_debug <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_SCRIPT_PATH</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>BL64_SCRIPT_PATH</span><span class=k>:-</span><span class=nv>EMPTY</span><span class=si>}</span><span class=s2>]&quot;</span>
   bl64_msg_show_debug <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_HOME</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>HOME</span><span class=k>:-</span><span class=nv>EMPTY</span><span class=si>}</span><span class=s2>]&quot;</span>
   bl64_msg_show_debug <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_PATH</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>PATH</span><span class=k>:-</span><span class=nv>EMPTY</span><span class=si>}</span><span class=s2>]&quot;</span>
   bl64_msg_show_debug <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_CD_PWD</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>PWD</span><span class=k>:-</span><span class=nv>EMPTY</span><span class=si>}</span><span class=s2>]&quot;</span>
   bl64_msg_show_debug <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_CD_OLDPWD</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>OLDPWD</span><span class=k>:-</span><span class=nv>EMPTY</span><span class=si>}</span><span class=s2>]&quot;</span>
   bl64_msg_show_debug <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_PWD</span><span class=si>}</span><span class=s2>: [</span><span class=k>$(</span><span class=nb>pwd</span><span class=k>)</span><span class=s2>]&quot;</span>
+  bl64_msg_show_debug <span class=s2>&quot;[</span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2>] </span><span class=si>${</span><span class=nv>_BL64_DBG_TXT_TMPDIR</span><span class=si>}</span><span class=s2>: [</span><span class=si>${</span><span class=nv>TMPDIR</span><span class=k>:-</span><span class=nv>NONE</span><span class=si>}</span><span class=s2>]&quot;</span>
 
 <span class=o>}</span>
 

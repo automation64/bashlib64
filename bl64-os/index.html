@@ -45,15 +45,9 @@
 <span class=normal>45</span>
 <span class=normal>46</span>
 <span class=normal>47</span>
-<span class=normal>48</span>
-<span class=normal>49</span>
-<span class=normal>50</span>
-<span class=normal>51</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / OS / Identify OS attributes and provide command aliases</span>
+<span class=normal>48</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
 <span class=c1># Version: 1.9.0</span>
 <span class=c1>#######################################</span>
 
@@ -85,20 +79,20 @@
 <span class=c1>#   * OL    -&gt; OracleLinux</span>
 <span class=c1>#   * RHEL  -&gt; RedHat Enterprise Linux</span>
 <span class=c1>#   * UB    -&gt; Ubuntu</span>
-<span class=nb>readonly</span> <span class=nv>BL64_OS_TAGS</span><span class=o>=</span><span class=s1>&#39;ALM ALP AMZ CNT DEB FD MCOS OL RHEL UB&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_TAGS
+<span class=nb>export</span> <span class=nv>BL64_OS_TAGS</span><span class=o>=</span><span class=s1>&#39;ALM ALP AMZ CNT DEB FD MCOS OL RHEL UB&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_TAGS
 
 <span class=c1># OS tags. Uppercase version of os-release id</span>
-<span class=nb>readonly</span> <span class=nv>BL64_OS_ALM</span><span class=o>=</span><span class=s1>&#39;ALMALINUX&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_ALM
-<span class=nb>readonly</span> <span class=nv>BL64_OS_ALP</span><span class=o>=</span><span class=s1>&#39;ALPINE&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_ALP
-<span class=nb>readonly</span> <span class=nv>BL64_OS_AMZ</span><span class=o>=</span><span class=s1>&#39;AMZN&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_AMZ
-<span class=nb>readonly</span> <span class=nv>BL64_OS_CNT</span><span class=o>=</span><span class=s1>&#39;CENTOS&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_CNT
-<span class=nb>readonly</span> <span class=nv>BL64_OS_DEB</span><span class=o>=</span><span class=s1>&#39;DEBIAN&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_DEB
-<span class=nb>readonly</span> <span class=nv>BL64_OS_FD</span><span class=o>=</span><span class=s1>&#39;FEDORA&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_FD
-<span class=nb>readonly</span> <span class=nv>BL64_OS_MCOS</span><span class=o>=</span><span class=s1>&#39;DARWIN&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_MCOS
-<span class=nb>readonly</span> <span class=nv>BL64_OS_OL</span><span class=o>=</span><span class=s1>&#39;OL&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_OL
-<span class=nb>readonly</span> <span class=nv>BL64_OS_RHEL</span><span class=o>=</span><span class=s1>&#39;RHEL&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_RHEL
-<span class=nb>readonly</span> <span class=nv>BL64_OS_UB</span><span class=o>=</span><span class=s1>&#39;UBUNTU&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_UB
-<span class=nb>readonly</span> <span class=nv>BL64_OS_UNK</span><span class=o>=</span><span class=s1>&#39;UNKNOWN&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_UNK
+<span class=nb>export</span> <span class=nv>BL64_OS_ALM</span><span class=o>=</span><span class=s1>&#39;ALMALINUX&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_ALM
+<span class=nb>export</span> <span class=nv>BL64_OS_ALP</span><span class=o>=</span><span class=s1>&#39;ALPINE&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_ALP
+<span class=nb>export</span> <span class=nv>BL64_OS_AMZ</span><span class=o>=</span><span class=s1>&#39;AMZN&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_AMZ
+<span class=nb>export</span> <span class=nv>BL64_OS_CNT</span><span class=o>=</span><span class=s1>&#39;CENTOS&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_CNT
+<span class=nb>export</span> <span class=nv>BL64_OS_DEB</span><span class=o>=</span><span class=s1>&#39;DEBIAN&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_DEB
+<span class=nb>export</span> <span class=nv>BL64_OS_FD</span><span class=o>=</span><span class=s1>&#39;FEDORA&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_FD
+<span class=nb>export</span> <span class=nv>BL64_OS_MCOS</span><span class=o>=</span><span class=s1>&#39;DARWIN&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_MCOS
+<span class=nb>export</span> <span class=nv>BL64_OS_OL</span><span class=o>=</span><span class=s1>&#39;OL&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_OL
+<span class=nb>export</span> <span class=nv>BL64_OS_RHEL</span><span class=o>=</span><span class=s1>&#39;RHEL&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_RHEL
+<span class=nb>export</span> <span class=nv>BL64_OS_UB</span><span class=o>=</span><span class=s1>&#39;UBUNTU&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_UB
+<span class=nb>export</span> <span class=nv>BL64_OS_UNK</span><span class=o>=</span><span class=s1>&#39;UNKNOWN&#39;</span><span class=p>;</span> <span class=nb>export</span> BL64_OS_UNK
 </code></pre></div> </td></tr></table> <h2 id=code>Code<a class=headerlink href=#code title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>  1</span>
 <span class=normal>  2</span>
 <span class=normal>  3</span>
@@ -321,20 +315,10 @@
 <span class=normal>220</span>
 <span class=normal>221</span>
 <span class=normal>222</span>
-<span class=normal>223</span>
-<span class=normal>224</span>
-<span class=normal>225</span>
-<span class=normal>226</span>
-<span class=normal>227</span>
-<span class=normal>228</span>
-<span class=normal>229</span>
-<span class=normal>230</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / OS / Identify OS attributes and provide command aliases</span>
+<span class=normal>223</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.12.0</span>
+<span class=c1># Version: 1.13.0</span>
 <span class=c1>#######################################</span>
 
 <span class=k>function</span> _bl64_os_match<span class=o>()</span> <span class=o>{</span>
@@ -520,9 +504,9 @@
 <span class=c1># Returns:</span>
 <span class=c1>#   command exit status</span>
 <span class=c1>#######################################</span>
-<span class=k>function</span> bl64_os_awk<span class=o>()</span> <span class=o>{</span>
+<span class=k>function</span> bl64_os_run_awk<span class=o>()</span> <span class=o>{</span>
   bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>awk_cmd</span><span class=o>=</span><span class=s1>&#39;/usr/bin/awk&#39;</span>
+  <span class=nb>local</span> <span class=nv>awk_cmd</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_INCOMPATIBLE</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>awk_flags</span><span class=o>=</span><span class=s1>&#39; &#39;</span>
 
   <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=k>in</span>
@@ -547,11 +531,7 @@
   <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=nv>awk_cmd</span><span class=o>=</span><span class=s1>&#39;/usr/bin/awk&#39;</span>
     <span class=p>;;</span>
-  *<span class=o>)</span>
-    bl64_check_show_unsupported
-    <span class=c1># shellcheck disable=SC2086</span>
-    <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_APP_INCOMPATIBLE</span>
-    <span class=p>;;</span>
+  *<span class=o>)</span> bl64_check_show_unsupported <span class=p>;;</span>
   <span class=k>esac</span>
   bl64_check_command <span class=s2>&quot;</span><span class=nv>$awk_cmd</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 

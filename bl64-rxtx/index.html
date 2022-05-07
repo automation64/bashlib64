@@ -23,15 +23,9 @@
 <span class=normal>23</span>
 <span class=normal>24</span>
 <span class=normal>25</span>
-<span class=normal>26</span>
-<span class=normal>27</span>
-<span class=normal>28</span>
-<span class=normal>29</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Transfer and Receive data over the network</span>
+<span class=normal>26</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Globals / Transfer and Receive data over the network</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
 <span class=c1># Version: 1.4.0</span>
 <span class=c1>#######################################</span>
 
@@ -299,12 +293,55 @@
 <span class=normal>242</span>
 <span class=normal>243</span>
 <span class=normal>244</span>
-<span class=normal>245</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Transfer and Receive data over the network</span>
+<span class=normal>245</span>
+<span class=normal>246</span>
+<span class=normal>247</span>
+<span class=normal>248</span>
+<span class=normal>249</span>
+<span class=normal>250</span>
+<span class=normal>251</span>
+<span class=normal>252</span>
+<span class=normal>253</span>
+<span class=normal>254</span>
+<span class=normal>255</span>
+<span class=normal>256</span>
+<span class=normal>257</span>
+<span class=normal>258</span>
+<span class=normal>259</span>
+<span class=normal>260</span>
+<span class=normal>261</span>
+<span class=normal>262</span>
+<span class=normal>263</span>
+<span class=normal>264</span>
+<span class=normal>265</span>
+<span class=normal>266</span>
+<span class=normal>267</span>
+<span class=normal>268</span>
+<span class=normal>269</span>
+<span class=normal>270</span>
+<span class=normal>271</span>
+<span class=normal>272</span>
+<span class=normal>273</span>
+<span class=normal>274</span>
+<span class=normal>275</span>
+<span class=normal>276</span>
+<span class=normal>277</span>
+<span class=normal>278</span>
+<span class=normal>279</span>
+<span class=normal>280</span>
+<span class=normal>281</span>
+<span class=normal>282</span>
+<span class=normal>283</span>
+<span class=normal>284</span>
+<span class=normal>285</span>
+<span class=normal>286</span>
+<span class=normal>287</span>
+<span class=normal>288</span>
+<span class=normal>289</span>
+<span class=normal>290</span>
+<span class=normal>291</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Functions / Transfer and Receive data over the network</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
 <span class=c1># Version: 1.10.0</span>
 <span class=c1>#######################################</span>
 
@@ -331,7 +368,6 @@
   <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$2</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>replace</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_VAR_OFF</span><span class=si>}}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>mode</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>4</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>verbose</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_SET_CURL_SILENT</span><span class=s2>&quot;</span>
   <span class=nb>local</span> -i <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
 
   bl64_check_parameter <span class=s1>&#39;source&#39;</span> <span class=o>&amp;&amp;</span>
@@ -340,16 +376,15 @@
   <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$replace</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> -e <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=m>0</span>
   _bl64_rxtx_backup <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
+  <span class=c1># shellcheck disable=SC2086</span>
   <span class=k>if</span> <span class=o>[[</span> -x <span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_CURL</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    bl64_dbg_lib_command_enabled <span class=o>&amp;&amp;</span> <span class=nv>verbose</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_SET_CURL_VERBOSE</span><span class=s2>&quot;</span>
-    <span class=nv>$BL64_RXTX_ALIAS_CURL</span> <span class=nv>$verbose</span> <span class=se>\</span>
+    bl64_rxtx_run_curl <span class=se>\</span>
       <span class=nv>$BL64_RXTX_SET_CURL_REDIRECT</span> <span class=se>\</span>
       <span class=nv>$BL64_RXTX_SET_CURL_OUTPUT</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=se>\</span>
       <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span>
     <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
   <span class=k>elif</span> <span class=o>[[</span> -x <span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_WGET</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    bl64_dbg_lib_command_enabled <span class=o>&amp;&amp;</span> <span class=nv>verbose</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_SET_WGET_VERBOSE</span><span class=s2>&quot;</span>
-    <span class=nv>$BL64_RXTX_ALIAS_WGET</span> <span class=nv>$verbose</span> <span class=se>\</span>
+    bl64_rxtx_run_wget <span class=se>\</span>
       <span class=nv>$BL64_RXTX_SET_WGET_OUTPUT</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=se>\</span>
       <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span>
     <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
@@ -436,6 +471,57 @@
   <span class=c1># Check if restore is needed</span>
   _bl64_rxtx_restore <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$status</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
   <span class=k>return</span> <span class=nv>$status</span>
+<span class=o>}</span>
+
+<span class=c1>#######################################</span>
+<span class=c1># CURL wrapper with verbose, debug and common options</span>
+<span class=c1>#</span>
+<span class=c1># Arguments:</span>
+<span class=c1>#   $@: arguments are passed as-is to the command</span>
+<span class=c1># Outputs:</span>
+<span class=c1>#   STDOUT: command output</span>
+<span class=c1>#   STDERR: command stderr</span>
+<span class=c1># Returns:</span>
+<span class=c1>#   command exit status</span>
+<span class=c1>#######################################</span>
+<span class=k>function</span> bl64_rxtx_run_curl<span class=o>()</span> <span class=o>{</span>
+  bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>verbose</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_SET_CURL_SILENT</span><span class=s2>&quot;</span>
+
+  bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_CURL</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+
+  bl64_dbg_lib_command_enabled <span class=o>&amp;&amp;</span> <span class=nv>verbose</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_SET_CURL_VERBOSE</span><span class=s2>&quot;</span>
+
+  <span class=c1># shellcheck disable=SC2086</span>
+  <span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_CURL</span><span class=s2>&quot;</span> <span class=se>\</span>
+    <span class=nv>$BL64_RXTX_SET_CURL_SECURE</span> <span class=se>\</span>
+    <span class=nv>$verbose</span> <span class=se>\</span>
+    <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+<span class=o>}</span>
+
+<span class=c1>#######################################</span>
+<span class=c1># WGet wrapper with verbose, debug and common options</span>
+<span class=c1>#</span>
+<span class=c1># Arguments:</span>
+<span class=c1>#   $@: arguments are passed as-is to the command</span>
+<span class=c1># Outputs:</span>
+<span class=c1>#   STDOUT: command output</span>
+<span class=c1>#   STDERR: command stderr</span>
+<span class=c1># Returns:</span>
+<span class=c1>#   command exit status</span>
+<span class=c1>#######################################</span>
+<span class=k>function</span> bl64_rxtx_run_wget<span class=o>()</span> <span class=o>{</span>
+  bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>verbose</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
+
+  bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_WGET</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+
+  bl64_dbg_lib_command_enabled <span class=o>&amp;&amp;</span> <span class=nv>verbose</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_RXTX_SET_WGET_VERBOSE</span><span class=s2>&quot;</span>
+
+  <span class=c1># shellcheck disable=SC2086</span>
+  <span class=s2>&quot;</span><span class=nv>$BL64_RXTX_CMD_WGET</span><span class=s2>&quot;</span> <span class=se>\</span>
+    <span class=nv>$verbose</span> <span class=se>\</span>
+    <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
 <span class=o>}</span>
 
 <span class=k>function</span> _bl64_rxtx_git_get_dir_root<span class=o>()</span> <span class=o>{</span>

@@ -238,15 +238,9 @@
 <span class=normal>238</span>
 <span class=normal>239</span>
 <span class=normal>240</span>
-<span class=normal>241</span>
-<span class=normal>242</span>
-<span class=normal>243</span>
-<span class=normal>244</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Format text data</span>
+<span class=normal>241</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Functions / Format text data</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
 <span class=c1># Version: 1.4.0</span>
 <span class=c1>#######################################</span>
 
@@ -450,7 +444,7 @@
   <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$prefix</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>prefix</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
   <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$postfix</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>postfix</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 
-  bl64_os_awk <span class=se>\</span>
+  bl64_os_run_awk <span class=se>\</span>
     -v <span class=nv>field_separator</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$field_separator</span><span class=s2>&quot;</span> <span class=se>\</span>
     -v <span class=nv>prefix</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$prefix</span><span class=s2>&quot;</span> <span class=se>\</span>
     -v <span class=nv>postfix</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$postfix</span><span class=s2>&quot;</span> <span class=se>\</span>

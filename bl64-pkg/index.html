@@ -33,15 +33,9 @@
 <span class=normal>33</span>
 <span class=normal>34</span>
 <span class=normal>35</span>
-<span class=normal>36</span>
-<span class=normal>37</span>
-<span class=normal>38</span>
-<span class=normal>39</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Manage native OS packages</span>
+<span class=normal>36</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Globals / Manage native OS packages</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
 <span class=c1># Version: 1.6.0</span>
 <span class=c1>#######################################</span>
 
@@ -256,28 +250,10 @@
 <span class=normal>179</span>
 <span class=normal>180</span>
 <span class=normal>181</span>
-<span class=normal>182</span>
-<span class=normal>183</span>
-<span class=normal>184</span>
-<span class=normal>185</span>
-<span class=normal>186</span>
-<span class=normal>187</span>
-<span class=normal>188</span>
-<span class=normal>189</span>
-<span class=normal>190</span>
-<span class=normal>191</span>
-<span class=normal>192</span>
-<span class=normal>193</span>
-<span class=normal>194</span>
-<span class=normal>195</span>
-<span class=normal>196</span>
-<span class=normal>197</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Manage native OS packages</span>
+<span class=normal>182</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Functions / Manage native OS packages</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.9.0</span>
+<span class=c1># Version: 1.10.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -345,11 +321,7 @@
   <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_BRW</span><span class=s2>&quot;</span> update <span class=nv>$verbose</span>
     <span class=p>;;</span>
-  *<span class=o>)</span>
-    bl64_check_show_unsupported
-    <span class=c1># shellcheck disable=SC2086</span>
-    <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_APP_INCOMPATIBLE</span>
-    <span class=p>;;</span>
+  *<span class=o>)</span> bl64_check_show_unsupported <span class=p>;;</span>
   <span class=k>esac</span>
 <span class=o>}</span>
 
@@ -400,11 +372,7 @@
   <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_BRW</span><span class=s2>&quot;</span> install <span class=nv>$verbose</span> <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
     <span class=p>;;</span>
-  *<span class=o>)</span>
-    bl64_check_show_unsupported
-    <span class=c1># shellcheck disable=SC2086</span>
-    <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_APP_INCOMPATIBLE</span>
-    <span class=p>;;</span>
+  *<span class=o>)</span> bl64_check_show_unsupported <span class=p>;;</span>
 
   <span class=k>esac</span>
 <span class=o>}</span>
@@ -460,11 +428,7 @@
   <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_BRW</span><span class=s2>&quot;</span> cleanup <span class=nv>$verbose</span> --prune<span class=o>=</span>all -s
     <span class=p>;;</span>
-  *<span class=o>)</span>
-    bl64_check_show_unsupported
-    <span class=c1># shellcheck disable=SC2086</span>
-    <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_APP_INCOMPATIBLE</span>
-    <span class=p>;;</span>
+  *<span class=o>)</span> bl64_check_show_unsupported <span class=p>;;</span>
 
   <span class=k>esac</span>
 <span class=o>}</span>

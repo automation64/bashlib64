@@ -19,25 +19,19 @@
 <span class=normal>19</span>
 <span class=normal>20</span>
 <span class=normal>21</span>
-<span class=normal>22</span>
-<span class=normal>23</span>
-<span class=normal>24</span>
-<span class=normal>25</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Write messages to logs</span>
+<span class=normal>22</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Globals / Write messages to logs</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
 <span class=c1># Version: 1.2.0</span>
 <span class=c1>#######################################</span>
 
-<span class=nb>readonly</span> <span class=nv>BL64_LOG_TYPE_FILE</span><span class=o>=</span><span class=s1>&#39;F&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LOG_CATEGORY_INFO</span><span class=o>=</span><span class=s1>&#39;info&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LOG_CATEGORY_TASK</span><span class=o>=</span><span class=s1>&#39;task&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LOG_CATEGORY_DEBUG</span><span class=o>=</span><span class=s1>&#39;debug&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LOG_CATEGORY_WARNING</span><span class=o>=</span><span class=s1>&#39;warning&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LOG_CATEGORY_ERROR</span><span class=o>=</span><span class=s1>&#39;error&#39;</span>
-<span class=nb>readonly</span> <span class=nv>BL64_LOG_CATEGORY_RECORD</span><span class=o>=</span><span class=s1>&#39;record&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_LOG_TYPE_FILE</span><span class=o>=</span><span class=s1>&#39;F&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_LOG_CATEGORY_INFO</span><span class=o>=</span><span class=s1>&#39;info&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_LOG_CATEGORY_TASK</span><span class=o>=</span><span class=s1>&#39;task&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_LOG_CATEGORY_DEBUG</span><span class=o>=</span><span class=s1>&#39;debug&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_LOG_CATEGORY_WARNING</span><span class=o>=</span><span class=s1>&#39;warning&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_LOG_CATEGORY_ERROR</span><span class=o>=</span><span class=s1>&#39;error&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_LOG_CATEGORY_RECORD</span><span class=o>=</span><span class=s1>&#39;record&#39;</span>
 
 <span class=nb>readonly</span> <span class=nv>_BL64_LOG_TXT_NOT_SETUP</span><span class=o>=</span><span class=s1>&#39;missing setup information. Please use the bl64_log_setup function before calling bl64_log_* functions&#39;</span>
 <span class=nb>readonly</span> <span class=nv>_BL64_LOG_TXT_INVALID_TYPE</span><span class=o>=</span><span class=s1>&#39;invalid log type. Please use any of BL64_LOG_TYPE_*&#39;</span>
@@ -297,13 +291,14 @@
 <span class=normal>248</span>
 <span class=normal>249</span>
 <span class=normal>250</span>
-<span class=normal>251</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Write messages to logs</span>
+<span class=normal>251</span>
+<span class=normal>252</span>
+<span class=normal>253</span>
+<span class=normal>254</span>
+<span class=normal>255</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Functions / Write messages to logs</span>
 <span class=c1>#</span>
-<span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
-<span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
-<span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 1.3.0</span>
+<span class=c1># Version: 1.4.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -330,6 +325,7 @@
 
   <span class=k>if</span> <span class=o>[[</span> -z <span class=s2>&quot;</span><span class=nv>$BL64_LOG_PATH</span><span class=s2>&quot;</span> <span class=o>||</span> -z <span class=s2>&quot;</span><span class=nv>$BL64_LOG_VERBOSE</span><span class=s2>&quot;</span> <span class=o>||</span> -z <span class=s2>&quot;</span><span class=nv>$BL64_LOG_TYPE</span><span class=s2>&quot;</span> <span class=o>||</span> -z <span class=s2>&quot;</span><span class=nv>$BL64_LOG_FS</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
     bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_LOG_TXT_NOT_SETUP</span><span class=s2>&quot;</span>
+    <span class=c1># shellcheck disable=SC2086</span>
     <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_MODULE_SETUP_MISSING</span>
   <span class=k>fi</span>
 
@@ -352,6 +348,7 @@
     <span class=p>;;</span>
   *<span class=o>)</span>
     bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_LOG_TXT_INVALID_TYPE</span><span class=s2>&quot;</span>
+    <span class=c1># shellcheck disable=SC2086</span>
     <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_MODULE_SETUP_INVALID</span>
     <span class=p>;;</span>
   <span class=k>esac</span>
@@ -545,6 +542,11 @@
         <span class=s2>&quot;</span><span class=nv>$BL64_LOG_CATEGORY_RECORD</span><span class=s2>&quot;</span> <span class=se>\</span>
         <span class=s2>&quot;</span><span class=si>${</span><span class=nv>tag</span><span class=si>}${</span><span class=nv>BL64_LOG_FS</span><span class=si>}${</span><span class=nv>input_log_line</span><span class=si>}</span><span class=s2>&quot;</span>
     <span class=k>done</span>
+    <span class=p>;;</span>
+  *<span class=o>)</span>
+    bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_LOG_TXT_INVALID_TYPE</span><span class=s2>&quot;</span>
+    <span class=c1># shellcheck disable=SC2086</span>
+    <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_MODULE_SETUP_INVALID</span>
     <span class=p>;;</span>
   <span class=k>esac</span>
 <span class=o>}</span>
