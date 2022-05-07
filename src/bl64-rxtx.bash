@@ -1,9 +1,6 @@
 #######################################
-# BashLib64 / Transfer and Receive data over the network
+# BashLib64 / Module / Functions / Transfer and Receive data over the network
 #
-# Author: serdigital64 (https://github.com/serdigital64)
-# License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
-# Repository: https://github.com/serdigital64/bashlib64
 # Version: 1.10.0
 #######################################
 
@@ -30,7 +27,6 @@ function bl64_rxtx_web_get_file() {
   local destination="$2"
   local replace="${3:-${BL64_LIB_VAR_OFF}}"
   local mode="${4:-${BL64_LIB_DEFAULT}}"
-  local verbose="$BL64_RXTX_SET_CURL_SILENT"
   local -i status=0
 
   bl64_check_parameter 'source' &&
@@ -39,16 +35,15 @@ function bl64_rxtx_web_get_file() {
   [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]] && return 0
   _bl64_rxtx_backup "$destination" >/dev/null || return $?
 
+  # shellcheck disable=SC2086
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
-    bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
-    $BL64_RXTX_ALIAS_CURL $verbose \
+    bl64_rxtx_run_curl \
       $BL64_RXTX_SET_CURL_REDIRECT \
       $BL64_RXTX_SET_CURL_OUTPUT "$destination" \
       "$source"
     status=$?
   elif [[ -x "$BL64_RXTX_CMD_WGET" ]]; then
-    bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
-    $BL64_RXTX_ALIAS_WGET $verbose \
+    bl64_rxtx_run_wget \
       $BL64_RXTX_SET_WGET_OUTPUT "$destination" \
       "$source"
     status=$?
@@ -135,6 +130,57 @@ function bl64_rxtx_git_get_dir() {
   # Check if restore is needed
   _bl64_rxtx_restore "$destination" "$status" >/dev/null || return $?
   return $status
+}
+
+#######################################
+# CURL wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_rxtx_run_curl() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose="$BL64_RXTX_SET_CURL_SILENT"
+
+  bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
+
+  bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_RXTX_CMD_CURL" \
+    $BL64_RXTX_SET_CURL_SECURE \
+    $verbose \
+    "$@"
+}
+
+#######################################
+# WGet wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_rxtx_run_wget() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_command "$BL64_RXTX_CMD_WGET" || return $?
+
+  bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_RXTX_CMD_WGET" \
+    $verbose \
+    "$@"
 }
 
 function _bl64_rxtx_git_get_dir_root() {
