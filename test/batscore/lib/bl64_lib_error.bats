@@ -2,7 +2,7 @@ setup() {
   . "$DEVBL_TEST_SETUP"
 }
 
-@test "bl64_lib_env: error constants are set" {
+@test "bl64_lib_error: error constants are set" {
 
   assert_equal $BL64_LIB_ERROR_PARAMETER_INVALID 3
   assert_equal $BL64_LIB_ERROR_PARAMETER_MISSING 4
