@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 #
@@ -90,6 +90,8 @@ else
   bl64_py_set_command
   bl64_py_set_options
   bl64_cnt_set_command
+  bl64_gcp_set_command
+  bl64_gcp_set_options
 
   # Set signal handlers
   # shellcheck disable=SC2064
