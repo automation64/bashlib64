@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 #
@@ -68,8 +68,8 @@ if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" || ("${BASH_VERSINFO[0]}" != '4' && "$
   false
 else
   bl64_os_set_command
-  bl64_os_set_options
   bl64_os_set_alias
+  bl64_txt_set_command
   bl64_fs_set_command
   bl64_fs_set_options
   bl64_fs_set_alias
@@ -91,6 +91,8 @@ else
   bl64_py_set_command
   bl64_py_set_options
   bl64_cnt_set_command
+  bl64_gcp_set_command
+  bl64_gcp_set_options
 
   # Set signal handlers
   # shellcheck disable=SC2064

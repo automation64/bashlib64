@@ -31,7 +31,7 @@ function bl64_rbac_add_root() {
 
   umask 0266
   # shellcheck disable=SC2016
-  bl64_os_run_awk \
+  bl64_txt_run_awk \
     -v ControlUsr="$user" \
     '
       BEGIN { Found = 0 }

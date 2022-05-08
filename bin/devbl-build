@@ -27,13 +27,13 @@ function devbl_build_standalone() {
   bl64_msg_show_task "creating stand-alone library: $DEVBL_BUILD_BASHLIB64"
   {
     "$BL64_OS_CMD_CAT" "bl64-lib.header" && bl64_fmt_separator_line
-    "$BL64_OS_CMD_CAT" "bl64-lib.env"
+    "$BL64_OS_CMD_CAT" "bl64-lib-env.bash"
   } >"$DEVBL_BUILD_BASHLIB64" || return 1
 
   for file in $DEVBL_MODULES; do
-    [[ ! -f "bl64-${file}.env" ]] && continue
+    [[ ! -f "bl64-${file}-env.bash" ]] && continue
     bl64_msg_show_task "adding module ${file} environment"
-    { "$BL64_OS_CMD_CAT" "bl64-${file}.env" && bl64_fmt_separator_line; } >>"$DEVBL_BUILD_BASHLIB64"
+    { "$BL64_OS_CMD_CAT" "bl64-${file}-env.bash" && bl64_fmt_separator_line; } >>"$DEVBL_BUILD_BASHLIB64"
   done || return 1
 
   for file in $DEVBL_MODULES; do
@@ -59,7 +59,7 @@ function devbl_build_docs() {
   cd "$DEVBL_SRC" || return 1
 
   for file in lib $DEVBL_MODULES; do
-    module_env="bl64-${file}.env"
+    module_env="bl64-${file}-env.bash"
     [[ ! -f "$module_env" ]] && module_env="$BL64_LIB_VAR_NULL"
     module_code="bl64-${file}.bash"
     [[ ! -f "$module_code" ]] && module_code="$BL64_LIB_VAR_NULL"
@@ -83,7 +83,7 @@ function devbl_build_md() {
     printf '## Header\n\n'
     printf '```shell\n'
     [[ "$module" == 'lib' ]] && printf '{%% include "../src/bl64-%s.header" %%}\n' "$module"
-    printf '{%% include "../src/bl64-%s.env" %%}\n' "$module"
+    printf '{%% include "../src/bl64-%s-env.bash" %%}\n' "$module"
     printf '```\n\n'
   fi
   if [[ "$module_init" != "$BL64_LIB_VAR_NULL" ]]; then

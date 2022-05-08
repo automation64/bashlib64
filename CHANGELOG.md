@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.0]
+
+### Added
+
+- py
+  - bl64_py_run_python: new function
+- gcp
+  - new module
+
+### Changed
+
+- py
+  - Use bl64_py_run_python instead of CMD_PYTHON3
+- os
+  - migrated awp,grep,gawk to module txt
+
 ## [2.3.0]
 
 ### Added
@@ -342,7 +358,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.3.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.4.0...HEAD
+[2.4.0]: https://github.com/serdigital64/bashlib64/compare/2.3.0...2.4.0
 [2.3.0]: https://github.com/serdigital64/bashlib64/compare/2.2.0...2.3.0
 [2.2.0]: https://github.com/serdigital64/bashlib64/compare/2.0.0...2.2.0
 [2.0.0]: https://github.com/serdigital64/bashlib64/compare/1.24.0...2.0.0

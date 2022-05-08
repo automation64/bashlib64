@@ -23,7 +23,7 @@ function bl64_xsv_dump() {
   bl64_check_parameter 'source' &&
     bl64_check_file "$source" "$_BL64_XSV_TXT_SOURCE_NOT_FOUND" || return $?
 
-  "$BL64_OS_CMD_GREP" -v -E '^#.*$|^$' "$source"
+  "$BL64_TXT_CMD_GREP" -v -E '^#.*$|^$' "$source"
 
 }
 
@@ -59,7 +59,7 @@ function bl64_xsv_search_records() {
   bl64_check_parameter 'values' 'search value' || return $?
 
   # shellcheck disable=SC2016
-  bl64_os_run_awk \
+  bl64_txt_run_awk \
     -F "$fs_src" \
     -v VALUES="${values}" \
     -v KEYS="$keys" \

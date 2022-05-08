@@ -13,8 +13,8 @@ setup() {
 
 @test "bl64_lib_env: public constants are set" {
   assert_equal "$BL64_LIB_DEFAULT" '_'
-  assert_equal "$BL64_LIB_INCOMPATIBLE" '_X_'
-
+  assert_equal "$BL64_LIB_INCOMPATIBLE" '_INC_'
+  assert_equal "$BL64_LIB_UNAVAILABLE" '_UNV_'
   assert_equal "$BL64_LIB_VAR_FALSE" '1'
   assert_equal "$BL64_LIB_VAR_NULL" '__'
   assert_equal "$BL64_LIB_VAR_OFF" '0'
