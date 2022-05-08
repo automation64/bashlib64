@@ -2,7 +2,7 @@ setup() {
   . "$DEVBL_TEST_SETUP"
 }
 
-@test "bl64_lib_env: debug constants are set" {
+@test "bl64_dbg_env: debug constants are set" {
   assert_equal "$BL64_DBG_TARGET_NONE" '0'
   assert_equal "$BL64_DBG_TARGET_APP_TRACE" '1'
   assert_equal "$BL64_DBG_TARGET_APP_TASK" '2'
