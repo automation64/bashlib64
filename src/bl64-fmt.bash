@@ -23,7 +23,7 @@ function bl64_fmt_strip_comments() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:--}"
 
-  "$BL64_OS_CMD_GREP" -v -E '^#.*$|^ *#.*$' "$source"
+  "$BL64_TXT_CMD_GREP" -v -E '^#.*$|^ *#.*$' "$source"
 }
 
 #######################################
@@ -204,7 +204,7 @@ function bl64_fmt_list_to_string() {
   [[ "$prefix" == "$BL64_LIB_DEFAULT" ]] && prefix=''
   [[ "$postfix" == "$BL64_LIB_DEFAULT" ]] && postfix=''
 
-  bl64_os_run_awk \
+  bl64_txt_run_awk \
     -v field_separator="$field_separator" \
     -v prefix="$prefix" \
     -v postfix="$postfix" \
