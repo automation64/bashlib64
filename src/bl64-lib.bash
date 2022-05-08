@@ -68,7 +68,6 @@ if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" || ("${BASH_VERSINFO[0]}" != '4' && "$
   false
 else
   bl64_os_set_command
-  bl64_os_set_options
   bl64_os_set_alias
   bl64_fs_set_command
   bl64_fs_set_options

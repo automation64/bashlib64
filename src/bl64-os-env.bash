@@ -17,8 +17,6 @@ export BL64_OS_CMD_ID=''
 export BL64_OS_CMD_TRUE=''
 export BL64_OS_CMD_UNAME=''
 
-export BL64_FS_ALIAS_RM_FULL=''
-export BL64_OS_ALIAS_AWK=''
 export BL64_OS_ALIAS_ID_USER=''
 
 # * OS tags:
