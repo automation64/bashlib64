@@ -103,20 +103,6 @@ function bl64_py_pip_usr_install() {
 function bl64_py_run_python() {
   bl64_dbg_lib_show_function "$@"
 
-  # Select best match for default python or leave default if no better option found
-  if [[ -x "$BL64_PY_CMD_PYTHON310" ]]; then
-    BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON310"
-  elif [[ -x "$BL64_PY_CMD_PYTHON39" ]]; then
-    BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON39"
-  elif [[ -x "$BL64_PY_CMD_PYTHON37" ]]; then
-    BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON37"
-  elif [[ -x "$BL64_PY_CMD_PYTHON36" ]]; then
-    BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON36"
-  elif [[ -x "$BL64_PY_CMD_PYTHON35" ]]; then
-    BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON35"
-  else
-    BL64_PY_CMD_PYTHON3="/usr/bin/python3"
-  fi
   bl64_check_command "$BL64_PY_CMD_PYTHON3" || return $?
 
   "$BL64_PY_CMD_PYTHON3" "$@"
