@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 2.3.0
+# Version: 2.4.0
 #######################################
 
 # Do not inherit aliases and commands
@@ -71,8 +71,11 @@ export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
 # Default value for parameters
 export BL64_LIB_DEFAULT='_'
 
-# Flag for incompatible command
-export BL64_LIB_INCOMPATIBLE='_X_'
+# Flag for incompatible command o task
+export BL64_LIB_INCOMPATIBLE='_INC_'
+
+# Flag for unavailable command o task
+export BL64_LIB_UNAVAILABLE='_UNV_'
 
 # Pseudo null value
 export BL64_LIB_VAR_NULL='__'
@@ -265,7 +268,7 @@ readonly _BL64_DBG_TXT_PWD='Current working directory (pwd command)'
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 readonly _BL64_FS_TXT_MISSING_PARAMETER='required parameters are missing'
@@ -288,6 +291,7 @@ export BL64_FS_ALIAS_LS_FILES=''
 export BL64_FS_ALIAS_MKDIR_FULL=''
 export BL64_FS_ALIAS_MV=''
 export BL64_FS_ALIAS_RM_FILE=''
+export BL64_FS_ALIAS_RM_FULL=''
 
 export BL64_FS_SET_CHMOD_RECURSIVE=''
 export BL64_FS_SET_CHMOD_VERBOSE=''
@@ -303,6 +307,21 @@ export BL64_FS_SET_MV_VERBOSE=''
 export BL64_FS_SET_RM_FORCE=''
 export BL64_FS_SET_RM_RECURSIVE=''
 export BL64_FS_SET_RM_VERBOSE=''
+
+#######################################
+# BashLib64 / Module / Globals / Manage local filesystem
+#
+# Version: 1.0.0
+#######################################
+
+export BL64_GCP_CMD_GCLOUD="${BL64_GCP_CMD_GCLOUD:-}"
+
+export BL64_GCP_CONFIGURATION_NAME='bl64_gcp_configuration_private'
+export BL64_GCP_CONFIGURATION_CREATED="$BL64_LIB_VAR_FALSE"
+
+export BL64_GCP_SET_FORMAT_YAML=''
+export BL64_GCP_SET_FORMAT_TEXT=''
+export BL64_GCP_SET_FORMAT_JSON=''
 
 #######################################
 # BashLib64 / Module / Globals / Manage OS identity and access service
@@ -370,24 +389,19 @@ readonly _BL64_MSG_TXT_BATCH_FINISH_ERROR='finished with errors'
 #######################################
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 export BL64_OS_DISTRO=''
 
-export BL64_OS_CMD_AWK=''
 export BL64_OS_CMD_CAT=''
 export BL64_OS_CMD_DATE=''
 export BL64_OS_CMD_FALSE=''
-export BL64_OS_CMD_GAWK=''
-export BL64_OS_CMD_GREP=''
 export BL64_OS_CMD_HOSTNAME=''
 export BL64_OS_CMD_ID=''
 export BL64_OS_CMD_TRUE=''
 export BL64_OS_CMD_UNAME=''
 
-export BL64_FS_ALIAS_RM_FULL=''
-export BL64_OS_ALIAS_AWK=''
 export BL64_OS_ALIAS_ID_USER=''
 
 # * OS tags:
@@ -545,6 +559,19 @@ readonly _BL64_RXTX_TXT_EXISTING_DESTINATION='destination path is not empty. No 
 readonly _BL64_RXTX_TXT_CREATION_PROBLEM='unable to create temporary git repo'
 
 readonly _BL64_RXTX_BACKUP_POSTFIX='._bl64_rxtx_backup'
+
+#######################################
+# BashLib64 / Module / Globals / Manipulate text files content
+#
+# Version: 1.0.0
+#######################################
+
+export BL64_TXT_CMD_AWK=''
+export BL64_TXT_CMD_GAWK=''
+export BL64_TXT_CMD_GREP=''
+export BL64_TXT_CMD_SED=''
+export BL64_TXT_CMD_TR=''
+export BL64_TXT_CMD_BASE64=''
 
 #######################################
 # BashLib64 / Module / Globals / Manage Version Control System
@@ -757,20 +784,27 @@ function bl64_arc_open_tar() {
 #   0: Command found
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_APP_INCOMPATIBLE
+#   $BL64_LIB_ERROR_APP_MISSING
 #   $BL64_LIB_ERROR_FILE_NOT_FOUND
 #   $BL64_LIB_ERROR_FILE_NOT_EXECUTE
 #######################################
 function bl64_check_command() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
-  local message="${2:-$_BL64_CHECK_TXT_COMMAND_NOT_FOUND}"
+  local message="${2:-${_BL64_CHECK_TXT_COMMAND_NOT_FOUND}}"
 
   bl64_check_parameter 'path' || return $?
 
   if [[ "$path" == "$BL64_LIB_INCOMPATIBLE" ]]; then
-    bl64_check_show_unsupported "$path"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${_BL64_CHECK_TXT_INCOMPATIBLE}"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+  fi
+
+  if [[ "$path" == "$BL64_LIB_UNAVAILABLE" ]]; then
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${_BL64_CHECK_TXT_COMMAND_NOT_FOUND}"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_MISSING
   fi
 
   if [[ ! -f "$path" ]]; then
@@ -780,7 +814,7 @@ function bl64_check_command() {
   fi
 
   if [[ ! -x "$path" ]]; then
-    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE (${path})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE} (${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_EXECUTE
   fi
@@ -806,7 +840,7 @@ function bl64_check_command() {
 function bl64_check_file() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
-  local message="${2:-$_BL64_CHECK_TXT_FILE_NOT_FOUND}"
+  local message="${2:-${_BL64_CHECK_TXT_FILE_NOT_FOUND}}"
 
   bl64_check_parameter 'path' || return $?
   if [[ ! -f "$path" ]]; then
@@ -815,7 +849,7 @@ function bl64_check_file() {
     return $BL64_LIB_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -r "$path" ]]; then
-    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_FILE_NOT_READABLE (${path})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${_BL64_CHECK_TXT_FILE_NOT_READABLE} (${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_READ
   fi
@@ -840,7 +874,7 @@ function bl64_check_file() {
 function bl64_check_directory() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
-  local message="${2:-$_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND}"
+  local message="${2:-${_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND}}"
 
   bl64_check_parameter 'path' || return $?
   if [[ ! -d "$path" ]]; then
@@ -849,7 +883,7 @@ function bl64_check_directory() {
     return $BL64_LIB_ERROR_DIRECTORY_NOT_FOUND
   fi
   if [[ ! -r "$path" || ! -x "$path" ]]; then
-    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE (${path})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE} (${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_DIRECTORY_NOT_READ
   fi
@@ -877,13 +911,13 @@ function bl64_check_parameter() {
   local description="${2:-parameter $parameter}"
 
   if [[ -z "$parameter" ]]; then
-    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_MISSING_PARAMETER (parameter name)"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${_BL64_CHECK_TXT_MISSING_PARAMETER} (parameter name)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PARAMETER_MISSING
   fi
 
   if eval "[[ -z \"\$${parameter}\" || \"\$${parameter}\" == '${BL64_LIB_DEFAULT}' ]]"; then
-    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_MISSING_PARAMETER (${description})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${_BL64_CHECK_TXT_MISSING_PARAMETER} (${description})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PARAMETER_EMPTY
   fi
@@ -915,13 +949,13 @@ function bl64_check_export() {
   bl64_check_parameter 'export_name' || return $?
 
   if [[ ! -v "$export_name" ]]; then
-    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_EXPORT_SET (${description})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${_BL64_CHECK_TXT_EXPORT_SET} (${description})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_EXPORT_SET
   fi
 
   if eval "[[ -z \$${export_name} ]]"; then
-    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_EXPORT_EMPTY (${description})"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${_BL64_CHECK_TXT_EXPORT_EMPTY} (${description})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_EXPORT_EMPTY
   fi
@@ -948,11 +982,11 @@ function bl64_check_export() {
 function bl64_check_path_relative() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
-  local message="${2:-$_BL64_CHECK_TXT_PATH_NOT_RELATIVE}"
+  local message="${2:-${_BL64_CHECK_TXT_PATH_NOT_RELATIVE}}"
 
   bl64_check_parameter 'path' || return $?
   if [[ "$path" == '/' || "$path" == /* ]]; then
-    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${_BL64_CHECK_TXT_PATH_NOT_RELATIVE} ($path)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PATH_NOT_RELATIVE
   fi
@@ -979,11 +1013,11 @@ function bl64_check_path_relative() {
 function bl64_check_path_absolute() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
-  local message="${2:-$_BL64_CHECK_TXT_PATH_NOT_ABSOLUTE}"
+  local message="${2:-${_BL64_CHECK_TXT_PATH_NOT_ABSOLUTE}}"
 
   bl64_check_parameter 'path' || return $?
   if [[ "$path" != '/' && "$path" != /* ]]; then
-    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_PATH_NOT_RELATIVE ($path)"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${_BL64_CHECK_TXT_PATH_NOT_RELATIVE} ($path)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
   fi
@@ -1006,7 +1040,7 @@ function bl64_check_privilege_root() {
   bl64_dbg_lib_show_function
   bl64_dbg_lib_show_vars 'EUID'
   if [[ "$EUID" != '0' ]]; then
-    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT (EUID: $EUID)"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${_BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT} (EUID: $EUID)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT
   fi
@@ -1029,7 +1063,7 @@ function bl64_check_privilege_not_root() {
   bl64_dbg_lib_show_function "$@"
   bl64_dbg_lib_show_vars 'EUID'
   if [[ "$EUID" == '0' ]]; then
-    bl64_msg_show_error "[${FUNCNAME[1]}] $_BL64_CHECK_TXT_PRIVILEGE_IS_ROOT"
+    bl64_msg_show_error "[${FUNCNAME[1]}] ${_BL64_CHECK_TXT_PRIVILEGE_IS_ROOT}"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PRIVILEGE_IS_ROOT
   fi
@@ -1054,7 +1088,7 @@ function bl64_check_privilege_not_root() {
 function bl64_check_overwrite() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
-  local message="${2:-$_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}"
+  local message="${2:-${_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}}"
   local overwrite="${3:-"$BL64_LIB_VAR_OFF"}"
 
   bl64_check_parameter 'path' || return $?
@@ -1794,7 +1828,7 @@ function bl64_dbg_runtime_show_callstack() {
 #######################################
 function bl64_dbg_runtime_show_paths() {
 
-  bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0  
+  bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
   bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_SCRIPT_PATH}: [${BL64_SCRIPT_PATH:-EMPTY}]"
   bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
   bl64_msg_show_debug "[${FUNCNAME[1]}] ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
@@ -2839,7 +2873,7 @@ function bl64_fmt_strip_comments() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:--}"
 
-  "$BL64_OS_CMD_GREP" -v -E '^#.*$|^ *#.*$' "$source"
+  "$BL64_TXT_CMD_GREP" -v -E '^#.*$|^ *#.*$' "$source"
 }
 
 #######################################
@@ -3020,7 +3054,7 @@ function bl64_fmt_list_to_string() {
   [[ "$prefix" == "$BL64_LIB_DEFAULT" ]] && prefix=''
   [[ "$postfix" == "$BL64_LIB_DEFAULT" ]] && postfix=''
 
-  bl64_os_run_awk \
+  bl64_txt_run_awk \
     -v field_separator="$field_separator" \
     -v prefix="$prefix" \
     -v postfix="$postfix" \
@@ -3054,6 +3088,159 @@ function bl64_fmt_separator_line() {
   local payload="${1:-}"
 
   printf '%s\n' "$payload"
+}
+
+#######################################
+# BashLib64 / Module / Setup / Manage OS identity and access service
+#
+# Version: 1.0.0
+#######################################
+
+#######################################
+# Identify and normalize commands
+#
+# * Commands are exported as variables with full path
+# * The caller function is responsible for checking that the target command is present (installed)
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+# Warning: bootstrap function: use pure bash, no return, no exit
+function bl64_gcp_set_command() {
+  bl64_dbg_lib_show_function
+
+  # Detect gcloud location
+  if [[ -z "$BL64_GCP_CMD_GCLOUD" ]]; then
+    if [[ -x '/usr/bin/gcloud' ]]; then
+      BL64_GCP_CMD_GCLOUD='/usr/bin/gcloud'
+    elif [[ -x '/opt/homebrew/bin/gcloud' ]]; then
+      BL64_GCP_CMD_GCLOUD='/opt/homebrew/bin/gcloud'
+    elif [[ -x '/home/linuxbrew/.linuxbrew/bin/gcloud' ]]; then
+      BL64_GCP_CMD_GCLOUD='/home/linuxbrew/.linuxbrew/bin/gcloud'
+    else
+      BL64_GCP_CMD_GCLOUD="$BL64_LIB_UNAVAILABLE"
+    fi
+  fi
+
+  return 0
+}
+
+#######################################
+# Create command sets for common options
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+# Warning: bootstrap function: use pure bash, no return, no exit
+function bl64_gcp_set_options() {
+  BL64_GCP_SET_FORMAT_YAML='--format yaml'
+  BL64_GCP_SET_FORMAT_TEXT='--format text'
+  BL64_GCP_SET_FORMAT_JSON='--format json'
+}
+
+#######################################
+# BashLib64 / Module / Functions / Interact with GCP CLI
+#
+# Version: 1.0.0
+#######################################
+
+#######################################
+# GCloud wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_gcp_run_gcloud() {
+  bl64_dbg_lib_show_function "$@"
+  local debug=' '
+  local config=' '
+
+  bl64_check_command "$BL64_GCP_CMD_GCLOUD" || return $?
+
+  if bl64_dbg_lib_command_enabled; then
+    debug='--verbosity debug --log-http'
+  else
+    debug='--verbosity none --quiet'
+  fi
+
+  [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_LIB_VAR_TRUE" ]] && config="--configuration $BL64_GCP_CONFIGURATION_NAME"
+
+  "$BL64_GCP_CMD_GCLOUD" \
+    $debug \
+    $config \
+    "$@"
+}
+
+#######################################
+# Login to GCP using a Service Account
+#
+# * key must be in json format
+# * previous credentials are revoked
+#
+# Arguments:
+#   $1: key file full path
+#   $2: project id
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_gcp_login_sa() {
+  bl64_dbg_lib_show_function "$@"
+  local key_file="$1"
+  local project="$2"
+
+  bl64_check_parameter 'key_file' &&
+    bl64_check_parameter 'project' &&
+    bl64_check_file "$key_file" || return $?
+
+  _bl64_gcp_configure
+
+  bl64_dbg_lib_show_info 'remove previous credentials'
+  bl64_gcp_run_gcloud \
+    auth \
+    revoke \
+    --all
+
+  bl64_dbg_lib_show_info 'login to gcp'
+  bl64_gcp_run_gcloud \
+    auth \
+    activate-service-account \
+    --key-file "$key_file" \
+    --project "$project"
+}
+
+function _bl64_gcp_configure() {
+  bl64_dbg_lib_show_function
+
+  if [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_LIB_VAR_FALSE" ]]; then
+
+    bl64_dbg_lib_show_info 'create BL64_GCP_CONFIGURATION'
+    bl64_gcp_run_gcloud \
+      config \
+      configurations \
+      create "$BL64_GCP_CONFIGURATION_NAME" &&
+      BL64_GCP_CONFIGURATION_CREATED="$BL64_LIB_VAR_TRUE"
+
+  else
+    :
+  fi
 }
 
 #######################################
@@ -3714,7 +3901,7 @@ function bl64_msg_show_batch_finish() {
 #######################################
 # BashLib64 / Module / Setup / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.0.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -3734,75 +3921,43 @@ function bl64_os_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/bin/false'
-    BL64_OS_CMD_GAWK='/usr/bin/gawk'
-    BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_ARC_CMD_TAR='/bin/tar'
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_CAT='/usr/bin/cat'
     BL64_OS_CMD_DATE=/usr'/bin/date'
     BL64_OS_CMD_FALSE='/usr/bin/false'
-    BL64_OS_CMD_GAWK='/usr/bin/gawk'
-    BL64_OS_CMD_GREP='/usr/bin/grep'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_ARC_CMD_TAR='/bin/tar'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_ALP}-*)
-    BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/bin/false'
-    BL64_OS_CMD_GAWK='/usr/bin/gawk'
-    BL64_OS_CMD_GREP='/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_ARC_CMD_TAR='/bin/tar'
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_OS_CMD_AWK='/usr/bin/awk'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/usr/bin/false'
-    BL64_OS_CMD_GAWK="$BL64_LIB_INCOMPATIBLE"
-    BL64_OS_CMD_GREP='/usr/bin/grep'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_ID='/usr/bin/id'
-    BL64_ARC_CMD_TAR='/usr/bin/tar'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/usr/bin/uname'
     ;;
   *) bl64_check_show_unsupported ;;
   esac
-}
-
-#######################################
-# Create command sets for common options
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
-function bl64_os_set_options() {
-  :
 }
 
 #######################################
@@ -3821,24 +3976,16 @@ function bl64_os_set_options() {
 #######################################
 # Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_os_set_alias() {
-  local cmd_mawk='/usr/bin/mawk'
 
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    if [[ -x "$cmd_mawk" ]]; then
-      BL64_OS_ALIAS_AWK="$cmd_mawk"
-    else
-      BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
-    fi
     BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
     ;;
   ${BL64_OS_ALP}-*)
-    BL64_OS_ALIAS_AWK="$BL64_OS_CMD_GAWK --traditional"
     BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_OS_ALIAS_AWK="$BL64_OS_CMD_AWK"
     BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
     ;;
   *) bl64_check_show_unsupported ;;
@@ -3848,7 +3995,7 @@ function bl64_os_set_alias() {
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.13.0
+# Version: 1.14.0
 #######################################
 
 function _bl64_os_match() {
@@ -4017,56 +4164,6 @@ function bl64_os_get_distro() {
 function bl64_os_id_user() {
   bl64_dbg_lib_show_function "$@"
   $BL64_OS_ALIAS_ID_USER "$@"
-}
-
-#######################################
-# OS command wrapper: awk
-#
-# * Detects OS provided awk and selects the best match
-# * The selected awk app is configured for POSIX compatibility and traditional regexp
-# * If gawk is required use the BL64_OS_CMD_GAWK variable instead of this function
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_os_run_awk() {
-  bl64_dbg_lib_show_function "$@"
-  local awk_cmd="$BL64_LIB_INCOMPATIBLE"
-  local awk_flags=' '
-
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    if [[ -x '/usr/bin/gawk' ]]; then
-      awk_cmd='/usr/bin/gawk'
-      awk_flags='--posix'
-    elif [[ -x '/usr/bin/mawk' ]]; then
-      awk_cmd='/usr/bin/mawk'
-    fi
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
-    awk_cmd='/usr/bin/gawk'
-    awk_flags='--posix'
-    ;;
-  ${BL64_OS_ALP}-*)
-    if [[ -x '/usr/bin/gawk' ]]; then
-      awk_cmd='/usr/bin/gawk'
-      awk_flags='--posix'
-    fi
-    ;;
-  ${BL64_OS_MCOS}-*)
-    awk_cmd='/usr/bin/awk'
-    ;;
-  *) bl64_check_show_unsupported ;;
-  esac
-  bl64_check_command "$awk_cmd" || return $?
-
-  # shellcheck disable=SC2086
-  "$awk_cmd" $awk_flags "$@"
 }
 
 #######################################
@@ -4399,7 +4496,7 @@ function bl64_pkg_cleanup() {
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -4423,43 +4520,21 @@ function bl64_py_set_command() {
   # Define distro native Python versions
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    BL64_PY_CMD_PYTHON36='/usr/bin/python3'
-    ;;
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*) BL64_PY_CMD_PYTHON36='/usr/bin/python3' ;;
   ${BL64_OS_CNT}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_OL}-8.*)
     BL64_PY_CMD_PYTHON36='/usr/bin/python3'
     BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
     ;;
-  ${BL64_OS_RHEL}-9.*)
-    BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
-    ;;
-  ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.*)
-    BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
-    ;;
-  ${BL64_OS_FD}-35.*)
-    BL64_PY_CMD_PYTHON310='/usr/bin/python3.10'
-    ;;
-  ${BL64_OS_DEB}-9.*)
-    BL64_PY_CMD_PYTHON35='/usr/bin/python3.5'
-    ;;
-  ${BL64_OS_DEB}-10.*)
-    BL64_PY_CMD_PYTHON37='/usr/bin/python3.7'
-    ;;
-  ${BL64_OS_DEB}-11.*)
-    BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
-    ;;
-  ${BL64_OS_UB}-20.*)
-    BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
-    ;;
-  ${BL64_OS_UB}-21.*)
-    BL64_PY_CMD_PYTHON310='/usr/bin/python3.10'
-    ;;
-  ${BL64_OS_ALP}-3.*)
-    BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
-    ;;
-  ${BL64_OS_MCOS}-12.*)
-    BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
-    ;;
+  ${BL64_OS_RHEL}-9.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+  ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+  ${BL64_OS_FD}-35.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
+  ${BL64_OS_DEB}-9.*) BL64_PY_CMD_PYTHON35='/usr/bin/python3.5' ;;
+  ${BL64_OS_DEB}-10.*) BL64_PY_CMD_PYTHON37='/usr/bin/python3.7' ;;
+  ${BL64_OS_DEB}-11.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+  ${BL64_OS_UB}-20.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+  ${BL64_OS_UB}-21.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
+  ${BL64_OS_ALP}-3.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+  ${BL64_OS_MCOS}-12.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
   *) bl64_check_show_unsupported ;;
   esac
 
@@ -4477,6 +4552,7 @@ function bl64_py_set_command() {
   else
     BL64_PY_CMD_PYTHON3="/usr/bin/python3"
   fi
+
 }
 
 #######################################
@@ -4503,31 +4579,8 @@ function bl64_py_set_options() {
 #######################################
 # BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
-
-#######################################
-# Python PIP caller
-#
-# Arguments:
-#   $@: arguments are passes as-is
-# Outputs:
-#   STDOUT: PIP output
-#   STDERR: PIP error
-# Returns:
-#   PIP exit status
-#######################################
-function bl64_py_run_pip() {
-  bl64_dbg_lib_show_function "$@"
-  local debug=''
-
-  bl64_check_command "$BL64_PY_CMD_PYTHON3" || return $?
-
-  bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_VERBOSE"
-
-  bl64_dbg_lib_show_info "arguments:[$*]"
-  "$BL64_PY_CMD_PYTHON3" -m 'pip' $debug "$@"
-}
 
 #######################################
 # Get Python PIP version
@@ -4545,7 +4598,7 @@ function bl64_py_pip_get_version() {
   bl64_dbg_lib_show_function
   local -a version
 
-  read -r -a version < <("$BL64_PY_CMD_PYTHON3" -m 'pip' "$BL64_PY_SET_PIP_VERSION")
+  read -r -a version < <(bl64_py_run_pip "$BL64_PY_SET_PIP_VERSION")
   if [[ "${version[1]}" == [0-9.]* ]]; then
     printf '%s' "${version[1]}"
   else
@@ -4612,6 +4665,45 @@ function bl64_py_pip_usr_install() {
     'install' \
     $BL64_PY_SET_PIP_USER \
     "$@"
+}
+
+#######################################
+# Python wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_py_run_python() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_command "$BL64_PY_CMD_PYTHON3" || return $?
+
+  "$BL64_PY_CMD_PYTHON3" "$@"
+}
+
+#######################################
+# Python PIP wrapper
+#
+# Arguments:
+#   $@: arguments are passes as-is
+# Outputs:
+#   STDOUT: PIP output
+#   STDERR: PIP error
+# Returns:
+#   PIP exit status
+#######################################
+function bl64_py_run_pip() {
+  bl64_dbg_lib_show_function "$@"
+  local debug=''
+
+  bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_VERBOSE"
+
+  bl64_py_run_python -m 'pip' $debug "$@"
 }
 
 #######################################
@@ -4706,7 +4798,7 @@ function bl64_rbac_add_root() {
 
   umask 0266
   # shellcheck disable=SC2016
-  bl64_os_run_awk \
+  bl64_txt_run_awk \
     -v ControlUsr="$user" \
     '
       BEGIN { Found = 0 }
@@ -5322,6 +5414,64 @@ function _bl64_rxtx_restore() {
 }
 
 #######################################
+# BashLib64 / Module / Setup / Manipulate text files content
+#
+# Version: 1.0.0
+#######################################
+
+#######################################
+# Identify and normalize common *nix OS commands
+# Commands are exported as variables with full path
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok, even when the OS is not supported
+#######################################
+# Warning: bootstrap function: use pure bash, no return, no exit
+function bl64_txt_set_command() {
+  # shellcheck disable=SC2034
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_TXT_CMD_AWK='/usr/bin/awk'
+    BL64_TXT_CMD_GAWK='/usr/bin/gawk'
+    BL64_TXT_CMD_GREP='/bin/grep'
+    BL64_TXT_CMD_SED='/bin/sed'
+    BL64_TXT_CMD_TR='/usr/bin/tr'
+    BL64_TXT_CMD_BASE64='/usr/bin/base64'
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+    BL64_TXT_CMD_AWK='/usr/bin/awk'
+    BL64_TXT_CMD_GAWK='/usr/bin/gawk'
+    BL64_TXT_CMD_GREP='/usr/bin/grep'
+    BL64_TXT_CMD_SED='/usr/bin/sed'
+    BL64_TXT_CMD_TR='/usr/bin/tr'
+    BL64_TXT_CMD_BASE64='/usr/bin/base64'
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_TXT_CMD_AWK='/usr/bin/awk'
+    BL64_TXT_CMD_GAWK='/usr/bin/gawk'
+    BL64_TXT_CMD_GREP='/bin/grep'
+    BL64_TXT_CMD_SED='/bin/sed'
+    BL64_TXT_CMD_TR='/usr/bin/tr'
+    BL64_TXT_CMD_BASE64='/bin/base64'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_TXT_CMD_AWK='/usr/bin/awk'
+    BL64_TXT_CMD_GAWK="$BL64_LIB_INCOMPATIBLE"
+    BL64_TXT_CMD_GREP='/usr/bin/grep'
+    BL64_TXT_CMD_SED='/usr/bin/sed'
+    BL64_TXT_CMD_TR='/usr/bin/tr'
+    BL64_TXT_CMD_BASE64='/usr/bin/base64'
+    ;;
+  *) bl64_check_show_unsupported ;;
+  esac
+}
+
+#######################################
 # BashLib64 / Module / Functions / Manipulate text files content
 #
 # Version: 1.1.0
@@ -5345,7 +5495,57 @@ function bl64_txt_search_line() {
   local source="${1:--}"
   local line="$2"
 
-  "$BL64_OS_CMD_GREP" -E "^${line}$" "$source" > /dev/null
+  "$BL64_TXT_CMD_GREP" -E "^${line}$" "$source" > /dev/null
+}
+
+#######################################
+# OS command wrapper: awk
+#
+# * Detects OS provided awk and selects the best match
+# * The selected awk app is configured for POSIX compatibility and traditional regexp
+# * If gawk is required use the BL64_TXT_CMD_GAWK variable instead of this function
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_txt_run_awk() {
+  bl64_dbg_lib_show_function "$@"
+  local awk_cmd="$BL64_LIB_INCOMPATIBLE"
+  local awk_flags=' '
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    if [[ -x '/usr/bin/gawk' ]]; then
+      awk_cmd='/usr/bin/gawk'
+      awk_flags='--posix'
+    elif [[ -x '/usr/bin/mawk' ]]; then
+      awk_cmd='/usr/bin/mawk'
+    fi
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+    awk_cmd='/usr/bin/gawk'
+    awk_flags='--posix'
+    ;;
+  ${BL64_OS_ALP}-*)
+    if [[ -x '/usr/bin/gawk' ]]; then
+      awk_cmd='/usr/bin/gawk'
+      awk_flags='--posix'
+    fi
+    ;;
+  ${BL64_OS_MCOS}-*)
+    awk_cmd='/usr/bin/awk'
+    ;;
+  *) bl64_check_show_unsupported ;;
+  esac
+  bl64_check_command "$awk_cmd" || return $?
+
+  # shellcheck disable=SC2086
+  "$awk_cmd" $awk_flags "$@"
 }
 
 #######################################
@@ -5583,7 +5783,7 @@ function bl64_xsv_dump() {
   bl64_check_parameter 'source' &&
     bl64_check_file "$source" "$_BL64_XSV_TXT_SOURCE_NOT_FOUND" || return $?
 
-  "$BL64_OS_CMD_GREP" -v -E '^#.*$|^$' "$source"
+  "$BL64_TXT_CMD_GREP" -v -E '^#.*$|^$' "$source"
 
 }
 
@@ -5619,7 +5819,7 @@ function bl64_xsv_search_records() {
   bl64_check_parameter 'values' 'search value' || return $?
 
   # shellcheck disable=SC2016
-  bl64_os_run_awk \
+  bl64_txt_run_awk \
     -F "$fs_src" \
     -v VALUES="${values}" \
     -v KEYS="$keys" \
@@ -5666,7 +5866,7 @@ function bl64_xsv_search_records() {
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 #
@@ -5733,8 +5933,8 @@ if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" || ("${BASH_VERSINFO[0]}" != '4' && "$
   false
 else
   bl64_os_set_command
-  bl64_os_set_options
   bl64_os_set_alias
+  bl64_txt_set_command
   bl64_fs_set_command
   bl64_fs_set_options
   bl64_fs_set_alias
@@ -5756,6 +5956,8 @@ else
   bl64_py_set_command
   bl64_py_set_options
   bl64_cnt_set_command
+  bl64_gcp_set_command
+  bl64_gcp_set_options
 
   # Set signal handlers
   # shellcheck disable=SC2064

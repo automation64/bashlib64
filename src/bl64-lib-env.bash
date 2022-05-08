@@ -39,8 +39,11 @@ export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
 # Default value for parameters
 export BL64_LIB_DEFAULT='_'
 
-# Flag for incompatible command
-export BL64_LIB_INCOMPATIBLE='_X_'
+# Flag for incompatible command o task
+export BL64_LIB_INCOMPATIBLE='_INC_'
+
+# Flag for unavailable command o task
+export BL64_LIB_UNAVAILABLE='_UNV_'
 
 # Pseudo null value
 export BL64_LIB_VAR_NULL='__'

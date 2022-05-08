@@ -1,31 +1,8 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
-
-#######################################
-# Python PIP caller
-#
-# Arguments:
-#   $@: arguments are passes as-is
-# Outputs:
-#   STDOUT: PIP output
-#   STDERR: PIP error
-# Returns:
-#   PIP exit status
-#######################################
-function bl64_py_run_pip() {
-  bl64_dbg_lib_show_function "$@"
-  local debug=''
-
-  bl64_check_command "$BL64_PY_CMD_PYTHON3" || return $?
-
-  bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_VERBOSE"
-
-  bl64_dbg_lib_show_info "arguments:[$*]"
-  "$BL64_PY_CMD_PYTHON3" -m 'pip' $debug "$@"
-}
 
 #######################################
 # Get Python PIP version
@@ -43,7 +20,7 @@ function bl64_py_pip_get_version() {
   bl64_dbg_lib_show_function
   local -a version
 
-  read -r -a version < <("$BL64_PY_CMD_PYTHON3" -m 'pip' "$BL64_PY_SET_PIP_VERSION")
+  read -r -a version < <(bl64_py_run_pip "$BL64_PY_SET_PIP_VERSION")
   if [[ "${version[1]}" == [0-9.]* ]]; then
     printf '%s' "${version[1]}"
   else
@@ -110,4 +87,43 @@ function bl64_py_pip_usr_install() {
     'install' \
     $BL64_PY_SET_PIP_USER \
     "$@"
+}
+
+#######################################
+# Python wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_py_run_python() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_command "$BL64_PY_CMD_PYTHON3" || return $?
+
+  "$BL64_PY_CMD_PYTHON3" "$@"
+}
+
+#######################################
+# Python PIP wrapper
+#
+# Arguments:
+#   $@: arguments are passes as-is
+# Outputs:
+#   STDOUT: PIP output
+#   STDERR: PIP error
+# Returns:
+#   PIP exit status
+#######################################
+function bl64_py_run_pip() {
+  bl64_dbg_lib_show_function "$@"
+  local debug=''
+
+  bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_VERBOSE"
+
+  bl64_py_run_python -m 'pip' $debug "$@"
 }

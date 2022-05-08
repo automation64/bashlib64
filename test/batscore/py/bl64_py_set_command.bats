@@ -12,9 +12,3 @@ setup() {
   assert_not_equal "$BL64_PY_CMD_PYTHON310" ''
 
 }
-
-@test "bl64_py_set_command: commands are present" {
-
-  assert_file_executable "$BL64_PY_CMD_PYTHON3"
-
-}

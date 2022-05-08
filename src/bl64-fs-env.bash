@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 readonly _BL64_FS_TXT_MISSING_PARAMETER='required parameters are missing'
@@ -24,6 +24,7 @@ export BL64_FS_ALIAS_LS_FILES=''
 export BL64_FS_ALIAS_MKDIR_FULL=''
 export BL64_FS_ALIAS_MV=''
 export BL64_FS_ALIAS_RM_FILE=''
+export BL64_FS_ALIAS_RM_FULL=''
 
 export BL64_FS_SET_CHMOD_RECURSIVE=''
 export BL64_FS_SET_CHMOD_VERBOSE=''
