@@ -136,8 +136,29 @@ function bl64_cnt_podman_login() {
 }
 
 #######################################
+# Open a container image using sh
+#
+# * Ignores entrypointt
+#
+# Arguments:
+#   $1: container
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_cnt_run_sh() {
+  bl64_dbg_lib_show_function "$@"
+  local container="$1"
 
-# Runs a container source using interactive settings
+  bl64_check_parameter 'container' || return $?
+
+  bl64_cnt_run_interactive --entrypoint 'sh' "$container"
+}
+
+#######################################
+# Runs a container image using interactive settings
 #
 # * Allows signals
 # * Attaches tty
