@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage archive files
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -22,15 +22,19 @@ function bl64_arc_set_command() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_ARC_CMD_TAR='/bin/tar'
+    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
     BL64_ARC_CMD_TAR='/bin/tar'
+    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_ARC_CMD_TAR='/bin/tar'
+    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_ARC_CMD_TAR='/usr/bin/tar'
+    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
     ;;
   *) bl64_check_show_unsupported ;;
   esac
@@ -51,10 +55,12 @@ function bl64_arc_set_command() {
 function bl64_arc_set_options() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_MCOS}-*)
-    BL64_ARC_SET_VERBOSE='--verbose'
+    BL64_ARC_SET_TAR_VERBOSE='--verbose'
+    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
     ;;
   ${BL64_OS_ALP}-*)
-    BL64_ARC_SET_VERBOSE='-v'
+    BL64_ARC_SET_TAR_VERBOSE='-v'
+    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
     ;;
   *) bl64_check_show_unsupported ;;
   esac
