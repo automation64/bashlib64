@@ -3,7 +3,7 @@
 ## Header
 
 ```shell
-{% include "../src/bl64-dbg.env" %}
+{% include "../src/bl64-dbg-env.bash" %}
 ```
 
 ## Code

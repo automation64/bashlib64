@@ -3,7 +3,7 @@
 ## Header
 
 ```shell
-{% include "../src/bl64-iam.env" %}
+{% include "../src/bl64-iam-env.bash" %}
 ```
 
 ## Code
