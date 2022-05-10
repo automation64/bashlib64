@@ -17,7 +17,7 @@ export TERM
 # Set Command flag (On/Off)
 export BL64_LIB_CMD="${BL64_LIB_CMD:-0}"
 
-# Set Verbosity flag (On/Off)
+# Set Verbosity flag (BL64_MSG_VERBOSE_APP)
 export BL64_LIB_VERBOSE="${BL64_LIB_VERBOSE:-1}"
 
 # Set Debug flag (On/Off)
