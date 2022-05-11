@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -555,4 +555,84 @@ function _bl64_cnt_login_put_password() {
     "$BL64_OS_CMD_CAT" "$file"
   fi
 
+}
+
+#######################################
+# Assigns a new name to an existing image
+#
+# Arguments:
+#   $1: source. Format: image[:tag]
+#   $2: target. Format: image[:tag]
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_cnt_tag() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local target="$2"
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'target' ||
+    return $?
+
+  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
+    bl64_cnt_docker_tag "$source" "$target"
+  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
+    bl64_cnt_podman_tag "$source" "$target"
+  else
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_MISSING
+  fi
+}
+
+#######################################
+# Command wrapper: docker tag
+#
+# Arguments:
+#   $1: source. Format: image[:tag]
+#   $2: target. Format: image[:tag]
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_docker_tag() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local target="$2"
+
+  bl64_cnt_run_docker \
+    tag \
+    "$source" \
+    "$target"
+}
+
+#######################################
+# Command wrapper: podman tag
+#
+# Arguments:
+#   $1: source. Format: image[:tag]
+#   $2: target. Format: image[:tag]
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_podman_tag() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local target="$2"
+
+  bl64_cnt_run_podman \
+    tag \
+    "$source" \
+    "$target"
 }
