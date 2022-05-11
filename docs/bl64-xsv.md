@@ -3,7 +3,7 @@
 ## Header
 
 ```shell
-{% include "../src/bl64-xsv.env" %}
+{% include "../src/bl64-xsv-env.bash" %}
 ```
 
 ## Code

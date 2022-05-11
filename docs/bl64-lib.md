@@ -4,7 +4,7 @@
 
 ```shell
 {% include "../src/bl64-lib.header" %}
-{% include "../src/bl64-lib.env" %}
+{% include "../src/bl64-lib-env.bash" %}
 ```
 
 ## Code

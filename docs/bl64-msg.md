@@ -3,7 +3,7 @@
 ## Header
 
 ```shell
-{% include "../src/bl64-msg.env" %}
+{% include "../src/bl64-msg-env.bash" %}
 ```
 
 ## Code

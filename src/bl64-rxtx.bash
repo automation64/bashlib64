@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Transfer and Receive data over the network
 #
-# Version: 1.10.0
+# Version: 1.11.0
 #######################################
 
 #######################################
@@ -35,6 +35,7 @@ function bl64_rxtx_web_get_file() {
   [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]] && return 0
   _bl64_rxtx_backup "$destination" >/dev/null || return $?
 
+  bl64_msg_show_lib_task "$_BL64_RXTX_TXT_DOWNLOAD_FILE ($source)"
   # shellcheck disable=SC2086
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
     bl64_rxtx_run_curl \

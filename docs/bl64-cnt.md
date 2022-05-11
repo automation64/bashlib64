@@ -3,7 +3,7 @@
 ## Header
 
 ```shell
-{% include "../src/bl64-cnt.env" %}
+{% include "../src/bl64-cnt-env.bash" %}
 ```
 
 ## Code

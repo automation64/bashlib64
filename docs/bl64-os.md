@@ -3,7 +3,7 @@
 ## Header
 
 ```shell
-{% include "../src/bl64-os.env" %}
+{% include "../src/bl64-os-env.bash" %}
 ```
 
 ## Code

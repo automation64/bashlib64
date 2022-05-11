@@ -3,7 +3,7 @@
 ## Header
 
 ```shell
-{% include "../src/bl64-arc.env" %}
+{% include "../src/bl64-arc-env.bash" %}
 ```
 
 ## Code

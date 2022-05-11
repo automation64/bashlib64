@@ -1,8 +1,12 @@
 #######################################
 # BashLib64 / Module / Globals / Msg / Display messages
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
+
+export BL64_MSG_VERBOSE_NONE='0'
+export BL64_MSG_VERBOSE_APP='1'
+export BL64_MSG_VERBOSE_LIB='2'
 
 export BL64_MSG_FORMAT_PLAIN='R'
 export BL64_MSG_FORMAT_HOST='H'
