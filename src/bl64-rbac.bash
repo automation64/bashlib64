@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage role based access service
 #
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 #######################################
@@ -29,6 +29,7 @@ function bl64_rbac_add_root() {
     bl64_rbac_check_sudoers "$BL64_RBAC_FILE_SUDOERS" ||
     return $?
 
+  bl64_msg_show_lib_task "$_BL64_RBAC_TXT_ADD_ROOT ($user)"
   umask 0266
   # shellcheck disable=SC2016
   bl64_txt_run_awk \
@@ -56,6 +57,7 @@ function bl64_rbac_add_root() {
     status=$BL64_LIB_ERROR_TASK_FAILED
   fi
 
+  # shellcheck disable=SC2086
   return $status
 }
 
@@ -75,14 +77,18 @@ function bl64_rbac_check_sudoers() {
   bl64_dbg_lib_show_function "$@"
   local sudoers="$1"
   local -i status=0
+  local debug='--quiet'
 
-  bl64_check_privilege_root &&
+  bl64_check_parameter 'sudoers' &&
     bl64_check_command "$BL64_RBAC_CMD_VISUDO" ||
     return $?
 
+  bl64_dbg_lib_command_enabled && debug=' '
+
   "$BL64_RBAC_CMD_VISUDO" \
+    $debug \
     --check \
-    --file "$sudoers"
+    --file="$sudoers"
   status=$?
 
   if ((status != 0)); then

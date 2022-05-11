@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.0]
+
+### Added
+
+- arc
+  - new functions: bl64_arc_run_tar, bl64_arc_open_zip
+- msg
+  - new functions: bl64_msg_show_lib_task, bl64_msg_verbose_app_enabled, bl64_msg_verbose_lib_enabled
+  - library level verbose option
+- cnt
+  - new function: bl64_cnt_run_sh, bl64_cnt_tag
+
 ## [2.4.0]
 
 ### Added

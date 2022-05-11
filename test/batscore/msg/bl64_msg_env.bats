@@ -11,4 +11,10 @@ setup() {
   assert_equal "$BL64_MSG_FORMAT_CALLER" 'C'
   assert_equal "$BL64_MSG_FORMAT_FULL" 'F'
 
+  assert_equal "$BL64_MSG_VERBOSE_NONE" '0'
+  assert_equal "$BL64_MSG_VERBOSE_APP" '1'
+  assert_equal "$BL64_MSG_VERBOSE_LIB" '2'
+
+  assert_not_equal "$BL64_MSG_FORMAT" ''
+
 }
