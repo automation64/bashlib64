@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.0]
+
+### Added
+
+- all: add Rocky Linux 8, Ubuntu 22.4 support
+
 ## [2.5.0]
 
 ### Added
