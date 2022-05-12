@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manipulate text files content
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -54,7 +54,7 @@ function bl64_txt_run_awk() {
       awk_cmd='/usr/bin/mawk'
     fi
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     awk_cmd='/usr/bin/gawk'
     awk_flags='--posix'
     ;;

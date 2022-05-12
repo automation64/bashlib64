@@ -60,8 +60,10 @@ The library has been tested on the following operating systems:
 - OracleLinux7
 - OracleLinux8
 - RedHatLinux8
+- RockyLinux
 - Ubuntu20
 - Ubuntu21
+- Ubuntu22
 
 ### Prerequisites
 
