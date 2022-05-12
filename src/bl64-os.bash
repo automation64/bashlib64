@@ -81,6 +81,7 @@ function _bl64_os_get_distro_from_os_release() {
     [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-35" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-35.0"
     ;;
   ${BL64_OS_OL}-7* | ${BL64_OS_OL}-8*) : ;;
+  ${BL64_OS_RCK}-8*) : ;;
   ${BL64_OS_RHEL}-8*) : ;;
   ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21*) : ;;
   *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;
@@ -118,6 +119,7 @@ function bl64_os_match() {
     'FD' | FD-*) _bl64_os_match "$BL64_OS_FD" "$item" && return 0 ;;
     'MCOS' | MCOS-*) _bl64_os_match "$BL64_OS_MCOS" "$item" && return 0 ;;
     'OL' | OL-*) _bl64_os_match "$BL64_OS_OL" "$item" && return 0 ;;
+    'RCK' | RCK-*) _bl64_os_match "$BL64_OS_RCK" "$item" && return 0 ;;
     'RHEL' | RHEL-*) _bl64_os_match "$BL64_OS_RHEL" "$item" && return 0 ;;
     'UB' | UB-*) _bl64_os_match "$BL64_OS_UB" "$item" && return 0 ;;
     *) return $BL64_LIB_ERROR_OS_TAG_INVALID ;;
