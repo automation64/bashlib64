@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manipulate text files content
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -28,7 +28,7 @@ function bl64_txt_set_command() {
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_BASE64='/usr/bin/base64'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_TXT_CMD_AWK='/usr/bin/awk'
     BL64_TXT_CMD_GAWK='/usr/bin/gawk'
     BL64_TXT_CMD_GREP='/usr/bin/grep'

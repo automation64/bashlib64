@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage local filesystem
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -32,7 +32,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_MV='/bin/mv'
     BL64_FS_CMD_RM='/bin/rm'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_FS_CMD_CHMOD='/usr/bin/chmod'
     BL64_FS_CMD_CHOWN='/usr/bin/chown'
     BL64_FS_CMD_CP='/usr/bin/cp'
@@ -87,7 +87,7 @@ function bl64_fs_set_command() {
 function bl64_fs_set_options() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_FS_SET_MKDIR_VERBOSE='--verbose'
     BL64_FS_SET_MKDIR_PARENTS='--parents'
     BL64_FS_SET_CHOWN_VERBOSE='--verbose'
@@ -159,7 +159,7 @@ function bl64_fs_set_alias() {
   local cmd_mawk='/usr/bin/mawk'
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_FS_ALIAS_LN_SYMBOLIC="${BL64_FS_CMD_LN} --verbose --symbolic"
     BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} --color=never"
     ;;

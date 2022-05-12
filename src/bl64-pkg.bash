@@ -53,7 +53,7 @@ function bl64_pkg_prepare() {
   bl64_msg_show_task "$_BL64_PKG_TXT_PREPARE"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
     "$BL64_PKG_CMD_DNF" $verbose makecache
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -104,7 +104,7 @@ function bl64_pkg_install() {
   bl64_msg_show_task "$_BL64_PKG_TXT_INSTALL"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
     "$BL64_PKG_CMD_DNF" $verbose ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install -- "$@"
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -156,7 +156,7 @@ function bl64_pkg_cleanup() {
   bl64_msg_show_task "$_BL64_PKG_TXT_CLEAN"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
     "$BL64_PKG_CMD_DNF" clean all $verbose
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)

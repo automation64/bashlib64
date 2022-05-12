@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage archive files
 #
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 #######################################
@@ -90,7 +90,7 @@ function bl64_arc_open_tar() {
   cd "$destination"
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     bl64_arc_run_tar \
       --overwrite \
       --extract \
