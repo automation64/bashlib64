@@ -9,10 +9,12 @@
 <span class=normal> 9</span>
 <span class=normal>10</span>
 <span class=normal>11</span>
-<span class=normal>12</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>12</span>
+<span class=normal>13</span>
+<span class=normal>14</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Globals / Manage Version Control System</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.3.0</span>
+<span class=c1># Version: 1.4.0</span>
 <span class=c1>#######################################</span>
 
 <span class=nb>export</span> <span class=nv>BL64_VCS_CMD_GIT</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
@@ -21,6 +23,8 @@
 
 <span class=nb>export</span> <span class=nv>BL64_VCS_SET_GIT_NO_PAGER</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_VCS_SET_GIT_QUIET</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
+
+<span class=nb>readonly</span> <span class=nv>_BL64_VCS_TXT_CLONE_REPO</span><span class=o>=</span><span class=s1>&#39;clone single branch from GIT repository&#39;</span>
 </code></pre></div> </td></tr></table> <h2 id=code>Code<a class=headerlink href=#code title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>  1</span>
 <span class=normal>  2</span>
 <span class=normal>  3</span>
@@ -153,7 +157,11 @@
 <span class=normal>130</span>
 <span class=normal>131</span>
 <span class=normal>132</span>
-<span class=normal>133</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>133</span>
+<span class=normal>134</span>
+<span class=normal>135</span>
+<span class=normal>136</span>
+<span class=normal>137</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Manage Version Control System</span>
 <span class=c1>#</span>
 <span class=c1># Version: 1.9.0</span>
@@ -189,6 +197,8 @@
 <span class=c1>#</span>
 <span class=c1># * File ownership is set to the current user</span>
 <span class=c1># * Destination is created if not existing</span>
+<span class=c1># * Single branch</span>
+<span class=c1># * Depth = 1</span>
 <span class=c1>#</span>
 <span class=c1># Arguments:</span>
 <span class=c1>#   $1: URL to the GIT repository</span>
@@ -211,7 +221,9 @@
     bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_VCS_CMD_GIT</span><span class=s2>&quot;</span> <span class=o>||</span>
     <span class=k>return</span> <span class=nv>$?</span>
 
-  bl64_fs_create_dir <span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>||</span> returnn <span class=nv>$?</span>
+  bl64_fs_create_dir <span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+
+  bl64_msg_show_lib_task <span class=s2>&quot;</span><span class=nv>$_BL64_VCS_TXT_CLONE_REPO</span><span class=s2> (</span><span class=nv>$source</span><span class=s2>)&quot;</span>
 
   <span class=c1># shellcheck disable=SC2164</span>
   <span class=nb>cd</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>

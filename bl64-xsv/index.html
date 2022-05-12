@@ -163,7 +163,7 @@
   bl64_check_parameter <span class=s1>&#39;source&#39;</span> <span class=o>&amp;&amp;</span>
     bl64_check_file <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$_BL64_XSV_TXT_SOURCE_NOT_FOUND</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
-  <span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_GREP</span><span class=s2>&quot;</span> -v -E <span class=s1>&#39;^#.*$|^$&#39;</span> <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span>
+  <span class=s2>&quot;</span><span class=nv>$BL64_TXT_CMD_GREP</span><span class=s2>&quot;</span> -v -E <span class=s1>&#39;^#.*$|^$&#39;</span> <span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span>
 
 <span class=o>}</span>
 
@@ -199,7 +199,7 @@
   bl64_check_parameter <span class=s1>&#39;values&#39;</span> <span class=s1>&#39;search value&#39;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=c1># shellcheck disable=SC2016</span>
-  bl64_os_run_awk <span class=se>\</span>
+  bl64_txt_run_awk <span class=se>\</span>
     -F <span class=s2>&quot;</span><span class=nv>$fs_src</span><span class=s2>&quot;</span> <span class=se>\</span>
     -v <span class=nv>VALUES</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>values</span><span class=si>}</span><span class=s2>&quot;</span> <span class=se>\</span>
     -v <span class=nv>KEYS</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$keys</span><span class=s2>&quot;</span> <span class=se>\</span>

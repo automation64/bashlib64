@@ -149,14 +149,17 @@
 <span class=normal>149</span>
 <span class=normal>150</span>
 <span class=normal>151</span>
-<span class=normal>152</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=ch>#!/usr/bin/env bash</span>
+<span class=normal>152</span>
+<span class=normal>153</span>
+<span class=normal>154</span>
+<span class=normal>155</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=ch>#!/usr/bin/env bash</span>
 <span class=c1>#######################################</span>
 <span class=c1># BashLib64</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 2.3.0</span>
+<span class=c1># Version: 2.6.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1># Do not inherit aliases and commands</span>
@@ -200,7 +203,7 @@
 <span class=c1># Set Command flag (On/Off)</span>
 <span class=nb>export</span> <span class=nv>BL64_LIB_CMD</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_CMD</span><span class=k>:-</span><span class=nv>0</span><span class=si>}</span><span class=s2>&quot;</span>
 
-<span class=c1># Set Verbosity flag (On/Off)</span>
+<span class=c1># Set Verbosity flag (BL64_MSG_VERBOSE_APP)</span>
 <span class=nb>export</span> <span class=nv>BL64_LIB_VERBOSE</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_VERBOSE</span><span class=k>:-</span><span class=nv>1</span><span class=si>}</span><span class=s2>&quot;</span>
 
 <span class=c1># Set Debug flag (On/Off)</span>
@@ -222,8 +225,11 @@
 <span class=c1># Default value for parameters</span>
 <span class=nb>export</span> <span class=nv>BL64_LIB_DEFAULT</span><span class=o>=</span><span class=s1>&#39;_&#39;</span>
 
-<span class=c1># Flag for incompatible command</span>
-<span class=nb>export</span> <span class=nv>BL64_LIB_INCOMPATIBLE</span><span class=o>=</span><span class=s1>&#39;_X_&#39;</span>
+<span class=c1># Flag for incompatible command o task</span>
+<span class=nb>export</span> <span class=nv>BL64_LIB_INCOMPATIBLE</span><span class=o>=</span><span class=s1>&#39;_INC_&#39;</span>
+
+<span class=c1># Flag for unavailable command o task</span>
+<span class=nb>export</span> <span class=nv>BL64_LIB_UNAVAILABLE</span><span class=o>=</span><span class=s1>&#39;_UNV_&#39;</span>
 
 <span class=c1># Pseudo null value</span>
 <span class=nb>export</span> <span class=nv>BL64_LIB_VAR_NULL</span><span class=o>=</span><span class=s1>&#39;__&#39;</span>
@@ -416,10 +422,12 @@
 <span class=normal>113</span>
 <span class=normal>114</span>
 <span class=normal>115</span>
-<span class=normal>116</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>116</span>
+<span class=normal>117</span>
+<span class=normal>118</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Setup script run-time environment</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.8.0</span>
+<span class=c1># Version: 1.9.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#</span>
@@ -486,8 +494,8 @@ bl64_os_get_distro
   <span class=nb>false</span>
 <span class=k>else</span>
   bl64_os_set_command
-  bl64_os_set_options
   bl64_os_set_alias
+  bl64_txt_set_command
   bl64_fs_set_command
   bl64_fs_set_options
   bl64_fs_set_alias
@@ -509,6 +517,8 @@ bl64_os_get_distro
   bl64_py_set_command
   bl64_py_set_options
   bl64_cnt_set_command
+  bl64_gcp_set_command
+  bl64_gcp_set_options
 
   <span class=c1># Set signal handlers</span>
   <span class=c1># shellcheck disable=SC2064</span>
