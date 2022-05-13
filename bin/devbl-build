@@ -39,7 +39,7 @@ function devbl_build_standalone() {
   for file in $DEVBL_MODULES; do
     bl64_msg_show_task "adding module ${file} code"
     {
-      [[ -f "bl64-${file}-init.bash" ]] && "$BL64_OS_CMD_CAT" "bl64-${file}-init.bash" && bl64_fmt_separator_line
+      [[ -f "bl64-${file}-setup.bash" ]] && "$BL64_OS_CMD_CAT" "bl64-${file}-setup.bash" && bl64_fmt_separator_line
       "$BL64_OS_CMD_CAT" "bl64-${file}.bash" && bl64_fmt_separator_line
     } >>"$DEVBL_BUILD_BASHLIB64"
   done || return 1
