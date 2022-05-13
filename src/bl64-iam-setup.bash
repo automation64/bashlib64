@@ -32,7 +32,7 @@ function bl64_iam_set_command() {
   ${BL64_OS_MCOS}-*)
     BL64_IAM_CMD_USERADD='/usr/bin/dscl'
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -64,6 +64,6 @@ function bl64_iam_set_alias() {
   ${BL64_OS_MCOS}-*)
     BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD -q . -create"
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }

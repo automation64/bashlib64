@@ -1,5 +1,5 @@
 #######################################
-# BashLib64 / Module / Globals / Manage local filesystem
+# BashLib64 / Module / Globals / Interact with GCP CLI
 #
 # Version: 1.0.0
 #######################################

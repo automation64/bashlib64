@@ -30,7 +30,7 @@ function bl64_arc_set_command() {
     BL64_ARC_CMD_TAR='/usr/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -57,6 +57,6 @@ function bl64_arc_set_options() {
     BL64_ARC_SET_TAR_VERBOSE='-v'
     BL64_ARC_SET_UNZIP_OVERWRITE='-o'
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }

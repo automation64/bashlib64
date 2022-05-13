@@ -1,10 +1,8 @@
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
-
-readonly _BL64_FS_TXT_MISSING_PARAMETER='required parameters are missing'
 
 export BL64_FS_CMD_CHMOD=''
 export BL64_FS_CMD_CHOWN=''

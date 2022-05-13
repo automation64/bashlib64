@@ -1,11 +1,13 @@
 #######################################
 # BashLib64 / Module / Functions / Manage archive files
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 #######################################
 # Unzip wrapper debug and common options
+#
+# * Trust noone. Ignore env args
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -17,9 +19,11 @@
 #######################################
 function bl64_arc_run_unzip() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbosity='-qq'
 
   bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
+
   bl64_msg_verbose_lib_enabled && verbosity='-q'
   bl64_dbg_lib_command_enabled && verbosity=' '
 
@@ -45,6 +49,7 @@ function bl64_arc_run_unzip() {
 #######################################
 function bl64_arc_run_tar() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local debug=''
 
   bl64_check_command "$BL64_ARC_CMD_TAR" || return $?
@@ -117,7 +122,7 @@ function bl64_arc_open_tar() {
       --auto-compress \
       --file="$source"
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
   status=$?
 

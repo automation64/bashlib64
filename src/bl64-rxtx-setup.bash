@@ -30,7 +30,7 @@ function bl64_rxtx_set_command() {
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
     BL64_RXTX_CMD_WGET="$BL64_LIB_INCOMPATIBLE"
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -91,7 +91,7 @@ function bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_OUTPUT=''
     BL64_RXTX_SET_WGET_SECURE=''
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -121,6 +121,6 @@ function bl64_rxtx_set_alias() {
     BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
     BL64_RXTX_ALIAS_WGET=''
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }

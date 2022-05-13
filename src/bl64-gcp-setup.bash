@@ -1,5 +1,5 @@
 #######################################
-# BashLib64 / Module / Setup / Manage OS identity and access service
+# BashLib64 / Module / Setup / Interact with GCP CLI
 #
 # Version: 1.1.0
 #######################################

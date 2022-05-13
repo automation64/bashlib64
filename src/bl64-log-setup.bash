@@ -27,7 +27,7 @@ function bl64_log_setup() {
   local type="${3:-$BL64_LOG_TYPE_FILE}"
   local fs="${4:-:}"
 
-  bl64_check_parameter "$path" || return $?
+  bl64_check_parameter 'path' || return $?
 
   # shellcheck disable=SC2086
   if [[ "$type" != "$BL64_LOG_TYPE_FILE" ]]; then
