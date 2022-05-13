@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 #
@@ -67,30 +67,27 @@ if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" || ("${BASH_VERSINFO[0]}" != '4' && "$
   # Warning: return and exit are not used to avoid terminating the shell when using source to load the lib
   false
 else
-  bl64_os_set_command
-  bl64_os_set_alias
-  bl64_txt_set_command
-  bl64_fs_set_command
-  bl64_fs_set_options
-  bl64_fs_set_alias
-  bl64_arc_set_command
-  bl64_arc_set_options
-  bl64_iam_set_command
-  bl64_iam_set_alias
-  bl64_pkb_set_command
-  bl64_pkg_set_options
-  bl64_pkb_set_alias
-  bl64_rbac_set_command
-  bl64_rbac_set_alias
-  bl64_vcs_set_command
-  bl64_vcs_set_options
-  bl64_vcs_set_alias
-  bl64_rxtx_set_command
-  bl64_rxtx_set_options
-  bl64_rxtx_set_alias
-  bl64_py_set_command
-  bl64_py_set_options
-  bl64_cnt_set_command
+  bl64_os_set_command &&
+    bl64_os_set_alias &&
+    bl64_txt_set_command &&
+    bl64_fs_set_command &&
+    bl64_fs_set_options &&
+    bl64_fs_set_alias &&
+    bl64_arc_set_command &&
+    bl64_arc_set_options &&
+    bl64_iam_set_command &&
+    bl64_iam_set_alias &&
+    bl64_pkb_set_command &&
+    bl64_pkg_set_options &&
+    bl64_pkb_set_alias &&
+    bl64_rbac_set_command &&
+    bl64_rbac_set_alias &&
+    bl64_vcs_set_command &&
+    bl64_vcs_set_options &&
+    bl64_vcs_set_alias &&
+    bl64_rxtx_set_command &&
+    bl64_rxtx_set_options &&
+    bl64_rxtx_set_alias
 
   # Set signal handlers
   # shellcheck disable=SC2064
