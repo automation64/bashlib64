@@ -91,8 +91,6 @@ else
   bl64_py_set_command
   bl64_py_set_options
   bl64_cnt_set_command
-  bl64_gcp_set_command
-  bl64_gcp_set_options
 
   # Set signal handlers
   # shellcheck disable=SC2064
