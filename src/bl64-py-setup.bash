@@ -1,8 +1,30 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_py_setup() {
+  bl64_dbg_lib_show_function
+
+  bl64_py_set_command &&
+    bl64_py_set_options
+
+}
 
 #######################################
 # Identify and normalize commands

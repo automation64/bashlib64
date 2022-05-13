@@ -1,8 +1,28 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_cnt_setup() {
+  bl64_dbg_lib_show_function
+
+  bl64_cnt_set_command
+}
 
 #######################################
 # Identify and normalize commands
