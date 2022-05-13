@@ -9,6 +9,7 @@
 #
 # * Commands are exported as variables with full path
 # * The caller function is responsible for checking that the target command is present (installed)
+# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -18,7 +19,6 @@
 # Returns:
 #   0: always ok
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_gcp_set_command() {
   bl64_dbg_lib_show_function
 
@@ -41,6 +41,8 @@ function bl64_gcp_set_command() {
 #######################################
 # Create command sets for common options
 #
+# * Warning: bootstrap function
+#
 # Arguments:
 #   None
 # Outputs:
@@ -49,7 +51,6 @@ function bl64_gcp_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_gcp_set_options() {
   BL64_GCP_SET_FORMAT_YAML='--format yaml'
   BL64_GCP_SET_FORMAT_TEXT='--format text'

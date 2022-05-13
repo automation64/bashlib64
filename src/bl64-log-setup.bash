@@ -5,7 +5,7 @@
 #######################################
 
 #######################################
-# Initialize the log repository
+# Setup the bashlib64 module
 #
 # Arguments:
 #   $1: full path to the log repository

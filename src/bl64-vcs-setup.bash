@@ -9,6 +9,7 @@
 #
 # * Commands are exported as variables with full path
 # * The caller function is responsible for checking that the target command is present (installed)
+# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -18,7 +19,6 @@
 # Returns:
 #   0: always ok
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_vcs_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
@@ -34,6 +34,7 @@ function bl64_vcs_set_command() {
 #
 # * Aliases are presented as regular shell variables for easy inclusion in complex commands
 # * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
+# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -43,7 +44,6 @@ function bl64_vcs_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_vcs_set_alias() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
@@ -58,6 +58,8 @@ function bl64_vcs_set_alias() {
 #######################################
 # Create command sets for common options
 #
+# * Warning: bootstrap function
+#
 # Arguments:
 #   None
 # Outputs:
@@ -66,7 +68,6 @@ function bl64_vcs_set_alias() {
 # Returns:
 #   0: always ok
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_vcs_set_options() {
   bl64_dbg_lib_show_function
   # Common sets - unversioned

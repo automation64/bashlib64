@@ -6,7 +6,9 @@
 
 #######################################
 # Identify and normalize common *nix OS commands
-# Commands are exported as variables with full path
+#
+# * Commands are exported as variables with full path
+# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -16,7 +18,7 @@
 # Returns:
 #   0: always ok, even when the OS is not supported
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
+# Warning: bootstrap function
 function bl64_fs_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -75,6 +77,8 @@ function bl64_fs_set_command() {
 #######################################
 # Create command sets for common options
 #
+# * Warning: bootstrap function
+#
 # Arguments:
 #   None
 # Outputs:
@@ -83,7 +87,6 @@ function bl64_fs_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_fs_set_options() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -144,6 +147,7 @@ function bl64_fs_set_options() {
 #
 # * Aliases are presented as regular shell variables for easy inclusion in complex commands
 # * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
+# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -153,7 +157,6 @@ function bl64_fs_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
 # shellcheck disable=SC2034
 function bl64_fs_set_alias() {
   local cmd_mawk='/usr/bin/mawk'

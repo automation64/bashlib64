@@ -145,7 +145,7 @@ function bl64_os_match() {
 # Returns:
 #   0: always ok, even when the OS is not supported
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
+# Warning: bootstrap function
 function bl64_os_get_distro() {
   if [[ -r '/etc/os-release' ]]; then
     _bl64_os_get_distro_from_os_release

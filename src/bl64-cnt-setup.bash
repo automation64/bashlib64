@@ -9,6 +9,7 @@
 #
 # * Commands are exported as variables with full path
 # * The caller function is responsible for checking that the target command is present (installed)
+# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -18,7 +19,6 @@
 # Returns:
 #   0: always ok
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_cnt_set_command() {
   bl64_dbg_lib_show_function
 
