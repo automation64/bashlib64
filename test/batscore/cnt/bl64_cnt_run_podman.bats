@@ -1,5 +1,6 @@
 setup() {
   . "$DEVBL_TEST_SETUP"
+  bl64_cnt_setup
 }
 
 @test "bl64_cnt_run_podman: CLI runs ok" {

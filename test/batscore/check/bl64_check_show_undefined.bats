@@ -3,8 +3,8 @@ setup() {
 
 }
 
-@test "bl64_check_show_undefined: syntax" {
+@test "bl64_check_alert_undefined: syntax" {
 
-  run bl64_check_show_undefined 'test'
+  run bl64_check_alert_undefined 'test'
   assert_failure
 }

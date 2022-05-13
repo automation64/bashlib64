@@ -22,7 +22,6 @@ setup() {
 
   run bl64_check_parameter 'fake_parameter'
   assert_failure
-  assert_equal "$status" $BL64_LIB_ERROR_PARAMETER_EMPTY
 
 }
 
@@ -31,7 +30,6 @@ setup() {
   TEST_PARAMETER="$BL64_LIB_DEFAULT"
   run bl64_check_parameter 'TEST_PARAMETER'
   assert_failure
-  assert_equal "$status" $BL64_LIB_ERROR_PARAMETER_EMPTY
 
 }
 
@@ -39,6 +37,5 @@ setup() {
 
   run bl64_check_parameter
   assert_failure
-  assert_equal "$status" $BL64_LIB_ERROR_PARAMETER_MISSING
 
 }

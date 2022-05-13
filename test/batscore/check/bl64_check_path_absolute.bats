@@ -20,7 +20,6 @@ setup() {
 
   run bl64_check_path_absolute '.'
   assert_failure
-  assert_equal "$status" $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
 
 }
 
@@ -28,7 +27,6 @@ setup() {
 
   run bl64_check_path_absolute 'path/to/file'
   assert_failure
-  assert_equal "$status" $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
 
 }
 
@@ -36,7 +34,6 @@ setup() {
 
   run bl64_check_path_absolute 'path/to/file/'
   assert_failure
-  assert_equal "$status" $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
 
 }
 
@@ -44,7 +41,6 @@ setup() {
 
   run bl64_check_path_absolute './path/to/file/'
   assert_failure
-  assert_equal "$status" $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
 
 }
 
