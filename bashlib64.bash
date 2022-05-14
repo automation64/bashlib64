@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 2.7.0
+# Version: 2.7.1
 #######################################
 
 # Do not inherit aliases and commands
@@ -4616,7 +4616,7 @@ function bl64_os_set_alias() {
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.14.0
+# Version: 1.14.1
 #######################################
 
 function _bl64_os_match() {
@@ -4658,6 +4658,7 @@ function _bl64_os_get_distro_from_uname() {
 
 # Warning: bootstrap function
 function _bl64_os_get_distro_from_os_release() {
+  bl64_dbg_lib_show_function
 
   # shellcheck disable=SC1091
   source '/etc/os-release'
@@ -4762,6 +4763,7 @@ function bl64_os_match() {
 #######################################
 # Warning: bootstrap function
 function bl64_os_get_distro() {
+  bl64_dbg_lib_show_function
   if [[ -r '/etc/os-release' ]]; then
     _bl64_os_get_distro_from_os_release
   else
@@ -4792,7 +4794,7 @@ function bl64_os_id_user() {
 #######################################
 # BashLib64 / Module / Setup / Manage native OS packages
 #
-# Version: 1.1.0
+# Version: 1.1.1
 #######################################
 
 #######################################
@@ -4810,7 +4812,7 @@ function bl64_os_id_user() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_pkb_set_command() {
+function bl64_pkg_set_command() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -4902,7 +4904,7 @@ function bl64_pkg_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_pkb_set_alias() {
+function bl64_pkg_set_alias() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -6536,7 +6538,7 @@ function bl64_xsv_search_records() {
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 1.10.0
+# Version: 1.10.1
 #######################################
 
 #
@@ -6612,9 +6614,9 @@ else
     bl64_arc_set_options &&
     bl64_iam_set_command &&
     bl64_iam_set_alias &&
-    bl64_pkb_set_command &&
+    bl64_pkg_set_command &&
     bl64_pkg_set_options &&
-    bl64_pkb_set_alias &&
+    bl64_pkg_set_alias &&
     bl64_rbac_set_command &&
     bl64_rbac_set_alias &&
     bl64_vcs_set_command &&
@@ -6627,6 +6629,7 @@ else
   # Set signal handlers
   # shellcheck disable=SC2064
   if [[ "$BL64_LIB_TRAPS" == "$BL64_LIB_VAR_ON" ]]; then
+    bl64_dbg_lib_show_info 'enable traps'
     trap "$BL64_LIB_SIGNAL_HUP" 'SIGHUP'
     trap "$BL64_LIB_SIGNAL_STOP" 'SIGINT'
     trap "$BL64_LIB_SIGNAL_QUIT" 'SIGQUIT'
@@ -6641,8 +6644,10 @@ else
 
   # Enable command mode: the library can be used as a stand-alone script to run embeded functions
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
+    bl64_dbg_lib_show_info 'run bashlib64 in command mode'
     "$@"
   else
+    bl64_dbg_lib_show_info 'run bashlib64 in source mode'
     :
   fi
 fi
