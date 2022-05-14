@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage role based access service
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 #######################################
@@ -111,10 +111,9 @@ function bl64_rbac_check_sudoers() {
 #######################################
 function bl64_rbac_run_command() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
 
-  # shellcheck disable=SC2086
-  (($# == 0)) && return $BL64_LIB_ERROR_PARAMETER_MISSING
-  # shellcheck disable=SC2086
+
   bl64_check_command "$BL64_RBAC_CMD_SUDO" || return $?
 
   # Check the effective user id

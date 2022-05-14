@@ -39,7 +39,7 @@ function devbl_build_standalone() {
   for file in $DEVBL_MODULES; do
     bl64_msg_show_task "adding module ${file} code"
     {
-      [[ -f "bl64-${file}-init.bash" ]] && "$BL64_OS_CMD_CAT" "bl64-${file}-init.bash" && bl64_fmt_separator_line
+      [[ -f "bl64-${file}-setup.bash" ]] && "$BL64_OS_CMD_CAT" "bl64-${file}-setup.bash" && bl64_fmt_separator_line
       "$BL64_OS_CMD_CAT" "bl64-${file}.bash" && bl64_fmt_separator_line
     } >>"$DEVBL_BUILD_BASHLIB64"
   done || return 1
@@ -157,7 +157,8 @@ while getopts ':bptdh' devbl_build_option; do
     devbl_build_command='devbl_build_docs'
     devbl_build_command_tag='build library documentation'
     ;;
-  h | \? | *) devbl_build_help && exit ;;
+  h) devbl_build_help && exit ;;
+  *) devbl_build_help && exit 1 ;;
   esac
 done
 devbl_build_check_requirements || exit 1
@@ -165,7 +166,7 @@ devbl_build_check_requirements || exit 1
 bl64_msg_show_batch_start "$devbl_build_command_tag"
 case "$devbl_build_command" in
 'devbl_build_standalone' | 'devbl_build_docs' | 'devbl_promote_test' | 'devbl_promote_prod') "$devbl_build_command" ;;
-*) bl64_check_show_undefined "$devbl_build_command" ;;
+*) bl64_check_alert_undefined "$devbl_build_command" ;;
 esac
 devbl_build_status=$?
 

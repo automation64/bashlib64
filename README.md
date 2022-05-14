@@ -19,11 +19,13 @@ BashLib64 is a **Bash** library that provides a simple abstraction layer for dev
 
 | Module                                                             | Purpose                                            |
 | ------------------------------------------------------------------ | -------------------------------------------------- |
+| [bl64-ans](https://serdigital64.github.io/bashlib64/bl64-ans/)     | Interact with Ansible                              |
 | [bl64-arc](https://serdigital64.github.io/bashlib64/bl64-arc/)     | Manage archive files                               |
 | [bl64-check](https://serdigital64.github.io/bashlib64/bl64-check/) | Check for conditions and report status             |
 | [bl64-cnt](https://serdigital64.github.io/bashlib64/bl64-cnt/)     | Interact with container engines                    |
 | [bl64-dbg](https://serdigital64.github.io/bashlib64/bl64-dbg/)     | Show shell debugging information                   |
 | [bl64-fmt](https://serdigital64.github.io/bashlib64/bl64-fmt/)     | Format text data                                   |
+| [bl64-gcp](https://serdigital64.github.io/bashlib64/bl64-gcp/)     | Interact with Google Cloud CLI                     |
 | [bl64-iam](https://serdigital64.github.io/bashlib64/bl64-iam/)     | Manage OS identity and access service              |
 | [bl64-lib](https://serdigital64.github.io/bashlib64/bl64-lib/)     | Setup script run-time environment                  |
 | [bl64-log](https://serdigital64.github.io/bashlib64/bl64-log/)     | Write messages to logs                             |
@@ -60,7 +62,7 @@ The library has been tested on the following operating systems:
 - OracleLinux7
 - OracleLinux8
 - RedHatLinux8
-- RockyLinux
+- RockyLinux8
 - Ubuntu20
 - Ubuntu21
 - Ubuntu22

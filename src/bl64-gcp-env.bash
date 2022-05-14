@@ -1,8 +1,11 @@
 #######################################
-# BashLib64 / Module / Globals / Manage local filesystem
+# BashLib64 / Module / Globals / Interact with GCP CLI
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
+
+# Optional module. Not enabled by default
+export BL64_GCP_MODULE="$BL64_LIB_VAR_OFF"
 
 export BL64_GCP_CMD_GCLOUD="${BL64_GCP_CMD_GCLOUD:-}"
 

@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.0]
+
+### Added
+
+- ans:
+  - new module
+- gcp
+  - new function: bl64_gcp_setup
+- py
+  - new function: bl64_py_setup
+- cnt
+  - new function: bl64_cnt_setup
+
+### Changed
+
+- gcp
+  - module is now optional
+- py
+  - module is now optional
+- cnt
+  - module is now optional
+- check
+  - renamed bl64_check_show_* to bl64_check_alert_*
+
 ## [2.6.0]
 
 ### Added
@@ -376,7 +400,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.4.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.7.0...HEAD
+[2.7.0]: https://github.com/serdigital64/bashlib64/compare/2.6.0...2.7.0
+[2.6.0]: https://github.com/serdigital64/bashlib64/compare/2.5.0...2.6.0
+[2.5.0]: https://github.com/serdigital64/bashlib64/compare/2.4.0...2.5.0
 [2.4.0]: https://github.com/serdigital64/bashlib64/compare/2.3.0...2.4.0
 [2.3.0]: https://github.com/serdigital64/bashlib64/compare/2.2.0...2.3.0
 [2.2.0]: https://github.com/serdigital64/bashlib64/compare/2.0.0...2.2.0

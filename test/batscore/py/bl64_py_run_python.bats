@@ -1,5 +1,6 @@
 setup() {
   . "$DEVBL_TEST_SETUP"
+  bl64_py_setup
 }
 
 @test "bl64_py_run_python: CLI runs ok" {

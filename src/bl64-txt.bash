@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manipulate text files content
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -42,6 +42,7 @@ function bl64_txt_search_line() {
 #######################################
 function bl64_txt_run_awk() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local awk_cmd="$BL64_LIB_INCOMPATIBLE"
   local awk_flags=' '
 
@@ -67,7 +68,7 @@ function bl64_txt_run_awk() {
   ${BL64_OS_MCOS}-*)
     awk_cmd='/usr/bin/awk'
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
   bl64_check_command "$awk_cmd" || return $?
 

@@ -1,5 +1,6 @@
 setup() {
   . "$DEVBL_TEST_SETUP"
+  bl64_py_setup
 }
 
 @test "bl64_py_set_command: commands are set" {

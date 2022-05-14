@@ -17,6 +17,7 @@
 #######################################
 function bl64_vcs_run_git() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local debug="$BL64_VCS_SET_GIT_QUIET"
 
   bl64_check_command "$BL64_VCS_CMD_GIT" || return $?
