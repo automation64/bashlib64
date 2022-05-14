@@ -6,7 +6,6 @@ setup() {
 
   run bl64_msg_setup
   assert_failure
-  assert_equal "$status" $BL64_LIB_ERROR_MODULE_SETUP_INVALID
 
 }
 
@@ -14,7 +13,6 @@ setup() {
 
   run bl64_msg_setup 'NOT_VALID'
   assert_failure
-  assert_equal "$status" $BL64_LIB_ERROR_MODULE_SETUP_INVALID
 
 }
 
