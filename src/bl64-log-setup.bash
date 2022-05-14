@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Write messages to logs
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -45,5 +45,5 @@ function bl64_log_setup() {
   BL64_LOG_VERBOSE="${verbose}"
   BL64_LOG_TYPE="${type}"
   BL64_LOG_FS="${fs}"
-  return 0
+  BL64_LOG_MODULE="$BL64_LIB_VAR_ON"
 }

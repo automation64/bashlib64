@@ -4,6 +4,8 @@
 # Version: 1.8.0
 #######################################
 
+readonly _BL64_CHECK_TXT_MODULE_NOT_SETUP='required bashlib64 module is not setup. Module must be initialized before usage'
+
 readonly _BL64_CHECK_TXT_PARAMETER_MISSING='required parameter is missing'
 readonly _BL64_CHECK_TXT_PARAMETER_NOT_SET='required shell variable is not set'
 

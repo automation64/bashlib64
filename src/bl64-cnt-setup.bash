@@ -21,7 +21,8 @@
 function bl64_cnt_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_cnt_set_command
+  bl64_cnt_set_command &&
+    BL64_CNT_MODULE="$BL64_LIB_VAR_ON"
 }
 
 #######################################

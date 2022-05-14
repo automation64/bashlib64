@@ -380,9 +380,7 @@ function bl64_check_alert_undefined() {
 }
 
 #######################################
-# Raise undefined command error
-#
-# * Commonly used in the default branch of case statements to catch undefined options
+# Check that parameters are passed
 #
 # Arguments:
 #   $1: total number of parameters from the calling function ($#)
@@ -393,12 +391,35 @@ function bl64_check_alert_undefined() {
 #   BL64_LIB_ERROR_TASK_UNDEFINED
 #######################################
 function bl64_check_parameters_none() {
-
   local count="${1:-0}"
 
   if [[ "$count" == '0' ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_NOARGS} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]})"
     return $BL64_LIB_ERROR_PARAMETER_MISSING
+  else
+    return 0
+  fi
+}
+
+#######################################
+# Check that the optional module is loaded
+#
+# Arguments:
+#   $1: load status (eg: $BL64_XXXX_MODULE)
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_TASK_UNDEFINED
+#######################################
+function bl64_check_module_setup() {
+  local setup_status="${1:-}"
+
+  bl64_check_parameter 'setup_status' || return $?
+
+  if [[ "$setup_status" == "$BL64_LIB_VAR_OFF" ]]; then
+    bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_NOT_SETUP} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]})"
+    return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
   else
     return 0
   fi

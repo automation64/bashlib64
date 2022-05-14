@@ -22,7 +22,8 @@ function bl64_gcp_setup() {
   bl64_dbg_lib_show_function
 
   bl64_gcp_set_command &&
-    bl64_gcp_set_options
+    bl64_gcp_set_options &&
+    BL64_GCP_MODULE="$BL64_LIB_VAR_ON"
 
 }
 

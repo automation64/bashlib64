@@ -1,5 +1,5 @@
 #######################################
-# BashLib64 / Module / Globals / Msg / Display messages
+# BashLib64 / Module / Globals / Display messages
 #
 # Version: 1.7.0
 #######################################

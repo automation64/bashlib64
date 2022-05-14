@@ -255,7 +255,9 @@ function bl64_cnt_run_podman() {
   bl64_check_parameters_none "$#" || return $?
   local verbose='error'
 
-  bl64_check_command "$BL64_CNT_CMD_PODMAN" || return $?
+  bl64_check_module_setup "$BL64_CNT_MODULE" &&
+    bl64_check_command "$BL64_CNT_CMD_PODMAN" ||
+    return $?
 
   bl64_dbg_lib_command_enabled && verbose='debug'
   bl64_dbg_runtime_show_paths
@@ -285,7 +287,9 @@ function bl64_cnt_run_docker() {
   local verbose='error'
   local debug=' '
 
-  bl64_check_command "$BL64_CNT_CMD_DOCKER" || return $?
+  bl64_check_module_setup "$BL64_CNT_MODULE" &&
+    bl64_check_command "$BL64_CNT_CMD_DOCKER" ||
+    return $?
 
   if bl64_dbg_lib_command_enabled; then
     verbose='debug'

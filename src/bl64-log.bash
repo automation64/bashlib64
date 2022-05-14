@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Write messages to logs
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -26,11 +26,7 @@ function _bl64_log_register() {
   local category="$2"
   local payload="$3"
 
-  if [[ -z "$BL64_LOG_PATH" || -z "$BL64_LOG_VERBOSE" || -z "$BL64_LOG_TYPE" || -z "$BL64_LOG_FS" ]]; then
-    bl64_msg_show_error "$_BL64_LOG_TXT_NOT_SETUP"
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
-  fi
+  bl64_check_module_setup "$BL64_LOG_MODULE" || return $?
 
   case "$BL64_LOG_TYPE" in
   "$BL64_LOG_TYPE_FILE")

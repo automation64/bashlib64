@@ -21,8 +21,9 @@ function bl64_gcp_run_gcloud() {
   local debug=' '
   local config=' '
 
-
-  bl64_check_command "$BL64_GCP_CMD_GCLOUD" || return $?
+  bl64_check_module_setup "$BL64_GCP_MODULE" &&
+    bl64_check_command "$BL64_GCP_CMD_GCLOUD" ||
+    return $?
 
   if bl64_dbg_lib_command_enabled; then
     debug='--verbosity debug --log-http'

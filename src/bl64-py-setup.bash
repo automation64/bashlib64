@@ -22,8 +22,8 @@ function bl64_py_setup() {
   bl64_dbg_lib_show_function
 
   bl64_py_set_command &&
-    bl64_py_set_options
-
+    bl64_py_set_options &&
+    BL64_PY_MODULE="$BL64_LIB_VAR_ON"
 }
 
 #######################################
