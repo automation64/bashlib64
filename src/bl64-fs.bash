@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 1.4.0
+# Version: 1.6.0
 #######################################
 
 #######################################
@@ -36,8 +36,7 @@ function bl64_fs_create_dir() {
   shift
   shift
 
-  # shellcheck disable=SC2086
-  (($# == 0)) && bl64_msg_show_error "$_BL64_FS_TXT_MISSING_PARAMETER" && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "paths:[${*}]"
 
   for path in "$@"; do
@@ -100,7 +99,8 @@ function bl64_fs_copy_files() {
   shift
 
   # shellcheck disable=SC2086
-  (($# == 0)) && bl64_msg_show_error "$_BL64_FS_TXT_MISSING_PARAMETER" && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  bl64_check_parameters_none "$#" || return $?
+
   bl64_dbg_lib_show_info "paths:[${*}]"
 
   for path in "$@"; do
@@ -167,7 +167,8 @@ function bl64_fs_merge_files() {
   shift
 
   # shellcheck disable=SC2086
-  (($# == 0)) && bl64_msg_show_error "$_BL64_FS_TXT_MISSING_PARAMETER" && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  bl64_check_parameters_none "$#" || return $?
+
   bl64_dbg_lib_show_info "paths:[${*}]"
 
   for path in "$@"; do
@@ -241,7 +242,7 @@ function bl64_fs_merge_dir() {
       bl64_fs_cp_dir ${source}/* -t "$target" &&
       shopt -uq dotglob
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -585,6 +586,7 @@ function bl64_fs_cleanup_full() {
 #######################################
 function bl64_fs_run_find() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
 
   bl64_check_command "$BL64_FS_CMD_FIND" || return $?
 

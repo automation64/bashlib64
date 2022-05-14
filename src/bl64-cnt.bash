@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -252,9 +252,13 @@ function bl64_cnt_docker_run_interactive() {
 
 function bl64_cnt_run_podman() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbose='error'
 
-  bl64_check_command "$BL64_CNT_CMD_PODMAN" || return $?
+  bl64_check_module_setup "$BL64_CNT_MODULE" &&
+    bl64_check_command "$BL64_CNT_CMD_PODMAN" ||
+    return $?
+
   bl64_dbg_lib_command_enabled && verbose='debug'
   bl64_dbg_runtime_show_paths
 
@@ -279,10 +283,14 @@ function bl64_cnt_run_podman() {
 
 function bl64_cnt_run_docker() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbose='error'
   local debug=' '
 
-  bl64_check_command "$BL64_CNT_CMD_DOCKER" || return $?
+  bl64_check_module_setup "$BL64_CNT_MODULE" &&
+    bl64_check_command "$BL64_CNT_CMD_DOCKER" ||
+    return $?
+
   if bl64_dbg_lib_command_enabled; then
     verbose='debug'
     debug='--debug'

@@ -3,8 +3,8 @@ setup() {
 
 }
 
-@test "bl64_check_show_unsupported: syntax" {
+@test "bl64_check_alert_unsupported: syntax" {
 
-  run bl64_check_show_unsupported 'test'
+  run bl64_check_alert_unsupported 'test'
   assert_failure
 }

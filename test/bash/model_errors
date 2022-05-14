@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+. "$DEVBL_TEST_BASHLIB64"
+
+#
+# Model error messages
+#
+
+function test_check_alerts() {
+  bl64_check_alert_unsupported
+  bl64_check_alert_undefined 'caller'
+  bl64_check_privilege_root
+}
+
+function test_check_args() {
+  export TEST_EXPORT_EMPTY=''
+  export test_parameter_empty=''
+  bl64_check_parameters_none
+  bl64_check_parameter
+  bl64_check_parameter 'test_parameter_empty'
+  bl64_check_parameter 'test_variable_not_defined'
+  bl64_check_export 'TEST_EXPORT_EMPTY'
+  bl64_check_export 'TEST_EXPORT_NOT_DEFINED'
+}
+
+function test_check_commands() {
+  bl64_check_command '/no/command'
+  bl64_check_command '/etc/os-release'
+}
+
+function test_check_paths() {
+  bl64_check_file '/no/file'
+  bl64_check_file '/etc'
+  bl64_check_directory '/no/dir/'
+  bl64_check_directory '/etc/os-release'
+  bl64_check_path_relative '/test/path/'
+  bl64_check_path_absolute 'test/path'
+  bl64_check_overwrite '/etc'
+}
+
+test_check_alerts
+test_check_args
+test_check_commands
+test_check_paths

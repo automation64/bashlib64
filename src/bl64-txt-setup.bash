@@ -6,7 +6,9 @@
 
 #######################################
 # Identify and normalize common *nix OS commands
-# Commands are exported as variables with full path
+#
+# * Commands are exported as variables with full path
+# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -16,7 +18,7 @@
 # Returns:
 #   0: always ok, even when the OS is not supported
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
+# Warning: bootstrap function
 function bl64_txt_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -52,6 +54,6 @@ function bl64_txt_set_command() {
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_BASE64='/usr/bin/base64'
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }

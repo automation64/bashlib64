@@ -9,6 +9,7 @@
 #
 # * Commands are exported as variables with full path
 # * The caller function is responsible for checking that the target command is present (installed)
+# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -18,7 +19,6 @@
 # Returns:
 #   0: always ok
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_rxtx_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
@@ -30,12 +30,14 @@ function bl64_rxtx_set_command() {
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
     BL64_RXTX_CMD_WGET="$BL64_LIB_INCOMPATIBLE"
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }
 
 #######################################
 # Create command sets for common options
+#
+# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -45,7 +47,6 @@ function bl64_rxtx_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_rxtx_set_options() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
@@ -90,7 +91,7 @@ function bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_OUTPUT=''
     BL64_RXTX_SET_WGET_SECURE=''
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -99,6 +100,7 @@ function bl64_rxtx_set_options() {
 #
 # * Aliases are presented as regular shell variables for easy inclusion in complex commands
 # * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
+# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -108,7 +110,6 @@ function bl64_rxtx_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_rxtx_set_alias() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
@@ -120,6 +121,6 @@ function bl64_rxtx_set_alias() {
     BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
     BL64_RXTX_ALIAS_WGET=''
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }

@@ -1,14 +1,36 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_cnt_setup() {
+  bl64_dbg_lib_show_function
+
+  bl64_cnt_set_command &&
+    BL64_CNT_MODULE="$BL64_LIB_VAR_ON"
+}
 
 #######################################
 # Identify and normalize commands
 #
 # * Commands are exported as variables with full path
 # * The caller function is responsible for checking that the target command is present (installed)
+# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -18,7 +40,6 @@
 # Returns:
 #   0: always ok
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_cnt_set_command() {
   bl64_dbg_lib_show_function
 
@@ -33,6 +54,6 @@ function bl64_cnt_set_command() {
     # Docker is available using docker-desktop
     BL64_CNT_CMD_DOCKER='/usr/local/bin/docker'
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }

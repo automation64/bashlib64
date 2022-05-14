@@ -69,7 +69,7 @@ function bl64_pkg_prepare() {
   ${BL64_OS_MCOS}-*)
     "$BL64_PKG_CMD_BRW" update $verbose
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -120,7 +120,7 @@ function bl64_pkg_install() {
   ${BL64_OS_MCOS}-*)
     "$BL64_PKG_CMD_BRW" install $verbose "$@"
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
 
   esac
 }
@@ -176,7 +176,7 @@ function bl64_pkg_cleanup() {
   ${BL64_OS_MCOS}-*)
     "$BL64_PKG_CMD_BRW" cleanup $verbose --prune=all -s
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
 
   esac
 }

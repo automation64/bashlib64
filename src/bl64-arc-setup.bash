@@ -6,7 +6,9 @@
 
 #######################################
 # Identify and normalize common *nix OS commands
-# Commands are exported as variables with full path
+#
+# * Commands are exported as variables with full path
+# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -16,7 +18,7 @@
 # Returns:
 #   0: always ok, even when the OS is not supported
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
+# Warning: bootstrap function
 function bl64_arc_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -28,12 +30,14 @@ function bl64_arc_set_command() {
     BL64_ARC_CMD_TAR='/usr/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }
 
 #######################################
 # Create command sets for common options
+#
+# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -43,7 +47,6 @@ function bl64_arc_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-# Warning: bootstrap function: use pure bash, no return, no exit
 function bl64_arc_set_options() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_MCOS}-*)
@@ -54,6 +57,6 @@ function bl64_arc_set_options() {
     BL64_ARC_SET_TAR_VERBOSE='-v'
     BL64_ARC_SET_UNZIP_OVERWRITE='-o'
     ;;
-  *) bl64_check_show_unsupported ;;
+  *) bl64_check_alert_unsupported ;;
   esac
 }

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -102,8 +102,11 @@ function bl64_py_pip_usr_install() {
 #######################################
 function bl64_py_run_python() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
 
-  bl64_check_command "$BL64_PY_CMD_PYTHON3" || return $?
+  bl64_check_module_setup "$BL64_PY_MODULE" &&
+    bl64_check_command "$BL64_PY_CMD_PYTHON3" ||
+    return $?
 
   "$BL64_PY_CMD_PYTHON3" "$@"
 }
@@ -121,9 +124,10 @@ function bl64_py_run_python() {
 #######################################
 function bl64_py_run_pip() {
   bl64_dbg_lib_show_function "$@"
-  local debug=''
+  local debug="$BL64_PY_SET_PIP_QUIET"
 
-  bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_VERBOSE"
+  bl64_msg_verbose_lib_enabled && debug="$BL64_PY_SET_PIP_VERBOSE"
+  bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
   bl64_py_run_python -m 'pip' $debug "$@"
 }

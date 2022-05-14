@@ -1,5 +1,6 @@
 setup() {
   . "$DEVBL_TEST_SETUP"
+  bl64_cnt_setup
 }
 
 @test "bl64_cnt_set_command: commands are set" {
