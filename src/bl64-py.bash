@@ -124,9 +124,10 @@ function bl64_py_run_python() {
 #######################################
 function bl64_py_run_pip() {
   bl64_dbg_lib_show_function "$@"
-  local debug=''
+  local debug="$BL64_PY_SET_PIP_QUIET"
 
-  bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_VERBOSE"
+  bl64_msg_verbose_lib_enabled && debug="$BL64_PY_SET_PIP_VERBOSE"
+  bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
   bl64_py_run_python -m 'pip' $debug "$@"
 }
