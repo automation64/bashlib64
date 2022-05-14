@@ -193,14 +193,21 @@
 <span class=normal>164</span>
 <span class=normal>165</span>
 <span class=normal>166</span>
-<span class=normal>167</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>167</span>
+<span class=normal>168</span>
+<span class=normal>169</span>
+<span class=normal>170</span>
+<span class=normal>171</span>
+<span class=normal>172</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Manage archive files</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.8.0</span>
+<span class=c1># Version: 1.9.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
 <span class=c1># Unzip wrapper debug and common options</span>
+<span class=c1>#</span>
+<span class=c1># * Trust noone. Ignore env args</span>
 <span class=c1>#</span>
 <span class=c1># Arguments:</span>
 <span class=c1>#   $@: arguments are passed as-is to the command</span>
@@ -212,9 +219,11 @@
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_arc_run_unzip<span class=o>()</span> <span class=o>{</span>
   bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
   <span class=nb>local</span> <span class=nv>verbosity</span><span class=o>=</span><span class=s1>&#39;-qq&#39;</span>
 
   bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_ARC_CMD_UNZIP</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+
   bl64_msg_verbose_lib_enabled <span class=o>&amp;&amp;</span> <span class=nv>verbosity</span><span class=o>=</span><span class=s1>&#39;-q&#39;</span>
   bl64_dbg_lib_command_enabled <span class=o>&amp;&amp;</span> <span class=nv>verbosity</span><span class=o>=</span><span class=s1>&#39; &#39;</span>
 
@@ -240,6 +249,7 @@
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_arc_run_tar<span class=o>()</span> <span class=o>{</span>
   bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
   <span class=nb>local</span> <span class=nv>debug</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 
   bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_ARC_CMD_TAR</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
@@ -312,7 +322,7 @@
       --auto-compress <span class=se>\</span>
       --file<span class=o>=</span><span class=s2>&quot;</span><span class=nv>$source</span><span class=s2>&quot;</span>
     <span class=p>;;</span>
-  *<span class=o>)</span> bl64_check_show_unsupported <span class=p>;;</span>
+  *<span class=o>)</span> bl64_check_alert_unsupported <span class=p>;;</span>
   <span class=k>esac</span>
   <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
 

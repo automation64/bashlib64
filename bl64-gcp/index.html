@@ -11,11 +11,17 @@
 <span class=normal>11</span>
 <span class=normal>12</span>
 <span class=normal>13</span>
-<span class=normal>14</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
-<span class=c1># BashLib64 / Module / Globals / Manage local filesystem</span>
+<span class=normal>14</span>
+<span class=normal>15</span>
+<span class=normal>16</span>
+<span class=normal>17</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=c1># BashLib64 / Module / Globals / Interact with GCP CLI</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.0.0</span>
+<span class=c1># Version: 1.1.0</span>
 <span class=c1>#######################################</span>
+
+<span class=c1># Optional module. Not enabled by default</span>
+<span class=nb>export</span> <span class=nv>BL64_GCP_MODULE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=s2>&quot;</span>
 
 <span class=nb>export</span> <span class=nv>BL64_GCP_CMD_GCLOUD</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_GCP_CMD_GCLOUD</span><span class=k>:-</span><span class=si>}</span><span class=s2>&quot;</span>
 
@@ -118,10 +124,13 @@
 <span class=normal>91</span>
 <span class=normal>92</span>
 <span class=normal>93</span>
-<span class=normal>94</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>94</span>
+<span class=normal>95</span>
+<span class=normal>96</span>
+<span class=normal>97</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Interact with GCP CLI</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.0.0</span>
+<span class=c1># Version: 1.1.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -137,10 +146,13 @@
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_gcp_run_gcloud<span class=o>()</span> <span class=o>{</span>
   bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
   <span class=nb>local</span> <span class=nv>debug</span><span class=o>=</span><span class=s1>&#39; &#39;</span>
   <span class=nb>local</span> <span class=nv>config</span><span class=o>=</span><span class=s1>&#39; &#39;</span>
 
-  bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_GCP_CMD_GCLOUD</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  bl64_check_module_setup <span class=s2>&quot;</span><span class=nv>$BL64_GCP_MODULE</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span>
+    bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_GCP_CMD_GCLOUD</span><span class=s2>&quot;</span> <span class=o>||</span>
+    <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=k>if</span> bl64_dbg_lib_command_enabled<span class=p>;</span> <span class=k>then</span>
     <span class=nv>debug</span><span class=o>=</span><span class=s1>&#39;--verbosity debug --log-http&#39;</span>

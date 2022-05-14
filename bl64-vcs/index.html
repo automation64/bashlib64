@@ -161,7 +161,8 @@
 <span class=normal>134</span>
 <span class=normal>135</span>
 <span class=normal>136</span>
-<span class=normal>137</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>137</span>
+<span class=normal>138</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Manage Version Control System</span>
 <span class=c1>#</span>
 <span class=c1># Version: 1.9.0</span>
@@ -180,6 +181,7 @@
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_vcs_run_git<span class=o>()</span> <span class=o>{</span>
   bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
   <span class=nb>local</span> <span class=nv>debug</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_VCS_SET_GIT_QUIET</span><span class=s2>&quot;</span>
 
   bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_VCS_CMD_GIT</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>

@@ -19,13 +19,25 @@
 <span class=normal>19</span>
 <span class=normal>20</span>
 <span class=normal>21</span>
-<span class=normal>22</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>22</span>
+<span class=normal>23</span>
+<span class=normal>24</span>
+<span class=normal>25</span>
+<span class=normal>26</span>
+<span class=normal>27</span>
+<span class=normal>28</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Globals / Write messages to logs</span>
 <span class=c1>#</span>
 <span class=c1># Version: 1.2.0</span>
 <span class=c1>#######################################</span>
 
+<span class=c1># Optional module. Not enabled by default</span>
+<span class=nb>export</span> <span class=nv>BL64_LOG_MODULE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=s2>&quot;</span>
+
+<span class=c1># Log file types</span>
 <span class=nb>export</span> <span class=nv>BL64_LOG_TYPE_FILE</span><span class=o>=</span><span class=s1>&#39;F&#39;</span>
+
+<span class=c1># Logging categories</span>
 <span class=nb>export</span> <span class=nv>BL64_LOG_CATEGORY_INFO</span><span class=o>=</span><span class=s1>&#39;info&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_LOG_CATEGORY_TASK</span><span class=o>=</span><span class=s1>&#39;task&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_LOG_CATEGORY_DEBUG</span><span class=o>=</span><span class=s1>&#39;debug&#39;</span>
@@ -33,10 +45,10 @@
 <span class=nb>export</span> <span class=nv>BL64_LOG_CATEGORY_ERROR</span><span class=o>=</span><span class=s1>&#39;error&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_LOG_CATEGORY_RECORD</span><span class=o>=</span><span class=s1>&#39;record&#39;</span>
 
-<span class=nb>readonly</span> <span class=nv>_BL64_LOG_TXT_NOT_SETUP</span><span class=o>=</span><span class=s1>&#39;missing setup information. Please use the bl64_log_setup function before calling bl64_log_* functions&#39;</span>
 <span class=nb>readonly</span> <span class=nv>_BL64_LOG_TXT_INVALID_TYPE</span><span class=o>=</span><span class=s1>&#39;invalid log type. Please use any of BL64_LOG_TYPE_*&#39;</span>
 <span class=nb>readonly</span> <span class=nv>_BL64_LOG_TXT_INVALID_VERBOSE</span><span class=o>=</span><span class=s1>&#39;invalid option for verbose. Please use 1 (enable) or 0 (disable)&#39;</span>
 
+<span class=c1># Module parameters</span>
 <span class=nb>export</span> <span class=nv>BL64_LOG_PATH</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_LOG_VERBOSE</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_LOG_FS</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
@@ -247,58 +259,10 @@
 <span class=normal>204</span>
 <span class=normal>205</span>
 <span class=normal>206</span>
-<span class=normal>207</span>
-<span class=normal>208</span>
-<span class=normal>209</span>
-<span class=normal>210</span>
-<span class=normal>211</span>
-<span class=normal>212</span>
-<span class=normal>213</span>
-<span class=normal>214</span>
-<span class=normal>215</span>
-<span class=normal>216</span>
-<span class=normal>217</span>
-<span class=normal>218</span>
-<span class=normal>219</span>
-<span class=normal>220</span>
-<span class=normal>221</span>
-<span class=normal>222</span>
-<span class=normal>223</span>
-<span class=normal>224</span>
-<span class=normal>225</span>
-<span class=normal>226</span>
-<span class=normal>227</span>
-<span class=normal>228</span>
-<span class=normal>229</span>
-<span class=normal>230</span>
-<span class=normal>231</span>
-<span class=normal>232</span>
-<span class=normal>233</span>
-<span class=normal>234</span>
-<span class=normal>235</span>
-<span class=normal>236</span>
-<span class=normal>237</span>
-<span class=normal>238</span>
-<span class=normal>239</span>
-<span class=normal>240</span>
-<span class=normal>241</span>
-<span class=normal>242</span>
-<span class=normal>243</span>
-<span class=normal>244</span>
-<span class=normal>245</span>
-<span class=normal>246</span>
-<span class=normal>247</span>
-<span class=normal>248</span>
-<span class=normal>249</span>
-<span class=normal>250</span>
-<span class=normal>251</span>
-<span class=normal>252</span>
-<span class=normal>253</span>
-<span class=normal>254</span>
-<span class=normal>255</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>207</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Write messages to logs</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.4.0</span>
+<span class=c1># Version: 1.5.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -323,11 +287,7 @@
   <span class=nb>local</span> <span class=nv>category</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$2</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>payload</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$3</span><span class=s2>&quot;</span>
 
-  <span class=k>if</span> <span class=o>[[</span> -z <span class=s2>&quot;</span><span class=nv>$BL64_LOG_PATH</span><span class=s2>&quot;</span> <span class=o>||</span> -z <span class=s2>&quot;</span><span class=nv>$BL64_LOG_VERBOSE</span><span class=s2>&quot;</span> <span class=o>||</span> -z <span class=s2>&quot;</span><span class=nv>$BL64_LOG_TYPE</span><span class=s2>&quot;</span> <span class=o>||</span> -z <span class=s2>&quot;</span><span class=nv>$BL64_LOG_FS</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_LOG_TXT_NOT_SETUP</span><span class=s2>&quot;</span>
-    <span class=c1># shellcheck disable=SC2086</span>
-    <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_MODULE_SETUP_MISSING</span>
-  <span class=k>fi</span>
+  bl64_check_module_setup <span class=s2>&quot;</span><span class=nv>$BL64_LOG_MODULE</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_LOG_TYPE</span><span class=s2>&quot;</span> <span class=k>in</span>
   <span class=s2>&quot;</span><span class=nv>$BL64_LOG_TYPE_FILE</span><span class=s2>&quot;</span><span class=o>)</span>
@@ -352,50 +312,6 @@
     <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_MODULE_SETUP_INVALID</span>
     <span class=p>;;</span>
   <span class=k>esac</span>
-<span class=o>}</span>
-
-<span class=c1>#######################################</span>
-<span class=c1># Initialize the log repository</span>
-<span class=c1>#</span>
-<span class=c1># Arguments:</span>
-<span class=c1>#   $1: full path to the log repository</span>
-<span class=c1>#   $2: show log messages to STDOUT/STDERR?. 1: yes, 0: no</span>
-<span class=c1>#   $3: log type. Use any of the constants $BL64_LOG_TYPE_*</span>
-<span class=c1>#   $4: field separator character to be used on each log record</span>
-<span class=c1># Outputs:</span>
-<span class=c1>#   STDOUT: None</span>
-<span class=c1>#   STDERR: None</span>
-<span class=c1># Returns:</span>
-<span class=c1>#   0: setup ok</span>
-<span class=c1>#   BL64_LIB_ERROR_MODULE_SETUP_INVALID</span>
-<span class=c1>#   BL64_LIB_ERROR_MODULE_SETUP_INVALID</span>
-<span class=c1>#######################################</span>
-<span class=k>function</span> bl64_log_setup<span class=o>()</span> <span class=o>{</span>
-  bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>verbose</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=nv>1</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>type</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=nv>$BL64_LOG_TYPE_FILE</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>fs</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>4</span><span class=k>:-</span><span class=p>:</span><span class=si>}</span><span class=s2>&quot;</span>
-
-  bl64_check_parameter <span class=s2>&quot;</span><span class=nv>$path</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
-
-  <span class=c1># shellcheck disable=SC2086</span>
-  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$type</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s2>&quot;</span><span class=nv>$BL64_LOG_TYPE_FILE</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_LOG_TXT_INVALID_TYPE</span><span class=s2>&quot;</span>
-    <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_MODULE_SETUP_INVALID</span>
-  <span class=k>fi</span>
-
-  <span class=c1># shellcheck disable=SC2086</span>
-  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$verbose</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s1>&#39;0&#39;</span> <span class=o>&amp;&amp;</span> <span class=s2>&quot;</span><span class=nv>$verbose</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s1>&#39;1&#39;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_LOG_TXT_INVALID_VERBOSE</span><span class=s2>&quot;</span>
-    <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_MODULE_SETUP_INVALID</span>
-  <span class=k>fi</span>
-
-  <span class=nv>BL64_LOG_PATH</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>path</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nv>BL64_LOG_VERBOSE</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>verbose</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nv>BL64_LOG_TYPE</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>type</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nv>BL64_LOG_FS</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>fs</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=k>return</span> <span class=m>0</span>
 <span class=o>}</span>
 
 <span class=c1>#######################################</span>

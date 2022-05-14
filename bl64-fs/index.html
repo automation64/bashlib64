@@ -37,15 +37,11 @@
 <span class=normal>37</span>
 <span class=normal>38</span>
 <span class=normal>39</span>
-<span class=normal>40</span>
-<span class=normal>41</span>
-<span class=normal>42</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>40</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Globals / Manage local filesystem</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.2.0</span>
+<span class=c1># Version: 1.3.0</span>
 <span class=c1>#######################################</span>
-
-<span class=nb>readonly</span> <span class=nv>_BL64_FS_TXT_MISSING_PARAMETER</span><span class=o>=</span><span class=s1>&#39;required parameters are missing&#39;</span>
 
 <span class=nb>export</span> <span class=nv>BL64_FS_CMD_CHMOD</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_FS_CMD_CHOWN</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
@@ -702,10 +698,12 @@
 <span class=normal>619</span>
 <span class=normal>620</span>
 <span class=normal>621</span>
-<span class=normal>622</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>622</span>
+<span class=normal>623</span>
+<span class=normal>624</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Manage local filesystem</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.4.0</span>
+<span class=c1># Version: 1.6.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -740,8 +738,7 @@
   <span class=nb>shift</span>
   <span class=nb>shift</span>
 
-  <span class=c1># shellcheck disable=SC2086</span>
-  <span class=o>((</span><span class=nv>$#</span> <span class=o>==</span> <span class=m>0</span><span class=o>))</span> <span class=o>&amp;&amp;</span> bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_FS_TXT_MISSING_PARAMETER</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_PARAMETER_MISSING</span>
+  bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
   bl64_dbg_lib_show_info <span class=s2>&quot;paths:[</span><span class=si>${</span><span class=p>*</span><span class=si>}</span><span class=s2>]&quot;</span>
 
   <span class=k>for</span> path <span class=k>in</span> <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span><span class=p>;</span> <span class=k>do</span>
@@ -804,7 +801,8 @@
   <span class=nb>shift</span>
 
   <span class=c1># shellcheck disable=SC2086</span>
-  <span class=o>((</span><span class=nv>$#</span> <span class=o>==</span> <span class=m>0</span><span class=o>))</span> <span class=o>&amp;&amp;</span> bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_FS_TXT_MISSING_PARAMETER</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_PARAMETER_MISSING</span>
+  bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+
   bl64_dbg_lib_show_info <span class=s2>&quot;paths:[</span><span class=si>${</span><span class=p>*</span><span class=si>}</span><span class=s2>]&quot;</span>
 
   <span class=k>for</span> path <span class=k>in</span> <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span><span class=p>;</span> <span class=k>do</span>
@@ -871,7 +869,8 @@
   <span class=nb>shift</span>
 
   <span class=c1># shellcheck disable=SC2086</span>
-  <span class=o>((</span><span class=nv>$#</span> <span class=o>==</span> <span class=m>0</span><span class=o>))</span> <span class=o>&amp;&amp;</span> bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_FS_TXT_MISSING_PARAMETER</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_PARAMETER_MISSING</span>
+  bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+
   bl64_dbg_lib_show_info <span class=s2>&quot;paths:[</span><span class=si>${</span><span class=p>*</span><span class=si>}</span><span class=s2>]&quot;</span>
 
   <span class=k>for</span> path <span class=k>in</span> <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span><span class=p>;</span> <span class=k>do</span>
@@ -945,7 +944,7 @@
       bl64_fs_cp_dir <span class=si>${</span><span class=nv>source</span><span class=si>}</span>/* -t <span class=s2>&quot;</span><span class=nv>$target</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span>
       <span class=nb>shopt</span> -uq dotglob
     <span class=p>;;</span>
-  *<span class=o>)</span> bl64_check_show_unsupported <span class=p>;;</span>
+  *<span class=o>)</span> bl64_check_alert_unsupported <span class=p>;;</span>
   <span class=k>esac</span>
 <span class=o>}</span>
 
@@ -1289,6 +1288,7 @@
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_fs_run_find<span class=o>()</span> <span class=o>{</span>
   bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_FS_CMD_FIND</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 

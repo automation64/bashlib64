@@ -159,7 +159,7 @@
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 2.6.0</span>
+<span class=c1># Version: 2.7.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1># Do not inherit aliases and commands</span>
@@ -419,15 +419,10 @@
 <span class=normal>110</span>
 <span class=normal>111</span>
 <span class=normal>112</span>
-<span class=normal>113</span>
-<span class=normal>114</span>
-<span class=normal>115</span>
-<span class=normal>116</span>
-<span class=normal>117</span>
-<span class=normal>118</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>113</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Setup script run-time environment</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.9.0</span>
+<span class=c1># Version: 1.10.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#</span>
@@ -493,32 +488,27 @@ bl64_os_get_distro
   <span class=c1># Warning: return and exit are not used to avoid terminating the shell when using source to load the lib</span>
   <span class=nb>false</span>
 <span class=k>else</span>
-  bl64_os_set_command
-  bl64_os_set_alias
-  bl64_txt_set_command
-  bl64_fs_set_command
-  bl64_fs_set_options
-  bl64_fs_set_alias
-  bl64_arc_set_command
-  bl64_arc_set_options
-  bl64_iam_set_command
-  bl64_iam_set_alias
-  bl64_pkb_set_command
-  bl64_pkg_set_options
-  bl64_pkb_set_alias
-  bl64_rbac_set_command
-  bl64_rbac_set_alias
-  bl64_vcs_set_command
-  bl64_vcs_set_options
-  bl64_vcs_set_alias
-  bl64_rxtx_set_command
-  bl64_rxtx_set_options
-  bl64_rxtx_set_alias
-  bl64_py_set_command
-  bl64_py_set_options
-  bl64_cnt_set_command
-  bl64_gcp_set_command
-  bl64_gcp_set_options
+  bl64_os_set_command <span class=o>&amp;&amp;</span>
+    bl64_os_set_alias <span class=o>&amp;&amp;</span>
+    bl64_txt_set_command <span class=o>&amp;&amp;</span>
+    bl64_fs_set_command <span class=o>&amp;&amp;</span>
+    bl64_fs_set_options <span class=o>&amp;&amp;</span>
+    bl64_fs_set_alias <span class=o>&amp;&amp;</span>
+    bl64_arc_set_command <span class=o>&amp;&amp;</span>
+    bl64_arc_set_options <span class=o>&amp;&amp;</span>
+    bl64_iam_set_command <span class=o>&amp;&amp;</span>
+    bl64_iam_set_alias <span class=o>&amp;&amp;</span>
+    bl64_pkb_set_command <span class=o>&amp;&amp;</span>
+    bl64_pkg_set_options <span class=o>&amp;&amp;</span>
+    bl64_pkb_set_alias <span class=o>&amp;&amp;</span>
+    bl64_rbac_set_command <span class=o>&amp;&amp;</span>
+    bl64_rbac_set_alias <span class=o>&amp;&amp;</span>
+    bl64_vcs_set_command <span class=o>&amp;&amp;</span>
+    bl64_vcs_set_options <span class=o>&amp;&amp;</span>
+    bl64_vcs_set_alias <span class=o>&amp;&amp;</span>
+    bl64_rxtx_set_command <span class=o>&amp;&amp;</span>
+    bl64_rxtx_set_options <span class=o>&amp;&amp;</span>
+    bl64_rxtx_set_alias
 
   <span class=c1># Set signal handlers</span>
   <span class=c1># shellcheck disable=SC2064</span>

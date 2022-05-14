@@ -151,11 +151,10 @@
 <span class=normal>124</span>
 <span class=normal>125</span>
 <span class=normal>126</span>
-<span class=normal>127</span>
-<span class=normal>128</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>127</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Manage role based access service</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.8.0</span>
+<span class=c1># Version: 1.9.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -265,10 +264,9 @@
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_rbac_run_command<span class=o>()</span> <span class=o>{</span>
   bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
-  <span class=c1># shellcheck disable=SC2086</span>
-  <span class=o>((</span><span class=nv>$#</span> <span class=o>==</span> <span class=m>0</span><span class=o>))</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_PARAMETER_MISSING</span>
-  <span class=c1># shellcheck disable=SC2086</span>
+
   bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_RBAC_CMD_SUDO</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=c1># Check the effective user id</span>

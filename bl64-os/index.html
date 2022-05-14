@@ -408,7 +408,7 @@
 <span class=c1># Returns:</span>
 <span class=c1>#   0: always ok, even when the OS is not supported</span>
 <span class=c1>#######################################</span>
-<span class=c1># Warning: bootstrap function: use pure bash, no return, no exit</span>
+<span class=c1># Warning: bootstrap function</span>
 <span class=k>function</span> bl64_os_get_distro<span class=o>()</span> <span class=o>{</span>
   <span class=k>if</span> <span class=o>[[</span> -r <span class=s1>&#39;/etc/os-release&#39;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
     _bl64_os_get_distro_from_os_release

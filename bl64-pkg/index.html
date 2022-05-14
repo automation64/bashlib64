@@ -321,7 +321,7 @@
   <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_BRW</span><span class=s2>&quot;</span> update <span class=nv>$verbose</span>
     <span class=p>;;</span>
-  *<span class=o>)</span> bl64_check_show_unsupported <span class=p>;;</span>
+  *<span class=o>)</span> bl64_check_alert_unsupported <span class=p>;;</span>
   <span class=k>esac</span>
 <span class=o>}</span>
 
@@ -372,7 +372,7 @@
   <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_BRW</span><span class=s2>&quot;</span> install <span class=nv>$verbose</span> <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
     <span class=p>;;</span>
-  *<span class=o>)</span> bl64_check_show_unsupported <span class=p>;;</span>
+  *<span class=o>)</span> bl64_check_alert_unsupported <span class=p>;;</span>
 
   <span class=k>esac</span>
 <span class=o>}</span>
@@ -428,7 +428,7 @@
   <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=s2>&quot;</span><span class=nv>$BL64_PKG_CMD_BRW</span><span class=s2>&quot;</span> cleanup <span class=nv>$verbose</span> --prune<span class=o>=</span>all -s
     <span class=p>;;</span>
-  *<span class=o>)</span> bl64_check_show_unsupported <span class=p>;;</span>
+  *<span class=o>)</span> bl64_check_alert_unsupported <span class=p>;;</span>
 
   <span class=k>esac</span>
 <span class=o>}</span>

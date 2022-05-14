@@ -7,11 +7,17 @@
 <span class=normal> 7</span>
 <span class=normal> 8</span>
 <span class=normal> 9</span>
-<span class=normal>10</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>10</span>
+<span class=normal>11</span>
+<span class=normal>12</span>
+<span class=normal>13</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Globals / Interact with container engines</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.0.0</span>
+<span class=c1># Version: 1.1.0</span>
 <span class=c1>#######################################</span>
+
+<span class=c1># Optional module. Not enabled by default</span>
+<span class=nb>export</span> <span class=nv>BL64_CNT_MODULE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=s2>&quot;</span>
 
 <span class=nb>export</span> <span class=nv>BL64_CNT_CMD_PODMAN</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_CNT_CMD_DOCKER</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
@@ -654,10 +660,18 @@
 <span class=normal>635</span>
 <span class=normal>636</span>
 <span class=normal>637</span>
-<span class=normal>638</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>638</span>
+<span class=normal>639</span>
+<span class=normal>640</span>
+<span class=normal>641</span>
+<span class=normal>642</span>
+<span class=normal>643</span>
+<span class=normal>644</span>
+<span class=normal>645</span>
+<span class=normal>646</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Interact with container engines</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.3.0</span>
+<span class=c1># Version: 1.4.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -908,9 +922,13 @@
 
 <span class=k>function</span> bl64_cnt_run_podman<span class=o>()</span> <span class=o>{</span>
   bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
   <span class=nb>local</span> <span class=nv>verbose</span><span class=o>=</span><span class=s1>&#39;error&#39;</span>
 
-  bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_CNT_CMD_PODMAN</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  bl64_check_module_setup <span class=s2>&quot;</span><span class=nv>$BL64_CNT_MODULE</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span>
+    bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_CNT_CMD_PODMAN</span><span class=s2>&quot;</span> <span class=o>||</span>
+    <span class=k>return</span> <span class=nv>$?</span>
+
   bl64_dbg_lib_command_enabled <span class=o>&amp;&amp;</span> <span class=nv>verbose</span><span class=o>=</span><span class=s1>&#39;debug&#39;</span>
   bl64_dbg_runtime_show_paths
 
@@ -935,10 +953,14 @@
 
 <span class=k>function</span> bl64_cnt_run_docker<span class=o>()</span> <span class=o>{</span>
   bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
   <span class=nb>local</span> <span class=nv>verbose</span><span class=o>=</span><span class=s1>&#39;error&#39;</span>
   <span class=nb>local</span> <span class=nv>debug</span><span class=o>=</span><span class=s1>&#39; &#39;</span>
 
-  bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_CNT_CMD_DOCKER</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  bl64_check_module_setup <span class=s2>&quot;</span><span class=nv>$BL64_CNT_MODULE</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span>
+    bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_CNT_CMD_DOCKER</span><span class=s2>&quot;</span> <span class=o>||</span>
+    <span class=k>return</span> <span class=nv>$?</span>
+
   <span class=k>if</span> bl64_dbg_lib_command_enabled<span class=p>;</span> <span class=k>then</span>
     <span class=nv>verbose</span><span class=o>=</span><span class=s1>&#39;debug&#39;</span>
     <span class=nv>debug</span><span class=o>=</span><span class=s1>&#39;--debug&#39;</span>
