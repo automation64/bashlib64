@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.14.0
+# Version: 1.14.1
 #######################################
 
 function _bl64_os_match() {
@@ -43,6 +43,7 @@ function _bl64_os_get_distro_from_uname() {
 
 # Warning: bootstrap function
 function _bl64_os_get_distro_from_os_release() {
+  bl64_dbg_lib_show_function
 
   # shellcheck disable=SC1091
   source '/etc/os-release'
@@ -147,6 +148,7 @@ function bl64_os_match() {
 #######################################
 # Warning: bootstrap function
 function bl64_os_get_distro() {
+  bl64_dbg_lib_show_function
   if [[ -r '/etc/os-release' ]]; then
     _bl64_os_get_distro_from_os_release
   else

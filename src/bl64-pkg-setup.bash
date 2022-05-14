@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage native OS packages
 #
-# Version: 1.1.0
+# Version: 1.1.1
 #######################################
 
 #######################################
@@ -19,7 +19,7 @@
 # Returns:
 #   0: always ok
 #######################################
-function bl64_pkb_set_command() {
+function bl64_pkg_set_command() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -111,7 +111,7 @@ function bl64_pkg_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_pkb_set_alias() {
+function bl64_pkg_set_alias() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
