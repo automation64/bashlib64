@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 # Declare imported variables
@@ -93,6 +93,7 @@ declare -ig BL64_LIB_ERROR_DIRECTORY_NOT_FOUND=53
 declare -ig BL64_LIB_ERROR_DIRECTORY_NOT_READ=54
 declare -ig BL64_LIB_ERROR_PATH_NOT_RELATIVE=55
 declare -ig BL64_LIB_ERROR_PATH_NOT_ABSOLUTE=56
+declare -ig BL64_LIB_ERROR_PATH_NOT_FOUND=57
 
 # General
 declare -ig BL64_LIB_ERROR_EXPORT_EMPTY=60
