@@ -7,6 +7,8 @@
 #######################################
 # GIT CLI wrapper with verbose, debug and common options
 #
+# * Trust no one. Ignore user provided config and use default config
+#
 # Arguments:
 #   $@: arguments are passed as-is to the command
 # Outputs:
@@ -21,10 +23,17 @@ function bl64_vcs_run_git() {
   local debug="$BL64_VCS_SET_GIT_QUIET"
 
   bl64_check_command "$BL64_VCS_CMD_GIT" || return $?
+  bl64_dbg_lib_show_info "current path: $(pwd)"
+  if bl64_dbg_lib_command_enabled; then
+    debug=''
+    GIT_TRACE='2'
+  else
+    GIT_TRACE='0'
+  fi
 
-  bl64_dbg_lib_command_enabled && debug=''
-  # shellcheck disable=SC2086
-  bl64_dbg_lib_show_info "$BL64_VCS_CMD_GIT" $debug $BL64_VCS_SET_GIT_NO_PAGER "$@"
+  GIT_CONFIG_NOSYSTEM='0'
+  GIT_AUTHOR_EMAIL='nouser@nodomain'
+  GIT_AUTHOR_NAME='bl64_vcs_run_git'
 
   # shellcheck disable=SC2086
   "$BL64_VCS_CMD_GIT" $debug $BL64_VCS_SET_GIT_NO_PAGER "$@"
@@ -66,6 +75,7 @@ function bl64_vcs_git_clone() {
   # shellcheck disable=SC2164
   cd "$destination"
 
+  # shellcheck disable=SC2086
   bl64_vcs_run_git \
     clone \
     --depth 1 \
