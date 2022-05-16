@@ -5,6 +5,8 @@ setup() {
   _bl64_rxtx_git_get_dir_source='https://github.com/serdigital64/bashlib64.git'
   export _bl64_rxtx_git_get_dir_destination
   export _bl64_rxtx_git_get_dir_source
+  BATSLIB_TEMP_PRESERVE=0
+  BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
 }
 
 teardown() {
@@ -25,6 +27,6 @@ teardown() {
     "$BL64_LIB_VAR_ON"
   assert_success
 
-  assert_file_exists "${test_dir}/devbl-set"
+  assert_file_exists "${test_dir}/target/devbl-set"
 
 }
