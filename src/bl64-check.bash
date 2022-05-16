@@ -70,7 +70,7 @@ function bl64_check_command() {
 #   $BL64_LIB_ERROR_FILE_NOT_READ
 #######################################
 function bl64_check_file() {
-  local path="$1"
+  local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_FILE_NOT_FOUND}}"
 
   bl64_check_parameter 'path' || return $?
@@ -108,7 +108,7 @@ function bl64_check_file() {
 #   $BL64_LIB_ERROR_DIRECTORY_NOT_READ
 #######################################
 function bl64_check_directory() {
-  local path="$1"
+  local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND}}"
 
   bl64_check_parameter 'path' || return $?
@@ -126,6 +126,33 @@ function bl64_check_directory() {
     bl64_msg_show_error "${_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / path: ${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_DIRECTORY_NOT_READ
+  fi
+  return 0
+}
+
+#######################################
+# Check and report if the path is present
+#
+# Arguments:
+#   $1: Full path to the directory
+#   $2: Not found error message. Default: _BL64_CHECK_TXT_PATH_NOT_FOUND
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: File found
+#   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   $BL64_LIB_ERROR_PATH_NOT_FOUND
+#######################################
+function bl64_check_path() {
+  local path="${1:-}"
+  local message="${2:-${_BL64_CHECK_TXT_PATH_NOT_FOUND}}"
+
+  bl64_check_parameter 'path' || return $?
+  if [[ ! -e "$path" ]]; then
+    bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / path: ${path})"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_PATH_NOT_FOUND
   fi
   return 0
 }
@@ -224,7 +251,7 @@ function bl64_check_export() {
 #   $BL64_LIB_ERROR_PATH_NOT_RELATIVE
 #######################################
 function bl64_check_path_relative() {
-  local path="$1"
+  local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_PATH_NOT_RELATIVE}}"
 
   bl64_check_parameter 'path' || return $?
@@ -254,7 +281,7 @@ function bl64_check_path_relative() {
 #   $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
 #######################################
 function bl64_check_path_absolute() {
-  local path="$1"
+  local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_PATH_NOT_ABSOLUTE}}"
 
   bl64_check_parameter 'path' || return $?
@@ -324,9 +351,9 @@ function bl64_check_privilege_not_root() {
 #   $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
 #######################################
 function bl64_check_overwrite() {
-  local path="$1"
-  local message="${2:-${_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}}"
-  local overwrite="${3:-"$BL64_LIB_VAR_OFF"}"
+  local path="${1:-}"
+  local overwrite="${2:-"$BL64_LIB_VAR_OFF"}"
+  local message="${3:-${_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}}"
 
   bl64_check_parameter 'path' || return $?
 
