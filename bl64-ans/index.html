@@ -13,10 +13,13 @@
 <span class=normal>13</span>
 <span class=normal>14</span>
 <span class=normal>15</span>
-<span class=normal>16</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>16</span>
+<span class=normal>17</span>
+<span class=normal>18</span>
+<span class=normal>19</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Globals / Interact with Ansible CLI</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.0.0</span>
+<span class=c1># Version: 1.1.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1># Optional module. Not enabled by default</span>
@@ -29,6 +32,9 @@
 <span class=nb>export</span> <span class=nv>BL64_ANS_SET_VERBOSE</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_ANS_SET_DIFF</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_ANS_SET_DEBUG</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
+
+<span class=c1># External commands variables</span>
+<span class=nb>export</span> ANSIBLE_CONFIG
 </code></pre></div> </td></tr></table> <h2 id=code>Code<a class=headerlink href=#code title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>  1</span>
 <span class=normal>  2</span>
 <span class=normal>  3</span>
@@ -177,7 +183,7 @@
 <span class=c1>#######################################</span>
 <span class=c1># Command wrapper with verbose, debug and common options</span>
 <span class=c1>#</span>
-<span class=c1># * Trust noone. Use default config</span>
+<span class=c1># * Trust no one. Ignore user provided config and use default config</span>
 <span class=c1>#</span>
 <span class=c1># Arguments:</span>
 <span class=c1>#   $@: arguments are passed as-is to the command</span>

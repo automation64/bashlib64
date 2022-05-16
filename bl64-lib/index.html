@@ -152,14 +152,15 @@
 <span class=normal>152</span>
 <span class=normal>153</span>
 <span class=normal>154</span>
-<span class=normal>155</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=ch>#!/usr/bin/env bash</span>
+<span class=normal>155</span>
+<span class=normal>156</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=ch>#!/usr/bin/env bash</span>
 <span class=c1>#######################################</span>
 <span class=c1># BashLib64</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 2.7.1</span>
+<span class=c1># Version: 2.8.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1># Do not inherit aliases and commands</span>
@@ -187,7 +188,7 @@
 <span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Globals / Setup script run-time environment</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.7.0</span>
+<span class=c1># Version: 1.8.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1># Declare imported variables</span>
@@ -279,6 +280,7 @@
 <span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_DIRECTORY_NOT_READ</span><span class=o>=</span><span class=m>54</span>
 <span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PATH_NOT_RELATIVE</span><span class=o>=</span><span class=m>55</span>
 <span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PATH_NOT_ABSOLUTE</span><span class=o>=</span><span class=m>56</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PATH_NOT_FOUND</span><span class=o>=</span><span class=m>57</span>
 
 <span class=c1># General</span>
 <span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_EXPORT_EMPTY</span><span class=o>=</span><span class=m>60</span>
@@ -421,11 +423,10 @@
 <span class=normal>112</span>
 <span class=normal>113</span>
 <span class=normal>114</span>
-<span class=normal>115</span>
-<span class=normal>116</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>115</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Setup script run-time environment</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.10.1</span>
+<span class=c1># Version: 1.11.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#</span>
@@ -499,8 +500,7 @@ bl64_os_get_distro
     bl64_fs_set_alias <span class=o>&amp;&amp;</span>
     bl64_arc_set_command <span class=o>&amp;&amp;</span>
     bl64_arc_set_options <span class=o>&amp;&amp;</span>
-    bl64_iam_set_command <span class=o>&amp;&amp;</span>
-    bl64_iam_set_alias <span class=o>&amp;&amp;</span>
+    bl64_iam_setup <span class=o>&amp;&amp;</span>
     bl64_pkg_set_command <span class=o>&amp;&amp;</span>
     bl64_pkg_set_options <span class=o>&amp;&amp;</span>
     bl64_pkg_set_alias <span class=o>&amp;&amp;</span>

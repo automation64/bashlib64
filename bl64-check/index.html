@@ -35,10 +35,12 @@
 <span class=normal>35</span>
 <span class=normal>36</span>
 <span class=normal>37</span>
-<span class=normal>38</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>38</span>
+<span class=normal>39</span>
+<span class=normal>40</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Globals / Check for conditions and report status</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.8.0</span>
+<span class=c1># Version: 1.9.0</span>
 <span class=c1>#######################################</span>
 
 <span class=nb>readonly</span> <span class=nv>_BL64_CHECK_TXT_MODULE_NOT_SETUP</span><span class=o>=</span><span class=s1>&#39;required bashlib64 module is not setup. Module must be initialized before usage&#39;</span>
@@ -56,6 +58,8 @@
 <span class=nb>readonly</span> <span class=nv>_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND</span><span class=o>=</span><span class=s1>&#39;required directory is not present&#39;</span>
 <span class=nb>readonly</span> <span class=nv>_BL64_CHECK_TXT_DIRECTORY_NOT_DIR</span><span class=o>=</span><span class=s1>&#39;path is present but is not a directory&#39;</span>
 <span class=nb>readonly</span> <span class=nv>_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE</span><span class=o>=</span><span class=s1>&#39;required directory is present but has no read permission&#39;</span>
+
+<span class=nb>readonly</span> <span class=nv>_BL64_CHECK_TXT_PATH_NOT_FOUND</span><span class=o>=</span><span class=s1>&#39;required path is not present&#39;</span>
 
 <span class=nb>readonly</span> <span class=nv>_BL64_CHECK_TXT_EXPORT_EMPTY</span><span class=o>=</span><span class=s1>&#39;required shell exported variable is empty&#39;</span>
 <span class=nb>readonly</span> <span class=nv>_BL64_CHECK_TXT_EXPORT_SET</span><span class=o>=</span><span class=s1>&#39;required shell exported variable is not set&#39;</span>
@@ -498,7 +502,34 @@
 <span class=normal>423</span>
 <span class=normal>424</span>
 <span class=normal>425</span>
-<span class=normal>426</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>426</span>
+<span class=normal>427</span>
+<span class=normal>428</span>
+<span class=normal>429</span>
+<span class=normal>430</span>
+<span class=normal>431</span>
+<span class=normal>432</span>
+<span class=normal>433</span>
+<span class=normal>434</span>
+<span class=normal>435</span>
+<span class=normal>436</span>
+<span class=normal>437</span>
+<span class=normal>438</span>
+<span class=normal>439</span>
+<span class=normal>440</span>
+<span class=normal>441</span>
+<span class=normal>442</span>
+<span class=normal>443</span>
+<span class=normal>444</span>
+<span class=normal>445</span>
+<span class=normal>446</span>
+<span class=normal>447</span>
+<span class=normal>448</span>
+<span class=normal>449</span>
+<span class=normal>450</span>
+<span class=normal>451</span>
+<span class=normal>452</span>
+<span class=normal>453</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Check for conditions and report status</span>
 <span class=c1>#</span>
 <span class=c1># Version: 1.10.0</span>
@@ -570,7 +601,7 @@
 <span class=c1>#   $BL64_LIB_ERROR_FILE_NOT_READ</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_check_file<span class=o>()</span> <span class=o>{</span>
-  <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_FILE_NOT_FOUND</span><span class=si>}}</span><span class=s2>&quot;</span>
 
   bl64_check_parameter <span class=s1>&#39;path&#39;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
@@ -608,7 +639,7 @@
 <span class=c1>#   $BL64_LIB_ERROR_DIRECTORY_NOT_READ</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_check_directory<span class=o>()</span> <span class=o>{</span>
-  <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND</span><span class=si>}}</span><span class=s2>&quot;</span>
 
   bl64_check_parameter <span class=s1>&#39;path&#39;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
@@ -626,6 +657,33 @@
     bl64_msg_show_error <span class=s2>&quot;</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE</span><span class=si>}</span><span class=s2> (</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_FUNCTION</span><span class=si>}</span><span class=s2>: </span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2> / path: </span><span class=si>${</span><span class=nv>path</span><span class=si>}</span><span class=s2>)&quot;</span>
     <span class=c1># shellcheck disable=SC2086</span>
     <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_DIRECTORY_NOT_READ</span>
+  <span class=k>fi</span>
+  <span class=k>return</span> <span class=m>0</span>
+<span class=o>}</span>
+
+<span class=c1>#######################################</span>
+<span class=c1># Check and report if the path is present</span>
+<span class=c1>#</span>
+<span class=c1># Arguments:</span>
+<span class=c1>#   $1: Full path to the directory</span>
+<span class=c1>#   $2: Not found error message. Default: _BL64_CHECK_TXT_PATH_NOT_FOUND</span>
+<span class=c1># Outputs:</span>
+<span class=c1>#   STDOUT: None</span>
+<span class=c1>#   STDERR: Error message</span>
+<span class=c1># Returns:</span>
+<span class=c1>#   0: File found</span>
+<span class=c1>#   $BL64_LIB_ERROR_PARAMETER_MISSING</span>
+<span class=c1>#   $BL64_LIB_ERROR_PATH_NOT_FOUND</span>
+<span class=c1>#######################################</span>
+<span class=k>function</span> bl64_check_path<span class=o>()</span> <span class=o>{</span>
+  <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_PATH_NOT_FOUND</span><span class=si>}}</span><span class=s2>&quot;</span>
+
+  bl64_check_parameter <span class=s1>&#39;path&#39;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  <span class=k>if</span> <span class=o>[[</span> ! -e <span class=s2>&quot;</span><span class=nv>$path</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+    bl64_msg_show_error <span class=s2>&quot;</span><span class=si>${</span><span class=nv>message</span><span class=si>}</span><span class=s2> (</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_FUNCTION</span><span class=si>}</span><span class=s2>: </span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2> / path: </span><span class=si>${</span><span class=nv>path</span><span class=si>}</span><span class=s2>)&quot;</span>
+    <span class=c1># shellcheck disable=SC2086</span>
+    <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_PATH_NOT_FOUND</span>
   <span class=k>fi</span>
   <span class=k>return</span> <span class=m>0</span>
 <span class=o>}</span>
@@ -724,7 +782,7 @@
 <span class=c1>#   $BL64_LIB_ERROR_PATH_NOT_RELATIVE</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_check_path_relative<span class=o>()</span> <span class=o>{</span>
-  <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_PATH_NOT_RELATIVE</span><span class=si>}}</span><span class=s2>&quot;</span>
 
   bl64_check_parameter <span class=s1>&#39;path&#39;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
@@ -754,7 +812,7 @@
 <span class=c1>#   $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_check_path_absolute<span class=o>()</span> <span class=o>{</span>
-  <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_PATH_NOT_ABSOLUTE</span><span class=si>}}</span><span class=s2>&quot;</span>
 
   bl64_check_parameter <span class=s1>&#39;path&#39;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
@@ -824,9 +882,9 @@
 <span class=c1>#   $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_check_overwrite<span class=o>()</span> <span class=o>{</span>
-  <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED</span><span class=si>}}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>overwrite</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=s2>&quot;</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>overwrite</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=s2>&quot;</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED</span><span class=si>}}</span><span class=s2>&quot;</span>
 
   bl64_check_parameter <span class=s1>&#39;path&#39;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 

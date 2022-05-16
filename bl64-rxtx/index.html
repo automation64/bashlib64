@@ -22,12 +22,10 @@
 <span class=normal>22</span>
 <span class=normal>23</span>
 <span class=normal>24</span>
-<span class=normal>25</span>
-<span class=normal>26</span>
-<span class=normal>27</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>25</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Globals / Transfer and Receive data over the network</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.5.0</span>
+<span class=c1># Version: 1.6.0</span>
 <span class=c1>#######################################</span>
 
 <span class=nb>export</span> <span class=nv>BL64_RXTX_CMD_CURL</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
@@ -49,8 +47,6 @@
 <span class=nb>readonly</span> <span class=nv>_BL64_RXTX_TXT_EXISTING_DESTINATION</span><span class=o>=</span><span class=s1>&#39;destination path is not empty. No action taken.&#39;</span>
 <span class=nb>readonly</span> <span class=nv>_BL64_RXTX_TXT_CREATION_PROBLEM</span><span class=o>=</span><span class=s1>&#39;unable to create temporary git repo&#39;</span>
 <span class=nb>readonly</span> <span class=nv>_BL64_RXTX_TXT_DOWNLOAD_FILE</span><span class=o>=</span><span class=s1>&#39;download file&#39;</span>
-
-<span class=nb>readonly</span> <span class=nv>_BL64_RXTX_BACKUP_POSTFIX</span><span class=o>=</span><span class=s1>&#39;._bl64_rxtx_backup&#39;</span>
 </code></pre></div> </td></tr></table> <h2 id=code>Code<a class=headerlink href=#code title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>  1</span>
 <span class=normal>  2</span>
 <span class=normal>  3</span>
@@ -295,59 +291,10 @@
 <span class=normal>242</span>
 <span class=normal>243</span>
 <span class=normal>244</span>
-<span class=normal>245</span>
-<span class=normal>246</span>
-<span class=normal>247</span>
-<span class=normal>248</span>
-<span class=normal>249</span>
-<span class=normal>250</span>
-<span class=normal>251</span>
-<span class=normal>252</span>
-<span class=normal>253</span>
-<span class=normal>254</span>
-<span class=normal>255</span>
-<span class=normal>256</span>
-<span class=normal>257</span>
-<span class=normal>258</span>
-<span class=normal>259</span>
-<span class=normal>260</span>
-<span class=normal>261</span>
-<span class=normal>262</span>
-<span class=normal>263</span>
-<span class=normal>264</span>
-<span class=normal>265</span>
-<span class=normal>266</span>
-<span class=normal>267</span>
-<span class=normal>268</span>
-<span class=normal>269</span>
-<span class=normal>270</span>
-<span class=normal>271</span>
-<span class=normal>272</span>
-<span class=normal>273</span>
-<span class=normal>274</span>
-<span class=normal>275</span>
-<span class=normal>276</span>
-<span class=normal>277</span>
-<span class=normal>278</span>
-<span class=normal>279</span>
-<span class=normal>280</span>
-<span class=normal>281</span>
-<span class=normal>282</span>
-<span class=normal>283</span>
-<span class=normal>284</span>
-<span class=normal>285</span>
-<span class=normal>286</span>
-<span class=normal>287</span>
-<span class=normal>288</span>
-<span class=normal>289</span>
-<span class=normal>290</span>
-<span class=normal>291</span>
-<span class=normal>292</span>
-<span class=normal>293</span>
-<span class=normal>294</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>245</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Transfer and Receive data over the network</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.12.0</span>
+<span class=c1># Version: 1.13.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -379,7 +326,7 @@
     bl64_check_parameter <span class=s1>&#39;destination&#39;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$replace</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> -e <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=k>return</span> <span class=m>0</span>
-  _bl64_rxtx_backup <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  bl64_fs_safeguard <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   bl64_msg_show_lib_task <span class=s2>&quot;</span><span class=nv>$_BL64_RXTX_TXT_DOWNLOAD_FILE</span><span class=s2> (</span><span class=nv>$source</span><span class=s2>)&quot;</span>
   <span class=c1># shellcheck disable=SC2086</span>
@@ -406,7 +353,7 @@
     <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
   <span class=k>fi</span>
 
-  _bl64_rxtx_restore <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$status</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  bl64_fs_restore <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$status</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=k>return</span> <span class=nv>$status</span>
 <span class=o>}</span>
@@ -415,7 +362,7 @@
 <span class=c1># Pull directory contents from git repo</span>
 <span class=c1>#</span>
 <span class=c1># * Content of source path is downloaded into destination (source_path/* --&gt; destionation/). Source path itself is not created</span>
-<span class=c1># * If the destination is already present no update is done unless $3=$BL64_LIB_VAR_ON</span>
+<span class=c1># * If the destination is already present no update is done unless $4=$BL64_LIB_VAR_ON</span>
 <span class=c1># * If asked to replace destination, temporary backup is done in case git fails by moving the destination to a temp name</span>
 <span class=c1># * Warning: git repo info is removed after pull (.git)</span>
 <span class=c1>#</span>
@@ -423,8 +370,8 @@
 <span class=c1>#   $1: URL to the GIT repository</span>
 <span class=c1>#   $2: source path. Format: relative to the repo URL. Use &#39;.&#39; to download the full repo</span>
 <span class=c1>#   $3: destination path. Format: full path</span>
-<span class=c1>#   $3: branch name. Default: main</span>
-<span class=c1>#   $5: replace existing content. Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)</span>
+<span class=c1>#   $4: replace existing content. Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)</span>
+<span class=c1>#   $5: branch name. Default: main</span>
 <span class=c1># Outputs:</span>
 <span class=c1>#   STDOUT: command stdout</span>
 <span class=c1>#   STDERR: command error</span>
@@ -448,15 +395,11 @@
     bl64_check_path_relative <span class=s2>&quot;</span><span class=nv>$source_path</span><span class=s2>&quot;</span> <span class=o>||</span>
     <span class=k>return</span> <span class=nv>$?</span>
 
-  <span class=c1># Check if destination is already present</span>
-  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$replace</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> -e <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    bl64_msg_show_warning <span class=s2>&quot;</span><span class=nv>$_BL64_RXTX_TXT_EXISTING_DESTINATION</span><span class=s2>&quot;</span>
-    <span class=c1># shellcheck disable=SC2086</span>
-    <span class=k>return</span> <span class=nv>$BL64_LIB_VAR_OK</span>
-  <span class=k>else</span>
-    <span class=c1># Asked to replace, backup first</span>
-    _bl64_rxtx_backup <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
-  <span class=k>fi</span>
+  <span class=c1># shellcheck disable=SC2086</span>
+  bl64_check_overwrite <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$replace</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$_BL64_RXTX_TXT_EXISTING_DESTINATION</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$BL64_LIB_VAR_OK</span>
+
+  <span class=c1># Asked to replace, backup first</span>
+  bl64_fs_safeguard <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=c1># Detect what type of path is requested</span>
   <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$source_path</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;.&#39;</span> <span class=o>||</span> <span class=s2>&quot;</span><span class=nv>$source_path</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;./&#39;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
@@ -468,14 +411,14 @@
 
   <span class=c1># Remove GIT repo metadata</span>
   <span class=k>if</span> <span class=o>[[</span> -d <span class=s2>&quot;</span><span class=si>${</span><span class=nv>destination</span><span class=si>}</span><span class=s2>/.git&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    bl64_dbg_lib_show_info <span class=s1>&#39;remove git metadata&#39;</span>
+    bl64_dbg_lib_show_info <span class=s2>&quot;remove git metadata (</span><span class=si>${</span><span class=nv>destination</span><span class=si>}</span><span class=s2>/.git)&quot;</span>
     <span class=c1># shellcheck disable=SC2164</span>
     <span class=nb>cd</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>
     bl64_fs_rm_full <span class=s1>&#39;.git&#39;</span> &gt;/dev/null
   <span class=k>fi</span>
 
   <span class=c1># Check if restore is needed</span>
-  _bl64_rxtx_restore <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$status</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  bl64_fs_restore <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$status</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
   <span class=k>return</span> <span class=nv>$status</span>
 <span class=o>}</span>
 
@@ -553,8 +496,6 @@
 
   <span class=c1># Clone the repo</span>
   bl64_vcs_git_clone <span class=s2>&quot;</span><span class=nv>$source_url</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$repo</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$branch</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span>
-    <span class=c1># Promote to destination</span>
-    <span class=o>[[</span> -d <span class=s2>&quot;</span><span class=nv>$transition</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span>
     bl64_dbg_lib_show_info <span class=s1>&#39;promote to destination&#39;</span> <span class=o>&amp;&amp;</span>
     bl64_fs_mv <span class=s2>&quot;</span><span class=nv>$transition</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>
   <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
@@ -593,49 +534,6 @@
   <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
 
   <span class=o>[[</span> -d <span class=s2>&quot;</span><span class=nv>$repo</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> bl64_fs_rm_full <span class=s2>&quot;</span><span class=nv>$repo</span><span class=s2>&quot;</span> &gt;/dev/null
-  <span class=k>return</span> <span class=nv>$status</span>
-<span class=o>}</span>
-
-<span class=k>function</span> _bl64_rxtx_backup<span class=o>()</span> <span class=o>{</span>
-  bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>backup</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>destination</span><span class=si>}${</span><span class=nv>_BL64_RXTX_BACKUP_POSTFIX</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> -i <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
-
-  <span class=k>if</span> <span class=o>[[</span> -e <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    bl64_fs_mv <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span>
-    <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
-  <span class=k>fi</span>
-
-  <span class=o>((</span>status !<span class=o>=</span> <span class=m>0</span><span class=o>))</span> <span class=o>&amp;&amp;</span> <span class=nv>status</span><span class=o>=</span><span class=nv>$BL64_LIB_ERROR_TASK_BACKUP</span>
-  <span class=c1># shellcheck disable=SC2086</span>
-  <span class=k>return</span> <span class=nv>$status</span>
-<span class=o>}</span>
-
-<span class=k>function</span> _bl64_rxtx_restore<span class=o>()</span> <span class=o>{</span>
-  bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$1</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>result</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$2</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>backup</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>destination</span><span class=si>}${</span><span class=nv>_BL64_RXTX_BACKUP_POSTFIX</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> -i <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
-
-  <span class=c1># Check if restore is needed based on the operation result</span>
-  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$result</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OK</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    <span class=c1># Operation was ok, backup no longer needed</span>
-    <span class=o>[[</span> -e <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> bl64_fs_rm_full <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span>
-    <span class=c1># shellcheck disable=SC2086</span>
-    <span class=k>return</span> <span class=nv>$BL64_LIB_VAR_OK</span>
-  <span class=k>fi</span>
-
-  <span class=c1># Remove invalid content</span>
-  <span class=o>[[</span> -e <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> bl64_fs_rm_full <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>
-
-  <span class=c1># Restore content from backup</span>
-  bl64_fs_mv <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>
-  <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
-
-  <span class=o>((</span>status !<span class=o>=</span> <span class=m>0</span><span class=o>))</span> <span class=o>&amp;&amp;</span> <span class=nv>status</span><span class=o>=</span><span class=nv>$BL64_LIB_ERROR_TASK_RESTORE</span>
-  <span class=c1># shellcheck disable=SC2086</span>
   <span class=k>return</span> <span class=nv>$status</span>
 <span class=o>}</span>
 </code></pre></div> </td></tr></table> </article> </div> </div> <a href=# class="md-top md-icon" data-md-component=top data-md-state=hidden> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg> Back to top </a> </main> <footer class=md-footer> <nav class="md-footer__inner md-grid" aria-label=Footer> <a href=../bl64-rnd/ class="md-footer__link md-footer__link--prev" aria-label="Previous: Module: rnd" rel=prev> <div class="md-footer__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg> </div> <div class=md-footer__title> <div class=md-ellipsis> <span class=md-footer__direction> Previous </span> Module: rnd </div> </div> </a> <a href=../bl64-txt/ class="md-footer__link md-footer__link--next" aria-label="Next: Module: txt" rel=next> <div class=md-footer__title> <div class=md-ellipsis> <span class=md-footer__direction> Next </span> Module: txt </div> </div> <div class="md-footer__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg> </div> </a> </nav> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class=md-copyright> <div class=md-copyright__highlight> GPL-3.0-or-later </div> Made with <a href=https://squidfunk.github.io/mkdocs-material/ target=_blank rel=noopener> Material for MkDocs </a> </div> </div> </div> </footer> </div> <div class=md-dialog data-md-component=dialog> <div class="md-dialog__inner md-typeset"></div> </div> <script id=__config type=application/json>{"base": "..", "features": ["navigation.instant", "navigation.sections", "navigation.expand", "navigation.indexes", "toc.integrate", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.bd0b6b67.min.js"}</script> <script src=../assets/javascripts/bundle.8aa65030.min.js></script> </body> </html>

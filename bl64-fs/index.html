@@ -37,10 +37,14 @@
 <span class=normal>37</span>
 <span class=normal>38</span>
 <span class=normal>39</span>
-<span class=normal>40</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>40</span>
+<span class=normal>41</span>
+<span class=normal>42</span>
+<span class=normal>43</span>
+<span class=normal>44</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Globals / Manage local filesystem</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.3.0</span>
+<span class=c1># Version: 1.4.0</span>
 <span class=c1>#######################################</span>
 
 <span class=nb>export</span> <span class=nv>BL64_FS_CMD_CHMOD</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
@@ -77,6 +81,10 @@
 <span class=nb>export</span> <span class=nv>BL64_FS_SET_RM_FORCE</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_FS_SET_RM_RECURSIVE</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_FS_SET_RM_VERBOSE</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
+
+<span class=nb>readonly</span> <span class=nv>BL64_FS_SAFEGUARD_POSTFIX</span><span class=o>=</span><span class=s1>&#39;.bl64_fs_safeguard&#39;</span>
+
+<span class=nb>readonly</span> <span class=nv>_BL64_FS_TXT_SAFEGUARD_FAILED</span><span class=o>=</span><span class=s1>&#39;unable to safeguard requested path&#39;</span>
 </code></pre></div> </td></tr></table> <h2 id=code>Code<a class=headerlink href=#code title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>  1</span>
 <span class=normal>  2</span>
 <span class=normal>  3</span>
@@ -700,7 +708,96 @@
 <span class=normal>621</span>
 <span class=normal>622</span>
 <span class=normal>623</span>
-<span class=normal>624</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>624</span>
+<span class=normal>625</span>
+<span class=normal>626</span>
+<span class=normal>627</span>
+<span class=normal>628</span>
+<span class=normal>629</span>
+<span class=normal>630</span>
+<span class=normal>631</span>
+<span class=normal>632</span>
+<span class=normal>633</span>
+<span class=normal>634</span>
+<span class=normal>635</span>
+<span class=normal>636</span>
+<span class=normal>637</span>
+<span class=normal>638</span>
+<span class=normal>639</span>
+<span class=normal>640</span>
+<span class=normal>641</span>
+<span class=normal>642</span>
+<span class=normal>643</span>
+<span class=normal>644</span>
+<span class=normal>645</span>
+<span class=normal>646</span>
+<span class=normal>647</span>
+<span class=normal>648</span>
+<span class=normal>649</span>
+<span class=normal>650</span>
+<span class=normal>651</span>
+<span class=normal>652</span>
+<span class=normal>653</span>
+<span class=normal>654</span>
+<span class=normal>655</span>
+<span class=normal>656</span>
+<span class=normal>657</span>
+<span class=normal>658</span>
+<span class=normal>659</span>
+<span class=normal>660</span>
+<span class=normal>661</span>
+<span class=normal>662</span>
+<span class=normal>663</span>
+<span class=normal>664</span>
+<span class=normal>665</span>
+<span class=normal>666</span>
+<span class=normal>667</span>
+<span class=normal>668</span>
+<span class=normal>669</span>
+<span class=normal>670</span>
+<span class=normal>671</span>
+<span class=normal>672</span>
+<span class=normal>673</span>
+<span class=normal>674</span>
+<span class=normal>675</span>
+<span class=normal>676</span>
+<span class=normal>677</span>
+<span class=normal>678</span>
+<span class=normal>679</span>
+<span class=normal>680</span>
+<span class=normal>681</span>
+<span class=normal>682</span>
+<span class=normal>683</span>
+<span class=normal>684</span>
+<span class=normal>685</span>
+<span class=normal>686</span>
+<span class=normal>687</span>
+<span class=normal>688</span>
+<span class=normal>689</span>
+<span class=normal>690</span>
+<span class=normal>691</span>
+<span class=normal>692</span>
+<span class=normal>693</span>
+<span class=normal>694</span>
+<span class=normal>695</span>
+<span class=normal>696</span>
+<span class=normal>697</span>
+<span class=normal>698</span>
+<span class=normal>699</span>
+<span class=normal>700</span>
+<span class=normal>701</span>
+<span class=normal>702</span>
+<span class=normal>703</span>
+<span class=normal>704</span>
+<span class=normal>705</span>
+<span class=normal>706</span>
+<span class=normal>707</span>
+<span class=normal>708</span>
+<span class=normal>709</span>
+<span class=normal>710</span>
+<span class=normal>711</span>
+<span class=normal>712</span>
+<span class=normal>713</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Manage local filesystem</span>
 <span class=c1>#</span>
 <span class=c1># Version: 1.6.0</span>
@@ -733,13 +830,12 @@
   <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 
   <span class=c1># Remove consumed parameters</span>
-  bl64_dbg_lib_show_info <span class=s2>&quot;parameters:[</span><span class=si>${</span><span class=p>*</span><span class=si>}</span><span class=s2>]&quot;</span>
   <span class=nb>shift</span>
   <span class=nb>shift</span>
   <span class=nb>shift</span>
 
   bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
-  bl64_dbg_lib_show_info <span class=s2>&quot;paths:[</span><span class=si>${</span><span class=p>*</span><span class=si>}</span><span class=s2>]&quot;</span>
+  bl64_dbg_lib_show_info <span class=s2>&quot;path list:[</span><span class=si>${</span><span class=p>*</span><span class=si>}</span><span class=s2>]&quot;</span>
 
   <span class=k>for</span> path <span class=k>in</span> <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span><span class=p>;</span> <span class=k>do</span>
 
@@ -794,7 +890,7 @@
   bl64_check_directory <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=c1># Remove consumed parameters</span>
-  bl64_dbg_lib_show_info <span class=s2>&quot;parameters:[</span><span class=si>${</span><span class=p>*</span><span class=si>}</span><span class=s2>]&quot;</span>
+  bl64_dbg_lib_show_info <span class=s2>&quot;source files:[</span><span class=si>${</span><span class=p>*</span><span class=si>}</span><span class=s2>]&quot;</span>
   <span class=nb>shift</span>
   <span class=nb>shift</span>
   <span class=nb>shift</span>
@@ -1323,5 +1419,95 @@
     -type f <span class=se>\</span>
     <span class=si>${</span><span class=nv>pattern</span><span class=p>:+-name </span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>pattern</span><span class=si>}</span><span class=s2>&quot;</span><span class=si>}</span> <span class=se>\</span>
     -print
+<span class=o>}</span>
+
+<span class=c1>#######################################</span>
+<span class=c1># Safeguard path to a temporary location</span>
+<span class=c1>#</span>
+<span class=c1># * Use for file/dir operations that will alter or replace the content and requires a quick rollback mechanism</span>
+<span class=c1># * The original path is renamed until bl64_fs_restore is called to either remove or restore it</span>
+<span class=c1># * If the destination is not present nothing is done. Return with no error. This is to cover for first time path creation</span>
+<span class=c1>#</span>
+<span class=c1># Arguments:</span>
+<span class=c1>#   $1: safeguard path (produced by bl64_fs_safeguard)</span>
+<span class=c1>#   $2: task status (exit status from last operation)</span>
+<span class=c1># Outputs:</span>
+<span class=c1>#   STDOUT: command dependant</span>
+<span class=c1>#   STDERR: command dependant</span>
+<span class=c1># Returns:</span>
+<span class=c1>#   command dependant</span>
+<span class=c1>#######################################</span>
+<span class=k>function</span> bl64_fs_safeguard<span class=o>()</span> <span class=o>{</span>
+  bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>backup</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>destination</span><span class=si>}${</span><span class=nv>BL64_FS_SAFEGUARD_POSTFIX</span><span class=si>}</span><span class=s2>&quot;</span>
+
+  bl64_check_parameter <span class=s1>&#39;destination&#39;</span> <span class=o>&amp;&amp;</span>
+    <span class=k>return</span> <span class=nv>$?</span>
+
+  <span class=c1># Return if not present</span>
+  <span class=k>if</span> <span class=o>[[</span> ! -e <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+    bl64_dbg_lib_show_info <span class=s2>&quot;path is not yet created, nothing to do (</span><span class=si>${</span><span class=nv>destination</span><span class=si>}</span><span class=s2>)&quot;</span>
+    <span class=k>return</span> <span class=m>0</span>
+  <span class=k>fi</span>
+
+  bl64_dbg_lib_show_info <span class=s2>&quot;safeguard object: [</span><span class=si>${</span><span class=nv>destination</span><span class=si>}</span><span class=s2>]-&gt;[</span><span class=si>${</span><span class=nv>backup</span><span class=si>}</span><span class=s2>]&quot;</span>
+  <span class=k>if</span> ! bl64_fs_mv <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span><span class=p>;</span> <span class=k>then</span>
+    bl64_msg_show_error <span class=s2>&quot;</span><span class=nv>$_BL64_FS_TXT_SAFEGUARD_FAILED</span><span class=s2> (</span><span class=nv>$destination</span><span class=s2>)&quot;</span>
+    <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_TASK_BACKUP</span>
+  <span class=k>fi</span>
+
+  <span class=k>return</span> <span class=m>0</span>
+<span class=o>}</span>
+
+<span class=c1>#######################################</span>
+<span class=c1># Restore path from safeguard if operation failed or remove if operation was ok</span>
+<span class=c1>#</span>
+<span class=c1># * Use as a quick rollback for file/dir operations</span>
+<span class=c1># * Called after bl64_fs_safeguard creates the backup</span>
+<span class=c1># * If the backup is not there nothing is done, no error returned. This is to cover for first time path creation</span>
+<span class=c1>#</span>
+<span class=c1># Arguments:</span>
+<span class=c1>#   $1: safeguard path (produced by bl64_fs_safeguard)</span>
+<span class=c1>#   $2: task status (exit status from last operation)</span>
+<span class=c1># Outputs:</span>
+<span class=c1>#   STDOUT: command dependant</span>
+<span class=c1>#   STDERR: command dependant</span>
+<span class=c1># Returns:</span>
+<span class=c1>#   command dependant</span>
+<span class=c1>#######################################</span>
+<span class=k>function</span> bl64_fs_restore<span class=o>()</span> <span class=o>{</span>
+  bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>result</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>backup</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>destination</span><span class=si>}${</span><span class=nv>BL64_FS_SAFEGUARD_POSTFIX</span><span class=si>}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> -i <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
+
+  bl64_check_parameter <span class=s1>&#39;destination&#39;</span> <span class=o>&amp;&amp;</span>
+    bl64_check_parameter <span class=s1>&#39;result&#39;</span>
+  <span class=k>return</span> <span class=nv>$?</span>
+
+  <span class=c1># Return if not present</span>
+  <span class=k>if</span> <span class=o>[[</span> ! -e <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+    bl64_dbg_lib_show_info <span class=s2>&quot;backup was not created, nothing to do (</span><span class=si>${</span><span class=nv>backup</span><span class=si>}</span><span class=s2>)&quot;</span>
+    <span class=k>return</span> <span class=m>0</span>
+  <span class=k>fi</span>
+
+  <span class=c1># Check if restore is needed based on the operation result</span>
+  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$result</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OK</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+    bl64_dbg_lib_show_info <span class=s1>&#39;operation was ok, backup no longer needed, remove it&#39;</span>
+    <span class=o>[[</span> -e <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> bl64_fs_rm_full <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span>
+
+    <span class=c1># shellcheck disable=SC2086</span>
+    <span class=k>return</span> <span class=nv>$BL64_LIB_VAR_OK</span>
+  <span class=k>else</span>
+    bl64_dbg_lib_show_info <span class=s1>&#39;operation was NOT ok, remove invalid content&#39;</span>
+    <span class=o>[[</span> -e <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> bl64_fs_rm_full <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>
+
+    bl64_dbg_lib_show_info <span class=s1>&#39;restore content from backup&#39;</span>
+    <span class=c1># shellcheck disable=SC2086</span>
+    bl64_fs_mv <span class=s2>&quot;</span><span class=nv>$backup</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>||</span>
+      <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_TASK_RESTORE</span>
+  <span class=k>fi</span>
 <span class=o>}</span>
 </code></pre></div> </td></tr></table> </article> </div> </div> <a href=# class="md-top md-icon" data-md-component=top data-md-state=hidden> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg> Back to top </a> </main> <footer class=md-footer> <nav class="md-footer__inner md-grid" aria-label=Footer> <a href=../bl64-fmt/ class="md-footer__link md-footer__link--prev" aria-label="Previous: Module: fmt" rel=prev> <div class="md-footer__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg> </div> <div class=md-footer__title> <div class=md-ellipsis> <span class=md-footer__direction> Previous </span> Module: fmt </div> </div> </a> <a href=../bl64-gcp/ class="md-footer__link md-footer__link--next" aria-label="Next: Module: gcp" rel=next> <div class=md-footer__title> <div class=md-ellipsis> <span class=md-footer__direction> Next </span> Module: gcp </div> </div> <div class="md-footer__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg> </div> </a> </nav> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class=md-copyright> <div class=md-copyright__highlight> GPL-3.0-or-later </div> Made with <a href=https://squidfunk.github.io/mkdocs-material/ target=_blank rel=noopener> Material for MkDocs </a> </div> </div> </div> </footer> </div> <div class=md-dialog data-md-component=dialog> <div class="md-dialog__inner md-typeset"></div> </div> <script id=__config type=application/json>{"base": "..", "features": ["navigation.instant", "navigation.sections", "navigation.expand", "navigation.indexes", "toc.integrate", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.bd0b6b67.min.js"}</script> <script src=../assets/javascripts/bundle.8aa65030.min.js></script> </body> </html>

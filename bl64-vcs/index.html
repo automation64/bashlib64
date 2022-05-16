@@ -11,10 +11,16 @@
 <span class=normal>11</span>
 <span class=normal>12</span>
 <span class=normal>13</span>
-<span class=normal>14</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>14</span>
+<span class=normal>15</span>
+<span class=normal>16</span>
+<span class=normal>17</span>
+<span class=normal>18</span>
+<span class=normal>19</span>
+<span class=normal>20</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Globals / Manage Version Control System</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.4.0</span>
+<span class=c1># Version: 1.5.0</span>
 <span class=c1>#######################################</span>
 
 <span class=nb>export</span> <span class=nv>BL64_VCS_CMD_GIT</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
@@ -25,6 +31,12 @@
 <span class=nb>export</span> <span class=nv>BL64_VCS_SET_GIT_QUIET</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 
 <span class=nb>readonly</span> <span class=nv>_BL64_VCS_TXT_CLONE_REPO</span><span class=o>=</span><span class=s1>&#39;clone single branch from GIT repository&#39;</span>
+
+<span class=c1># External commands variables</span>
+<span class=nb>export</span> GIT_TRACE
+<span class=nb>export</span> GIT_CONFIG_NOSYSTEM
+<span class=nb>export</span> GIT_AUTHOR_EMAIL
+<span class=nb>export</span> GIT_AUTHOR_NAME
 </code></pre></div> </td></tr></table> <h2 id=code>Code<a class=headerlink href=#code title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>  1</span>
 <span class=normal>  2</span>
 <span class=normal>  3</span>
@@ -162,7 +174,17 @@
 <span class=normal>135</span>
 <span class=normal>136</span>
 <span class=normal>137</span>
-<span class=normal>138</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>138</span>
+<span class=normal>139</span>
+<span class=normal>140</span>
+<span class=normal>141</span>
+<span class=normal>142</span>
+<span class=normal>143</span>
+<span class=normal>144</span>
+<span class=normal>145</span>
+<span class=normal>146</span>
+<span class=normal>147</span>
+<span class=normal>148</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Manage Version Control System</span>
 <span class=c1>#</span>
 <span class=c1># Version: 1.9.0</span>
@@ -170,6 +192,8 @@
 
 <span class=c1>#######################################</span>
 <span class=c1># GIT CLI wrapper with verbose, debug and common options</span>
+<span class=c1>#</span>
+<span class=c1># * Trust no one. Ignore user provided config and use default config</span>
 <span class=c1>#</span>
 <span class=c1># Arguments:</span>
 <span class=c1>#   $@: arguments are passed as-is to the command</span>
@@ -185,10 +209,17 @@
   <span class=nb>local</span> <span class=nv>debug</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_VCS_SET_GIT_QUIET</span><span class=s2>&quot;</span>
 
   bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_VCS_CMD_GIT</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  bl64_dbg_lib_show_info <span class=s2>&quot;current path: </span><span class=k>$(</span><span class=nb>pwd</span><span class=k>)</span><span class=s2>&quot;</span>
+  <span class=k>if</span> bl64_dbg_lib_command_enabled<span class=p>;</span> <span class=k>then</span>
+    <span class=nv>debug</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
+    <span class=nv>GIT_TRACE</span><span class=o>=</span><span class=s1>&#39;2&#39;</span>
+  <span class=k>else</span>
+    <span class=nv>GIT_TRACE</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
+  <span class=k>fi</span>
 
-  bl64_dbg_lib_command_enabled <span class=o>&amp;&amp;</span> <span class=nv>debug</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
-  <span class=c1># shellcheck disable=SC2086</span>
-  bl64_dbg_lib_show_info <span class=s2>&quot;</span><span class=nv>$BL64_VCS_CMD_GIT</span><span class=s2>&quot;</span> <span class=nv>$debug</span> <span class=nv>$BL64_VCS_SET_GIT_NO_PAGER</span> <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  <span class=nv>GIT_CONFIG_NOSYSTEM</span><span class=o>=</span><span class=s1>&#39;0&#39;</span>
+  <span class=nv>GIT_AUTHOR_EMAIL</span><span class=o>=</span><span class=s1>&#39;nouser@nodomain&#39;</span>
+  <span class=nv>GIT_AUTHOR_NAME</span><span class=o>=</span><span class=s1>&#39;bl64_vcs_run_git&#39;</span>
 
   <span class=c1># shellcheck disable=SC2086</span>
   <span class=s2>&quot;</span><span class=nv>$BL64_VCS_CMD_GIT</span><span class=s2>&quot;</span> <span class=nv>$debug</span> <span class=nv>$BL64_VCS_SET_GIT_NO_PAGER</span> <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
@@ -230,6 +261,7 @@
   <span class=c1># shellcheck disable=SC2164</span>
   <span class=nb>cd</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>
 
+  <span class=c1># shellcheck disable=SC2086</span>
   bl64_vcs_run_git <span class=se>\</span>
     clone <span class=se>\</span>
     --depth <span class=m>1</span> <span class=se>\</span>
