@@ -28,7 +28,7 @@ function bl64_ans_collections_install() {
 #######################################
 # Command wrapper with verbose, debug and common options
 #
-# * Trust noone. Use default config
+# * Trust no one. Ignore user provided config and use default config
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
