@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 export BL64_FS_CMD_CHMOD=''
@@ -38,3 +38,7 @@ export BL64_FS_SET_MV_VERBOSE=''
 export BL64_FS_SET_RM_FORCE=''
 export BL64_FS_SET_RM_RECURSIVE=''
 export BL64_FS_SET_RM_VERBOSE=''
+
+readonly BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
+
+readonly _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
