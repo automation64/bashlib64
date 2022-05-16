@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Transfer and Receive data over the network
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 export BL64_RXTX_CMD_CURL=''
@@ -23,5 +23,3 @@ readonly _BL64_RXTX_TXT_MISSING_COMMAND='no web transfer command was found on th
 readonly _BL64_RXTX_TXT_EXISTING_DESTINATION='destination path is not empty. No action taken.'
 readonly _BL64_RXTX_TXT_CREATION_PROBLEM='unable to create temporary git repo'
 readonly _BL64_RXTX_TXT_DOWNLOAD_FILE='download file'
-
-readonly _BL64_RXTX_BACKUP_POSTFIX='._bl64_rxtx_backup'

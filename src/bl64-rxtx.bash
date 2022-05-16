@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Transfer and Receive data over the network
 #
-# Version: 1.12.0
+# Version: 1.13.0
 #######################################
 
 #######################################
@@ -33,7 +33,7 @@ function bl64_rxtx_web_get_file() {
     bl64_check_parameter 'destination' || return $?
 
   [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]] && return 0
-  _bl64_rxtx_backup "$destination" >/dev/null || return $?
+  bl64_fs_safeguard "$destination" >/dev/null || return $?
 
   bl64_msg_show_lib_task "$_BL64_RXTX_TXT_DOWNLOAD_FILE ($source)"
   # shellcheck disable=SC2086
@@ -60,7 +60,7 @@ function bl64_rxtx_web_get_file() {
     status=$?
   fi
 
-  _bl64_rxtx_restore "$destination" "$status" >/dev/null || return $?
+  bl64_fs_restore "$destination" "$status" >/dev/null || return $?
 
   return $status
 }
@@ -69,7 +69,7 @@ function bl64_rxtx_web_get_file() {
 # Pull directory contents from git repo
 #
 # * Content of source path is downloaded into destination (source_path/* --> destionation/). Source path itself is not created
-# * If the destination is already present no update is done unless $3=$BL64_LIB_VAR_ON
+# * If the destination is already present no update is done unless $4=$BL64_LIB_VAR_ON
 # * If asked to replace destination, temporary backup is done in case git fails by moving the destination to a temp name
 # * Warning: git repo info is removed after pull (.git)
 #
@@ -77,8 +77,8 @@ function bl64_rxtx_web_get_file() {
 #   $1: URL to the GIT repository
 #   $2: source path. Format: relative to the repo URL. Use '.' to download the full repo
 #   $3: destination path. Format: full path
-#   $3: branch name. Default: main
-#   $5: replace existing content. Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)
+#   $4: replace existing content. Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)
+#   $5: branch name. Default: main
 # Outputs:
 #   STDOUT: command stdout
 #   STDERR: command error
@@ -102,15 +102,11 @@ function bl64_rxtx_git_get_dir() {
     bl64_check_path_relative "$source_path" ||
     return $?
 
-  # Check if destination is already present
-  if [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]]; then
-    bl64_msg_show_warning "$_BL64_RXTX_TXT_EXISTING_DESTINATION"
-    # shellcheck disable=SC2086
-    return $BL64_LIB_VAR_OK
-  else
-    # Asked to replace, backup first
-    _bl64_rxtx_backup "$destination" >/dev/null || return $?
-  fi
+  # shellcheck disable=SC2086
+  bl64_check_overwrite "$destination" "$replace" "$_BL64_RXTX_TXT_EXISTING_DESTINATION" || return $BL64_LIB_VAR_OK
+
+  # Asked to replace, backup first
+  bl64_fs_safeguard "$destination" || return $?
 
   # Detect what type of path is requested
   if [[ "$source_path" == '.' || "$source_path" == './' ]]; then
@@ -122,14 +118,14 @@ function bl64_rxtx_git_get_dir() {
 
   # Remove GIT repo metadata
   if [[ -d "${destination}/.git" ]]; then
-    bl64_dbg_lib_show_info 'remove git metadata'
+    bl64_dbg_lib_show_info "remove git metadata (${destination}/.git)"
     # shellcheck disable=SC2164
     cd "$destination"
     bl64_fs_rm_full '.git' >/dev/null
   fi
 
   # Check if restore is needed
-  _bl64_rxtx_restore "$destination" "$status" >/dev/null || return $?
+  bl64_fs_restore "$destination" "$status" >/dev/null || return $?
   return $status
 }
 
@@ -207,8 +203,6 @@ function _bl64_rxtx_git_get_dir_root() {
 
   # Clone the repo
   bl64_vcs_git_clone "$source_url" "$repo" "$branch" &&
-    # Promote to destination
-    [[ -d "$transition" ]] &&
     bl64_dbg_lib_show_info 'promote to destination' &&
     bl64_fs_mv "$transition" "$destination"
   status=$?
@@ -247,48 +241,5 @@ function _bl64_rxtx_git_get_dir_sub() {
   status=$?
 
   [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
-  return $status
-}
-
-function _bl64_rxtx_backup() {
-  bl64_dbg_lib_show_function "$@"
-  local destination="$1"
-  local backup="${destination}${_BL64_RXTX_BACKUP_POSTFIX}"
-  local -i status=0
-
-  if [[ -e "$destination" ]]; then
-    bl64_fs_mv "$destination" "$backup"
-    status=$?
-  fi
-
-  ((status != 0)) && status=$BL64_LIB_ERROR_TASK_BACKUP
-  # shellcheck disable=SC2086
-  return $status
-}
-
-function _bl64_rxtx_restore() {
-  bl64_dbg_lib_show_function "$@"
-  local destination="$1"
-  local result="$2"
-  local backup="${destination}${_BL64_RXTX_BACKUP_POSTFIX}"
-  local -i status=0
-
-  # Check if restore is needed based on the operation result
-  if [[ "$result" == "$BL64_LIB_VAR_OK" ]]; then
-    # Operation was ok, backup no longer needed
-    [[ -e "$backup" ]] && bl64_fs_rm_full "$backup"
-    # shellcheck disable=SC2086
-    return $BL64_LIB_VAR_OK
-  fi
-
-  # Remove invalid content
-  [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
-
-  # Restore content from backup
-  bl64_fs_mv "$backup" "$destination"
-  status=$?
-
-  ((status != 0)) && status=$BL64_LIB_ERROR_TASK_RESTORE
-  # shellcheck disable=SC2086
   return $status
 }
