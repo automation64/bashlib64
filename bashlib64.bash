@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 2.7.1
+# Version: 2.8.0
 #######################################
 
 # Do not inherit aliases and commands
@@ -33,7 +33,7 @@ shopt -qs \
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 # Declare imported variables
@@ -125,6 +125,7 @@ declare -ig BL64_LIB_ERROR_DIRECTORY_NOT_FOUND=53
 declare -ig BL64_LIB_ERROR_DIRECTORY_NOT_READ=54
 declare -ig BL64_LIB_ERROR_PATH_NOT_RELATIVE=55
 declare -ig BL64_LIB_ERROR_PATH_NOT_ABSOLUTE=56
+declare -ig BL64_LIB_ERROR_PATH_NOT_FOUND=57
 
 # General
 declare -ig BL64_LIB_ERROR_EXPORT_EMPTY=60
@@ -156,7 +157,7 @@ declare BL64_SCRIPT_SID="${BASHPID}"
 #######################################
 # BashLib64 / Module / Globals / Interact with Ansible CLI
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -170,10 +171,13 @@ export BL64_ANS_SET_VERBOSE=''
 export BL64_ANS_SET_DIFF=''
 export BL64_ANS_SET_DEBUG=''
 
+# External commands variables
+export ANSIBLE_CONFIG
+
 #######################################
 # BashLib64 / Module / Globals / Manage archive files
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 export BL64_ARC_CMD_TAR=''
@@ -186,10 +190,13 @@ export BL64_ARC_SET_UNZIP_OVERWRITE=''
 readonly _BL64_ARC_TXT_OPEN_ZIP='open zip archive'
 readonly _BL64_ARC_TXT_OPEN_TAR='open tar archive'
 
+# External commands variables
+export UNZIP
+
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 readonly _BL64_CHECK_TXT_MODULE_NOT_SETUP='required bashlib64 module is not setup. Module must be initialized before usage'
@@ -207,6 +214,8 @@ readonly _BL64_CHECK_TXT_FILE_NOT_READABLE='required file is present but has no 
 readonly _BL64_CHECK_TXT_DIRECTORY_NOT_FOUND='required directory is not present'
 readonly _BL64_CHECK_TXT_DIRECTORY_NOT_DIR='path is present but is not a directory'
 readonly _BL64_CHECK_TXT_DIRECTORY_NOT_READABLE='required directory is present but has no read permission'
+
+readonly _BL64_CHECK_TXT_PATH_NOT_FOUND='required path is not present'
 
 readonly _BL64_CHECK_TXT_EXPORT_EMPTY='required shell exported variable is empty'
 readonly _BL64_CHECK_TXT_EXPORT_SET='required shell exported variable is not set'
@@ -302,7 +311,7 @@ readonly _BL64_DBG_TXT_PWD='Current working directory (pwd command)'
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 export BL64_FS_CMD_CHMOD=''
@@ -340,6 +349,10 @@ export BL64_FS_SET_RM_FORCE=''
 export BL64_FS_SET_RM_RECURSIVE=''
 export BL64_FS_SET_RM_VERBOSE=''
 
+readonly BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
+
+readonly _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
+
 #######################################
 # BashLib64 / Module / Globals / Interact with GCP CLI
 #
@@ -361,8 +374,10 @@ export BL64_GCP_SET_FORMAT_JSON=''
 #######################################
 # BashLib64 / Module / Globals / Manage OS identity and access service
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
+
+export BL64_IAM_MODULE="$BL64_LIB_VAR_OFF"
 
 export BL64_IAM_CMD_USERADD=''
 
@@ -591,7 +606,7 @@ readonly _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
 #######################################
 # BashLib64 / Module / Globals / Transfer and Receive data over the network
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 export BL64_RXTX_CMD_CURL=''
@@ -614,8 +629,6 @@ readonly _BL64_RXTX_TXT_EXISTING_DESTINATION='destination path is not empty. No 
 readonly _BL64_RXTX_TXT_CREATION_PROBLEM='unable to create temporary git repo'
 readonly _BL64_RXTX_TXT_DOWNLOAD_FILE='download file'
 
-readonly _BL64_RXTX_BACKUP_POSTFIX='._bl64_rxtx_backup'
-
 #######################################
 # BashLib64 / Module / Globals / Manipulate text files content
 #
@@ -632,7 +645,7 @@ export BL64_TXT_CMD_BASE64=''
 #######################################
 # BashLib64 / Module / Globals / Manage Version Control System
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 export BL64_VCS_CMD_GIT=''
@@ -643,6 +656,12 @@ export BL64_VCS_SET_GIT_NO_PAGER=''
 export BL64_VCS_SET_GIT_QUIET=''
 
 readonly _BL64_VCS_TXT_CLONE_REPO='clone single branch from GIT repository'
+
+# External commands variables
+export GIT_TRACE
+export GIT_CONFIG_NOSYSTEM
+export GIT_AUTHOR_EMAIL
+export GIT_AUTHOR_NAME
 
 #######################################
 # BashLib64 / Module / Globals / Manipulate CSV like text files
@@ -812,7 +831,7 @@ function bl64_ans_collections_install() {
 #######################################
 # Command wrapper with verbose, debug and common options
 #
-# * Trust noone. Use default config
+# * Trust no one. Ignore user provided config and use default config
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -1210,7 +1229,7 @@ function bl64_check_command() {
 #   $BL64_LIB_ERROR_FILE_NOT_READ
 #######################################
 function bl64_check_file() {
-  local path="$1"
+  local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_FILE_NOT_FOUND}}"
 
   bl64_check_parameter 'path' || return $?
@@ -1248,7 +1267,7 @@ function bl64_check_file() {
 #   $BL64_LIB_ERROR_DIRECTORY_NOT_READ
 #######################################
 function bl64_check_directory() {
-  local path="$1"
+  local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND}}"
 
   bl64_check_parameter 'path' || return $?
@@ -1266,6 +1285,33 @@ function bl64_check_directory() {
     bl64_msg_show_error "${_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / path: ${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_DIRECTORY_NOT_READ
+  fi
+  return 0
+}
+
+#######################################
+# Check and report if the path is present
+#
+# Arguments:
+#   $1: Full path to the directory
+#   $2: Not found error message. Default: _BL64_CHECK_TXT_PATH_NOT_FOUND
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: File found
+#   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   $BL64_LIB_ERROR_PATH_NOT_FOUND
+#######################################
+function bl64_check_path() {
+  local path="${1:-}"
+  local message="${2:-${_BL64_CHECK_TXT_PATH_NOT_FOUND}}"
+
+  bl64_check_parameter 'path' || return $?
+  if [[ ! -e "$path" ]]; then
+    bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / path: ${path})"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_PATH_NOT_FOUND
   fi
   return 0
 }
@@ -1364,7 +1410,7 @@ function bl64_check_export() {
 #   $BL64_LIB_ERROR_PATH_NOT_RELATIVE
 #######################################
 function bl64_check_path_relative() {
-  local path="$1"
+  local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_PATH_NOT_RELATIVE}}"
 
   bl64_check_parameter 'path' || return $?
@@ -1394,7 +1440,7 @@ function bl64_check_path_relative() {
 #   $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
 #######################################
 function bl64_check_path_absolute() {
-  local path="$1"
+  local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_PATH_NOT_ABSOLUTE}}"
 
   bl64_check_parameter 'path' || return $?
@@ -1464,9 +1510,9 @@ function bl64_check_privilege_not_root() {
 #   $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
 #######################################
 function bl64_check_overwrite() {
-  local path="$1"
-  local message="${2:-${_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}}"
-  local overwrite="${3:-"$BL64_LIB_VAR_OFF"}"
+  local path="${1:-}"
+  local overwrite="${2:-"$BL64_LIB_VAR_OFF"}"
+  local message="${3:-${_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}}"
 
   bl64_check_parameter 'path' || return $?
 
@@ -2814,13 +2860,12 @@ function bl64_fs_create_dir() {
   local path=''
 
   # Remove consumed parameters
-  bl64_dbg_lib_show_info "parameters:[${*}]"
   shift
   shift
   shift
 
   bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_show_info "paths:[${*}]"
+  bl64_dbg_lib_show_info "path list:[${*}]"
 
   for path in "$@"; do
 
@@ -2875,7 +2920,7 @@ function bl64_fs_copy_files() {
   bl64_check_directory "$destination" || return $?
 
   # Remove consumed parameters
-  bl64_dbg_lib_show_info "parameters:[${*}]"
+  bl64_dbg_lib_show_info "source files:[${*}]"
   shift
   shift
   shift
@@ -3407,6 +3452,96 @@ function bl64_fs_find_files() {
 }
 
 #######################################
+# Safeguard path to a temporary location
+#
+# * Use for file/dir operations that will alter or replace the content and requires a quick rollback mechanism
+# * The original path is renamed until bl64_fs_restore is called to either remove or restore it
+# * If the destination is not present nothing is done. Return with no error. This is to cover for first time path creation
+#
+# Arguments:
+#   $1: safeguard path (produced by bl64_fs_safeguard)
+#   $2: task status (exit status from last operation)
+# Outputs:
+#   STDOUT: command dependant
+#   STDERR: command dependant
+# Returns:
+#   command dependant
+#######################################
+function bl64_fs_safeguard() {
+  bl64_dbg_lib_show_function "$@"
+  local destination="${1:-}"
+  local backup="${destination}${BL64_FS_SAFEGUARD_POSTFIX}"
+
+  bl64_check_parameter 'destination' &&
+    return $?
+
+  # Return if not present
+  if [[ ! -e "$destination" ]]; then
+    bl64_dbg_lib_show_info "path is not yet created, nothing to do (${destination})"
+    return 0
+  fi
+
+  bl64_dbg_lib_show_info "safeguard object: [${destination}]->[${backup}]"
+  if ! bl64_fs_mv "$destination" "$backup"; then
+    bl64_msg_show_error "$_BL64_FS_TXT_SAFEGUARD_FAILED ($destination)"
+    return $BL64_LIB_ERROR_TASK_BACKUP
+  fi
+
+  return 0
+}
+
+#######################################
+# Restore path from safeguard if operation failed or remove if operation was ok
+#
+# * Use as a quick rollback for file/dir operations
+# * Called after bl64_fs_safeguard creates the backup
+# * If the backup is not there nothing is done, no error returned. This is to cover for first time path creation
+#
+# Arguments:
+#   $1: safeguard path (produced by bl64_fs_safeguard)
+#   $2: task status (exit status from last operation)
+# Outputs:
+#   STDOUT: command dependant
+#   STDERR: command dependant
+# Returns:
+#   command dependant
+#######################################
+function bl64_fs_restore() {
+  bl64_dbg_lib_show_function "$@"
+  local destination="${1:-}"
+  local result="${2:-}"
+  local backup="${destination}${BL64_FS_SAFEGUARD_POSTFIX}"
+  local -i status=0
+
+  bl64_check_parameter 'destination' &&
+    bl64_check_parameter 'result'
+  return $?
+
+  # Return if not present
+  if [[ ! -e "$backup" ]]; then
+    bl64_dbg_lib_show_info "backup was not created, nothing to do (${backup})"
+    return 0
+  fi
+
+  # Check if restore is needed based on the operation result
+  if [[ "$result" == "$BL64_LIB_VAR_OK" ]]; then
+    bl64_dbg_lib_show_info 'operation was ok, backup no longer needed, remove it'
+    [[ -e "$backup" ]] && bl64_fs_rm_full "$backup"
+
+    # shellcheck disable=SC2086
+    return $BL64_LIB_VAR_OK
+  else
+    bl64_dbg_lib_show_info 'operation was NOT ok, remove invalid content'
+    [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
+
+    bl64_dbg_lib_show_info 'restore content from backup'
+    # shellcheck disable=SC2086
+    bl64_fs_mv "$backup" "$destination" ||
+      return $BL64_LIB_ERROR_TASK_RESTORE
+  fi
+}
+
+#######################################
 # BashLib64 / Module / Functions / Format text data
 #
 # Version: 1.4.0
@@ -3831,8 +3966,32 @@ function _bl64_gcp_configure() {
 #######################################
 # BashLib64 / Module / Setup / Manage OS identity and access service
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_iam_setup() {
+  bl64_dbg_lib_show_function
+
+  bl64_iam_set_command &&
+    bl64_iam_set_alias &&
+    bl64_iam_set_options &&
+    BL64_IAM_MODULE="$BL64_LIB_VAR_ON"
+
+}
 
 #######################################
 # Identify and normalize commands
@@ -3851,7 +4010,7 @@ function _bl64_gcp_configure() {
 #######################################
 function bl64_iam_set_command() {
   bl64_dbg_lib_show_function
-  # shellcheck disable=SC2034
+
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
@@ -3883,7 +4042,7 @@ function bl64_iam_set_command() {
 #######################################
 function bl64_iam_set_alias() {
   bl64_dbg_lib_show_function
-  # shellcheck disable=SC2034
+
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
@@ -3899,13 +4058,47 @@ function bl64_iam_set_alias() {
 }
 
 #######################################
+# Create command sets for common options
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_iam_set_options() {
+  bl64_dbg_lib_show_function
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
+    ;;
+  ${BL64_OS_ALP}-*)
+    # Home is created by default
+    BL64_IAM_SET_USERADD_CREATE_HOME=' '
+    ;;
+  ${BL64_OS_MCOS}-*)
+    # Home is created by default
+    BL64_IAM_SET_USERADD_CREATE_HOME=' '
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+}
+
+#######################################
 # BashLib64 / Module / Functions / Manage OS identity and access service
 #
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 #######################################
 # Create OS user
+#
+# * creates home using OS default settings
 #
 # Arguments:
 #   $1: login name
@@ -3925,9 +4118,25 @@ function bl64_iam_user_add() {
 
   bl64_msg_show_lib_task "$_BL64_IAM_TXT_ADD_USER ($login)"
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*) $BL64_IAM_ALIAS_USERADD "$login" ;;
-  ${BL64_OS_ALP}-*) $BL64_IAM_ALIAS_USERADD -D "$login" ;;
-  ${BL64_OS_MCOS}-*) $BL64_IAM_ALIAS_USERADD "/Users/${login}" ;;
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    "$BL64_IAM_CMD_USERADD" \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      "$login"
+    ;;
+  ${BL64_OS_ALP}-*)
+    # shellcheck disable=SC2086
+    "$BL64_IAM_CMD_USERADD" \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      -D \
+      "$login"
+    ;;
+  ${BL64_OS_MCOS}-*)
+    # shellcheck disable=SC2086
+    "$BL64_IAM_CMD_USERADD" \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      -q . \
+      -create "/Users/${login}"
+    ;;
   *) bl64_check_alert_unsupported ;;
   esac
 }
@@ -5784,7 +5993,7 @@ function bl64_rxtx_set_alias() {
 #######################################
 # BashLib64 / Module / Functions / Transfer and Receive data over the network
 #
-# Version: 1.12.0
+# Version: 1.13.0
 #######################################
 
 #######################################
@@ -5816,7 +6025,7 @@ function bl64_rxtx_web_get_file() {
     bl64_check_parameter 'destination' || return $?
 
   [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]] && return 0
-  _bl64_rxtx_backup "$destination" >/dev/null || return $?
+  bl64_fs_safeguard "$destination" >/dev/null || return $?
 
   bl64_msg_show_lib_task "$_BL64_RXTX_TXT_DOWNLOAD_FILE ($source)"
   # shellcheck disable=SC2086
@@ -5843,7 +6052,7 @@ function bl64_rxtx_web_get_file() {
     status=$?
   fi
 
-  _bl64_rxtx_restore "$destination" "$status" >/dev/null || return $?
+  bl64_fs_restore "$destination" "$status" >/dev/null || return $?
 
   return $status
 }
@@ -5852,7 +6061,7 @@ function bl64_rxtx_web_get_file() {
 # Pull directory contents from git repo
 #
 # * Content of source path is downloaded into destination (source_path/* --> destionation/). Source path itself is not created
-# * If the destination is already present no update is done unless $3=$BL64_LIB_VAR_ON
+# * If the destination is already present no update is done unless $4=$BL64_LIB_VAR_ON
 # * If asked to replace destination, temporary backup is done in case git fails by moving the destination to a temp name
 # * Warning: git repo info is removed after pull (.git)
 #
@@ -5860,8 +6069,8 @@ function bl64_rxtx_web_get_file() {
 #   $1: URL to the GIT repository
 #   $2: source path. Format: relative to the repo URL. Use '.' to download the full repo
 #   $3: destination path. Format: full path
-#   $3: branch name. Default: main
-#   $5: replace existing content. Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)
+#   $4: replace existing content. Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)
+#   $5: branch name. Default: main
 # Outputs:
 #   STDOUT: command stdout
 #   STDERR: command error
@@ -5885,15 +6094,11 @@ function bl64_rxtx_git_get_dir() {
     bl64_check_path_relative "$source_path" ||
     return $?
 
-  # Check if destination is already present
-  if [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]]; then
-    bl64_msg_show_warning "$_BL64_RXTX_TXT_EXISTING_DESTINATION"
-    # shellcheck disable=SC2086
-    return $BL64_LIB_VAR_OK
-  else
-    # Asked to replace, backup first
-    _bl64_rxtx_backup "$destination" >/dev/null || return $?
-  fi
+  # shellcheck disable=SC2086
+  bl64_check_overwrite "$destination" "$replace" "$_BL64_RXTX_TXT_EXISTING_DESTINATION" || return $BL64_LIB_VAR_OK
+
+  # Asked to replace, backup first
+  bl64_fs_safeguard "$destination" || return $?
 
   # Detect what type of path is requested
   if [[ "$source_path" == '.' || "$source_path" == './' ]]; then
@@ -5905,14 +6110,14 @@ function bl64_rxtx_git_get_dir() {
 
   # Remove GIT repo metadata
   if [[ -d "${destination}/.git" ]]; then
-    bl64_dbg_lib_show_info 'remove git metadata'
+    bl64_dbg_lib_show_info "remove git metadata (${destination}/.git)"
     # shellcheck disable=SC2164
     cd "$destination"
     bl64_fs_rm_full '.git' >/dev/null
   fi
 
   # Check if restore is needed
-  _bl64_rxtx_restore "$destination" "$status" >/dev/null || return $?
+  bl64_fs_restore "$destination" "$status" >/dev/null || return $?
   return $status
 }
 
@@ -5990,8 +6195,6 @@ function _bl64_rxtx_git_get_dir_root() {
 
   # Clone the repo
   bl64_vcs_git_clone "$source_url" "$repo" "$branch" &&
-    # Promote to destination
-    [[ -d "$transition" ]] &&
     bl64_dbg_lib_show_info 'promote to destination' &&
     bl64_fs_mv "$transition" "$destination"
   status=$?
@@ -6030,49 +6233,6 @@ function _bl64_rxtx_git_get_dir_sub() {
   status=$?
 
   [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
-  return $status
-}
-
-function _bl64_rxtx_backup() {
-  bl64_dbg_lib_show_function "$@"
-  local destination="$1"
-  local backup="${destination}${_BL64_RXTX_BACKUP_POSTFIX}"
-  local -i status=0
-
-  if [[ -e "$destination" ]]; then
-    bl64_fs_mv "$destination" "$backup"
-    status=$?
-  fi
-
-  ((status != 0)) && status=$BL64_LIB_ERROR_TASK_BACKUP
-  # shellcheck disable=SC2086
-  return $status
-}
-
-function _bl64_rxtx_restore() {
-  bl64_dbg_lib_show_function "$@"
-  local destination="$1"
-  local result="$2"
-  local backup="${destination}${_BL64_RXTX_BACKUP_POSTFIX}"
-  local -i status=0
-
-  # Check if restore is needed based on the operation result
-  if [[ "$result" == "$BL64_LIB_VAR_OK" ]]; then
-    # Operation was ok, backup no longer needed
-    [[ -e "$backup" ]] && bl64_fs_rm_full "$backup"
-    # shellcheck disable=SC2086
-    return $BL64_LIB_VAR_OK
-  fi
-
-  # Remove invalid content
-  [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
-
-  # Restore content from backup
-  bl64_fs_mv "$backup" "$destination"
-  status=$?
-
-  ((status != 0)) && status=$BL64_LIB_ERROR_TASK_RESTORE
-  # shellcheck disable=SC2086
   return $status
 }
 
@@ -6217,7 +6377,7 @@ function bl64_txt_run_awk() {
 #######################################
 # BashLib64 / Module / Setup / Manage Version Control System
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -6300,6 +6460,8 @@ function bl64_vcs_set_options() {
 #######################################
 # GIT CLI wrapper with verbose, debug and common options
 #
+# * Trust no one. Ignore user provided config and use default config
+#
 # Arguments:
 #   $@: arguments are passed as-is to the command
 # Outputs:
@@ -6314,10 +6476,17 @@ function bl64_vcs_run_git() {
   local debug="$BL64_VCS_SET_GIT_QUIET"
 
   bl64_check_command "$BL64_VCS_CMD_GIT" || return $?
+  bl64_dbg_lib_show_info "current path: $(pwd)"
+  if bl64_dbg_lib_command_enabled; then
+    debug=''
+    GIT_TRACE='2'
+  else
+    GIT_TRACE='0'
+  fi
 
-  bl64_dbg_lib_command_enabled && debug=''
-  # shellcheck disable=SC2086
-  bl64_dbg_lib_show_info "$BL64_VCS_CMD_GIT" $debug $BL64_VCS_SET_GIT_NO_PAGER "$@"
+  GIT_CONFIG_NOSYSTEM='0'
+  GIT_AUTHOR_EMAIL='nouser@nodomain'
+  GIT_AUTHOR_NAME='bl64_vcs_run_git'
 
   # shellcheck disable=SC2086
   "$BL64_VCS_CMD_GIT" $debug $BL64_VCS_SET_GIT_NO_PAGER "$@"
@@ -6359,6 +6528,7 @@ function bl64_vcs_git_clone() {
   # shellcheck disable=SC2164
   cd "$destination"
 
+  # shellcheck disable=SC2086
   bl64_vcs_run_git \
     clone \
     --depth 1 \
@@ -6538,7 +6708,7 @@ function bl64_xsv_search_records() {
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 1.10.1
+# Version: 1.11.0
 #######################################
 
 #
@@ -6612,8 +6782,7 @@ else
     bl64_fs_set_alias &&
     bl64_arc_set_command &&
     bl64_arc_set_options &&
-    bl64_iam_set_command &&
-    bl64_iam_set_alias &&
+    bl64_iam_setup &&
     bl64_pkg_set_command &&
     bl64_pkg_set_options &&
     bl64_pkg_set_alias &&

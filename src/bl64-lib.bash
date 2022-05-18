@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 1.10.1
+# Version: 1.11.0
 #######################################
 
 #
@@ -75,8 +75,7 @@ else
     bl64_fs_set_alias &&
     bl64_arc_set_command &&
     bl64_arc_set_options &&
-    bl64_iam_set_command &&
-    bl64_iam_set_alias &&
+    bl64_iam_setup &&
     bl64_pkg_set_command &&
     bl64_pkg_set_options &&
     bl64_pkg_set_alias &&

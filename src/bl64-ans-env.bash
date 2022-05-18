@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with Ansible CLI
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -14,3 +14,6 @@ export BL64_ANS_CMD_ANSIBLE_GALAXY="${BL64_ANS_CMD_ANSIBLE_GALAXY:-}"
 export BL64_ANS_SET_VERBOSE=''
 export BL64_ANS_SET_DIFF=''
 export BL64_ANS_SET_DEBUG=''
+
+# External commands variables
+export ANSIBLE_CONFIG

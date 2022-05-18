@@ -17,3 +17,5 @@ set -o 'errexit'
 set +o 'nounset'
 
 # Do not set/unset: 'keyword', 'noexec'
+
+export BL64_LIB_DEBUG=0

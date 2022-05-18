@@ -1,8 +1,32 @@
 #######################################
 # BashLib64 / Module / Setup / Manage OS identity and access service
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_iam_setup() {
+  bl64_dbg_lib_show_function
+
+  bl64_iam_set_command &&
+    bl64_iam_set_alias &&
+    bl64_iam_set_options &&
+    BL64_IAM_MODULE="$BL64_LIB_VAR_ON"
+
+}
 
 #######################################
 # Identify and normalize commands
@@ -21,7 +45,7 @@
 #######################################
 function bl64_iam_set_command() {
   bl64_dbg_lib_show_function
-  # shellcheck disable=SC2034
+
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
@@ -53,7 +77,7 @@ function bl64_iam_set_command() {
 #######################################
 function bl64_iam_set_alias() {
   bl64_dbg_lib_show_function
-  # shellcheck disable=SC2034
+
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
@@ -63,6 +87,38 @@ function bl64_iam_set_alias() {
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD -q . -create"
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+}
+
+#######################################
+# Create command sets for common options
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_iam_set_options() {
+  bl64_dbg_lib_show_function
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
+    ;;
+  ${BL64_OS_ALP}-*)
+    # Home is created by default
+    BL64_IAM_SET_USERADD_CREATE_HOME=' '
+    ;;
+  ${BL64_OS_MCOS}-*)
+    # Home is created by default
+    BL64_IAM_SET_USERADD_CREATE_HOME=' '
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
