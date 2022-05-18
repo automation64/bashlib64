@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 1.10.0
+# Version: 1.11.0
 #######################################
 
 #######################################
@@ -340,8 +340,8 @@ function bl64_check_privilege_not_root() {
 #
 # Arguments:
 #   $1: Full path to the object
-#   $2: Error message
-#   $3: Overwrite flag. Must be ON(1) or OFF(0). Default: OFF
+#   $2: Overwrite flag. Must be ON(1) or OFF(0). Default: OFF
+#   $3: Error message
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
@@ -357,7 +357,7 @@ function bl64_check_overwrite() {
 
   bl64_check_parameter 'path' || return $?
 
-  if [[ "$overwrite" == "$BL64_LIB_VAR_OFF" ]]; then
+  if [[ "$overwrite" == "$BL64_LIB_VAR_OFF" || "$overwrite" == "$BL64_LIB_DEFAULT" ]]; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / path: ${path})"
       # shellcheck disable=SC2086
