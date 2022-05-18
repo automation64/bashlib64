@@ -1,16 +1,17 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Ansible CLI
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
 # Setup the bashlib64 module
 #
-# * Warning: bootstrap function
+# * Warning: required in order to use the module
+# * Check for core commands, fail if not available
 #
 # Arguments:
-#   None
+#   $1: (optional) Full path to the ansible command
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -19,10 +20,19 @@
 #   >0: setup failed
 #######################################
 function bl64_ans_setup() {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_show_function "$@"
+  local cmd_ansible="${1:-}"
+
+  # Use provided path if requested
+  if [[ -n "$cmd_ansible" ]]; then
+    BL64_ANS_CMD_ANSIBLE="$cmd_ansible"
+    BL64_ANS_CMD_ANSIBLE_GALAXY="${cmd_ansible}-galaxy"
+    BL64_ANS_CMD_ANSIBLE_PLAYBOOK="${cmd_ansible}-playbook"
+  fi
 
   bl64_ans_set_command &&
     bl64_ans_set_options &&
+    bl64_check_command "$BL64_ANS_CMD_ANSIBLE" &&
     BL64_ANS_MODULE="$BL64_LIB_VAR_ON"
 
 }
