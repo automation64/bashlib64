@@ -678,10 +678,9 @@ function bl64_fs_restore() {
   local destination="${1:-}"
   local result="${2:-}"
   local backup="${destination}${BL64_FS_SAFEGUARD_POSTFIX}"
-  local -i status=0
 
   bl64_check_parameter 'destination' &&
-    bl64_check_parameter 'result'
+    bl64_check_parameter 'result' ||
   return $?
 
   # Return if not present
