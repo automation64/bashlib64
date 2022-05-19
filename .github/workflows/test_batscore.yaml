@@ -15,4 +15,4 @@ jobs:
         run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
 
       - name: "Run ShellCheck"
-        run: "bash testmansh -b -o -e alpine-3-bash-test:latest"
+        run: "bash testmansh -b -o -m tap -e alpine-3-bash-test:latest"
