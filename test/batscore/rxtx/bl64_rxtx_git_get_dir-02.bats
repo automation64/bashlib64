@@ -27,6 +27,6 @@ teardown() {
     "$BL64_LIB_VAR_ON"
   assert_success
 
-  assert_file_exists "${test_dir}/target/devbl-set"
+  assert_file_exists "${test_dir}/devbl-set"
 
 }

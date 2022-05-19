@@ -4,7 +4,7 @@ on:
   - "push"
 
 jobs:
-  lint_shellcheck:
+  test_batscore:
     runs-on: "ubuntu-latest"
     steps:
 
@@ -14,7 +14,5 @@ jobs:
       - name: "Download testmansh"
         run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
 
-      # - name: "Run testmansh using batscore on alpine OS"
-      #   env:
-      #     BL64_LIB_DEBUG: "6"
-      #   run: "bash testmansh -b -o -m tap -e alpine-3-bash-test:latest"
+      - name: "Run testmansh using batscore on alpine OS"
+        run: "bash testmansh -b -o -m tap -e alpine-3-bash-test:latest"

@@ -127,6 +127,9 @@ function bl64_fs_copy_files() {
 #######################################
 # Merge 2 or more files into a new one, then set owner and permissions
 #
+# * If the destination is already present no update is done unless requested
+# * If asked to replace destination, temporary backup is done in case git fails by moving the destination to a temp name
+#
 # Arguments:
 #   $1: permissions. Regular chown format accepted. Default: umask defined
 #   $2: user name. Default: root
@@ -151,7 +154,6 @@ function bl64_fs_merge_files() {
   local destination="${5:-${BL64_LIB_DEFAULT}}"
   local path=''
   local -i status_cat=0
-  local -i status_file=0
 
   bl64_check_parameter 'destination' || return $?
   bl64_check_overwrite "$destination" "$replace" || return $?
@@ -165,6 +167,9 @@ function bl64_fs_merge_files() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "source files:[${*}]"
 
+  # Asked to replace, backup first
+  bl64_fs_safeguard "$destination" || return $?
+
   bl64_dbg_lib_show_info 'concatenate files'
   for path in "$@"; do
     bl64_check_path_absolute "$path" &&
@@ -173,27 +178,20 @@ function bl64_fs_merge_files() {
     ((status_cat != 0)) && break
     :
   done >>"$destination"
-  status_file=$?
 
   # Determine if mode needs to be set
-  if [[ "$status_file" == '0' && "$status_cat" == '0' && "$mode" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$status_cat" == '0' && "$mode" != "$BL64_LIB_DEFAULT" ]]; then
     bl64_fs_chmod "$mode" "$destination" || return $?
   fi
 
   # Determine if owner needs to be set
-  if [[ "$status_file" == '0' && "$status_cat" == '0' && "$user" != "$BL64_LIB_DEFAULT" && "$group" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$status_cat" == '0' && "$user" != "$BL64_LIB_DEFAULT" && "$group" != "$BL64_LIB_DEFAULT" ]]; then
     bl64_fs_chown "${user}:${group}" "$destination" || return $?
   fi
 
   # Rollback if error
-  # shellcheck disable=SC2030 # BL64_LIB_VERBOSE is temporary modified in a subshell to avoid changing the global setting
-  if ((status_cat != 0 || status_file != 0)); then
-    BL64_LIB_VERBOSE="$BL64_LIB_VAR_OFF"
-    bl64_fs_rm_file "$destination"
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_TASK_FAILED
-  fi
-  return 0
+  bl64_fs_restore "$destination" "$status_cat" || return $?
+  return $status_cat
 }
 
 #######################################
