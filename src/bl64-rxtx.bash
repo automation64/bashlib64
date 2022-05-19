@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Transfer and Receive data over the network
 #
-# Version: 1.13.0
+# Version: 1.13.1
 #######################################
 
 #######################################
@@ -60,7 +60,7 @@ function bl64_rxtx_web_get_file() {
     status=$?
   fi
 
-  bl64_fs_restore "$destination" "$status" >/dev/null || return $?
+  bl64_fs_restore "$destination" "$status" || return $?
 
   return $status
 }
@@ -125,7 +125,7 @@ function bl64_rxtx_git_get_dir() {
   fi
 
   # Check if restore is needed
-  bl64_fs_restore "$destination" "$status" >/dev/null || return $?
+  bl64_fs_restore "$destination" "$status" || return $?
   return $status
 }
 
