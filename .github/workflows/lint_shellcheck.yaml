@@ -1,0 +1,13 @@
+name: "Lint / ShellCheck"
+
+on:
+  - "push"
+
+jobs:
+  lint_shellcheck:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+      - name: "Download testmansh"
+        run: "pwd"
