@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 1.11.0
+# Version: 1.12.0
 #######################################
 
 #######################################
@@ -372,7 +372,7 @@ function bl64_check_overwrite() {
 # Raise unsupported platform error
 #
 # Arguments:
-#   $1: target (function name, command path, etc)
+#   None
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
@@ -380,9 +380,8 @@ function bl64_check_overwrite() {
 #   BL64_LIB_ERROR_OS_INCOMPATIBLE
 #######################################
 function bl64_check_alert_unsupported() {
-  local target="${1:-}"
 
-  bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / os: ${BL64_OS_DISTRO}${target:+ / command: ${target}})"
+  bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / os: ${BL64_OS_DISTRO})"
   return $BL64_LIB_ERROR_OS_INCOMPATIBLE
 }
 
