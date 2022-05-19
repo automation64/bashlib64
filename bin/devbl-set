@@ -1,6 +1,9 @@
 #!/bin/sh
 #
-# Set development environment
+# Set development environment variables
+#
+# * Source this script from the project's root directory
+# * Template Version: v1.0.1
 #
 
 # Check calling location
@@ -10,13 +13,13 @@ if test $? -ne 0; then
 fi
 
 # Load local variables
-# shellcheck source-path=SCRIPTDIR/..
+# shellcheck source=SCRIPTDIR/../.local
 . ./.local
 
 # Load secrets
-# shellcheck source-path=SCRIPTDIR/..
+# shellcheck source=SCRIPTDIR/../.secrets
 . ./.secrets
 
 # Load global variables
-# shellcheck source-path=SCRIPTDIR/..
+# shellcheck source=SCRIPTDIR/../.env
 . ./.env
