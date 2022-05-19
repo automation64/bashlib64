@@ -7,12 +7,12 @@ jobs:
   lint_shellcheck:
     runs-on: "ubuntu-latest"
     steps:
+
       - name: "Check out repository code"
         uses: "actions/checkout@main"
+
       - name: "Download testmansh"
         run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-      - name: "Search Commands"
-        run: |
-          command -v shellcheck
+
       - name: "Run ShellCheck"
-        run: "bash testmansh -t -c test/lib/bashlib64.bash"
+        run: "testmansh -t -c test/lib/bashlib64.bash"
