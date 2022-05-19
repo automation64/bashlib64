@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -643,4 +643,76 @@ function bl64_cnt_podman_tag() {
     tag \
     "$source" \
     "$target"
+}
+
+#######################################
+# Runs a container image
+#
+# Arguments:
+#   $@: arguments are passes as-is
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_cnt_run() {
+  bl64_dbg_lib_show_function "$@"
+
+  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
+    bl64_cnt_docker_run "$@"
+  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
+    bl64_cnt_podman_run "$@"
+  else
+    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_MISSING
+  fi
+}
+
+#######################################
+# Command wrapper: podman run
+#
+# * Provides verbose and debug support
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_podman_run() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_cnt_run_podman \
+    run \
+    --rm \
+    "$@"
+}
+
+#######################################
+# Command wrapper: docker run
+#
+# * Provides verbose and debug support
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_docker_run() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_cnt_run_docker \
+    run \
+    --rm \
+    "$@"
+
 }
