@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -127,15 +127,12 @@ function bl64_fs_copy_files() {
 #######################################
 # Merge 2 or more files into a new one, then set owner and permissions
 #
-# * Will not overwrite if already existing
-#
-# Requirements:
-#   * root privilege (sudo) if paths are restricted or change owner is requested
 # Arguments:
 #   $1: permissions. Regular chown format accepted. Default: umask defined
 #   $2: user name. Default: root
 #   $3: group name. Default: root (or equivalent)
-#   $4: destination file. Full path
+#   $4: replace existing content. Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)
+#   $5: destination file. Full path
 #   $@: source files. Full path
 # Outputs:
 #   STDOUT: command dependant
@@ -150,26 +147,25 @@ function bl64_fs_merge_files() {
   local mode="${1:-${BL64_LIB_DEFAULT}}"
   local user="${2:-${BL64_LIB_DEFAULT}}"
   local group="${3:-${BL64_LIB_DEFAULT}}"
-  local destination="${4:-${BL64_LIB_DEFAULT}}"
+  local replace="${4:-${BL64_LIB_DEFAULT}}"
+  local destination="${5:-${BL64_LIB_DEFAULT}}"
   local path=''
   local -i status_cat=0
   local -i status_file=0
 
   bl64_check_parameter 'destination' || return $?
-  bl64_check_overwrite "$destination" || return $?
+  bl64_check_overwrite "$destination" "$replace" || return $?
 
   # Remove consumed parameters
-  bl64_dbg_lib_show_info "parameters:[${*}]"
   shift
   shift
   shift
   shift
-
-  # shellcheck disable=SC2086
+  shift
   bl64_check_parameters_none "$#" || return $?
+  bl64_dbg_lib_show_info "source files:[${*}]"
 
-  bl64_dbg_lib_show_info "paths:[${*}]"
-
+  bl64_dbg_lib_show_info 'concatenate files'
   for path in "$@"; do
     bl64_check_path_absolute "$path" &&
       "$BL64_OS_CMD_CAT" "$path"
@@ -682,10 +678,9 @@ function bl64_fs_restore() {
   local destination="${1:-}"
   local result="${2:-}"
   local backup="${destination}${BL64_FS_SAFEGUARD_POSTFIX}"
-  local -i status=0
 
   bl64_check_parameter 'destination' &&
-    bl64_check_parameter 'result'
+    bl64_check_parameter 'result' ||
   return $?
 
   # Return if not present

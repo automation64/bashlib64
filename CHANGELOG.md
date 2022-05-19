@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.0]
+
+### Added
+
+- fs
+  - bl64_fs_merge_files: overwrite option
+- ans
+  - bl64_ans_setup: set ansible path
+
 ## [2.8.0]
 
 ### Added
@@ -412,7 +421,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.7.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.9.0...HEAD
+[2.9.0]: https://github.com/serdigital64/bashlib64/compare/2.8.0...2.9.0
+[2.8.0]: https://github.com/serdigital64/bashlib64/compare/2.7.0...2.8.0
 [2.7.0]: https://github.com/serdigital64/bashlib64/compare/2.6.0...2.7.0
 [2.6.0]: https://github.com/serdigital64/bashlib64/compare/2.5.0...2.6.0
 [2.5.0]: https://github.com/serdigital64/bashlib64/compare/2.4.0...2.5.0
