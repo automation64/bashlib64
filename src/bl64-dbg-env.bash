@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Show shell debugging information
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #
@@ -44,7 +44,6 @@ readonly _BL64_DBG_TXT_UID='Script / Effective User ID'
 readonly _BL64_DBG_TXT_BASH_ARGV='Script / Arguments'
 readonly _BL64_DBG_TXT_COMMAND='Script / Last executed command'
 readonly _BL64_DBG_TXT_STATUS='Script / Last exit status'
-readonly _BL64_DBG_TXT_SCRIPT_FATAL='the script is unable to contine due to a critical error'
 
 readonly _BL64_DBG_TXT_FUNCTION_RUN='run function with parameters'
 
