@@ -15,4 +15,4 @@ jobs:
         run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
 
       - name: "Run ShellCheck"
-        run: "testmansh -t -c test/lib/bashlib64.bash"
+        run: "bash testmansh -t -c test/lib/bashlib64.bash"
