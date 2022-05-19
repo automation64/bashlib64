@@ -85,6 +85,7 @@ function bl64_rbac_check_sudoers() {
 
   bl64_dbg_lib_command_enabled && debug=' '
 
+  # shellcheck disable=SC2086
   "$BL64_RBAC_CMD_VISUDO" \
     $debug \
     --check \
