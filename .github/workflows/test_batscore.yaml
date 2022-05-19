@@ -1,0 +1,18 @@
+name: "Test / BatsCore"
+
+on:
+  - "push"
+
+jobs:
+  lint_shellcheck:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Run ShellCheck"
+        run: "bash testmansh -b -o -e alpine-3-bash-test:latest"
