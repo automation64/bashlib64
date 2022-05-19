@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_fs_merge_files: overwrite option
 - ans
   - bl64_ans_setup: set ansible path
+- cnt
+  - new function: cnt_run
 
 ## [2.8.0]
 
