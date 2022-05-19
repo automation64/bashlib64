@@ -1,6 +1,6 @@
 setup() {
   . "$DEVBL_TEST_SETUP"
-  bl64_ans_setup
+  bl64_ans_setup "$BL64_OS_CMD_TRUE"
 }
 
 @test "bl64_ans_set_command: commands are set" {

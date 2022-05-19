@@ -1,0 +1,20 @@
+name: "Test / BatsCore"
+
+on:
+  - "push"
+
+jobs:
+  lint_shellcheck:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      # - name: "Run testmansh using batscore on alpine OS"
+      #   env:
+      #     BL64_LIB_DEBUG: "6"
+      #   run: "bash testmansh -b -o -m tap -e alpine-3-bash-test:latest"

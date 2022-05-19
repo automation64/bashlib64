@@ -1,32 +1,36 @@
 setup() {
   . "$DEVBL_TEST_SETUP"
 
-  _bl64_fs_restore_destination="$(mktemp -d)"
-  export _bl64_fs_restore_destination
+  TEST_SANDBOX="$(temp_make)"
+  export TEST_SANDBOX
 }
 
 teardown() {
 
-  [[ -d "$_bl64_fs_restore_destination" ]] && rm -Rf "$_bl64_fs_restore_destination"
+  temp_del "$TEST_SANDBOX"
 
 }
 
 @test "bl64_fs_restore: restore + result not ok + restore ok" {
 
-  test_file="${_bl64_fs_restore_destination}/org"
-  cat "${DEVBL_SAMPLES}/text_02.txt" > "$test_file"
-
+  # Create original file
+  original_file_path="${TEST_SANDBOX}/original_file"
   sample="${DEVBL_SAMPLES}/text_01.txt"
-  test_bkp="${_bl64_fs_restore_destination}/org${BL64_FS_SAFEGUARD_POSTFIX}"
-  cat "$sample" > "$test_bkp"
+  saved_file="${original_file_path}${BL64_FS_SAFEGUARD_POSTFIX}"
+  cat "$sample" > "$saved_file"
 
-  run bl64_fs_restore "$test_file" "1"
+  # Create updated file
+  updated_file="${original_file_path}"
+  sample2="${DEVBL_SAMPLES}/text_02.txt"
+  cat "$sample2" > "$updated_file"
+
+  run bl64_fs_restore "$original_file_path" '22'
   assert_success
 
-  assert_not_exists "$test_bkp"
-  assert_exists "$test_file"
+  assert_not_exists "$saved_file"
+  assert_exists "$original_file_path"
 
-  run diff "$sample" "$test_file"
+  run diff "$sample" "$original_file_path"
   assert_success
 
 }

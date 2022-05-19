@@ -10,10 +10,10 @@ setup() {
 
 }
 
-@test "bl64_fs_find_files: find one file - not found" {
+# @test "bl64_fs_find_files: find one file - not found" {
 
-  run bl64_fs_find_files "$DEVBL_SAMPLES" 'fake_file'
-  assert_success
-  assert_output ''
+#   run bl64_fs_find_files "$DEVBL_SAMPLES" 'fake_file'
+#   assert_success
+#   assert_output ''
 
-}
+# }

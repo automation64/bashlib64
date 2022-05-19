@@ -33,6 +33,7 @@ function bl64_gcp_run_gcloud() {
 
   [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_LIB_VAR_TRUE" ]] && config="--configuration $BL64_GCP_CONFIGURATION_NAME"
 
+  # shellcheck disable=SC2086
   "$BL64_GCP_CMD_GCLOUD" \
     $debug \
     $config \
