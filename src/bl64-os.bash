@@ -47,7 +47,7 @@ function _bl64_os_get_distro_from_os_release() {
 
   # shellcheck disable=SC1091
   source '/etc/os-release'
-  if [[ -n "$ID" && -n "$VERSION_ID" ]]; then
+  if [[ -n "${ID:-}" && -n "${VERSION_ID:-}" ]]; then
     BL64_OS_DISTRO="${ID^^}-${VERSION_ID}"
   fi
 
