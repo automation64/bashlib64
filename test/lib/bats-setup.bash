@@ -18,5 +18,5 @@ set +o 'nounset'
 
 # Do not set/unset: 'keyword', 'noexec'
 
-# Use 6 to enable bashlib64 function debug
+# Use 6 to enable bashlib64 function debug. WARNING: tests that rely pre-recorded output fill fail due to extra debug info
 export BL64_LIB_DEBUG=0
