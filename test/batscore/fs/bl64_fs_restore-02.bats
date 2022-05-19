@@ -27,8 +27,8 @@ teardown() {
   run bl64_fs_restore "$original_file_path" '22'
   assert_success
 
-  assert_exists "$saved_file"
-  assert_not_exists "$original_file_path"
+  assert_not_exists "$saved_file"
+  assert_exists "$original_file_path"
 
   run diff "$sample" "$original_file_path"
   assert_success
