@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 2.8.0
+# Version: 2.9.0
 #######################################
 
 # Do not inherit aliases and commands
@@ -686,16 +686,17 @@ readonly _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
 #######################################
 # BashLib64 / Module / Setup / Interact with Ansible CLI
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
 # Setup the bashlib64 module
 #
-# * Warning: bootstrap function
+# * Warning: required in order to use the module
+# * Check for core commands, fail if not available
 #
 # Arguments:
-#   None
+#   $1: (optional) Full path to the ansible command
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -704,10 +705,19 @@ readonly _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
 #   >0: setup failed
 #######################################
 function bl64_ans_setup() {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_show_function "$@"
+  local cmd_ansible="${1:-}"
+
+  # Use provided path if requested
+  if [[ -n "$cmd_ansible" ]]; then
+    BL64_ANS_CMD_ANSIBLE="$cmd_ansible"
+    BL64_ANS_CMD_ANSIBLE_GALAXY="${cmd_ansible}-galaxy"
+    BL64_ANS_CMD_ANSIBLE_PLAYBOOK="${cmd_ansible}-playbook"
+  fi
 
   bl64_ans_set_command &&
     bl64_ans_set_options &&
+    bl64_check_command "$BL64_ANS_CMD_ANSIBLE" &&
     BL64_ANS_MODULE="$BL64_LIB_VAR_ON"
 
 }
@@ -804,7 +814,7 @@ function bl64_ans_set_options() {
 #######################################
 # BashLib64 / Module / Functions / Interact with Ansible CLI
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -846,8 +856,7 @@ function bl64_ans_run_ansible() {
   bl64_check_parameters_none "$#" || return $?
   local debug=' '
 
-  bl64_check_module_setup "$BL64_ANS_MODULE" &&
-    bl64_check_command "$BL64_ANS_CMD_ANSIBLE" ||
+  bl64_check_module_setup "$BL64_ANS_MODULE" ||
     return $?
 
   bl64_msg_verbose_lib_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
@@ -1160,7 +1169,7 @@ function bl64_arc_open_zip() {
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 1.10.0
+# Version: 1.12.0
 #######################################
 
 #######################################
@@ -1499,8 +1508,8 @@ function bl64_check_privilege_not_root() {
 #
 # Arguments:
 #   $1: Full path to the object
-#   $2: Error message
-#   $3: Overwrite flag. Must be ON(1) or OFF(0). Default: OFF
+#   $2: Overwrite flag. Must be ON(1) or OFF(0). Default: OFF
+#   $3: Error message
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
@@ -1516,7 +1525,7 @@ function bl64_check_overwrite() {
 
   bl64_check_parameter 'path' || return $?
 
-  if [[ "$overwrite" == "$BL64_LIB_VAR_OFF" ]]; then
+  if [[ "$overwrite" == "$BL64_LIB_VAR_OFF" || "$overwrite" == "$BL64_LIB_DEFAULT" ]]; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / path: ${path})"
       # shellcheck disable=SC2086
@@ -1531,7 +1540,7 @@ function bl64_check_overwrite() {
 # Raise unsupported platform error
 #
 # Arguments:
-#   $1: target (function name, command path, etc)
+#   None
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
@@ -1539,9 +1548,8 @@ function bl64_check_overwrite() {
 #   BL64_LIB_ERROR_OS_INCOMPATIBLE
 #######################################
 function bl64_check_alert_unsupported() {
-  local target="${1:-}"
 
-  bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / os: ${BL64_OS_DISTRO}${target:+ / command: ${target}})"
+  bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / os: ${BL64_OS_DISTRO})"
   return $BL64_LIB_ERROR_OS_INCOMPATIBLE
 }
 
@@ -2830,7 +2838,7 @@ function bl64_fs_set_alias() {
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -2956,15 +2964,12 @@ function bl64_fs_copy_files() {
 #######################################
 # Merge 2 or more files into a new one, then set owner and permissions
 #
-# * Will not overwrite if already existing
-#
-# Requirements:
-#   * root privilege (sudo) if paths are restricted or change owner is requested
 # Arguments:
 #   $1: permissions. Regular chown format accepted. Default: umask defined
 #   $2: user name. Default: root
 #   $3: group name. Default: root (or equivalent)
-#   $4: destination file. Full path
+#   $4: replace existing content. Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)
+#   $5: destination file. Full path
 #   $@: source files. Full path
 # Outputs:
 #   STDOUT: command dependant
@@ -2979,26 +2984,25 @@ function bl64_fs_merge_files() {
   local mode="${1:-${BL64_LIB_DEFAULT}}"
   local user="${2:-${BL64_LIB_DEFAULT}}"
   local group="${3:-${BL64_LIB_DEFAULT}}"
-  local destination="${4:-${BL64_LIB_DEFAULT}}"
+  local replace="${4:-${BL64_LIB_DEFAULT}}"
+  local destination="${5:-${BL64_LIB_DEFAULT}}"
   local path=''
   local -i status_cat=0
   local -i status_file=0
 
   bl64_check_parameter 'destination' || return $?
-  bl64_check_overwrite "$destination" || return $?
+  bl64_check_overwrite "$destination" "$replace" || return $?
 
   # Remove consumed parameters
-  bl64_dbg_lib_show_info "parameters:[${*}]"
   shift
   shift
   shift
   shift
-
-  # shellcheck disable=SC2086
+  shift
   bl64_check_parameters_none "$#" || return $?
+  bl64_dbg_lib_show_info "source files:[${*}]"
 
-  bl64_dbg_lib_show_info "paths:[${*}]"
-
+  bl64_dbg_lib_show_info 'concatenate files'
   for path in "$@"; do
     bl64_check_path_absolute "$path" &&
       "$BL64_OS_CMD_CAT" "$path"
@@ -3511,10 +3515,9 @@ function bl64_fs_restore() {
   local destination="${1:-}"
   local result="${2:-}"
   local backup="${destination}${BL64_FS_SAFEGUARD_POSTFIX}"
-  local -i status=0
 
   bl64_check_parameter 'destination' &&
-    bl64_check_parameter 'result'
+    bl64_check_parameter 'result' ||
   return $?
 
   # Return if not present
@@ -3900,6 +3903,7 @@ function bl64_gcp_run_gcloud() {
 
   [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_LIB_VAR_TRUE" ]] && config="--configuration $BL64_GCP_CONFIGURATION_NAME"
 
+  # shellcheck disable=SC2086
   "$BL64_GCP_CMD_GCLOUD" \
     $debug \
     $config \
@@ -4117,6 +4121,7 @@ function bl64_iam_user_add() {
     return $?
 
   bl64_msg_show_lib_task "$_BL64_IAM_TXT_ADD_USER ($login)"
+  # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     "$BL64_IAM_CMD_USERADD" \
@@ -4124,14 +4129,12 @@ function bl64_iam_user_add() {
       "$login"
     ;;
   ${BL64_OS_ALP}-*)
-    # shellcheck disable=SC2086
     "$BL64_IAM_CMD_USERADD" \
       $BL64_IAM_SET_USERADD_CREATE_HOME \
       -D \
       "$login"
     ;;
   ${BL64_OS_MCOS}-*)
-    # shellcheck disable=SC2086
     "$BL64_IAM_CMD_USERADD" \
       $BL64_IAM_SET_USERADD_CREATE_HOME \
       -q . \
@@ -5715,6 +5718,7 @@ function bl64_rbac_check_sudoers() {
 
   bl64_dbg_lib_command_enabled && debug=' '
 
+  # shellcheck disable=SC2086
   "$BL64_RBAC_CMD_VISUDO" \
     $debug \
     --check \
