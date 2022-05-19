@@ -10,4 +10,8 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
       - name: "Download testmansh"
-        run: "pwd"
+        run: |
+          curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh
+      - name: "Run ShellCheck"
+        run: |
+          bash testmansh -c test/lib/bashlib64.bash
