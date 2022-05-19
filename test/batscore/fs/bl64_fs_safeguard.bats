@@ -1,19 +1,19 @@
 setup() {
   . "$DEVBL_TEST_SETUP"
 
-  _bl64_fs_safeguard_destination="$(mktemp -d)"
-  export _bl64_fs_safeguard_destination
+  TEST_SANDBOX="$(temp_make)"
+  export TEST_SANDBOX
 }
 
 teardown() {
 
-  [[ -d "$_bl64_fs_safeguard_destination" ]] && rm -Rf "$_bl64_fs_safeguard_destination"
+  temp_del "$TEST_SANDBOX"
 
 }
 
 @test "bl64_fs_safeguard: backup" {
 
-  test_file="${_bl64_fs_safeguard_destination}/org"
+  test_file="${TEST_SANDBOX}/org"
   cat "${DEVBL_SAMPLES}/text_01.txt" > "$test_file"
 
   run bl64_fs_safeguard "$test_file"

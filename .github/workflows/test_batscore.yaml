@@ -14,5 +14,5 @@ jobs:
       - name: "Download testmansh"
         run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
 
-      - name: "Run ShellCheck"
+      - name: "Run testmansh using batscore on alpine OS"
         run: "bash testmansh -b -o -m tap -e alpine-3-bash-test:latest"

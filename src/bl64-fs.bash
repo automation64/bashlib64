@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 1.7.0
+# Version: 1.7.1
 #######################################
 
 #######################################
@@ -639,7 +639,7 @@ function bl64_fs_safeguard() {
   local destination="${1:-}"
   local backup="${destination}${BL64_FS_SAFEGUARD_POSTFIX}"
 
-  bl64_check_parameter 'destination' &&
+  bl64_check_parameter 'destination' ||
     return $?
 
   # Return if not present
