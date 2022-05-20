@@ -1,5 +1,5 @@
 setup() {
-  . "$DEVBL_TEST_SETUP"
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 }
 
 @test "bl64_rnd_get_range: check range" {

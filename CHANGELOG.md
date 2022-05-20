@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10.0]
+
+### Added
+
+- fs
+  - bl64_fs_merge_files: added rollback
+
 ## [2.9.0]
 
 ### Added

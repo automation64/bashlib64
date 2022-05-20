@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 # shellcheck source=SCRIPTDIR/devbl-set
@@ -14,10 +14,10 @@ source './bin/devbl-set' || {
   exit 1
 }
 
-# shellcheck source-path=SCRIPTDIR/../lib disable=SC2154
+# shellcheck source=SCRIPTDIR/../lib/bashlib64.bash
 source "$DEVBL_LIB_BASHLIB64" || exit 1
 
-function devbl_build_standalone() {
+function devbl_build_test() {
   local file=''
 
   bl64_dbg_app_show_info "DEVBL_MODULES='${DEVBL_MODULES}'"
@@ -25,17 +25,20 @@ function devbl_build_standalone() {
 
   # Create header
   bl64_msg_show_task "creating stand-alone library: $DEVBL_BUILD_BASHLIB64"
+  # shellcheck disable=SC2119
   {
     "$BL64_OS_CMD_CAT" "bl64-lib.header" && bl64_fmt_separator_line
     "$BL64_OS_CMD_CAT" "bl64-lib-env.bash"
   } >"$DEVBL_BUILD_BASHLIB64" || return 1
 
+  # shellcheck disable=SC2119
   for file in $DEVBL_MODULES; do
     [[ ! -f "bl64-${file}-env.bash" ]] && continue
     bl64_msg_show_task "adding module ${file} environment"
     { "$BL64_OS_CMD_CAT" "bl64-${file}-env.bash" && bl64_fmt_separator_line; } >>"$DEVBL_BUILD_BASHLIB64"
   done || return 1
 
+  # shellcheck disable=SC2119
   for file in $DEVBL_MODULES; do
     bl64_msg_show_task "adding module ${file} code"
     {
@@ -46,6 +49,7 @@ function devbl_build_standalone() {
 
   # Add remaining modules
   bl64_msg_show_task 'adding core'
+  # shellcheck disable=SC2119
   { "$BL64_OS_CMD_CAT" "bl64-lib.bash" && bl64_fmt_separator_line; } >>"$DEVBL_BUILD_BASHLIB64"
 }
 
@@ -99,14 +103,8 @@ function devbl_build_md() {
 
 }
 
-function devbl_promote_test() {
-  devbl_build_standalone &&
-    bl64_msg_show_task "promoting library to: ${DEVBL_TEST_BASHLIB64}" &&
-    bl64_fs_cp_file "$DEVBL_BUILD_BASHLIB64" "$DEVBL_TEST_BASHLIB64"
-}
-
-function devbl_promote_prod() {
-  devbl_build_standalone &&
+function devbl_promote() {
+  devbl_build_test &&
     bl64_msg_show_task "promoting library to: ${DEVBL_PROD_BASHLIB64}" &&
     bl64_fs_cp_file "$DEVBL_BUILD_BASHLIB64" "$DEVBL_PROD_BASHLIB64"
 }
@@ -118,12 +116,11 @@ function devbl_build_check_requirements() {
 
 function devbl_build_help() {
   bl64_msg_show_usage \
-    '<-b|-p|-t|-d> [-h]' \
+    '<-p|-t|-d> [-h]' \
     'Create the BashLib64 stand-alone distributable file' \
     '
-  -b: Build stand-alone file
-  -p: Promote: copy the stand-alone file to the public location
-  -t: Update test/lib: copy the stand-alone file to the testing environment
+  -p: Build stand-alone file and promote to public location
+  -t: Build stand-alone file for testing
   -d: Build documentation
   ' '
   -h: Show Help
@@ -139,19 +136,15 @@ declare devbl_build_command=''
 declare devbl_build_option=''
 
 (($# == 0)) && devbl_build_help && exit 1
-while getopts ':bptdh' devbl_build_option; do
+while getopts ':ptdh' devbl_build_option; do
   case "$devbl_build_option" in
   p)
-    devbl_build_command='devbl_promote_prod'
-    devbl_build_command_tag='build stand-alone and promote to production'
+    devbl_build_command='devbl_promote'
+    devbl_build_command_tag='build stand-alone library and promote to production'
     ;;
   t)
-    devbl_build_command='devbl_promote_test'
-    devbl_build_command_tag='build stand-alone and promote to testing'
-    ;;
-  b)
-    devbl_build_command='devbl_build_standalone'
-    devbl_build_command_tag='build stand-alone library'
+    devbl_build_command='devbl_build_test'
+    devbl_build_command_tag='build stand-alone library for testing'
     ;;
   d)
     devbl_build_command='devbl_build_docs'
@@ -165,7 +158,7 @@ devbl_build_check_requirements || exit 1
 
 bl64_msg_show_batch_start "$devbl_build_command_tag"
 case "$devbl_build_command" in
-'devbl_build_standalone' | 'devbl_build_docs' | 'devbl_promote_test' | 'devbl_promote_prod') "$devbl_build_command" ;;
+'devbl_build_docs' | 'devbl_build_test' | 'devbl_promote') "$devbl_build_command" ;;
 *) bl64_check_alert_undefined "$devbl_build_command" ;;
 esac
 devbl_build_status=$?

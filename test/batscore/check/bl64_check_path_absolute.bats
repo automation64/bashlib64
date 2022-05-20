@@ -1,5 +1,5 @@
 setup() {
-  . "$DEVBL_TEST_SETUP"
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 }
 
 @test "bl64_check_path_absolute: dir is absolute" {

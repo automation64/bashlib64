@@ -1,5 +1,5 @@
 setup() {
-  . "$DEVBL_TEST_SETUP"
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   _bl64_vcs_git_sparse_destination="$(mktemp -d)"
   export _bl64_vcs_git_sparse_destination

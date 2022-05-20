@@ -1,5 +1,5 @@
 setup() {
-  . "$DEVBL_TEST_SETUP"
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 }
 
 function _test_bl64_dbg_lib_show_vars() {

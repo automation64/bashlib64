@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 2.9.0
+# Version: 2.10.0
 #######################################
 
 # Do not inherit aliases and commands
@@ -251,7 +251,7 @@ readonly _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
 #######################################
 # BashLib64 / Module / Globals / Show shell debugging information
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #
@@ -294,7 +294,6 @@ readonly _BL64_DBG_TXT_UID='Script / Effective User ID'
 readonly _BL64_DBG_TXT_BASH_ARGV='Script / Arguments'
 readonly _BL64_DBG_TXT_COMMAND='Script / Last executed command'
 readonly _BL64_DBG_TXT_STATUS='Script / Last exit status'
-readonly _BL64_DBG_TXT_SCRIPT_FATAL='the script is unable to contine due to a critical error'
 
 readonly _BL64_DBG_TXT_FUNCTION_RUN='run function with parameters'
 
@@ -3012,6 +3011,9 @@ function bl64_fs_copy_files() {
 #######################################
 # Merge 2 or more files into a new one, then set owner and permissions
 #
+# * If the destination is already present no update is done unless requested
+# * If asked to replace destination, temporary backup is done in case git fails by moving the destination to a temp name
+#
 # Arguments:
 #   $1: permissions. Regular chown format accepted. Default: umask defined
 #   $2: user name. Default: root
@@ -3036,7 +3038,6 @@ function bl64_fs_merge_files() {
   local destination="${5:-${BL64_LIB_DEFAULT}}"
   local path=''
   local -i status_cat=0
-  local -i status_file=0
 
   bl64_check_parameter 'destination' || return $?
   bl64_check_overwrite "$destination" "$replace" || return $?
@@ -3050,6 +3051,9 @@ function bl64_fs_merge_files() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "source files:[${*}]"
 
+  # Asked to replace, backup first
+  bl64_fs_safeguard "$destination" || return $?
+
   bl64_dbg_lib_show_info 'concatenate files'
   for path in "$@"; do
     bl64_check_path_absolute "$path" &&
@@ -3058,27 +3062,20 @@ function bl64_fs_merge_files() {
     ((status_cat != 0)) && break
     :
   done >>"$destination"
-  status_file=$?
 
   # Determine if mode needs to be set
-  if [[ "$status_file" == '0' && "$status_cat" == '0' && "$mode" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$status_cat" == '0' && "$mode" != "$BL64_LIB_DEFAULT" ]]; then
     bl64_fs_chmod "$mode" "$destination" || return $?
   fi
 
   # Determine if owner needs to be set
-  if [[ "$status_file" == '0' && "$status_cat" == '0' && "$user" != "$BL64_LIB_DEFAULT" && "$group" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$status_cat" == '0' && "$user" != "$BL64_LIB_DEFAULT" && "$group" != "$BL64_LIB_DEFAULT" ]]; then
     bl64_fs_chown "${user}:${group}" "$destination" || return $?
   fi
 
   # Rollback if error
-  # shellcheck disable=SC2030 # BL64_LIB_VERBOSE is temporary modified in a subshell to avoid changing the global setting
-  if ((status_cat != 0 || status_file != 0)); then
-    BL64_LIB_VERBOSE="$BL64_LIB_VAR_OFF"
-    bl64_fs_rm_file "$destination"
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_TASK_FAILED
-  fi
-  return 0
+  bl64_fs_restore "$destination" "$status_cat" || return $?
+  return $status_cat
 }
 
 #######################################
@@ -4922,7 +4919,7 @@ function _bl64_os_get_distro_from_os_release() {
 
   # shellcheck disable=SC1091
   source '/etc/os-release'
-  if [[ -n "$ID" && -n "$VERSION_ID" ]]; then
+  if [[ -n "${ID:-}" && -n "${VERSION_ID:-}" ]]; then
     BL64_OS_DISTRO="${ID^^}-${VERSION_ID}"
   fi
 
@@ -6045,7 +6042,7 @@ function bl64_rxtx_set_alias() {
 #######################################
 # BashLib64 / Module / Functions / Transfer and Receive data over the network
 #
-# Version: 1.13.0
+# Version: 1.13.1
 #######################################
 
 #######################################
@@ -6104,7 +6101,7 @@ function bl64_rxtx_web_get_file() {
     status=$?
   fi
 
-  bl64_fs_restore "$destination" "$status" >/dev/null || return $?
+  bl64_fs_restore "$destination" "$status" || return $?
 
   return $status
 }
@@ -6169,7 +6166,7 @@ function bl64_rxtx_git_get_dir() {
   fi
 
   # Check if restore is needed
-  bl64_fs_restore "$destination" "$status" >/dev/null || return $?
+  bl64_fs_restore "$destination" "$status" || return $?
   return $status
 }
 
