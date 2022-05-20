@@ -790,17 +790,10 @@
 <span class=normal>703</span>
 <span class=normal>704</span>
 <span class=normal>705</span>
-<span class=normal>706</span>
-<span class=normal>707</span>
-<span class=normal>708</span>
-<span class=normal>709</span>
-<span class=normal>710</span>
-<span class=normal>711</span>
-<span class=normal>712</span>
-<span class=normal>713</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>706</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Manage local filesystem</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.6.0</span>
+<span class=c1># Version: 1.7.1</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -926,15 +919,15 @@
 <span class=c1>#######################################</span>
 <span class=c1># Merge 2 or more files into a new one, then set owner and permissions</span>
 <span class=c1>#</span>
-<span class=c1># * Will not overwrite if already existing</span>
+<span class=c1># * If the destination is already present no update is done unless requested</span>
+<span class=c1># * If asked to replace destination, temporary backup is done in case git fails by moving the destination to a temp name</span>
 <span class=c1>#</span>
-<span class=c1># Requirements:</span>
-<span class=c1>#   * root privilege (sudo) if paths are restricted or change owner is requested</span>
 <span class=c1># Arguments:</span>
 <span class=c1>#   $1: permissions. Regular chown format accepted. Default: umask defined</span>
 <span class=c1>#   $2: user name. Default: root</span>
 <span class=c1>#   $3: group name. Default: root (or equivalent)</span>
-<span class=c1>#   $4: destination file. Full path</span>
+<span class=c1>#   $4: replace existing content. Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)</span>
+<span class=c1>#   $5: destination file. Full path</span>
 <span class=c1>#   $@: source files. Full path</span>
 <span class=c1># Outputs:</span>
 <span class=c1>#   STDOUT: command dependant</span>
@@ -949,26 +942,27 @@
   <span class=nb>local</span> <span class=nv>mode</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>user</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>group</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>4</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>replace</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>4</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>5</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>path</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
   <span class=nb>local</span> -i <span class=nv>status_cat</span><span class=o>=</span><span class=m>0</span>
-  <span class=nb>local</span> -i <span class=nv>status_file</span><span class=o>=</span><span class=m>0</span>
 
   bl64_check_parameter <span class=s1>&#39;destination&#39;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
-  bl64_check_overwrite <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  bl64_check_overwrite <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$replace</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=c1># Remove consumed parameters</span>
-  bl64_dbg_lib_show_info <span class=s2>&quot;parameters:[</span><span class=si>${</span><span class=p>*</span><span class=si>}</span><span class=s2>]&quot;</span>
   <span class=nb>shift</span>
   <span class=nb>shift</span>
   <span class=nb>shift</span>
   <span class=nb>shift</span>
-
-  <span class=c1># shellcheck disable=SC2086</span>
+  <span class=nb>shift</span>
   bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  bl64_dbg_lib_show_info <span class=s2>&quot;source files:[</span><span class=si>${</span><span class=p>*</span><span class=si>}</span><span class=s2>]&quot;</span>
 
-  bl64_dbg_lib_show_info <span class=s2>&quot;paths:[</span><span class=si>${</span><span class=p>*</span><span class=si>}</span><span class=s2>]&quot;</span>
+  <span class=c1># Asked to replace, backup first</span>
+  bl64_fs_safeguard <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
+  bl64_dbg_lib_show_info <span class=s1>&#39;concatenate files&#39;</span>
   <span class=k>for</span> path <span class=k>in</span> <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span><span class=p>;</span> <span class=k>do</span>
     bl64_check_path_absolute <span class=s2>&quot;</span><span class=nv>$path</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span>
       <span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_CAT</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$path</span><span class=s2>&quot;</span>
@@ -976,27 +970,20 @@
     <span class=o>((</span>status_cat !<span class=o>=</span> <span class=m>0</span><span class=o>))</span> <span class=o>&amp;&amp;</span> <span class=nb>break</span>
     :
   <span class=k>done</span> &gt;&gt;<span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>
-  <span class=nv>status_file</span><span class=o>=</span><span class=nv>$?</span>
 
   <span class=c1># Determine if mode needs to be set</span>
-  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$status_file</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;0&#39;</span> <span class=o>&amp;&amp;</span> <span class=s2>&quot;</span><span class=nv>$status_cat</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;0&#39;</span> <span class=o>&amp;&amp;</span> <span class=s2>&quot;</span><span class=nv>$mode</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$status_cat</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;0&#39;</span> <span class=o>&amp;&amp;</span> <span class=s2>&quot;</span><span class=nv>$mode</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
     bl64_fs_chmod <span class=s2>&quot;</span><span class=nv>$mode</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
   <span class=k>fi</span>
 
   <span class=c1># Determine if owner needs to be set</span>
-  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$status_file</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;0&#39;</span> <span class=o>&amp;&amp;</span> <span class=s2>&quot;</span><span class=nv>$status_cat</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;0&#39;</span> <span class=o>&amp;&amp;</span> <span class=s2>&quot;</span><span class=nv>$user</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=s2>&quot;</span><span class=nv>$group</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$status_cat</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;0&#39;</span> <span class=o>&amp;&amp;</span> <span class=s2>&quot;</span><span class=nv>$user</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span> <span class=s2>&quot;</span><span class=nv>$group</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
     bl64_fs_chown <span class=s2>&quot;</span><span class=si>${</span><span class=nv>user</span><span class=si>}</span><span class=s2>:</span><span class=si>${</span><span class=nv>group</span><span class=si>}</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
   <span class=k>fi</span>
 
   <span class=c1># Rollback if error</span>
-  <span class=c1># shellcheck disable=SC2030 # BL64_LIB_VERBOSE is temporary modified in a subshell to avoid changing the global setting</span>
-  <span class=k>if</span> <span class=o>((</span>status_cat !<span class=o>=</span> <span class=m>0</span> <span class=o>||</span> status_file !<span class=o>=</span> <span class=m>0</span><span class=o>))</span><span class=p>;</span> <span class=k>then</span>
-    <span class=nv>BL64_LIB_VERBOSE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=s2>&quot;</span>
-    bl64_fs_rm_file <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span>
-    <span class=c1># shellcheck disable=SC2086</span>
-    <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_TASK_FAILED</span>
-  <span class=k>fi</span>
-  <span class=k>return</span> <span class=m>0</span>
+  bl64_fs_restore <span class=s2>&quot;</span><span class=nv>$destination</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$status_cat</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  <span class=k>return</span> <span class=nv>$status_cat</span>
 <span class=o>}</span>
 
 <span class=c1>#######################################</span>
@@ -1442,7 +1429,7 @@
   <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>backup</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>destination</span><span class=si>}${</span><span class=nv>BL64_FS_SAFEGUARD_POSTFIX</span><span class=si>}</span><span class=s2>&quot;</span>
 
-  bl64_check_parameter <span class=s1>&#39;destination&#39;</span> <span class=o>&amp;&amp;</span>
+  bl64_check_parameter <span class=s1>&#39;destination&#39;</span> <span class=o>||</span>
     <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=c1># Return if not present</span>
@@ -1481,10 +1468,9 @@
   <span class=nb>local</span> <span class=nv>destination</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>result</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=nb>local</span> <span class=nv>backup</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>destination</span><span class=si>}${</span><span class=nv>BL64_FS_SAFEGUARD_POSTFIX</span><span class=si>}</span><span class=s2>&quot;</span>
-  <span class=nb>local</span> -i <span class=nv>status</span><span class=o>=</span><span class=m>0</span>
 
   bl64_check_parameter <span class=s1>&#39;destination&#39;</span> <span class=o>&amp;&amp;</span>
-    bl64_check_parameter <span class=s1>&#39;result&#39;</span>
+    bl64_check_parameter <span class=s1>&#39;result&#39;</span> <span class=o>||</span>
   <span class=k>return</span> <span class=nv>$?</span>
 
   <span class=c1># Return if not present</span>

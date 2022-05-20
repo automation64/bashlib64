@@ -151,7 +151,8 @@
 <span class=normal>124</span>
 <span class=normal>125</span>
 <span class=normal>126</span>
-<span class=normal>127</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>127</span>
+<span class=normal>128</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Manage role based access service</span>
 <span class=c1>#</span>
 <span class=c1># Version: 1.9.0</span>
@@ -238,6 +239,7 @@
 
   bl64_dbg_lib_command_enabled <span class=o>&amp;&amp;</span> <span class=nv>debug</span><span class=o>=</span><span class=s1>&#39; &#39;</span>
 
+  <span class=c1># shellcheck disable=SC2086</span>
   <span class=s2>&quot;</span><span class=nv>$BL64_RBAC_CMD_VISUDO</span><span class=s2>&quot;</span> <span class=se>\</span>
     <span class=nv>$debug</span> <span class=se>\</span>
     --check <span class=se>\</span>

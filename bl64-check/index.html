@@ -528,11 +528,10 @@
 <span class=normal>449</span>
 <span class=normal>450</span>
 <span class=normal>451</span>
-<span class=normal>452</span>
-<span class=normal>453</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>452</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Check for conditions and report status</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.10.0</span>
+<span class=c1># Version: 1.12.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -871,8 +870,8 @@
 <span class=c1>#</span>
 <span class=c1># Arguments:</span>
 <span class=c1>#   $1: Full path to the object</span>
-<span class=c1>#   $2: Error message</span>
-<span class=c1>#   $3: Overwrite flag. Must be ON(1) or OFF(0). Default: OFF</span>
+<span class=c1>#   $2: Overwrite flag. Must be ON(1) or OFF(0). Default: OFF</span>
+<span class=c1>#   $3: Error message</span>
 <span class=c1># Outputs:</span>
 <span class=c1>#   STDOUT: None</span>
 <span class=c1>#   STDERR: Error message</span>
@@ -888,7 +887,7 @@
 
   bl64_check_parameter <span class=s1>&#39;path&#39;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
-  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$overwrite</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$overwrite</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=s2>&quot;</span><span class=nv>$overwrite</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_DEFAULT</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
     <span class=k>if</span> <span class=o>[[</span> -e <span class=s2>&quot;</span><span class=nv>$path</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
       bl64_msg_show_error <span class=s2>&quot;</span><span class=si>${</span><span class=nv>message</span><span class=si>}</span><span class=s2> (</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_FUNCTION</span><span class=si>}</span><span class=s2>: </span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2> / path: </span><span class=si>${</span><span class=nv>path</span><span class=si>}</span><span class=s2>)&quot;</span>
       <span class=c1># shellcheck disable=SC2086</span>
@@ -903,7 +902,7 @@
 <span class=c1># Raise unsupported platform error</span>
 <span class=c1>#</span>
 <span class=c1># Arguments:</span>
-<span class=c1>#   $1: target (function name, command path, etc)</span>
+<span class=c1>#   None</span>
 <span class=c1># Outputs:</span>
 <span class=c1>#   STDOUT: none</span>
 <span class=c1>#   STDERR: message</span>
@@ -911,9 +910,8 @@
 <span class=c1>#   BL64_LIB_ERROR_OS_INCOMPATIBLE</span>
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_check_alert_unsupported<span class=o>()</span> <span class=o>{</span>
-  <span class=nb>local</span> <span class=nv>target</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>}</span><span class=s2>&quot;</span>
 
-  bl64_msg_show_error <span class=s2>&quot;</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_INCOMPATIBLE</span><span class=si>}</span><span class=s2> (</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_FUNCTION</span><span class=si>}</span><span class=s2>: </span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2> / os: </span><span class=si>${</span><span class=nv>BL64_OS_DISTRO</span><span class=si>}${</span><span class=nv>target</span><span class=p>:+ / command: </span><span class=si>${</span><span class=nv>target</span><span class=si>}}</span><span class=s2>)&quot;</span>
+  bl64_msg_show_error <span class=s2>&quot;</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_INCOMPATIBLE</span><span class=si>}</span><span class=s2> (</span><span class=si>${</span><span class=nv>_BL64_CHECK_TXT_FUNCTION</span><span class=si>}</span><span class=s2>: </span><span class=si>${</span><span class=nv>FUNCNAME</span><span class=p>[1]</span><span class=si>}</span><span class=s2> / os: </span><span class=si>${</span><span class=nv>BL64_OS_DISTRO</span><span class=si>}</span><span class=s2>)&quot;</span>
   <span class=k>return</span> <span class=nv>$BL64_LIB_ERROR_OS_INCOMPATIBLE</span>
 <span class=o>}</span>
 

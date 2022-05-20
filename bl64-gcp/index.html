@@ -127,7 +127,8 @@
 <span class=normal>94</span>
 <span class=normal>95</span>
 <span class=normal>96</span>
-<span class=normal>97</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>97</span>
+<span class=normal>98</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Interact with GCP CLI</span>
 <span class=c1>#</span>
 <span class=c1># Version: 1.1.0</span>
@@ -162,6 +163,7 @@
 
   <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_GCP_CONFIGURATION_CREATED</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_TRUE</span><span class=s2>&quot;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>config</span><span class=o>=</span><span class=s2>&quot;--configuration </span><span class=nv>$BL64_GCP_CONFIGURATION_NAME</span><span class=s2>&quot;</span>
 
+  <span class=c1># shellcheck disable=SC2086</span>
   <span class=s2>&quot;</span><span class=nv>$BL64_GCP_CMD_GCLOUD</span><span class=s2>&quot;</span> <span class=se>\</span>
     <span class=nv>$debug</span> <span class=se>\</span>
     <span class=nv>$config</span> <span class=se>\</span>

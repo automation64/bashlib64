@@ -72,8 +72,7 @@
 <span class=normal>47</span>
 <span class=normal>48</span>
 <span class=normal>49</span>
-<span class=normal>50</span>
-<span class=normal>51</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>50</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Manage OS identity and access service</span>
 <span class=c1>#</span>
 <span class=c1># Version: 1.8.0</span>
@@ -101,6 +100,7 @@
     <span class=k>return</span> <span class=nv>$?</span>
 
   bl64_msg_show_lib_task <span class=s2>&quot;</span><span class=nv>$_BL64_IAM_TXT_ADD_USER</span><span class=s2> (</span><span class=nv>$login</span><span class=s2>)&quot;</span>
+  <span class=c1># shellcheck disable=SC2086</span>
   <span class=k>case</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_DISTRO</span><span class=s2>&quot;</span> <span class=k>in</span>
   <span class=si>${</span><span class=nv>BL64_OS_UB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_DEB</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_FD</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_CNT</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_RHEL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_ALM</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_OL</span><span class=si>}</span>-* <span class=p>|</span> <span class=si>${</span><span class=nv>BL64_OS_RCK</span><span class=si>}</span>-*<span class=o>)</span>
     <span class=s2>&quot;</span><span class=nv>$BL64_IAM_CMD_USERADD</span><span class=s2>&quot;</span> <span class=se>\</span>
@@ -108,14 +108,12 @@
       <span class=s2>&quot;</span><span class=nv>$login</span><span class=s2>&quot;</span>
     <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_ALP</span><span class=si>}</span>-*<span class=o>)</span>
-    <span class=c1># shellcheck disable=SC2086</span>
     <span class=s2>&quot;</span><span class=nv>$BL64_IAM_CMD_USERADD</span><span class=s2>&quot;</span> <span class=se>\</span>
       <span class=nv>$BL64_IAM_SET_USERADD_CREATE_HOME</span> <span class=se>\</span>
       -D <span class=se>\</span>
       <span class=s2>&quot;</span><span class=nv>$login</span><span class=s2>&quot;</span>
     <span class=p>;;</span>
   <span class=si>${</span><span class=nv>BL64_OS_MCOS</span><span class=si>}</span>-*<span class=o>)</span>
-    <span class=c1># shellcheck disable=SC2086</span>
     <span class=s2>&quot;</span><span class=nv>$BL64_IAM_CMD_USERADD</span><span class=s2>&quot;</span> <span class=se>\</span>
       <span class=nv>$BL64_IAM_SET_USERADD_CREATE_HOME</span> <span class=se>\</span>
       -q . <span class=se>\</span>
