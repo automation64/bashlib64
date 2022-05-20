@@ -14,6 +14,9 @@ jobs:
       - name: "Download testmansh"
         run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
 
+      - name: "Prepare test environment"
+        run: "cp bashlib64.bash build"
+
       - name: "Run testmansh using batscore on alpine OS"
         shell: 'script -q -e -c "bash {0}"'
         run: "bash testmansh -b -o -m tap -e alpine-3-bash-test:latest"
