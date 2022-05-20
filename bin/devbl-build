@@ -20,7 +20,7 @@ source "$DEVBL_LIB_BASHLIB64" || exit 1
 function devbl_build_test() {
   local file=''
 
-  bl64_dbg_app_show_info "DEVBL_MODULES='${DEVBL_MODULES}'"
+  bl64_dbg_app_show_vars 'DEVBL_MODULES'
   cd "$DEVBL_SRC" || return 1
 
   # Create header
@@ -47,10 +47,10 @@ function devbl_build_test() {
     } >>"$DEVBL_BUILD_BASHLIB64"
   done || return 1
 
-  # Add remaining modules
   bl64_msg_show_task 'adding core'
   # shellcheck disable=SC2119
   { "$BL64_OS_CMD_CAT" "bl64-lib.bash" && bl64_fmt_separator_line; } >>"$DEVBL_BUILD_BASHLIB64"
+  bl64_fs_chmod '0755' "$DEVBL_BUILD_BASHLIB64"
 }
 
 function devbl_build_docs() {
