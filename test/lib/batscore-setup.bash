@@ -4,13 +4,15 @@
 # * Source this file from the first line of the setup() function in the test-case
 #
 
-. "${DEVBL_BATS_HELPER_SUPPORT}/load.bash"
-. "${DEVBL_BATS_HELPER_ASSERT}/load.bash"
-. "${DEVBL_BATS_HELPER_FILE}/load.bash"
+. "$TESTMANSH_CMD_BATS_HELPER_SUPPORT"
+. "$TESTMANSH_CMD_BATS_HELPER_ASSERT"
+. "$TESTMANSH_CMD_BATS_HELPER_FILE"
 
 # Do not overwrite signals already set by bats-core
 export BL64_LIB_TRAPS='0'
-. "$DEVBL_TEST_BASHLIB64"
+
+# Load the bashlib64 build library for all test-cases
+. "${TESTMANSH_PROJECT_BUILD}/bashlib64.bash"
 
 # Sets used by bats-core. Do not overwrite
 set -o 'errexit'
@@ -20,3 +22,7 @@ set +o 'nounset'
 
 # Use 6 to enable bashlib64 function debug. WARNING: tests that rely pre-recorded output fill fail due to extra debug info
 export BL64_LIB_DEBUG=0
+
+# Test-case specific variables
+export DEVBL_TEST_BASHLIB64="${TESTMANSH_PROJECT_BUILD}/bashlib64.bash"
+export DEVBL_SAMPLES="$TESTMANSH_TEST_SAMPLES"

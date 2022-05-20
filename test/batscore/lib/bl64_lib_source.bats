@@ -1,7 +1,7 @@
 setup() {
-  . "${DEVBL_BATS_HELPER_SUPPORT}/load.bash"
-  . "${DEVBL_BATS_HELPER_ASSERT}/load.bash"
-  . "${DEVBL_BATS_HELPER_FILE}/load.bash"
+  . "$TESTMANSH_CMD_BATS_HELPER_SUPPORT"
+  . "$TESTMANSH_CMD_BATS_HELPER_ASSERT"
+  . "$TESTMANSH_CMD_BATS_HELPER_FILE"
 }
 
 @test "bl64_lib_source: load library with defaults" {

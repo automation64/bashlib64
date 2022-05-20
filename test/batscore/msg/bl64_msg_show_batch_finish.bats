@@ -1,5 +1,5 @@
 setup() {
-  . "$DEVBL_TEST_SETUP"
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   bl64_msg_setup "$BL64_MSG_FORMAT_FULL"
 }

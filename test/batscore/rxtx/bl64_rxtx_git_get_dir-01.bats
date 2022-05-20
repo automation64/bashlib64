@@ -1,5 +1,5 @@
 setup() {
-  . "$DEVBL_TEST_SETUP"
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   _bl64_rxtx_git_get_dir_destination="$(temp_make)"
   _bl64_rxtx_git_get_dir_source='https://github.com/serdigital64/bashlib64.git'
