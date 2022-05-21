@@ -4,9 +4,7 @@ setup() {
 }
 
 @test "bl64_py_run_pip: run pip" {
-  if [[ ! -f '/run/.containerenv' ]]; then
-    skip 'this case can only be tested inside a container'
-  fi
+  [[ ! -f '/run/.containerenv' ]] && skip 'test-case for container mode'
 
   run bl64_py_run_pip
   set -u

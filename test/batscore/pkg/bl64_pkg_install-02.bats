@@ -4,9 +4,7 @@ setup() {
 }
 
 @test "bl64_pkg_install: install package + explicit sudo" {
-  if [[ ! -f '/run/.containerenv' ]]; then
-    skip 'this case can only be tested inside a container'
-  fi
+  [[ ! -f '/run/.containerenv' ]] && skip 'test-case for container mode'
   run $BL64_RBAC_ALIAS_SUDO_ENV /usr/bin/env bash -c "source $DEVBL_TEST_BASHLIB64; bl64_pkg_install file"
   assert_success
 }
