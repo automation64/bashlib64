@@ -38,4 +38,6 @@ readonly _BL64_PKG_TXT_INSTALL='install packages'
 readonly _BL64_PKG_TXT_PREPARE='initialize package manager'
 
 # External commands variables
-export DEBIAN_FRONTEND=''
+export DEBIAN_FRONTEND
+export DEBCONF_TERSE
+export DEBCONF_NOWARNINGS

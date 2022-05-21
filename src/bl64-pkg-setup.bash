@@ -24,17 +24,7 @@ function bl64_pkg_setup() {
   bl64_pkg_set_command &&
     bl64_pkg_set_alias &&
     bl64_pkg_set_options &&
-    BL64_PKG_MODULE="$BL64_LIB_VAR_ON" ||
-    return $?
-
-  # Set global parameters
-  # shellcheck disable=SC2249
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    DEBIAN_FRONTEND="noninteractive"
-    ;;
-  esac
-
+    BL64_PKG_MODULE="$BL64_LIB_VAR_ON"
 }
 
 #######################################
@@ -110,7 +100,7 @@ function bl64_pkg_set_options() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_PKG_SET_ASSUME_YES='--assume-yes'
     BL64_PKG_SET_SLIM=' '
-    BL64_PKG_SET_QUIET='--quiet'
+    BL64_PKG_SET_QUIET='--quiet --quiet'
     BL64_PKG_SET_VERBOSE='--show-progress'
     ;;
   ${BL64_OS_ALP}-*)
