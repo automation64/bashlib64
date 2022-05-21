@@ -7,7 +7,8 @@
 #######################################
 # Setup the bashlib64 module
 #
-# * Warning: bootstrap function
+# * Warning: required in order to use the module
+# * Check for core commands, fail if not available
 #
 # Arguments:
 #   None

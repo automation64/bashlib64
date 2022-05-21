@@ -9,9 +9,7 @@ setup() {
 
 @test "bl64_fs_create_dir: default mode,owner + 2 dirs" {
 
-  if [[ ! -f '/run/.containerenv' ]]; then
-    skip 'this case can only be tested inside a container'
-  fi
+  [[ ! -f '/run/.containerenv' ]] && skip 'test-case for container mode'
 
   target1="$TEST_SANDBOX/target1"
   target2="$TEST_SANDBOX/target2"
@@ -24,9 +22,7 @@ setup() {
 
 @test "bl64_fs_create_dir: mode + default owner + 2 dirs" {
 
-  if [[ ! -f '/run/.containerenv' ]]; then
-    skip 'this case can only be tested inside a container'
-  fi
+  [[ ! -f '/run/.containerenv' ]] && skip 'test-case for container mode'
 
   target1="$TEST_SANDBOX/target3"
   target2="$TEST_SANDBOX/target4"
