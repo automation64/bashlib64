@@ -1,8 +1,17 @@
-source=test/lib/bashlib64.bash
+#
+# External sources
+#
+
 external-sources=true
+# source-path=
+
+#
+# Optional checks
+#
+
 enable=add-default-case
 enable=avoid-nullary-conditions
 enable=check-unassigned-uppercase
 enable=deprecate-which
-#enable=quote-safe-variables
-#enable=require-variable-braces
+# enable=quote-safe-variables
+# enable=require-variable-braces
