@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -92,6 +92,8 @@ function bl64_py_pip_usr_install() {
 #######################################
 # Python wrapper with verbose, debug and common options
 #
+# * Trust no one. Ignore user provided config and use default config
+#
 # Arguments:
 #   $@: arguments are passed as-is to the command
 # Outputs:
@@ -102,11 +104,18 @@ function bl64_py_pip_usr_install() {
 #######################################
 function bl64_py_run_python() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
 
-  bl64_check_module_setup "$BL64_PY_MODULE" &&
-    bl64_check_command "$BL64_PY_CMD_PYTHON3" ||
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module_setup "$BL64_PY_MODULE" ||
     return $?
+
+  unset PYTHONHOME
+  unset PYTHONPATH
+  unset PYTHONSTARTUP
+  unset PYTHONDEBUG
+  unset PYTHONUSERBASE
+  unset PYTHONEXECUTABLE
+  unset PYTHONWARNINGS
 
   "$BL64_PY_CMD_PYTHON3" "$@"
 }
