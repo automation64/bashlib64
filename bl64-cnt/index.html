@@ -708,7 +708,8 @@
 <span class=normal>683</span>
 <span class=normal>684</span>
 <span class=normal>685</span>
-<span class=normal>686</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>686</span>
+<span class=normal>687</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Interact with container engines</span>
 <span class=c1>#</span>
 <span class=c1># Version: 1.5.0</span>
@@ -1025,6 +1026,7 @@
     bl64_check_file <span class=s2>&quot;</span><span class=si>${</span><span class=nv>context</span><span class=si>}</span><span class=s2>/</span><span class=si>${</span><span class=nv>file</span><span class=si>}</span><span class=s2>&quot;</span> <span class=o>||</span>
     <span class=k>return</span> <span class=nv>$?</span>
 
+  <span class=c1># shellcheck disable=SC2164</span>
   <span class=nb>cd</span> <span class=s2>&quot;</span><span class=si>${</span><span class=nv>context</span><span class=si>}</span><span class=s2>&quot;</span>
 
   <span class=k>if</span> <span class=o>[[</span> -x <span class=s2>&quot;</span><span class=nv>$BL64_CNT_CMD_DOCKER</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
