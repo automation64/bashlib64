@@ -5318,7 +5318,7 @@ function bl64_pkg_prepare() {
 function bl64_pkg_install() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_msg_show_task "$_BL64_PKG_TXT_INSTALL"
+  bl64_msg_show_task "$_BL64_PKG_TXT_INSTALL (${*})"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
@@ -5473,8 +5473,13 @@ function bl64_pkg_run_apt() {
   if bl64_dbg_lib_command_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
+    DEBCONF_NOWARNINGS='yes'
+    DEBCONF_TERSE='yes'
     verbose="$BL64_PKG_SET_QUIET"
   fi
+
+  # Avoid interactive questions
+  DEBIAN_FRONTEND="noninteractive"
 
   # shellcheck disable=SC2086
   "$BL64_PKG_CMD_APT" $verbose "$@"
@@ -5504,13 +5509,8 @@ function bl64_pkg_run_apk() {
   if bl64_dbg_lib_command_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
-    DEBCONF_NOWARNINGS='yes'
-    DEBCONF_TERSE='yes'
     verbose="$BL64_PKG_SET_QUIET"
   fi
-
-  # Avoid interactive questions
-  DEBIAN_FRONTEND="noninteractive"
 
   # shellcheck disable=SC2086
   "$BL64_PKG_CMD_APK" $verbose "$@"
