@@ -1,7 +1,9 @@
 name: "Test / BatsCore"
 
 on:
-  - "push"
+  push:
+    branches:
+      - "main"
 
 jobs:
   test_batscore_alpine_3:
