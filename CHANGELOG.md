@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - pkg
   - add module setup
   - add apk,yum,dnf,brew,apt wrappers
+- py
+  - normalize environment: reset PYTHON* shell environment variables to defaults
 
 ## [2.10.0]
 
