@@ -315,6 +315,7 @@ function bl64_cnt_build() {
     bl64_check_file "${context}/${file}" ||
     return $?
 
+  # shellcheck disable=SC2164
   cd "${context}"
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 readonly _BL64_CHECK_TXT_MODULE_NOT_SETUP='required bashlib64 module is not setup. Module must be initialized before usage'
@@ -11,6 +11,7 @@ readonly _BL64_CHECK_TXT_PARAMETER_NOT_SET='required shell variable is not set'
 
 readonly _BL64_CHECK_TXT_COMMAND_NOT_FOUND='required command is not present'
 readonly _BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE='required command is present but has no execution permission'
+readonly _BL64_CHECK_TXT_COMMAND_NOT_INSTALLED='required command is not installed'
 
 readonly _BL64_CHECK_TXT_FILE_NOT_FOUND='required file is not present'
 readonly _BL64_CHECK_TXT_FILE_NOT_FILE='path is present but is not a regular file'

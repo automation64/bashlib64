@@ -4,7 +4,7 @@ on:
   - "push"
 
 jobs:
-  test_batscore:
+  test_batscore_alpine_3:
     runs-on: "ubuntu-latest"
     steps:
 
@@ -15,8 +15,297 @@ jobs:
         run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
 
       - name: "Prepare test environment"
-        run: "cp bashlib64.bash build"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
 
-      # - name: "Run testmansh using batscore on alpine OS"
-      #   shell: 'script -q -e -c "bash {0}"'
-      #   run: "bash testmansh -b -o -m tap -e alpine-3-bash-test:latest"
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e alpine-3-bash-test:latest"
+
+  test_batscore_almalinux_8:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e almalinux-8-bash-test:latest"
+
+  test_batscore_rockylinux_8:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e rockylinux-8-bash-test:latest"
+
+  test_batscore_rhel_8:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e rhel-8-bash-test:latest"
+
+  test_batscore_centos_7:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e centos-7-bash-test:latest"
+
+  test_batscore_centos_8:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e centos-8-bash-test:latest"
+
+  test_batscore_centos_9:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e centos-9-bash-test:latest"
+
+  test_batscore_oraclelinux_7:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e oraclelinux-7-bash-test:latest"
+
+  test_batscore_oraclelinux_8:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e oraclelinux-8-bash-test:latest"
+
+  test_batscore_fedora_33:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e fedora-33-bash-test:latest"
+
+  test_batscore_fedora_34:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e fedora-34-bash-test:latest"
+
+  test_batscore_fedora_35:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e fedora-35-bash-test:latest"
+
+  test_batscore_debian_9:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e debian-9-bash-test:latest"
+
+  test_batscore_debian_10:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e debian-10-bash-test:latest"
+
+  test_batscore_debian_11:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e debian-11-bash-test:latest"
+
+  test_batscore_ubuntu_204:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e ubuntu-20.4-bash-test:latest"
+
+  test_batscore_ubuntu_214:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e ubuntu-21.4-bash-test:latest"
+
+  test_batscore_ubuntu_224:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e ubuntu-22.4-bash-test:latest"

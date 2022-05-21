@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Show shell debugging information
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 #
@@ -27,6 +27,7 @@ export BL64_DBG_TARGET_LIB_TRACE='5'
 export BL64_DBG_TARGET_LIB_TASK='6'
 export BL64_DBG_TARGET_LIB_CMD='7'
 export BL64_DBG_TARGET_LIB_ALL='8'
+export BL64_DBG_TARGET_ALL='9'
 
 readonly _BL64_DBG_TXT_FUNCTION_START='function tracing started'
 readonly _BL64_DBG_TXT_FUNCTION_STOP='function tracing stopped'

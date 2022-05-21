@@ -1,4 +1,5 @@
 setup() {
+  [[ -f '/run/.containerenv' ]] && skip 'not applicable to container mode'
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
 }
 

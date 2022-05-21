@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -26,3 +26,12 @@ export BL64_PY_SET_PIP_QUIET=''
 readonly _BL64_PY_TXT_PIP_PREPARE_PIP='upgrade pip module'
 readonly _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
 readonly _BL64_PY_TXT_PIP_INSTALL='install modules'
+
+# External commands variables
+export PYTHONHOME
+export PYTHONPATH
+export PYTHONSTARTUP
+export PYTHONDEBUG
+export PYTHONUSERBASE
+export PYTHONEXECUTABLE
+export PYTHONWARNINGS

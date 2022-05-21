@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 1.12.0
+# Version: 1.13.0
 #######################################
 
 #######################################
@@ -22,6 +22,7 @@
 #   $BL64_LIB_ERROR_FILE_NOT_EXECUTE
 #######################################
 function bl64_check_command() {
+  bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_COMMAND_NOT_FOUND}}"
 
@@ -34,12 +35,12 @@ function bl64_check_command() {
   fi
 
   if [[ "$path" == "$BL64_LIB_UNAVAILABLE" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_FOUND} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_INSTALLED} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
 
-  if [[ ! -f "$path" ]]; then
+  if [[ ! -e "$path" ]]; then
     bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / command: ${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_FOUND
@@ -70,6 +71,7 @@ function bl64_check_command() {
 #   $BL64_LIB_ERROR_FILE_NOT_READ
 #######################################
 function bl64_check_file() {
+  bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_FILE_NOT_FOUND}}"
 
@@ -108,6 +110,7 @@ function bl64_check_file() {
 #   $BL64_LIB_ERROR_DIRECTORY_NOT_READ
 #######################################
 function bl64_check_directory() {
+  bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND}}"
 
@@ -145,6 +148,7 @@ function bl64_check_directory() {
 #   $BL64_LIB_ERROR_PATH_NOT_FOUND
 #######################################
 function bl64_check_path() {
+  bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_PATH_NOT_FOUND}}"
 
@@ -176,6 +180,7 @@ function bl64_check_path() {
 #   $BL64_LIB_ERROR_PARAMETER_EMPTY
 #######################################
 function bl64_check_parameter() {
+  bl64_dbg_lib_show_function "$@"
   local parameter_name="${1:-}"
   local description="${2:-parameter: ${parameter_name}}"
 
@@ -216,6 +221,7 @@ function bl64_check_parameter() {
 #   $BL64_LIB_ERROR_EXPORT_SET
 #######################################
 function bl64_check_export() {
+  bl64_dbg_lib_show_function "$@"
   local export_name="${1:-}"
   local description="${2:-export: $export_name}"
 
@@ -251,6 +257,7 @@ function bl64_check_export() {
 #   $BL64_LIB_ERROR_PATH_NOT_RELATIVE
 #######################################
 function bl64_check_path_relative() {
+  bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_PATH_NOT_RELATIVE}}"
 
@@ -281,6 +288,7 @@ function bl64_check_path_relative() {
 #   $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
 #######################################
 function bl64_check_path_absolute() {
+  bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_PATH_NOT_ABSOLUTE}}"
 
@@ -306,6 +314,7 @@ function bl64_check_path_absolute() {
 #   $BL64_LIB_ERROR_PRIVILEGE_IS_ROOT
 #######################################
 function bl64_check_privilege_root() {
+  bl64_dbg_lib_show_function
   if [[ "$EUID" != '0' ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / current id: $EUID)"
     # shellcheck disable=SC2086
@@ -327,6 +336,7 @@ function bl64_check_privilege_root() {
 #   $BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT
 #######################################
 function bl64_check_privilege_not_root() {
+  bl64_dbg_lib_show_function
   if [[ "$EUID" == '0' ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PRIVILEGE_IS_ROOT} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]})"
     # shellcheck disable=SC2086
@@ -351,6 +361,7 @@ function bl64_check_privilege_not_root() {
 #   $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
 #######################################
 function bl64_check_overwrite() {
+  bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local overwrite="${2:-"$BL64_LIB_VAR_OFF"}"
   local message="${3:-${_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}}"
@@ -380,6 +391,7 @@ function bl64_check_overwrite() {
 #   BL64_LIB_ERROR_OS_INCOMPATIBLE
 #######################################
 function bl64_check_alert_unsupported() {
+  bl64_dbg_lib_show_function
 
   bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / os: ${BL64_OS_DISTRO})"
   return $BL64_LIB_ERROR_OS_INCOMPATIBLE
@@ -399,6 +411,7 @@ function bl64_check_alert_unsupported() {
 #   BL64_LIB_ERROR_TASK_UNDEFINED
 #######################################
 function bl64_check_alert_undefined() {
+  bl64_dbg_lib_show_function "$@"
   local target="${1:-}"
 
   bl64_msg_show_error "${_BL64_CHECK_TXT_UNDEFINED} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]}${target:+ / command: ${target}})"
@@ -417,6 +430,7 @@ function bl64_check_alert_undefined() {
 #   BL64_LIB_ERROR_TASK_UNDEFINED
 #######################################
 function bl64_check_parameters_none() {
+  bl64_dbg_lib_show_function "$@"
   local count="${1:-0}"
 
   if [[ "$count" == '0' ]]; then
@@ -439,6 +453,7 @@ function bl64_check_parameters_none() {
 #   BL64_LIB_ERROR_TASK_UNDEFINED
 #######################################
 function bl64_check_module_setup() {
+  bl64_dbg_lib_show_function "$@"
   local setup_status="${1:-}"
 
   bl64_check_parameter 'setup_status' || return $?

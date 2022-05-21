@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.11.0]
+
+- dbg:
+  - add debug all flag
+- pkg
+  - add module setup
+  - add apk,yum,dnf,brew,apt wrappers
+- py
+  - normalize environment: reset PYTHON* shell environment variables to defaults
+
 ## [2.10.0]
 
 ### Added
@@ -430,7 +440,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.9.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.11.0...HEAD
+[2.11.0]: https://github.com/serdigital64/bashlib64/compare/2.10.0...2.11.0
+[2.10.0]: https://github.com/serdigital64/bashlib64/compare/2.9.0...2.10.0
 [2.9.0]: https://github.com/serdigital64/bashlib64/compare/2.8.0...2.9.0
 [2.8.0]: https://github.com/serdigital64/bashlib64/compare/2.7.0...2.8.0
 [2.7.0]: https://github.com/serdigital64/bashlib64/compare/2.6.0...2.7.0
