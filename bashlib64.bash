@@ -196,7 +196,7 @@ export UNZIP
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 readonly _BL64_CHECK_TXT_MODULE_NOT_SETUP='required bashlib64 module is not setup. Module must be initialized before usage'
@@ -206,6 +206,7 @@ readonly _BL64_CHECK_TXT_PARAMETER_NOT_SET='required shell variable is not set'
 
 readonly _BL64_CHECK_TXT_COMMAND_NOT_FOUND='required command is not present'
 readonly _BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE='required command is present but has no execution permission'
+readonly _BL64_CHECK_TXT_COMMAND_NOT_INSTALLED='required command is not installed'
 
 readonly _BL64_CHECK_TXT_FILE_NOT_FOUND='required file is not present'
 readonly _BL64_CHECK_TXT_FILE_NOT_FILE='path is present but is not a regular file'
@@ -540,7 +541,7 @@ export DEBCONF_NOWARNINGS
 #######################################
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -565,6 +566,15 @@ export BL64_PY_SET_PIP_QUIET=''
 readonly _BL64_PY_TXT_PIP_PREPARE_PIP='upgrade pip module'
 readonly _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
 readonly _BL64_PY_TXT_PIP_INSTALL='install modules'
+
+# External commands variables
+export PYTHONHOME
+export PYTHONPATH
+export PYTHONSTARTUP
+export PYTHONDEBUG
+export PYTHONUSERBASE
+export PYTHONEXECUTABLE
+export PYTHONWARNINGS
 
 #######################################
 # BashLib64 / Module / Globals / Manage role based access service
@@ -1208,12 +1218,12 @@ function bl64_check_command() {
   fi
 
   if [[ "$path" == "$BL64_LIB_UNAVAILABLE" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_FOUND} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_INSTALLED} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
 
-  if [[ ! -f "$path" ]]; then
+  if [[ ! -e "$path" ]]; then
     bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / command: ${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_FOUND
@@ -5550,7 +5560,7 @@ function bl64_pkg_run_brew() {
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -5572,6 +5582,7 @@ function bl64_py_setup() {
 
   bl64_py_set_command &&
     bl64_py_set_options &&
+    bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
     BL64_PY_MODULE="$BL64_LIB_VAR_ON"
 }
 
@@ -5607,8 +5618,9 @@ function bl64_py_set_command() {
   ${BL64_OS_DEB}-9.*) BL64_PY_CMD_PYTHON35='/usr/bin/python3.5' ;;
   ${BL64_OS_DEB}-10.*) BL64_PY_CMD_PYTHON37='/usr/bin/python3.7' ;;
   ${BL64_OS_DEB}-11.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-  ${BL64_OS_UB}-20.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-  ${BL64_OS_UB}-21.* | ${BL64_OS_UB}-22.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
+  ${BL64_OS_UB}-20.*) BL64_PY_CMD_PYTHON38='/usr/bin/python3.8' ;;
+  ${BL64_OS_UB}-21.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+  ${BL64_OS_UB}-22.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
   ${BL64_OS_ALP}-3.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
   ${BL64_OS_MCOS}-12.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
   *) bl64_check_alert_unsupported ;;
@@ -5619,6 +5631,8 @@ function bl64_py_set_command() {
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON310"
   elif [[ -x "$BL64_PY_CMD_PYTHON39" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON39"
+  elif [[ -x "$BL64_PY_CMD_PYTHON38" ]]; then
+    BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON38"
   elif [[ -x "$BL64_PY_CMD_PYTHON37" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON37"
   elif [[ -x "$BL64_PY_CMD_PYTHON36" ]]; then
@@ -5626,6 +5640,7 @@ function bl64_py_set_command() {
   elif [[ -x "$BL64_PY_CMD_PYTHON35" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON35"
   fi
+  bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3'
 
 }
 
@@ -5656,7 +5671,7 @@ function bl64_py_set_options() {
 #######################################
 # BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -5747,6 +5762,8 @@ function bl64_py_pip_usr_install() {
 #######################################
 # Python wrapper with verbose, debug and common options
 #
+# * Trust no one. Ignore user provided config and use default config
+#
 # Arguments:
 #   $@: arguments are passed as-is to the command
 # Outputs:
@@ -5757,11 +5774,18 @@ function bl64_py_pip_usr_install() {
 #######################################
 function bl64_py_run_python() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
 
-  bl64_check_module_setup "$BL64_PY_MODULE" &&
-    bl64_check_command "$BL64_PY_CMD_PYTHON3" ||
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module_setup "$BL64_PY_MODULE" ||
     return $?
+
+  unset PYTHONHOME
+  unset PYTHONPATH
+  unset PYTHONSTARTUP
+  unset PYTHONDEBUG
+  unset PYTHONUSERBASE
+  unset PYTHONEXECUTABLE
+  unset PYTHONWARNINGS
 
   "$BL64_PY_CMD_PYTHON3" "$@"
 }
