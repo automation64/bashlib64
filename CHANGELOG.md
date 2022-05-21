@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - dbg:
   - add debug all flag
+- pkg
+  - add module setup
+  - add apk,yum,dnf,brew,apt wrappers
 
 ## [2.10.0]
 
