@@ -1,8 +1,41 @@
 #######################################
 # BashLib64 / Module / Setup / Manage native OS packages
 #
-# Version: 1.1.1
+# Version: 1.2.0
 #######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_pkg_setup() {
+  bl64_dbg_lib_show_function
+
+  bl64_pkg_set_command &&
+    bl64_pkg_set_alias &&
+    bl64_pkg_set_options &&
+    BL64_PKG_MODULE="$BL64_LIB_VAR_ON" ||
+    return $?
+
+  # Set global parameters
+  # shellcheck disable=SC2249
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    DEBIAN_FRONTEND="noninteractive"
+    ;;
+  esac
+
+}
 
 #######################################
 # Identify and normalize commands

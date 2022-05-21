@@ -1,8 +1,10 @@
 #######################################
 # BashLib64 / Module / Globals / Manage native OS packages
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
+
+export BL64_PKG_MODULE="$BL64_LIB_VAR_OFF"
 
 export BL64_PKG_CMD_APK=''
 export BL64_PKG_CMD_APT=''
@@ -35,3 +37,5 @@ readonly _BL64_PKG_TXT_CLEAN='clean up package manager run-time environment'
 readonly _BL64_PKG_TXT_INSTALL='install packages'
 readonly _BL64_PKG_TXT_PREPARE='initialize package manager'
 
+# External commands variables
+export DEBIAN_FRONTEND=''
