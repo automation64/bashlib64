@@ -35,12 +35,12 @@ function bl64_check_command() {
   fi
 
   if [[ "$path" == "$BL64_LIB_UNAVAILABLE" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_FOUND} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_INSTALLED} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
 
-  if [[ ! -f "$path" ]]; then
+  if [[ ! -e "$path" ]]; then
     bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / command: ${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_FOUND
