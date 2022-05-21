@@ -4,7 +4,7 @@ on:
   - "push"
 
 jobs:
-  test_batscore_alpine:
+  test_batscore_alpine_3:
     runs-on: "ubuntu-latest"
     steps:
 
@@ -17,6 +17,40 @@ jobs:
       - name: "Prepare test environment"
         run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
 
-      - name: "Run testmansh using batscore on alpine OS"
+      - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
         run: "bash testmansh -b -o -e alpine-3-bash-test:latest"
+
+  test_batscore_almalinux_8:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e almalinux-8-bash-test:latest"
+
+  test_batscore_rhel_8:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Download testmansh"
+        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+
+      - name: "Prepare test environment"
+        run: "chmod 0755 bashlib64.bash && cp bashlib64.bash build "
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash testmansh -b -o -e rhel-8-bash-test:latest"
