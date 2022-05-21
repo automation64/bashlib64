@@ -1,7 +1,9 @@
 name: "Lint / ShellCheck"
 
 on:
-  - "push"
+  push:
+    branches:
+      - "main"
 
 jobs:
   lint_shellcheck:
