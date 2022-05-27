@@ -1,0 +1,7 @@
+function bash_test() {
+    echo "testing"
+}
+
+function bash_test2() {
+    echo "testing $1"
+}
