@@ -157,33 +157,3 @@ function bl64_os_get_distro() {
 
   # Do not use return as this function gets sourced
 }
-
-#######################################
-# Get user's UID
-#
-# Arguments:
-#   $1: user login name. Default: current user
-# Outputs:
-#   STDOUT: user ID
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_os_get_uid() {
-  bl64_dbg_lib_show_function "$@"
-  local user="$1"
-
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    "${BL64_OS_CMD_ID}" -u $user
-    ;;
-  ${BL64_OS_ALP}-*)
-    "${BL64_OS_CMD_ID}" -u $user
-    ;;
-  ${BL64_OS_MCOS}-*)
-    "${BL64_OS_CMD_ID}" -u $user
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-
-}
