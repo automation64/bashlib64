@@ -1,8 +1,32 @@
 #######################################
 # BashLib64 / Module / Setup / Manage local filesystem
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_fs_setup() {
+  bl64_dbg_lib_show_function
+
+  bl64_fs_set_command &&
+    bl64_fs_set_alias &&
+    bl64_fs_set_options &&
+    BL64_FS_MODULE="$BL64_LIB_VAR_ON"
+
+}
 
 #######################################
 # Identify and normalize common *nix OS commands

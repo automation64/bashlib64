@@ -67,23 +67,15 @@ if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" || ("${BASH_VERSINFO[0]}" != '4' && "$
   # Warning: return and exit are not used to avoid terminating the shell when using source to load the lib
   false
 else
-  bl64_os_set_command &&
-    bl64_os_set_alias &&
-    bl64_txt_set_command &&
-    bl64_fs_set_command &&
-    bl64_fs_set_options &&
-    bl64_fs_set_alias &&
-    bl64_arc_set_command &&
-    bl64_arc_set_options &&
+  bl64_os_setup &&
+    bl64_txt_setup &&
+    bl64_fs_setup &&
+    bl64_arc_setup &&
     bl64_iam_setup &&
     bl64_pkg_setup &&
     bl64_rbac_setup &&
-    bl64_vcs_set_command &&
-    bl64_vcs_set_options &&
-    bl64_vcs_set_alias &&
-    bl64_rxtx_set_command &&
-    bl64_rxtx_set_options &&
-    bl64_rxtx_set_alias
+    bl64_vcs_setup &&
+    bl64_rxtx_setup
 
   # Set signal handlers
   # shellcheck disable=SC2064

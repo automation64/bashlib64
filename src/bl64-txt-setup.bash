@@ -1,8 +1,30 @@
 #######################################
 # BashLib64 / Module / Setup / Manipulate text files content
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_txt_setup() {
+  bl64_dbg_lib_show_function
+
+  bl64_txt_set_command &&
+    BL64_TXT_MODULE="$BL64_LIB_VAR_ON"
+
+}
 
 #######################################
 # Identify and normalize common *nix OS commands
