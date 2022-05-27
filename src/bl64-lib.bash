@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 1.12.0
+# Version: 1.13.0
 #######################################
 
 #
@@ -77,8 +77,7 @@ else
     bl64_arc_set_options &&
     bl64_iam_setup &&
     bl64_pkg_setup &&
-    bl64_rbac_set_command &&
-    bl64_rbac_set_alias &&
+    bl64_rbac_setup &&
     bl64_vcs_set_command &&
     bl64_vcs_set_options &&
     bl64_vcs_set_alias &&
@@ -100,7 +99,7 @@ else
   fi
 
   # Capture script path
-  bl64_dbg_runtime_get_script_path
+  BL64_SCRIPT_PATH="$(cd -- "${BASH_SOURCE[0]%/*}" >/dev/null 2>&1 && pwd)"
 
   # Enable command mode: the library can be used as a stand-alone script to run embeded functions
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
