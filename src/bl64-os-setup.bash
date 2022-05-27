@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -30,6 +30,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
+    BL64_OS_CMD_BASH='/bin/bash'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_OS_CMD_CAT='/usr/bin/cat'
@@ -39,6 +40,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
+    BL64_OS_CMD_BASH='/bin/bash'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_OS_CMD_CAT='/bin/cat'
@@ -48,8 +50,10 @@ function bl64_os_set_command() {
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
+    BL64_OS_CMD_BASH='/bin/bash'
     ;;
   ${BL64_OS_MCOS}-*)
+    # Homebrew used when no native option available
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/usr/bin/false'
@@ -57,6 +61,7 @@ function bl64_os_set_command() {
     BL64_OS_CMD_ID='/usr/bin/id'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/usr/bin/uname'
+    BL64_OS_CMD_BASH='/opt/homebre/bin/bash'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -78,18 +83,5 @@ function bl64_os_set_command() {
 #   0: always ok
 #######################################
 function bl64_os_set_alias() {
-
-  # shellcheck disable=SC2034
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_OS_ALIAS_ID_USER="${BL64_OS_CMD_ID} -u -n"
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
+  :
 }

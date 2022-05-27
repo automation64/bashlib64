@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.11.0
+# Version: 1.12.0
 #######################################
 
 export BL64_OS_DISTRO=''
@@ -13,6 +13,7 @@ export BL64_OS_CMD_HOSTNAME=''
 export BL64_OS_CMD_ID=''
 export BL64_OS_CMD_TRUE=''
 export BL64_OS_CMD_UNAME=''
+export BL64_OS_CMD_BASH=''
 
 export BL64_OS_ALIAS_ID_USER=''
 
