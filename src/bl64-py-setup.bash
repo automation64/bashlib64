@@ -7,8 +7,6 @@
 #######################################
 # Setup the bashlib64 module
 #
-# * Warning: bootstrap function
-#
 # Arguments:
 #   None
 # Outputs:
@@ -32,7 +30,6 @@ function bl64_py_setup() {
 #
 # * Commands are exported as variables with full path
 # * The caller function is responsible for checking that the target command is present (installed)
-# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -87,8 +84,6 @@ function bl64_py_set_command() {
 
 #######################################
 # Create command sets for common options
-#
-# * Warning: bootstrap function
 #
 # Arguments:
 #   None
