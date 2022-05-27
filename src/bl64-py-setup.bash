@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -102,4 +102,5 @@ function bl64_py_set_options() {
   BL64_PY_SET_PIP_UPGRADE='--upgrade'
   BL64_PY_SET_PIP_USER='--user'
   BL64_PY_SET_PIP_QUIET='--quiet'
+  BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
 }

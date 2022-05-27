@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -85,6 +85,7 @@ function bl64_py_pip_usr_install() {
   bl64_msg_show_task "$_BL64_PY_TXT_PIP_INSTALL"
   bl64_py_run_pip \
     'install' \
+    $BL64_PY_SET_PIP_NO_WARN_SCRIPT \
     $BL64_PY_SET_PIP_USER \
     "$@"
 }
