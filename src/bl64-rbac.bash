@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage role based access service
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 #######################################
@@ -103,6 +103,7 @@ function bl64_rbac_check_sudoers() {
 # Run privileged OS command using Sudo if needed
 #
 # Arguments:
+#   $1: user to run as. Default: root
 #   $@: command and arguments to run
 # Outputs:
 #   STDOUT: command or sudo output
@@ -112,17 +113,64 @@ function bl64_rbac_check_sudoers() {
 #######################################
 function bl64_rbac_run_command() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
+  local user="${1:-${BL64_LIB_DEFAULT}}"
+  local target=''
 
+  bl64_check_parameter 'user' &&
+    bl64_check_command "$BL64_RBAC_CMD_SUDO" ||
+    return $?
 
-  bl64_check_command "$BL64_RBAC_CMD_SUDO" || return $?
+  shift
+  bl64_check_parameters_none "$#" ||
+    return $?
+  target="$(bl64_os_get_uid "${user}")" || return $?
 
-  # Check the effective user id
-  if [[ "$EUID" == '0' ]]; then
-    # Already root, execute command directly
+  if [[ "$UID" == "$target" ]]; then
+    bl64_dbg_lib_show_info "run command directly (user: $user)"
     "$@"
   else
-    # Current user is regular, use SUDO
-    $BL64_RBAC_ALIAS_SUDO_ENV "$@"
+    bl64_dbg_lib_show_info "run command with sudo (user: $user)"
+    $BL64_RBAC_ALIAS_SUDO_ENV -u "$user" "$@"
+  fi
+}
+
+#######################################
+# Run privileged Bash function using Sudo if needed
+#
+# Arguments:
+#   $1: library that contains the target function.
+#   $2: user to run as. Default: root
+#   $@: command and arguments to run
+# Outputs:
+#   STDOUT: command or sudo output
+#   STDERR: command or sudo error
+# Returns:
+#   command or sudo exit status
+#######################################
+function bl64_rbac_run_bash_function() {
+  bl64_dbg_lib_show_function "$@"
+  local library="${1:-${BL64_LIB_DEFAULT}}"
+  local user="${2:-${BL64_LIB_DEFAULT}}"
+  local target=''
+
+  bl64_check_parameter 'library' &&
+    bl64_check_parameter 'user' &&
+    bl64_check_file "$library" &&
+    bl64_check_command "$BL64_RBAC_CMD_SUDO" ||
+    return $?
+
+  shift
+  shift
+  bl64_check_parameters_none "$#" ||
+    return $?
+
+  target="$(bl64_os_get_uid "${user}")" || return $?
+
+  if [[ "$UID" == "$target" ]]; then
+    # shellcheck disable=SC1090
+    . "$library" &&
+      "$@"
+  else
+    $BL64_RBAC_ALIAS_SUDO_ENV -u "$user" "$BL64_OS_CMD_BASH" -c ". ${library}; ${*}"
   fi
 }
