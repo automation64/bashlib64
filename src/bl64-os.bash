@@ -159,19 +159,31 @@ function bl64_os_get_distro() {
 }
 
 #######################################
-# Show current user name
-#
-# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
+# Get user's UID
 #
 # Arguments:
-#   $@: arguments are passed as is to the command
+#   $1: user login name. Default: current user
 # Outputs:
-#   STDOUT: command output
+#   STDOUT: user ID
 #   STDERR: command stderr
 # Returns:
 #   command exit status
 #######################################
-function bl64_os_id_user() {
+function bl64_os_get_uid() {
   bl64_dbg_lib_show_function "$@"
-  $BL64_OS_ALIAS_ID_USER "$@"
+  local user="$1"
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    "${BL64_OS_CMD_ID}" -u $user
+    ;;
+  ${BL64_OS_ALP}-*)
+    "${BL64_OS_CMD_ID}" -u $user
+    ;;
+  ${BL64_OS_MCOS}-*)
+    "${BL64_OS_CMD_ID}" -u $user
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+
 }
