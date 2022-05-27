@@ -1,31 +1,13 @@
 #######################################
 # BashLib64 / Module / Functions / Show shell debugging information
 #
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 function bl64_dbg_app_task_enabled { [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TASK" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]]; }
 function bl64_dbg_lib_task_enabled { [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TASK" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]]; }
 function bl64_dbg_app_command_enabled { [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_CMD" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]]; }
 function bl64_dbg_lib_command_enabled { [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_CMD" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]]; }
-
-#######################################
-# Show runtime info
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: runtime info
-# Returns:
-#   latest exit status (before function call)
-#######################################
-function bl64_dbg_runtime_get_script_path() {
-  BL64_SCRIPT_PATH="$(
-    cd "${BASH_SOURCE[0]%/*}" >/dev/null 2>&1 &&
-      pwd
-  )"
-}
 
 #######################################
 # Show runtime info
