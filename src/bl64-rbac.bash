@@ -123,7 +123,7 @@ function bl64_rbac_run_command() {
   shift
   bl64_check_parameters_none "$#" ||
     return $?
-  target="$(bl64_os_get_uid "${user}")" || return $?
+  target="$(bl64_iam_user_get_id "${user}")" || return $?
 
   if [[ "$UID" == "$target" ]]; then
     bl64_dbg_lib_show_info "run command directly (user: $user)"
@@ -164,7 +164,7 @@ function bl64_rbac_run_bash_function() {
   bl64_check_parameters_none "$#" ||
     return $?
 
-  target="$(bl64_os_get_uid "${user}")" || return $?
+  target="$(bl64_iam_user_get_id "${user}")" || return $?
 
   if [[ "$UID" == "$target" ]]; then
     # shellcheck disable=SC1090
