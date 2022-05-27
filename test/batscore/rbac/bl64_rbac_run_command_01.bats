@@ -4,7 +4,6 @@ setup() {
 }
 
 @test "bl64_rbac_run_command: no args" {
-  [[ ! -f '/run/.containerenv' ]]
   run bl64_rbac_run_command
   assert_failure
 }
