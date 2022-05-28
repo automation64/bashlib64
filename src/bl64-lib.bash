@@ -94,12 +94,16 @@ else
     trap "$BL64_LIB_SIGNAL_ERR" 'ERR'
   fi
 
-  # Capture script path
-  BL64_SCRIPT_PATH="$(cd -- "${0%/*}" >/dev/null && pwd)"
-  BL64_SCRIPT_NAME="$(bl64_fmt_basename "${0}")"
-
-# Define session ID for the current script
+  # Create session ID for the current script
   BL64_SCRIPT_SID="${BASHPID}${RANDOM}"
+
+  # Determine script path when not source directly from bash
+  if [[ "$0" != 'bash' ]]; then
+    BL64_SCRIPT_NAME="$(bl64_fmt_basename "${0}")"
+    BL64_SCRIPT_PATH="$(cd -- "${0%/*}" >/dev/null && pwd)"
+  else
+    BL64_SCRIPT_NAME='bashlib64.bash'
+  fi
 
   # Enable command mode: the library can be used as a stand-alone script to run embeded functions
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
