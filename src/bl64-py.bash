@@ -36,6 +36,7 @@ function bl64_py_pip_get_version() {
 #
 # * Upgrade pip
 # * Install/upgrade setuptools
+# * Upgrade is done using the OS provided PIP module. Do not use bl64_py_pip_usr_install as it relays on the latest version of PIP
 #
 # Arguments:
 #   None
@@ -52,9 +53,17 @@ function bl64_py_pip_usr_prepare() {
 
   # shellcheck disable=SC2086
   bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_PIP" &&
-    bl64_py_pip_usr_install $modules_pip &&
+    bl64_py_run_pip \
+      'install' \
+      $BL64_PY_SET_PIP_UPGRADE \
+      $BL64_PY_SET_PIP_USER \
+      $modules_pip &&
     bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP" &&
-    bl64_py_pip_usr_install $modules_setup
+    bl64_py_run_pip \
+      'install' \
+      $BL64_PY_SET_PIP_UPGRADE \
+      $BL64_PY_SET_PIP_USER \
+      $modules_setup
 
 }
 
@@ -62,6 +71,8 @@ function bl64_py_pip_usr_prepare() {
 # Install packages for local-user
 #
 # * Assume yes
+# * Assumes that bl64_py_pip_usr_prepare was runned before
+# * Uses the latest version of PIP (previously upgraded by bl64_py_pip_usr_prepare)
 #
 # Arguments:
 #   package list, separated by spaces (expanded with $@)

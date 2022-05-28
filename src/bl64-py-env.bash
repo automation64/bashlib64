@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -15,6 +15,10 @@ export BL64_PY_CMD_PYTHON37="$BL64_LIB_UNAVAILABLE"
 export BL64_PY_CMD_PYTHON38="$BL64_LIB_UNAVAILABLE"
 export BL64_PY_CMD_PYTHON39="$BL64_LIB_UNAVAILABLE"
 export BL64_PY_CMD_PYTHON310="$BL64_LIB_UNAVAILABLE"
+
+# Version info
+export BL64_PY_VERSION_PYTHON3=''
+export BL64_PY_VERSION_PIP3=''
 
 export BL64_PY_SET_PIP_VERBOSE=''
 export BL64_PY_SET_PIP_VERSION=''

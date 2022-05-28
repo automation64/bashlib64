@@ -67,16 +67,22 @@ function bl64_py_set_command() {
   # Select best match for default python3
   if [[ -x "$BL64_PY_CMD_PYTHON310" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON310"
+    BL64_PY_VERSION_PYTHON3='3.10'
   elif [[ -x "$BL64_PY_CMD_PYTHON39" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON39"
+    BL64_PY_VERSION_PYTHON3='3.9'
   elif [[ -x "$BL64_PY_CMD_PYTHON38" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON38"
+    BL64_PY_VERSION_PYTHON3='3.8'
   elif [[ -x "$BL64_PY_CMD_PYTHON37" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON37"
+    BL64_PY_VERSION_PYTHON3='3.7'
   elif [[ -x "$BL64_PY_CMD_PYTHON36" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON36"
+    BL64_PY_VERSION_PYTHON3='3.6'
   elif [[ -x "$BL64_PY_CMD_PYTHON35" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON35"
+    BL64_PY_VERSION_PYTHON3='3.5'
   fi
   bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3'
 
