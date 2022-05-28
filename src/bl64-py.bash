@@ -50,20 +50,11 @@ function bl64_py_pip_usr_prepare() {
   local modules_pip='pip'
   local modules_setup='setuptools wheel stevedore'
 
-  bl64_msg_show_task "$_BL64_PY_TXT_PIP_PREPARE_PIP"
-  bl64_py_run_pip \
-    'install' \
-    $BL64_PY_SET_PIP_UPGRADE \
-    $BL64_PY_SET_PIP_USER \
-    $modules_pip
-
-  bl64_msg_show_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP"
   # shellcheck disable=SC2086
-  bl64_py_run_pip \
-    'install' \
-    $BL64_PY_SET_PIP_UPGRADE \
-    $BL64_PY_SET_PIP_USER \
-    $modules_setup
+  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_PIP" &&
+    bl64_py_pip_usr_install $modules_pip &&
+    bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP" &&
+    bl64_py_pip_usr_install $modules_setup
 
 }
 
@@ -82,9 +73,11 @@ function bl64_py_pip_usr_prepare() {
 #######################################
 function bl64_py_pip_usr_install() {
   bl64_dbg_lib_show_function "$@"
-  bl64_msg_show_task "$_BL64_PY_TXT_PIP_INSTALL"
+
+  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_INSTALL ($*)"
   bl64_py_run_pip \
     'install' \
+    $BL64_PY_SET_PIP_UPGRADE \
     $BL64_PY_SET_PIP_NO_WARN_SCRIPT \
     $BL64_PY_SET_PIP_USER \
     "$@"
