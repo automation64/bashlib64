@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 1.13.0
+# Version: 1.14.0
 #######################################
 
 #######################################
@@ -461,6 +461,33 @@ function bl64_check_module_setup() {
   if [[ "$setup_status" == "$BL64_LIB_VAR_OFF" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_NOT_SETUP} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]})"
     return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
+  else
+    return 0
+  fi
+}
+
+#######################################
+# Check that the user is created
+#
+# Arguments:
+#   $1: user name
+#   $2: error message
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_USER_NOT_FOUND
+#######################################
+function bl64_check_user() {
+  bl64_dbg_lib_show_function "$@"
+  local user="${1:-}"
+  local message="${2:-${_BL64_CHECK_TXT_USER_NOT_FOUND}}"
+
+  bl64_check_parameter 'user' || return $?
+
+  if ! bl64_iam_user_is_created "$user"; then
+    bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]} / user: ${user})"
+    return $BL64_LIB_ERROR_USER_NOT_FOUND
   else
     return 0
   fi
