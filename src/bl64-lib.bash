@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 1.13.0
+# Version: 1.14.0
 #######################################
 
 #
@@ -12,6 +12,7 @@
 unset MAIL
 unset ENV
 unset IFS
+unset TMPDIR
 
 # Normalize terminal settings
 TERM="${TERM:-vt100}"
@@ -58,6 +59,9 @@ set +o 'posix'
 # set -o 'keyword'
 # set -o 'noexec'
 
+# Normalize umask
+umask -S 'u=rwx,g=,o=' > /dev/null
+
 # Detect current OS
 bl64_os_get_distro
 
@@ -91,7 +95,11 @@ else
   fi
 
   # Capture script path
-  BL64_SCRIPT_PATH="$(cd -- "${BASH_SOURCE[0]%/*}" >/dev/null 2>&1 && pwd)"
+  BL64_SCRIPT_PATH="$(cd -- "${0%/*}" >/dev/null && pwd)"
+  BL64_SCRIPT_NAME="$(bl64_fmt_basename "${0}")"
+
+# Define session ID for the current script
+  BL64_SCRIPT_SID="${BASHPID}${RANDOM}"
 
   # Enable command mode: the library can be used as a stand-alone script to run embeded functions
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
