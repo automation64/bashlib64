@@ -41,3 +41,7 @@ readonly _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one p
 readonly _BL64_CHECK_TXT_FUNCTION='caller'
 
 readonly _BL64_CHECK_TXT_USER_NOT_FOUND='required user is not present in the operating system'
+
+readonly _BL64_CHECK_TXT_STATUS_ERROR='task execution failed'
+
+readonly _BL64_CHECK_TXT_I='|'
