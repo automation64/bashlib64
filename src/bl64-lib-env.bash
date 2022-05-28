@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 # Declare imported variables
@@ -106,6 +106,10 @@ declare -ig BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED=64
 # Local values (not exported)
 #
 
+declare BL64_SCRIPT_PATH=''
+declare BL64_SCRIPT_NAME=''
+declare BL64_SCRIPT_SID=''
+
 # Set Signal traps
 declare BL64_LIB_SIGNAL_HUP="${BL64_LIB_SIGNAL_HUP:--}"
 declare BL64_LIB_SIGNAL_STOP="${BL64_LIB_SIGNAL_STOP:--}"
@@ -113,12 +117,3 @@ declare BL64_LIB_SIGNAL_QUIT="${BL64_LIB_SIGNAL_QUIT:--}"
 declare BL64_LIB_SIGNAL_DEBUG="${BL64_LIB_SIGNAL_DEBUG:--}"
 declare BL64_LIB_SIGNAL_ERR="${BL64_LIB_SIGNAL_ERR:--}"
 declare BL64_LIB_SIGNAL_EXIT="${BL64_LIB_SIGNAL_EXIT:-bl64_dbg_runtime_show}"
-
-# Capture script name
-declare BL64_SCRIPT_NAME="${BL64_SCRIPT_NAME:-${0##*/}}"
-
-# Capture script path
-declare BL64_SCRIPT_PATH=''
-
-# Define session ID for the current script
-declare BL64_SCRIPT_SID="${BASHPID}"
