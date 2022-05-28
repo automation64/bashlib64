@@ -96,6 +96,7 @@ function bl64_iam_user_get_id() {
   bl64_dbg_lib_show_function "$@"
   local user="$1"
 
+  # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     "${BL64_IAM_CMD_ID}" -u $user
