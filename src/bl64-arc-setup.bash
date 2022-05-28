@@ -1,8 +1,31 @@
 #######################################
 # BashLib64 / Module / Setup / Manage archive files
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_arc_setup() {
+  bl64_dbg_lib_show_function
+
+  bl64_arc_set_command &&
+    bl64_arc_set_options &&
+    BL64_ARC_MODULE="$BL64_LIB_VAR_ON"
+
+}
 
 #######################################
 # Identify and normalize common *nix OS commands

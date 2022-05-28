@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.12.0]
+
 ## [2.11.0]
 
 - dbg:
@@ -440,7 +442,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.11.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.12.0...HEAD
+[2.12.0]: https://github.com/serdigital64/bashlib64/compare/2.11.0...2.12.0
 [2.11.0]: https://github.com/serdigital64/bashlib64/compare/2.10.0...2.11.0
 [2.10.0]: https://github.com/serdigital64/bashlib64/compare/2.9.0...2.10.0
 [2.9.0]: https://github.com/serdigital64/bashlib64/compare/2.8.0...2.9.0

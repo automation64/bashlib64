@@ -157,21 +157,3 @@ function bl64_os_get_distro() {
 
   # Do not use return as this function gets sourced
 }
-
-#######################################
-# Show current user name
-#
-# * Based on the BLD_OS_ALIAS_* variables and provided for cases where variables as command can not be used
-#
-# Arguments:
-#   $@: arguments are passed as is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_os_id_user() {
-  bl64_dbg_lib_show_function "$@"
-  $BL64_OS_ALIAS_ID_USER "$@"
-}

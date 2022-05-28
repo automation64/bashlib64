@@ -3,7 +3,7 @@ name: "Lint / ShellCheck"
 on:
   push:
     branches:
-      - "main"
+      - "develop"
 
 jobs:
   lint_shellcheck:

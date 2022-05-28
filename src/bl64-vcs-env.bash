@@ -1,8 +1,10 @@
 #######################################
 # BashLib64 / Module / Globals / Manage Version Control System
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
+
+export BL64_VCS_MODULE="$BL64_LIB_VAR_OFF"
 
 export BL64_VCS_CMD_GIT=''
 
