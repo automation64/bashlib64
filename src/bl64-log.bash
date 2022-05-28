@@ -70,7 +70,7 @@ function _bl64_log_register() {
 function bl64_log_info() {
   bl64_dbg_lib_show_function "$@"
   local payload="$1"
-  local source="${2:-${FUNCNAME[1]}}"
+  local source="${2:-${FUNCNAME[1]:-NONE}}"
 
   if [[ -n "$BL64_LOG_VERBOSE" && "$BL64_LOG_VERBOSE" == '1' ]]; then
     bl64_msg_show_info "$payload"
@@ -99,7 +99,7 @@ function bl64_log_info() {
 function bl64_log_task() {
   bl64_dbg_lib_show_function "$@"
   local payload="$1"
-  local source="${2:-${FUNCNAME[1]}}"
+  local source="${2:-${FUNCNAME[1]:-NONE}}"
 
   if [[ -n "$BL64_LOG_VERBOSE" && "$BL64_LOG_VERBOSE" == '1' ]]; then
     bl64_msg_show_task "$payload"
@@ -128,7 +128,7 @@ function bl64_log_task() {
 function bl64_log_error() {
   bl64_dbg_lib_show_function "$@"
   local payload="$1"
-  local source="${2:-${FUNCNAME[1]}}"
+  local source="${2:-${FUNCNAME[1]:-NONE}}"
 
   if [[ -n "$BL64_LOG_VERBOSE" && "$BL64_LOG_VERBOSE" == '1' ]]; then
     bl64_msg_show_error "$payload"
@@ -157,7 +157,7 @@ function bl64_log_error() {
 function bl64_log_warning() {
   bl64_dbg_lib_show_function "$@"
   local payload="$1"
-  local source="${2:-${FUNCNAME[1]}}"
+  local source="${2:-${FUNCNAME[1]:-NONE}}"
 
   if [[ -n "$BL64_LOG_VERBOSE" && "$BL64_LOG_VERBOSE" == '1' ]]; then
     bl64_msg_show_warning "$payload"
@@ -186,7 +186,7 @@ function bl64_log_warning() {
 function bl64_log_record() {
   bl64_dbg_lib_show_function "$@"
   local tag="${1:-tag}"
-  local source="${2:-${FUNCNAME[1]}}"
+  local source="${2:-${FUNCNAME[1]:-NONE}}"
   local input_log_line=''
 
   case "$BL64_LOG_TYPE" in
