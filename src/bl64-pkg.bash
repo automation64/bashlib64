@@ -42,7 +42,7 @@ function bl64_pkg_deploy() {
 function bl64_pkg_prepare() {
   bl64_dbg_lib_show_function
 
-  bl64_msg_show_task "$_BL64_PKG_TXT_PREPARE"
+  bl64_msg_show_lib_task "$_BL64_PKG_TXT_PREPARE"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
@@ -83,7 +83,7 @@ function bl64_pkg_prepare() {
 function bl64_pkg_install() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_msg_show_task "$_BL64_PKG_TXT_INSTALL (${*})"
+  bl64_msg_show_lib_task "$_BL64_PKG_TXT_INSTALL (${*})"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
@@ -125,7 +125,7 @@ function bl64_pkg_cleanup() {
   bl64_dbg_lib_show_function
   local target=''
 
-  bl64_msg_show_task "$_BL64_PKG_TXT_CLEAN"
+  bl64_msg_show_lib_task "$_BL64_PKG_TXT_CLEAN"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
