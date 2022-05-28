@@ -30,6 +30,8 @@ function bl64_xsv_dump() {
 #######################################
 # Search for records based on key filters and return matching rows
 #
+# * Column numbers are AWK fields. First column: 1
+#
 # Arguments:
 #   $1: Single string with one ore more search values separated by $BL64_XSV_FS
 #   $2: source file path. Default: STDIN
