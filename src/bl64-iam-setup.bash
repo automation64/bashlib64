@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage OS identity and access service
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -49,12 +49,15 @@ function bl64_iam_set_command() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
+    BL64_IAM_CMD_ID='/usr/bin/id'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_IAM_CMD_USERADD='/usr/sbin/adduser'
+    BL64_IAM_CMD_ID='/usr/bin/id'
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_IAM_CMD_USERADD='/usr/bin/dscl'
+    BL64_IAM_CMD_ID='/usr/bin/id'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -111,14 +114,17 @@ function bl64_iam_set_options() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
+    BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
     ;;
   ${BL64_OS_ALP}-*)
     # Home is created by default
     BL64_IAM_SET_USERADD_CREATE_HOME=' '
+    BL64_IAM_SET_USERADD_HOME_PATH='-h'
     ;;
   ${BL64_OS_MCOS}-*)
     # Home is created by default
     BL64_IAM_SET_USERADD_CREATE_HOME=' '
+    BL64_IAM_SET_USERADD_HOME_PATH=' '
     ;;
   *) bl64_check_alert_unsupported ;;
   esac

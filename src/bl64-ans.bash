@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with Ansible CLI
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -21,7 +21,12 @@ function bl64_ans_collections_install() {
   local collection=''
 
   for collection in "$@"; do
-    bl64_ans_run_ansible_galaxy collection install "$collection" || return $?
+    bl64_ans_run_ansible_galaxy \
+      collection \
+      install \
+      --upgrade \
+      "$collection" ||
+      return $?
   done
 }
 
@@ -50,6 +55,8 @@ function bl64_ans_run_ansible() {
   bl64_dbg_lib_command_enabled && debug="$BL64_ANS_SET_DEBUG"
 
   unset ANSIBLE_CONFIG
+  unset ANSIBLE_COLLECTIONS
+  # shellcheck disable=SC2086
   "$BL64_ANS_CMD_ANSIBLE" \
     $debug \
     "$@"
@@ -81,6 +88,7 @@ function bl64_ans_run_ansible_galaxy() {
   bl64_dbg_lib_command_enabled && debug="$BL64_ANS_SET_DEBUG"
 
   unset ANSIBLE_CONFIG
+  unset ANSIBLE_COLLECTIONS
   "$BL64_ANS_CMD_ANSIBLE_GALAXY" \
     $debug \
     "$@"
@@ -112,6 +120,7 @@ function bl64_ans_run_ansible_playbook() {
   bl64_dbg_lib_command_enabled && debug="$BL64_ANS_SET_DEBUG"
 
   unset ANSIBLE_CONFIG
+  unset ANSIBLE_COLLECTIONS
   "$BL64_ANS_CMD_ANSIBLE_PLAYBOOK" \
     $debug \
     "$@"

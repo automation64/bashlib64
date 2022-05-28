@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 1.12.0
+# Version: 1.14.0
 #######################################
 
 #
@@ -12,6 +12,7 @@
 unset MAIL
 unset ENV
 unset IFS
+unset TMPDIR
 
 # Normalize terminal settings
 TERM="${TERM:-vt100}"
@@ -58,6 +59,9 @@ set +o 'posix'
 # set -o 'keyword'
 # set -o 'noexec'
 
+# Normalize umask
+umask -S 'u=rwx,g=,o=' > /dev/null
+
 # Detect current OS
 bl64_os_get_distro
 
@@ -67,24 +71,15 @@ if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" || ("${BASH_VERSINFO[0]}" != '4' && "$
   # Warning: return and exit are not used to avoid terminating the shell when using source to load the lib
   false
 else
-  bl64_os_set_command &&
-    bl64_os_set_alias &&
-    bl64_txt_set_command &&
-    bl64_fs_set_command &&
-    bl64_fs_set_options &&
-    bl64_fs_set_alias &&
-    bl64_arc_set_command &&
-    bl64_arc_set_options &&
+  bl64_os_setup &&
+    bl64_txt_setup &&
+    bl64_fs_setup &&
+    bl64_arc_setup &&
     bl64_iam_setup &&
     bl64_pkg_setup &&
-    bl64_rbac_set_command &&
-    bl64_rbac_set_alias &&
-    bl64_vcs_set_command &&
-    bl64_vcs_set_options &&
-    bl64_vcs_set_alias &&
-    bl64_rxtx_set_command &&
-    bl64_rxtx_set_options &&
-    bl64_rxtx_set_alias
+    bl64_rbac_setup &&
+    bl64_vcs_setup &&
+    bl64_rxtx_setup
 
   # Set signal handlers
   # shellcheck disable=SC2064
@@ -99,8 +94,16 @@ else
     trap "$BL64_LIB_SIGNAL_ERR" 'ERR'
   fi
 
-  # Capture script path
-  bl64_dbg_runtime_get_script_path
+  # Create session ID for the current script
+  BL64_SCRIPT_SID="${BASHPID}${RANDOM}"
+
+  # Determine script path when not source directly from bash
+  if [[ "$0" != 'bash' ]]; then
+    BL64_SCRIPT_NAME="$(bl64_fmt_basename "${0}")"
+    BL64_SCRIPT_PATH="$(cd -- "${0%/*}" >/dev/null && pwd)"
+  else
+    BL64_SCRIPT_NAME='bashlib64.bash'
+  fi
 
   # Enable command mode: the library can be used as a stand-alone script to run embeded functions
   if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then

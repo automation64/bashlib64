@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 1.7.1
+# Version: 1.8.0
 #######################################
 
 #######################################
@@ -13,9 +13,9 @@
 #   * Parent directories are not created
 #   * No rollback in case of errors. The process will not remove already created paths
 # Arguments:
-#   $1: permissions. Regular chown format accepted. Default: umask defined
-#   $2: user name. Default: root
-#   $3: group name. Default: root (or equivalent)
+#   $1: permissions. Format: chown format. Default: none
+#   $2: user name. Default: none
+#   $3: group name. Default: none
 #   $@: full directory paths
 # Outputs:
 #   STDOUT: command dependant
@@ -42,17 +42,10 @@ function bl64_fs_create_dir() {
 
     bl64_check_path_absolute "$path" || return $?
     [[ -d "$path" ]] && continue
-    bl64_fs_mkdir "$path" || return $?
 
-    # Determine if mode needs to be set
-    if [[ "$mode" != "$BL64_LIB_DEFAULT" ]]; then
-      bl64_fs_chmod "$mode" "$path" || return $?
-    fi
-
-    # Determine if owner needs to be set
-    if [[ "$user" != "$BL64_LIB_DEFAULT" && "$group" != "$BL64_LIB_DEFAULT" ]]; then
-      bl64_fs_chown "${user}:${group}" "$path" || return $?
-    fi
+    bl64_fs_mkdir "$path" &&
+      bl64_fs_set_permissions "$path" "$mode" "$user" "$group" ||
+      return $?
 
   done
 
@@ -68,9 +61,9 @@ function bl64_fs_create_dir() {
 # Limitations:
 #   * No rollback in case of errors. The process will not remove already copied files
 # Arguments:
-#   $1: permissions. Regular chown format accepted. Default: umask defined
-#   $2: user name. Default: root
-#   $3: group name. Default: root (or equivalent)
+#   $1: permissions. Format: chown format. Default: none
+#   $2: user name. Default: none
+#   $3: group name. Default: none
 #   $4: destination path
 #   $@: full file paths
 # Outputs:
@@ -99,26 +92,15 @@ function bl64_fs_copy_files() {
 
   # shellcheck disable=SC2086
   bl64_check_parameters_none "$#" || return $?
-
   bl64_dbg_lib_show_info "paths:[${*}]"
-
   for path in "$@"; do
 
     target=''
     bl64_check_path_absolute "$path" &&
       target="${destination}/$(bl64_fmt_basename "$path")" &&
-      bl64_fs_cp_file "$path" "$target" || return $?
-
-    # Determine if mode needs to be set
-    if [[ "$mode" != "$BL64_LIB_DEFAULT" ]]; then
-      bl64_fs_chmod "$mode" "$target" || return $?
-    fi
-
-    # Determine if owner needs to be set
-    if [[ "$user" != "$BL64_LIB_DEFAULT" && "$group" != "$BL64_LIB_DEFAULT" ]]; then
-      bl64_fs_chown "${user}:${group}" "$target" || return $?
-    fi
-
+      bl64_fs_cp_file "$path" "$target" &&
+      bl64_fs_set_permissions "$target" "$mode" "$user" "$group" ||
+      return $?
   done
 
   return 0
@@ -131,9 +113,9 @@ function bl64_fs_copy_files() {
 # * If asked to replace destination, temporary backup is done in case git fails by moving the destination to a temp name
 #
 # Arguments:
-#   $1: permissions. Regular chown format accepted. Default: umask defined
-#   $2: user name. Default: root
-#   $3: group name. Default: root (or equivalent)
+#   $1: permissions. Format: chown format. Default: none
+#   $2: user name. Default: none
+#   $3: group name. Default: none
 #   $4: replace existing content. Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)
 #   $5: destination file. Full path
 #   $@: source files. Full path
@@ -153,7 +135,7 @@ function bl64_fs_merge_files() {
   local replace="${4:-${BL64_LIB_DEFAULT}}"
   local destination="${5:-${BL64_LIB_DEFAULT}}"
   local path=''
-  local -i status_cat=0
+  local -i status=0
 
   bl64_check_parameter 'destination' || return $?
   bl64_check_overwrite "$destination" "$replace" || return $?
@@ -170,28 +152,23 @@ function bl64_fs_merge_files() {
   # Asked to replace, backup first
   bl64_fs_safeguard "$destination" || return $?
 
-  bl64_dbg_lib_show_info 'concatenate files'
   for path in "$@"; do
+    bl64_dbg_lib_show_info "concatenate file (${path})"
     bl64_check_path_absolute "$path" &&
       "$BL64_OS_CMD_CAT" "$path"
-    status_cat=$?
-    ((status_cat != 0)) && break
+    status=$?
+    ((status != 0)) && break
     :
   done >>"$destination"
 
-  # Determine if mode needs to be set
-  if [[ "$status_cat" == '0' && "$mode" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_fs_chmod "$mode" "$destination" || return $?
-  fi
-
-  # Determine if owner needs to be set
-  if [[ "$status_cat" == '0' && "$user" != "$BL64_LIB_DEFAULT" && "$group" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_fs_chown "${user}:${group}" "$destination" || return $?
+  if [[ "$status" == '0' ]]; then
+    bl64_fs_set_permissions "$destination" "$mode" "$user" "$group"
+    status=$?
   fi
 
   # Rollback if error
-  bl64_fs_restore "$destination" "$status_cat" || return $?
-  return $status_cat
+  bl64_fs_restore "$destination" "$status" || return $?
+  return $status
 }
 
 #######################################
@@ -679,7 +656,7 @@ function bl64_fs_restore() {
 
   bl64_check_parameter 'destination' &&
     bl64_check_parameter 'result' ||
-  return $?
+    return $?
 
   # Return if not present
   if [[ ! -e "$backup" ]]; then
@@ -703,4 +680,47 @@ function bl64_fs_restore() {
     bl64_fs_mv "$backup" "$destination" ||
       return $BL64_LIB_ERROR_TASK_RESTORE
   fi
+}
+
+#######################################
+# Set object permissions and ownership
+#
+# Arguments:
+#   $1: object path
+#   $2: permissions. Format: chown format. Default: none
+#   $3: user name. Default: nonde
+#   $4: group name. Default: none
+# Outputs:
+#   STDOUT: command stdin
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_set_permissions() {
+  bl64_dbg_lib_show_function "$@"
+  local path="${1:-}"
+  local mode="${2:-${BL64_LIB_DEFAULT}}"
+  local user="${3:-${BL64_LIB_DEFAULT}}"
+  local group="${4:-${BL64_LIB_DEFAULT}}"
+
+  bl64_check_parameter 'path' &&
+    bl64_check_path "$path" ||
+    return $?
+
+  # Determine if mode needs to be set
+  if [[ "$mode" != "$BL64_LIB_DEFAULT" ]]; then
+    bl64_fs_chmod "$mode" "$path" || return $?
+  fi
+
+  # Determine if owner needs to be set
+  if [[ "$user" != "$BL64_LIB_DEFAULT" ]]; then
+    bl64_fs_chown "${user}" "$path" || return $?
+  fi
+
+  # Determine if group needs to be set
+  if [[ "$group" != "$BL64_LIB_DEFAULT" ]]; then
+    bl64_fs_chown ":${group}" "$path" || return $?
+  fi
+
+  return 0
 }

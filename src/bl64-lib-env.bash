@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Version: 1.8.0
+# Version: 1.10.0
 #######################################
 
 # Declare imported variables
@@ -95,16 +95,24 @@ declare -ig BL64_LIB_ERROR_PATH_NOT_RELATIVE=55
 declare -ig BL64_LIB_ERROR_PATH_NOT_ABSOLUTE=56
 declare -ig BL64_LIB_ERROR_PATH_NOT_FOUND=57
 
+# IAM
+declare -ig BL64_LIB_ERROR_PRIVILEGE_IS_ROOT=60
+declare -ig BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT=61
+declare -ig BL64_LIB_ERROR_USER_NOT_FOUND=62
+#declare -ig BL64_LIB_ERROR_GROUP_NOT_FOUND=63
+
 # General
-declare -ig BL64_LIB_ERROR_EXPORT_EMPTY=60
-declare -ig BL64_LIB_ERROR_EXPORT_SET=61
-declare -ig BL64_LIB_ERROR_PRIVILEGE_IS_ROOT=62
-declare -ig BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT=63
-declare -ig BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED=64
+declare -ig BL64_LIB_ERROR_EXPORT_EMPTY=70
+declare -ig BL64_LIB_ERROR_EXPORT_SET=71
+declare -ig BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED=72
 
 #
 # Local values (not exported)
 #
+
+declare BL64_SCRIPT_PATH=''
+declare BL64_SCRIPT_NAME=''
+declare BL64_SCRIPT_SID=''
 
 # Set Signal traps
 declare BL64_LIB_SIGNAL_HUP="${BL64_LIB_SIGNAL_HUP:--}"
@@ -113,12 +121,3 @@ declare BL64_LIB_SIGNAL_QUIT="${BL64_LIB_SIGNAL_QUIT:--}"
 declare BL64_LIB_SIGNAL_DEBUG="${BL64_LIB_SIGNAL_DEBUG:--}"
 declare BL64_LIB_SIGNAL_ERR="${BL64_LIB_SIGNAL_ERR:--}"
 declare BL64_LIB_SIGNAL_EXIT="${BL64_LIB_SIGNAL_EXIT:-bl64_dbg_runtime_show}"
-
-# Capture script name
-declare BL64_SCRIPT_NAME="${BL64_SCRIPT_NAME:-${0##*/}}"
-
-# Capture script path
-declare BL64_SCRIPT_PATH=''
-
-# Define session ID for the current script
-declare BL64_SCRIPT_SID="${BASHPID}"

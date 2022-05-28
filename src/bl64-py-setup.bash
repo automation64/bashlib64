@@ -1,13 +1,11 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
 # Setup the bashlib64 module
-#
-# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -32,7 +30,6 @@ function bl64_py_setup() {
 #
 # * Commands are exported as variables with full path
 # * The caller function is responsible for checking that the target command is present (installed)
-# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -70,16 +67,22 @@ function bl64_py_set_command() {
   # Select best match for default python3
   if [[ -x "$BL64_PY_CMD_PYTHON310" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON310"
+    BL64_PY_VERSION_PYTHON3='3.10'
   elif [[ -x "$BL64_PY_CMD_PYTHON39" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON39"
+    BL64_PY_VERSION_PYTHON3='3.9'
   elif [[ -x "$BL64_PY_CMD_PYTHON38" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON38"
+    BL64_PY_VERSION_PYTHON3='3.8'
   elif [[ -x "$BL64_PY_CMD_PYTHON37" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON37"
+    BL64_PY_VERSION_PYTHON3='3.7'
   elif [[ -x "$BL64_PY_CMD_PYTHON36" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON36"
+    BL64_PY_VERSION_PYTHON3='3.6'
   elif [[ -x "$BL64_PY_CMD_PYTHON35" ]]; then
     BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON35"
+    BL64_PY_VERSION_PYTHON3='3.5'
   fi
   bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3'
 
@@ -87,8 +90,6 @@ function bl64_py_set_command() {
 
 #######################################
 # Create command sets for common options
-#
-# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -107,4 +108,5 @@ function bl64_py_set_options() {
   BL64_PY_SET_PIP_UPGRADE='--upgrade'
   BL64_PY_SET_PIP_USER='--user'
   BL64_PY_SET_PIP_QUIET='--quiet'
+  BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
 }

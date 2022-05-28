@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Show shell debugging information
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #
@@ -46,7 +46,8 @@ readonly _BL64_DBG_TXT_BASH_ARGV='Script / Arguments'
 readonly _BL64_DBG_TXT_COMMAND='Script / Last executed command'
 readonly _BL64_DBG_TXT_STATUS='Script / Last exit status'
 
-readonly _BL64_DBG_TXT_FUNCTION_RUN='run function with parameters'
+readonly _BL64_DBG_TXT_FUNCTION_APP_RUN='run app function with parameters'
+readonly _BL64_DBG_TXT_FUNCTION_LIB_RUN='run bashlib64 function with parameters'
 
 readonly _BL64_DBG_TXT_CALLSTACK='Last executed function'
 
