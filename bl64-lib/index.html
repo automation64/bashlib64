@@ -152,15 +152,14 @@
 <span class=normal>152</span>
 <span class=normal>153</span>
 <span class=normal>154</span>
-<span class=normal>155</span>
-<span class=normal>156</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=ch>#!/usr/bin/env bash</span>
+<span class=normal>155</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=ch>#!/usr/bin/env bash</span>
 <span class=c1>#######################################</span>
 <span class=c1># BashLib64</span>
 <span class=c1>#</span>
 <span class=c1># Author: serdigital64 (https://github.com/serdigital64)</span>
 <span class=c1># License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)</span>
 <span class=c1># Repository: https://github.com/serdigital64/bashlib64</span>
-<span class=c1># Version: 2.11.0</span>
+<span class=c1># Version: 2.12.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1># Do not inherit aliases and commands</span>
@@ -188,7 +187,7 @@
 <span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Globals / Setup script run-time environment</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.8.0</span>
+<span class=c1># Version: 1.10.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1># Declare imported variables</span>
@@ -282,16 +281,24 @@
 <span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PATH_NOT_ABSOLUTE</span><span class=o>=</span><span class=m>56</span>
 <span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PATH_NOT_FOUND</span><span class=o>=</span><span class=m>57</span>
 
+<span class=c1># IAM</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PRIVILEGE_IS_ROOT</span><span class=o>=</span><span class=m>60</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT</span><span class=o>=</span><span class=m>61</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_USER_NOT_FOUND</span><span class=o>=</span><span class=m>62</span>
+<span class=c1>#declare -ig BL64_LIB_ERROR_GROUP_NOT_FOUND=63</span>
+
 <span class=c1># General</span>
-<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_EXPORT_EMPTY</span><span class=o>=</span><span class=m>60</span>
-<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_EXPORT_SET</span><span class=o>=</span><span class=m>61</span>
-<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PRIVILEGE_IS_ROOT</span><span class=o>=</span><span class=m>62</span>
-<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT</span><span class=o>=</span><span class=m>63</span>
-<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED</span><span class=o>=</span><span class=m>64</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_EXPORT_EMPTY</span><span class=o>=</span><span class=m>70</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_EXPORT_SET</span><span class=o>=</span><span class=m>71</span>
+<span class=nb>declare</span> -ig <span class=nv>BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED</span><span class=o>=</span><span class=m>72</span>
 
 <span class=c1>#</span>
 <span class=c1># Local values (not exported)</span>
 <span class=c1>#</span>
+
+<span class=nb>declare</span> <span class=nv>BL64_SCRIPT_PATH</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
+<span class=nb>declare</span> <span class=nv>BL64_SCRIPT_NAME</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
+<span class=nb>declare</span> <span class=nv>BL64_SCRIPT_SID</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 
 <span class=c1># Set Signal traps</span>
 <span class=nb>declare</span> <span class=nv>BL64_LIB_SIGNAL_HUP</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_SIGNAL_HUP</span><span class=k>:-</span><span class=p>-</span><span class=si>}</span><span class=s2>&quot;</span>
@@ -300,15 +307,6 @@
 <span class=nb>declare</span> <span class=nv>BL64_LIB_SIGNAL_DEBUG</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_SIGNAL_DEBUG</span><span class=k>:-</span><span class=p>-</span><span class=si>}</span><span class=s2>&quot;</span>
 <span class=nb>declare</span> <span class=nv>BL64_LIB_SIGNAL_ERR</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_SIGNAL_ERR</span><span class=k>:-</span><span class=p>-</span><span class=si>}</span><span class=s2>&quot;</span>
 <span class=nb>declare</span> <span class=nv>BL64_LIB_SIGNAL_EXIT</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_LIB_SIGNAL_EXIT</span><span class=k>:-</span><span class=nv>bl64_dbg_runtime_show</span><span class=si>}</span><span class=s2>&quot;</span>
-
-<span class=c1># Capture script name</span>
-<span class=nb>declare</span> <span class=nv>BL64_SCRIPT_NAME</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BL64_SCRIPT_NAME</span><span class=k>:-</span><span class=si>${</span><span class=nv>0</span><span class=p>##*/</span><span class=si>}}</span><span class=s2>&quot;</span>
-
-<span class=c1># Capture script path</span>
-<span class=nb>declare</span> <span class=nv>BL64_SCRIPT_PATH</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
-
-<span class=c1># Define session ID for the current script</span>
-<span class=nb>declare</span> <span class=nv>BL64_SCRIPT_SID</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BASHPID</span><span class=si>}</span><span class=s2>&quot;</span>
 </code></pre></div> </td></tr></table> <h2 id=code>Code<a class=headerlink href=#code title="Permanent link">&para;</a></h2> <table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>  1</span>
 <span class=normal>  2</span>
 <span class=normal>  3</span>
@@ -421,10 +419,13 @@
 <span class=normal>110</span>
 <span class=normal>111</span>
 <span class=normal>112</span>
-<span class=normal>113</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>113</span>
+<span class=normal>114</span>
+<span class=normal>115</span>
+<span class=normal>116</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Setup script run-time environment</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.12.0</span>
+<span class=c1># Version: 1.14.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#</span>
@@ -435,6 +436,7 @@
 <span class=nb>unset</span> MAIL
 <span class=nb>unset</span> ENV
 <span class=nb>unset</span> IFS
+<span class=nb>unset</span> TMPDIR
 
 <span class=c1># Normalize terminal settings</span>
 <span class=nv>TERM</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>TERM</span><span class=k>:-</span><span class=nv>vt100</span><span class=si>}</span><span class=s2>&quot;</span>
@@ -481,6 +483,9 @@
 <span class=c1># set -o &#39;keyword&#39;</span>
 <span class=c1># set -o &#39;noexec&#39;</span>
 
+<span class=c1># Normalize umask</span>
+<span class=nb>umask</span> -S <span class=s1>&#39;u=rwx,g=,o=&#39;</span> &gt; /dev/null
+
 <span class=c1># Detect current OS</span>
 bl64_os_get_distro
 
@@ -490,24 +495,15 @@ bl64_os_get_distro
   <span class=c1># Warning: return and exit are not used to avoid terminating the shell when using source to load the lib</span>
   <span class=nb>false</span>
 <span class=k>else</span>
-  bl64_os_set_command <span class=o>&amp;&amp;</span>
-    bl64_os_set_alias <span class=o>&amp;&amp;</span>
-    bl64_txt_set_command <span class=o>&amp;&amp;</span>
-    bl64_fs_set_command <span class=o>&amp;&amp;</span>
-    bl64_fs_set_options <span class=o>&amp;&amp;</span>
-    bl64_fs_set_alias <span class=o>&amp;&amp;</span>
-    bl64_arc_set_command <span class=o>&amp;&amp;</span>
-    bl64_arc_set_options <span class=o>&amp;&amp;</span>
+  bl64_os_setup <span class=o>&amp;&amp;</span>
+    bl64_txt_setup <span class=o>&amp;&amp;</span>
+    bl64_fs_setup <span class=o>&amp;&amp;</span>
+    bl64_arc_setup <span class=o>&amp;&amp;</span>
     bl64_iam_setup <span class=o>&amp;&amp;</span>
     bl64_pkg_setup <span class=o>&amp;&amp;</span>
-    bl64_rbac_set_command <span class=o>&amp;&amp;</span>
-    bl64_rbac_set_alias <span class=o>&amp;&amp;</span>
-    bl64_vcs_set_command <span class=o>&amp;&amp;</span>
-    bl64_vcs_set_options <span class=o>&amp;&amp;</span>
-    bl64_vcs_set_alias <span class=o>&amp;&amp;</span>
-    bl64_rxtx_set_command <span class=o>&amp;&amp;</span>
-    bl64_rxtx_set_options <span class=o>&amp;&amp;</span>
-    bl64_rxtx_set_alias
+    bl64_rbac_setup <span class=o>&amp;&amp;</span>
+    bl64_vcs_setup <span class=o>&amp;&amp;</span>
+    bl64_rxtx_setup
 
   <span class=c1># Set signal handlers</span>
   <span class=c1># shellcheck disable=SC2064</span>
@@ -522,8 +518,16 @@ bl64_os_get_distro
     <span class=nb>trap</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_SIGNAL_ERR</span><span class=s2>&quot;</span> <span class=s1>&#39;ERR&#39;</span>
   <span class=k>fi</span>
 
-  <span class=c1># Capture script path</span>
-  bl64_dbg_runtime_get_script_path
+  <span class=c1># Create session ID for the current script</span>
+  <span class=nv>BL64_SCRIPT_SID</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>BASHPID</span><span class=si>}${</span><span class=nv>RANDOM</span><span class=si>}</span><span class=s2>&quot;</span>
+
+  <span class=c1># Determine script path when not source directly from bash</span>
+  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$0</span><span class=s2>&quot;</span> !<span class=o>=</span> <span class=s1>&#39;bash&#39;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+    <span class=nv>BL64_SCRIPT_NAME</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$(</span>bl64_fmt_basename <span class=s2>&quot;</span><span class=si>${</span><span class=nv>0</span><span class=si>}</span><span class=s2>&quot;</span><span class=k>)</span><span class=s2>&quot;</span>
+    <span class=nv>BL64_SCRIPT_PATH</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$(</span><span class=nb>cd</span> -- <span class=s2>&quot;</span><span class=si>${</span><span class=nv>0</span><span class=p>%/*</span><span class=si>}</span><span class=s2>&quot;</span> &gt;/dev/null <span class=o>&amp;&amp;</span> <span class=nb>pwd</span><span class=k>)</span><span class=s2>&quot;</span>
+  <span class=k>else</span>
+    <span class=nv>BL64_SCRIPT_NAME</span><span class=o>=</span><span class=s1>&#39;bashlib64.bash&#39;</span>
+  <span class=k>fi</span>
 
   <span class=c1># Enable command mode: the library can be used as a stand-alone script to run embeded functions</span>
   <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_CMD</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_ON</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>

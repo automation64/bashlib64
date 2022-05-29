@@ -11,11 +11,15 @@
 <span class=normal>11</span>
 <span class=normal>12</span>
 <span class=normal>13</span>
-<span class=normal>14</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>14</span>
+<span class=normal>15</span>
+<span class=normal>16</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Globals / Manage role based access service</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.4.0</span>
+<span class=c1># Version: 1.5.0</span>
 <span class=c1>#######################################</span>
+
+<span class=nb>export</span> <span class=nv>BL64_RBAC_MODULE</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_VAR_OFF</span><span class=s2>&quot;</span>
 
 <span class=nb>export</span> <span class=nv>BL64_RBAC_CMD_SUDO</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_RBAC_CMD_VISUDO</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
@@ -152,10 +156,58 @@
 <span class=normal>125</span>
 <span class=normal>126</span>
 <span class=normal>127</span>
-<span class=normal>128</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>128</span>
+<span class=normal>129</span>
+<span class=normal>130</span>
+<span class=normal>131</span>
+<span class=normal>132</span>
+<span class=normal>133</span>
+<span class=normal>134</span>
+<span class=normal>135</span>
+<span class=normal>136</span>
+<span class=normal>137</span>
+<span class=normal>138</span>
+<span class=normal>139</span>
+<span class=normal>140</span>
+<span class=normal>141</span>
+<span class=normal>142</span>
+<span class=normal>143</span>
+<span class=normal>144</span>
+<span class=normal>145</span>
+<span class=normal>146</span>
+<span class=normal>147</span>
+<span class=normal>148</span>
+<span class=normal>149</span>
+<span class=normal>150</span>
+<span class=normal>151</span>
+<span class=normal>152</span>
+<span class=normal>153</span>
+<span class=normal>154</span>
+<span class=normal>155</span>
+<span class=normal>156</span>
+<span class=normal>157</span>
+<span class=normal>158</span>
+<span class=normal>159</span>
+<span class=normal>160</span>
+<span class=normal>161</span>
+<span class=normal>162</span>
+<span class=normal>163</span>
+<span class=normal>164</span>
+<span class=normal>165</span>
+<span class=normal>166</span>
+<span class=normal>167</span>
+<span class=normal>168</span>
+<span class=normal>169</span>
+<span class=normal>170</span>
+<span class=normal>171</span>
+<span class=normal>172</span>
+<span class=normal>173</span>
+<span class=normal>174</span>
+<span class=normal>175</span>
+<span class=normal>176</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Manage role based access service</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.9.0</span>
+<span class=c1># Version: 1.10.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -257,6 +309,7 @@
 <span class=c1># Run privileged OS command using Sudo if needed</span>
 <span class=c1>#</span>
 <span class=c1># Arguments:</span>
+<span class=c1>#   $1: user to run as. Default: root</span>
 <span class=c1>#   $@: command and arguments to run</span>
 <span class=c1># Outputs:</span>
 <span class=c1>#   STDOUT: command or sudo output</span>
@@ -266,18 +319,65 @@
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_rbac_run_command<span class=o>()</span> <span class=o>{</span>
   bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
-  bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  <span class=nb>local</span> <span class=nv>user</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>target</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 
+  bl64_check_parameter <span class=s1>&#39;user&#39;</span> <span class=o>&amp;&amp;</span>
+    bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_RBAC_CMD_SUDO</span><span class=s2>&quot;</span> <span class=o>||</span>
+    <span class=k>return</span> <span class=nv>$?</span>
 
-  bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_RBAC_CMD_SUDO</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+  <span class=nb>shift</span>
+  bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span>
+    <span class=k>return</span> <span class=nv>$?</span>
+  <span class=nv>target</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$(</span>bl64_iam_user_get_id <span class=s2>&quot;</span><span class=si>${</span><span class=nv>user</span><span class=si>}</span><span class=s2>&quot;</span><span class=k>)</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
 
-  <span class=c1># Check the effective user id</span>
-  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$EUID</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s1>&#39;0&#39;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
-    <span class=c1># Already root, execute command directly</span>
+  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$UID</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$target</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+    bl64_dbg_lib_show_info <span class=s2>&quot;run command directly (user: </span><span class=nv>$user</span><span class=s2>)&quot;</span>
     <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
   <span class=k>else</span>
-    <span class=c1># Current user is regular, use SUDO</span>
-    <span class=nv>$BL64_RBAC_ALIAS_SUDO_ENV</span> <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+    bl64_dbg_lib_show_info <span class=s2>&quot;run command with sudo (user: </span><span class=nv>$user</span><span class=s2>)&quot;</span>
+    <span class=nv>$BL64_RBAC_ALIAS_SUDO_ENV</span> -u <span class=s2>&quot;</span><span class=nv>$user</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  <span class=k>fi</span>
+<span class=o>}</span>
+
+<span class=c1>#######################################</span>
+<span class=c1># Run privileged Bash function using Sudo if needed</span>
+<span class=c1>#</span>
+<span class=c1># Arguments:</span>
+<span class=c1>#   $1: library that contains the target function.</span>
+<span class=c1>#   $2: user to run as. Default: root</span>
+<span class=c1>#   $@: command and arguments to run</span>
+<span class=c1># Outputs:</span>
+<span class=c1>#   STDOUT: command or sudo output</span>
+<span class=c1>#   STDERR: command or sudo error</span>
+<span class=c1># Returns:</span>
+<span class=c1>#   command or sudo exit status</span>
+<span class=c1>#######################################</span>
+<span class=k>function</span> bl64_rbac_run_bash_function<span class=o>()</span> <span class=o>{</span>
+  bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>library</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>user</span><span class=o>=</span><span class=s2>&quot;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=si>${</span><span class=nv>BL64_LIB_DEFAULT</span><span class=si>}}</span><span class=s2>&quot;</span>
+  <span class=nb>local</span> <span class=nv>target</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
+
+  bl64_check_parameter <span class=s1>&#39;library&#39;</span> <span class=o>&amp;&amp;</span>
+    bl64_check_parameter <span class=s1>&#39;user&#39;</span> <span class=o>&amp;&amp;</span>
+    bl64_check_file <span class=s2>&quot;</span><span class=nv>$library</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span>
+    bl64_check_command <span class=s2>&quot;</span><span class=nv>$BL64_RBAC_CMD_SUDO</span><span class=s2>&quot;</span> <span class=o>||</span>
+    <span class=k>return</span> <span class=nv>$?</span>
+
+  <span class=nb>shift</span>
+  <span class=nb>shift</span>
+  bl64_check_parameters_none <span class=s2>&quot;</span><span class=nv>$#</span><span class=s2>&quot;</span> <span class=o>||</span>
+    <span class=k>return</span> <span class=nv>$?</span>
+
+  <span class=nv>target</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$(</span>bl64_iam_user_get_id <span class=s2>&quot;</span><span class=si>${</span><span class=nv>user</span><span class=si>}</span><span class=s2>&quot;</span><span class=k>)</span><span class=s2>&quot;</span> <span class=o>||</span> <span class=k>return</span> <span class=nv>$?</span>
+
+  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&quot;</span><span class=nv>$UID</span><span class=s2>&quot;</span> <span class=o>==</span> <span class=s2>&quot;</span><span class=nv>$target</span><span class=s2>&quot;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+    <span class=c1># shellcheck disable=SC1090</span>
+    . <span class=s2>&quot;</span><span class=nv>$library</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span>
+      <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+  <span class=k>else</span>
+    <span class=nv>$BL64_RBAC_ALIAS_SUDO_ENV</span> -u <span class=s2>&quot;</span><span class=nv>$user</span><span class=s2>&quot;</span> <span class=s2>&quot;</span><span class=nv>$BL64_OS_CMD_BASH</span><span class=s2>&quot;</span> -c <span class=s2>&quot;. </span><span class=si>${</span><span class=nv>library</span><span class=si>}</span><span class=s2>; </span><span class=si>${</span><span class=p>*</span><span class=si>}</span><span class=s2>&quot;</span>
   <span class=k>fi</span>
 <span class=o>}</span>
 </code></pre></div> </td></tr></table> </article> </div> </div> <a href=# class="md-top md-icon" data-md-component=top data-md-state=hidden> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg> Back to top </a> </main> <footer class=md-footer> <nav class="md-footer__inner md-grid" aria-label=Footer> <a href=../bl64-py/ class="md-footer__link md-footer__link--prev" aria-label="Previous: Module: py" rel=prev> <div class="md-footer__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg> </div> <div class=md-footer__title> <div class=md-ellipsis> <span class=md-footer__direction> Previous </span> Module: py </div> </div> </a> <a href=../bl64-rnd/ class="md-footer__link md-footer__link--next" aria-label="Next: Module: rnd" rel=next> <div class=md-footer__title> <div class=md-ellipsis> <span class=md-footer__direction> Next </span> Module: rnd </div> </div> <div class="md-footer__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg> </div> </a> </nav> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class=md-copyright> <div class=md-copyright__highlight> GPL-3.0-or-later </div> Made with <a href=https://squidfunk.github.io/mkdocs-material/ target=_blank rel=noopener> Material for MkDocs </a> </div> </div> </div> </footer> </div> <div class=md-dialog data-md-component=dialog> <div class="md-dialog__inner md-typeset"></div> </div> <script id=__config type=application/json>{"base": "..", "features": ["navigation.instant", "navigation.sections", "navigation.expand", "navigation.indexes", "toc.integrate", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.bd0b6b67.min.js"}</script> <script src=../assets/javascripts/bundle.8aa65030.min.js></script> </body> </html>

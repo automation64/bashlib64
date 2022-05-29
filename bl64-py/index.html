@@ -34,10 +34,15 @@
 <span class=normal>34</span>
 <span class=normal>35</span>
 <span class=normal>36</span>
-<span class=normal>37</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>37</span>
+<span class=normal>38</span>
+<span class=normal>39</span>
+<span class=normal>40</span>
+<span class=normal>41</span>
+<span class=normal>42</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Globals / Interact with system-wide Python</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.4.0</span>
+<span class=c1># Version: 1.6.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1># Optional module. Not enabled by default</span>
@@ -52,12 +57,17 @@
 <span class=nb>export</span> <span class=nv>BL64_PY_CMD_PYTHON39</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_UNAVAILABLE</span><span class=s2>&quot;</span>
 <span class=nb>export</span> <span class=nv>BL64_PY_CMD_PYTHON310</span><span class=o>=</span><span class=s2>&quot;</span><span class=nv>$BL64_LIB_UNAVAILABLE</span><span class=s2>&quot;</span>
 
+<span class=c1># Version info</span>
+<span class=nb>export</span> <span class=nv>BL64_PY_VERSION_PYTHON3</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_PY_VERSION_PIP3</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
+
 <span class=nb>export</span> <span class=nv>BL64_PY_SET_PIP_VERBOSE</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_PY_SET_PIP_VERSION</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_PY_SET_PIP_UPGRADE</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_PY_SET_PIP_USER</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_PY_SET_PIP_DEBUG</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 <span class=nb>export</span> <span class=nv>BL64_PY_SET_PIP_QUIET</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
+<span class=nb>export</span> <span class=nv>BL64_PY_SET_PIP_NO_WARN_SCRIPT</span><span class=o>=</span><span class=s1>&#39;&#39;</span>
 
 <span class=nb>readonly</span> <span class=nv>_BL64_PY_TXT_PIP_PREPARE_PIP</span><span class=o>=</span><span class=s1>&#39;upgrade pip module&#39;</span>
 <span class=nb>readonly</span> <span class=nv>_BL64_PY_TXT_PIP_PREPARE_SETUP</span><span class=o>=</span><span class=s1>&#39;install and upgrade setuptools modules&#39;</span>
@@ -212,10 +222,15 @@
 <span class=normal>139</span>
 <span class=normal>140</span>
 <span class=normal>141</span>
-<span class=normal>142</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
+<span class=normal>142</span>
+<span class=normal>143</span>
+<span class=normal>144</span>
+<span class=normal>145</span>
+<span class=normal>146</span>
+<span class=normal>147</span></pre></div></td><td class=code><div class=highlight><pre><span></span><code><span class=c1>#######################################</span>
 <span class=c1># BashLib64 / Module / Functions / Interact with system-wide Python</span>
 <span class=c1>#</span>
-<span class=c1># Version: 1.4.0</span>
+<span class=c1># Version: 1.5.0</span>
 <span class=c1>#######################################</span>
 
 <span class=c1>#######################################</span>
@@ -250,6 +265,7 @@
 <span class=c1>#</span>
 <span class=c1># * Upgrade pip</span>
 <span class=c1># * Install/upgrade setuptools</span>
+<span class=c1># * Upgrade is done using the OS provided PIP module. Do not use bl64_py_pip_usr_install as it relays on the latest version of PIP</span>
 <span class=c1>#</span>
 <span class=c1># Arguments:</span>
 <span class=c1>#   None</span>
@@ -264,20 +280,19 @@
   <span class=nb>local</span> <span class=nv>modules_pip</span><span class=o>=</span><span class=s1>&#39;pip&#39;</span>
   <span class=nb>local</span> <span class=nv>modules_setup</span><span class=o>=</span><span class=s1>&#39;setuptools wheel stevedore&#39;</span>
 
-  bl64_msg_show_task <span class=s2>&quot;</span><span class=nv>$_BL64_PY_TXT_PIP_PREPARE_PIP</span><span class=s2>&quot;</span>
-  bl64_py_run_pip <span class=se>\</span>
-    <span class=s1>&#39;install&#39;</span> <span class=se>\</span>
-    <span class=nv>$BL64_PY_SET_PIP_UPGRADE</span> <span class=se>\</span>
-    <span class=nv>$BL64_PY_SET_PIP_USER</span> <span class=se>\</span>
-    <span class=nv>$modules_pip</span>
-
-  bl64_msg_show_task <span class=s2>&quot;</span><span class=nv>$_BL64_PY_TXT_PIP_PREPARE_SETUP</span><span class=s2>&quot;</span>
   <span class=c1># shellcheck disable=SC2086</span>
-  bl64_py_run_pip <span class=se>\</span>
-    <span class=s1>&#39;install&#39;</span> <span class=se>\</span>
-    <span class=nv>$BL64_PY_SET_PIP_UPGRADE</span> <span class=se>\</span>
-    <span class=nv>$BL64_PY_SET_PIP_USER</span> <span class=se>\</span>
-    <span class=nv>$modules_setup</span>
+  bl64_msg_show_lib_task <span class=s2>&quot;</span><span class=nv>$_BL64_PY_TXT_PIP_PREPARE_PIP</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span>
+    bl64_py_run_pip <span class=se>\</span>
+      <span class=s1>&#39;install&#39;</span> <span class=se>\</span>
+      <span class=nv>$BL64_PY_SET_PIP_UPGRADE</span> <span class=se>\</span>
+      <span class=nv>$BL64_PY_SET_PIP_USER</span> <span class=se>\</span>
+      <span class=nv>$modules_pip</span> <span class=o>&amp;&amp;</span>
+    bl64_msg_show_lib_task <span class=s2>&quot;</span><span class=nv>$_BL64_PY_TXT_PIP_PREPARE_SETUP</span><span class=s2>&quot;</span> <span class=o>&amp;&amp;</span>
+    bl64_py_run_pip <span class=se>\</span>
+      <span class=s1>&#39;install&#39;</span> <span class=se>\</span>
+      <span class=nv>$BL64_PY_SET_PIP_UPGRADE</span> <span class=se>\</span>
+      <span class=nv>$BL64_PY_SET_PIP_USER</span> <span class=se>\</span>
+      <span class=nv>$modules_setup</span>
 
 <span class=o>}</span>
 
@@ -285,6 +300,8 @@
 <span class=c1># Install packages for local-user</span>
 <span class=c1>#</span>
 <span class=c1># * Assume yes</span>
+<span class=c1># * Assumes that bl64_py_pip_usr_prepare was runned before</span>
+<span class=c1># * Uses the latest version of PIP (previously upgraded by bl64_py_pip_usr_prepare)</span>
 <span class=c1>#</span>
 <span class=c1># Arguments:</span>
 <span class=c1>#   package list, separated by spaces (expanded with $@)</span>
@@ -296,9 +313,12 @@
 <span class=c1>#######################################</span>
 <span class=k>function</span> bl64_py_pip_usr_install<span class=o>()</span> <span class=o>{</span>
   bl64_dbg_lib_show_function <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
-  bl64_msg_show_task <span class=s2>&quot;</span><span class=nv>$_BL64_PY_TXT_PIP_INSTALL</span><span class=s2>&quot;</span>
+
+  bl64_msg_show_lib_task <span class=s2>&quot;</span><span class=nv>$_BL64_PY_TXT_PIP_INSTALL</span><span class=s2> (</span><span class=nv>$*</span><span class=s2>)&quot;</span>
   bl64_py_run_pip <span class=se>\</span>
     <span class=s1>&#39;install&#39;</span> <span class=se>\</span>
+    <span class=nv>$BL64_PY_SET_PIP_UPGRADE</span> <span class=se>\</span>
+    <span class=nv>$BL64_PY_SET_PIP_NO_WARN_SCRIPT</span> <span class=se>\</span>
     <span class=nv>$BL64_PY_SET_PIP_USER</span> <span class=se>\</span>
     <span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
 <span class=o>}</span>
