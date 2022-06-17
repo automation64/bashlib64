@@ -16,7 +16,7 @@ setup() {
 
   run bl64_xsv_search_records \
     "$search" \
-    "$DEVBL_SAMPLES/csv_01.txt" \
+    "$TESTMANSH_TEST_SAMPLES/csv_01.txt" \
     '4' \
     '1'
   assert_success
@@ -32,7 +32,7 @@ setup() {
 
   run bl64_xsv_search_records \
     "$search" \
-    "$DEVBL_SAMPLES/csv_01.txt" \
+    "$TESTMANSH_TEST_SAMPLES/csv_01.txt" \
     '4' \
     '1'
   assert_success
@@ -48,7 +48,7 @@ setup() {
 
   run bl64_xsv_search_records \
     "$search" \
-    "$DEVBL_SAMPLES/csv_01.txt" \
+    "$TESTMANSH_TEST_SAMPLES/csv_01.txt" \
     '4' \
     '1:2'
   assert_success
@@ -64,7 +64,7 @@ setup() {
 
   run bl64_xsv_search_records \
     "$search" \
-    "$DEVBL_SAMPLES/csv_01.txt" \
+    "$TESTMANSH_TEST_SAMPLES/csv_01.txt" \
     '2:4' \
     '1:2'
   assert_success

@@ -14,9 +14,9 @@ setup() {
     "$BL64_LIB_DEFAULT" \
     "$BL64_LIB_DEFAULT" \
     "${TEST_SANDBOX}/merge_result.txt" \
-    "${DEVBL_SAMPLES}/merge_files_01/file1.txt" \
-    "${DEVBL_SAMPLES}/merge_files_01/file2.txt" \
-    "${DEVBL_SAMPLES}/merge_files_01/file3.txt"
+    "${TESTMANSH_TEST_SAMPLES}/merge_files_01/file1.txt" \
+    "${TESTMANSH_TEST_SAMPLES}/merge_files_01/file2.txt" \
+    "${TESTMANSH_TEST_SAMPLES}/merge_files_01/file3.txt"
   assert_success
   assert_file_exist "${TEST_SANDBOX}/merge_result.txt"
 }

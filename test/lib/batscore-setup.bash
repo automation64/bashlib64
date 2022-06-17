@@ -25,4 +25,3 @@ export BL64_LIB_DEBUG=0
 
 # Test-case specific variables
 export DEVBL_TEST_BASHLIB64="${TESTMANSH_PROJECT_BUILD}/bashlib64.bash"
-export DEVBL_SAMPLES="$TESTMANSH_TEST_SAMPLES"
