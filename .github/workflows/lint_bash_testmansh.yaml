@@ -1,4 +1,4 @@
-name: "Lint / ShellCheck"
+name: "Lint / Bash / TestManSH"
 
 on:
   push:
