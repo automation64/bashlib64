@@ -354,7 +354,7 @@ function bl64_fs_run_mkdir() {
 }
 
 #######################################
-# Create full path including parents. Uses verbose flag
+# Create full path including parents
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -366,12 +366,8 @@ function bl64_fs_run_mkdir() {
 #######################################
 function bl64_fs_mkdir_full() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
-
-  # shellcheck disable=SC2086
-  "$BL64_FS_CMD_MKDIR" $verbose "$BL64_FS_SET_MKDIR_PARENTS" "$@"
+  bl64_fs_run_mkdir "$BL64_FS_SET_MKDIR_PARENTS" "$@"
 }
 
 #######################################
