@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.0]
+
+### Added
+
+- check
+  - new function: bl64_check_path_not_present
+- py
+  - all: virtual environments support with venv
+  - new function: bl64_py_venv_activate, bl64_py_venv_create
+
 ## [2.13.0]
 
 ### Added
@@ -448,7 +458,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.13.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.14.0...HEAD
+[2.14.0]: https://github.com/serdigital64/bashlib64/compare/2.13.0...2.14.0
 [2.13.0]: https://github.com/serdigital64/bashlib64/compare/2.12.0...2.13.0
 [2.12.0]: https://github.com/serdigital64/bashlib64/compare/2.11.0...2.12.0
 [2.11.0]: https://github.com/serdigital64/bashlib64/compare/2.10.0...2.11.0
