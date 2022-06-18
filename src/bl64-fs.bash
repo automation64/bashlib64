@@ -331,22 +331,6 @@ function bl64_fs_ln_symbolic() {
 }
 
 #######################################
-# List files with nocolor flag
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_fs_ls_files() {
-  bl64_dbg_lib_show_function "$@"
-  $BL64_FS_ALIAS_LS_FILES "$@"
-}
-
-#######################################
 # Command wrapper with verbose, debug and common options
 #
 # Arguments:
