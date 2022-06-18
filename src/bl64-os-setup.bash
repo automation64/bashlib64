@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.3.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -21,7 +21,12 @@
 function bl64_os_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_os_set_command &&
+  [[ "${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5' ]] &&
+    bl64_msg_show_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
+    return $BL64_LIB_ERROR_OS_BASH_VERSION
+
+  bl64_os_get_distro &&
+    bl64_os_set_command &&
     bl64_os_set_alias &&
     BL64_OS_MODULE="$BL64_LIB_VAR_ON"
 
