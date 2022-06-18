@@ -740,3 +740,21 @@ function bl64_fs_run_cp() {
 
   "$BL64_FS_CMD_CP" "$@"
 }
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_run_ls() {
+  bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
+
+  "$BL64_FS_CMD_LS" "$@"
+}
