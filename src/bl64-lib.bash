@@ -59,9 +59,7 @@ set +o 'posix'
 # set -o 'keyword'
 # set -o 'noexec'
 
-# Normalize umask
-umask -S 'u=rwx,g=,o=' > /dev/null
-
+# Initialize mandatory modules
 bl64_os_setup &&
   bl64_txt_setup &&
   bl64_fs_setup &&
@@ -85,6 +83,9 @@ if [[ "$BL64_LIB_TRAPS" == "$BL64_LIB_VAR_ON" ]]; then
   trap "$BL64_LIB_SIGNAL_EXIT" 'EXIT'
   trap "$BL64_LIB_SIGNAL_ERR" 'ERR'
 fi
+
+# Set default creation permissions
+bl64_fs_set_umask "$BL64_FS_UMASK_RW_USER" || return $?
 
 # Create session ID for the current script
 BL64_SCRIPT_SID="${BASHPID}${RANDOM}"

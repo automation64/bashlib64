@@ -762,3 +762,24 @@ function bl64_fs_run_ln() {
   # shellcheck disable=SC2086
   "$BL64_FS_CMD_LN" $verbose "$@"
 }
+
+#######################################
+# Set default path creation permission with umask
+#
+# Arguments:
+#   $1: Permission set
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_set_umask() {
+  bl64_dbg_lib_show_function "$@"
+  local permissions="${1:-}"
+
+  bl64_check_parameter 'permissions' ||
+    return $?
+
+  umask -S "$permissions" >/dev/null
+}
