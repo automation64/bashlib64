@@ -1,8 +1,61 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
+
+#######################################
+# Activate virtual environment
+#
+# * Create the environment if not present
+#
+# Arguments:
+#   $1: full path to the virtual environment
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_py_venv_activate() {
+  bl64_dbg_lib_show_function "$@"
+  local venv_path="${1:-}"
+
+  bl64_check_parameter 'venv_path' ||
+    return $?
+
+  if [[ ! -d "$venv_path" ]]; then
+    bl64_py_venv_create "$venv_path" ||
+      return $?
+  fi
+
+  bl64_py_setup "$venv_path"
+
+}
+
+#######################################
+# Create virtual environment
+#
+# Arguments:
+#   $1: full path to the virtual environment
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_py_venv_create() {
+  bl64_dbg_lib_show_function "$@"
+  local venv_path="${1:-}"
+
+  bl64_check_parameter 'venv_path' &&
+    bl64_check_path_absolute "$venv_path" &&
+    bl64_check_path_not_present "$venv_path" ||
+    return $?
+
+  bl64_py_run_python -m "$BL64_PY_SET_MODULE_VENV" "$venv_path"
+
+}
 
 #######################################
 # Get Python PIP version
@@ -48,7 +101,7 @@ function bl64_py_pip_get_version() {
 #######################################
 function bl64_py_pip_usr_prepare() {
   bl64_dbg_lib_show_function
-  local modules_pip='pip'
+  local modules_pip="$BL64_PY_SET_MODULE_PIP"
   local modules_setup='setuptools wheel stevedore'
 
   # shellcheck disable=SC2086
@@ -97,7 +150,7 @@ function bl64_py_pip_usr_install() {
 #######################################
 # Python wrapper with verbose, debug and common options
 #
-# * Trust no one. Ignore user provided config and use default config
+# * Trust no one. Ignore user provided config and use default
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -143,5 +196,5 @@ function bl64_py_run_pip() {
   bl64_msg_verbose_lib_enabled && debug="$BL64_PY_SET_PIP_VERBOSE"
   bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
-  bl64_py_run_python -m 'pip' $debug "$@"
+  bl64_py_run_python -m "$BL64_PY_SET_MODULE_PIP" $debug "$@"
 }
