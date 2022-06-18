@@ -16,6 +16,9 @@ jobs:
       - name: "Download testmansh"
         run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
 
+      - name: "Prepare build environment"
+        run: "./bin/devbl-lib"
+
       - name: "Build app"
         run: "./bin/devbl-build -t"
 
