@@ -238,6 +238,27 @@ function bl64_fs_run_chown() {
 }
 
 #######################################
+# Wrapper. Change object ownership with verbose flag
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_run_chown() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHOWN_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_FS_CMD_CHOWN" $verbose "$@"
+}
+
+#######################################
 # Wrapper. Change object permission with verbose flag
 #
 # Arguments:
@@ -259,7 +280,7 @@ function bl64_fs_run_chmod() {
 }
 
 #######################################
-# Change directory ownership with verbose and recursive flags
+# Change directory ownership recursively
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -271,16 +292,13 @@ function bl64_fs_run_chmod() {
 #######################################
 function bl64_fs_chown_dir() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CHMOD" $verbose "$BL64_FS_SET_CHOWN_RECURSIVE" "$@"
+  bl64_fs_run_chown "$BL64_FS_SET_CHOWN_RECURSIVE" "$@"
 }
 
 #######################################
-# Copy files with verbose and force flags
+# Copy files with force flag
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -292,16 +310,13 @@ function bl64_fs_chown_dir() {
 #######################################
 function bl64_fs_cp_file() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CP" $verbose "$BL64_FS_SET_CP_FORCE" "$@"
+  bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$@"
 }
 
 #######################################
-# Copy directory recursively with verbose and force flags
+# Copy directory with recursive and force flags
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -313,12 +328,9 @@ function bl64_fs_cp_file() {
 #######################################
 function bl64_fs_cp_dir() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CP" $verbose "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" "$@"
+  bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" "$@"
 }
 
 #######################################
@@ -723,4 +735,22 @@ function bl64_fs_set_permissions() {
   fi
 
   return 0
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_run_cp() {
+  bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
+
+  "$BL64_FS_CMD_CP" "$@"
 }
