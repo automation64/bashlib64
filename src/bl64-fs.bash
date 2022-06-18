@@ -229,6 +229,7 @@ function bl64_fs_merge_dir() {
 #######################################
 function bl64_fs_run_chown() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHOWN_VERBOSE"
@@ -250,6 +251,7 @@ function bl64_fs_run_chown() {
 #######################################
 function bl64_fs_run_chmod() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
@@ -357,6 +359,7 @@ function bl64_fs_ls_files() {
 #######################################
 function bl64_fs_run_mkdir() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
@@ -399,6 +402,7 @@ function bl64_fs_mkdir_full() {
 #######################################
 function bl64_fs_run_mv() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MV_VERBOSE"
@@ -730,6 +734,9 @@ function bl64_fs_set_permissions() {
 function bl64_fs_run_cp() {
   bl64_dbg_lib_show_function "$@"
   bl64_check_parameters_none "$#" || return $?
+  local verbose=''
+
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
   "$BL64_FS_CMD_CP" "$@"
 }
