@@ -766,6 +766,9 @@ function bl64_fs_run_ln() {
 #######################################
 # Set default path creation permission with umask
 #
+# * Uses symbolic permission form
+# * Supports predefined sets: BL64_FS_UMASK_*
+#
 # Arguments:
 #   $1: Permission set
 # Outputs:
