@@ -315,7 +315,7 @@ function bl64_fs_cp_dir() {
 }
 
 #######################################
-# Create a symbolic link with verbose flag
+# Create a symbolic link
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -327,7 +327,8 @@ function bl64_fs_cp_dir() {
 #######################################
 function bl64_fs_ln_symbolic() {
   bl64_dbg_lib_show_function "$@"
-  $BL64_FS_ALIAS_LN_SYMBOLIC "$@"
+
+  bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$@"
 }
 
 #######################################
@@ -722,7 +723,8 @@ function bl64_fs_run_cp() {
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
-  "$BL64_FS_CMD_CP" "$@"
+  # shellcheck disable=SC2086
+  "$BL64_FS_CMD_CP" $verbose "$@"
 }
 
 #######################################
@@ -741,4 +743,26 @@ function bl64_fs_run_ls() {
   bl64_check_parameters_none "$#" || return $?
 
   "$BL64_FS_CMD_LS" "$@"
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_run_ln() {
+  bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
+  local verbose=''
+
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_LN_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_FS_CMD_LN" $verbose "$@"
 }
