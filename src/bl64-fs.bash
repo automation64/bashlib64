@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 1.8.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -43,7 +43,7 @@ function bl64_fs_create_dir() {
     bl64_check_path_absolute "$path" || return $?
     [[ -d "$path" ]] && continue
 
-    bl64_fs_mkdir "$path" &&
+    bl64_fs_run_mkdir "$path" &&
       bl64_fs_set_permissions "$path" "$mode" "$user" "$group" ||
       return $?
 
@@ -217,7 +217,7 @@ function bl64_fs_merge_dir() {
 }
 
 #######################################
-# Change object ownership with verbose flag
+# Wrapper. Change object ownership with verbose flag
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -227,7 +227,7 @@ function bl64_fs_merge_dir() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_fs_chown() {
+function bl64_fs_run_chown() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
@@ -238,7 +238,7 @@ function bl64_fs_chown() {
 }
 
 #######################################
-# Change object permission with verbose flag
+# Wrapper. Change object permission with verbose flag
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -248,7 +248,7 @@ function bl64_fs_chown() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_fs_chmod() {
+function bl64_fs_run_chmod() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
@@ -364,7 +364,7 @@ function bl64_fs_ls_files() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_fs_mkdir() {
+function bl64_fs_run_mkdir() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
@@ -406,7 +406,7 @@ function bl64_fs_mkdir_full() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_fs_mv() {
+function bl64_fs_run_mv() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
@@ -624,7 +624,7 @@ function bl64_fs_safeguard() {
   fi
 
   bl64_dbg_lib_show_info "safeguard object: [${destination}]->[${backup}]"
-  if ! bl64_fs_mv "$destination" "$backup"; then
+  if ! bl64_fs_run_mv "$destination" "$backup"; then
     bl64_msg_show_error "$_BL64_FS_TXT_SAFEGUARD_FAILED ($destination)"
     return $BL64_LIB_ERROR_TASK_BACKUP
   fi
@@ -677,7 +677,7 @@ function bl64_fs_restore() {
 
     bl64_dbg_lib_show_info 'restore content from backup'
     # shellcheck disable=SC2086
-    bl64_fs_mv "$backup" "$destination" ||
+    bl64_fs_run_mv "$backup" "$destination" ||
       return $BL64_LIB_ERROR_TASK_RESTORE
   fi
 }
@@ -709,17 +709,17 @@ function bl64_fs_set_permissions() {
 
   # Determine if mode needs to be set
   if [[ "$mode" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_fs_chmod "$mode" "$path" || return $?
+    bl64_fs_run_chmod "$mode" "$path" || return $?
   fi
 
   # Determine if owner needs to be set
   if [[ "$user" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_fs_chown "${user}" "$path" || return $?
+    bl64_fs_run_chown "${user}" "$path" || return $?
   fi
 
   # Determine if group needs to be set
   if [[ "$group" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_fs_chown ":${group}" "$path" || return $?
+    bl64_fs_run_chown ":${group}" "$path" || return $?
   fi
 
   return 0

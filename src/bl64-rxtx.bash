@@ -56,7 +56,7 @@ function bl64_rxtx_web_get_file() {
 
   # Determine if mode needs to be set
   if [[ "$status" == '0' && "$mode" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_fs_chmod "$mode" "$destination"
+    bl64_fs_run_chmod "$mode" "$destination"
     status=$?
   fi
 
@@ -204,7 +204,7 @@ function _bl64_rxtx_git_get_dir_root() {
   # Clone the repo
   bl64_vcs_git_clone "$source_url" "$repo" "$branch" &&
     bl64_dbg_lib_show_info 'promote to destination' &&
-    bl64_fs_mv "$transition" "$destination"
+    bl64_fs_run_mv "$transition" "$destination"
   status=$?
 
   [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
@@ -236,8 +236,8 @@ function _bl64_rxtx_git_get_dir_sub() {
   bl64_vcs_git_sparse "$source_url" "$repo" "$branch" "$source_path" &&
     [[ -d "$source" ]] &&
     bl64_fs_mkdir_full "${repo}/transition" &&
-    bl64_fs_mv "$source" "$transition" >/dev/null &&
-    bl64_fs_mv "${transition}" "$destination" >/dev/null
+    bl64_fs_run_mv "$source" "$transition" >/dev/null &&
+    bl64_fs_run_mv "${transition}" "$destination" >/dev/null
   status=$?
 
   [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
