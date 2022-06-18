@@ -1,4 +1,4 @@
-name: "Lint / ShellCheck"
+name: "Lint / Bash / TestManSH"
 
 on:
   push:
@@ -16,5 +16,8 @@ jobs:
       - name: "Download testmansh"
         run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
 
+      - name: "Build app"
+        run: "./bin/devbl-build -t"
+
       - name: "Run ShellCheck"
-        run: "bash testmansh -t -c bashlib64.bash"
+        run: "bash testmansh -t -c build/bashlib64.bash"

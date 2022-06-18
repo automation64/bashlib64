@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Version: 1.10.0
+# Version: 1.11.0
 #######################################
 
 # Declare imported variables
@@ -94,6 +94,7 @@ declare -ig BL64_LIB_ERROR_DIRECTORY_NOT_READ=54
 declare -ig BL64_LIB_ERROR_PATH_NOT_RELATIVE=55
 declare -ig BL64_LIB_ERROR_PATH_NOT_ABSOLUTE=56
 declare -ig BL64_LIB_ERROR_PATH_NOT_FOUND=57
+declare -ig BL64_LIB_ERROR_PATH_PRESENT=58
 
 # IAM
 declare -ig BL64_LIB_ERROR_PRIVILEGE_IS_ROOT=60

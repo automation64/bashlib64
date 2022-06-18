@@ -15,7 +15,7 @@ teardown() {
 
 @test "bl64_rxtx_web_get_file: download file + replace off + old content" {
 
-  sample="${DEVBL_SAMPLES}/text_01.txt"
+  sample="${TESTMANSH_TEST_SAMPLES}/text_01.txt"
   test_file="${_bl64_rxtx_web_get_file_destination}/test"
   cat "$sample" > "$test_file"
 

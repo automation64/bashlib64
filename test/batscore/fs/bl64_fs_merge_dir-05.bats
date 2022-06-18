@@ -8,7 +8,7 @@ setup() {
 }
 
 @test "bl64_fs_merge_dir: copy dir + file names with spaces + subdirs" {
-  source="$DEVBL_SAMPLES/dir_04"
+  source="$TESTMANSH_TEST_SAMPLES/dir_04"
   target="$TEST_SANDBOX/target"
   mkdir "$target"
   run bl64_fs_merge_dir "$source" "$target"

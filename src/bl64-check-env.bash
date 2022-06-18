@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
 #
-# Version: 1.11.0
+# Version: 1.12.0
 #######################################
 
 readonly _BL64_CHECK_TXT_MODULE_NOT_SETUP='required bashlib64 module is not setup. Module must be initialized before usage'
@@ -28,6 +28,7 @@ readonly _BL64_CHECK_TXT_EXPORT_SET='required shell exported variable is not set
 
 readonly _BL64_CHECK_TXT_PATH_NOT_RELATIVE='required path must be relative'
 readonly _BL64_CHECK_TXT_PATH_NOT_ABSOLUTE='required path must be absolute'
+readonly _BL64_CHECK_TXT_PATH_PRESENT='requested path is already present'
 
 readonly _BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT='the task requires root privilege. Please run the script as root or with SUDO'
 readonly _BL64_CHECK_TXT_PRIVILEGE_IS_ROOT='the task should not be run with root privilege. Please run the script as a regular user and not using SUDO'

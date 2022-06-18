@@ -15,13 +15,13 @@ teardown() {
 
   # Create original file
   original_file_path="${TEST_SANDBOX}/original_file"
-  sample="${DEVBL_SAMPLES}/text_01.txt"
+  sample="${TESTMANSH_TEST_SAMPLES}/text_01.txt"
   saved_file="${original_file_path}${BL64_FS_SAFEGUARD_POSTFIX}"
   cat "$sample" > "$saved_file"
 
   # Create updated file
   updated_file="${original_file_path}"
-  sample2="${DEVBL_SAMPLES}/text_02.txt"
+  sample2="${TESTMANSH_TEST_SAMPLES}/text_02.txt"
   cat "$sample2" > "$updated_file"
 
   run bl64_fs_restore "$original_file_path" '0'
