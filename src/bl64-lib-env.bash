@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Version: 1.11.0
+# Version: 1.12.0
 #######################################
 
 # Declare imported variables
@@ -31,6 +31,9 @@ export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-1}"
 
 # Set Normalize locale flag
 export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
+
+# Set Debug umask to BL64_FS_UMASK_RW_USER
+export BL64_LIB_UMASK="${BL64_LIB_UMASK:-u=rwx,g=,o=}"
 
 #
 # Common values
@@ -80,6 +83,7 @@ declare -ig BL64_LIB_ERROR_MODULE_SETUP_MISSING=21
 declare -ig BL64_LIB_ERROR_OS_NOT_MATCH=30
 declare -ig BL64_LIB_ERROR_OS_TAG_INVALID=31
 declare -ig BL64_LIB_ERROR_OS_INCOMPATIBLE=32
+declare -ig BL64_LIB_ERROR_OS_BASH_VERSION=33
 
 # External commands
 declare -ig BL64_LIB_ERROR_APP_INCOMPATIBLE=40

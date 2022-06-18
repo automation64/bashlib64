@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0]
+
+### Added
+
+- fs
+  - new functions: bl64_fs_run_cp, bl64_fs_run_ls, bl64_fs_run_ln, bl64_fs_set_umask
+
+### Changed
+
+- fs:
+  - **Breaking change** Normalizeed wrapper functions names:
+    - bl64_fs_chown -> bl64_fs_run_chown
+    - bl64_fs_chmod -> bl64_fs_run_chmod
+    - bl64_fs_mkdir -> bl64_fs_run_mkdir
+    - bl64_fs_mv -> bl64_fs_run_mv
+
+### Removed
+
+- fs
+  - **Breaking change** removed obsolete functions:
+    - bl64_fs_ls_files
+
 ## [2.14.0]
 
 ### Added
@@ -24,6 +46,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fedora 36 support
 
 ## [2.12.0]
+
+### Added
+
+- all
+  - added setup module function
+- core
+  - added shell wide defaults for umask
+- os
+  - new function: bl64_os_get_uid
+- rbac
+  - new function: bl64_rbac_run_bash_function
+- fs
+  - new function: bl64_fs_set_permissions
+- iam
+  - new functions: bl64_iam_user_is_created, bl64_iam_user_get_id, bl64_iam_user_get_current
+- check
+  - new function: bl64_check_user
+
+### Changed
+
+- os
+  - **Breaking change** normalized function locations
+    - bl64_os_get_uid -> bl64_iam_user_get_id
+
+### Removed
+
+- dbg
+  - removed obsolete function: bl64_dbg_runtime_get_script_path
 
 ## [2.11.0]
 
@@ -458,7 +508,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/2.14.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/serdigital64/bashlib64/compare/2.14.0...3.0.0
 [2.14.0]: https://github.com/serdigital64/bashlib64/compare/2.13.0...2.14.0
 [2.13.0]: https://github.com/serdigital64/bashlib64/compare/2.12.0...2.13.0
 [2.12.0]: https://github.com/serdigital64/bashlib64/compare/2.11.0...2.12.0

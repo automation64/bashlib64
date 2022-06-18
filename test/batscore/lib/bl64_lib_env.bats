@@ -9,6 +9,7 @@ setup() {
   assert_not_equal "$BL64_LIB_STRICT" ''
   assert_not_equal "$BL64_LIB_VERBOSE" ''
   assert_not_equal "$BL64_LIB_TRAPS" ''
+  assert_not_equal "$BL64_LIB_UMASK" ''
 }
 
 @test "bl64_lib_env: public constants are set" {

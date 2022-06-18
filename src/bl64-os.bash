@@ -38,6 +38,11 @@ function _bl64_os_get_distro_from_uname() {
   *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;
   esac
 
+  if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" ]]; then
+    bl64_msg_show_error "BashLib64 is not supported in the current OS ($(uname -a))"
+    return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+  fi
+
   return 0
 }
 
@@ -91,6 +96,11 @@ function _bl64_os_get_distro_from_os_release() {
   *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;
   esac
 
+  if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" ]]; then
+    bl64_msg_show_error "BashLib64 is not supported in the current OS (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE})"
+    return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+  fi
+
   return 0
 }
 
@@ -137,7 +147,8 @@ function bl64_os_match() {
 #######################################
 # Identify and normalize Linux OS distribution name and version
 #
-# * Target format: OOO-V.V
+# * Warning: bootstrap function
+# * OS name format: OOO-V.V
 #   * OOO: OS short name (tag)
 #   * V.V: Version (Major, Minor)
 #
@@ -157,6 +168,4 @@ function bl64_os_get_distro() {
   else
     _bl64_os_get_distro_from_uname
   fi
-
-  # Do not use return as this function gets sourced
 }
