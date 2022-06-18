@@ -217,7 +217,7 @@ function bl64_fs_merge_dir() {
 }
 
 #######################################
-# Wrapper. Change object ownership with verbose flag
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -238,28 +238,7 @@ function bl64_fs_run_chown() {
 }
 
 #######################################
-# Wrapper. Change object ownership with verbose flag
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_fs_run_chown() {
-  bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHOWN_VERBOSE"
-
-  # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CHOWN" $verbose "$@"
-}
-
-#######################################
-# Wrapper. Change object permission with verbose flag
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -366,7 +345,7 @@ function bl64_fs_ls_files() {
 }
 
 #######################################
-# Create full path including parents. Uses verbose flag
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -408,7 +387,7 @@ function bl64_fs_mkdir_full() {
 }
 
 #######################################
-# Move files using the verbose and force flags
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -556,7 +535,7 @@ function bl64_fs_cleanup_full() {
 }
 
 #######################################
-# OS command wrapper: find
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
