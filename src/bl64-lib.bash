@@ -84,8 +84,8 @@ if [[ "$BL64_LIB_TRAPS" == "$BL64_LIB_VAR_ON" ]]; then
   trap "$BL64_LIB_SIGNAL_ERR" 'ERR'
 fi
 
-# Set default creation permissions
-bl64_fs_set_umask "$BL64_FS_UMASK_RW_USER" || return $?
+# Set default umask
+bl64_fs_set_umask "$BL64_LIB_UMASK" || return $?
 
 # Create session ID for the current script
 BL64_SCRIPT_SID="${BASHPID}${RANDOM}"
