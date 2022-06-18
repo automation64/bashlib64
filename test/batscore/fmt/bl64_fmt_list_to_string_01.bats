@@ -12,7 +12,7 @@ setup() {
 
 @test "bl64_fmt_list_to_string: find" {
 
-  output="$(bl64_fs_find_files "$DEVBL_SAMPLES/dir_01" | bl64_fmt_list_to_string)"
-  assert_output --partial "$DEVBL_SAMPLES/dir_01"
+  output="$(bl64_fs_find_files "$TESTMANSH_TEST_SAMPLES/dir_01" | bl64_fmt_list_to_string)"
+  assert_output --partial "$TESTMANSH_TEST_SAMPLES/dir_01"
 
 }

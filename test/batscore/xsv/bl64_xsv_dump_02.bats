@@ -12,9 +12,9 @@ teardown() {
 
 @test "bl64_xsv_dump: dump csv file" {
 
-  expected="$(<${DEVBL_SAMPLES}/csv_02.txt)"
+  expected="$(<${TESTMANSH_TEST_SAMPLES}/csv_02.txt)"
 
-  run bl64_xsv_dump "${DEVBL_SAMPLES}/csv_01.txt"
+  run bl64_xsv_dump "${TESTMANSH_TEST_SAMPLES}/csv_01.txt"
   assert_success
   assert_output "$expected"
 

@@ -6,7 +6,7 @@ setup() {
 
   TEST_SANDBOX="$(temp_make)"
 
-  source="$DEVBL_SAMPLES/dir_01"
+  source="$TESTMANSH_TEST_SAMPLES/dir_01"
   target="$TEST_SANDBOX/target"
   mkdir "$target"
 }

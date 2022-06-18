@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 2.13.0
+# Version: 2.14.0
 #######################################
 
 # Do not inherit aliases and commands
@@ -33,7 +33,7 @@ shopt -qs \
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Version: 1.10.0
+# Version: 1.11.0
 #######################################
 
 # Declare imported variables
@@ -126,6 +126,7 @@ declare -ig BL64_LIB_ERROR_DIRECTORY_NOT_READ=54
 declare -ig BL64_LIB_ERROR_PATH_NOT_RELATIVE=55
 declare -ig BL64_LIB_ERROR_PATH_NOT_ABSOLUTE=56
 declare -ig BL64_LIB_ERROR_PATH_NOT_FOUND=57
+declare -ig BL64_LIB_ERROR_PATH_PRESENT=58
 
 # IAM
 declare -ig BL64_LIB_ERROR_PRIVILEGE_IS_ROOT=60
@@ -201,7 +202,7 @@ export UNZIP
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
 #
-# Version: 1.11.0
+# Version: 1.12.0
 #######################################
 
 readonly _BL64_CHECK_TXT_MODULE_NOT_SETUP='required bashlib64 module is not setup. Module must be initialized before usage'
@@ -228,6 +229,7 @@ readonly _BL64_CHECK_TXT_EXPORT_SET='required shell exported variable is not set
 
 readonly _BL64_CHECK_TXT_PATH_NOT_RELATIVE='required path must be relative'
 readonly _BL64_CHECK_TXT_PATH_NOT_ABSOLUTE='required path must be absolute'
+readonly _BL64_CHECK_TXT_PATH_PRESENT='requested path is already present'
 
 readonly _BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT='the task requires root privilege. Please run the script as root or with SUDO'
 readonly _BL64_CHECK_TXT_PRIVILEGE_IS_ROOT='the task should not be run with root privilege. Please run the script as a regular user and not using SUDO'
@@ -560,7 +562,7 @@ export DEBCONF_NOWARNINGS
 #######################################
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -586,6 +588,9 @@ export BL64_PY_SET_PIP_USER=''
 export BL64_PY_SET_PIP_DEBUG=''
 export BL64_PY_SET_PIP_QUIET=''
 export BL64_PY_SET_PIP_NO_WARN_SCRIPT=''
+export BL64_PY_SET_VENV_CFG=''
+export BL64_PY_SET_MODULE_VENV=''
+export BL64_PY_SET_MODULE_PIP=''
 
 readonly _BL64_PY_TXT_PIP_PREPARE_PIP='upgrade pip module'
 readonly _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
@@ -599,6 +604,7 @@ export PYTHONDEBUG
 export PYTHONUSERBASE
 export PYTHONEXECUTABLE
 export PYTHONWARNINGS
+export VIRTUAL_ENV
 
 #######################################
 # BashLib64 / Module / Globals / Manage role based access service
@@ -1249,7 +1255,7 @@ function bl64_arc_open_zip() {
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 1.14.0
+# Version: 1.15.0
 #######################################
 
 #######################################
@@ -1514,6 +1520,34 @@ function bl64_check_path_relative() {
     bl64_msg_show_error "${_BL64_CHECK_TXT_PATH_NOT_RELATIVE} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE} ${_BL64_CHECK_TXT_I} path: ${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PATH_NOT_RELATIVE
+  fi
+  return 0
+}
+
+#######################################
+# Check that the given path is not present
+#
+# Arguments:
+#   $1: Full path
+#   $2: Failed check error message. Default: _BL64_CHECK_TXT_PATH_PRESENT
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: File found
+#   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   $BL64_LIB_ERROR_PATH_PRESENT
+#######################################
+function bl64_check_path_not_present() {
+  bl64_dbg_lib_show_function "$@"
+  local path="${1:-}"
+  local message="${2:-${_BL64_CHECK_TXT_PATH_PRESENT}}"
+
+  bl64_check_parameter 'path' || return $?
+  if [[ -e "$path" ]]; then
+    bl64_msg_show_error "${_BL64_CHECK_TXT_PATH_PRESENT} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE} ${_BL64_CHECK_TXT_I} path: ${path})"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_PATH_PRESENT
   fi
   return 0
 }
@@ -5781,14 +5815,16 @@ function bl64_pkg_run_brew() {
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 #######################################
 # Setup the bashlib64 module
 #
+# * (Optional) Use virtual environment
+#
 # Arguments:
-#   None
+#   $1: full path to the virtual environment
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -5797,9 +5833,18 @@ function bl64_pkg_run_brew() {
 #   >0: setup failed
 #######################################
 function bl64_py_setup() {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_show_function "$@"
+  local venv_path="${1:-${BL64_LIB_DEFAULT}}"
 
-  bl64_py_set_command &&
+  if [[ "$venv_path" != "$BL64_LIB_DEFAULT" ]]; then
+    bl64_dbg_lib_show_info "check requested virtual environment (${venv_path})"
+    bl64_check_directory "$venv_path" &&
+      bl64_check_file "${venv_path}/${BL64_PY_SET_VENV_CFG}" &&
+      bl64_check_command "${venv_path}/bin/python3" ||
+      return $?
+  fi
+
+  bl64_py_set_command "$venv_path" &&
     bl64_py_set_options &&
     bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
     BL64_PY_MODULE="$BL64_LIB_VAR_ON"
@@ -5810,9 +5855,11 @@ function bl64_py_setup() {
 #
 # * Commands are exported as variables with full path
 # * The caller function is responsible for checking that the target command is present (installed)
+# * (Optional) Enable requested virtual environment
+# * If virtual environment is requested, instead of running bin/activate manually set the same variables that it would
 #
 # Arguments:
-#   None
+#   $1: full path to the virtual environment
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -5820,50 +5867,63 @@ function bl64_py_setup() {
 #   0: always ok
 #######################################
 function bl64_py_set_command() {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_show_function "$@"
+  local venv_path="$1"
 
-  # Define distro native Python versions
-  # shellcheck disable=SC2034
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*) BL64_PY_CMD_PYTHON36='/usr/bin/python3' ;;
-  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
-    BL64_PY_CMD_PYTHON36='/usr/bin/python3'
-    BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
-    ;;
-  ${BL64_OS_CNT}-9.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-  ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-  ${BL64_OS_FD}-35.* | ${BL64_OS_FD}-36.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
-  ${BL64_OS_DEB}-9.*) BL64_PY_CMD_PYTHON35='/usr/bin/python3.5' ;;
-  ${BL64_OS_DEB}-10.*) BL64_PY_CMD_PYTHON37='/usr/bin/python3.7' ;;
-  ${BL64_OS_DEB}-11.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-  ${BL64_OS_UB}-20.*) BL64_PY_CMD_PYTHON38='/usr/bin/python3.8' ;;
-  ${BL64_OS_UB}-21.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-  ${BL64_OS_UB}-22.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
-  ${BL64_OS_ALP}-3.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-  ${BL64_OS_MCOS}-12.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
+  if [[ "$venv_path" == "$BL64_LIB_DEFAULT" ]]; then
+    bl64_dbg_lib_show_info 'identify OS native python3 path'
+    # Define distro native Python versions
+    # shellcheck disable=SC2034
+    case "$BL64_OS_DISTRO" in
+    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*) BL64_PY_CMD_PYTHON36='/usr/bin/python3' ;;
+    ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+      BL64_PY_CMD_PYTHON36='/usr/bin/python3'
+      BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
+      ;;
+    ${BL64_OS_CNT}-9.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_FD}-35.* | ${BL64_OS_FD}-36.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
+    ${BL64_OS_DEB}-9.*) BL64_PY_CMD_PYTHON35='/usr/bin/python3.5' ;;
+    ${BL64_OS_DEB}-10.*) BL64_PY_CMD_PYTHON37='/usr/bin/python3.7' ;;
+    ${BL64_OS_DEB}-11.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_UB}-20.*) BL64_PY_CMD_PYTHON38='/usr/bin/python3.8' ;;
+    ${BL64_OS_UB}-21.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_UB}-22.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
+    ${BL64_OS_ALP}-3.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_MCOS}-12.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    *) bl64_check_alert_unsupported ;;
+    esac
 
-  # Select best match for default python3
-  if [[ -x "$BL64_PY_CMD_PYTHON310" ]]; then
-    BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON310"
-    BL64_PY_VERSION_PYTHON3='3.10'
-  elif [[ -x "$BL64_PY_CMD_PYTHON39" ]]; then
-    BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON39"
-    BL64_PY_VERSION_PYTHON3='3.9'
-  elif [[ -x "$BL64_PY_CMD_PYTHON38" ]]; then
-    BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON38"
-    BL64_PY_VERSION_PYTHON3='3.8'
-  elif [[ -x "$BL64_PY_CMD_PYTHON37" ]]; then
-    BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON37"
-    BL64_PY_VERSION_PYTHON3='3.7'
-  elif [[ -x "$BL64_PY_CMD_PYTHON36" ]]; then
-    BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON36"
-    BL64_PY_VERSION_PYTHON3='3.6'
-  elif [[ -x "$BL64_PY_CMD_PYTHON35" ]]; then
-    BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON35"
-    BL64_PY_VERSION_PYTHON3='3.5'
+    # Select best match for default python3
+    if [[ -x "$BL64_PY_CMD_PYTHON310" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON310"
+      BL64_PY_VERSION_PYTHON3='3.10'
+    elif [[ -x "$BL64_PY_CMD_PYTHON39" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON39"
+      BL64_PY_VERSION_PYTHON3='3.9'
+    elif [[ -x "$BL64_PY_CMD_PYTHON38" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON38"
+      BL64_PY_VERSION_PYTHON3='3.8'
+    elif [[ -x "$BL64_PY_CMD_PYTHON37" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON37"
+      BL64_PY_VERSION_PYTHON3='3.7'
+    elif [[ -x "$BL64_PY_CMD_PYTHON36" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON36"
+      BL64_PY_VERSION_PYTHON3='3.6'
+    elif [[ -x "$BL64_PY_CMD_PYTHON35" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON35"
+      BL64_PY_VERSION_PYTHON3='3.5'
+    fi
+  else
+    bl64_dbg_lib_show_info 'use python3 from virtual environment'
+    BL64_PY_CMD_PYTHON3="${venv_path}/bin/python3"
+
+    # Emulate bin/activate
+    VIRTUAL_ENV="$venv_path"
+    PATH="${VIRTUAL_ENV}:${PATH}"
+    unset PYTHONHOME
   fi
+
   bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3'
 
 }
@@ -5889,13 +5949,71 @@ function bl64_py_set_options() {
   BL64_PY_SET_PIP_USER='--user'
   BL64_PY_SET_PIP_QUIET='--quiet'
   BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
+
+  BL64_PY_SET_VENV_CFG='pyvenv.cfg'
+  BL64_PY_SET_MODULE_VENV='venv'
+  BL64_PY_SET_MODULE_PIP='pip'
+
 }
 
 #######################################
 # BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
+
+#######################################
+# Activate virtual environment
+#
+# * Create the environment if not present
+#
+# Arguments:
+#   $1: full path to the virtual environment
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_py_venv_activate() {
+  bl64_dbg_lib_show_function "$@"
+  local venv_path="${1:-}"
+
+  bl64_check_parameter 'venv_path' ||
+    return $?
+
+  if [[ ! -d "$venv_path" ]]; then
+    bl64_py_venv_create "$venv_path" ||
+      return $?
+  fi
+
+  bl64_py_setup "$venv_path"
+
+}
+
+#######################################
+# Create virtual environment
+#
+# Arguments:
+#   $1: full path to the virtual environment
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_py_venv_create() {
+  bl64_dbg_lib_show_function "$@"
+  local venv_path="${1:-}"
+
+  bl64_check_parameter 'venv_path' &&
+    bl64_check_path_absolute "$venv_path" &&
+    bl64_check_path_not_present "$venv_path" ||
+    return $?
+
+  bl64_py_run_python -m "$BL64_PY_SET_MODULE_VENV" "$venv_path"
+
+}
 
 #######################################
 # Get Python PIP version
@@ -5941,7 +6059,7 @@ function bl64_py_pip_get_version() {
 #######################################
 function bl64_py_pip_usr_prepare() {
   bl64_dbg_lib_show_function
-  local modules_pip='pip'
+  local modules_pip="$BL64_PY_SET_MODULE_PIP"
   local modules_setup='setuptools wheel stevedore'
 
   # shellcheck disable=SC2086
@@ -5990,7 +6108,7 @@ function bl64_py_pip_usr_install() {
 #######################################
 # Python wrapper with verbose, debug and common options
 #
-# * Trust no one. Ignore user provided config and use default config
+# * Trust no one. Ignore user provided config and use default
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -6036,7 +6154,7 @@ function bl64_py_run_pip() {
   bl64_msg_verbose_lib_enabled && debug="$BL64_PY_SET_PIP_VERBOSE"
   bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
-  bl64_py_run_python -m 'pip' $debug "$@"
+  bl64_py_run_python -m "$BL64_PY_SET_MODULE_PIP" $debug "$@"
 }
 
 #######################################

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 1.14.0
+# Version: 1.15.0
 #######################################
 
 #######################################
@@ -266,6 +266,34 @@ function bl64_check_path_relative() {
     bl64_msg_show_error "${_BL64_CHECK_TXT_PATH_NOT_RELATIVE} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE} ${_BL64_CHECK_TXT_I} path: ${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PATH_NOT_RELATIVE
+  fi
+  return 0
+}
+
+#######################################
+# Check that the given path is not present
+#
+# Arguments:
+#   $1: Full path
+#   $2: Failed check error message. Default: _BL64_CHECK_TXT_PATH_PRESENT
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: File found
+#   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   $BL64_LIB_ERROR_PATH_PRESENT
+#######################################
+function bl64_check_path_not_present() {
+  bl64_dbg_lib_show_function "$@"
+  local path="${1:-}"
+  local message="${2:-${_BL64_CHECK_TXT_PATH_PRESENT}}"
+
+  bl64_check_parameter 'path' || return $?
+  if [[ -e "$path" ]]; then
+    bl64_msg_show_error "${_BL64_CHECK_TXT_PATH_PRESENT} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE} ${_BL64_CHECK_TXT_I} path: ${path})"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_PATH_PRESENT
   fi
   return 0
 }
