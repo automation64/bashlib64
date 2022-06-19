@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - new function: bl64_check_path_not_present
 - py
   - all: virtual environments support with venv
-  - new function: bl64_py_venv_activate, bl64_py_venv_create
+  - new function: bl64_py_venv_create
 
 ## [2.13.0]
 
