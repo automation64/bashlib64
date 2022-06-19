@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -24,16 +24,11 @@ function bl64_py_setup() {
 
   if [[ "$venv_path" != "$BL64_LIB_DEFAULT" ]]; then
     if [[ -d "$venv_path" ]]; then
-      bl64_dbg_lib_show_info "check requested virtual environment (${venv_path})"
-      bl64_check_directory "$venv_path" &&
-        bl64_check_file "${venv_path}/${BL64_PY_SET_VENV_CFG}" &&
-        bl64_check_command "${venv_path}/bin/python3" ||
-        return $?
+      _bl64_py_setup "$venv_path"
     else
       _bl64_py_setup "$BL64_LIB_DEFAULT" &&
         bl64_py_venv_create "$venv_path" &&
-        _bl64_py_setup "$venv_path" ||
-        return $?
+        _bl64_py_setup "$venv_path"
     fi
   else
     _bl64_py_setup "$BL64_LIB_DEFAULT"
@@ -43,6 +38,13 @@ function bl64_py_setup() {
 function _bl64_py_setup() {
   bl64_dbg_lib_show_function "$@"
   local venv_path="$1"
+
+  if [[ "$venv_path" != "$BL64_LIB_DEFAULT" ]]; then
+    bl64_check_directory "$venv_path" &&
+      bl64_check_file "${venv_path}/${BL64_PY_SET_VENV_CFG}" &&
+      bl64_check_command "${venv_path}/bin/python3" ||
+      return $?
+  fi
 
   bl64_py_set_command "$venv_path" &&
     bl64_py_set_options &&
