@@ -5,35 +5,6 @@
 #######################################
 
 #######################################
-# Activate virtual environment
-#
-# * Create the environment if not present
-#
-# Arguments:
-#   $1: full path to the virtual environment
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_py_venv_activate() {
-  bl64_dbg_lib_show_function "$@"
-  local venv_path="${1:-}"
-
-  bl64_check_parameter 'venv_path' ||
-    return $?
-
-  if [[ ! -d "$venv_path" ]]; then
-    bl64_py_venv_create "$venv_path" ||
-      return $?
-  fi
-
-  bl64_py_setup "$venv_path"
-
-}
-
-#######################################
 # Create virtual environment
 #
 # Arguments:
