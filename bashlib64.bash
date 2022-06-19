@@ -6187,6 +6187,7 @@ function bl64_py_pip_usr_install() {
   [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
 
   bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_INSTALL ($*)"
+  # shellcheck disable=SC2086
   bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_UPGRADE \
