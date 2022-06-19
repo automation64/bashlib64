@@ -31,9 +31,9 @@ export BL64_PY_SET_VENV_CFG=''
 export BL64_PY_SET_MODULE_VENV=''
 export BL64_PY_SET_MODULE_PIP=''
 
-readonly _BL64_PY_TXT_PIP_PREPARE_PIP='upgrade pip module'
-readonly _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
-readonly _BL64_PY_TXT_PIP_INSTALL='install modules'
+declare _BL64_PY_TXT_PIP_PREPARE_PIP='upgrade pip module'
+declare _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
+declare _BL64_PY_TXT_PIP_INSTALL='install modules'
 
 # External commands variables
 export PYTHONHOME

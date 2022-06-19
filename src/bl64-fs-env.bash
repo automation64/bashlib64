@@ -49,6 +49,6 @@ export BL64_FS_UMASK_RW_ALL='u=rwx,g=rwx,o=rwx'
 export BL64_FS_UMASK_RW_USER_RO_ALL='u=rwx,g=rx,o=rx'
 export BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
 
-readonly BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
+declare BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
 
-readonly _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
+declare _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
