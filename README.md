@@ -76,8 +76,7 @@ The library has been tested on the following operating systems:
 - Download the library to the project directory
 
   ```shell
-  cd <PROJECT_DIR>
-  wget https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash
+  curl -O https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64.bash
   ```
 
 - Add the library loader to the target script:

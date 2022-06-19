@@ -23,12 +23,26 @@ function bl64_py_setup() {
   local venv_path="${1:-${BL64_LIB_DEFAULT}}"
 
   if [[ "$venv_path" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_dbg_lib_show_info "check requested virtual environment (${venv_path})"
-    bl64_check_directory "$venv_path" &&
-      bl64_check_file "${venv_path}/${BL64_PY_SET_VENV_CFG}" &&
-      bl64_check_command "${venv_path}/bin/python3" ||
-      return $?
+    if [[ -d "$venv_path" ]]; then
+      bl64_dbg_lib_show_info "check requested virtual environment (${venv_path})"
+      bl64_check_directory "$venv_path" &&
+        bl64_check_file "${venv_path}/${BL64_PY_SET_VENV_CFG}" &&
+        bl64_check_command "${venv_path}/bin/python3" ||
+        return $?
+    else
+      _bl64_py_setup "$BL64_LIB_DEFAULT" &&
+        bl64_py_venv_create "$venv_path" &&
+        _bl64_py_setup "$venv_path" ||
+        return $?
+    fi
+  else
+    _bl64_py_setup "$BL64_LIB_DEFAULT"
   fi
+}
+
+function _bl64_py_setup() {
+  bl64_dbg_lib_show_function "$@"
+  local venv_path="$1"
 
   bl64_py_set_command "$venv_path" &&
     bl64_py_set_options &&
