@@ -21,6 +21,7 @@ setup() {
   assert_equal $BL64_LIB_ERROR_OS_NOT_MATCH 30
   assert_equal $BL64_LIB_ERROR_OS_TAG_INVALID 31
   assert_equal $BL64_LIB_ERROR_OS_INCOMPATIBLE 32
+  assert_equal $BL64_LIB_ERROR_OS_BASH_VERSION 33
 
   assert_equal $BL64_LIB_ERROR_APP_INCOMPATIBLE 40
   assert_equal $BL64_LIB_ERROR_APP_MISSING 41

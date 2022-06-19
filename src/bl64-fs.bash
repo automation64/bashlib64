@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 1.8.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -43,7 +43,7 @@ function bl64_fs_create_dir() {
     bl64_check_path_absolute "$path" || return $?
     [[ -d "$path" ]] && continue
 
-    bl64_fs_mkdir "$path" &&
+    bl64_fs_run_mkdir "$path" &&
       bl64_fs_set_permissions "$path" "$mode" "$user" "$group" ||
       return $?
 
@@ -217,7 +217,7 @@ function bl64_fs_merge_dir() {
 }
 
 #######################################
-# Change object ownership with verbose flag
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -227,8 +227,9 @@ function bl64_fs_merge_dir() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_fs_chown() {
+function bl64_fs_run_chown() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHOWN_VERBOSE"
@@ -238,7 +239,7 @@ function bl64_fs_chown() {
 }
 
 #######################################
-# Change object permission with verbose flag
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -248,8 +249,9 @@ function bl64_fs_chown() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_fs_chmod() {
+function bl64_fs_run_chmod() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
@@ -259,7 +261,7 @@ function bl64_fs_chmod() {
 }
 
 #######################################
-# Change directory ownership with verbose and recursive flags
+# Change directory ownership recursively
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -271,16 +273,13 @@ function bl64_fs_chmod() {
 #######################################
 function bl64_fs_chown_dir() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CHMOD" $verbose "$BL64_FS_SET_CHOWN_RECURSIVE" "$@"
+  bl64_fs_run_chown "$BL64_FS_SET_CHOWN_RECURSIVE" "$@"
 }
 
 #######################################
-# Copy files with verbose and force flags
+# Copy files with force flag
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -292,16 +291,13 @@ function bl64_fs_chown_dir() {
 #######################################
 function bl64_fs_cp_file() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CP" $verbose "$BL64_FS_SET_CP_FORCE" "$@"
+  bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$@"
 }
 
 #######################################
-# Copy directory recursively with verbose and force flags
+# Copy directory with recursive and force flags
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -313,16 +309,13 @@ function bl64_fs_cp_file() {
 #######################################
 function bl64_fs_cp_dir() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CP" $verbose "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" "$@"
+  bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" "$@"
 }
 
 #######################################
-# Create a symbolic link with verbose flag
+# Create a symbolic link
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -334,11 +327,12 @@ function bl64_fs_cp_dir() {
 #######################################
 function bl64_fs_ln_symbolic() {
   bl64_dbg_lib_show_function "$@"
-  $BL64_FS_ALIAS_LN_SYMBOLIC "$@"
+
+  bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$@"
 }
 
 #######################################
-# List files with nocolor flag
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -348,24 +342,9 @@ function bl64_fs_ln_symbolic() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_fs_ls_files() {
+function bl64_fs_run_mkdir() {
   bl64_dbg_lib_show_function "$@"
-  $BL64_FS_ALIAS_LS_FILES "$@"
-}
-
-#######################################
-# Create full path including parents. Uses verbose flag
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_fs_mkdir() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
@@ -375,7 +354,7 @@ function bl64_fs_mkdir() {
 }
 
 #######################################
-# Create full path including parents. Uses verbose flag
+# Create full path including parents
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -387,16 +366,12 @@ function bl64_fs_mkdir() {
 #######################################
 function bl64_fs_mkdir_full() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
-
-  # shellcheck disable=SC2086
-  "$BL64_FS_CMD_MKDIR" $verbose "$BL64_FS_SET_MKDIR_PARENTS" "$@"
+  bl64_fs_run_mkdir "$BL64_FS_SET_MKDIR_PARENTS" "$@"
 }
 
 #######################################
-# Move files using the verbose and force flags
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -406,8 +381,9 @@ function bl64_fs_mkdir_full() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_fs_mv() {
+function bl64_fs_run_mv() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MV_VERBOSE"
@@ -544,7 +520,7 @@ function bl64_fs_cleanup_full() {
 }
 
 #######################################
-# OS command wrapper: find
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -624,7 +600,7 @@ function bl64_fs_safeguard() {
   fi
 
   bl64_dbg_lib_show_info "safeguard object: [${destination}]->[${backup}]"
-  if ! bl64_fs_mv "$destination" "$backup"; then
+  if ! bl64_fs_run_mv "$destination" "$backup"; then
     bl64_msg_show_error "$_BL64_FS_TXT_SAFEGUARD_FAILED ($destination)"
     return $BL64_LIB_ERROR_TASK_BACKUP
   fi
@@ -677,7 +653,7 @@ function bl64_fs_restore() {
 
     bl64_dbg_lib_show_info 'restore content from backup'
     # shellcheck disable=SC2086
-    bl64_fs_mv "$backup" "$destination" ||
+    bl64_fs_run_mv "$backup" "$destination" ||
       return $BL64_LIB_ERROR_TASK_RESTORE
   fi
 }
@@ -709,18 +685,104 @@ function bl64_fs_set_permissions() {
 
   # Determine if mode needs to be set
   if [[ "$mode" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_fs_chmod "$mode" "$path" || return $?
+    bl64_fs_run_chmod "$mode" "$path" || return $?
   fi
 
   # Determine if owner needs to be set
   if [[ "$user" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_fs_chown "${user}" "$path" || return $?
+    bl64_fs_run_chown "${user}" "$path" || return $?
   fi
 
   # Determine if group needs to be set
   if [[ "$group" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_fs_chown ":${group}" "$path" || return $?
+    bl64_fs_run_chown ":${group}" "$path" || return $?
   fi
 
   return 0
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_run_cp() {
+  bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
+  local verbose=''
+
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_FS_CMD_CP" $verbose "$@"
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_run_ls() {
+  bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
+
+  "$BL64_FS_CMD_LS" "$@"
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_run_ln() {
+  bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
+  local verbose=''
+
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_LN_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_FS_CMD_LN" $verbose "$@"
+}
+
+#######################################
+# Set default path creation permission with umask
+#
+# * Uses symbolic permission form
+# * Supports predefined sets: BL64_FS_UMASK_*
+#
+# Arguments:
+#   $1: Permission set
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_set_umask() {
+  bl64_dbg_lib_show_function "$@"
+  local permissions="${1:-}"
+
+  bl64_check_parameter 'permissions' ||
+    return $?
+
+  umask -S "$permissions" >/dev/null
 }

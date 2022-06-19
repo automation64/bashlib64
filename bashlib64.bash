@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 2.14.0
+# Version: 3.0.0
 #######################################
 
 # Do not inherit aliases and commands
@@ -33,7 +33,7 @@ shopt -qs \
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Version: 1.11.0
+# Version: 1.12.0
 #######################################
 
 # Declare imported variables
@@ -63,6 +63,9 @@ export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-1}"
 
 # Set Normalize locale flag
 export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
+
+# Set Debug umask to BL64_FS_UMASK_RW_USER
+export BL64_LIB_UMASK="${BL64_LIB_UMASK:-u=rwx,g=,o=}"
 
 #
 # Common values
@@ -112,6 +115,7 @@ declare -ig BL64_LIB_ERROR_MODULE_SETUP_MISSING=21
 declare -ig BL64_LIB_ERROR_OS_NOT_MATCH=30
 declare -ig BL64_LIB_ERROR_OS_TAG_INVALID=31
 declare -ig BL64_LIB_ERROR_OS_INCOMPATIBLE=32
+declare -ig BL64_LIB_ERROR_OS_BASH_VERSION=33
 
 # External commands
 declare -ig BL64_LIB_ERROR_APP_INCOMPATIBLE=40
@@ -325,7 +329,7 @@ readonly _BL64_DBG_TXT_PWD='Current working directory (pwd command)'
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 export BL64_FS_MODULE="$BL64_LIB_VAR_OFF"
@@ -357,6 +361,8 @@ export BL64_FS_SET_CHOWN_VERBOSE=''
 export BL64_FS_SET_CP_FORCE=''
 export BL64_FS_SET_CP_RECURSIVE=''
 export BL64_FS_SET_CP_VERBOSE=''
+export BL64_FS_SET_LN_SYMBOLIC=''
+export BL64_FS_SET_LN_VERBOSE=''
 export BL64_FS_SET_MKDIR_PARENTS=''
 export BL64_FS_SET_MKDIR_VERBOSE=''
 export BL64_FS_SET_MV_FORCE=''
@@ -364,6 +370,12 @@ export BL64_FS_SET_MV_VERBOSE=''
 export BL64_FS_SET_RM_FORCE=''
 export BL64_FS_SET_RM_RECURSIVE=''
 export BL64_FS_SET_RM_VERBOSE=''
+
+export BL64_FS_UMASK_RW_USER='u=rwx,g=,o='
+export BL64_FS_UMASK_RW_GROUP='u=rwx,g=rwx,o='
+export BL64_FS_UMASK_RW_ALL='u=rwx,g=rwx,o=rwx'
+export BL64_FS_UMASK_RW_USER_RO_ALL='u=rwx,g=rx,o=rx'
+export BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
 
 readonly BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
 
@@ -2854,7 +2866,7 @@ function bl64_dbg_app_show_function() {
 #######################################
 # BashLib64 / Module / Setup / Manage local filesystem
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -2977,6 +2989,8 @@ function bl64_fs_set_options() {
     BL64_FS_SET_CP_FORCE='--force'
     BL64_FS_SET_CHMOD_VERBOSE='--verbose'
     BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
+    BL64_FS_SET_LN_SYMBOLIC='--symbolic'
+    BL64_FS_SET_LN_VERBOSE='--verbose'
     BL64_FS_SET_MV_VERBOSE='--verbose'
     BL64_FS_SET_MV_FORCE='--force'
     BL64_FS_SET_RM_VERBOSE='--verbose'
@@ -2993,6 +3007,8 @@ function bl64_fs_set_options() {
     BL64_FS_SET_CP_FORCE='-f'
     BL64_FS_SET_CHMOD_VERBOSE='-v'
     BL64_FS_SET_CHMOD_RECURSIVE='-R'
+    BL64_FS_SET_LN_SYMBOLIC='-s'
+    BL64_FS_SET_LN_VERBOSE='-v'
     BL64_FS_SET_MV_VERBOSE=' '
     BL64_FS_SET_MV_FORCE='-f'
     BL64_FS_SET_RM_VERBOSE=' '
@@ -3009,6 +3025,8 @@ function bl64_fs_set_options() {
     BL64_FS_SET_CP_FORCE='-f'
     BL64_FS_SET_CHMOD_VERBOSE='-v'
     BL64_FS_SET_CHMOD_RECURSIVE='-R'
+    BL64_FS_SET_LN_SYMBOLIC='-s'
+    BL64_FS_SET_LN_VERBOSE='-v'
     BL64_FS_SET_MV_VERBOSE='-v'
     BL64_FS_SET_MV_FORCE='-f'
     BL64_FS_SET_RM_VERBOSE='-v'
@@ -3040,28 +3058,27 @@ function bl64_fs_set_alias() {
 
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_FS_ALIAS_LN_SYMBOLIC="${BL64_FS_CMD_LN} --verbose --symbolic"
     BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} --color=never"
     ;;
   ${BL64_OS_ALP}-*)
-    BL64_FS_ALIAS_LN_SYMBOLIC="${BL64_FS_CMD_LN} -v -s"
     BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} --color=never"
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_FS_ALIAS_LN_SYMBOLIC="${BL64_FS_CMD_LN} -v -s"
     BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} --color=never"
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
 
+  BL64_FS_ALIAS_CHOWN_DIR="${BL64_FS_CMD_CHOWN} ${BL64_FS_SET_CHOWN_VERBOSE} ${BL64_FS_SET_CHOWN_RECURSIVE}"
+  BL64_FS_ALIAS_CP_DFIND="/usr/bin/find"
+  BL64_FS_ALIAS_CP_DIR="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE} ${BL64_FS_SET_CP_RECURSIVE}"
+  BL64_FS_ALIAS_CP_FIFIND="/usr/bin/find"
+  BL64_FS_ALIAS_CP_FILE="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE}"
+  BL64_FS_ALIAS_LN_SYMBOLIC="${BL64_FS_CMD_LN} ${BL64_FS_SET_LN_SYMBOLIC} ${BL64_FS_SET_LN_VERBOSE}"
+  BL64_FS_ALIAS_MKDIR_FULL="${BL64_FS_CMD_MKDIR} ${BL64_FS_SET_MKDIR_VERBOSE} ${BL64_FS_SET_MKDIR_PARENTS}"
   BL64_FS_ALIAS_MKTEMP_DIR="${BL64_FS_CMD_MKTEMP} -d"
   BL64_FS_ALIAS_MKTEMP_FILE="${BL64_FS_CMD_MKTEMP}"
-  BL64_FS_ALIAS_CHOWN_DIR="${BL64_FS_CMD_CHOWN} ${BL64_FS_SET_CHOWN_VERBOSE} ${BL64_FS_SET_CHOWN_RECURSIVE}"
-  BL64_FS_ALIAS_CP_DIR="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE} ${BL64_FS_SET_CP_RECURSIVE}"
-  BL64_FS_ALIAS_CP_DFIND="/usr/bin/find"
-  BL64_FS_ALIAS_CP_FILE="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE}"
-  BL64_FS_ALIAS_CP_FIFIND="/usr/bin/find"
-  BL64_FS_ALIAS_MKDIR_FULL="${BL64_FS_CMD_MKDIR} ${BL64_FS_SET_MKDIR_VERBOSE} ${BL64_FS_SET_MKDIR_PARENTS}"
+  BL64_FS_ALIAS_MV="${BL64_FS_CMD_MV} ${BL64_FS_SET_MV_VERBOSE} ${BL64_FS_SET_MV_FORCE}"
   BL64_FS_ALIAS_MV="${BL64_FS_CMD_MV} ${BL64_FS_SET_MV_VERBOSE} ${BL64_FS_SET_MV_FORCE}"
   BL64_FS_ALIAS_RM_FILE="${BL64_FS_CMD_RM} ${BL64_FS_SET_RM_VERBOSE} ${BL64_FS_SET_RM_FORCE}"
   BL64_FS_ALIAS_RM_FULL="${BL64_FS_CMD_RM} ${BL64_FS_SET_RM_VERBOSE} ${BL64_FS_SET_RM_FORCE} ${BL64_FS_SET_RM_RECURSIVE}"
@@ -3070,7 +3087,7 @@ function bl64_fs_set_alias() {
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 1.8.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -3112,7 +3129,7 @@ function bl64_fs_create_dir() {
     bl64_check_path_absolute "$path" || return $?
     [[ -d "$path" ]] && continue
 
-    bl64_fs_mkdir "$path" &&
+    bl64_fs_run_mkdir "$path" &&
       bl64_fs_set_permissions "$path" "$mode" "$user" "$group" ||
       return $?
 
@@ -3286,7 +3303,7 @@ function bl64_fs_merge_dir() {
 }
 
 #######################################
-# Change object ownership with verbose flag
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -3296,8 +3313,9 @@ function bl64_fs_merge_dir() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_fs_chown() {
+function bl64_fs_run_chown() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHOWN_VERBOSE"
@@ -3307,7 +3325,7 @@ function bl64_fs_chown() {
 }
 
 #######################################
-# Change object permission with verbose flag
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -3317,8 +3335,9 @@ function bl64_fs_chown() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_fs_chmod() {
+function bl64_fs_run_chmod() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
@@ -3328,7 +3347,7 @@ function bl64_fs_chmod() {
 }
 
 #######################################
-# Change directory ownership with verbose and recursive flags
+# Change directory ownership recursively
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -3340,16 +3359,13 @@ function bl64_fs_chmod() {
 #######################################
 function bl64_fs_chown_dir() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CHMOD" $verbose "$BL64_FS_SET_CHOWN_RECURSIVE" "$@"
+  bl64_fs_run_chown "$BL64_FS_SET_CHOWN_RECURSIVE" "$@"
 }
 
 #######################################
-# Copy files with verbose and force flags
+# Copy files with force flag
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -3361,16 +3377,13 @@ function bl64_fs_chown_dir() {
 #######################################
 function bl64_fs_cp_file() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CP" $verbose "$BL64_FS_SET_CP_FORCE" "$@"
+  bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$@"
 }
 
 #######################################
-# Copy directory recursively with verbose and force flags
+# Copy directory with recursive and force flags
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -3382,16 +3395,13 @@ function bl64_fs_cp_file() {
 #######################################
 function bl64_fs_cp_dir() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CP" $verbose "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" "$@"
+  bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" "$@"
 }
 
 #######################################
-# Create a symbolic link with verbose flag
+# Create a symbolic link
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -3403,11 +3413,12 @@ function bl64_fs_cp_dir() {
 #######################################
 function bl64_fs_ln_symbolic() {
   bl64_dbg_lib_show_function "$@"
-  $BL64_FS_ALIAS_LN_SYMBOLIC "$@"
+
+  bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$@"
 }
 
 #######################################
-# List files with nocolor flag
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -3417,24 +3428,9 @@ function bl64_fs_ln_symbolic() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_fs_ls_files() {
+function bl64_fs_run_mkdir() {
   bl64_dbg_lib_show_function "$@"
-  $BL64_FS_ALIAS_LS_FILES "$@"
-}
-
-#######################################
-# Create full path including parents. Uses verbose flag
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_fs_mkdir() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
@@ -3444,7 +3440,7 @@ function bl64_fs_mkdir() {
 }
 
 #######################################
-# Create full path including parents. Uses verbose flag
+# Create full path including parents
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -3456,16 +3452,12 @@ function bl64_fs_mkdir() {
 #######################################
 function bl64_fs_mkdir_full() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
-
-  # shellcheck disable=SC2086
-  "$BL64_FS_CMD_MKDIR" $verbose "$BL64_FS_SET_MKDIR_PARENTS" "$@"
+  bl64_fs_run_mkdir "$BL64_FS_SET_MKDIR_PARENTS" "$@"
 }
 
 #######################################
-# Move files using the verbose and force flags
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -3475,8 +3467,9 @@ function bl64_fs_mkdir_full() {
 # Returns:
 #   command exit status
 #######################################
-function bl64_fs_mv() {
+function bl64_fs_run_mv() {
   bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MV_VERBOSE"
@@ -3613,7 +3606,7 @@ function bl64_fs_cleanup_full() {
 }
 
 #######################################
-# OS command wrapper: find
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -3693,7 +3686,7 @@ function bl64_fs_safeguard() {
   fi
 
   bl64_dbg_lib_show_info "safeguard object: [${destination}]->[${backup}]"
-  if ! bl64_fs_mv "$destination" "$backup"; then
+  if ! bl64_fs_run_mv "$destination" "$backup"; then
     bl64_msg_show_error "$_BL64_FS_TXT_SAFEGUARD_FAILED ($destination)"
     return $BL64_LIB_ERROR_TASK_BACKUP
   fi
@@ -3746,7 +3739,7 @@ function bl64_fs_restore() {
 
     bl64_dbg_lib_show_info 'restore content from backup'
     # shellcheck disable=SC2086
-    bl64_fs_mv "$backup" "$destination" ||
+    bl64_fs_run_mv "$backup" "$destination" ||
       return $BL64_LIB_ERROR_TASK_RESTORE
   fi
 }
@@ -3778,20 +3771,106 @@ function bl64_fs_set_permissions() {
 
   # Determine if mode needs to be set
   if [[ "$mode" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_fs_chmod "$mode" "$path" || return $?
+    bl64_fs_run_chmod "$mode" "$path" || return $?
   fi
 
   # Determine if owner needs to be set
   if [[ "$user" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_fs_chown "${user}" "$path" || return $?
+    bl64_fs_run_chown "${user}" "$path" || return $?
   fi
 
   # Determine if group needs to be set
   if [[ "$group" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_fs_chown ":${group}" "$path" || return $?
+    bl64_fs_run_chown ":${group}" "$path" || return $?
   fi
 
   return 0
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_run_cp() {
+  bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
+  local verbose=''
+
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_FS_CMD_CP" $verbose "$@"
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_run_ls() {
+  bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
+
+  "$BL64_FS_CMD_LS" "$@"
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_run_ln() {
+  bl64_dbg_lib_show_function "$@"
+  bl64_check_parameters_none "$#" || return $?
+  local verbose=''
+
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_LN_VERBOSE"
+
+  # shellcheck disable=SC2086
+  "$BL64_FS_CMD_LN" $verbose "$@"
+}
+
+#######################################
+# Set default path creation permission with umask
+#
+# * Uses symbolic permission form
+# * Supports predefined sets: BL64_FS_UMASK_*
+#
+# Arguments:
+#   $1: Permission set
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_set_umask() {
+  bl64_dbg_lib_show_function "$@"
+  local permissions="${1:-}"
+
+  bl64_check_parameter 'permissions' ||
+    return $?
+
+  umask -S "$permissions" >/dev/null
 }
 
 #######################################
@@ -5062,7 +5141,7 @@ function bl64_msg_show_batch_finish() {
 #######################################
 # BashLib64 / Module / Setup / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.3.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -5082,7 +5161,12 @@ function bl64_msg_show_batch_finish() {
 function bl64_os_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_os_set_command &&
+  [[ "${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5' ]] &&
+    bl64_msg_show_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
+    return $BL64_LIB_ERROR_OS_BASH_VERSION
+
+  bl64_os_get_distro &&
+    bl64_os_set_command &&
     bl64_os_set_alias &&
     BL64_OS_MODULE="$BL64_LIB_VAR_ON"
 
@@ -5206,6 +5290,11 @@ function _bl64_os_get_distro_from_uname() {
   *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;
   esac
 
+  if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" ]]; then
+    bl64_msg_show_error "BashLib64 is not supported in the current OS ($(uname -a))"
+    return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+  fi
+
   return 0
 }
 
@@ -5259,6 +5348,11 @@ function _bl64_os_get_distro_from_os_release() {
   *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;
   esac
 
+  if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" ]]; then
+    bl64_msg_show_error "BashLib64 is not supported in the current OS (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE})"
+    return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+  fi
+
   return 0
 }
 
@@ -5305,7 +5399,8 @@ function bl64_os_match() {
 #######################################
 # Identify and normalize Linux OS distribution name and version
 #
-# * Target format: OOO-V.V
+# * Warning: bootstrap function
+# * OS name format: OOO-V.V
 #   * OOO: OS short name (tag)
 #   * V.V: Version (Major, Minor)
 #
@@ -5325,8 +5420,6 @@ function bl64_os_get_distro() {
   else
     _bl64_os_get_distro_from_uname
   fi
-
-  # Do not use return as this function gets sourced
 }
 
 #######################################
@@ -6732,7 +6825,7 @@ function bl64_rxtx_web_get_file() {
 
   # Determine if mode needs to be set
   if [[ "$status" == '0' && "$mode" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_fs_chmod "$mode" "$destination"
+    bl64_fs_run_chmod "$mode" "$destination"
     status=$?
   fi
 
@@ -6880,7 +6973,7 @@ function _bl64_rxtx_git_get_dir_root() {
   # Clone the repo
   bl64_vcs_git_clone "$source_url" "$repo" "$branch" &&
     bl64_dbg_lib_show_info 'promote to destination' &&
-    bl64_fs_mv "$transition" "$destination"
+    bl64_fs_run_mv "$transition" "$destination"
   status=$?
 
   [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
@@ -6912,8 +7005,8 @@ function _bl64_rxtx_git_get_dir_sub() {
   bl64_vcs_git_sparse "$source_url" "$repo" "$branch" "$source_path" &&
     [[ -d "$source" ]] &&
     bl64_fs_mkdir_full "${repo}/transition" &&
-    bl64_fs_mv "$source" "$transition" >/dev/null &&
-    bl64_fs_mv "${transition}" "$destination" >/dev/null
+    bl64_fs_run_mv "$source" "$transition" >/dev/null &&
+    bl64_fs_run_mv "${transition}" "$destination" >/dev/null
   status=$?
 
   [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
@@ -7440,7 +7533,7 @@ function bl64_xsv_search_records() {
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 1.14.0
+# Version: 2.0.0
 #######################################
 
 #
@@ -7498,59 +7591,51 @@ set +o 'posix'
 # set -o 'keyword'
 # set -o 'noexec'
 
-# Normalize umask
-umask -S 'u=rwx,g=,o=' > /dev/null
+# Initialize mandatory modules
+bl64_os_setup &&
+  bl64_txt_setup &&
+  bl64_fs_setup &&
+  bl64_arc_setup &&
+  bl64_iam_setup &&
+  bl64_pkg_setup &&
+  bl64_rbac_setup &&
+  bl64_vcs_setup &&
+  bl64_rxtx_setup ||
+  return $?
 
-# Detect current OS
-bl64_os_get_distro
+# Set signal handlers
+# shellcheck disable=SC2064
+if [[ "$BL64_LIB_TRAPS" == "$BL64_LIB_VAR_ON" ]]; then
+  bl64_dbg_lib_show_info 'enable traps'
+  trap "$BL64_LIB_SIGNAL_HUP" 'SIGHUP'
+  trap "$BL64_LIB_SIGNAL_STOP" 'SIGINT'
+  trap "$BL64_LIB_SIGNAL_QUIT" 'SIGQUIT'
+  trap "$BL64_LIB_SIGNAL_QUIT" 'SIGTERM'
+  trap "$BL64_LIB_SIGNAL_DEBUG" 'DEBUG'
+  trap "$BL64_LIB_SIGNAL_EXIT" 'EXIT'
+  trap "$BL64_LIB_SIGNAL_ERR" 'ERR'
+fi
 
-# Verify lib compatibility
-if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" || ("${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5') ]]; then
-  printf '%s\n' "Fatal: BashLib64 is not supported in the current OS (distro:[${BL64_OS_DISTRO}] / bash:[${BASH_VERSION}] / uname:[$(uname -a))])" >&2
-  # Warning: return and exit are not used to avoid terminating the shell when using source to load the lib
-  false
+# Set default umask
+bl64_fs_set_umask "$BL64_LIB_UMASK" || return $?
+
+# Create session ID for the current script
+BL64_SCRIPT_SID="${BASHPID}${RANDOM}"
+
+# Determine script path when not source directly from bash
+if [[ "$0" != 'bash' ]]; then
+  BL64_SCRIPT_NAME="$(bl64_fmt_basename "${0}")"
+  BL64_SCRIPT_PATH="$(cd -- "${0%/*}" >/dev/null && pwd)"
 else
-  bl64_os_setup &&
-    bl64_txt_setup &&
-    bl64_fs_setup &&
-    bl64_arc_setup &&
-    bl64_iam_setup &&
-    bl64_pkg_setup &&
-    bl64_rbac_setup &&
-    bl64_vcs_setup &&
-    bl64_rxtx_setup
+  BL64_SCRIPT_NAME='bashlib64.bash'
+fi
 
-  # Set signal handlers
-  # shellcheck disable=SC2064
-  if [[ "$BL64_LIB_TRAPS" == "$BL64_LIB_VAR_ON" ]]; then
-    bl64_dbg_lib_show_info 'enable traps'
-    trap "$BL64_LIB_SIGNAL_HUP" 'SIGHUP'
-    trap "$BL64_LIB_SIGNAL_STOP" 'SIGINT'
-    trap "$BL64_LIB_SIGNAL_QUIT" 'SIGQUIT'
-    trap "$BL64_LIB_SIGNAL_QUIT" 'SIGTERM'
-    trap "$BL64_LIB_SIGNAL_DEBUG" 'DEBUG'
-    trap "$BL64_LIB_SIGNAL_EXIT" 'EXIT'
-    trap "$BL64_LIB_SIGNAL_ERR" 'ERR'
-  fi
-
-  # Create session ID for the current script
-  BL64_SCRIPT_SID="${BASHPID}${RANDOM}"
-
-  # Determine script path when not source directly from bash
-  if [[ "$0" != 'bash' ]]; then
-    BL64_SCRIPT_NAME="$(bl64_fmt_basename "${0}")"
-    BL64_SCRIPT_PATH="$(cd -- "${0%/*}" >/dev/null && pwd)"
-  else
-    BL64_SCRIPT_NAME='bashlib64.bash'
-  fi
-
-  # Enable command mode: the library can be used as a stand-alone script to run embeded functions
-  if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
-    bl64_dbg_lib_show_info 'run bashlib64 in command mode'
-    "$@"
-  else
-    bl64_dbg_lib_show_info 'run bashlib64 in source mode'
-    :
-  fi
+# Enable command mode: the library can be used as a stand-alone script to run embeded functions
+if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
+  bl64_dbg_lib_show_info 'run bashlib64 in command mode'
+  "$@"
+else
+  bl64_dbg_lib_show_info 'run bashlib64 in source mode'
+  :
 fi
 
