@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0]
+
+### Changed
+
+- py
+  - merged bl64_py_venv_activate into bl64_py_setup
+
+### Fixed
+
+- py
+  - pip install: do not use --user when VENV is in use
+
 ## [3.0.0]
 
 ### Added
@@ -37,7 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - new function: bl64_check_path_not_present
 - py
   - all: virtual environments support with venv
-  - new function: bl64_py_venv_create
+  - new function: bl64_py_venv_activate, bl64_py_venv_create
 
 ## [2.13.0]
 
@@ -508,7 +520,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/3.0.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/3.1.0...HEAD
+[3.1.0]: https://github.com/serdigital64/bashlib64/compare/3.0.0...3.1.0
 [3.0.0]: https://github.com/serdigital64/bashlib64/compare/2.14.0...3.0.0
 [2.14.0]: https://github.com/serdigital64/bashlib64/compare/2.13.0...2.14.0
 [2.13.0]: https://github.com/serdigital64/bashlib64/compare/2.12.0...2.13.0

@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 3.0.0
+# Version: 3.1.0
 #######################################
 
 # Do not inherit aliases and commands
@@ -5908,7 +5908,7 @@ function bl64_pkg_run_brew() {
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -5931,16 +5931,11 @@ function bl64_py_setup() {
 
   if [[ "$venv_path" != "$BL64_LIB_DEFAULT" ]]; then
     if [[ -d "$venv_path" ]]; then
-      bl64_dbg_lib_show_info "check requested virtual environment (${venv_path})"
-      bl64_check_directory "$venv_path" &&
-        bl64_check_file "${venv_path}/${BL64_PY_SET_VENV_CFG}" &&
-        bl64_check_command "${venv_path}/bin/python3" ||
-        return $?
+      _bl64_py_setup "$venv_path"
     else
       _bl64_py_setup "$BL64_LIB_DEFAULT" &&
         bl64_py_venv_create "$venv_path" &&
-        _bl64_py_setup "$venv_path" ||
-        return $?
+        _bl64_py_setup "$venv_path"
     fi
   else
     _bl64_py_setup "$BL64_LIB_DEFAULT"
@@ -5950,6 +5945,13 @@ function bl64_py_setup() {
 function _bl64_py_setup() {
   bl64_dbg_lib_show_function "$@"
   local venv_path="$1"
+
+  if [[ "$venv_path" != "$BL64_LIB_DEFAULT" ]]; then
+    bl64_check_directory "$venv_path" &&
+      bl64_check_file "${venv_path}/${BL64_PY_SET_VENV_CFG}" &&
+      bl64_check_command "${venv_path}/bin/python3" ||
+      return $?
+  fi
 
   bl64_py_set_command "$venv_path" &&
     bl64_py_set_options &&
@@ -6021,6 +6023,10 @@ function bl64_py_set_command() {
       BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON35"
       BL64_PY_VERSION_PYTHON3='3.5'
     fi
+
+    # Ignore VENV. Use detected python
+    VIRTUAL_ENV=''
+
   else
     bl64_dbg_lib_show_info 'use python3 from virtual environment'
     BL64_PY_CMD_PYTHON3="${venv_path}/bin/python3"
@@ -6066,7 +6072,7 @@ function bl64_py_set_options() {
 #######################################
 # BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -6139,19 +6145,22 @@ function bl64_py_pip_usr_prepare() {
   bl64_dbg_lib_show_function
   local modules_pip="$BL64_PY_SET_MODULE_PIP"
   local modules_setup='setuptools wheel stevedore'
+  local flag_user="$BL64_PY_SET_PIP_USER"
+
+  [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
 
   # shellcheck disable=SC2086
   bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_PIP" &&
     bl64_py_run_pip \
       'install' \
       $BL64_PY_SET_PIP_UPGRADE \
-      $BL64_PY_SET_PIP_USER \
+      $flag_user \
       $modules_pip &&
     bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP" &&
     bl64_py_run_pip \
       'install' \
       $BL64_PY_SET_PIP_UPGRADE \
-      $BL64_PY_SET_PIP_USER \
+      $flag_user \
       $modules_setup
 
 }
@@ -6173,13 +6182,16 @@ function bl64_py_pip_usr_prepare() {
 #######################################
 function bl64_py_pip_usr_install() {
   bl64_dbg_lib_show_function "$@"
+  local flag_user="$BL64_PY_SET_PIP_USER"
+
+  [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
 
   bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_INSTALL ($*)"
   bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_UPGRADE \
     $BL64_PY_SET_PIP_NO_WARN_SCRIPT \
-    $BL64_PY_SET_PIP_USER \
+    $flag_user \
     "$@"
 }
 

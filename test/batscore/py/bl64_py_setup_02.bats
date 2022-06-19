@@ -16,7 +16,7 @@ setup() {
     skip 'this case can only be tested inside a container'
   fi
 
-  target="${TEST_SANDBOX}/new"
+  target="${TEST_SANDBOX}/venv"
   bl64_py_setup
 
   run bl64_py_setup "$target"

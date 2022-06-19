@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -74,19 +74,22 @@ function bl64_py_pip_usr_prepare() {
   bl64_dbg_lib_show_function
   local modules_pip="$BL64_PY_SET_MODULE_PIP"
   local modules_setup='setuptools wheel stevedore'
+  local flag_user="$BL64_PY_SET_PIP_USER"
+
+  [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
 
   # shellcheck disable=SC2086
   bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_PIP" &&
     bl64_py_run_pip \
       'install' \
       $BL64_PY_SET_PIP_UPGRADE \
-      $BL64_PY_SET_PIP_USER \
+      $flag_user \
       $modules_pip &&
     bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP" &&
     bl64_py_run_pip \
       'install' \
       $BL64_PY_SET_PIP_UPGRADE \
-      $BL64_PY_SET_PIP_USER \
+      $flag_user \
       $modules_setup
 
 }
@@ -108,13 +111,16 @@ function bl64_py_pip_usr_prepare() {
 #######################################
 function bl64_py_pip_usr_install() {
   bl64_dbg_lib_show_function "$@"
+  local flag_user="$BL64_PY_SET_PIP_USER"
+
+  [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
 
   bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_INSTALL ($*)"
   bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_UPGRADE \
     $BL64_PY_SET_PIP_NO_WARN_SCRIPT \
-    $BL64_PY_SET_PIP_USER \
+    $flag_user \
     "$@"
 }
 
