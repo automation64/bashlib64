@@ -116,6 +116,10 @@ function bl64_py_set_command() {
       BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON35"
       BL64_PY_VERSION_PYTHON3='3.5'
     fi
+
+    # Ignore VENV. Use detected python
+    VIRTUAL_ENV=''
+
   else
     bl64_dbg_lib_show_info 'use python3 from virtual environment'
     BL64_PY_CMD_PYTHON3="${venv_path}/bin/python3"
