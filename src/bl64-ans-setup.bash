@@ -19,6 +19,7 @@
 #   0: setup ok
 #   >0: setup failed
 #######################################
+# shellcheck disable=SC2120
 function bl64_ans_setup() {
   bl64_dbg_lib_show_function "$@"
   local ansible_bin="${1:-${BL64_LIB_DEFAULT}}"
