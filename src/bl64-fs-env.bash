@@ -1,10 +1,13 @@
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 export BL64_FS_MODULE="$BL64_LIB_VAR_OFF"
+
+export BL64_FS_PATH_TEMPORAL=''
+export BL64_FS_PATH_CACHE=''
 
 export BL64_FS_CMD_CHMOD=''
 export BL64_FS_CMD_CHOWN=''
@@ -49,6 +52,6 @@ export BL64_FS_UMASK_RW_ALL='u=rwx,g=rwx,o=rwx'
 export BL64_FS_UMASK_RW_USER_RO_ALL='u=rwx,g=rx,o=rx'
 export BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
 
-readonly BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
+export BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
 
-readonly _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
+declare _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'

@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.0]
+
+### Added
+
+- fs
+  - new function: bl64_fs_set_ephemeral
+- py
+  - new function: bl64_py_venv_check
+  - register requested venv
+  - support ephemeral paths
+- ans
+  - python venv support
+
+### Changed
+
+- ans
+  - bl64_py_setup: use base path instead of binary for parameter-1
+
+- gcp
+  - bl64_gcp_setup: use base path instead of binary for parameter-1
+
 ## [3.1.0]
 
 ### Changed
@@ -520,7 +541,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/3.1.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/3.2.0...HEAD
+[3.2.0]: https://github.com/serdigital64/bashlib64/compare/3.1.0...3.2.0
 [3.1.0]: https://github.com/serdigital64/bashlib64/compare/3.0.0...3.1.0
 [3.0.0]: https://github.com/serdigital64/bashlib64/compare/2.14.0...3.0.0
 [2.14.0]: https://github.com/serdigital64/bashlib64/compare/2.13.0...2.14.0
