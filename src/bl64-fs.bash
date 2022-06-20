@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
 
 #######################################
@@ -13,9 +13,9 @@
 #   * Parent directories are not created
 #   * No rollback in case of errors. The process will not remove already created paths
 # Arguments:
-#   $1: permissions. Format: chown format. Default: none
-#   $2: user name. Default: none
-#   $3: group name. Default: none
+#   $1: permissions. Format: chown format. Default: use current umask
+#   $2: user name. Default: current
+#   $3: group name. Default: current
 #   $@: full directory paths
 # Outputs:
 #   STDOUT: command dependant
@@ -61,9 +61,9 @@ function bl64_fs_create_dir() {
 # Limitations:
 #   * No rollback in case of errors. The process will not remove already copied files
 # Arguments:
-#   $1: permissions. Format: chown format. Default: none
-#   $2: user name. Default: none
-#   $3: group name. Default: none
+#   $1: permissions. Format: chown format. Default: use current umask
+#   $2: user name. Default: current
+#   $3: group name. Default: current
 #   $4: destination path
 #   $@: full file paths
 # Outputs:
@@ -113,9 +113,9 @@ function bl64_fs_copy_files() {
 # * If asked to replace destination, temporary backup is done in case git fails by moving the destination to a temp name
 #
 # Arguments:
-#   $1: permissions. Format: chown format. Default: none
-#   $2: user name. Default: none
-#   $3: group name. Default: none
+#   $1: permissions. Format: chown format. Default: use current umask
+#   $2: user name. Default: current
+#   $3: group name. Default: current
 #   $4: replace existing content. Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)
 #   $5: destination file. Full path
 #   $@: source files. Full path
@@ -663,9 +663,9 @@ function bl64_fs_restore() {
 #
 # Arguments:
 #   $1: object path
-#   $2: permissions. Format: chown format. Default: none
+#   $2: permissions. Format: chown format. Default: use current umask
 #   $3: user name. Default: nonde
-#   $4: group name. Default: none
+#   $4: group name. Default: current
 # Outputs:
 #   STDOUT: command stdin
 #   STDERR: command stderr
@@ -770,7 +770,7 @@ function bl64_fs_run_ln() {
 # * Supports predefined sets: BL64_FS_UMASK_*
 #
 # Arguments:
-#   $1: Permission set
+#   $1: permission. Format: umask symbolic
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -785,4 +785,45 @@ function bl64_fs_set_umask() {
     return $?
 
   umask -S "$permissions" >/dev/null
+}
+
+#######################################
+# Set global ephemeral paths for bashlib64 functions
+#
+# * When set, bashlib64 can use these locations as alternative paths to standard ephemeral locations (tmp, cache, etc)
+# * Path is created if not already present
+#
+# Arguments:
+#   $1: Temporal files. Short lived, data should be removed after usage. Format: full path
+#   $2: cache files. Lifecycle managed by the consumer. Data can persist between runs. If data is removed, consumer should be able to regenerate it. Format: full path
+#   $3: permissions. Format: chown format. Default: use current umask
+#   $4: user name. Default: current
+#   $5: group name. Default: current
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_set_ephemeral() {
+  bl64_dbg_lib_show_function "$@"
+  local temporal="${1:-${BL64_LIB_DEFAULT}}"
+  local cache="${2:-${BL64_LIB_DEFAULT}}"
+  local mode="${3:-${BL64_LIB_DEFAULT}}"
+  local user="${4:-${BL64_LIB_DEFAULT}}"
+  local group="${5:-${BL64_LIB_DEFAULT}}"
+
+  if [[ "$temporal" != "$BL64_LIB_DEFAULT" ]]; then
+    bl64_fs_create_dir "$mode" "$user" "$group" "$temporal" &&
+      BL64_FS_PATH_TEMPORAL="$temporal" ||
+      return $?
+  fi
+
+  if [[ "$cache" != "$BL64_LIB_DEFAULT" ]]; then
+    bl64_fs_create_dir "$mode" "$user" "$group" "$cache" &&
+      BL64_FS_PATH_CACHE="$cache" ||
+      return $?
+  fi
+
+  return 0
 }
