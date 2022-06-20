@@ -8,6 +8,7 @@ setup() {
 }
 
 @test "bl64_fs_merge_files: defaults, merge ok" {
+
   run bl64_fs_merge_files \
     "$BL64_LIB_DEFAULT" \
     "$BL64_LIB_DEFAULT" \

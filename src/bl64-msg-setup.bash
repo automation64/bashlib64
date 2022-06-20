@@ -22,7 +22,7 @@ function bl64_msg_setup() {
   bl64_check_parameter 'format' || return $?
 
   # shellcheck disable=SC2086
-  if [[ 
+  if [[
     "$format" != "$BL64_MSG_FORMAT_PLAIN" &&
     "$format" != "$BL64_MSG_FORMAT_HOST" &&
     "$format" != "$BL64_MSG_FORMAT_TIME" &&
