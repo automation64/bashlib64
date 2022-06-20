@@ -265,6 +265,7 @@ function bl64_dbg_app_show_vars() {
 # Returns:
 #   0: always ok
 #######################################
+# shellcheck disable=SC2120
 function bl64_dbg_lib_show_function() {
   bl64_dbg_lib_task_enabled || return 0
 
@@ -283,6 +284,7 @@ function bl64_dbg_lib_show_function() {
 # Returns:
 #   0: always ok
 #######################################
+# shellcheck disable=SC2120
 function bl64_dbg_app_show_function() {
   bl64_dbg_app_task_enabled || return 0
 

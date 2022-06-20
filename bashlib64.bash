@@ -790,6 +790,7 @@ declare _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
 #   0: setup ok
 #   >0: setup failed
 #######################################
+# shellcheck disable=SC2120
 function bl64_ans_setup() {
   bl64_dbg_lib_show_function "$@"
   local ansible_bin="${1:-${BL64_LIB_DEFAULT}}"
@@ -2839,6 +2840,7 @@ function bl64_dbg_app_show_vars() {
 # Returns:
 #   0: always ok
 #######################################
+# shellcheck disable=SC2120
 function bl64_dbg_lib_show_function() {
   bl64_dbg_lib_task_enabled || return 0
 
@@ -2857,6 +2859,7 @@ function bl64_dbg_lib_show_function() {
 # Returns:
 #   0: always ok
 #######################################
+# shellcheck disable=SC2120
 function bl64_dbg_app_show_function() {
   bl64_dbg_app_task_enabled || return 0
 
@@ -4175,6 +4178,7 @@ function bl64_fmt_separator_line() {
 #   0: setup ok
 #   >0: setup failed
 #######################################
+# shellcheck disable=SC2120
 function bl64_gcp_setup() {
   bl64_dbg_lib_show_function "$@"
   local gcloud_bin="${1:-${BL64_LIB_DEFAULT}}"
@@ -5979,6 +5983,7 @@ function bl64_pkg_run_brew() {
 #   0: setup ok
 #   >0: setup failed
 #######################################
+# shellcheck disable=SC2120
 function bl64_py_setup() {
   bl64_dbg_lib_show_function "$@"
   local venv_path="${1:-${BL64_LIB_DEFAULT}}"
