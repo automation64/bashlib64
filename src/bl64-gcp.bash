@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with GCP CLI
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -21,8 +21,7 @@ function bl64_gcp_run_gcloud() {
   local debug=' '
   local config=' '
 
-  bl64_check_module_setup "$BL64_GCP_MODULE" &&
-    bl64_check_command "$BL64_GCP_CMD_GCLOUD" ||
+  bl64_check_module_setup "$BL64_GCP_MODULE" ||
     return $?
 
   if bl64_dbg_lib_command_enabled; then
@@ -33,6 +32,7 @@ function bl64_gcp_run_gcloud() {
 
   [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_LIB_VAR_TRUE" ]] && config="--configuration $BL64_GCP_CONFIGURATION_NAME"
 
+  bl64_dbg_lib_show_info "extra args: [${debug} ${config}]"
   # shellcheck disable=SC2086
   "$BL64_GCP_CMD_GCLOUD" \
     $debug \
