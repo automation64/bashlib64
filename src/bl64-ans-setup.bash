@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Ansible CLI
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -40,7 +40,7 @@ function bl64_ans_setup() {
 #######################################
 # Identify and normalize commands
 #
-# * If no values are providedprovied, detect commands in order or preference
+# * If no values are providedprovied, try to detect commands looking for common paths
 # * Commands are exported as variables with full path
 # * The caller function is responsible for checking that the target command is present (installed)
 #
@@ -54,50 +54,42 @@ function bl64_ans_setup() {
 #######################################
 function bl64_ans_set_command() {
   bl64_dbg_lib_show_function
+  local ansible_root=''
 
   if [[ -z "$BL64_ANS_CMD_ANSIBLE" ]]; then
-    if [[ -n "$HOME" && -x "${HOME}/.local/bin/ansible" ]]; then
-      BL64_ANS_CMD_ANSIBLE="${HOME}/.local/bin/ansible"
+    if [[ -n "$BL64_PY_VENV_PATH" && -x "${BL64_PY_VENV_PATH}/bin/ansible" ]]; then
+      ansible_root="${BL64_PY_VENV_PATH}/bin"
+    elif [[ -n "$HOME" && -x "${HOME}/.local/bin/ansible" ]]; then
+      ansible_root="${HOME}/.local/bin"
     elif [[ -x '/usr/local/bin/ansible' ]]; then
-      BL64_ANS_CMD_ANSIBLE='/usr/local/bin/ansible'
+      ansible_root='/usr/local/bin'
     elif [[ -x '/home/linuxbrew/.linuxbrew/bin/ansible' ]]; then
-      BL64_ANS_CMD_ANSIBLE='/home/linuxbrew/.linuxbrew/bin/ansible'
+      ansible_root='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/ansible' ]]; then
-      BL64_ANS_CMD_ANSIBLE='/opt/homebrew/bin/ansible'
+      ansible_root='/opt/homebrew/bin'
+    elif [[ -x '/opt/ansible/bin/ansible' ]]; then
+      ansible_root='/opt/ansible/bin'
     elif [[ -x '/usr/bin/ansible' ]]; then
-      BL64_ANS_CMD_ANSIBLE='/usr/bin/ansible'
+      ansible_root='/usr/bin'
+    fi
+    if [[ -n "$ansible_root" ]]; then
+      BL64_ANS_CMD_ANSIBLE="${ansible_root}/ansible"
     else
       BL64_ANS_CMD_ANSIBLE="$BL64_LIB_UNAVAILABLE"
     fi
   fi
 
   if [[ -z "$BL64_ANS_CMD_ANSIBLE_GALAXY" ]]; then
-    if [[ -n "$HOME" && -x "${HOME}/.local/bin/ansible-galaxy" ]]; then
-      BL64_ANS_CMD_ANSIBLE_GALAXY="${HOME}/.local/bin/ansible-galaxy"
-    elif [[ -x '/usr/local/bin/ansible-galaxy' ]]; then
-      BL64_ANS_CMD_ANSIBLE_GALAXY='/usr/local/bin/ansible-galaxy'
-    elif [[ -x '/home/linuxbrew/.linuxbrew/bin/ansible-galaxy' ]]; then
-      BL64_ANS_CMD_ANSIBLE_GALAXY='/home/linuxbrew/.linuxbrew/bin/ansible-galaxy'
-    elif [[ -x '/opt/homebrew/bin/ansible-galaxy' ]]; then
-      BL64_ANS_CMD_ANSIBLE_GALAXY='/opt/homebrew/bin/ansible-galaxy'
-    elif [[ -x '/usr/bin/ansible-galaxy' ]]; then
-      BL64_ANS_CMD_ANSIBLE_GALAXY='/usr/bin/ansible-galaxy'
+    if [[ -n "$ansible_root" && -x "${ansible_root}/ansible-galaxy" ]]; then
+      BL64_ANS_CMD_ANSIBLE_GALAXY="${ansible_root}/ansible-galaxy"
     else
       BL64_ANS_CMD_ANSIBLE_GALAXY="$BL64_LIB_UNAVAILABLE"
     fi
   fi
 
   if [[ -z "$BL64_ANS_CMD_ANSIBLE_PLAYBOOK" ]]; then
-    if [[ -n "$HOME" && -x "${HOME}/.local/bin/ansible-playbook" ]]; then
-      BL64_ANS_CMD_ANSIBLE_PLAYBOOK="${HOME}/.local/bin/ansible-playbook"
-    elif [[ -x '/usr/local/bin/ansible-playbook' ]]; then
-      BL64_ANS_CMD_ANSIBLE_PLAYBOOK='/usr/local/bin/ansible-playbook'
-    elif [[ -x '/home/linuxbrew/.linuxbrew/bin/ansible-playbook' ]]; then
-      BL64_ANS_CMD_ANSIBLE_PLAYBOOK='/home/linuxbrew/.linuxbrew/bin/ansible-playbook'
-    elif [[ -x '/opt/homebrew/bin/ansible-playbook' ]]; then
-      BL64_ANS_CMD_ANSIBLE_PLAYBOOK='/opt/homebrew/bin/ansible-playbook'
-    elif [[ -x '/usr/bin/ansible-playbook' ]]; then
-      BL64_ANS_CMD_ANSIBLE_PLAYBOOK='/usr/bin/ansible-playbook'
+    if [[ -n "$ansible_root" && -x "${ansible_root}/ansible-playbook" ]]; then
+      BL64_ANS_CMD_ANSIBLE_PLAYBOOK="${ansible_root}/ansible-playbook"
     else
       BL64_ANS_CMD_ANSIBLE_PLAYBOOK="$BL64_LIB_UNAVAILABLE"
     fi
