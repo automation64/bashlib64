@@ -4,10 +4,21 @@
 # Version: 1.7.0
 #######################################
 
+#
+# Verbosity levels
+#
+# * 0: nothing is showed
+# * 1: application messages only
+# * 2: bashlib64 and application messages
+#
+
 export BL64_MSG_VERBOSE_NONE='0'
 export BL64_MSG_VERBOSE_APP='1'
 export BL64_MSG_VERBOSE_LIB='2'
 
+#
+# Message formats
+#
 export BL64_MSG_FORMAT_PLAIN='R'
 export BL64_MSG_FORMAT_HOST='H'
 export BL64_MSG_FORMAT_TIME='T'
