@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 #######################################
@@ -128,6 +128,9 @@ function bl64_py_set_command() {
     VIRTUAL_ENV="$venv_path"
     PATH="${VIRTUAL_ENV}:${PATH}"
     unset PYTHONHOME
+
+    # Let other basthlib64 functions know about this venv
+    BL64_PY_VENV_PATH="$venv_path"
   fi
 
   bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3'
