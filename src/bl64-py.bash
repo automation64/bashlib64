@@ -218,5 +218,5 @@ function bl64_py_run_pip() {
     -m "$BL64_PY_SET_MODULE_PIP" \
     $debug \
     $cache \
-    "$@"
+    "$*"
 }
