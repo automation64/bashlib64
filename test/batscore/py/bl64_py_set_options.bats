@@ -11,6 +11,7 @@ setup() {
   assert_not_equal "$BL64_PY_SET_PIP_USER" ''
   assert_not_equal "$BL64_PY_SET_PIP_DEBUG" ''
   assert_not_equal "$BL64_PY_SET_PIP_QUIET" ''
+  assert_not_equal "$BL64_PY_SET_PIP_SITE" ''
   assert_not_equal "$BL64_PY_SET_PIP_NO_WARN_SCRIPT" ''
 
   assert_not_equal "$BL64_PY_SET_VENV_CFG" ''
