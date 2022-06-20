@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -29,6 +29,7 @@ export BL64_PY_SET_PIP_UPGRADE=''
 export BL64_PY_SET_PIP_USER=''
 export BL64_PY_SET_PIP_DEBUG=''
 export BL64_PY_SET_PIP_QUIET=''
+export BL64_PY_SET_PIP_SITE=''
 export BL64_PY_SET_PIP_NO_WARN_SCRIPT=''
 export BL64_PY_SET_VENV_CFG=''
 export BL64_PY_SET_MODULE_VENV=''

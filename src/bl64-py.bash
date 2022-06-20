@@ -191,6 +191,8 @@ function bl64_py_run_python() {
 #######################################
 # Python PIP wrapper
 #
+# * Uses global ephemeral settings when configured for temporal and cache
+#
 # Arguments:
 #   $@: arguments are passes as-is
 # Outputs:
@@ -202,9 +204,19 @@ function bl64_py_run_python() {
 function bl64_py_run_pip() {
   bl64_dbg_lib_show_function "$@"
   local debug="$BL64_PY_SET_PIP_QUIET"
+  local temporal=' '
+  local cache=' '
 
   bl64_msg_verbose_lib_enabled && debug=' '
   bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
-  bl64_py_run_python -m "$BL64_PY_SET_MODULE_PIP" $debug "$@"
+  [[ -n "$BL64_FS_PATH_TEMPORAL" ]] && temporal="TMPDIR=${BL64_FS_PATH_TEMPORAL}"
+  [[ -n "$BL64_FS_PATH_CACHE" ]] && cache="--cache-dir=${BL64_FS_PATH_CACHE}"
+
+  # shellcheck disable=SC2086
+  eval $temporal bl64_py_run_python \
+    -m "$BL64_PY_SET_MODULE_PIP" \
+    $debug \
+    $cache \
+    "$@"
 }

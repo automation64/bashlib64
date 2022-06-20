@@ -23,14 +23,18 @@ function bl64_py_setup() {
   local venv_path="${1:-${BL64_LIB_DEFAULT}}"
 
   if [[ "$venv_path" != "$BL64_LIB_DEFAULT" ]]; then
+    bl64_dbg_lib_show_info "venv requested (${venv_path})"
     if [[ -d "$venv_path" ]]; then
+      bl64_dbg_lib_show_info 'use already existing venv'
       _bl64_py_setup "$venv_path"
     else
+      bl64_dbg_lib_show_info 'no previous venv, create one'
       _bl64_py_setup "$BL64_LIB_DEFAULT" &&
         bl64_py_venv_create "$venv_path" &&
         _bl64_py_setup "$venv_path"
     fi
   else
+    bl64_dbg_lib_show_info "no venv requested"
     _bl64_py_setup "$BL64_LIB_DEFAULT"
   fi
 }
@@ -40,9 +44,7 @@ function _bl64_py_setup() {
   local venv_path="$1"
 
   if [[ "$venv_path" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_check_directory "$venv_path" &&
-      bl64_check_file "${venv_path}/${BL64_PY_SET_VENV_CFG}" &&
-      bl64_check_command "${venv_path}/bin/python3" ||
+    bl64_py_venv_check "$venv_path" ||
       return $?
   fi
 
@@ -133,8 +135,7 @@ function bl64_py_set_command() {
     BL64_PY_VENV_PATH="$venv_path"
   fi
 
-  bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3'
-
+  bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3' 'BL64_PY_VENV_PATH' 'VIRTUAL_ENV' 'PATH'
 }
 
 #######################################
@@ -157,6 +158,7 @@ function bl64_py_set_options() {
   BL64_PY_SET_PIP_UPGRADE='--upgrade'
   BL64_PY_SET_PIP_USER='--user'
   BL64_PY_SET_PIP_QUIET='--quiet'
+  BL64_PY_SET_PIP_SITE='--system-site-packages'
   BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
 
   BL64_PY_SET_VENV_CFG='pyvenv.cfg'
