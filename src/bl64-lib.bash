@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
 
 #
@@ -60,7 +60,8 @@ set +o 'posix'
 # set -o 'noexec'
 
 # Initialize mandatory modules
-bl64_os_setup &&
+bl64_bsh_setup &&
+  bl64_os_setup &&
   bl64_txt_setup &&
   bl64_fs_setup &&
   bl64_arc_setup &&
@@ -90,13 +91,8 @@ bl64_fs_set_umask "$BL64_LIB_UMASK" || return $?
 # Create session ID for the current script
 BL64_SCRIPT_SID="${BASHPID}${RANDOM}"
 
-# Determine script path when not source directly from bash
-if [[ "$0" != 'bash' ]]; then
-  BL64_SCRIPT_NAME="$(bl64_fmt_basename "${0}")"
-  BL64_SCRIPT_PATH="$(cd -- "${0%/*}" >/dev/null && pwd)"
-else
-  BL64_SCRIPT_NAME='bashlib64.bash'
-fi
+BL64_SCRIPT_NAME="$(bl64_bsh_script_get_name)"
+BL64_SCRIPT_PATH="$(bl64_bsh_script_get_path)"
 
 # Enable command mode: the library can be used as a stand-alone script to run embeded functions
 if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
