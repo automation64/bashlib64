@@ -5,7 +5,7 @@
 # Author: serdigital64 (https://github.com/serdigital64)
 # License: GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.txt)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 3.2.0
+# Version: 3.3.0
 #######################################
 
 # Do not inherit aliases and commands
@@ -202,6 +202,18 @@ declare _BL64_ARC_TXT_OPEN_TAR='open tar archive'
 
 # External commands variables
 export UNZIP
+
+#######################################
+# BashLib64 / Module / Functions / Interact with Bash shell
+#
+# Version: 1.0.0
+#######################################
+
+export BL64_BSH_MODULE="$BL64_LIB_VAR_OFF"
+
+export BL64_BSH_VERSION=''
+
+export _BL64_BSH_TXT_UNSUPPORTED='BashLib64 is not supported in the current Bash version'
 
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
@@ -1264,6 +1276,118 @@ function bl64_arc_open_zip() {
   ((status == 0)) && bl64_fs_rm_file "$source"
 
   return $status
+}
+
+#######################################
+# BashLib64 / Module / Functions / Interact with Bash shell
+#
+# Version: 1.0.0
+#######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_bsh_setup() {
+  bl64_dbg_lib_show_function
+
+  bl64_bsh_set_command ||
+    return $?
+  BL64_BSH_MODULE="$BL64_LIB_VAR_ON"
+
+}
+
+#######################################
+# Identify and normalize commands
+#
+# * Commands are exported as variables with full path
+# * The caller function is responsible for checking that the target command is present (installed)
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_bsh_set_command() {
+  bl64_dbg_lib_show_function
+
+  case "${BASH_VERSINFO[0]}" in
+  4*) BL64_BSH_VERSION='4.0' ;;
+  5*) BL64_BSH_VERSION='5.0' ;;
+  *)
+    bl64_msg_show_error "${_BL64_BSH_TXT_UNSUPPORTED} (${BASH_VERSINFO[0]})" &&
+      return $BL64_LIB_ERROR_OS_BASH_VERSION
+    ;;
+  esac
+  bl64_dbg_lib_show_vars 'BL64_BSH_VERSION'
+}
+
+#######################################
+# BashLib64 / Module / Functions / Interact with Bash shell
+#
+# Version: 1.0.0
+#######################################
+
+#######################################
+# Get current script location
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: full path
+#   STDERR: Error messages
+# Returns:
+#   0: full path
+#   >0: command error
+#######################################
+function bl64_bsh_script_get_path() {
+  bl64_dbg_lib_show_function
+  local -i main=${#BASH_SOURCE[*]}
+  local caller=''
+
+  (( main > 0 )) && main=$((main - 1))
+  caller="${BASH_SOURCE[${main}]}"
+
+  unset CDPATH &&
+    [[ -n "$caller" ]] &&
+    cd -- "${caller%/*}" >/dev/null &&
+    pwd -P ||
+    return $?
+}
+
+#######################################
+# Get current script name
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: script name
+#   STDERR: Error messages
+# Returns:
+#   0: name
+#   >0: command error
+#######################################
+function bl64_bsh_script_get_name() {
+  bl64_dbg_lib_show_function
+  local -i main=${#BASH_SOURCE[*]}
+
+  (( main > 0 )) && main=$((main - 1))
+
+  bl64_fmt_basename "${BASH_SOURCE[${main}]}"
+
 }
 
 #######################################
@@ -7639,7 +7763,7 @@ function bl64_xsv_search_records() {
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
 
 #
@@ -7698,7 +7822,8 @@ set +o 'posix'
 # set -o 'noexec'
 
 # Initialize mandatory modules
-bl64_os_setup &&
+bl64_bsh_setup &&
+  bl64_os_setup &&
   bl64_txt_setup &&
   bl64_fs_setup &&
   bl64_arc_setup &&
@@ -7728,13 +7853,8 @@ bl64_fs_set_umask "$BL64_LIB_UMASK" || return $?
 # Create session ID for the current script
 BL64_SCRIPT_SID="${BASHPID}${RANDOM}"
 
-# Determine script path when not source directly from bash
-if [[ "$0" != 'bash' ]]; then
-  BL64_SCRIPT_NAME="$(bl64_fmt_basename "${0}")"
-  BL64_SCRIPT_PATH="$(cd -- "${0%/*}" >/dev/null && pwd)"
-else
-  BL64_SCRIPT_NAME='bashlib64.bash'
-fi
+BL64_SCRIPT_NAME="$(bl64_bsh_script_get_name)"
+BL64_SCRIPT_PATH="$(bl64_bsh_script_get_path)"
 
 # Enable command mode: the library can be used as a stand-alone script to run embeded functions
 if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
