@@ -1,7 +1,7 @@
 #######################################
-# BashLib64 / Module / Setup / Interact with GCP CLI
+# BashLib64 / Module / Setup / Interact with GCP
 #
-# Version: 1.2.0
+# Version: 1.2.1
 #######################################
 
 #######################################
@@ -61,7 +61,7 @@ function bl64_gcp_set_command() {
       gcloud_bin='/usr/bin'
     fi
   else
-    [[ ! -x "${gcloud_bin}/ansible" ]] && gcloud_bin="$BL64_LIB_DEFAULT"
+    [[ ! -x "${gcloud_bin}/gcloud" ]] && gcloud_bin="$BL64_LIB_DEFAULT"
   fi
 
   if [[ "$gcloud_bin" != "$BL64_LIB_DEFAULT" ]]; then
