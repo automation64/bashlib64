@@ -22,5 +22,5 @@ export BL64_RND_POOL_DIGITS_MAX_IDX="$(( ${#BL64_RND_POOL_DIGITS} - 1 ))"
 export BL64_RND_POOL_ALPHANUMERIC="${BL64_RND_POOL_UPPERCASE}${BL64_RND_POOL_LOWERCASE}${BL64_RND_POOL_DIGITS}"
 export BL64_RND_POOL_ALPHANUMERIC_MAX_IDX="$(( ${#BL64_RND_POOL_ALPHANUMERIC} - 1 ))"
 
-declare _BL64_RND_TXT_LENGHT_MIN='length can not be less than'
-declare _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
+export _BL64_RND_TXT_LENGHT_MIN='length can not be less than'
+export _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'

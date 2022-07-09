@@ -35,12 +35,12 @@ export BL64_PY_SET_VENV_CFG=''
 export BL64_PY_SET_MODULE_VENV=''
 export BL64_PY_SET_MODULE_PIP=''
 
-declare _BL64_PY_TXT_PIP_PREPARE_PIP='upgrade pip module'
-declare _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
-declare _BL64_PY_TXT_PIP_INSTALL='install modules'
-declare _BL64_PY_TXT_VENV_MISSING='requested python virtual environment is missing'
-declare _BL64_PY_TXT_VENV_INVALID='requested python virtual environment is invalid (no pyvenv.cfg found)'
-declare _BL64_PY_TXT_VENV_CREATE='create python virtual environment'
+export _BL64_PY_TXT_PIP_PREPARE_PIP='upgrade pip module'
+export _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
+export _BL64_PY_TXT_PIP_INSTALL='install modules'
+export _BL64_PY_TXT_VENV_MISSING='requested python virtual environment is missing'
+export _BL64_PY_TXT_VENV_INVALID='requested python virtual environment is invalid (no pyvenv.cfg found)'
+export _BL64_PY_TXT_VENV_CREATE='create python virtual environment'
 
 # External commands variables
 export PYTHONHOME

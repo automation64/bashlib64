@@ -33,9 +33,9 @@ export BL64_PKG_SET_QUIET=''
 export BL64_PKG_SET_SLIM=''
 export BL64_PKG_SET_VERBOSE=''
 
-declare _BL64_PKG_TXT_CLEAN='clean up package manager run-time environment'
-declare _BL64_PKG_TXT_INSTALL='install packages'
-declare _BL64_PKG_TXT_PREPARE='initialize package manager'
+export _BL64_PKG_TXT_CLEAN='clean up package manager run-time environment'
+export _BL64_PKG_TXT_INSTALL='install packages'
+export _BL64_PKG_TXT_PREPARE='initialize package manager'
 
 # External commands variables
 export DEBIAN_FRONTEND
