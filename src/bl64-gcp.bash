@@ -1,5 +1,5 @@
 #######################################
-# BashLib64 / Module / Functions / Interact with GCP CLI
+# BashLib64 / Module / Functions / Interact with GCP
 #
 # Version: 1.2.0
 #######################################
