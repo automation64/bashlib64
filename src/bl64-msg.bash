@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Display messages
 #
-# Version: 1.7.0
+# Version: 2.0.0
 #######################################
 
 function bl64_msg_verbose_app_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" ]]; }
@@ -11,7 +11,8 @@ function bl64_msg_verbose_lib_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VER
 # Display message helper
 #
 # Arguments:
-#   $1: type of message
+#   $1: stetic attribute
+#   $2: type of message
 #   $2: message to show
 # Outputs:
 #   STDOUT: message
@@ -21,45 +22,111 @@ function bl64_msg_verbose_lib_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VER
 #   BL64_LIB_ERROR_MODULE_SETUP_INVALID
 #######################################
 function _bl64_msg_show() {
-  local type="$1"
-  local message="${2:-${BL64_LIB_DEFAULT}}"
+  local attribute="${1:-}"
+  local type="${2:-}"
+  local message="${3:-}"
+
+  [[ -n "$attribute" && -n "$type" && -n "$message" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
+
+  case "$BL64_MSG_OUTPUT" in
+  "$BL64_MSG_OUTPUT_ASCII") _bl64_msg_show_ascii "$attribute" "$type" "$message" ;;
+  "$BL64_MSG_OUTPUT_ANSI") _bl64_msg_show_ansi "$attribute" "$type" "$message" ;;
+  *)
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
+    ;;
+  esac
+}
+
+function _bl64_msg_show_ansi() {
+  local attribute="${1:-}"
+  local type="${2:-}"
+  local message="${3:-}"
+
+  [[ -n "$attribute" && -n "$type" && -n "$message" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
+
+  case "$BL64_MSG_FORMAT" in
+  "$BL64_MSG_FORMAT_PLAIN")
+    printf "%b: %s\n" \
+      "\e[${BL64_MSG_THEME[${attribute}]}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_HOST")
+    printf "[%b] %b: %s\n" \
+      "\e[${BL64_MSG_THEME[FMTHOST]}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${BL64_MSG_THEME[${attribute}]}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_TIME")
+    printf "[%b] %b: %s\n" \
+      "\e[${BL64_MSG_THEME[FMTTIME]}m$(printf '%(%d/%b/%Y-%H:%M:%S)T' '-1' )\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${BL64_MSG_THEME[${attribute}]}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_CALLER")
+    printf "[%b] %b: %s\n" \
+      "\e[${BL64_MSG_THEME[FMTCALLER]}m${BL64_SCRIPT_NAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${BL64_MSG_THEME[${attribute}]}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_FULL")
+    printf "[%b] %b:%b | %b: %s\n" \
+      "\e[${BL64_MSG_THEME[FMTTIME]}m$(printf '%(%d/%b/%Y-%H:%M:%S)T' '-1' )\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${BL64_MSG_THEME[FMTHOST]}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${BL64_MSG_THEME[FMTCALLER]}m${BL64_SCRIPT_NAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${BL64_MSG_THEME[${attribute}]}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "$message"
+    ;;
+  *)
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
+    ;;
+  esac
+}
+
+function _bl64_msg_show_ascii() {
+  local attribute="${1:-}"
+  local type="${2:-}"
+  local message="${3:-}"
+
+  [[ -n "$attribute" && -n "$type" && -n "$message" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
 
   case "$BL64_MSG_FORMAT" in
   "$BL64_MSG_FORMAT_PLAIN")
     printf "%s: %s\n" \
-      "$type" \
+      "${BL64_MSG_THEME[${attribute}]} $type" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_HOST")
-    printf "@%s %s: %s\n" \
-      "$HOSTNAME" \
-      "$type" \
+    printf "[%s] %s: %s\n" \
+      "${HOSTNAME}" \
+      "${BL64_MSG_THEME[${attribute}]} $type" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_TIME")
     printf "[%(%d/%b/%Y-%H:%M:%S)T] %s: %s\n" \
       '-1' \
-      "$type" \
+      "${BL64_MSG_THEME[${attribute}]} $type" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_CALLER")
-    printf "%s %s: %s\n" \
+    printf "[%s] %s: %s\n" \
       "$BL64_SCRIPT_NAME" \
-      "$type" \
+      "${BL64_MSG_THEME[${attribute}]} $type" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_FULL")
-    printf "%s@%s[%(%d/%b/%Y-%H:%M:%S)T] %s: %s\n" \
-      "$BL64_SCRIPT_NAME" \
-      "$HOSTNAME" \
+    printf "[%(%d/%b/%Y-%H:%M:%S)T] %s:%s | %s: %s\n" \
       '-1' \
-      "$type" \
+      "$HOSTNAME" \
+      "$BL64_SCRIPT_NAME" \
+      "${BL64_MSG_THEME[${attribute}]} $type" \
       "$message"
     ;;
   *)
-    bl64_msg_show_error "$_BL64_MSG_TXT_INVALID_FORMAT"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
+    ;;
   esac
 }
 
@@ -122,7 +189,7 @@ function bl64_msg_show_usage() {
 function bl64_msg_show_error() {
   local message="$1"
 
-  _bl64_msg_show "$_BL64_MSG_TXT_ERROR" "$message" >&2
+  _bl64_msg_show 'ERROR' "$_BL64_MSG_TXT_ERROR" "$message" >&2
 }
 
 #######################################
@@ -140,7 +207,7 @@ function bl64_msg_show_error() {
 function bl64_msg_show_warning() {
   local message="$1"
 
-  _bl64_msg_show "$_BL64_MSG_TXT_WARNING" "$message" >&2
+  _bl64_msg_show 'WARNING' "$_BL64_MSG_TXT_WARNING" "$message" >&2
 }
 
 #######################################
@@ -160,7 +227,7 @@ function bl64_msg_show_info() {
 
   bl64_msg_verbose_app_enabled || return 0
 
-  _bl64_msg_show "$_BL64_MSG_TXT_INFO" "$message"
+  _bl64_msg_show 'INFO' "$_BL64_MSG_TXT_INFO" "$message"
 }
 
 #######################################
@@ -180,7 +247,7 @@ function bl64_msg_show_task() {
 
   bl64_msg_verbose_app_enabled || return 0
 
-  _bl64_msg_show "$_BL64_MSG_TXT_TASK" "$message"
+  _bl64_msg_show 'TASK' "$_BL64_MSG_TXT_TASK" "$message"
 }
 
 #######################################
@@ -200,7 +267,7 @@ function bl64_msg_show_lib_task() {
 
   bl64_msg_verbose_lib_enabled || return 0
 
-  _bl64_msg_show "$_BL64_MSG_TXT_TASK" "$message"
+  _bl64_msg_show 'LIBTASK' "$_BL64_MSG_TXT_TASK" "$message"
 }
 
 #######################################
@@ -218,7 +285,7 @@ function bl64_msg_show_lib_task() {
 function bl64_msg_show_debug() {
   local message="$1"
 
-  _bl64_msg_show "$_BL64_MSG_TXT_DEBUG" "$message" >&2
+  _bl64_msg_show 'DEBUG' "$_BL64_MSG_TXT_DEBUG" "$message" >&2
 }
 
 #######################################
@@ -258,7 +325,7 @@ function bl64_msg_show_batch_start() {
 
   bl64_msg_verbose_app_enabled || return 0
 
-  _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_START}"
+  _bl64_msg_show 'BATCH' "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_START}"
 }
 
 #######################################
@@ -281,8 +348,8 @@ function bl64_msg_show_batch_finish() {
   bl64_msg_verbose_app_enabled || return 0
 
   if ((status == 0)); then
-    _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_OK}"
+    _bl64_msg_show 'BATCHOK' "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_OK}"
   else
-    _bl64_msg_show "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: exit-status-${status}"
+    _bl64_msg_show 'BATCHERR' "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: exit-status-${status}"
   fi
 }
