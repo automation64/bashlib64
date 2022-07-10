@@ -59,7 +59,7 @@ function _bl64_msg_show_ansi() {
     ;;
   "$BL64_MSG_FORMAT_TIME")
     printf "[%b] %b: %s\n" \
-      "\e[${BL64_MSG_THEME[FMTTIME]}m$(printf '%(%d/%b/%Y-%H:%M:%S)T' '-1' )\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${BL64_MSG_THEME[FMTTIME]}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1' )\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${BL64_MSG_THEME[${attribute}]}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
@@ -71,7 +71,7 @@ function _bl64_msg_show_ansi() {
     ;;
   "$BL64_MSG_FORMAT_FULL")
     printf "[%b] %b:%b | %b: %s\n" \
-      "\e[${BL64_MSG_THEME[FMTTIME]}m$(printf '%(%d/%b/%Y-%H:%M:%S)T' '-1' )\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${BL64_MSG_THEME[FMTTIME]}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1' )\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${BL64_MSG_THEME[FMTHOST]}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${BL64_MSG_THEME[FMTCALLER]}m${BL64_SCRIPT_NAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${BL64_MSG_THEME[${attribute}]}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
@@ -104,7 +104,7 @@ function _bl64_msg_show_ascii() {
       "$message"
     ;;
   "$BL64_MSG_FORMAT_TIME")
-    printf "[%(%d/%b/%Y-%H:%M:%S)T] %s: %s\n" \
+    printf "[%(%d/%b/%Y-%H:%M:%S-UTC%z)T] %s: %s\n" \
       '-1' \
       "${BL64_MSG_THEME[${attribute}]} $type" \
       "$message"
@@ -116,7 +116,7 @@ function _bl64_msg_show_ascii() {
       "$message"
     ;;
   "$BL64_MSG_FORMAT_FULL")
-    printf "[%(%d/%b/%Y-%H:%M:%S)T] %s:%s | %s: %s\n" \
+    printf "[%(%d/%b/%Y-%H:%M:%S-UTC%z)T] %s:%s | %s: %s\n" \
       '-1' \
       "$HOSTNAME" \
       "$BL64_SCRIPT_NAME" \
