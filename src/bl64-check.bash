@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 1.16.0
+# Version: 1.18.0
 #######################################
 
 #######################################
@@ -406,6 +406,28 @@ function bl64_check_overwrite() {
   fi
 
   return 0
+}
+
+#######################################
+# Raise error: invalid parameter
+#
+# * Use to raise an error when the calling function has verified that the parameter is not valid
+# * This is a generic enough message to capture most validation use cases
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_PARAMETER_INVALID
+#######################################
+function bl64_check_alert_parameter_invalid() {
+  bl64_dbg_lib_show_function "$@"
+  local parameter="${1:-}"
+
+  bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_INVALID} (${parameter:+${_BL64_CHECK_TXT_PARAMETER}: ${parameter}}${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+  return $BL64_LIB_ERROR_PARAMETER_INVALID
 }
 
 #######################################
