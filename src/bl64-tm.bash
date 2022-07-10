@@ -17,14 +17,14 @@
 # Returns:
 #   date exit status
 #######################################
-function bl64_time_show_timestamp() {
+function bl64_tm_create_timestamp() {
   "$BL64_OS_CMD_DATE" '+%d%m%Y%H%M%S'
 }
 
 #######################################
 # Get current date-time in file timestamp format
 #
-# * Format: DD:MM:YYYY-HH:MM:SS
+# * Format: DD:MM:YYYY-HH:MM:SS-TZ
 #
 # Arguments:
 #   None
@@ -34,6 +34,6 @@ function bl64_time_show_timestamp() {
 # Returns:
 #   date exit status
 #######################################
-function bl64_time_show_timestamp_file() {
-  "$BL64_OS_CMD_DATE" '+%d:%m:%Y-%H:%M:%S'
+function bl64_tm_create_timestamp_file() {
+  "$BL64_OS_CMD_DATE" '+%d:%m:%Y-%H:%M:%S-UTC%z'
 }
