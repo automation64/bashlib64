@@ -162,11 +162,12 @@ function bl64_check_path() {
 }
 
 #######################################
-# Check shell parameters
+# Check for mandatory shell function parameters
 #
-# * variable is defined
-# * parameter is not empty
-# * parameter is not using default value
+# * Check that:
+#   * variable is defined
+#   * parameter is not empty
+#   * parameter is not using default value
 #
 # Arguments:
 #   $1: parameter name
