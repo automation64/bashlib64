@@ -4,8 +4,13 @@
 # Version: 2.0.0
 #######################################
 
-function bl64_msg_verbose_app_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" ]]; }
-function bl64_msg_verbose_lib_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" ]]; }
+function bl64_msg_app_verbose_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
+function bl64_msg_lib_verbose_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
+
+function bl64_msg_all_disable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_NONE"; }
+function bl64_msg_all_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_ALL"; }
+function bl64_msg_lib_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_LIB"; }
+function bl64_msg_app_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_APP"; }
 
 #######################################
 # Display message helper
@@ -59,7 +64,7 @@ function _bl64_msg_show_ansi() {
     ;;
   "$BL64_MSG_FORMAT_TIME")
     printf "[%b] %b: %s\n" \
-      "\e[${BL64_MSG_THEME[FMTTIME]}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1' )\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${BL64_MSG_THEME[FMTTIME]}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${BL64_MSG_THEME[${attribute}]}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
@@ -71,7 +76,7 @@ function _bl64_msg_show_ansi() {
     ;;
   "$BL64_MSG_FORMAT_FULL")
     printf "[%b] %b:%b | %b: %s\n" \
-      "\e[${BL64_MSG_THEME[FMTTIME]}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1' )\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${BL64_MSG_THEME[FMTTIME]}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${BL64_MSG_THEME[FMTHOST]}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${BL64_MSG_THEME[FMTCALLER]}m${BL64_SCRIPT_NAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${BL64_MSG_THEME[${attribute}]}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
@@ -225,7 +230,7 @@ function bl64_msg_show_warning() {
 function bl64_msg_show_info() {
   local message="$1"
 
-  bl64_msg_verbose_app_enabled || return 0
+  bl64_msg_app_verbose_enabled || return 0
 
   _bl64_msg_show 'INFO' "$_BL64_MSG_TXT_INFO" "$message"
 }
@@ -245,7 +250,7 @@ function bl64_msg_show_info() {
 function bl64_msg_show_task() {
   local message="$1"
 
-  bl64_msg_verbose_app_enabled || return 0
+  bl64_msg_app_verbose_enabled || return 0
 
   _bl64_msg_show 'TASK' "$_BL64_MSG_TXT_TASK" "$message"
 }
@@ -265,7 +270,7 @@ function bl64_msg_show_task() {
 function bl64_msg_show_lib_task() {
   local message="$1"
 
-  bl64_msg_verbose_lib_enabled || return 0
+  bl64_msg_lib_verbose_enabled || return 0
 
   _bl64_msg_show 'LIBTASK' "$_BL64_MSG_TXT_TASK" "$message"
 }
@@ -303,7 +308,7 @@ function bl64_msg_show_debug() {
 function bl64_msg_show_text() {
   local message="$1"
 
-  bl64_msg_verbose_app_enabled || return 0
+  bl64_msg_app_verbose_enabled || return 0
 
   printf '%s\n' "$message"
 }
@@ -323,7 +328,7 @@ function bl64_msg_show_text() {
 function bl64_msg_show_batch_start() {
   local message="$1"
 
-  bl64_msg_verbose_app_enabled || return 0
+  bl64_msg_app_verbose_enabled || return 0
 
   _bl64_msg_show 'BATCH' "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_START}"
 }
@@ -345,7 +350,7 @@ function bl64_msg_show_batch_finish() {
   local status="$1"
   local message="${2-${BL64_LIB_DEFAULT}}"
 
-  bl64_msg_verbose_app_enabled || return 0
+  bl64_msg_app_verbose_enabled || return 0
 
   if ((status == 0)); then
     _bl64_msg_show 'BATCHOK' "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_OK}"

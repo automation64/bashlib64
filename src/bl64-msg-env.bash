@@ -15,6 +15,7 @@
 export BL64_MSG_VERBOSE_NONE='0'
 export BL64_MSG_VERBOSE_APP='1'
 export BL64_MSG_VERBOSE_LIB='2'
+export BL64_MSG_VERBOSE_ALL='3'
 
 #
 # Message output type
