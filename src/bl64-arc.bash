@@ -30,8 +30,8 @@ function bl64_arc_run_unzip() {
   # Ignore previous settings
   unset UNZIP
 
-  # shellcheck disable=SC2086
   bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
   "$BL64_ARC_CMD_UNZIP" \
     $verbosity \
     "$@"
@@ -57,8 +57,8 @@ function bl64_arc_run_tar() {
   bl64_check_command "$BL64_ARC_CMD_TAR" || return $?
   bl64_dbg_lib_command_enabled && debug="$BL64_ARC_SET_TAR_VERBOSE"
 
-  # shellcheck disable=SC2086
   bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
   "$BL64_ARC_CMD_TAR" \
     $debug \
     "$@"

@@ -44,6 +44,7 @@ export BL64_MSG_FORMAT="${BL64_MSG_FORMAT:-$BL64_MSG_FORMAT_FULL}"
 # Message Themes
 #
 
+# shellcheck disable=SC2034
 declare -g -A BL64_MSG_THEME_ASCII_STD=(
   [ERROR]='(!)'
   [WARNING]='(*)'
@@ -59,7 +60,7 @@ declare -g -A BL64_MSG_THEME_ASCII_STD=(
   [FMTTIME]=''
 )
 
-#  [ERROR]="$BL64_MSG_ANSI_FG_RED"
+# shellcheck disable=SC2034
 declare -g -A BL64_MSG_THEME_ANSI_STD=(
   [ERROR]='5;31'
   [WARNING]='35'
