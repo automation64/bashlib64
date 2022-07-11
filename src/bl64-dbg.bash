@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Show shell debugging information
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 function bl64_dbg_app_task_enabled { [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TASK" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]]; }

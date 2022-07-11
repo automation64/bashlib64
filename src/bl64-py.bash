@@ -185,7 +185,9 @@ function bl64_py_run_python() {
   unset PYTHONEXECUTABLE
   unset PYTHONWARNINGS
 
+  bl64_dbg_lib_trace_start
   "$BL64_PY_CMD_PYTHON3" "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################

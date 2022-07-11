@@ -149,11 +149,13 @@ function bl64_rxtx_run_curl() {
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_RXTX_CMD_CURL" \
     $BL64_RXTX_SET_CURL_SECURE \
     $verbose \
     "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -176,10 +178,12 @@ function bl64_rxtx_run_wget() {
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_RXTX_CMD_WGET" \
     $verbose \
     "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 function _bl64_rxtx_git_get_dir_root() {

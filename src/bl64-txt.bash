@@ -72,6 +72,8 @@ function bl64_txt_run_awk() {
   esac
   bl64_check_command "$awk_cmd" || return $?
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$awk_cmd" $awk_flags "$@"
+  bl64_dbg_lib_trace_stop
 }

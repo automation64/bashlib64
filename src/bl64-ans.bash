@@ -56,11 +56,13 @@ function bl64_ans_run_ansible() {
 
   unset ANSIBLE_CONFIG
   unset ANSIBLE_COLLECTIONS
-  bl64_dbg_lib_show_info "extra args: [${debug}]"
+
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ANS_CMD_ANSIBLE" \
     $debug \
     "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -88,11 +90,13 @@ function bl64_ans_run_ansible_galaxy() {
 
   unset ANSIBLE_CONFIG
   unset ANSIBLE_COLLECTIONS
-  bl64_dbg_lib_show_info "extra args: [${debug}]"
+
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ANS_CMD_ANSIBLE_GALAXY" \
     $debug \
     "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -121,9 +125,11 @@ function bl64_ans_run_ansible_playbook() {
 
   unset ANSIBLE_CONFIG
   unset ANSIBLE_COLLECTIONS
-  bl64_dbg_lib_show_info "extra args: [${debug}]"
+
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ANS_CMD_ANSIBLE_PLAYBOOK" \
     $debug \
     "$@"
+  bl64_dbg_lib_trace_stop
 }
