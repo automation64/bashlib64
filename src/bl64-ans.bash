@@ -33,7 +33,7 @@ function bl64_ans_collections_install() {
 #######################################
 # Command wrapper with verbose, debug and common options
 #
-# * Trust no one. Ignore user provided config and use default config
+# * Trust no one. Ignore inherited config and use explicit config
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -51,7 +51,7 @@ function bl64_ans_run_ansible() {
   bl64_check_module_setup "$BL64_ANS_MODULE" ||
     return $?
 
-  bl64_msg_verbose_lib_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
+  bl64_msg_lib_verbose_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
   bl64_dbg_lib_command_enabled && debug="$BL64_ANS_SET_DEBUG"
 
   unset ANSIBLE_CONFIG
@@ -84,7 +84,7 @@ function bl64_ans_run_ansible_galaxy() {
   bl64_check_module_setup "$BL64_ANS_MODULE" ||
     return $?
 
-  bl64_msg_verbose_lib_enabled && debug="$BL64_ANS_SET_VERBOSE"
+  bl64_msg_lib_verbose_enabled && debug="$BL64_ANS_SET_VERBOSE"
 
   unset ANSIBLE_CONFIG
   unset ANSIBLE_COLLECTIONS
@@ -116,7 +116,7 @@ function bl64_ans_run_ansible_playbook() {
   bl64_check_module_setup "$BL64_ANS_MODULE" ||
     return $?
 
-  bl64_msg_verbose_lib_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
+  bl64_msg_lib_verbose_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
   bl64_dbg_lib_command_enabled && debug="$BL64_ANS_SET_DEBUG"
 
   unset ANSIBLE_CONFIG

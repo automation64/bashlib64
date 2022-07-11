@@ -24,7 +24,7 @@ function bl64_arc_run_unzip() {
 
   bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
-  bl64_msg_verbose_lib_enabled && verbosity='-q'
+  bl64_msg_lib_verbose_enabled && verbosity='-q'
   bl64_dbg_lib_command_enabled && verbosity=' '
 
   # Ignore previous settings

@@ -160,7 +160,7 @@ function bl64_py_pip_usr_install() {
 #######################################
 # Python wrapper with verbose, debug and common options
 #
-# * Trust no one. Ignore user provided config and use default
+# * Trust no one. Ignore inherited config and use explicit
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -207,7 +207,7 @@ function bl64_py_run_pip() {
   local temporal=' '
   local cache=' '
 
-  bl64_msg_verbose_lib_enabled && debug=' '
+  bl64_msg_lib_verbose_enabled && debug=' '
   bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
   [[ -n "$BL64_FS_PATH_TEMPORAL" ]] && temporal="TMPDIR=${BL64_FS_PATH_TEMPORAL}"
