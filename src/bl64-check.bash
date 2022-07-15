@@ -462,6 +462,7 @@ function bl64_check_alert_unsupported() {
 # Returns:
 #   BL64_LIB_ERROR_TASK_UNDEFINED
 #######################################
+# shellcheck disable=SC2119,SC2120
 function bl64_check_alert_undefined() {
   bl64_dbg_lib_show_function "$@"
   local target="${1:-}"
