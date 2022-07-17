@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 1.16.0
+# Version: 1.18.0
 #######################################
 
 #######################################
@@ -162,11 +162,12 @@ function bl64_check_path() {
 }
 
 #######################################
-# Check shell parameters
+# Check for mandatory shell function parameters
 #
-# * variable is defined
-# * parameter is not empty
-# * parameter is not using default value
+# * Check that:
+#   * variable is defined
+#   * parameter is not empty
+#   * parameter is not using default value
 #
 # Arguments:
 #   $1: parameter name
@@ -409,6 +410,28 @@ function bl64_check_overwrite() {
 }
 
 #######################################
+# Raise error: invalid parameter
+#
+# * Use to raise an error when the calling function has verified that the parameter is not valid
+# * This is a generic enough message to capture most validation use cases
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_PARAMETER_INVALID
+#######################################
+function bl64_check_alert_parameter_invalid() {
+  bl64_dbg_lib_show_function "$@"
+  local parameter="${1:-}"
+
+  bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_INVALID} (${parameter:+${_BL64_CHECK_TXT_PARAMETER}: ${parameter}}${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+  return $BL64_LIB_ERROR_PARAMETER_INVALID
+}
+
+#######################################
 # Raise unsupported platform error
 #
 # Arguments:
@@ -439,6 +462,7 @@ function bl64_check_alert_unsupported() {
 # Returns:
 #   BL64_LIB_ERROR_TASK_UNDEFINED
 #######################################
+# shellcheck disable=SC2119,SC2120
 function bl64_check_alert_undefined() {
   bl64_dbg_lib_show_function "$@"
   local target="${1:-}"

@@ -14,4 +14,4 @@ export BL64_IAM_SET_USERADD_CREATE_HOME=''
 
 export BL64_IAM_ALIAS_USERADD=''
 
-declare _BL64_IAM_TXT_ADD_USER='create user account'
+export _BL64_IAM_TXT_ADD_USER='create user account'

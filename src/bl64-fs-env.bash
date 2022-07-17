@@ -54,4 +54,4 @@ export BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
 
 export BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
 
-declare _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
+export _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'

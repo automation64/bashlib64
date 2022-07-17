@@ -1,5 +1,5 @@
 #######################################
-# BashLib64 / Module / Globals / Interact with GCP CLI
+# BashLib64 / Module / Globals / Interact with GCP
 #
 # Version: 1.2.0
 #######################################

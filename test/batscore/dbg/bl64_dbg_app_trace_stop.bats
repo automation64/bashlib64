@@ -3,6 +3,7 @@ setup() {
 }
 
 function _test_bl64_dbg_app_trace_stop() {
+  true
   bl64_dbg_app_trace_stop
 }
 

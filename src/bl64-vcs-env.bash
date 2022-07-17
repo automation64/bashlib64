@@ -13,7 +13,7 @@ export BL64_VCS_ALIAS_GIT=''
 export BL64_VCS_SET_GIT_NO_PAGER=''
 export BL64_VCS_SET_GIT_QUIET=''
 
-declare _BL64_VCS_TXT_CLONE_REPO='clone single branch from GIT repository'
+export _BL64_VCS_TXT_CLONE_REPO='clone single branch from GIT repository'
 
 # External commands variables
 export GIT_TRACE

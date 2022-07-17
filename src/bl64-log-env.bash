@@ -18,8 +18,8 @@ export BL64_LOG_CATEGORY_WARNING='warning'
 export BL64_LOG_CATEGORY_ERROR='error'
 export BL64_LOG_CATEGORY_RECORD='record'
 
-declare _BL64_LOG_TXT_INVALID_TYPE='invalid log type. Please use any of BL64_LOG_TYPE_*'
-declare _BL64_LOG_TXT_INVALID_VERBOSE='invalid option for verbose. Please use 1 (enable) or 0 (disable)'
+export _BL64_LOG_TXT_INVALID_TYPE='invalid log type. Please use any of BL64_LOG_TYPE_*'
+export _BL64_LOG_TXT_INVALID_VERBOSE='invalid option for verbose. Please use 1 (enable) or 0 (disable)'
 
 # Module parameters
 export BL64_LOG_PATH=''

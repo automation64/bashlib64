@@ -250,9 +250,11 @@ function bl64_cnt_run_podman() {
   bl64_dbg_lib_command_enabled && verbose='debug'
   bl64_dbg_runtime_show_paths
 
+  bl64_dbg_lib_trace_start
   "$BL64_CNT_CMD_PODMAN" \
     --log-level "$verbose" \
     "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -285,10 +287,12 @@ function bl64_cnt_run_docker() {
   fi
   bl64_dbg_runtime_show_paths
 
+  bl64_dbg_lib_trace_start
   "$BL64_CNT_CMD_DOCKER" \
     --log-level "$verbose" \
     $debug \
     "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################

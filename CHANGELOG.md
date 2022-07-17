@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.4.0]
+
+### Added
+
+- txt
+  - new functions
+    - command runners (grep,sed,tr,envsubst,cut)
+    - replace shell environment variables on text
+- msg
+  - output format (ansi, ascii)
+  - theme support for ansi and ascii outputs
+  - verbosity control methods
+- dbg
+  - debug info control methods
+- new modules
+  - tf: Terraform support
+  - mdb: Mongodb support
+  - k8s: Kubernetes support
+  - hlm: Helm support
+  - aws: AWS support
+  - tm: Time data support
+
 ## [3.3.0]
 
 ### Added
@@ -548,7 +570,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/3.3.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/3.4.0...HEAD
+[3.4.0]: https://github.com/serdigital64/bashlib64/compare/3.3.0...3.4.0
 [3.3.0]: https://github.com/serdigital64/bashlib64/compare/3.2.0...3.3.0
 [3.2.0]: https://github.com/serdigital64/bashlib64/compare/3.1.0...3.2.0
 [3.1.0]: https://github.com/serdigital64/bashlib64/compare/3.0.0...3.1.0
