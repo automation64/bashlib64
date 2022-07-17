@@ -7,7 +7,7 @@
 #######################################
 # GIT CLI wrapper with verbose, debug and common options
 #
-# * Trust no one. Ignore user provided config and use default config
+# * Trust no one. Ignore inherited config and use explicit config
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -35,8 +35,10 @@ function bl64_vcs_run_git() {
   GIT_AUTHOR_EMAIL='nouser@nodomain'
   GIT_AUTHOR_NAME='bl64_vcs_run_git'
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_VCS_CMD_GIT" $debug $BL64_VCS_SET_GIT_NO_PAGER "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################

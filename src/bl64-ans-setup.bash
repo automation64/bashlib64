@@ -11,7 +11,7 @@
 # * Check for core commands, fail if not available
 #
 # Arguments:
-#   $1: (optional) Full path to the ansible bin path where ansible commands are (ansible, ansible-playbook, ansible-galaxy)
+#   $1: (optional) Full path where commands are
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -41,7 +41,7 @@ function bl64_ans_setup() {
 #######################################
 # Identify and normalize commands
 #
-# * If no values are providedprovied, try to detect commands looking for common paths
+# * If no values are provided, try to detect commands looking for common paths
 # * Commands are exported as variables with full path
 #
 # Arguments:
@@ -54,7 +54,7 @@ function bl64_ans_setup() {
 #######################################
 function bl64_ans_set_command() {
   bl64_dbg_lib_show_function
-  local ansible_bin="$1"
+  local ansible_bin="${1:-${BL64_LIB_DEFAULT}}"
 
   if [[ "$ansible_bin" == "$BL64_LIB_DEFAULT" ]]; then
     if [[ -n "$BL64_PY_VENV_PATH" && -x "${BL64_PY_VENV_PATH}/bin/ansible" ]]; then
@@ -101,6 +101,8 @@ function bl64_ans_set_command() {
 #   0: always ok
 #######################################
 function bl64_ans_set_options() {
+  bl64_dbg_lib_show_function
+
   BL64_ANS_SET_VERBOSE='-v'
   BL64_ANS_SET_DIFF='--diff'
   BL64_ANS_SET_DEBUG='-vvvvv'

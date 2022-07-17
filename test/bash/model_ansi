@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+
+. "$DEVBL_BUILD_BASHLIB64"
+
+#
+# Model ansi scape codes
+#
+
+bl64_msg_setup_output "$BL64_MSG_OUTPUT_ASCII"
+bl64_msg_show_error 'test'
+bl64_msg_show_warning 'test'
+bl64_msg_show_info 'test'
+bl64_msg_show_task 'test'
+bl64_msg_show_lib_task 'test'
+bl64_msg_show_debug 'test'
+bl64_msg_show_batch_start 'test'
+bl64_msg_show_batch_finish 0 'test'
+bl64_msg_show_batch_finish 1 'test'
+
+bl64_msg_setup_format "$BL64_MSG_FORMAT_PLAIN"
+bl64_msg_show_error 'test'
+bl64_msg_show_warning 'test'
+bl64_msg_show_info 'test'
+bl64_msg_show_task 'test'
+bl64_msg_show_lib_task 'test'
+bl64_msg_show_debug 'test'
+bl64_msg_show_batch_start 'test'
+bl64_msg_show_batch_finish 0 'test'
+bl64_msg_show_batch_finish 1 'test'
+
+bl64_msg_setup_format "$BL64_MSG_FORMAT_HOST"
+bl64_msg_show_error 'test'
+bl64_msg_show_warning 'test'
+bl64_msg_show_info 'test'
+bl64_msg_show_task 'test'
+bl64_msg_show_lib_task 'test'
+bl64_msg_show_debug 'test'
+bl64_msg_show_batch_start 'test'
+bl64_msg_show_batch_finish 0 'test'
+bl64_msg_show_batch_finish 1 'test'
+
+bl64_msg_setup_format "$BL64_MSG_FORMAT_TIME"
+bl64_msg_show_error 'test'
+bl64_msg_show_warning 'test'
+bl64_msg_show_info 'test'
+bl64_msg_show_task 'test'
+bl64_msg_show_lib_task 'test'
+bl64_msg_show_debug 'test'
+bl64_msg_show_batch_start 'test'
+bl64_msg_show_batch_finish 0 'test'
+bl64_msg_show_batch_finish 1 'test'
+
+bl64_msg_setup_format "$BL64_MSG_FORMAT_CALLER"
+bl64_msg_show_error 'test'
+bl64_msg_show_warning 'test'
+bl64_msg_show_info 'test'
+bl64_msg_show_task 'test'
+bl64_msg_show_lib_task 'test'
+bl64_msg_show_debug 'test'
+bl64_msg_show_batch_start 'test'
+bl64_msg_show_batch_finish 0 'test'
+bl64_msg_show_batch_finish 1 'test'
+
+bl64_msg_setup_output "$BL64_MSG_OUTPUT_ANSI"
+bl64_msg_show_error 'test'
+bl64_msg_show_warning 'test'
+bl64_msg_show_info 'test'
+bl64_msg_show_task 'test'
+bl64_msg_show_lib_task 'test'
+bl64_msg_show_debug 'test'
+bl64_msg_show_batch_start 'test'
+bl64_msg_show_batch_finish 0 'test'
+bl64_msg_show_batch_finish 1 'test'
+
+bl64_msg_setup_format "$BL64_MSG_FORMAT_PLAIN"
+bl64_msg_show_error 'test'
+bl64_msg_show_warning 'test'
+bl64_msg_show_info 'test'
+bl64_msg_show_task 'test'
+bl64_msg_show_lib_task 'test'
+bl64_msg_show_debug 'test'
+bl64_msg_show_batch_start 'test'
+bl64_msg_show_batch_finish 0 'test'
+bl64_msg_show_batch_finish 1 'test'
+
+bl64_msg_setup_format "$BL64_MSG_FORMAT_HOST"
+bl64_msg_show_error 'test'
+bl64_msg_show_warning 'test'
+bl64_msg_show_info 'test'
+bl64_msg_show_task 'test'
+bl64_msg_show_lib_task 'test'
+bl64_msg_show_debug 'test'
+bl64_msg_show_batch_start 'test'
+bl64_msg_show_batch_finish 0 'test'
+bl64_msg_show_batch_finish 1 'test'
+
+bl64_msg_setup_format "$BL64_MSG_FORMAT_TIME"
+bl64_msg_show_error 'test'
+bl64_msg_show_warning 'test'
+bl64_msg_show_info 'test'
+bl64_msg_show_task 'test'
+bl64_msg_show_lib_task 'test'
+bl64_msg_show_debug 'test'
+bl64_msg_show_batch_start 'test'
+bl64_msg_show_batch_finish 0 'test'
+bl64_msg_show_batch_finish 1 'test'
+
+bl64_msg_setup_format "$BL64_MSG_FORMAT_CALLER"
+bl64_msg_show_error 'test'
+bl64_msg_show_warning 'test'
+bl64_msg_show_info 'test'
+bl64_msg_show_task 'test'
+bl64_msg_show_lib_task 'test'
+bl64_msg_show_debug 'test'
+bl64_msg_show_batch_start 'test'
+bl64_msg_show_batch_finish 0 'test'
+bl64_msg_show_batch_finish 1 'test'

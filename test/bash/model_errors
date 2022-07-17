@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. "$DEVBL_TEST_BASHLIB64"
+. "$DEVBL_BUILD_BASHLIB64"
 
 #
 # Model error messages

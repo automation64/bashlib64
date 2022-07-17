@@ -127,10 +127,14 @@ function bl64_rbac_run_command() {
 
   if [[ "$UID" == "$target" ]]; then
     bl64_dbg_lib_show_info "run command directly (user: $user)"
+    bl64_dbg_lib_trace_start
     "$@"
+    bl64_dbg_lib_trace_stop
   else
     bl64_dbg_lib_show_info "run command with sudo (user: $user)"
+    bl64_dbg_lib_trace_start
     $BL64_RBAC_ALIAS_SUDO_ENV -u "$user" "$@"
+    bl64_dbg_lib_trace_stop
   fi
 }
 
@@ -171,6 +175,8 @@ function bl64_rbac_run_bash_function() {
     . "$library" &&
       "$@"
   else
+    bl64_dbg_lib_trace_start
     $BL64_RBAC_ALIAS_SUDO_ENV -u "$user" "$BL64_OS_CMD_BASH" -c ". ${library}; ${*}"
+    bl64_dbg_lib_trace_stop
   fi
 }

@@ -13,8 +13,8 @@ export BL64_ARC_SET_TAR_VERBOSE=''
 
 export BL64_ARC_SET_UNZIP_OVERWRITE=''
 
-declare _BL64_ARC_TXT_OPEN_ZIP='open zip archive'
-declare _BL64_ARC_TXT_OPEN_TAR='open tar archive'
+export _BL64_ARC_TXT_OPEN_ZIP='open zip archive'
+export _BL64_ARC_TXT_OPEN_TAR='open tar archive'
 
 # External commands variables
 export UNZIP

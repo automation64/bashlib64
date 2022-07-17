@@ -16,4 +16,4 @@ export BL64_XSV_FS_AT='@'
 export BL64_XSV_FS_DOLLAR='$'
 export BL64_XSV_FS_SLASH='/'
 
-declare _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
+export _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'

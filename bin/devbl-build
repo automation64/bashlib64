@@ -35,8 +35,9 @@ function devbl_build_test() {
   for file in $DEVBL_MODULES; do
     [[ ! -f "bl64-${file}-env.bash" ]] && continue
     bl64_msg_show_task "adding module ${file} environment"
-    { "$BL64_OS_CMD_CAT" "bl64-${file}-env.bash" && bl64_fmt_separator_line; } >>"$DEVBL_BUILD_BASHLIB64"
-  done || return 1
+    { "$BL64_OS_CMD_CAT" "bl64-${file}-env.bash" && bl64_fmt_separator_line; } >>"$DEVBL_BUILD_BASHLIB64" ||
+      return $?
+  done
 
   # shellcheck disable=SC2119
   for file in $DEVBL_MODULES; do
@@ -44,8 +45,9 @@ function devbl_build_test() {
     {
       [[ -f "bl64-${file}-setup.bash" ]] && "$BL64_OS_CMD_CAT" "bl64-${file}-setup.bash" && bl64_fmt_separator_line
       "$BL64_OS_CMD_CAT" "bl64-${file}.bash" && bl64_fmt_separator_line
-    } >>"$DEVBL_BUILD_BASHLIB64"
-  done || return 1
+    } >>"$DEVBL_BUILD_BASHLIB64" ||
+      return $?
+  done
 
   bl64_msg_show_task 'adding core'
   # shellcheck disable=SC2119

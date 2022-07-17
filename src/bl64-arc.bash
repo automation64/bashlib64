@@ -24,16 +24,18 @@ function bl64_arc_run_unzip() {
 
   bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
-  bl64_msg_verbose_lib_enabled && verbosity='-q'
+  bl64_msg_lib_verbose_enabled && verbosity='-q'
   bl64_dbg_lib_command_enabled && verbosity=' '
 
   # Ignore previous settings
   unset UNZIP
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ARC_CMD_UNZIP" \
     $verbosity \
     "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -55,10 +57,12 @@ function bl64_arc_run_tar() {
   bl64_check_command "$BL64_ARC_CMD_TAR" || return $?
   bl64_dbg_lib_command_enabled && debug="$BL64_ARC_SET_TAR_VERBOSE"
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ARC_CMD_TAR" \
     $debug \
     "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################

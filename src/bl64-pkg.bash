@@ -155,7 +155,7 @@ function bl64_pkg_cleanup() {
 #######################################
 # Command wrapper with verbose, debug and common options
 #
-# * Trust no one. Ignore user provided config and use default config
+# * Trust no one. Ignore inherited config and use explicit config
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -179,14 +179,16 @@ function bl64_pkg_run_dnf() {
     verbose="$BL64_PKG_SET_QUIET"
   fi
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_PKG_CMD_DNF" $verbose "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
 # Command wrapper with verbose, debug and common options
 #
-# * Trust no one. Ignore user provided config and use default config
+# * Trust no one. Ignore inherited config and use explicit config
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -210,14 +212,16 @@ function bl64_pkg_run_yum() {
     verbose="$BL64_PKG_SET_QUIET"
   fi
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_PKG_CMD_YUM" $verbose "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
 # Command wrapper with verbose, debug and common options
 #
-# * Trust no one. Ignore user provided config and use default config
+# * Trust no one. Ignore inherited config and use explicit config
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -246,14 +250,16 @@ function bl64_pkg_run_apt() {
   # Avoid interactive questions
   DEBIAN_FRONTEND="noninteractive"
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_PKG_CMD_APT" $verbose "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
 # Command wrapper with verbose, debug and common options
 #
-# * Trust no one. Ignore user provided config and use default config
+# * Trust no one. Ignore inherited config and use explicit config
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -277,14 +283,16 @@ function bl64_pkg_run_apk() {
     verbose="$BL64_PKG_SET_QUIET"
   fi
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_PKG_CMD_APK" $verbose "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
 # Command wrapper with verbose, debug and common options
 #
-# * Trust no one. Ignore user provided config and use default config
+# * Trust no one. Ignore inherited config and use explicit config
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -308,6 +316,8 @@ function bl64_pkg_run_brew() {
     verbose="$BL64_PKG_SET_QUIET"
   fi
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_PKG_CMD_BRW" $verbose "$@"
+  bl64_dbg_lib_trace_stop
 }

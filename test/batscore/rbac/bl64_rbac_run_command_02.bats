@@ -3,14 +3,15 @@ setup() {
 
 }
 
-@test "bl64_rbac_run_command: run ok" {
+@test "bl64_rbac_run_command: run with exit status ok" {
   [[ ! -f '/run/.containerenv' ]] && skip 'test-case for container mode'
   run bl64_rbac_run_command 'root' "$BL64_OS_CMD_TRUE"
   assert_success
 }
 
-@test "bl64_rbac_run_command: run error" {
+@test "bl64_rbac_run_command: run with exit status error" {
   [[ ! -f '/run/.containerenv' ]] && skip 'test-case for container mode'
+
   run bl64_rbac_run_command 'root' "$BL64_OS_CMD_FALSE"
   assert_failure
 }

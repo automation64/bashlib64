@@ -1,14 +1,14 @@
 #######################################
-# BashLib64 / Module / Setup / Interact with GCP CLI
+# BashLib64 / Module / Setup / Interact with GCP
 #
-# Version: 1.2.0
+# Version: 1.2.1
 #######################################
 
 #######################################
 # Setup the bashlib64 module
 #
 # Arguments:
-#   $1: (optional) Full path to the bin path where gcloud commands are
+#   $1: (optional) Full path where commands are
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -26,8 +26,9 @@ function bl64_gcp_setup() {
       return $?
   fi
 
-  bl64_gcp_set_command "$BL64_GCP_CMD_GCLOUD" &&
+  bl64_gcp_set_command "$gcloud_bin" &&
     bl64_gcp_set_options &&
+    bl64_check_command "$BL64_GCP_CMD_GCLOUD" &&
     BL64_GCP_MODULE="$BL64_LIB_VAR_ON"
 
 }
@@ -35,7 +36,7 @@ function bl64_gcp_setup() {
 #######################################
 # Identify and normalize commands
 #
-# * If no values are providedprovied, try to detect commands looking for common paths
+# * If no values are provided, try to detect commands looking for common paths
 # * Commands are exported as variables with full path
 #
 # Arguments:
@@ -48,9 +49,9 @@ function bl64_gcp_setup() {
 #######################################
 function bl64_gcp_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local gcloud_bin="$1"
+  local gcloud_bin="${1:-${BL64_LIB_DEFAULT}}"
 
-  if [[ "$gcloud_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$gcloud_bin" == "$BL64_LIB_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/gcloud' ]]; then
       gcloud_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/gcloud' ]]; then
@@ -61,7 +62,7 @@ function bl64_gcp_set_command() {
       gcloud_bin='/usr/bin'
     fi
   else
-    [[ ! -x "${gcloud_bin}/ansible" ]] && gcloud_bin="$BL64_LIB_DEFAULT"
+    [[ ! -x "${gcloud_bin}/gcloud" ]] && gcloud_bin="$BL64_LIB_DEFAULT"
   fi
 
   if [[ "$gcloud_bin" != "$BL64_LIB_DEFAULT" ]]; then
@@ -83,6 +84,8 @@ function bl64_gcp_set_command() {
 #   0: always ok
 #######################################
 function bl64_gcp_set_options() {
+  bl64_dbg_lib_show_function
+
   BL64_GCP_SET_FORMAT_YAML='--format yaml'
   BL64_GCP_SET_FORMAT_TEXT='--format text'
   BL64_GCP_SET_FORMAT_JSON='--format json'

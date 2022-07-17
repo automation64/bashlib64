@@ -10,4 +10,4 @@ export BL64_CNT_MODULE="$BL64_LIB_VAR_OFF"
 export BL64_CNT_CMD_PODMAN=''
 export BL64_CNT_CMD_DOCKER=''
 
-declare _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
+export _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
