@@ -1,0 +1,3 @@
+# Test file for replacing shell variables
+
+Simple replacement: $_SAMPLES_ENVSUBST_01

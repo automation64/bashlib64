@@ -1,7 +1,7 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
-  bl64_msg_setup "$BL64_MSG_FORMAT_FULL"
+  bl64_msg_setup_format "$BL64_MSG_FORMAT_FULL"
 }
 
 @test "bl64_msg_show_batch_finish: ok" {

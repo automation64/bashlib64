@@ -1,6 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  bl64_gcp_setup
+  bl64_gcp_setup || skip
 }
 
 @test "bl64_gcp_login_sa: no args" {
