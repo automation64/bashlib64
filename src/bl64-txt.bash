@@ -117,6 +117,7 @@ function bl64_txt_run_awk() {
 # Returns:
 #   command exit status
 #######################################
+# shellcheck disable=SC2120
 function bl64_txt_run_envsubst() {
   bl64_dbg_lib_show_function "$@"
 
