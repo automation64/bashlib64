@@ -5,7 +5,7 @@
 #######################################
 
 #######################################
-# GCloud wrapper with verbose, debug and common options
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -32,12 +32,13 @@ function bl64_gcp_run_gcloud() {
 
   [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_LIB_VAR_TRUE" ]] && config="--configuration $BL64_GCP_CONFIGURATION_NAME"
 
-  bl64_dbg_lib_show_info "extra args: [${debug} ${config}]"
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_GCP_CMD_GCLOUD" \
     $debug \
     $config \
     "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
