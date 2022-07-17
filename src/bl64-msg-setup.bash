@@ -40,7 +40,7 @@ function bl64_msg_setup_format() {
 # Set message display theme
 #
 # Arguments:
-#   $1: theme name. One of BL64_MSG_THEME_*
+#   $1: theme name. One of BL64_MSG_THEME_* (variable name, not value)
 # Outputs:
 #   STDOUT: None
 #   STDERR: parameter error
@@ -85,11 +85,11 @@ function bl64_msg_setup_output() {
   case "$output" in
   "$BL64_MSG_OUTPUT_ASCII")
     BL64_MSG_OUTPUT="$output"
-    declare -g -n BL64_MSG_THEME='BL64_MSG_THEME_ASCII_STD'
+    BL64_MSG_THEME='BL64_MSG_THEME_ASCII_STD'
     ;;
   "$BL64_MSG_OUTPUT_ANSI")
     BL64_MSG_OUTPUT="$output"
-    declare -g -n BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD'
+    BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD'
     ;;
   *)
     bl64_check_alert_parameter_invalid 'output_type'

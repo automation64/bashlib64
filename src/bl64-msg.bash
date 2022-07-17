@@ -47,39 +47,44 @@ function _bl64_msg_show_ansi() {
   local attribute="${1:-}"
   local type="${2:-}"
   local message="${3:-}"
+  local style=''
+  local style_fmttime="${BL64_MSG_THEME}_FMTTIME"
+  local style_fmthost="${BL64_MSG_THEME}_FMTHOST"
+  local style_fmtcaller="${BL64_MSG_THEME}_FMTCALLER"
 
   [[ -n "$attribute" && -n "$type" && -n "$message" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
+  style="${BL64_MSG_THEME}_${attribute}"
 
   case "$BL64_MSG_FORMAT" in
   "$BL64_MSG_FORMAT_PLAIN")
     printf "%b: %s\n" \
-      "\e[${BL64_MSG_THEME[${attribute}]}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_HOST")
     printf "[%b] %b: %s\n" \
-      "\e[${BL64_MSG_THEME[FMTHOST]}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${BL64_MSG_THEME[${attribute}]}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_TIME")
     printf "[%b] %b: %s\n" \
-      "\e[${BL64_MSG_THEME[FMTTIME]}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${BL64_MSG_THEME[${attribute}]}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmttime}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_CALLER")
     printf "[%b] %b: %s\n" \
-      "\e[${BL64_MSG_THEME[FMTCALLER]}m${BL64_SCRIPT_NAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${BL64_MSG_THEME[${attribute}]}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmtcaller}m${BL64_SCRIPT_NAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_FULL")
     printf "[%b] %b:%b | %b: %s\n" \
-      "\e[${BL64_MSG_THEME[FMTTIME]}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${BL64_MSG_THEME[FMTHOST]}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${BL64_MSG_THEME[FMTCALLER]}m${BL64_SCRIPT_NAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${BL64_MSG_THEME[${attribute}]}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmttime}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmtcaller}m${BL64_SCRIPT_NAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
   *)
@@ -93,31 +98,36 @@ function _bl64_msg_show_ascii() {
   local attribute="${1:-}"
   local type="${2:-}"
   local message="${3:-}"
+  local style=''
+  local style_fmttime="${BL64_MSG_THEME}_FMTTIME"
+  local style_fmthost="${BL64_MSG_THEME}_FMTHOST"
+  local style_fmtcaller="${BL64_MSG_THEME}_FMTCALLER"
 
   [[ -n "$attribute" && -n "$type" && -n "$message" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
+  style="${BL64_MSG_THEME}_${attribute}"
 
   case "$BL64_MSG_FORMAT" in
   "$BL64_MSG_FORMAT_PLAIN")
     printf "%s: %s\n" \
-      "${BL64_MSG_THEME[${attribute}]} $type" \
+      "${!style} $type" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_HOST")
     printf "[%s] %s: %s\n" \
       "${HOSTNAME}" \
-      "${BL64_MSG_THEME[${attribute}]} $type" \
+      "${!style} $type" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_TIME")
     printf "[%(%d/%b/%Y-%H:%M:%S-UTC%z)T] %s: %s\n" \
       '-1' \
-      "${BL64_MSG_THEME[${attribute}]} $type" \
+      "${!style} $type" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_CALLER")
     printf "[%s] %s: %s\n" \
       "$BL64_SCRIPT_NAME" \
-      "${BL64_MSG_THEME[${attribute}]} $type" \
+      "${!style} $type" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_FULL")
@@ -125,7 +135,7 @@ function _bl64_msg_show_ascii() {
       '-1' \
       "$HOSTNAME" \
       "$BL64_SCRIPT_NAME" \
-      "${BL64_MSG_THEME[${attribute}]} $type" \
+      "${!style} $type" \
       "$message"
     ;;
   *)
