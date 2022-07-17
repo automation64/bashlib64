@@ -54,7 +54,7 @@ function bl64_ans_setup() {
 #######################################
 function bl64_ans_set_command() {
   bl64_dbg_lib_show_function
-  local ansible_bin="$1"
+  local ansible_bin="${1:-${BL64_LIB_DEFAULT}}"
 
   if [[ "$ansible_bin" == "$BL64_LIB_DEFAULT" ]]; then
     if [[ -n "$BL64_PY_VENV_PATH" && -x "${BL64_PY_VENV_PATH}/bin/ansible" ]]; then
@@ -101,6 +101,8 @@ function bl64_ans_set_command() {
 #   0: always ok
 #######################################
 function bl64_ans_set_options() {
+  bl64_dbg_lib_show_function
+
   BL64_ANS_SET_VERBOSE='-v'
   BL64_ANS_SET_DIFF='--diff'
   BL64_ANS_SET_DEBUG='-vvvvv'
