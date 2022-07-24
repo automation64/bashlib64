@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with Ansible CLI
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 # Optional module. Not enabled by default
