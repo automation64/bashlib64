@@ -1,13 +1,14 @@
 #######################################
 # BashLib64 / Module / Globals / Manipulate CSV like text files
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 # Field separators
 export BL64_XSV_FS='_@64@_'       # Custom
 export BL64_XSV_FS_SPACE=' '
-export BL64_XSV_FS_TAB='	'
+export BL64_XSV_FS_NEWLINE=$'\n'
+export BL64_XSV_FS_TAB=$'\t'
 export BL64_XSV_FS_COLON=':'
 export BL64_XSV_FS_SEMICOLON=';'
 export BL64_XSV_FS_COMMA=','
