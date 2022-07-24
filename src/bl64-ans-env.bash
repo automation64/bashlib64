@@ -17,7 +17,3 @@ export BL64_ANS_PATH_USR_COLLECTIONS=''
 export BL64_ANS_SET_VERBOSE=''
 export BL64_ANS_SET_DIFF=''
 export BL64_ANS_SET_DEBUG=''
-
-# External commands variables
-export ANSIBLE_CONFIG
-export ANSIBLE_COLLECTIONS

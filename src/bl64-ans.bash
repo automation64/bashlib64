@@ -17,8 +17,9 @@
 #######################################
 function bl64_ans_collections_install() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local collection=''
+
+  bl64_check_parameters_none "$#" || return $?
 
   for collection in "$@"; do
     bl64_ans_run_ansible_galaxy \
@@ -45,17 +46,16 @@ function bl64_ans_collections_install() {
 #######################################
 function bl64_ans_run_ansible() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local debug=' '
 
-  bl64_check_module_setup "$BL64_ANS_MODULE" ||
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module_setup "$BL64_ANS_MODULE" ||
     return $?
 
   bl64_msg_lib_verbose_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
   bl64_dbg_lib_command_enabled && debug="$BL64_ANS_SET_DEBUG"
 
-  unset ANSIBLE_CONFIG
-  unset ANSIBLE_COLLECTIONS
+  bl64_ans_blank_ansible
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -80,16 +80,15 @@ function bl64_ans_run_ansible() {
 #######################################
 function bl64_ans_run_ansible_galaxy() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local debug=' '
 
-  bl64_check_module_setup "$BL64_ANS_MODULE" ||
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module_setup "$BL64_ANS_MODULE" ||
     return $?
 
   bl64_msg_lib_verbose_enabled && debug="$BL64_ANS_SET_VERBOSE"
 
-  unset ANSIBLE_CONFIG
-  unset ANSIBLE_COLLECTIONS
+  bl64_ans_blank_ansible
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -114,17 +113,16 @@ function bl64_ans_run_ansible_galaxy() {
 #######################################
 function bl64_ans_run_ansible_playbook() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local debug=' '
 
-  bl64_check_module_setup "$BL64_ANS_MODULE" ||
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module_setup "$BL64_ANS_MODULE" ||
     return $?
 
   bl64_msg_lib_verbose_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
   bl64_dbg_lib_command_enabled && debug="$BL64_ANS_SET_DEBUG"
 
-  unset ANSIBLE_CONFIG
-  unset ANSIBLE_COLLECTIONS
+  bl64_ans_blank_ansible
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -132,4 +130,27 @@ function bl64_ans_run_ansible_playbook() {
     $debug \
     "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_ans_blank_ansible() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited ANSIBLE_* shell variables'
+  bl64_dbg_lib_trace_start
+  unset ANSIBLE_CONFIG
+  unset ANSIBLE_COLLECTIONS
+  bl64_dbg_lib_trace_stop
+
+  return 0
 }
