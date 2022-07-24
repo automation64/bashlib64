@@ -88,11 +88,8 @@ fi
 # Set default umask
 bl64_fs_set_umask "$BL64_LIB_UMASK" || return $?
 
-# Create session ID for the current script
-BL64_SCRIPT_SID="${BASHPID}${RANDOM}"
-
-BL64_SCRIPT_NAME="$(bl64_bsh_script_get_name)"
-BL64_SCRIPT_PATH="$(bl64_bsh_script_get_path)"
+# Set script identity
+bl64_bsh_script_set_identity
 
 # Enable command mode: the library can be used as a stand-alone script to run embeded functions
 if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
