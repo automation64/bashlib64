@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manipulate CSV like text files
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -23,7 +23,7 @@ function bl64_xsv_dump() {
   bl64_check_parameter 'source' &&
     bl64_check_file "$source" "$_BL64_XSV_TXT_SOURCE_NOT_FOUND" || return $?
 
-  "$BL64_TXT_CMD_GREP" -v -E '^#.*$|^$' "$source"
+  "$BL64_TXT_CMD_GREP" "$BL64_TXT_SET_GREP_INVERT" "$BL64_TXT_SET_GREP_ERE" '^#.*$|^$' "$source"
 
 }
 

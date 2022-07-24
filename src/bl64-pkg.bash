@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage native OS packages
 #
-# Version: 1.12.0
+# Version: 1.13.0
 #######################################
 
 #######################################
@@ -239,21 +239,47 @@ function bl64_pkg_run_apt() {
     bl64_check_privilege_root ||
     return $?
 
+  bl64_pkg_blank_apt
+
   if bl64_dbg_lib_command_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
-    DEBCONF_NOWARNINGS='yes'
-    DEBCONF_TERSE='yes'
+    export DEBCONF_NOWARNINGS='yes'
+    export DEBCONF_TERSE='yes'
     verbose="$BL64_PKG_SET_QUIET"
   fi
 
   # Avoid interactive questions
-  DEBIAN_FRONTEND="noninteractive"
+  export DEBIAN_FRONTEND="noninteractive"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_PKG_CMD_APT" $verbose "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_pkg_blank_apt() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited DEB* shell variables'
+  bl64_dbg_lib_trace_start
+  unset DEBIAN_FRONTEND
+  unset DEBCONF_TERSE
+  unset DEBCONF_NOWARNINGS
+  bl64_dbg_lib_trace_stop
+
+  return 0
 }
 
 #######################################

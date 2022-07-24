@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with Terraform
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -23,17 +23,3 @@ export BL64_TF_SET_LOG_INFO=''
 export BL64_TF_SET_LOG_WARN=''
 export BL64_TF_SET_LOG_ERROR=''
 export BL64_TF_SET_LOG_OFF=''
-
-# Variables for external commands
-export TF_LOG
-export TF_LOG_PATH
-export TF_CLI_CONFIG_FILE
-export TF_LOG
-export TF_LOG_PATH
-export TF_IN_AUTOMATION
-export TF_INPUT
-export TF_VAR_name
-export TF_DATA_DIR
-export TF_PLUGIN_CACHE_DIR
-export TF_REGISTRY_DISCOVERY_RETRY
-export TF_REGISTRY_CLIENT_TIMEOUT

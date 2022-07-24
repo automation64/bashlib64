@@ -19,16 +19,15 @@
 #######################################
 function bl64_arc_run_unzip() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbosity='-qq'
 
-  bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
+  bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
   bl64_msg_lib_verbose_enabled && verbosity='-q'
   bl64_dbg_lib_command_enabled && verbosity=' '
 
-  # Ignore previous settings
-  unset UNZIP
+  bl64_arc_blank_unzip
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -36,6 +35,28 @@ function bl64_arc_run_unzip() {
     $verbosity \
     "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_arc_blank_unzip() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited UNZIP* shell variables'
+  bl64_dbg_lib_trace_start
+  unset UNZIP
+  bl64_dbg_lib_trace_stop
+
+  return 0
 }
 
 #######################################

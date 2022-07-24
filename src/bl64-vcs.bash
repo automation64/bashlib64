@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage Version Control System
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 #######################################
@@ -19,26 +19,57 @@
 #######################################
 function bl64_vcs_run_git() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local debug="$BL64_VCS_SET_GIT_QUIET"
 
-  bl64_check_command "$BL64_VCS_CMD_GIT" || return $?
+  bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_VCS_CMD_GIT" || return $?
+
+  bl64_vcs_blank_git
+
   bl64_dbg_lib_show_info "current path: $(pwd)"
   if bl64_dbg_lib_command_enabled; then
     debug=''
-    GIT_TRACE='2'
+    export GIT_TRACE='2'
   else
-    GIT_TRACE='0'
+    export GIT_TRACE='0'
   fi
 
-  GIT_CONFIG_NOSYSTEM='0'
-  GIT_AUTHOR_EMAIL='nouser@nodomain'
-  GIT_AUTHOR_NAME='bl64_vcs_run_git'
+  export GIT_CONFIG_NOSYSTEM='0'
+  export GIT_AUTHOR_EMAIL='nouser@nodomain'
+  export GIT_AUTHOR_NAME='bl64_vcs_run_git'
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_VCS_CMD_GIT" $debug $BL64_VCS_SET_GIT_NO_PAGER "$@"
+  "$BL64_VCS_CMD_GIT" \
+    $debug \
+    $BL64_VCS_SET_GIT_NO_PAGER \
+    "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_vcs_blank_git() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited GIT_* shell variables'
+  bl64_dbg_lib_trace_start
+  unset GIT_TRACE
+  unset GIT_CONFIG_NOSYSTEM
+  unset GIT_AUTHOR_EMAIL
+  unset GIT_AUTHOR_NAME
+  bl64_dbg_lib_trace_stop
+
+  return 0
 }
 
 #######################################

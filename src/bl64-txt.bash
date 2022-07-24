@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manipulate text files content
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -48,7 +48,7 @@ function bl64_txt_search_line() {
   local source="${1:--}"
   local line="${2:-}"
 
-  "$BL64_TXT_CMD_GREP" -E "^${line}$" "$source" >/dev/null
+  "$BL64_TXT_CMD_GREP" "$BL64_TXT_SET_GREP_ERE" "^${line}$" "$source" >/dev/null
 }
 
 #######################################
