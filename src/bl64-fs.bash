@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 2.1.0
+# Version: 2.2.0
 #######################################
 
 #######################################
@@ -234,8 +234,10 @@ function bl64_fs_run_chown() {
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHOWN_VERBOSE"
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_FS_CMD_CHOWN" $verbose "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -256,8 +258,10 @@ function bl64_fs_run_chmod() {
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_FS_CMD_CHMOD" $verbose "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -349,8 +353,10 @@ function bl64_fs_run_mkdir() {
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_FS_CMD_MKDIR" $verbose "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -388,8 +394,10 @@ function bl64_fs_run_mv() {
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MV_VERBOSE"
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_FS_CMD_MV" $verbose "$BL64_FS_SET_MV_FORCE" "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -532,11 +540,13 @@ function bl64_fs_cleanup_full() {
 #######################################
 function bl64_fs_run_find() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
 
+  bl64_check_parameters_none "$#" &&
   bl64_check_command "$BL64_FS_CMD_FIND" || return $?
 
+  bl64_dbg_lib_trace_start
   "$BL64_FS_CMD_FIND" "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -547,6 +557,7 @@ function bl64_fs_run_find() {
 # Arguments:
 #   $1: search path
 #   $2: search pattern. Format: find -name options
+#   $3: search content in text files
 # Outputs:
 #   STDOUT: file list. One path per line
 #   STDERR: command stderr
@@ -556,17 +567,35 @@ function bl64_fs_run_find() {
 function bl64_fs_find_files() {
   bl64_dbg_lib_show_function "$@"
   local path="${1:-.}"
-  local pattern="${2:-}"
+  local pattern="${2:-${BL64_LIB_DEFAULT}}"
+  local content="${3:-${BL64_LIB_DEFAULT}}"
 
   bl64_check_command "$BL64_FS_CMD_FIND" &&
     bl64_check_directory "$path" || return $?
 
+  [[ "$pattern" == "$BL64_LIB_DEFAULT" ]] && pattern=''
+
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_FIND" \
-    "$path" \
-    -type f \
-    ${pattern:+-name "${pattern}"} \
-    -print
+  if [[ "$content" == "$BL64_LIB_DEFAULT" ]]; then
+    "$BL64_FS_CMD_FIND" \
+      "$path" \
+      -type 'f' \
+      ${pattern:+-name "${pattern}"} \
+      -print
+  else
+    "$BL64_FS_CMD_FIND" \
+      "$path" \
+      -type 'f' \
+      ${pattern:+-name "${pattern}"} \
+      -exec \
+        "$BL64_TXT_CMD_GREP" \
+        "$BL64_TXT_SET_GREP_SHOW_FILE_ONLY" \
+        "$BL64_TXT_SET_GREP_ERE" "$content" \
+        "{}" \;
+  fi
+  bl64_dbg_lib_trace_stop
+
 }
 
 #######################################
@@ -719,8 +748,10 @@ function bl64_fs_run_cp() {
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_FS_CMD_CP" $verbose "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -738,7 +769,9 @@ function bl64_fs_run_ls() {
   bl64_dbg_lib_show_function "$@"
   bl64_check_parameters_none "$#" || return $?
 
+  bl64_dbg_lib_trace_start
   "$BL64_FS_CMD_LS" "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -759,8 +792,10 @@ function bl64_fs_run_ln() {
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_LN_VERBOSE"
 
+  bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_FS_CMD_LN" $verbose "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################

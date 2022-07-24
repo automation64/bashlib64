@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -41,13 +41,3 @@ export _BL64_PY_TXT_PIP_INSTALL='install modules'
 export _BL64_PY_TXT_VENV_MISSING='requested python virtual environment is missing'
 export _BL64_PY_TXT_VENV_INVALID='requested python virtual environment is invalid (no pyvenv.cfg found)'
 export _BL64_PY_TXT_VENV_CREATE='create python virtual environment'
-
-# External commands variables
-export PYTHONHOME
-export PYTHONPATH
-export PYTHONSTARTUP
-export PYTHONDEBUG
-export PYTHONUSERBASE
-export PYTHONEXECUTABLE
-export PYTHONWARNINGS
-export VIRTUAL_ENV

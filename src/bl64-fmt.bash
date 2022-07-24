@@ -23,7 +23,7 @@ function bl64_fmt_strip_comments() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:--}"
 
-  "$BL64_TXT_CMD_GREP" -v -E '^#.*$|^ *#.*$' "$source"
+  "$BL64_TXT_CMD_GREP" "$BL64_TXT_SET_GREP_INVERT" "$BL64_TXT_SET_GREP_ERE" '^#.*$|^ *#.*$' "$source"
 }
 
 #######################################

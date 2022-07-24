@@ -42,10 +42,10 @@ export BL64_LIB_UMASK="${BL64_LIB_UMASK:-u=rwx,g=,o=}"
 # Default value for parameters
 export BL64_LIB_DEFAULT='_'
 
-# Flag for incompatible command o task
+# Flag for incompatible command or task
 export BL64_LIB_INCOMPATIBLE='_INC_'
 
-# Flag for unavailable command o task
+# Flag for unavailable command or task
 export BL64_LIB_UNAVAILABLE='_UNV_'
 
 # Pseudo null value
@@ -111,13 +111,11 @@ declare -ig BL64_LIB_ERROR_EXPORT_EMPTY=70
 declare -ig BL64_LIB_ERROR_EXPORT_SET=71
 declare -ig BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED=72
 
-#
-# Local values (not exported)
-#
-
+# Script Identify
 export BL64_SCRIPT_PATH=''
 export BL64_SCRIPT_NAME=''
 export BL64_SCRIPT_SID=''
+export BL64_SCRIPT_ID=''
 
 # Set Signal traps
 export BL64_LIB_SIGNAL_HUP="${BL64_LIB_SIGNAL_HUP:--}"

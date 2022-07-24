@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 1.18.0
+# Version: 1.19.0
 #######################################
 
 #######################################
@@ -416,18 +416,22 @@ function bl64_check_overwrite() {
 # * This is a generic enough message to capture most validation use cases
 #
 # Arguments:
-#   None
+#   $1: parameter name
+#   $2: error message
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
+# shellcheck disable=SC2120
 function bl64_check_alert_parameter_invalid() {
   bl64_dbg_lib_show_function "$@"
-  local parameter="${1:-}"
+  local parameter="${1:-${BL64_LIB_DEFAULT}}"
+  local message="${2:-${_BL64_CHECK_TXT_PARAMETER_INVALID}}"
 
-  bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_INVALID} (${parameter:+${_BL64_CHECK_TXT_PARAMETER}: ${parameter}}${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+  [[ "$parameter" == "$BL64_LIB_DEFAULT" ]] && parameter=''
+  bl64_msg_show_error "${message} (${parameter:+${_BL64_CHECK_TXT_PARAMETER}: ${parameter}}${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
   return $BL64_LIB_ERROR_PARAMETER_INVALID
 }
 
@@ -571,4 +575,25 @@ function bl64_check_status() {
   else
     return 0
   fi
+}
+
+#######################################
+# Check that the HOME variable is present and the path is valid
+#
+# * HOME is the standard shell variable for current user's home
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: home is valid
+#   >0: home is not valid
+#######################################
+function bl64_check_home() {
+  bl64_dbg_lib_show_function
+
+  bl64_check_export 'HOME' &&
+    bl64_check_directory "$HOME"
 }

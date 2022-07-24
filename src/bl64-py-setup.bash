@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 #######################################
@@ -121,15 +121,15 @@ function bl64_py_set_command() {
     fi
 
     # Ignore VENV. Use detected python
-    VIRTUAL_ENV=''
+    export VIRTUAL_ENV=''
 
   else
     bl64_dbg_lib_show_info 'use python3 from virtual environment'
     BL64_PY_CMD_PYTHON3="${venv_path}/bin/python3"
 
     # Emulate bin/activate
-    VIRTUAL_ENV="$venv_path"
-    PATH="${VIRTUAL_ENV}:${PATH}"
+    export VIRTUAL_ENV="$venv_path"
+    export PATH="${VIRTUAL_ENV}:${PATH}"
     unset PYTHONHOME
 
     # Let other basthlib64 functions know about this venv

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 #######################################
@@ -177,6 +177,29 @@ function bl64_py_run_python() {
     bl64_check_module_setup "$BL64_PY_MODULE" ||
     return $?
 
+  bl64_py_blank_python
+
+  bl64_dbg_lib_trace_start
+  "$BL64_PY_CMD_PYTHON3" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_py_blank_python() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited PYTHON* shell variables'
+  bl64_dbg_lib_trace_start
   unset PYTHONHOME
   unset PYTHONPATH
   unset PYTHONSTARTUP
@@ -184,10 +207,9 @@ function bl64_py_run_python() {
   unset PYTHONUSERBASE
   unset PYTHONEXECUTABLE
   unset PYTHONWARNINGS
-
-  bl64_dbg_lib_trace_start
-  "$BL64_PY_CMD_PYTHON3" "$@"
   bl64_dbg_lib_trace_stop
+
+  return 0
 }
 
 #######################################
