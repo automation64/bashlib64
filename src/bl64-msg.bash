@@ -1,16 +1,8 @@
 #######################################
 # BashLib64 / Module / Functions / Display messages
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
-
-function bl64_msg_app_verbose_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
-function bl64_msg_lib_verbose_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
-
-function bl64_msg_all_disable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_NONE"; }
-function bl64_msg_all_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_ALL"; }
-function bl64_msg_lib_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_LIB"; }
-function bl64_msg_app_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_APP"; }
 
 #######################################
 # Display message helper
@@ -36,10 +28,7 @@ function _bl64_msg_show() {
   case "$BL64_MSG_OUTPUT" in
   "$BL64_MSG_OUTPUT_ASCII") _bl64_msg_show_ascii "$attribute" "$type" "$message" ;;
   "$BL64_MSG_OUTPUT_ANSI") _bl64_msg_show_ansi "$attribute" "$type" "$message" ;;
-  *)
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
-    ;;
+  *) bl64_check_alert_parameter_invalid ;;
   esac
 }
 
@@ -75,7 +64,7 @@ function _bl64_msg_show_ansi() {
     ;;
   "$BL64_MSG_FORMAT_CALLER")
     printf "[%b] %b: %s\n" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_NAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
@@ -83,14 +72,11 @@ function _bl64_msg_show_ansi() {
     printf "[%b] %b:%b | %b: %s\n" \
       "\e[${!style_fmttime}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_NAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
-  *)
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
-    ;;
+  *) bl64_check_alert_parameter_invalid ;;
   esac
 }
 
@@ -126,7 +112,7 @@ function _bl64_msg_show_ascii() {
     ;;
   "$BL64_MSG_FORMAT_CALLER")
     printf "[%s] %s: %s\n" \
-      "$BL64_SCRIPT_NAME" \
+      "$BL64_SCRIPT_ID" \
       "${!style} $type" \
       "$message"
     ;;
@@ -134,14 +120,11 @@ function _bl64_msg_show_ascii() {
     printf "[%(%d/%b/%Y-%H:%M:%S-UTC%z)T] %s:%s | %s: %s\n" \
       '-1' \
       "$HOSTNAME" \
-      "$BL64_SCRIPT_NAME" \
+      "$BL64_SCRIPT_ID" \
       "${!style} $type" \
       "$message"
     ;;
-  *)
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
-    ;;
+  *) bl64_check_alert_parameter_invalid ;;
   esac
 }
 
@@ -168,7 +151,7 @@ function bl64_msg_show_usage() {
   local flags="${4:-${BL64_LIB_DEFAULT}}"
   local parameters="${5:-${BL64_LIB_DEFAULT}}"
 
-  printf '\n%s: %s %s\n\n' "$_BL64_MSG_TXT_USAGE" "$BL64_SCRIPT_NAME" "$usage"
+  printf '\n%s: %s %s\n\n' "$_BL64_MSG_TXT_USAGE" "$BL64_SCRIPT_ID" "$usage"
 
   if [[ "$description" != "$BL64_LIB_DEFAULT" ]]; then
     printf '%s\n\n' "$description"

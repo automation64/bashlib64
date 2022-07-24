@@ -1,8 +1,16 @@
 #######################################
 # BashLib64 / Module / Setup / Display messages
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
+
+function bl64_msg_app_verbose_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
+function bl64_msg_lib_verbose_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
+
+function bl64_msg_all_disable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_NONE"; }
+function bl64_msg_all_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_ALL"; }
+function bl64_msg_lib_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_LIB"; }
+function bl64_msg_app_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_APP"; }
 
 #######################################
 # Set message format
@@ -16,24 +24,19 @@
 #   0: successfull execution
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
-function bl64_msg_setup_format() {
+function bl64_msg_set_format() {
   local format="$1"
 
   bl64_check_parameter 'format' || return $?
 
-  # shellcheck disable=SC2086
-  if [[
-    "$format" != "$BL64_MSG_FORMAT_PLAIN" &&
-    "$format" != "$BL64_MSG_FORMAT_HOST" &&
-    "$format" != "$BL64_MSG_FORMAT_TIME" &&
-    "$format" != "$BL64_MSG_FORMAT_CALLER" &&
-    "$format" != "$BL64_MSG_FORMAT_FULL" ]] \
-    ; then
-    bl64_check_alert_parameter_invalid 'format'
-    return $?
-  fi
-
-  BL64_MSG_FORMAT="$format"
+  case "$format" in
+  "$BL64_MSG_FORMAT_PLAIN") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN" ;;
+  "$BL64_MSG_FORMAT_HOST") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST" ;;
+  "$BL64_MSG_FORMAT_TIME") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME" ;;
+  "$BL64_MSG_FORMAT_CALLER") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER" ;;
+  "$BL64_MSG_FORMAT_FULL") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL" ;;
+  *) bl64_check_alert_parameter_invalid ;;
+  esac
 }
 
 #######################################
@@ -48,21 +51,16 @@ function bl64_msg_setup_format() {
 #   0: successfull execution
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
-function bl64_msg_setup_theme() {
+function bl64_msg_set_theme() {
   local theme="$1"
 
   bl64_check_parameter 'theme' || return $?
 
-  if [[
-    "$theme" != 'BL64_MSG_THEME_ASCII_STD' &&
-    "$theme" != 'BL64_MSG_THEME_ANSI_STD' ]] \
-    ; then
-    bl64_check_alert_parameter_invalid 'theme'
-    return $?
-  fi
-
-  BL64_MSG_THEME="$theme"
-
+  case "$theme" in
+  'BL64_MSG_THEME_ASCII_STD') BL64_MSG_THEME='BL64_MSG_THEME_ASCII_STD' ;;
+  'BL64_MSG_THEME_ANSI_STD') BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD' ;;
+  *) bl64_check_alert_parameter_invalid ;;
+  esac
 }
 
 #######################################
@@ -77,8 +75,7 @@ function bl64_msg_setup_theme() {
 #   0: successfull execution
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
-function bl64_msg_setup_output() {
-
+function bl64_msg_set_output() {
   local output="$1"
   bl64_check_parameter 'output' || return $?
 
@@ -91,10 +88,6 @@ function bl64_msg_setup_output() {
     BL64_MSG_OUTPUT="$output"
     BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD'
     ;;
-  *)
-    bl64_check_alert_parameter_invalid 'output_type'
-    return $?
-    ;;
+  *) bl64_check_alert_parameter_invalid ;;
   esac
-
 }
