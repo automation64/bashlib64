@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.5.0]
+
+### Added
+
+- aws
+  - run aws with profile
+  - sso login, config, get token
+  - get sts sttributes
+- chk
+  - check user home
+- bsh
+  - script id
+
+### Changed
+
+- code optimization
+
 ## [3.4.0]
 
 ### Added
@@ -52,6 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - ans
+
   - bl64_py_setup: use base path instead of binary for parameter-1
 
 - gcp
@@ -145,7 +163,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - add module setup
   - add apk,yum,dnf,brew,apt wrappers
 - py
-  - normalize environment: reset PYTHON* shell environment variables to defaults
+  - normalize environment: reset PYTHON\* shell environment variables to defaults
 
 ## [2.10.0]
 
@@ -199,7 +217,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - cnt
   - module is now optional
 - check
-  - renamed bl64_check_show_* to bl64_check_alert_*
+  - renamed bl64*check_show*_ to bl64*check_alert*_
 
 ## [2.6.0]
 
@@ -251,7 +269,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Update gawk detection
 - rxtx
   - Update wget detection
-  - Use bl64_rxtx_run_* wrappers
+  - Use bl64*rxtx_run*\* wrappers
 - arc
   - Use bl64_arc_run_tar
 - py:

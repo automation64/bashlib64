@@ -4,20 +4,25 @@ setup() {
   . "$TESTMANSH_CMD_BATS_HELPER_FILE"
 }
 
-@test "bl64_lib_cmd: execute true" {
+function _bl64_lib_cmd() {
+  local -i result=0
+
   export BL64_LIB_TRAPS='0'
   export BL64_LIB_CMD='1'
-  run "${TESTMANSH_PROJECT_BUILD}/bashlib64.bash" 'true'
+  "${TESTMANSH_PROJECT_BUILD}/bashlib64.bash" "$1"
+  result=$?
   set -o 'errexit'
   set +o 'nounset'
-  assert_success
+
+  return $result
 }
 
 @test "bl64_lib_cmd: execute false" {
-  export BL64_LIB_TRAPS='0'
-  export BL64_LIB_CMD='1'
-  run "${TESTMANSH_PROJECT_BUILD}/bashlib64.bash" 'false'
-  set -o 'errexit'
-  set +o 'nounset'
+  run _bl64_lib_cmd 'false'
   assert_failure
+}
+
+@test "bl64_lib_cmd: execute true" {
+  run _bl64_lib_cmd 'true'
+  assert_success
 }
