@@ -35,7 +35,7 @@ function _bl64_log_register() {
       "$BL64_LOG_FS" \
       "$HOSTNAME" \
       "$BL64_LOG_FS" \
-      "$BL64_SCRIPT_NAME" \
+      "$BL64_SCRIPT_ID" \
       "$BL64_LOG_FS" \
       "$BL64_SCRIPT_SID" \
       "$BL64_LOG_FS" \
