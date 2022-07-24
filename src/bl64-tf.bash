@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with Terraform
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -56,20 +56,47 @@ function bl64_tf_run_terraform() {
     bl64_check_module_setup "$BL64_TF_MODULE" ||
     return $?
 
-  TF_LOG="$BL64_TF_LOG_LEVEL"
-  TF_LOG_PATH="$BL64_TF_LOG_PATH"
+  bl64_tf_blank_terraform
 
-  unset TF_CLI_CONFIG_FILE
-  unset TF_IN_AUTOMATION
-  unset TF_INPUT
-  unset TF_DATA_DIR
-  unset TF_PLUGIN_CACHE_DIR
-  unset TF_REGISTRY_DISCOVERY_RETRY
-  unset TF_REGISTRY_CLIENT_TIMEOUT
+  export TF_LOG="$BL64_TF_LOG_LEVEL"
+  export TF_LOG_PATH="$BL64_TF_LOG_PATH"
+  bl64_dbg_lib_show_vars 'TF_LOG' 'TF_LOG_PATH'
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_TF_CMD_TERRAFORM" \
     "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_tf_blank_terraform() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited TF_* shell variables'
+  bl64_dbg_lib_trace_start
+  unset TF_LOG
+  unset TF_LOG_PATH
+  unset TF_CLI_CONFIG_FILE
+  unset TF_LOG
+  unset TF_LOG_PATH
+  unset TF_IN_AUTOMATION
+  unset TF_INPUT
+  unset TF_DATA_DIR
+  unset TF_PLUGIN_CACHE_DIR
+  unset TF_REGISTRY_DISCOVERY_RETRY
+  unset TF_REGISTRY_CLIENT_TIMEOUT
+  bl64_dbg_lib_trace_stop
+
+  return 0
 }
