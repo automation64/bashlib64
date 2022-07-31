@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0]
+
+### Changed
+
+- changed software license to Apache-2.0
+
 ## [3.5.0]
 
 ### Added
@@ -588,7 +594,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/3.4.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/4.0.0...HEAD
+[4.0.0]: https://github.com/serdigital64/bashlib64/compare/3.4.0...4.0.0
 [3.4.0]: https://github.com/serdigital64/bashlib64/compare/3.3.0...3.4.0
 [3.3.0]: https://github.com/serdigital64/bashlib64/compare/3.2.0...3.3.0
 [3.2.0]: https://github.com/serdigital64/bashlib64/compare/3.1.0...3.2.0

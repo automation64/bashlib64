@@ -15,7 +15,7 @@
 
 ## Overview
 
-BashLib64 is a **Bash** library that provides a simple abstraction layer for developing multi-platform scripts.
+BashLib64 is a **Bash** automation library that provides a simple abstraction layer for developing multi-platform scripts.
 
 | Module                                                             | Purpose                                            |
 | ------------------------------------------------------------------ | -------------------------------------------------- |
@@ -100,7 +100,7 @@ Help on implementing new features and maintaining the code base is welcomed.
 
 ## License
 
-[GPL-3.0-or-later](https://www.gnu.org/licenses/gpl-3.0.txt)
+[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Author
 
