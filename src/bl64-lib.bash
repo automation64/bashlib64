@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 2.1.0
+# Version: 2.2.0
 #######################################
 
 #
@@ -60,7 +60,9 @@ set +o 'posix'
 # set -o 'noexec'
 
 # Initialize mandatory modules
-bl64_bsh_setup &&
+bl64_dbg_setup &&
+  bl64_msg_setup &&
+  bl64_bsh_setup &&
   bl64_os_setup &&
   bl64_txt_setup &&
   bl64_fs_setup &&

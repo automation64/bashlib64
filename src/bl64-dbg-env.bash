@@ -1,8 +1,13 @@
 #######################################
 # BashLib64 / Module / Globals / Show shell debugging information
 #
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
+
+export BL64_DBG_MODULE="$BL64_LIB_VAR_OFF"
+
+# Debug target
+export BL64_DBG_TARGET=''
 
 #
 # Debug targets. Use to select what to debug and how
@@ -58,3 +63,4 @@ export _BL64_DBG_TXT_CD_OLDPWD='Previous cd working directory (OLDPWD)'
 export _BL64_DBG_TXT_SCRIPT_PATH='Initial script path (BL64_SCRIPT_PATH)'
 export _BL64_DBG_TXT_TMPDIR='Temporary path (TMPDIR)'
 export _BL64_DBG_TXT_PWD='Current working directory (pwd command)'
+export _BL64_DBG_TXT_DEBUG='Debug'
