@@ -1,16 +1,45 @@
 #######################################
 # BashLib64 / Module / Setup / Display messages
 #
-# Version: 2.1.0
+# Version: 2.2.0
 #######################################
 
-function bl64_msg_app_verbose_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
-function bl64_msg_lib_verbose_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
+#
+# Verbosity control
+#
 
-function bl64_msg_all_disable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_NONE"; }
-function bl64_msg_all_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_ALL"; }
-function bl64_msg_lib_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_LIB"; }
-function bl64_msg_app_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_APP"; }
+function bl64_msg_app_verbose_enabled { [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
+function bl64_msg_lib_verbose_enabled { [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
+
+function bl64_msg_all_disable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_NONE"; }
+function bl64_msg_all_enable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_ALL"; }
+function bl64_msg_lib_enable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_LIB"; }
+function bl64_msg_app_enable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_APP"; }
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_msg_setup() {
+  bl64_dbg_lib_show_function
+
+  # Set default verbosity
+  bl64_msg_app_enable_verbose
+
+  bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI"
+
+  BL64_MSG_MODULE="$BL64_LIB_VAR_ON"
+}
 
 #######################################
 # Set message format

@@ -80,6 +80,7 @@ done
 sample_script_setup_globals
 sample_script_check_requirements || exit 1
 
+bl64_msg_all_disable_verbose
 bl64_msg_show_batch_start "$sample_script_command_tag"
 case "$sample_script_command" in
 'sample_script_test') "$sample_script_command" ;;

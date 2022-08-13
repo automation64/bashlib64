@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Version: 1.12.0
+# Version: 2.0.0
 #######################################
 
 # Declare imported variables
@@ -16,12 +16,6 @@ export TERM
 
 # Set Command flag (On/Off)
 export BL64_LIB_CMD="${BL64_LIB_CMD:-0}"
-
-# Set Verbosity flag (BL64_MSG_VERBOSE_APP)
-export BL64_LIB_VERBOSE="${BL64_LIB_VERBOSE:-1}"
-
-# Set Debug flag (On/Off)
-export BL64_LIB_DEBUG="${BL64_LIB_DEBUG:-0}"
 
 # Set Strict flag (On/Off)
 export BL64_LIB_STRICT="${BL64_LIB_STRICT:-1}"
