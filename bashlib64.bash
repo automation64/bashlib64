@@ -318,7 +318,7 @@ export _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
 # Version: 1.8.0
 #######################################
 
-BL64_DBG_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_DBG_MODULE="$BL64_LIB_VAR_OFF"
 
 # Debug target
 export BL64_DBG_TARGET=''
@@ -3525,7 +3525,7 @@ function bl64_cnt_docker_run() {
 #######################################
 # BashLib64 / Module / Setup / Show shell debugging inlevelion
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #
