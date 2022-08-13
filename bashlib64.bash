@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 4.0.0
+# Version: 5.0.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -47,7 +47,7 @@ shopt -qs \
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Version: 1.12.0
+# Version: 2.0.0
 #######################################
 
 # Declare imported variables
@@ -62,12 +62,6 @@ export TERM
 
 # Set Command flag (On/Off)
 export BL64_LIB_CMD="${BL64_LIB_CMD:-0}"
-
-# Set Verbosity flag (BL64_MSG_VERBOSE_APP)
-export BL64_LIB_VERBOSE="${BL64_LIB_VERBOSE:-1}"
-
-# Set Debug flag (On/Off)
-export BL64_LIB_DEBUG="${BL64_LIB_DEBUG:-0}"
 
 # Set Strict flag (On/Off)
 export BL64_LIB_STRICT="${BL64_LIB_STRICT:-1}"
@@ -321,8 +315,13 @@ export _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
 #######################################
 # BashLib64 / Module / Globals / Show shell debugging information
 #
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
+
+BL64_DBG_MODULE="$BL64_LIB_VAR_OFF"
+
+# Debug target
+export BL64_DBG_TARGET=''
 
 #
 # Debug targets. Use to select what to debug and how
@@ -378,6 +377,7 @@ export _BL64_DBG_TXT_CD_OLDPWD='Previous cd working directory (OLDPWD)'
 export _BL64_DBG_TXT_SCRIPT_PATH='Initial script path (BL64_SCRIPT_PATH)'
 export _BL64_DBG_TXT_TMPDIR='Temporary path (TMPDIR)'
 export _BL64_DBG_TXT_PWD='Current working directory (pwd command)'
+export _BL64_DBG_TXT_DEBUG='Debug'
 
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
@@ -590,6 +590,11 @@ export BL64_MDB_REPLICA_TIMEOUT='1000'
 # Version: 2.0.0
 #######################################
 
+export BL64_MSG_MODULE="$BL64_LIB_VAR_OFF"
+
+# Target verbosity)
+export BL64_MSG_VERBOSE=''
+
 #
 # Verbosity levels
 #
@@ -611,7 +616,7 @@ export BL64_MSG_OUTPUT_ASCII='A'
 export BL64_MSG_OUTPUT_ANSI='N'
 
 # default message output type
-export BL64_MSG_OUTPUT="$BL64_MSG_OUTPUT_ANSI"
+export BL64_MSG_OUTPUT=''
 
 #
 # Message formats
@@ -635,7 +640,6 @@ export BL64_MSG_THEME_ASCII_STD_WARNING='(*)'
 export BL64_MSG_THEME_ASCII_STD_INFO='(I)'
 export BL64_MSG_THEME_ASCII_STD_TASK='(-)'
 export BL64_MSG_THEME_ASCII_STD_LIBTASK='(-)'
-export BL64_MSG_THEME_ASCII_STD_DEBUG='(=)'
 export BL64_MSG_THEME_ASCII_STD_BATCH='(@)'
 export BL64_MSG_THEME_ASCII_STD_BATCHOK='(@)'
 export BL64_MSG_THEME_ASCII_STD_BATCHERR='(@)'
@@ -643,12 +647,11 @@ export BL64_MSG_THEME_ASCII_STD_FMTHOST=''
 export BL64_MSG_THEME_ASCII_STD_FMTCALLER=''
 export BL64_MSG_THEME_ASCII_STD_FMTTIME=''
 
-export BL64_MSG_THEME_ANSI_STD_ERROR='5;31'
-export BL64_MSG_THEME_ANSI_STD_WARNING='35'
+export BL64_MSG_THEME_ANSI_STD_ERROR='5;37;41'
+export BL64_MSG_THEME_ANSI_STD_WARNING='5;37;43'
 export BL64_MSG_THEME_ANSI_STD_INFO='36'
 export BL64_MSG_THEME_ANSI_STD_TASK='1;37'
 export BL64_MSG_THEME_ANSI_STD_LIBTASK='37'
-export BL64_MSG_THEME_ANSI_STD_DEBUG='33'
 export BL64_MSG_THEME_ANSI_STD_BATCH='30;1;47'
 export BL64_MSG_THEME_ANSI_STD_BATCHOK='30;42'
 export BL64_MSG_THEME_ANSI_STD_BATCHERR='5;30;41'
@@ -714,7 +717,6 @@ export _BL64_MSG_TXT_PARAMETERS='Parameters'
 export _BL64_MSG_TXT_ERROR='Error'
 export _BL64_MSG_TXT_INFO='Info'
 export _BL64_MSG_TXT_TASK='Task'
-export _BL64_MSG_TXT_DEBUG='Debug'
 export _BL64_MSG_TXT_WARNING='Warning'
 export _BL64_MSG_TXT_BATCH='Process'
 export _BL64_MSG_TXT_BATCH_START='started'
@@ -975,14 +977,12 @@ export BL64_TXT_SET_GREP_SHOW_FILE_ONLY="$BL64_LIB_UNAVAILABLE"
 #######################################
 # BashLib64 / Module / Globals / Manage Version Control System
 #
-# Version: 1.7.0
+# Version: 2.0.0
 #######################################
 
 export BL64_VCS_MODULE="$BL64_LIB_VAR_OFF"
 
 export BL64_VCS_CMD_GIT=''
-
-export BL64_VCS_ALIAS_GIT=''
 
 export BL64_VCS_SET_GIT_NO_PAGER=''
 export BL64_VCS_SET_GIT_QUIET=''
@@ -3531,26 +3531,49 @@ function bl64_cnt_docker_run() {
 #
 # Individual debugging level status
 #
-function bl64_dbg_app_task_enabled { [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TASK" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]]; }
-function bl64_dbg_lib_task_enabled { [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TASK" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]]; }
-function bl64_dbg_app_command_enabled { [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_CMD" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]]; }
-function bl64_dbg_lib_command_enabled { [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_CMD" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]]; }
-function bl64_dbg_app_trace_enabled { [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_ALL" ]]; }
-function bl64_dbg_lib_trace_enabled { [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_ALL" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_TRACE" || "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_LIB_ALL" ]]; }
+function bl64_dbg_app_task_enabled { [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_ALL" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_APP_TASK" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_APP_ALL" ]]; }
+function bl64_dbg_lib_task_enabled { [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_ALL" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_LIB_TASK" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_LIB_ALL" ]]; }
+function bl64_dbg_app_command_enabled { [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_ALL" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_APP_CMD" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_APP_ALL" ]]; }
+function bl64_dbg_lib_command_enabled { [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_ALL" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_LIB_CMD" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_LIB_ALL" ]]; }
+function bl64_dbg_app_trace_enabled { [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_ALL" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_APP_TRACE" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_APP_ALL" ]]; }
+function bl64_dbg_lib_trace_enabled { [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_ALL" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_LIB_TRACE" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_LIB_ALL" ]]; }
 
 #
 # Individual debugging level control
 #
-function bl64_dbg_all_disable { BL64_LIB_DEBUG="$BL64_DBG_TARGET_NONE"; }
-function bl64_dbg_all_enable { BL64_LIB_DEBUG="$BL64_DBG_TARGET_ALL"; }
-function bl64_dbg_app_enable { BL64_LIB_DEBUG="$BL64_DBG_TARGET_APP_ALL"; }
-function bl64_dbg_lib_enable { BL64_LIB_DEBUG="$BL64_DBG_TARGET_LIB_ALL"; }
-function bl64_dbg_app_task_enable { BL64_LIB_DEBUG="$BL64_DBG_TARGET_APP_TASK"; }
-function bl64_dbg_lib_task_enable { BL64_LIB_DEBUG="$BL64_DBG_TARGET_LIB_TASK"; }
-function bl64_dbg_app_command_enable { BL64_LIB_DEBUG="$BL64_DBG_TARGET_APP_CMD"; }
-function bl64_dbg_lib_command_enable { BL64_LIB_DEBUG="$BL64_DBG_TARGET_LIB_CMD"; }
-function bl64_dbg_app_trace_enable { BL64_LIB_DEBUG="$BL64_DBG_TARGET_APP_TRACE"; }
-function bl64_dbg_lib_trace_enable { BL64_LIB_DEBUG="$BL64_DBG_TARGET_LIB_TRACE"; }
+function bl64_dbg_all_disable { BL64_DBG_TARGET="$BL64_DBG_TARGET_NONE"; }
+function bl64_dbg_all_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_ALL"; }
+function bl64_dbg_app_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_APP_ALL"; }
+function bl64_dbg_lib_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_LIB_ALL"; }
+function bl64_dbg_app_task_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_APP_TASK"; }
+function bl64_dbg_lib_task_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_LIB_TASK"; }
+function bl64_dbg_app_command_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_APP_CMD"; }
+function bl64_dbg_lib_command_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_LIB_CMD"; }
+function bl64_dbg_app_trace_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_APP_TRACE"; }
+function bl64_dbg_lib_trace_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_LIB_TRACE"; }
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_dbg_setup() {
+  bl64_dbg_lib_show_function
+
+  # Set default debug level
+  bl64_dbg_all_disable
+
+  BL64_DBG_MODULE="$BL64_LIB_VAR_ON"
+}
 
 #######################################
 # Set debugging level
@@ -3587,8 +3610,14 @@ function bl64_dbg_set_level() {
 #######################################
 # BashLib64 / Module / Functions / Show shell debugging information
 #
-# Version: 1.10.0
+# Version: 2.0.0
 #######################################
+
+function _bl64_dbg_show() {
+  local message="$1"
+
+  printf '%s: %s\n' "$_BL64_DBG_TXT_DEBUG" "$message" >&2
+}
 
 #######################################
 # Show runtime info
@@ -3604,31 +3633,31 @@ function bl64_dbg_set_level() {
 function bl64_dbg_runtime_show() {
   local -i last_status=$?
 
-  if [[ "$BL64_LIB_DEBUG" == "$BL64_DBG_TARGET_APP_CMD" ]]; then
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_BASH}: [${BASH}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_BASHOPTS}: [${BASHOPTS:-NONE}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_SHELLOPTS}: [${SHELLOPTS:-NONE}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_BASH_VERSION}: [${BASH_VERSION}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_OSTYPE}: [${OSTYPE:-NONE}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_LC_ALL}: [${LC_ALL:-NONE}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_HOSTNAME}: [${HOSTNAME:-EMPTY}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_EUID}: [${EUID}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_UID}: [${UID}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_BASH_ARGV}: [${BASH_ARGV[*]:-NONE}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_COMMAND}: [${BASH_COMMAND:-NONE}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_STATUS}: [${last_status}]"
+  if [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_APP_CMD" ]]; then
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_BASH}: [${BASH}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_BASHOPTS}: [${BASHOPTS:-NONE}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_SHELLOPTS}: [${SHELLOPTS:-NONE}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_BASH_VERSION}: [${BASH_VERSION}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_OSTYPE}: [${OSTYPE:-NONE}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_LC_ALL}: [${LC_ALL:-NONE}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_HOSTNAME}: [${HOSTNAME:-EMPTY}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_EUID}: [${EUID}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_UID}: [${UID}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_BASH_ARGV}: [${BASH_ARGV[*]:-NONE}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_COMMAND}: [${BASH_COMMAND:-NONE}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_STATUS}: [${last_status}]"
 
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_SCRIPT_PATH}: [${BL64_SCRIPT_PATH:-EMPTY}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_SCRIPT_PATH}: [${BL64_SCRIPT_PATH:-EMPTY}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
 
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_CALLSTACK}(1): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[1]:-NONE}:${BASH_LINENO[1]:-0}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_CALLSTACK}(2): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
-    bl64_msg_show_debug "[bash] ${_BL64_DBG_TXT_CALLSTACK}(3): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_CALLSTACK}(1): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[1]:-NONE}:${BASH_LINENO[1]:-0}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_CALLSTACK}(2): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
+    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_CALLSTACK}(3): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
   fi
 
   # shellcheck disable=SC2248
@@ -3650,9 +3679,9 @@ function bl64_dbg_runtime_show() {
 #######################################
 function bl64_dbg_runtime_show_callstack() {
   bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_CALLSTACK}(2): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_CALLSTACK}(3): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_CALLSTACK}(4): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[4]:-NONE}:${BASH_LINENO[4]:-0}]"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_CALLSTACK}(2): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_CALLSTACK}(3): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_CALLSTACK}(4): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[4]:-NONE}:${BASH_LINENO[4]:-0}]"
 }
 
 #######################################
@@ -3668,13 +3697,13 @@ function bl64_dbg_runtime_show_callstack() {
 #######################################
 function bl64_dbg_runtime_show_paths() {
   bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SCRIPT_PATH}: [${BL64_SCRIPT_PATH:-EMPTY}]"
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SCRIPT_PATH}: [${BL64_SCRIPT_PATH:-EMPTY}]"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
 }
 
 #######################################
@@ -3696,7 +3725,7 @@ function bl64_dbg_app_trace_stop() {
   bl64_dbg_app_trace_enabled || return $state
 
   set +x
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
 
   return $state
 }
@@ -3715,7 +3744,7 @@ function bl64_dbg_app_trace_stop() {
 function bl64_dbg_app_trace_start() {
   bl64_dbg_app_trace_enabled || return 0
 
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_START}"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_START}"
   set -x
 
   return 0
@@ -3740,7 +3769,7 @@ function bl64_dbg_lib_trace_stop() {
   bl64_dbg_lib_trace_enabled || return $state
 
   set +x
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
 
   return $state
 }
@@ -3759,7 +3788,7 @@ function bl64_dbg_lib_trace_stop() {
 function bl64_dbg_lib_trace_start() {
   bl64_dbg_lib_trace_enabled || return 0
 
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_START}"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_START}"
   set -x
 
   return 0
@@ -3777,9 +3806,9 @@ function bl64_dbg_lib_trace_start() {
 #   0: always ok
 #######################################
 function bl64_dbg_lib_show_info() {
-  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_ALL" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_TASK" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_ALL" || "$#" == '0' ]] &&
+  [[ "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_ALL" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_LIB_TASK" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_LIB_ALL" || "$#" == '0' ]] &&
     return 0
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${*}"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${*}"
 
   return 0
 }
@@ -3796,9 +3825,9 @@ function bl64_dbg_lib_show_info() {
 #   0: always ok
 #######################################
 function bl64_dbg_app_show_info() {
-  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_ALL" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_TASK" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_ALL" || "$#" == '0' ]] &&
+  [[ "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_ALL" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_APP_TASK" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_APP_ALL" || "$#" == '0' ]] &&
     return 0
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${*}"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${*}"
 
   return 0
 }
@@ -3817,11 +3846,11 @@ function bl64_dbg_app_show_info() {
 function bl64_dbg_lib_show_vars() {
   local variable=''
 
-  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_ALL" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_TASK" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_LIB_ALL" || "$#" == '0' ]] &&
+  [[ "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_ALL" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_LIB_TASK" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_LIB_ALL" || "$#" == '0' ]] &&
     return 0
 
   for variable in "$@"; do
-    eval "bl64_msg_show_debug \"[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=\$${variable}]\""
+    eval "_bl64_dbg_show \"[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=\$${variable}]\""
   done
 
   return 0
@@ -3841,11 +3870,11 @@ function bl64_dbg_lib_show_vars() {
 function bl64_dbg_app_show_vars() {
   local variable=''
 
-  [[ "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_ALL" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_TASK" && "$BL64_LIB_DEBUG" != "$BL64_DBG_TARGET_APP_ALL" || "$#" == '0' ]] &&
+  [[ "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_ALL" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_APP_TASK" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_APP_ALL" || "$#" == '0' ]] &&
     return 0
 
   for variable in "$@"; do
-    eval "bl64_msg_show_debug \"[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=\$${variable}]\""
+    eval "_bl64_dbg_show \"[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=\$${variable}]\""
   done
 
   return 0
@@ -3866,7 +3895,7 @@ function bl64_dbg_app_show_vars() {
 function bl64_dbg_lib_show_function() {
   bl64_dbg_lib_task_enabled || return 0
 
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_LIB_RUN}: [${*}]"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_LIB_RUN}: [${*}]"
   return 0
 }
 
@@ -3885,7 +3914,7 @@ function bl64_dbg_lib_show_function() {
 function bl64_dbg_app_show_function() {
   bl64_dbg_app_task_enabled || return 0
 
-  bl64_msg_show_debug "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_APP_RUN}: [${*}]"
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_APP_RUN}: [${*}]"
   return 0
 }
 
@@ -6754,16 +6783,45 @@ function bl64_mdb_run_mongoexport() {
 #######################################
 # BashLib64 / Module / Setup / Display messages
 #
-# Version: 2.1.0
+# Version: 2.2.0
 #######################################
 
-function bl64_msg_app_verbose_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
-function bl64_msg_lib_verbose_enabled { [[ "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_LIB_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
+#
+# Verbosity control
+#
 
-function bl64_msg_all_disable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_NONE"; }
-function bl64_msg_all_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_ALL"; }
-function bl64_msg_lib_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_LIB"; }
-function bl64_msg_app_enable_verbose { BL64_LIB_VERBOSE="$BL64_MSG_VERBOSE_APP"; }
+function bl64_msg_app_verbose_enabled { [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
+function bl64_msg_lib_verbose_enabled { [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
+
+function bl64_msg_all_disable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_NONE"; }
+function bl64_msg_all_enable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_ALL"; }
+function bl64_msg_lib_enable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_LIB"; }
+function bl64_msg_app_enable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_APP"; }
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_msg_setup() {
+  bl64_dbg_lib_show_function
+
+  # Set default verbosity
+  bl64_msg_app_enable_verbose
+
+  bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI"
+
+  BL64_MSG_MODULE="$BL64_LIB_VAR_ON"
+}
 
 #######################################
 # Set message format
@@ -6848,7 +6906,7 @@ function bl64_msg_set_output() {
 #######################################
 # BashLib64 / Module / Functions / Display messages
 #
-# Version: 2.1.0
+# Version: 3.0.0
 #######################################
 
 #######################################
@@ -7116,24 +7174,6 @@ function bl64_msg_show_lib_task() {
 }
 
 #######################################
-# Display debug message
-#
-# Arguments:formatting
-#   $1: message
-# Outputs:
-#   STDOUT: None
-#   STDERR: messageformatting
-# Returns:
-#   0: successfull execution
-#   >0: printf error
-#######################################
-function bl64_msg_show_debug() {
-  local message="$1"
-
-  _bl64_msg_show 'DEBUG' "$_BL64_MSG_TXT_DEBUG" "$message" >&2
-}
-
-#######################################
 # Display message. Plain output, no extra info.
 #
 # Arguments:
@@ -7202,7 +7242,7 @@ function bl64_msg_show_batch_finish() {
 #######################################
 # BashLib64 / Module / Setup / OS / Identify OS attributes and provide command aliases
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
 
 #######################################
@@ -7228,7 +7268,6 @@ function bl64_os_setup() {
 
   bl64_os_get_distro &&
     bl64_os_set_command &&
-    bl64_os_set_alias &&
     BL64_OS_MODULE="$BL64_LIB_VAR_ON"
 
 }
@@ -7290,25 +7329,6 @@ function bl64_os_set_command() {
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
-}
-
-#######################################
-# Create command aliases for common use cases
-#
-# * Aliases are presented as regular shell variables for easy inclusion in complex commands
-# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
-# * Warning: bootstrap function
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function bl64_os_set_alias() {
-  :
 }
 
 #######################################
@@ -9860,7 +9880,7 @@ function bl64_txt_run_cut() {
 #######################################
 # BashLib64 / Module / Setup / Manage Version Control System
 #
-# Version: 1.3.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -9881,7 +9901,6 @@ function bl64_vcs_setup() {
   bl64_dbg_lib_show_function
 
   bl64_vcs_set_command &&
-    bl64_vcs_set_alias &&
     bl64_vcs_set_options &&
     BL64_VCS_MODULE="$BL64_LIB_VAR_ON"
 
@@ -9907,32 +9926,6 @@ function bl64_vcs_set_command() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
     BL64_VCS_CMD_GIT='/usr/bin/git'
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-}
-
-#######################################
-# Create command aliases for common use cases
-#
-# * Aliases are presented as regular shell variables for easy inclusion in complex commands
-# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
-# * Warning: bootstrap function
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function bl64_vcs_set_alias() {
-  bl64_dbg_lib_show_function
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
-    # shellcheck disable=SC2034
-    BL64_VCS_ALIAS_GIT="$BL64_VCS_CMD_GIT"
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -10250,7 +10243,7 @@ function bl64_xsv_search_records() {
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 2.1.0
+# Version: 2.2.0
 #######################################
 
 #
@@ -10309,7 +10302,9 @@ set +o 'posix'
 # set -o 'noexec'
 
 # Initialize mandatory modules
-bl64_bsh_setup &&
+bl64_dbg_setup &&
+  bl64_msg_setup &&
+  bl64_bsh_setup &&
   bl64_os_setup &&
   bl64_txt_setup &&
   bl64_fs_setup &&

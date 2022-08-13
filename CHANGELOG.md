@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0]
+
+### Changed
+
+- Converted global variables for debugging and verbosity to getter/setter methods
+  - BL64_LIB_DEBUG -> bl64_dbg_all_disable, etc
+  - BL64_LIB_VERBOSE -> bl64_msg_all_disable_verbose, etc
+
 ## [4.0.0]
 
 ### Changed
@@ -594,7 +602,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/4.0.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/5.0.0...HEAD
+[5.0.0]: https://github.com/serdigital64/bashlib64/compare/4.0.0...5.0.0
 [4.0.0]: https://github.com/serdigital64/bashlib64/compare/3.4.0...4.0.0
 [3.4.0]: https://github.com/serdigital64/bashlib64/compare/3.3.0...3.4.0
 [3.3.0]: https://github.com/serdigital64/bashlib64/compare/3.2.0...3.3.0

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Display messages
 #
-# Version: 2.1.0
+# Version: 3.0.0
 #######################################
 
 #######################################
@@ -266,24 +266,6 @@ function bl64_msg_show_lib_task() {
   bl64_msg_lib_verbose_enabled || return 0
 
   _bl64_msg_show 'LIBTASK' "$_BL64_MSG_TXT_TASK" "$message"
-}
-
-#######################################
-# Display debug message
-#
-# Arguments:formatting
-#   $1: message
-# Outputs:
-#   STDOUT: None
-#   STDERR: messageformatting
-# Returns:
-#   0: successfull execution
-#   >0: printf error
-#######################################
-function bl64_msg_show_debug() {
-  local message="$1"
-
-  _bl64_msg_show 'DEBUG' "$_BL64_MSG_TXT_DEBUG" "$message" >&2
 }
 
 #######################################
