@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / OS / Identify OS attributes and provide command aliases
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
 
 #######################################
@@ -27,7 +27,6 @@ function bl64_os_setup() {
 
   bl64_os_get_distro &&
     bl64_os_set_command &&
-    bl64_os_set_alias &&
     BL64_OS_MODULE="$BL64_LIB_VAR_ON"
 
 }
@@ -89,23 +88,4 @@ function bl64_os_set_command() {
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
-}
-
-#######################################
-# Create command aliases for common use cases
-#
-# * Aliases are presented as regular shell variables for easy inclusion in complex commands
-# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
-# * Warning: bootstrap function
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function bl64_os_set_alias() {
-  :
 }
