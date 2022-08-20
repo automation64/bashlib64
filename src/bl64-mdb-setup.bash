@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with MongoDB
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -27,10 +27,11 @@ function bl64_mdb_setup() {
   fi
 
   bl64_mdb_set_command "$mdb_bin" &&
-    bl64_mdb_set_options &&
     bl64_check_command "$BL64_MDB_CMD_MONGOSH" &&
     bl64_check_command "$BL64_MDB_CMD_MONGORESTORE" &&
     bl64_check_command "$BL64_MDB_CMD_MONGOEXPORT" &&
+    bl64_mdb_set_options &&
+    bl64_mdb_set_runtime &&
     BL64_MDB_MODULE="$BL64_LIB_VAR_ON"
 
 }
@@ -95,4 +96,23 @@ function bl64_mdb_set_options() {
   BL64_MDB_SET_VERBOSE='--verbose'
   BL64_MDB_SET_QUIET='--quiet'
   BL64_MDB_SET_NORC='--norc'
+}
+
+#######################################
+# Set runtime variables
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_mdb_set_runtime() {
+  bl64_dbg_lib_show_function
+
+  # Write concern defaults
+  BL64_MDB_REPLICA_WRITE='majority'
+  BL64_MDB_REPLICA_TIMEOUT='1000'
 }
