@@ -78,7 +78,7 @@ function bl64_hlm_chart_upgrade() {
     "$source" \
     --kubeconfig="$kubeconfig" \
     --namespace "$namespace" \
-    --timeout "$BL64_HLM_K8S_TIMEOUT" \
+    --timeout "$BL64_HLM_RUN_TIMEOUT" \
     --atomic \
     --cleanup-on-fail \
     --install \
