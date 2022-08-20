@@ -168,6 +168,7 @@ function bl64_check_path() {
 #   * variable is defined
 #   * parameter is not empty
 #   * parameter is not using default value
+#   * parameter is not using null value
 #
 # Arguments:
 #   $1: parameter name
@@ -185,21 +186,24 @@ function bl64_check_parameter() {
   local parameter_name="${1:-}"
   local description="${2:-parameter: ${parameter_name}}"
 
-  if [[ ! -v "$parameter_name" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_NOT_SET} (${description} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PARAMETER_MISSING
-  fi
-
   if [[ -z "$parameter_name" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_MISSING} (parameter: parameter_name ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_EMPTY
   fi
 
-  if eval "[[ -z \"\${${parameter_name}}\" || \"\${${parameter_name}}\" == '${BL64_LIB_DEFAULT}' ]]"; then
+  if [[ ! -v "$parameter_name" ]]; then
+    bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_NOT_SET} (${description} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    return $BL64_LIB_ERROR_PARAMETER_MISSING
+  fi
+
+  if eval "[[ -z \"\${${parameter_name}}\" || \"\${${parameter_name}}\" == '${BL64_LIB_VAR_NULL}' ]]"; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_MISSING} (${description} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
-    # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PARAMETER_EMPTY
+  fi
+
+  if eval "[[ \"\${${parameter_name}}\" == '${BL64_LIB_DEFAULT}' ]]"; then
+    bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_DEFAULT} (${description} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
   fi
   return 0
 }
