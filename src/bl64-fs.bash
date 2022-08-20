@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 2.2.0
+# Version: 2.3.0
 #######################################
 
 #######################################
@@ -805,19 +805,16 @@ function bl64_fs_run_ln() {
 # * Supports predefined sets: BL64_FS_UMASK_*
 #
 # Arguments:
-#   $1: permission. Format: umask symbolic
+#   $1: permission. Format: BL64_FS_UMASK_RW_USER
 # Outputs:
-#   STDOUT: command output
+#   STDOUT: None
 #   STDERR: command stderr
 # Returns:
 #   command exit status
 #######################################
 function bl64_fs_set_umask() {
   bl64_dbg_lib_show_function "$@"
-  local permissions="${1:-}"
-
-  bl64_check_parameter 'permissions' ||
-    return $?
+  local permissions="${1:${BL64_FS_UMASK_RW_USER}}"
 
   umask -S "$permissions" >/dev/null
 }
