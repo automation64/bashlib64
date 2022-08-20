@@ -23,3 +23,5 @@ export BL64_TF_SET_LOG_INFO=''
 export BL64_TF_SET_LOG_WARN=''
 export BL64_TF_SET_LOG_ERROR=''
 export BL64_TF_SET_LOG_OFF=''
+
+export BL64_TF_DEF_FILE_LOCK=''
