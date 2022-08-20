@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with HLM
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -108,7 +108,32 @@ function bl64_hlm_run_helm() {
     return $?
 
   bl64_dbg_lib_command_enabled && verbosity="$BL64_HLM_SET_DEBUG"
+  bl64_hlm_blank_helm
 
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_HLM_CMD_HELM" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_hlm_blank_helm() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited HELM_* shell variables'
+  bl64_dbg_lib_trace_start
   unset HELM_CACHE_HOME
   unset HELM_CONFIG_HOME
   unset HELM_DATA_HOME
@@ -128,11 +153,7 @@ function bl64_hlm_run_helm() {
   unset HELM_KUBEASUSER
   unset HELM_KUBECONTEXT
   unset HELM_KUBETOKEN
-
-  bl64_dbg_lib_trace_start
-  # shellcheck disable=SC2086
-  "$BL64_HLM_CMD_HELM" \
-    $verbosity \
-    "$@"
   bl64_dbg_lib_trace_stop
+
+  return 0
 }
