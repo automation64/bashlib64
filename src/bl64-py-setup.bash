@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 #######################################
@@ -50,8 +50,9 @@ function _bl64_py_setup() {
   fi
 
   bl64_py_set_command "$venv_path" &&
-    bl64_py_set_options &&
     bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
+    bl64_py_set_options &&
+    bl64_py_set_definitions &&
     BL64_PY_MODULE="$BL64_LIB_VAR_ON"
 }
 
@@ -162,8 +163,28 @@ function bl64_py_set_options() {
   BL64_PY_SET_PIP_SITE='--system-site-packages'
   BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
 
-  BL64_PY_SET_VENV_CFG='pyvenv.cfg'
-  BL64_PY_SET_MODULE_VENV='venv'
-  BL64_PY_SET_MODULE_PIP='pip'
+}
 
+#######################################
+# Declare version specific definitions
+#
+# * Use to capture default file names, values, attributes, etc
+# * Do not use to capture CLI flags. Use *_set_options instead
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_py_set_definitions() {
+  bl64_dbg_lib_show_function
+
+  BL64_PY_DEF_VENV_CFG='pyvenv.cfg'
+  BL64_PY_DEF_MODULE_VENV='venv'
+  BL64_PY_DEF_MODULE_PIP='pip'
+
+  return 0
 }
