@@ -814,7 +814,7 @@ function bl64_fs_run_ln() {
 #######################################
 function bl64_fs_set_umask() {
   bl64_dbg_lib_show_function "$@"
-  local permissions="${1:${BL64_FS_UMASK_RW_USER}}"
+  local permissions="${1:-${BL64_FS_UMASK_RW_USER}}"
 
   umask -S "$permissions" >/dev/null
 }
