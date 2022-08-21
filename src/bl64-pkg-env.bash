@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Manage native OS packages
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 export BL64_PKG_MODULE="$BL64_LIB_VAR_OFF"
@@ -35,4 +35,5 @@ export BL64_PKG_SET_VERBOSE=''
 
 export _BL64_PKG_TXT_CLEAN='clean up package manager run-time environment'
 export _BL64_PKG_TXT_INSTALL='install packages'
+export _BL64_PKG_TXT_UPGRADE='upgrade packages'
 export _BL64_PKG_TXT_PREPARE='initialize package manager'

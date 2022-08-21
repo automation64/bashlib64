@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage native OS packages
 #
-# Version: 1.13.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -23,6 +23,7 @@ function bl64_pkg_deploy() {
 
   bl64_pkg_prepare &&
     bl64_pkg_install "$@" &&
+    bl64_pkg_upgrade &&
     bl64_pkg_cleanup
 }
 
@@ -100,6 +101,48 @@ function bl64_pkg_install() {
     ;;
   ${BL64_OS_MCOS}-*)
     "$BL64_PKG_CMD_BRW" 'install' "$@"
+    ;;
+  *) bl64_check_alert_unsupported ;;
+
+  esac
+}
+
+#######################################
+# Upgrade packages
+#
+# * Assume yes
+#
+# Requirements:
+#   * root privilege (sudo)
+# Arguments:
+#   package list, separated by spaces (expanded with $@)
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   n: package manager exist status
+#######################################
+# shellcheck disable=SC2120
+function bl64_pkg_upgrade() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_msg_show_lib_task "$_BL64_PKG_TXT_UPGRADE"
+  # shellcheck disable=SC2086
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
+    ;;
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+    bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
+    ;;
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES -- "$@"
+    ;;
+  ${BL64_OS_ALP}-*)
+    bl64_pkg_run_apk 'upgrade' -- "$@"
+    ;;
+  ${BL64_OS_MCOS}-*)
+    "$BL64_PKG_CMD_BRW" 'upgrade' "$@"
     ;;
   *) bl64_check_alert_unsupported ;;
 
