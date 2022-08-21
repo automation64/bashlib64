@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Terraform
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -27,8 +27,9 @@ function bl64_tf_setup() {
   fi
 
   bl64_tf_set_command "$terraform_bin" &&
-    bl64_tf_set_options &&
     bl64_check_command "$BL64_TF_CMD_TERRAFORM" &&
+    bl64_tf_set_options &&
+    bl64_tf_set_definitions &&
     BL64_TF_MODULE="$BL64_LIB_VAR_ON" ||
     return $?
 
@@ -110,7 +111,7 @@ function bl64_tf_set_options() {
 #######################################
 function bl64_tf_log_set() {
   bl64_dbg_lib_show_function "$@"
-  local path="${1:-$BL64_LIB_DEFAULT}"
+  local path="${1:-$BL64_LIB_VAR_NULL}"
   local level="${2:-$BL64_TF_SET_LOG_INFO}"
 
   bl64_check_parameter 'path' &&
@@ -119,4 +120,30 @@ function bl64_tf_log_set() {
 
   BL64_TF_LOG_PATH="$path"
   BL64_TF_LOG_LEVEL="$level"
+}
+
+#######################################
+# Declare version specific definitions
+#
+# * Use to capture default file names, values, attributes, etc
+# * Do not use to capture CLI flags. Use *_set_options instead
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_tf_set_definitions() {
+  bl64_dbg_lib_show_function
+
+  # Terraform configuration lock file name
+  BL64_TF_DEF_PATH_LOCK='.terraform.lock.hcl'
+
+  # Runtime directory created by terraform init
+  BL64_TF_DEF_PATH_RUNTIME='.terraform'
+
+  return 0
 }

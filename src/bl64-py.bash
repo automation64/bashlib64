@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 #######################################
@@ -25,7 +25,7 @@ function bl64_py_venv_create() {
     return $?
 
   bl64_msg_show_lib_task "${_BL64_PY_TXT_VENV_CREATE} (${venv_path})"
-  bl64_py_run_python -m "$BL64_PY_SET_MODULE_VENV" "$venv_path"
+  bl64_py_run_python -m "$BL64_PY_DEF_MODULE_VENV" "$venv_path"
 
 }
 
@@ -52,7 +52,7 @@ function bl64_py_venv_check() {
     return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
   fi
 
-  if [[ ! -r "${venv_path}/${BL64_PY_SET_VENV_CFG}" ]]; then
+  if [[ ! -r "${venv_path}/${BL64_PY_DEF_VENV_CFG}" ]]; then
     bl64_msg_show_error "${message} (command: ${path} ${_BL64_CHECK_TXT_I} ${_BL64_PY_TXT_VENV_INVALID}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
     return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
   fi
@@ -104,7 +104,7 @@ function bl64_py_pip_get_version() {
 #######################################
 function bl64_py_pip_usr_prepare() {
   bl64_dbg_lib_show_function
-  local modules_pip="$BL64_PY_SET_MODULE_PIP"
+  local modules_pip="$BL64_PY_DEF_MODULE_PIP"
   local modules_setup='setuptools wheel stevedore'
   local flag_user="$BL64_PY_SET_PIP_USER"
 
@@ -239,7 +239,7 @@ function bl64_py_run_pip() {
 
   # shellcheck disable=SC2086
   eval $temporal bl64_py_run_python \
-    -m "$BL64_PY_SET_MODULE_PIP" \
+    -m "$BL64_PY_DEF_MODULE_PIP" \
     $debug \
     $cache \
     "$*"

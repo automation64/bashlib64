@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with AWS
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -130,7 +130,7 @@ function bl64_aws_sso_get_token() {
   bl64_dbg_lib_trace_start
   token_file="$(bl64_fs_find_files \
     "$BL64_AWS_CLI_CACHE" \
-    "*.${BL64_AWS_SUFFIX_TOKEN}" \
+    "*.${BL64_AWS_DEF_SUFFIX_TOKEN}" \
     "$start_url")"
   bl64_dbg_lib_trace_stop
 
