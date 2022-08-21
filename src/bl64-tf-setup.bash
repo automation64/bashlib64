@@ -140,7 +140,10 @@ function bl64_tf_set_definitions() {
   bl64_dbg_lib_show_function
 
   # Terraform configuration lock file name
-  BL64_TF_DEF_FILE_LOCK='.terraform.lock.hcl'
+  BL64_TF_DEF_PATH_LOCK='.terraform.lock.hcl'
+
+  # Runtime directory created by terraform init
+  BL64_TF_DEF_PATH_RUNTIME='.terraform'
 
   return 0
 }
