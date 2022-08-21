@@ -812,6 +812,7 @@ function bl64_fs_run_ln() {
 # Returns:
 #   command exit status
 #######################################
+# shellcheck disable=SC2120
 function bl64_fs_set_umask() {
   bl64_dbg_lib_show_function "$@"
   local permissions="${1:-${BL64_FS_UMASK_RW_USER}}"
