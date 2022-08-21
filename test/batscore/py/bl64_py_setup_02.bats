@@ -23,7 +23,7 @@ setup() {
 
   assert_success
   assert_dir_exist "$target"
-  assert_file_exist "${target}/${BL64_PY_SET_VENV_CFG}"
+  assert_file_exist "${target}/${BL64_PY_DEF_VENV_CFG}"
   assert_file_exist "$BL64_PY_CMD_PYTHON3"
 
 }

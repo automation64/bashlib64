@@ -25,9 +25,17 @@ setup() {
 
 }
 
-@test "bl64_check_parameter: parameter is not present + using default value" {
+@test "bl64_check_parameter: parameter is default" {
 
   TEST_PARAMETER="$BL64_LIB_DEFAULT"
+  run bl64_check_parameter 'TEST_PARAMETER'
+  assert_failure
+
+}
+
+@test "bl64_check_parameter: parameter is null" {
+
+  TEST_PARAMETER="$BL64_LIB_VAR_NULL"
   run bl64_check_parameter 'TEST_PARAMETER'
   assert_failure
 

@@ -14,8 +14,8 @@ setup() {
   assert_not_equal "$BL64_PY_SET_PIP_SITE" ''
   assert_not_equal "$BL64_PY_SET_PIP_NO_WARN_SCRIPT" ''
 
-  assert_not_equal "$BL64_PY_SET_VENV_CFG" ''
-  assert_not_equal "$BL64_PY_SET_MODULE_VENV" ''
-  assert_not_equal "$BL64_PY_SET_MODULE_PIP" ''
+  assert_not_equal "$BL64_PY_DEF_VENV_CFG" ''
+  assert_not_equal "$BL64_PY_DEF_MODULE_VENV" ''
+  assert_not_equal "$BL64_PY_DEF_MODULE_PIP" ''
 
 }
