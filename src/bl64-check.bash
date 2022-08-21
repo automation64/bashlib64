@@ -493,10 +493,9 @@ function bl64_check_alert_undefined() {
 # Returns:
 #   provided exit status
 #######################################
-# shellcheck disable=SC2119,SC2120
 function bl64_check_alert_failed() {
   bl64_dbg_lib_show_function "$@"
-  local -i status="${1:-}"
+  local -i status=${1:-0}
   local message="${2:-${_BL64_CHECK_TXT_FAILED}}"
 
   ((status != 0)) &&
