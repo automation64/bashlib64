@@ -39,6 +39,7 @@ export _BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED='the object is already present and
 export _BL64_CHECK_TXT_INCOMPATIBLE='the requested operation is not supported in the current platform'
 export _BL64_CHECK_TXT_UNDEFINED='requested command is not defined or implemented'
 export _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one parameter and none was provided'
+export _BL64_CHECK_TXT_FAILED='task execution failed'
 
 export _BL64_CHECK_TXT_PARAMETER_INVALID='the requested operation was provided with an invalid parameter value'
 

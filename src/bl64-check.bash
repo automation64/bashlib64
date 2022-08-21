@@ -480,6 +480,32 @@ function bl64_check_alert_undefined() {
 }
 
 #######################################
+# Alert if provided exist status is failed
+#
+# * Use for simple check and alert of previously executed operation
+#
+# Arguments:
+#   $1: exist status
+#   $2: message
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   provided exit status
+#######################################
+# shellcheck disable=SC2119,SC2120
+function bl64_check_alert_failed() {
+  bl64_dbg_lib_show_function "$@"
+  local -i status="${1:-}"
+  local message="${2:-${_BL64_CHECK_TXT_FAILED}}"
+
+  ((status != 0)) &&
+    bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}${target:+ ${_BL64_CHECK_TXT_I} command: ${target}})"
+
+  return $status
+}
+
+#######################################
 # Check that parameters are passed
 #
 # Arguments:
