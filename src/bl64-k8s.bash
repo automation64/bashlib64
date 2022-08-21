@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with Kubernetes
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -131,8 +131,7 @@ function bl64_k8s_run_kubectl() {
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_VERBOSE_NORMAL"
   bl64_dbg_lib_command_enabled && verbosity="$BL64_K8S_SET_VERBOSE_TRACE"
 
-  unset POD_NAMESPACE
-  unset KUBECONFIG
+  bl64_k8s_blank_kubectl
   shift
 
   bl64_dbg_lib_trace_start
@@ -142,4 +141,27 @@ function bl64_k8s_run_kubectl() {
     $verbosity \
     "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_k8s_blank_kubectl() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited HELM_* shell variables'
+  bl64_dbg_lib_trace_start
+  unset POD_NAMESPACE
+  unset KUBECONFIG
+  bl64_dbg_lib_trace_stop
+
+  return 0
 }

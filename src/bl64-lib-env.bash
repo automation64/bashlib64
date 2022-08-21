@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Version: 2.0.0
+# Version: 3.0.0
 #######################################
 
 # Declare imported variables
@@ -25,9 +25,6 @@ export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-1}"
 
 # Set Normalize locale flag
 export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
-
-# Set Debug umask to BL64_FS_UMASK_RW_USER
-export BL64_LIB_UMASK="${BL64_LIB_UMASK:-u=rwx,g=,o=}"
 
 #
 # Common values
@@ -112,9 +109,9 @@ export BL64_SCRIPT_SID=''
 export BL64_SCRIPT_ID=''
 
 # Set Signal traps
-export BL64_LIB_SIGNAL_HUP="${BL64_LIB_SIGNAL_HUP:--}"
-export BL64_LIB_SIGNAL_STOP="${BL64_LIB_SIGNAL_STOP:--}"
-export BL64_LIB_SIGNAL_QUIT="${BL64_LIB_SIGNAL_QUIT:--}"
-export BL64_LIB_SIGNAL_DEBUG="${BL64_LIB_SIGNAL_DEBUG:--}"
-export BL64_LIB_SIGNAL_ERR="${BL64_LIB_SIGNAL_ERR:--}"
-export BL64_LIB_SIGNAL_EXIT="${BL64_LIB_SIGNAL_EXIT:-bl64_dbg_runtime_show}"
+export BL64_LIB_SIGNAL_HUP='-'
+export BL64_LIB_SIGNAL_STOP='-'
+export BL64_LIB_SIGNAL_QUIT='-'
+export BL64_LIB_SIGNAL_DEBUG='-'
+export BL64_LIB_SIGNAL_ERR='-'
+export BL64_LIB_SIGNAL_EXIT='bl64_dbg_runtime_show'

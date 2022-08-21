@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 2.2.0
+# Version: 3.0.0
 #######################################
 
 #
@@ -88,7 +88,7 @@ if [[ "$BL64_LIB_TRAPS" == "$BL64_LIB_VAR_ON" ]]; then
 fi
 
 # Set default umask
-bl64_fs_set_umask "$BL64_LIB_UMASK" || return $?
+bl64_fs_set_umask
 
 # Set script identity
 bl64_bsh_script_set_identity

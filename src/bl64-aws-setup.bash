@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with AWS
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 
@@ -46,6 +46,7 @@ function bl64_aws_setup() {
 
   bl64_aws_set_command "$aws_bin" &&
     bl64_aws_set_options &&
+    bl64_aws_set_definitions &&
     bl64_check_command "$BL64_AWS_CMD_AWS" &&
     bl64_aws_set_paths &&
     BL64_AWS_MODULE="$BL64_LIB_VAR_ON"
@@ -121,6 +122,32 @@ function bl64_aws_set_options() {
 }
 
 #######################################
+# Declare version specific definitions
+#
+# * Use to capture default file names, values, attributes, etc
+# * Do not use to capture CLI flags. Use *_set_options instead
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_aws_set_definitions() {
+  bl64_dbg_lib_show_function
+
+  BL64_AWS_DEF_SUFFIX_TOKEN='json'
+  BL64_AWS_DEF_SUFFIX_HOME='.aws'
+  BL64_AWS_DEF_SUFFIX_CACHE='sso/cache'
+  BL64_AWS_DEF_SUFFIX_CONFIG='cfg'
+  BL64_AWS_DEF_SUFFIX_CREDENTIALS='secret'
+
+  return 0
+}
+
+#######################################
 # Set and prepare module paths
 #
 # * Global paths only
@@ -145,14 +172,14 @@ function bl64_aws_set_paths() {
 
   bl64_dbg_lib_show_info 'prepare AWS_HOME'
   bl64_check_home || return $?
-  aws_home="${HOME}/${BL64_AWS_SUFFIX_HOME}"
+  aws_home="${HOME}/${BL64_AWS_DEF_SUFFIX_HOME}"
   bl64_fs_create_dir "$BL64_AWS_CLI_MODE" "$BL64_LIB_DEFAULT" "$BL64_LIB_DEFAULT" "$aws_home" || return $?
 
   bl64_dbg_lib_show_info 'set configuration paths'
   BL64_AWS_CLI_HOME="$aws_home"
-  BL64_AWS_CLI_CACHE="${BL64_AWS_CLI_HOME}/${BL64_AWS_SUFFIX_CACHE}"
-  BL64_AWS_CLI_CONFIG="${BL64_AWS_CLI_HOME}/${configuration}.${BL64_AWS_SUFFIX_CONFIG}"
-  BL64_AWS_CLI_CREDENTIALS="${BL64_AWS_CLI_HOME}/${credentials}.${BL64_AWS_SUFFIX_CREDENTIALS}"
+  BL64_AWS_CLI_CACHE="${BL64_AWS_CLI_HOME}/${BL64_AWS_DEF_SUFFIX_CACHE}"
+  BL64_AWS_CLI_CONFIG="${BL64_AWS_CLI_HOME}/${configuration}.${BL64_AWS_DEF_SUFFIX_CONFIG}"
+  BL64_AWS_CLI_CREDENTIALS="${BL64_AWS_CLI_HOME}/${credentials}.${BL64_AWS_DEF_SUFFIX_CREDENTIALS}"
 
   bl64_dbg_lib_show_vars 'BL64_AWS_CLI_HOME' 'BL64_AWS_CLI_CACHE' 'BL64_AWS_CLI_CONFIG' 'BL64_AWS_CLI_CREDENTIALS'
   return 0

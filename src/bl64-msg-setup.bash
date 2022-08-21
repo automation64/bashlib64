@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Display messages
 #
-# Version: 2.2.0
+# Version: 2.3.0
 #######################################
 
 #
@@ -39,6 +39,32 @@ function bl64_msg_setup() {
   bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI"
 
   BL64_MSG_MODULE="$BL64_LIB_VAR_ON"
+}
+
+#######################################
+# Set verbosity level
+#
+# Arguments:
+#   $1: target level. One of BL64_MSG_VERBOSE_*
+# Outputs:
+#   STDOUT: None
+#   STDERR: check error
+# Returns:
+#   0: set ok
+#   >0: unable to set
+#######################################
+function bl64_msg_set_level() {
+  local level="$1"
+
+  bl64_check_parameter 'level' || return $?
+
+  case "$level" in
+  "$BL64_MSG_VERBOSE_NONE") bl64_msg_all_disable_verbose ;;
+  "$BL64_MSG_VERBOSE_APP") bl64_msg_app_enable_verbose ;;
+  "$BL64_MSG_VERBOSE_LIB") bl64_msg_lib_enable_verbose ;;
+  "$BL64_MSG_VERBOSE_ALL") bl64_msg_all_enable_verbose ;;
+  *) bl64_check_alert_parameter_invalid ;;
+  esac
 }
 
 #######################################

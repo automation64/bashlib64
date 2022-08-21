@@ -7,7 +7,6 @@ setup() {
   assert_not_equal "$BL64_LIB_LANG" ''
   assert_not_equal "$BL64_LIB_STRICT" ''
   assert_not_equal "$BL64_LIB_TRAPS" ''
-  assert_not_equal "$BL64_LIB_UMASK" ''
 }
 
 @test "bl64_lib_env: public constants are set" {
@@ -60,7 +59,7 @@ setup() {
   assert_equal $BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT 61
   assert_equal $BL64_LIB_ERROR_USER_NOT_FOUND 62
 #  assert_equal $BL64_LIB_ERROR_GROUP_NOT_FOUND 63
- 
+
   assert_equal $BL64_LIB_ERROR_EXPORT_EMPTY 70
   assert_equal $BL64_LIB_ERROR_EXPORT_SET 71
   assert_equal $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED 72

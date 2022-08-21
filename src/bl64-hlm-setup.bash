@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with HLM
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -27,9 +27,9 @@ function bl64_hlm_setup() {
   fi
 
   bl64_hlm_set_command "$helm_bin" &&
-    bl64_hlm_set_options &&
     bl64_check_command "$BL64_HLM_CMD_HELM" &&
-    bl64_hlm_set_defaults &&
+    bl64_hlm_set_options &&
+    bl64_hlm_set_runtime &&
     BL64_HLM_MODULE="$BL64_LIB_VAR_ON"
 
 }
@@ -95,8 +95,20 @@ function bl64_hlm_set_options() {
   BL64_HLM_SET_OUTPUT_YAML='--output yaml'
 }
 
-function bl64_hlm_set_defaults() {
+#######################################
+# Set runtime variables
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_hlm_set_runtime() {
   bl64_dbg_lib_show_function
 
-  BL64_HLM_K8S_TIMEOUT='5m0s'
+  # Command timeout
+  BL64_HLM_RUN_TIMEOUT='5m0s'
 }

@@ -20,7 +20,7 @@ setup() {
   run bl64_py_venv_create "${TEST_SANDBOX}/new"
   assert_success
   assert_dir_exist "${TEST_SANDBOX}/new"
-  assert_file_exist "${TEST_SANDBOX}/new/${BL64_PY_SET_VENV_CFG}"
+  assert_file_exist "${TEST_SANDBOX}/new/${BL64_PY_DEF_VENV_CFG}"
 
 }
 

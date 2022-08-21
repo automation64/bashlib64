@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with AWS
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -9,11 +9,11 @@ export BL64_AWS_MODULE="$BL64_LIB_VAR_OFF"
 
 export BL64_AWS_CMD_AWS="$BL64_LIB_UNAVAILABLE"
 
-export BL64_AWS_SUFFIX_TOKEN='json'
-export BL64_AWS_SUFFIX_HOME='.aws'
-export BL64_AWS_SUFFIX_CACHE='sso/cache'
-export BL64_AWS_SUFFIX_CONFIG='cfg'
-export BL64_AWS_SUFFIX_CREDENTIALS='secret'
+export BL64_AWS_DEF_SUFFIX_TOKEN=''
+export BL64_AWS_DEF_SUFFIX_HOME=''
+export BL64_AWS_DEF_SUFFIX_CACHE=''
+export BL64_AWS_DEF_SUFFIX_CONFIG=''
+export BL64_AWS_DEF_SUFFIX_CREDENTIALS=''
 
 export BL64_AWS_CLI_MODE='0700'
 export BL64_AWS_CLI_HOME=''
