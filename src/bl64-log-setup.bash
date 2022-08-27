@@ -58,7 +58,7 @@ function bl64_log_set_repository() {
 
   if [[ ! -d "$repository" ]]; then
     "$BL64_FS_CMD_MKDIR" "$repository" &&
-      "$BL64_FS_CMD_MOD" "$BL64_LOG_REPOSITORY_MODE" "$repository" ||
+      "$BL64_FS_CMD_CHMOD" "$BL64_LOG_REPOSITORY_MODE" "$repository" ||
       return $BL64_LIB_ERROR_TASK_FAILED
   else
     [[ -w "$repository" ]] || return $BL64_LIB_ERROR_TASK_FAILED
@@ -173,7 +173,7 @@ function bl64_log_set_runtime() {
   bl64_dbg_lib_show_function "$@"
   local target="$1"
   local destination="${BL64_LOG_REPOSITORY}/${target}"
-  local log="$(printf '%(%FT%TZ%z)T' '-1')"
+  local log=''
 
   # Check if there is a new target to set
   [[ "$BL64_LOG_RUNTIME" == "$destination" ]] && return 0
@@ -186,6 +186,9 @@ function bl64_log_set_runtime() {
 
   [[ ! -w "$destination" ]] && return $BL64_LIB_ERROR_TASK_FAILED
 
-  BL64_LOG_RUNTIME="${destination}/${log}.log"
+  log="$(printf '%(%FT%TZ%z)T' '-1')" &&
+    BL64_LOG_RUNTIME="${destination}/${log}.log" ||
+    return 0
+
   return 0
 }
