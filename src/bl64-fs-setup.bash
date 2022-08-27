@@ -83,7 +83,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_MKTEMP='/bin/mktemp'
     BL64_FS_CMD_MV='/bin/mv'
     BL64_FS_CMD_RM='/bin/rm'
-    BL64_FS_CMD_TOUCH='/usr/bin/touch'
+    BL64_FS_CMD_TOUCH='/bin/touch'
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_FS_CMD_CHMOD='/bin/chmod'
