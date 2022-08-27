@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Display messages
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
 
 export BL64_MSG_MODULE="$BL64_LIB_VAR_OFF"
@@ -21,6 +21,19 @@ export BL64_MSG_VERBOSE_NONE='0'
 export BL64_MSG_VERBOSE_APP='1'
 export BL64_MSG_VERBOSE_LIB='2'
 export BL64_MSG_VERBOSE_ALL='3'
+
+#
+# Message type tag
+#
+
+export BL64_MSG_TYPE_ERROR='ERROR'
+export BL64_MSG_TYPE_WARNING='WARNING'
+export BL64_MSG_TYPE_INFO='INFO'
+export BL64_MSG_TYPE_TASK='TASK'
+export BL64_MSG_TYPE_LIBTASK='LIBTASK'
+export BL64_MSG_TYPE_BATCH='BATCH'
+export BL64_MSG_TYPE_BATCHOK='BATCHOK'
+export BL64_MSG_TYPE_BATCHERR='BATCHERR'
 
 #
 # Message output type
