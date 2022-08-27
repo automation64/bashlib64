@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage local filesystem
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -57,6 +57,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_MKTEMP='/bin/mktemp'
     BL64_FS_CMD_MV='/bin/mv'
     BL64_FS_CMD_RM='/bin/rm'
+    BL64_FS_CMD_TOUCH='/usr/bin/touch'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_FS_CMD_CHMOD='/usr/bin/chmod'
@@ -69,6 +70,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_MKTEMP='/usr/bin/mktemp'
     BL64_FS_CMD_MV='/usr/bin/mv'
     BL64_FS_CMD_RM='/usr/bin/rm'
+    BL64_FS_CMD_TOUCH='/usr/bin/touch'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_FS_CMD_CHMOD='/bin/chmod'
@@ -81,6 +83,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_MKTEMP='/bin/mktemp'
     BL64_FS_CMD_MV='/bin/mv'
     BL64_FS_CMD_RM='/bin/rm'
+    BL64_FS_CMD_TOUCH='/usr/bin/touch'
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_FS_CMD_CHMOD='/bin/chmod'
@@ -93,6 +96,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_MKTEMP='/usr/bin/mktemp'
     BL64_FS_CMD_MV='/bin/mv'
     BL64_FS_CMD_RM='/bin/rm'
+    BL64_FS_CMD_TOUCH='/usr/bin/touch'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
