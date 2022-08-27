@@ -582,6 +582,9 @@ function bl64_check_user() {
 #######################################
 # Check exit status
 #
+# * Helper to check for exit status of the last executed command and show error if failed
+# * Return the same status as the latest command. This is to facilitate chaining with &&
+#
 # Arguments:
 #   $1: exit status
 #   $2: error message
