@@ -1,8 +1,111 @@
 #######################################
 # BashLib64 / Module / Functions / Manage native OS packages
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
+
+#######################################
+# Add package repository
+#
+# * Add remote package repository
+# * Package cache is not refreshed
+#
+# Requirements:
+#   * root privilege (sudo)
+# Arguments:
+#   $1: repository name
+#   $2: repository source. Format: URL
+#   $3: GPGKey source (YUM only). Format: URL
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   package manager exist status
+#######################################
+function bl64_pkg_repository_add() {
+  bl64_dbg_lib_show_function "$@"
+  local repository="$1"
+  local source="$2"
+  local gpgkey="${3:-${BL64_LIB_VAR_NULL}}"
+  local definition=''
+
+  bl64_check_privilege_root &&
+    bl64_check_parameter 'repository' &&
+    bl64_check_parameter 'source' ||
+    return $?
+
+  bl64_msg_show_lib_task "$_BL64_PKG_TXT_REPOSITORY_ADD (${repository})"
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.* | ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+
+    bl64_check_parameter 'gpgkey' || return $?
+    definition="${BL64_PKG_PATH_YUM_REPOS_D}/${repository}.${BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY}"
+    [[ -f "$definition" ]] && bl64_dbg_lib_show_info "repository already created (${definition}). No action taken" && return 0
+
+    bl64_dbg_lib_show_info "create repository definition (${definition})"
+    printf '[%s]
+name=%s
+baseurl=%s
+gpgcheck=1
+enabled=1
+gpgkey=%s\n' \
+      "$repository" \
+      "$repository" \
+      "$source" \
+      "$gpgkey" \
+      >"$definition"
+    ;;
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_check_alert_unsupported
+    ;;
+  ${BL64_OS_ALP}-*)
+    bl64_check_alert_unsupported
+    ;;
+  ${BL64_OS_MCOS}-*)
+    bl64_check_alert_unsupported
+    ;;
+  *) bl64_check_alert_unsupported ;;
+
+  esac
+}
+
+#######################################
+# Refresh package repository
+#
+# Requirements:
+#   * root privilege (sudo)
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   n: package manager exist status
+#######################################
+function bl64_pkg_repository_refresh() {
+  bl64_dbg_lib_show_function
+
+  bl64_msg_show_lib_task "$_BL64_PKG_TXT_REPOSITORY_REFRESH"
+  # shellcheck disable=SC2086
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+    bl64_pkg_run_dnf 'makecache'
+    ;;
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+    bl64_pkg_run_yum 'makecache'
+    ;;
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'update'
+    ;;
+  ${BL64_OS_ALP}-*)
+    bl64_pkg_run_apk 'update'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    bl64_pkg_run_brew 'update'
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+}
 
 #######################################
 # Deploy packages
@@ -44,25 +147,7 @@ function bl64_pkg_prepare() {
   bl64_dbg_lib_show_function
 
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_PREPARE"
-  # shellcheck disable=SC2086
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
-    bl64_pkg_run_dnf 'makecache'
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_pkg_run_yum 'makecache'
-    ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'update'
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_pkg_run_apk 'update'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    bl64_pkg_run_brew 'update'
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
+  bl64_pkg_repository_refresh
 }
 
 #######################################
