@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Transfer and Receive data over the network
 #
-# Version: 1.13.1
+# Version: 1.14.0
 #######################################
 
 #######################################
@@ -29,10 +29,13 @@ function bl64_rxtx_web_get_file() {
   local mode="${4:-${BL64_LIB_DEFAULT}}"
   local -i status=0
 
-  bl64_check_parameter 'source' &&
+  bl64_check_module_setup "$BL64_RXTX_MODULE" &&
+    bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' || return $?
 
-  [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]] && return 0
+  [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]] &&
+    bl64_dbg_lib_show_info "destination is already created (${destination}) and overwrite is disabled. No action taken" &&
+    return 0
   bl64_fs_safeguard "$destination" >/dev/null || return $?
 
   bl64_msg_show_lib_task "$_BL64_RXTX_TXT_DOWNLOAD_FILE ($source)"
@@ -49,7 +52,6 @@ function bl64_rxtx_web_get_file() {
       "$source"
     status=$?
   else
-    # shellcheck disable=SC2086
     bl64_msg_show_error "$_BL64_RXTX_TXT_MISSING_COMMAND (wget or curl)" &&
       return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -95,8 +97,8 @@ function bl64_rxtx_git_get_dir() {
   local branch="${5:-main}"
   local -i status=0
 
-  # shellcheck disable=SC2086
-  bl64_check_parameter 'source_url' &&
+  bl64_check_module_setup "$BL64_RXTX_MODULE" &&
+    bl64_check_parameter 'source_url' &&
     bl64_check_parameter 'source_path' &&
     bl64_check_parameter 'destination' &&
     bl64_check_path_relative "$source_path" ||
@@ -145,7 +147,8 @@ function bl64_rxtx_run_curl() {
   bl64_check_parameters_none "$#" || return $?
   local verbose="$BL64_RXTX_SET_CURL_SILENT"
 
-  bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
+  bl64_check_module_setup "$BL64_RXTX_MODULE" &&
+    bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
 
@@ -174,7 +177,8 @@ function bl64_rxtx_run_wget() {
   bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
-  bl64_check_command "$BL64_RXTX_CMD_WGET" || return $?
+  bl64_check_module_setup "$BL64_RXTX_MODULE" &&
+    bl64_check_command "$BL64_RXTX_CMD_WGET" || return $?
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
 
@@ -196,8 +200,9 @@ function _bl64_rxtx_git_get_dir_root() {
   local git_name=''
   local transition=''
 
+  bl64_check_module_setup "$BL64_RXTX_MODULE" || return $?
+
   repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
-  # shellcheck disable=SC2086
   bl64_check_directory "$repo" "$_BL64_RXTX_TXT_CREATION_PROBLEM" || return $BL64_LIB_ERROR_TASK_TEMP
 
   git_name="$(bl64_fmt_basename "$source_url")"
@@ -226,6 +231,8 @@ function _bl64_rxtx_git_get_dir_sub() {
   local target=''
   local source=''
   local transition=''
+
+  bl64_check_module_setup "$BL64_RXTX_MODULE" || return $?
 
   repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
   # shellcheck disable=SC2086

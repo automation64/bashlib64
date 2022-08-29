@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Display messages
 #
-# Version: 3.0.0
+# Version: 3.1.0
 #######################################
 
 #######################################
@@ -187,7 +187,8 @@ function bl64_msg_show_usage() {
 function bl64_msg_show_error() {
   local message="$1"
 
-  _bl64_msg_show 'ERROR' "$_BL64_MSG_TXT_ERROR" "$message" >&2
+  bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
+    _bl64_msg_show "$BL64_MSG_TYPE_ERROR" "$_BL64_MSG_TXT_ERROR" "$message" >&2
 }
 
 #######################################
@@ -205,7 +206,8 @@ function bl64_msg_show_error() {
 function bl64_msg_show_warning() {
   local message="$1"
 
-  _bl64_msg_show 'WARNING' "$_BL64_MSG_TXT_WARNING" "$message" >&2
+  bl64_log_warning "${FUNCNAME[1]:-MAIN}" "$message" &&
+    _bl64_msg_show "$BL64_MSG_TYPE_WARNING" "$_BL64_MSG_TXT_WARNING" "$message" >&2
 }
 
 #######################################
@@ -223,9 +225,10 @@ function bl64_msg_show_warning() {
 function bl64_msg_show_info() {
   local message="$1"
 
-  bl64_msg_app_verbose_enabled || return 0
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
+    bl64_msg_app_verbose_enabled || return 0
 
-  _bl64_msg_show 'INFO' "$_BL64_MSG_TXT_INFO" "$message"
+  _bl64_msg_show "$BL64_MSG_TYPE_INFO" "$_BL64_MSG_TXT_INFO" "$message"
 }
 
 #######################################
@@ -243,9 +246,10 @@ function bl64_msg_show_info() {
 function bl64_msg_show_task() {
   local message="$1"
 
-  bl64_msg_app_verbose_enabled || return 0
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_TASK}:${message}" &&
+    bl64_msg_app_verbose_enabled || return 0
 
-  _bl64_msg_show 'TASK' "$_BL64_MSG_TXT_TASK" "$message"
+  _bl64_msg_show "$BL64_MSG_TYPE_TASK" "$_BL64_MSG_TXT_TASK" "$message"
 }
 
 #######################################
@@ -263,9 +267,10 @@ function bl64_msg_show_task() {
 function bl64_msg_show_lib_task() {
   local message="$1"
 
-  bl64_msg_lib_verbose_enabled || return 0
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBTASK}:${message}" &&
+    bl64_msg_lib_verbose_enabled || return 0
 
-  _bl64_msg_show 'LIBTASK' "$_BL64_MSG_TXT_TASK" "$message"
+  _bl64_msg_show "$BL64_MSG_TYPE_LIBTASK" "$_BL64_MSG_TXT_TASK" "$message"
 }
 
 #######################################
@@ -283,7 +288,8 @@ function bl64_msg_show_lib_task() {
 function bl64_msg_show_text() {
   local message="$1"
 
-  bl64_msg_app_verbose_enabled || return 0
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
+    bl64_msg_app_verbose_enabled || return 0
 
   printf '%s\n' "$message"
 }
@@ -303,9 +309,10 @@ function bl64_msg_show_text() {
 function bl64_msg_show_batch_start() {
   local message="$1"
 
-  bl64_msg_app_verbose_enabled || return 0
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${message}" &&
+    bl64_msg_app_verbose_enabled || return 0
 
-  _bl64_msg_show 'BATCH' "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_START}"
+  _bl64_msg_show "$BL64_MSG_TYPE_BATCH" "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_START}"
 }
 
 #######################################
@@ -325,11 +332,12 @@ function bl64_msg_show_batch_finish() {
   local status="$1"
   local message="${2-${BL64_LIB_DEFAULT}}"
 
-  bl64_msg_app_verbose_enabled || return 0
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${status}:${message}" &&
+    bl64_msg_app_verbose_enabled || return 0
 
   if ((status == 0)); then
-    _bl64_msg_show 'BATCHOK' "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_OK}"
+    _bl64_msg_show "$BL64_MSG_TYPE_BATCHOK" "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_OK}"
   else
-    _bl64_msg_show 'BATCHERR' "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: exit-status-${status}"
+    _bl64_msg_show "$BL64_MSG_TYPE_BATCHERR" "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: exit-status-${status}"
   fi
 }

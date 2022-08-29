@@ -15,6 +15,7 @@ setup() {
   assert_not_equal "${BL64_FS_CMD_MKTEMP}" ''
   assert_not_equal "${BL64_FS_CMD_MV}" ''
   assert_not_equal "${BL64_FS_CMD_RM}" ''
+  assert_not_equal "${BL64_FS_CMD_TOUCH}" ''
 
 }
 
@@ -30,5 +31,6 @@ setup() {
   assert_file_executable "${BL64_FS_CMD_MKTEMP}"
   assert_file_executable "${BL64_FS_CMD_MV}"
   assert_file_executable "${BL64_FS_CMD_RM}"
+  assert_file_executable "${BL64_FS_CMD_TOUCH}"
 
 }

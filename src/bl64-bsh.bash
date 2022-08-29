@@ -56,6 +56,8 @@ function bl64_bsh_script_get_name() {
 #######################################
 # Set script ID
 #
+# * Use to change the default BL64_SCRIPT_ID which is BL64_SCRIPT_NAME
+#
 # Arguments:
 #   $1: id value
 # Outputs:
@@ -78,6 +80,11 @@ function bl64_bsh_script_set_id() {
 
 #######################################
 # Define current script identity
+#
+# * BL64_SCRIPT_SID: session ID for the running script. Changes on each run
+# * BL64_SCRIPT_PATH: full path to the base directory script
+# * BL64_SCRIPT_NAME: file name of the current script
+# * BL64_SCRIPT_ID: script id (tag)
 #
 # Arguments:
 #   None

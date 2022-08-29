@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+. bin/devbl-set
+. "$DEVBL_BUILD_BASHLIB64"
+
+#
+# Model logging
+#
+
+bl64_log_setup "$DEVBL_TMP/test_model_logs" || exit 1
+
+bl64_log_set_level "$BL64_LOG_CATEGORY_INFO"
+
+bl64_log_info 'main' 'info log message'
+bl64_log_error 'main' 'error log message'
+bl64_log_warning 'main' 'warning log message'
+
+bl64_msg_show_error 'test'
+bl64_msg_show_warning 'test'
+bl64_msg_show_info 'test'
+bl64_msg_show_task 'test'
+bl64_msg_show_lib_task 'test'
+bl64_msg_show_batch_start 'test'
+bl64_msg_show_batch_finish 0 'test'
+bl64_msg_show_batch_finish 1 'test'

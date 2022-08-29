@@ -2,16 +2,16 @@ setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
 }
 
-@test "bl64_log_setup: type format" {
+@test "bl64_log_setup: no repo" {
 
-  run bl64_log_setup '/dev/null' '1' 'INVALID_TYPE'
+  run bl64_log_setup
   assert_failure
 
 }
 
-@test "bl64_log_setup: set type" {
+@test "bl64_log_setup: invalid repo" {
 
-  run bl64_log_setup '/dev/null' '1' "$BL64_LOG_TYPE_FILE"
-  assert_success
+  run bl64_log_setup '/dev/null'
+  assert_failure
 
 }

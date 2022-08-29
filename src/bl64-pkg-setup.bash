@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage native OS packages
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -22,6 +22,7 @@ function bl64_pkg_setup() {
   bl64_dbg_lib_show_function
 
   bl64_pkg_set_command &&
+    bl64_pkg_set_paths &&
     bl64_pkg_set_alias &&
     bl64_pkg_set_options &&
     BL64_PKG_MODULE="$BL64_LIB_VAR_ON"
@@ -44,7 +45,6 @@ function bl64_pkg_setup() {
 #######################################
 function bl64_pkg_set_command() {
   bl64_dbg_lib_show_function
-  # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
@@ -165,4 +165,48 @@ function bl64_pkg_set_alias() {
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
+}
+
+#######################################
+# Set and prepare module paths
+#
+# * Global paths only
+# * If preparation fails the whole module fails
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: paths prepared ok
+#   >0: failed to prepare paths
+#######################################
+# shellcheck disable=SC2120
+function bl64_pkg_set_paths() {
+  bl64_dbg_lib_show_function
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
+    ;;
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
+    ;;
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    :
+    ;;
+  ${BL64_OS_ALP}-*)
+    :
+    ;;
+  ${BL64_OS_MCOS}-*)
+    :
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+
+  return 0
 }
