@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage archive files
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 #######################################
@@ -21,6 +21,7 @@ function bl64_arc_run_unzip() {
   bl64_dbg_lib_show_function "$@"
   local verbosity='-qq'
 
+  bl64_check_module_setup "$BL64_ARC_MODULE" &&
   bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
@@ -75,7 +76,10 @@ function bl64_arc_run_tar() {
   bl64_check_parameters_none "$#" || return $?
   local debug=''
 
-  bl64_check_command "$BL64_ARC_CMD_TAR" || return $?
+  bl64_check_module_setup "$BL64_ARC_MODULE" &&
+    bl64_check_command "$BL64_ARC_CMD_TAR" ||
+    return $?
+
   bl64_dbg_lib_command_enabled && debug="$BL64_ARC_SET_TAR_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -109,7 +113,8 @@ function bl64_arc_open_tar() {
   local destination="$2"
   local -i status=0
 
-  bl64_check_parameter 'source' &&
+  bl64_check_module_setup "$BL64_ARC_MODULE" &&
+    bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_check_directory "$destination" ||
     return $?
