@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.0.0]
+
+### Added
+
+- pkg
+  - add package repository (YUM)
+
+- fs
+  - touch cmd
+
+### Changed
+
+- log
+  - refactored to integrate with msg module
+- msg
+  - integrated with log module to record messages
+
+### Removed
+
+- log
+  - bl64_log_record
+- check
+  - bl64_check_alert_failed
+
 ## [6.0.0]
 
 ### Changed
@@ -628,7 +652,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/6.0.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/7.0.0...HEAD
+[7.0.0]: https://github.com/serdigital64/bashlib64/compare/6.0.0...7.0.0
 [6.0.0]: https://github.com/serdigital64/bashlib64/compare/5.0.0...6.0.0
 [5.0.0]: https://github.com/serdigital64/bashlib64/compare/4.0.0...5.0.0
 [4.0.0]: https://github.com/serdigital64/bashlib64/compare/3.4.0...4.0.0
