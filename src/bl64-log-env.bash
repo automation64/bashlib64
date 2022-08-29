@@ -1,28 +1,34 @@
 #######################################
 # BashLib64 / Module / Globals / Write messages to logs
 #
-# Version: 1.2.0
+# Version: 2.0.0
 #######################################
 
 # Optional module. Not enabled by default
 export BL64_LOG_MODULE="$BL64_LIB_VAR_OFF"
 
 # Log file types
-export BL64_LOG_TYPE_FILE='F'
+export BL64_LOG_FORMAT_CSV='C'
 
 # Logging categories
-export BL64_LOG_CATEGORY_INFO='info'
-export BL64_LOG_CATEGORY_TASK='task'
-export BL64_LOG_CATEGORY_DEBUG='debug'
-export BL64_LOG_CATEGORY_WARNING='warning'
-export BL64_LOG_CATEGORY_ERROR='error'
-export BL64_LOG_CATEGORY_RECORD='record'
+export BL64_LOG_CATEGORY_NONE='NONE'
+export BL64_LOG_CATEGORY_INFO='INFO'
+export BL64_LOG_CATEGORY_DEBUG='DEBUG'
+export BL64_LOG_CATEGORY_WARNING='WARNING'
+export BL64_LOG_CATEGORY_ERROR='ERROR'
+
+# Parameters
+export BL64_LOG_REPOSITORY_MODE='0755'
+export BL64_LOG_TARGET_MODE='0644'
+
+# Module variables
+export BL64_LOG_FS=''
+export BL64_LOG_FORMAT=''
+export BL64_LOG_LEVEL=''
+export BL64_LOG_REPOSITORY=''
+export BL64_LOG_DESTINATION=''
+export BL64_LOG_RUNTIME=''
 
 export _BL64_LOG_TXT_INVALID_TYPE='invalid log type. Please use any of BL64_LOG_TYPE_*'
-export _BL64_LOG_TXT_INVALID_VERBOSE='invalid option for verbose. Please use 1 (enable) or 0 (disable)'
-
-# Module parameters
-export BL64_LOG_PATH=''
-export BL64_LOG_VERBOSE=''
-export BL64_LOG_FS=''
-export BL64_LOG_TYPE=''
+export _BL64_LOG_TXT_SET_TARGET_FAILED='failed to set log target'
+export _BL64_LOG_TXT_CREATE_REPOSITORY='create log repository'

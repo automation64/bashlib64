@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Manage native OS packages
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 export BL64_PKG_MODULE="$BL64_LIB_VAR_OFF"
@@ -33,7 +33,15 @@ export BL64_PKG_SET_QUIET=''
 export BL64_PKG_SET_SLIM=''
 export BL64_PKG_SET_VERBOSE=''
 
+export BL64_PKG_SET_VERBOSE=''
+
+export BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY='repo'
+
+export BL64_PKG_PATH_YUM_REPOS_D=''
+
 export _BL64_PKG_TXT_CLEAN='clean up package manager run-time environment'
 export _BL64_PKG_TXT_INSTALL='install packages'
 export _BL64_PKG_TXT_UPGRADE='upgrade packages'
 export _BL64_PKG_TXT_PREPARE='initialize package manager'
+export _BL64_PKG_TXT_REPOSITORY_REFRESH='refresh package repository content'
+export _BL64_PKG_TXT_REPOSITORY_ADD='add remote package repository'

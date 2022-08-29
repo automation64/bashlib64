@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 1.19.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -480,31 +480,6 @@ function bl64_check_alert_undefined() {
 }
 
 #######################################
-# Alert if provided exist status is failed
-#
-# * Use for simple check and alert of previously executed operation
-#
-# Arguments:
-#   $1: exist status
-#   $2: message
-# Outputs:
-#   STDOUT: none
-#   STDERR: message
-# Returns:
-#   provided exit status
-#######################################
-function bl64_check_alert_failed() {
-  bl64_dbg_lib_show_function "$@"
-  local -i status=${1:-0}
-  local message="${2:-${_BL64_CHECK_TXT_FAILED}}"
-
-  ((status != 0)) &&
-    bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}${target:+ ${_BL64_CHECK_TXT_I} command: ${target}})"
-
-  return $status
-}
-
-#######################################
 # Check that parameters are passed
 #
 # Arguments:
@@ -582,6 +557,9 @@ function bl64_check_user() {
 #######################################
 # Check exit status
 #
+# * Helper to check for exit status of the last executed command and show error if failed
+# * Return the same status as the latest command. This is to facilitate chaining with &&
+#
 # Arguments:
 #   $1: exit status
 #   $2: error message
@@ -593,14 +571,15 @@ function bl64_check_user() {
 #######################################
 function bl64_check_status() {
   bl64_dbg_lib_show_function "$@"
-  local status="${1:-}"
+  local -i status="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_STATUS_ERROR}}"
 
   bl64_check_parameter 'status' || return $?
 
   if [[ "$status" != '0' ]]; then
     bl64_msg_show_error "${message} (status: ${status} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
-    return "$status"
+    # shellcheck disable=SC2086
+    return $status
   else
     return 0
   fi

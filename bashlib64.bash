@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 6.0.0
+# Version: 7.0.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -381,7 +381,7 @@ export _BL64_DBG_TXT_DEBUG='Debug'
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 export BL64_FS_MODULE="$BL64_LIB_VAR_OFF"
@@ -399,6 +399,7 @@ export BL64_FS_CMD_MKDIR=''
 export BL64_FS_CMD_MKTEMP=''
 export BL64_FS_CMD_MV=''
 export BL64_FS_CMD_RM=''
+export BL64_FS_CMD_TOUCH=''
 
 export BL64_FS_ALIAS_CHOWN_DIR=''
 export BL64_FS_ALIAS_CP_FILE=''
@@ -511,32 +512,37 @@ export BL64_K8S_SET_OUTPUT_TXT=''
 #######################################
 # BashLib64 / Module / Globals / Write messages to logs
 #
-# Version: 1.2.0
+# Version: 2.0.0
 #######################################
 
 # Optional module. Not enabled by default
 export BL64_LOG_MODULE="$BL64_LIB_VAR_OFF"
 
 # Log file types
-export BL64_LOG_TYPE_FILE='F'
+export BL64_LOG_FORMAT_CSV='C'
 
 # Logging categories
-export BL64_LOG_CATEGORY_INFO='info'
-export BL64_LOG_CATEGORY_TASK='task'
-export BL64_LOG_CATEGORY_DEBUG='debug'
-export BL64_LOG_CATEGORY_WARNING='warning'
-export BL64_LOG_CATEGORY_ERROR='error'
-export BL64_LOG_CATEGORY_RECORD='record'
+export BL64_LOG_CATEGORY_NONE='NONE'
+export BL64_LOG_CATEGORY_INFO='INFO'
+export BL64_LOG_CATEGORY_DEBUG='DEBUG'
+export BL64_LOG_CATEGORY_WARNING='WARNING'
+export BL64_LOG_CATEGORY_ERROR='ERROR'
+
+# Parameters
+export BL64_LOG_REPOSITORY_MODE='0755'
+export BL64_LOG_TARGET_MODE='0644'
+
+# Module variables
+export BL64_LOG_FS=''
+export BL64_LOG_FORMAT=''
+export BL64_LOG_LEVEL=''
+export BL64_LOG_REPOSITORY=''
+export BL64_LOG_DESTINATION=''
+export BL64_LOG_RUNTIME=''
 
 export _BL64_LOG_TXT_INVALID_TYPE='invalid log type. Please use any of BL64_LOG_TYPE_*'
-export _BL64_LOG_TXT_INVALID_VERBOSE='invalid option for verbose. Please use 1 (enable) or 0 (disable)'
-
-# Module parameters
-export BL64_LOG_PATH=''
-export BL64_LOG_VERBOSE=''
-export BL64_LOG_FS=''
-export BL64_LOG_TYPE=''
-
+export _BL64_LOG_TXT_SET_TARGET_FAILED='failed to set log target'
+export _BL64_LOG_TXT_CREATE_REPOSITORY='create log repository'
 #######################################
 # BashLib64 / Module / Setup / Interact with MongoDB
 #
@@ -560,7 +566,7 @@ export BL64_MDB_REPLICA_TIMEOUT=''
 #######################################
 # BashLib64 / Module / Globals / Display messages
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
 
 export BL64_MSG_MODULE="$BL64_LIB_VAR_OFF"
@@ -580,6 +586,19 @@ export BL64_MSG_VERBOSE_NONE='0'
 export BL64_MSG_VERBOSE_APP='1'
 export BL64_MSG_VERBOSE_LIB='2'
 export BL64_MSG_VERBOSE_ALL='3'
+
+#
+# Message type tag
+#
+
+export BL64_MSG_TYPE_ERROR='ERROR'
+export BL64_MSG_TYPE_WARNING='WARNING'
+export BL64_MSG_TYPE_INFO='INFO'
+export BL64_MSG_TYPE_TASK='TASK'
+export BL64_MSG_TYPE_LIBTASK='LIBTASK'
+export BL64_MSG_TYPE_BATCH='BATCH'
+export BL64_MSG_TYPE_BATCHOK='BATCHOK'
+export BL64_MSG_TYPE_BATCHERR='BATCHERR'
 
 #
 # Message output type
@@ -747,7 +766,7 @@ export BL64_OS_UNK='UNKNOWN'; export BL64_OS_UNK
 #######################################
 # BashLib64 / Module / Globals / Manage native OS packages
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 export BL64_PKG_MODULE="$BL64_LIB_VAR_OFF"
@@ -779,10 +798,18 @@ export BL64_PKG_SET_QUIET=''
 export BL64_PKG_SET_SLIM=''
 export BL64_PKG_SET_VERBOSE=''
 
+export BL64_PKG_SET_VERBOSE=''
+
+export BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY='repo'
+
+export BL64_PKG_PATH_YUM_REPOS_D=''
+
 export _BL64_PKG_TXT_CLEAN='clean up package manager run-time environment'
 export _BL64_PKG_TXT_INSTALL='install packages'
 export _BL64_PKG_TXT_UPGRADE='upgrade packages'
 export _BL64_PKG_TXT_PREPARE='initialize package manager'
+export _BL64_PKG_TXT_REPOSITORY_REFRESH='refresh package repository content'
+export _BL64_PKG_TXT_REPOSITORY_ADD='add remote package repository'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with system-wide Python
@@ -1344,7 +1371,7 @@ function bl64_arc_set_options() {
 #######################################
 # BashLib64 / Module / Functions / Manage archive files
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 #######################################
@@ -1364,6 +1391,7 @@ function bl64_arc_run_unzip() {
   bl64_dbg_lib_show_function "$@"
   local verbosity='-qq'
 
+  bl64_check_module_setup "$BL64_ARC_MODULE" &&
   bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
@@ -1418,7 +1446,10 @@ function bl64_arc_run_tar() {
   bl64_check_parameters_none "$#" || return $?
   local debug=''
 
-  bl64_check_command "$BL64_ARC_CMD_TAR" || return $?
+  bl64_check_module_setup "$BL64_ARC_MODULE" &&
+    bl64_check_command "$BL64_ARC_CMD_TAR" ||
+    return $?
+
   bl64_dbg_lib_command_enabled && debug="$BL64_ARC_SET_TAR_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -1452,7 +1483,8 @@ function bl64_arc_open_tar() {
   local destination="$2"
   local -i status=0
 
-  bl64_check_parameter 'source' &&
+  bl64_check_module_setup "$BL64_ARC_MODULE" &&
+    bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_check_directory "$destination" ||
     return $?
@@ -2098,6 +2130,8 @@ function bl64_bsh_script_get_name() {
 #######################################
 # Set script ID
 #
+# * Use to change the default BL64_SCRIPT_ID which is BL64_SCRIPT_NAME
+#
 # Arguments:
 #   $1: id value
 # Outputs:
@@ -2120,6 +2154,11 @@ function bl64_bsh_script_set_id() {
 
 #######################################
 # Define current script identity
+#
+# * BL64_SCRIPT_SID: session ID for the running script. Changes on each run
+# * BL64_SCRIPT_PATH: full path to the base directory script
+# * BL64_SCRIPT_NAME: file name of the current script
+# * BL64_SCRIPT_ID: script id (tag)
 #
 # Arguments:
 #   None
@@ -2170,7 +2209,7 @@ function bl64_bsh_env_export_variable() {
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 1.19.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -2649,31 +2688,6 @@ function bl64_check_alert_undefined() {
 }
 
 #######################################
-# Alert if provided exist status is failed
-#
-# * Use for simple check and alert of previously executed operation
-#
-# Arguments:
-#   $1: exist status
-#   $2: message
-# Outputs:
-#   STDOUT: none
-#   STDERR: message
-# Returns:
-#   provided exit status
-#######################################
-function bl64_check_alert_failed() {
-  bl64_dbg_lib_show_function "$@"
-  local -i status=${1:-0}
-  local message="${2:-${_BL64_CHECK_TXT_FAILED}}"
-
-  ((status != 0)) &&
-    bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}${target:+ ${_BL64_CHECK_TXT_I} command: ${target}})"
-
-  return $status
-}
-
-#######################################
 # Check that parameters are passed
 #
 # Arguments:
@@ -2751,6 +2765,9 @@ function bl64_check_user() {
 #######################################
 # Check exit status
 #
+# * Helper to check for exit status of the last executed command and show error if failed
+# * Return the same status as the latest command. This is to facilitate chaining with &&
+#
 # Arguments:
 #   $1: exit status
 #   $2: error message
@@ -2762,14 +2779,15 @@ function bl64_check_user() {
 #######################################
 function bl64_check_status() {
   bl64_dbg_lib_show_function "$@"
-  local status="${1:-}"
+  local -i status="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_STATUS_ERROR}}"
 
   bl64_check_parameter 'status' || return $?
 
   if [[ "$status" != '0' ]]; then
     bl64_msg_show_error "${message} (status: ${status} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
-    return "$status"
+    # shellcheck disable=SC2086
+    return $status
   else
     return 0
   fi
@@ -3955,7 +3973,7 @@ function bl64_dbg_app_show_function() {
 #######################################
 # BashLib64 / Module / Setup / Manage local filesystem
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -4011,6 +4029,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_MKTEMP='/bin/mktemp'
     BL64_FS_CMD_MV='/bin/mv'
     BL64_FS_CMD_RM='/bin/rm'
+    BL64_FS_CMD_TOUCH='/usr/bin/touch'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_FS_CMD_CHMOD='/usr/bin/chmod'
@@ -4023,6 +4042,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_MKTEMP='/usr/bin/mktemp'
     BL64_FS_CMD_MV='/usr/bin/mv'
     BL64_FS_CMD_RM='/usr/bin/rm'
+    BL64_FS_CMD_TOUCH='/usr/bin/touch'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_FS_CMD_CHMOD='/bin/chmod'
@@ -4035,6 +4055,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_MKTEMP='/bin/mktemp'
     BL64_FS_CMD_MV='/bin/mv'
     BL64_FS_CMD_RM='/bin/rm'
+    BL64_FS_CMD_TOUCH='/bin/touch'
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_FS_CMD_CHMOD='/bin/chmod'
@@ -4047,6 +4068,7 @@ function bl64_fs_set_command() {
     BL64_FS_CMD_MKTEMP='/usr/bin/mktemp'
     BL64_FS_CMD_MV='/bin/mv'
     BL64_FS_CMD_RM='/bin/rm'
+    BL64_FS_CMD_TOUCH='/usr/bin/touch'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -6278,17 +6300,17 @@ function bl64_k8s_blank_kubectl() {
 #######################################
 # BashLib64 / Module / Setup / Write messages to logs
 #
-# Version: 1.1.0
+# Version: 2.0.0
 #######################################
 
 #######################################
 # Setup the bashlib64 module
 #
 # Arguments:
-#   $1: full path to the log repository
-#   $2: show log messages to STDOUT/STDERR?. 1: yes, 0: no
-#   $3: log type. Use any of the constants $BL64_LOG_TYPE_*
-#   $4: field separator character to be used on each log record
+#   $1: log repository. Full path
+#   $2: log target. Default: BL64_SCRIPT_ID
+#   $2: level. One of BL64_LOG_CATEGORY_*
+#   $3: format. One of BL64_LOG_FORMAT_*
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -6299,45 +6321,190 @@ function bl64_k8s_blank_kubectl() {
 #######################################
 function bl64_log_setup() {
   bl64_dbg_lib_show_function "$@"
-  local path="$1"
-  local verbose="${2:-1}"
-  local type="${3:-$BL64_LOG_TYPE_FILE}"
-  local fs="${4:-:}"
+  local repository="${1:-}"
+  local target="${2:-${BL64_SCRIPT_ID}}"
+  local level="${3:-${BL64_LOG_CATEGORY_NONE}}"
+  local format="${4:-${BL64_LOG_FORMAT_CSV}}"
 
-  bl64_check_parameter 'path' || return $?
+  [[ -z "$repository" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
 
-  # shellcheck disable=SC2086
-  if [[ "$type" != "$BL64_LOG_TYPE_FILE" ]]; then
-    bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
-    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
-  fi
+  bl64_log_set_repository "$repository" &&
+    bl64_log_set_target "$target" &&
+    bl64_log_set_level "$level" &&
+    bl64_log_set_format "$format" ||
+    return $?
 
-  # shellcheck disable=SC2086
-  if [[ "$verbose" != '0' && "$verbose" != '1' ]]; then
-    bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_VERBOSE"
-    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
-  fi
-
-  BL64_LOG_PATH="${path}"
-  BL64_LOG_VERBOSE="${verbose}"
-  BL64_LOG_TYPE="${type}"
-  BL64_LOG_FS="${fs}"
   BL64_LOG_MODULE="$BL64_LIB_VAR_ON"
+}
+
+#######################################
+# Set log repository
+#
+# * Create the repository directory
+#
+# Arguments:
+#   $1: repository path
+# Outputs:
+#   STDOUT: None
+#   STDERR: command stderr
+# Returns:
+#   0: set ok
+#   >0: unable to set
+#######################################
+function bl64_log_set_repository() {
+  bl64_dbg_lib_show_function "$@"
+  local repository="$1"
+
+  if [[ ! -d "$repository" ]]; then
+    "$BL64_FS_CMD_MKDIR" "$repository" &&
+      "$BL64_FS_CMD_CHMOD" "$BL64_LOG_REPOSITORY_MODE" "$repository" ||
+      return $BL64_LIB_ERROR_TASK_FAILED
+  else
+    [[ -w "$repository" ]] || return $BL64_LIB_ERROR_TASK_FAILED
+  fi
+
+  BL64_LOG_REPOSITORY="$repository"
+  return 0
+}
+
+#######################################
+# Set logging level
+#
+# Arguments:
+#   $1: target level. One of BL64_LOG_CATEGORY_*
+# Outputs:
+#   STDOUT: None
+#   STDERR: check error
+# Returns:
+#   0: set ok
+#   >0: unable to set
+#######################################
+function bl64_log_set_level() {
+  bl64_dbg_lib_show_function "$@"
+  local level="$1"
+
+  case "$level" in
+  "$BL64_LOG_CATEGORY_NONE") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_NONE" ;;
+  "$BL64_LOG_CATEGORY_INFO") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_INFO" ;;
+  "$BL64_LOG_CATEGORY_DEBUG") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_DEBUG" ;;
+  "$BL64_LOG_CATEGORY_WARNING") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_WARNING" ;;
+  "$BL64_LOG_CATEGORY_ERROR") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_ERROR" ;;
+  *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
+  esac
+}
+
+#######################################
+# Set log format
+#
+# Arguments:
+#   $1: log format. One of BL64_LOG_FORMAT_*
+# Outputs:
+#   STDOUT: None
+#   STDERR: commands stderr
+# Returns:
+#   0: set ok
+#   >0: unable to set
+#######################################
+function bl64_log_set_format() {
+  bl64_dbg_lib_show_function "$@"
+  local format="$1"
+
+  case "$format" in
+  "$BL64_LOG_FORMAT_CSV")
+    BL64_LOG_FORMAT="$BL64_LOG_FORMAT_CSV"
+    BL64_LOG_FS="$BL64_XSV_FS_COLON"
+    ;;
+  *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
+  esac
+}
+
+#######################################
+# Set log target
+#
+# * Log target is the file where logs will be written to
+# * File is created or appended in the log repository
+#
+# Arguments:
+#   $1: log target. Format: file name
+# Outputs:
+#   STDOUT: None
+#   STDERR: commands stderr
+# Returns:
+#   0: set ok
+#   >0: unable to set
+#######################################
+function bl64_log_set_target() {
+  bl64_dbg_lib_show_function "$@"
+  local target="$1"
+  local destination="${BL64_LOG_REPOSITORY}/${target}"
+
+  # Check if there is a new target to set
+  [[ "$BL64_LOG_DESTINATION" == "$destination" ]] && return 0
+
+  if [[ ! -w "$destination" ]]; then
+    "$BL64_FS_CMD_TOUCH" "$destination" &&
+      "$BL64_FS_CMD_CHMOD" "$BL64_LOG_TARGET_MODE" "$destination" ||
+      return $BL64_LIB_ERROR_TASK_FAILED
+  fi
+
+  BL64_LOG_DESTINATION="$destination"
+  return 0
+}
+
+#######################################
+# Set runtime log target
+#
+# * Use to save output from commands using one file per execution
+# * The target name is used as the directory for each execution
+# * The target directory is created in the log repository
+# * The calling script is responsible for redirecting the command's output to the target path BL64_LOG_RUNTIME
+#
+# Arguments:
+#   $1: runtime log target. Format: directory name
+# Outputs:
+#   STDOUT: None
+#   STDERR: commands stderr
+# Returns:
+#   0: set ok
+#   >0: unable to set
+#######################################
+function bl64_log_set_runtime() {
+  bl64_dbg_lib_show_function "$@"
+  local target="$1"
+  local destination="${BL64_LOG_REPOSITORY}/${target}"
+  local log=''
+
+  # Check if there is a new target to set
+  [[ "$BL64_LOG_RUNTIME" == "$destination" ]] && return 0
+
+  if [[ ! -d "$destination" ]]; then
+    "$BL64_FS_CMD_MKDIR" "$destination" &&
+      "$BL64_FS_CMD_CHMOD" "$BL64_LOG_REPOSITORY_MODE" "$destination" ||
+      return $BL64_LIB_ERROR_TASK_FAILED
+  fi
+
+  [[ ! -w "$destination" ]] && return $BL64_LIB_ERROR_TASK_FAILED
+
+  log="$(printf '%(%FT%TZ%z)T' '-1')" &&
+    BL64_LOG_RUNTIME="${destination}/${log}.log" ||
+    return 0
+
+  return 0
 }
 
 #######################################
 # BashLib64 / Module / Functions / Write messages to logs
 #
-# Version: 1.6.0
+# Version: 2.0.0
 #######################################
 
 #######################################
 # Save a log record to the logs repository
 #
 # Arguments:
-#   $1: name of the function, command or script name that is generating the message
+#   $1: name of the source that is generating the message
 #   $2: log message category. Use any of $BL64_LOG_CATEGORY_*
-#   $4: message to be saved to the logs repository
+#   $3: message
 # Outputs:
 #   STDOUT: None
 #   STDERR: execution errors
@@ -6353,40 +6520,36 @@ function _bl64_log_register() {
   local category="$2"
   local payload="$3"
 
-  bl64_check_module_setup "$BL64_LOG_MODULE" || return $?
+  [[ "$BL64_LOG_MODULE" == "$BL64_LIB_VAR_OFF" ]] && return 0
+  [[ -z "$source" || -z "$category" || -z "$payload" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
 
-  case "$BL64_LOG_TYPE" in
-  "$BL64_LOG_TYPE_FILE")
-    printf '%(%d%m%Y%H%M%S)T%s%s%s%s%s%s%s%s%s%s%s%s\n' \
+  case "$BL64_LOG_FORMAT" in
+  "$BL64_LOG_FORMAT_CSV")
+    printf '%(%FT%TZ%z)T%s%s%s%s%s%s%s%s%s%s%s%s\n' \
       '-1' \
+      "$BL64_LOG_FS" \
+      "$BL64_SCRIPT_SID" \
       "$BL64_LOG_FS" \
       "$HOSTNAME" \
       "$BL64_LOG_FS" \
       "$BL64_SCRIPT_ID" \
       "$BL64_LOG_FS" \
-      "$BL64_SCRIPT_SID" \
-      "$BL64_LOG_FS" \
       "${source}" \
       "$BL64_LOG_FS" \
       "$category" \
       "$BL64_LOG_FS" \
-      "$payload" >>"$BL64_LOG_PATH"
+      "$payload" >>"$BL64_LOG_DESTINATION"
     ;;
-  *)
-    bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
-    ;;
+  *) return $BL64_LIB_ERROR_MODULE_SETUP_INVALID ;;
   esac
 }
 
 #######################################
 # Save a single log record of type 'info' to the logs repository.
-# Optionally display the message on STDOUT (BL64_LOG_VERBOSE='1')
 #
 # Arguments:
-#   $1: message to be recorded
-#   $2: name of the function, command or script name that is generating the message
+#   $1: name of the source that is generating the message
+#   $2: message to be recorded
 # Outputs:
 #   STDOUT: message (when BL64_LOG_VERBOSE='1')
 #   STDERR: execution errors
@@ -6396,55 +6559,26 @@ function _bl64_log_register() {
 #######################################
 function bl64_log_info() {
   bl64_dbg_lib_show_function "$@"
-  local payload="$1"
-  local source="${2:-${FUNCNAME[1]:-NONE}}"
+  local source="$1"
+  local payload="$2"
 
-  if [[ -n "$BL64_LOG_VERBOSE" && "$BL64_LOG_VERBOSE" == '1' ]]; then
-    bl64_msg_show_info "$payload"
-  fi
+  [[ "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_NONE" ||
+    "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_ERROR" ||
+    "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_WARNING" ]] &&
+    return 0
 
   _bl64_log_register \
-    "${source:-main}" \
+    "$source" \
     "$BL64_LOG_CATEGORY_INFO" \
     "$payload"
 }
 
 #######################################
-# Save a single log record of type 'task' to the logs repository.
-# Optionally display the message on STDOUT (BL64_LOG_VERBOSE='1')
-#
-# Arguments:
-#   $1: message to be recorded
-#   $2: name of the function, command or script name that is generating the message
-# Outputs:
-#   STDOUT: message (when BL64_LOG_VERBOSE='1')
-#   STDERR: execution errors
-# Returns:
-#   0: log record successfully saved
-#   >0: failed to save the log record
-#######################################
-function bl64_log_task() {
-  bl64_dbg_lib_show_function "$@"
-  local payload="$1"
-  local source="${2:-${FUNCNAME[1]:-NONE}}"
-
-  if [[ -n "$BL64_LOG_VERBOSE" && "$BL64_LOG_VERBOSE" == '1' ]]; then
-    bl64_msg_show_task "$payload"
-  fi
-
-  _bl64_log_register \
-    "${source:-main}" \
-    "$BL64_LOG_CATEGORY_TASK" \
-    "$payload"
-}
-
-#######################################
 # Save a single log record of type 'error' to the logs repository.
-# Optionally display the message on STDERR (BL64_LOG_VERBOSE='1')
 #
 # Arguments:
-#   $1: message to be recorded
-#   $2: name of the function, command or script name that is generating the message
+#   $1: name of the source that is generating the message
+#   $2: message to be recorded
 # Outputs:
 #   STDOUT: None
 #   STDERR: execution errors, message (when BL64_LOG_VERBOSE='1')
@@ -6454,26 +6588,23 @@ function bl64_log_task() {
 #######################################
 function bl64_log_error() {
   bl64_dbg_lib_show_function "$@"
-  local payload="$1"
-  local source="${2:-${FUNCNAME[1]:-NONE}}"
+  local source="$1"
+  local payload="$2"
 
-  if [[ -n "$BL64_LOG_VERBOSE" && "$BL64_LOG_VERBOSE" == '1' ]]; then
-    bl64_msg_show_error "$payload"
-  fi
+  [[ "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_NONE" ]] && return 0
 
   _bl64_log_register \
-    "${source:-main}" \
+    "$source" \
     "$BL64_LOG_CATEGORY_ERROR" \
     "$payload"
 }
 
 #######################################
 # Save a single log record of type 'warning' to the logs repository.
-# Optionally display the message on STDERR (BL64_LOG_VERBOSE='1')
 #
 # Arguments:
-#   $1: message to be recorded
-#   $2: name of the function, command or script name that is generating the message
+#   $1: name of the source that is generating the message
+#   $2: message to be recorded
 # Outputs:
 #   STDOUT: None
 #   STDERR: execution errors, message (when BL64_LOG_VERBOSE='1')
@@ -6483,54 +6614,17 @@ function bl64_log_error() {
 #######################################
 function bl64_log_warning() {
   bl64_dbg_lib_show_function "$@"
-  local payload="$1"
-  local source="${2:-${FUNCNAME[1]:-NONE}}"
+  local source="$1"
+  local payload="$2"
 
-  if [[ -n "$BL64_LOG_VERBOSE" && "$BL64_LOG_VERBOSE" == '1' ]]; then
-    bl64_msg_show_warning "$payload"
-  fi
+  [[ "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_NONE" ||
+    "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_ERROR" ]] &&
+    return 0
 
   _bl64_log_register \
-    "${source:-main}" \
+    "$source" \
     "$BL64_LOG_CATEGORY_WARNING" \
     "$payload"
-}
-
-#######################################
-# Record a log stream and save it to the logs repository.
-# Each line is saved as a different log record.
-#
-# Arguments:
-#   $1: short alphanumeric string to identify the log stream
-#   $2: name of the function, command or script name that is generating the stream
-# Outputs:
-#   STDOUT: None
-#   STDERR: execution errors
-# Returns:
-#   0: stream successfully saved
-#   >0: failed to save the stream
-#######################################
-function bl64_log_record() {
-  bl64_dbg_lib_show_function "$@"
-  local tag="${1:-tag}"
-  local source="${2:-${FUNCNAME[1]:-NONE}}"
-  local input_log_line=''
-
-  case "$BL64_LOG_TYPE" in
-  "$BL64_LOG_TYPE_FILE")
-    while read -r input_log_line; do
-      _bl64_log_register \
-        "${source:-main}" \
-        "$BL64_LOG_CATEGORY_RECORD" \
-        "${tag}${BL64_LOG_FS}${input_log_line}"
-    done
-    ;;
-  *)
-    bl64_msg_show_error "$_BL64_LOG_TXT_INVALID_TYPE"
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
-    ;;
-  esac
 }
 
 #######################################
@@ -7039,7 +7133,7 @@ function bl64_msg_set_output() {
 #######################################
 # BashLib64 / Module / Functions / Display messages
 #
-# Version: 3.0.0
+# Version: 3.1.0
 #######################################
 
 #######################################
@@ -7225,7 +7319,8 @@ function bl64_msg_show_usage() {
 function bl64_msg_show_error() {
   local message="$1"
 
-  _bl64_msg_show 'ERROR' "$_BL64_MSG_TXT_ERROR" "$message" >&2
+  bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
+    _bl64_msg_show "$BL64_MSG_TYPE_ERROR" "$_BL64_MSG_TXT_ERROR" "$message" >&2
 }
 
 #######################################
@@ -7243,7 +7338,8 @@ function bl64_msg_show_error() {
 function bl64_msg_show_warning() {
   local message="$1"
 
-  _bl64_msg_show 'WARNING' "$_BL64_MSG_TXT_WARNING" "$message" >&2
+  bl64_log_warning "${FUNCNAME[1]:-MAIN}" "$message" &&
+    _bl64_msg_show "$BL64_MSG_TYPE_WARNING" "$_BL64_MSG_TXT_WARNING" "$message" >&2
 }
 
 #######################################
@@ -7261,9 +7357,10 @@ function bl64_msg_show_warning() {
 function bl64_msg_show_info() {
   local message="$1"
 
-  bl64_msg_app_verbose_enabled || return 0
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
+    bl64_msg_app_verbose_enabled || return 0
 
-  _bl64_msg_show 'INFO' "$_BL64_MSG_TXT_INFO" "$message"
+  _bl64_msg_show "$BL64_MSG_TYPE_INFO" "$_BL64_MSG_TXT_INFO" "$message"
 }
 
 #######################################
@@ -7281,9 +7378,10 @@ function bl64_msg_show_info() {
 function bl64_msg_show_task() {
   local message="$1"
 
-  bl64_msg_app_verbose_enabled || return 0
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_TASK}:${message}" &&
+    bl64_msg_app_verbose_enabled || return 0
 
-  _bl64_msg_show 'TASK' "$_BL64_MSG_TXT_TASK" "$message"
+  _bl64_msg_show "$BL64_MSG_TYPE_TASK" "$_BL64_MSG_TXT_TASK" "$message"
 }
 
 #######################################
@@ -7301,9 +7399,10 @@ function bl64_msg_show_task() {
 function bl64_msg_show_lib_task() {
   local message="$1"
 
-  bl64_msg_lib_verbose_enabled || return 0
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBTASK}:${message}" &&
+    bl64_msg_lib_verbose_enabled || return 0
 
-  _bl64_msg_show 'LIBTASK' "$_BL64_MSG_TXT_TASK" "$message"
+  _bl64_msg_show "$BL64_MSG_TYPE_LIBTASK" "$_BL64_MSG_TXT_TASK" "$message"
 }
 
 #######################################
@@ -7321,7 +7420,8 @@ function bl64_msg_show_lib_task() {
 function bl64_msg_show_text() {
   local message="$1"
 
-  bl64_msg_app_verbose_enabled || return 0
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
+    bl64_msg_app_verbose_enabled || return 0
 
   printf '%s\n' "$message"
 }
@@ -7341,9 +7441,10 @@ function bl64_msg_show_text() {
 function bl64_msg_show_batch_start() {
   local message="$1"
 
-  bl64_msg_app_verbose_enabled || return 0
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${message}" &&
+    bl64_msg_app_verbose_enabled || return 0
 
-  _bl64_msg_show 'BATCH' "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_START}"
+  _bl64_msg_show "$BL64_MSG_TYPE_BATCH" "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_START}"
 }
 
 #######################################
@@ -7363,12 +7464,13 @@ function bl64_msg_show_batch_finish() {
   local status="$1"
   local message="${2-${BL64_LIB_DEFAULT}}"
 
-  bl64_msg_app_verbose_enabled || return 0
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${status}:${message}" &&
+    bl64_msg_app_verbose_enabled || return 0
 
   if ((status == 0)); then
-    _bl64_msg_show 'BATCHOK' "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_OK}"
+    _bl64_msg_show "$BL64_MSG_TYPE_BATCHOK" "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_OK}"
   else
-    _bl64_msg_show 'BATCHERR' "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: exit-status-${status}"
+    _bl64_msg_show "$BL64_MSG_TYPE_BATCHERR" "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: exit-status-${status}"
   fi
 }
 
@@ -7639,7 +7741,7 @@ function bl64_os_get_distro() {
 #######################################
 # BashLib64 / Module / Setup / Manage native OS packages
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -7660,6 +7762,7 @@ function bl64_pkg_setup() {
   bl64_dbg_lib_show_function
 
   bl64_pkg_set_command &&
+    bl64_pkg_set_paths &&
     bl64_pkg_set_alias &&
     bl64_pkg_set_options &&
     BL64_PKG_MODULE="$BL64_LIB_VAR_ON"
@@ -7682,7 +7785,6 @@ function bl64_pkg_setup() {
 #######################################
 function bl64_pkg_set_command() {
   bl64_dbg_lib_show_function
-  # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
@@ -7806,10 +7908,157 @@ function bl64_pkg_set_alias() {
 }
 
 #######################################
+# Set and prepare module paths
+#
+# * Global paths only
+# * If preparation fails the whole module fails
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: paths prepared ok
+#   >0: failed to prepare paths
+#######################################
+# shellcheck disable=SC2120
+function bl64_pkg_set_paths() {
+  bl64_dbg_lib_show_function
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
+    ;;
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
+    ;;
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    :
+    ;;
+  ${BL64_OS_ALP}-*)
+    :
+    ;;
+  ${BL64_OS_MCOS}-*)
+    :
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+
+  return 0
+}
+
+#######################################
 # BashLib64 / Module / Functions / Manage native OS packages
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
+
+#######################################
+# Add package repository
+#
+# * Add remote package repository
+# * Package cache is not refreshed
+#
+# Requirements:
+#   * root privilege (sudo)
+# Arguments:
+#   $1: repository name
+#   $2: repository source. Format: URL
+#   $3: GPGKey source (YUM only). Format: URL
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   package manager exist status
+#######################################
+function bl64_pkg_repository_add() {
+  bl64_dbg_lib_show_function "$@"
+  local repository="$1"
+  local source="$2"
+  local gpgkey="${3:-${BL64_LIB_VAR_NULL}}"
+  local definition=''
+
+  bl64_check_privilege_root &&
+    bl64_check_parameter 'repository' &&
+    bl64_check_parameter 'source' ||
+    return $?
+
+  bl64_msg_show_lib_task "$_BL64_PKG_TXT_REPOSITORY_ADD (${repository})"
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.* | ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+
+    bl64_check_parameter 'gpgkey' || return $?
+    definition="${BL64_PKG_PATH_YUM_REPOS_D}/${repository}.${BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY}"
+    [[ -f "$definition" ]] && bl64_dbg_lib_show_info "repository already created (${definition}). No action taken" && return 0
+
+    bl64_dbg_lib_show_info "create repository definition (${definition})"
+    printf '[%s]
+name=%s
+baseurl=%s
+gpgcheck=1
+enabled=1
+gpgkey=%s\n' \
+      "$repository" \
+      "$repository" \
+      "$source" \
+      "$gpgkey" \
+      >"$definition"
+    ;;
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_check_alert_unsupported
+    ;;
+  ${BL64_OS_ALP}-*)
+    bl64_check_alert_unsupported
+    ;;
+  ${BL64_OS_MCOS}-*)
+    bl64_check_alert_unsupported
+    ;;
+  *) bl64_check_alert_unsupported ;;
+
+  esac
+}
+
+#######################################
+# Refresh package repository
+#
+# Requirements:
+#   * root privilege (sudo)
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   n: package manager exist status
+#######################################
+function bl64_pkg_repository_refresh() {
+  bl64_dbg_lib_show_function
+
+  bl64_msg_show_lib_task "$_BL64_PKG_TXT_REPOSITORY_REFRESH"
+  # shellcheck disable=SC2086
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+    bl64_pkg_run_dnf 'makecache'
+    ;;
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+    bl64_pkg_run_yum 'makecache'
+    ;;
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'update'
+    ;;
+  ${BL64_OS_ALP}-*)
+    bl64_pkg_run_apk 'update'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    bl64_pkg_run_brew 'update'
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+}
 
 #######################################
 # Deploy packages
@@ -7851,25 +8100,7 @@ function bl64_pkg_prepare() {
   bl64_dbg_lib_show_function
 
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_PREPARE"
-  # shellcheck disable=SC2086
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
-    bl64_pkg_run_dnf 'makecache'
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_pkg_run_yum 'makecache'
-    ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'update'
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_pkg_run_apk 'update'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    bl64_pkg_run_brew 'update'
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
+  bl64_pkg_repository_refresh
 }
 
 #######################################
@@ -9162,7 +9393,7 @@ function bl64_rxtx_set_alias() {
 #######################################
 # BashLib64 / Module / Functions / Transfer and Receive data over the network
 #
-# Version: 1.13.1
+# Version: 1.14.0
 #######################################
 
 #######################################
@@ -9190,10 +9421,13 @@ function bl64_rxtx_web_get_file() {
   local mode="${4:-${BL64_LIB_DEFAULT}}"
   local -i status=0
 
-  bl64_check_parameter 'source' &&
+  bl64_check_module_setup "$BL64_RXTX_MODULE" &&
+    bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' || return $?
 
-  [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]] && return 0
+  [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]] &&
+    bl64_dbg_lib_show_info "destination is already created (${destination}) and overwrite is disabled. No action taken" &&
+    return 0
   bl64_fs_safeguard "$destination" >/dev/null || return $?
 
   bl64_msg_show_lib_task "$_BL64_RXTX_TXT_DOWNLOAD_FILE ($source)"
@@ -9210,7 +9444,6 @@ function bl64_rxtx_web_get_file() {
       "$source"
     status=$?
   else
-    # shellcheck disable=SC2086
     bl64_msg_show_error "$_BL64_RXTX_TXT_MISSING_COMMAND (wget or curl)" &&
       return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -9256,8 +9489,8 @@ function bl64_rxtx_git_get_dir() {
   local branch="${5:-main}"
   local -i status=0
 
-  # shellcheck disable=SC2086
-  bl64_check_parameter 'source_url' &&
+  bl64_check_module_setup "$BL64_RXTX_MODULE" &&
+    bl64_check_parameter 'source_url' &&
     bl64_check_parameter 'source_path' &&
     bl64_check_parameter 'destination' &&
     bl64_check_path_relative "$source_path" ||
@@ -9306,7 +9539,8 @@ function bl64_rxtx_run_curl() {
   bl64_check_parameters_none "$#" || return $?
   local verbose="$BL64_RXTX_SET_CURL_SILENT"
 
-  bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
+  bl64_check_module_setup "$BL64_RXTX_MODULE" &&
+    bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
 
@@ -9335,7 +9569,8 @@ function bl64_rxtx_run_wget() {
   bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
-  bl64_check_command "$BL64_RXTX_CMD_WGET" || return $?
+  bl64_check_module_setup "$BL64_RXTX_MODULE" &&
+    bl64_check_command "$BL64_RXTX_CMD_WGET" || return $?
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
 
@@ -9357,8 +9592,9 @@ function _bl64_rxtx_git_get_dir_root() {
   local git_name=''
   local transition=''
 
+  bl64_check_module_setup "$BL64_RXTX_MODULE" || return $?
+
   repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
-  # shellcheck disable=SC2086
   bl64_check_directory "$repo" "$_BL64_RXTX_TXT_CREATION_PROBLEM" || return $BL64_LIB_ERROR_TASK_TEMP
 
   git_name="$(bl64_fmt_basename "$source_url")"
@@ -9387,6 +9623,8 @@ function _bl64_rxtx_git_get_dir_sub() {
   local target=''
   local source=''
   local transition=''
+
+  bl64_check_module_setup "$BL64_RXTX_MODULE" || return $?
 
   repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
   # shellcheck disable=SC2086

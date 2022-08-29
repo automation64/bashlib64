@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 export BL64_FS_MODULE="$BL64_LIB_VAR_OFF"
@@ -19,6 +19,7 @@ export BL64_FS_CMD_MKDIR=''
 export BL64_FS_CMD_MKTEMP=''
 export BL64_FS_CMD_MV=''
 export BL64_FS_CMD_RM=''
+export BL64_FS_CMD_TOUCH=''
 
 export BL64_FS_ALIAS_CHOWN_DIR=''
 export BL64_FS_ALIAS_CP_FILE=''
