@@ -88,6 +88,7 @@ markdown_extensions:
 
 nav:
   - Home: "index.md"
+  - Architecture: "architecture.md"
   - API:
     - "bl64-ans.md"
     - "bl64-arc.md"

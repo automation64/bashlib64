@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with Bash shell
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -21,27 +21,26 @@
 function bl64_bsh_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_bsh_set_command ||
+  bl64_bsh_set_version ||
     return $?
   BL64_BSH_MODULE="$BL64_LIB_VAR_ON"
-
 }
 
 #######################################
-# Identify and normalize commands
+# Identify and set module components versions
 #
-# * Commands are exported as variables with full path
-# * The caller function is responsible for checking that the target command is present (installed)
+# * Version information is stored in module global variables
 #
 # Arguments:
 #   None
 # Outputs:
 #   STDOUT: None
-#   STDERR: None
+#   STDERR: command errors
 # Returns:
-#   0: always ok
+#   0: version set ok
+#   >0: command error
 #######################################
-function bl64_bsh_set_command() {
+function bl64_bsh_set_version() {
   bl64_dbg_lib_show_function
 
   case "${BASH_VERSINFO[0]}" in
@@ -53,4 +52,6 @@ function bl64_bsh_set_command() {
     ;;
   esac
   bl64_dbg_lib_show_vars 'BL64_BSH_VERSION'
+
+  return 0
 }

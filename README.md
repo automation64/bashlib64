@@ -67,7 +67,9 @@ The library has been tested on the following operating systems:
   - Requires Bash4 (e.g. homebrew install bash)
 - OracleLinux7
 - OracleLinux8
+- OracleLinux9
 - RedHatLinux8
+- RedHatLinux9
 - RockyLinux8
 - Ubuntu20
 - Ubuntu21
