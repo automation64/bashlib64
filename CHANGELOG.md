@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.1.0]
+
+### Added
+
+- all
+  - OracleLinux9 support
+  - RedHat9 support
+- ans
+  - setting for ansible_config
+- dbg
+  - allow custom debug level for app usage
+
 ## [7.0.0]
 
 ### Added
@@ -652,7 +664,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/7.0.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/7.1.0...HEAD
+[7.1.0]: https://github.com/serdigital64/bashlib64/compare/7.0.0...7.1.0
 [7.0.0]: https://github.com/serdigital64/bashlib64/compare/6.0.0...7.0.0
 [6.0.0]: https://github.com/serdigital64/bashlib64/compare/5.0.0...6.0.0
 [5.0.0]: https://github.com/serdigital64/bashlib64/compare/4.0.0...5.0.0

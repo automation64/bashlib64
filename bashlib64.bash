@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 7.0.0
+# Version: 7.1.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -164,11 +164,15 @@ export BL64_LIB_SIGNAL_EXIT='bl64_dbg_runtime_show'
 #######################################
 # BashLib64 / Module / Globals / Interact with Ansible CLI
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 # Optional module. Not enabled by default
 export BL64_ANS_MODULE="$BL64_LIB_VAR_OFF"
+
+export BL64_ANS_ENV_IGNORE=''
+
+export BL64_ANS_VERSION_CORE=''
 
 export BL64_ANS_CMD_ANSIBLE="$BL64_LIB_UNAVAILABLE"
 export BL64_ANS_CMD_ANSIBLE_PLAYBOOK="$BL64_LIB_UNAVAILABLE"
@@ -176,6 +180,7 @@ export BL64_ANS_CMD_ANSIBLE_GALAXY="$BL64_LIB_UNAVAILABLE"
 
 export BL64_ANS_PATH_USR_ANSIBLE=''
 export BL64_ANS_PATH_USR_COLLECTIONS=''
+export BL64_ANS_PATH_USR_CONFIG=''
 
 export BL64_ANS_SET_VERBOSE=''
 export BL64_ANS_SET_DIFF=''
@@ -314,7 +319,7 @@ export _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
 #######################################
 # BashLib64 / Module / Globals / Show shell debugging information
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 export BL64_DBG_MODULE="$BL64_LIB_VAR_OFF"
@@ -329,6 +334,7 @@ export BL64_DBG_TARGET=''
 # * APP_TRACE: Shell tracing for selected application functions
 # * APP_TASK: Debugging messages from selected application functions
 # * APP_CMD: External commands: enable command specific debugging options used in the app
+# * APP_CUSTOM_X: Do nothing. Reserved to allow the application define custom debug
 # * APP_ALL: Enable full app debugging (task,trace,cmd)
 # * LIB_TRACE: Shell tracing for selected bashlib64 functions
 # * LIB_TASK: Debugging messages from selected bashlib64 functions
@@ -336,16 +342,19 @@ export BL64_DBG_TARGET=''
 # * LIB_ALL: Enable full bashlib64 debugging (task,trace,cmd)
 #
 
-export BL64_DBG_TARGET_NONE='0'
-export BL64_DBG_TARGET_APP_TRACE='1'
-export BL64_DBG_TARGET_APP_TASK='2'
-export BL64_DBG_TARGET_APP_CMD='3'
-export BL64_DBG_TARGET_APP_ALL='4'
-export BL64_DBG_TARGET_LIB_TRACE='5'
-export BL64_DBG_TARGET_LIB_TASK='6'
-export BL64_DBG_TARGET_LIB_CMD='7'
-export BL64_DBG_TARGET_LIB_ALL='8'
-export BL64_DBG_TARGET_ALL='9'
+export BL64_DBG_TARGET_NONE='APP0'
+export BL64_DBG_TARGET_APP_TRACE='APP1'
+export BL64_DBG_TARGET_APP_TASK='APP2'
+export BL64_DBG_TARGET_APP_CMD='APP3'
+export BL64_DBG_TARGET_APP_ALL='APP4'
+export BL64_DBG_TARGET_APP_CUSTOM_1='CST1'
+export BL64_DBG_TARGET_APP_CUSTOM_2='CST2'
+export BL64_DBG_TARGET_APP_CUSTOM_3='CST3'
+export BL64_DBG_TARGET_LIB_TRACE='LIB1'
+export BL64_DBG_TARGET_LIB_TASK='LIB2'
+export BL64_DBG_TARGET_LIB_CMD='LIB3'
+export BL64_DBG_TARGET_LIB_ALL='LIB4'
+export BL64_DBG_TARGET_ALL='ALL'
 
 export _BL64_DBG_TXT_FUNCTION_START='function tracing started'
 export _BL64_DBG_TXT_FUNCTION_STOP='function tracing stopped'
@@ -566,7 +575,7 @@ export BL64_MDB_REPLICA_TIMEOUT=''
 #######################################
 # BashLib64 / Module / Globals / Display messages
 #
-# Version: 2.1.0
+# Version: 2.2.0
 #######################################
 
 export BL64_MSG_MODULE="$BL64_LIB_VAR_OFF"
@@ -582,10 +591,10 @@ export BL64_MSG_VERBOSE=''
 # * 2: bashlib64 and application messages
 #
 
-export BL64_MSG_VERBOSE_NONE='0'
-export BL64_MSG_VERBOSE_APP='1'
-export BL64_MSG_VERBOSE_LIB='2'
-export BL64_MSG_VERBOSE_ALL='3'
+export BL64_MSG_VERBOSE_NONE='NONE'
+export BL64_MSG_VERBOSE_APP='APP'
+export BL64_MSG_VERBOSE_LIB='LIB'
+export BL64_MSG_VERBOSE_ALL='ALL'
 
 #
 # Message type tag
@@ -1018,7 +1027,7 @@ export _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
 #######################################
 # BashLib64 / Module / Setup / Interact with Ansible CLI
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -1029,6 +1038,8 @@ export _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
 #
 # Arguments:
 #   $1: (optional) Full path where commands are
+#   $2: (optional) Full path to the ansible configuration file
+#   $3: (optional) Ignore inherited shell environment? Default: BL64_LIB_VAR_ON
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -1040,19 +1051,22 @@ export _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
 function bl64_ans_setup() {
   bl64_dbg_lib_show_function "$@"
   local ansible_bin="${1:-${BL64_LIB_DEFAULT}}"
-
-  if [[ "$ansible_bin" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_check_directory "$ansible_bin" ||
-    return $?
-  fi
+  local ansible_config="${2:-${BL64_LIB_DEFAULT}}"
+  local env_ignore="${3:-${BL64_LIB_VAR_ON}}"
 
   bl64_ans_set_command "$ansible_bin" &&
-    bl64_ans_set_options &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE_GALAXY" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE_PLAYBOOK" &&
-    BL64_ANS_MODULE="$BL64_LIB_VAR_ON"
+    bl64_ans_set_paths "$ansible_config" &&
+    bl64_ans_set_options &&
+    bl64_ans_set_version ||
+    return $?
 
+  BL64_ANS_MODULE="$BL64_LIB_VAR_ON"
+  BL64_ANS_ENV_IGNORE="$env_ignore"
+
+  return 0
 }
 
 #######################################
@@ -1071,7 +1085,7 @@ function bl64_ans_setup() {
 #######################################
 function bl64_ans_set_command() {
   bl64_dbg_lib_show_function
-  local ansible_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local ansible_bin="$1"
 
   if [[ "$ansible_bin" == "$BL64_LIB_DEFAULT" ]]; then
     if [[ -n "$BL64_PY_VENV_PATH" && -x "${BL64_PY_VENV_PATH}/bin/ansible" ]]; then
@@ -1089,8 +1103,6 @@ function bl64_ans_set_command() {
     elif [[ -x '/usr/bin/ansible' ]]; then
       ansible_bin='/usr/bin'
     fi
-  else
-    [[ ! -x "${ansible_bin}/ansible" ]] && ansible_bin="$BL64_LIB_DEFAULT"
   fi
 
   if [[ "$ansible_bin" != "$BL64_LIB_DEFAULT" ]]; then
@@ -1099,11 +1111,8 @@ function bl64_ans_set_command() {
     [[ -x "${ansible_bin}/ansible-playbook" ]] && BL64_ANS_CMD_ANSIBLE_PLAYBOOK="${ansible_bin}/ansible-playbook"
   fi
 
-  # Publish common paths
-  BL64_ANS_PATH_USR_ANSIBLE="${HOME}/.ansible"
-  BL64_ANS_PATH_USR_COLLECTIONS="${BL64_ANS_PATH_USR_ANSIBLE}/collections/ansible_collections"
-
-  bl64_dbg_lib_show_vars 'BL64_ANS_CMD_ANSIBLE' 'BL64_ANS_CMD_ANSIBLE_GALAXY' 'BL64_ANS_CMD_ANSIBLE_PLAYBOOK' 'BL64_ANS_PATH_USR_ANSIBLE' 'BL64_ANS_PATH_USR_COLLECTIONS'
+  bl64_dbg_lib_show_vars 'BL64_ANS_CMD_ANSIBLE' 'BL64_ANS_CMD_ANSIBLE_GALAXY' 'BL64_ANS_CMD_ANSIBLE_PLAYBOOK'
+  return 0
 }
 
 #######################################
@@ -1126,9 +1135,88 @@ function bl64_ans_set_options() {
 }
 
 #######################################
+# Set and prepare module paths
+#
+# * Global paths only
+# * If preparation fails the whole module fails
+#
+# Arguments:
+#   $1: path to ansible_config
+#   $2: path to ansible collections
+#   $3: path to ansible workdir
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: paths prepared ok
+#   >0: failed to prepare paths
+#######################################
+function bl64_ans_set_paths() {
+  bl64_dbg_lib_show_function
+  local config="${1:-${BL64_LIB_DEFAULT}}"
+  local collections="${2:-${BL64_LIB_DEFAULT}}"
+  local ansible="${3:-${BL64_LIB_DEFAULT}}"
+
+  if [[ "$config" == "$BL64_LIB_DEFAULT" ]]; then
+    BL64_ANS_PATH_USR_CONFIG=''
+  else
+    bl64_check_file "$config" || return $?
+    BL64_ANS_PATH_USR_CONFIG="$config"
+  fi
+
+  if [[ "$ansible" == "$BL64_LIB_DEFAULT" ]]; then
+    BL64_ANS_PATH_USR_ANSIBLE="${HOME}/.ansible"
+  else
+    BL64_ANS_PATH_USR_ANSIBLE="$ansible"
+  fi
+
+  if [[ "$collections" == "$BL64_LIB_DEFAULT" ]]; then
+    BL64_ANS_PATH_USR_COLLECTIONS="${BL64_ANS_PATH_USR_ANSIBLE}/collections/ansible_collections"
+  else
+    bl64_check_directory "$collections" || return $?
+    BL64_ANS_PATH_USR_COLLECTIONS="$ansible"
+  fi
+
+  bl64_dbg_lib_show_vars 'BL64_ANS_PATH_USR_CONFIG' 'BL64_ANS_PATH_USR_ANSIBLE' 'BL64_ANS_PATH_USR_COLLECTIONS'
+  return 0
+}
+
+#######################################
+# Identify and set module components versions
+#
+# * Version information is stored in module global variables
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: command errors
+# Returns:
+#   0: version set ok
+#   >0: command error
+#######################################
+function bl64_ans_set_version() {
+  bl64_dbg_lib_show_function
+  local version=''
+
+  bl64_dbg_lib_show_info "run ansible to obtain ansible-core version"
+  version="$("$BL64_ANS_CMD_ANSIBLE" --version | bl64_txt_run_awk '/^ansible..core.*$/ { gsub( /\[|\]/, "" ); print $3 }')"
+
+  if [[ -n "$version" ]]; then
+    BL64_ANS_VERSION_CORE="$version"
+  else
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+  fi
+
+  bl64_dbg_lib_show_vars 'BL64_ANS_VERSION_CORE'
+  return 0
+}
+
+#######################################
 # BashLib64 / Module / Functions / Interact with Ansible CLI
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -1198,6 +1286,8 @@ function bl64_ans_run_ansible() {
 # * Trust noone. Use default config
 #
 # Arguments:
+#   $1: command
+#   $2: subcommand
 #   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
@@ -1207,19 +1297,26 @@ function bl64_ans_run_ansible() {
 #######################################
 function bl64_ans_run_ansible_galaxy() {
   bl64_dbg_lib_show_function "$@"
+  local command="${1:-${BL64_LIB_VAR_NULL}}"
+  local subcommand="${2:-${BL64_LIB_VAR_NULL}}"
   local debug=' '
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_ANS_MODULE" ||
+  bl64_check_module_setup "$BL64_ANS_MODULE" &&
+    bl64_check_parameter 'command' &&
+    bl64_check_parameter 'subcommand' ||
     return $?
 
   bl64_msg_lib_verbose_enabled && debug="$BL64_ANS_SET_VERBOSE"
 
   bl64_ans_blank_ansible
 
+  shift
+  shift
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ANS_CMD_ANSIBLE_GALAXY" \
+    "$command" \
+    "$subcommand" \
     $debug \
     "$@"
   bl64_dbg_lib_trace_stop
@@ -1273,11 +1370,28 @@ function bl64_ans_run_ansible_playbook() {
 function bl64_ans_blank_ansible() {
   bl64_dbg_lib_show_function
 
-  bl64_dbg_lib_show_info 'unset inherited ANSIBLE_* shell variables'
-  bl64_dbg_lib_trace_start
-  unset ANSIBLE_CONFIG
-  unset ANSIBLE_COLLECTIONS
-  bl64_dbg_lib_trace_stop
+  if [[ "$BL64_ANS_ENV_IGNORE" == "$BL64_LIB_VAR_ON" ]]; then
+    bl64_dbg_lib_show_info 'unset inherited ANSIBLE_* shell variables'
+    bl64_dbg_lib_trace_start
+    unset ANSIBLE_CACHE_PLUGIN_CONNECTION
+    unset ANSIBLE_COLLECTIONS_PATHS
+    unset ANSIBLE_CONFIG
+    unset ANSIBLE_GALAXY_CACHE_DIR
+    unset ANSIBLE_GALAXY_TOKEN_PATH
+    unset ANSIBLE_INVENTORY
+    unset ANSIBLE_LOCAL_TEMP
+    unset ANSIBLE_LOG_PATH
+    unset ANSIBLE_PERSISTENT_CONTROL_PATH_DIR
+    unset ANSIBLE_PLAYBOOK_DIR
+    unset ANSIBLE_PRIVATE_KEY_FILE
+    unset ANSIBLE_ROLES_PATH
+    unset ANSIBLE_SSH_CONTROL_PATH_DIR
+    unset ANSIBLE_VAULT_PASSWORD_FILE
+    unset ANSIBLE_RETRY_FILES_SAVE_PATH
+    bl64_dbg_lib_trace_stop
+  fi
+
+  [[ -n "$BL64_ANS_PATH_USR_CONFIG" ]] && export ANSIBLE_CONFIG="$BL64_ANS_PATH_USR_CONFIG"
 
   return 0
 }
@@ -2018,7 +2132,7 @@ function bl64_aws_blank_aws() {
 #######################################
 # BashLib64 / Module / Functions / Interact with Bash shell
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -2038,27 +2152,26 @@ function bl64_aws_blank_aws() {
 function bl64_bsh_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_bsh_set_command ||
+  bl64_bsh_set_version ||
     return $?
   BL64_BSH_MODULE="$BL64_LIB_VAR_ON"
-
 }
 
 #######################################
-# Identify and normalize commands
+# Identify and set module components versions
 #
-# * Commands are exported as variables with full path
-# * The caller function is responsible for checking that the target command is present (installed)
+# * Version information is stored in module global variables
 #
 # Arguments:
 #   None
 # Outputs:
 #   STDOUT: None
-#   STDERR: None
+#   STDERR: command errors
 # Returns:
-#   0: always ok
+#   0: version set ok
+#   >0: command error
 #######################################
-function bl64_bsh_set_command() {
+function bl64_bsh_set_version() {
   bl64_dbg_lib_show_function
 
   case "${BASH_VERSINFO[0]}" in
@@ -2070,6 +2183,8 @@ function bl64_bsh_set_command() {
     ;;
   esac
   bl64_dbg_lib_show_vars 'BL64_BSH_VERSION'
+
+  return 0
 }
 
 #######################################
@@ -3577,7 +3692,7 @@ function bl64_cnt_docker_run() {
 #######################################
 # BashLib64 / Module / Setup / Show shell debugging inlevelion
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #
@@ -3589,6 +3704,9 @@ function bl64_dbg_app_command_enabled { [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARG
 function bl64_dbg_lib_command_enabled { [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_ALL" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_LIB_CMD" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_LIB_ALL" ]]; }
 function bl64_dbg_app_trace_enabled { [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_ALL" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_APP_TRACE" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_APP_ALL" ]]; }
 function bl64_dbg_lib_trace_enabled { [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_ALL" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_LIB_TRACE" || "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_LIB_ALL" ]]; }
+function bl64_dbg_app_custom_1_enabled { [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_APP_CUSTOM_1" ]]; }
+function bl64_dbg_app_custom_2_enabled { [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_APP_CUSTOM_2" ]]; }
+function bl64_dbg_app_custom_3_enabled { [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_APP_CUSTOM_3" ]]; }
 
 #
 # Individual debugging level control
@@ -3603,6 +3721,9 @@ function bl64_dbg_app_command_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_APP_CMD
 function bl64_dbg_lib_command_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_LIB_CMD"; }
 function bl64_dbg_app_trace_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_APP_TRACE"; }
 function bl64_dbg_lib_trace_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_LIB_TRACE"; }
+function bl64_dbg_app_custom_1_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_APP_CUSTOM_1"; }
+function bl64_dbg_app_custom_2_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_APP_CUSTOM_2"; }
+function bl64_dbg_app_custom_3_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_APP_CUSTOM_3"; }
 
 #######################################
 # Setup the bashlib64 module
@@ -3649,6 +3770,9 @@ function bl64_dbg_set_level() {
   "$BL64_DBG_TARGET_APP_TRACE") bl64_dbg_app_trace_enable ;;
   "$BL64_DBG_TARGET_APP_TASK") bl64_dbg_app_task_enable ;;
   "$BL64_DBG_TARGET_APP_CMD") bl64_dbg_app_command_enable ;;
+  "$BL64_DBG_TARGET_APP_CUSTOM_1" ) bl64_dbg_app_custom_1_enable ;;
+  "$BL64_DBG_TARGET_APP_CUSTOM_2" ) bl64_dbg_app_custom_2_enable ;;
+  "$BL64_DBG_TARGET_APP_CUSTOM_3" ) bl64_dbg_app_custom_3_enable ;;
   "$BL64_DBG_TARGET_APP_ALL") bl64_dbg_app_enable ;;
   "$BL64_DBG_TARGET_LIB_TRACE") bl64_dbg_lib_trace_enable ;;
   "$BL64_DBG_TARGET_LIB_TASK") bl64_dbg_lib_task_enable ;;
@@ -7569,7 +7693,7 @@ function bl64_os_set_command() {
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.15.0
+# Version: 1.16.0
 #######################################
 
 function _bl64_os_match() {
@@ -7657,9 +7781,9 @@ function _bl64_os_get_distro_from_os_release() {
   ${BL64_OS_FD}-36*)
     [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-36" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-36.0"
     ;;
-  ${BL64_OS_OL}-7* | ${BL64_OS_OL}-8*) : ;;
+  ${BL64_OS_OL}-7* | ${BL64_OS_OL}-8* | ${BL64_OS_OL}-9*) : ;;
   ${BL64_OS_RCK}-8*) : ;;
-  ${BL64_OS_RHEL}-8*) : ;;
+  ${BL64_OS_RHEL}-8* | ${BL64_OS_RHEL}-9*) : ;;
   ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21* | ${BL64_OS_UB}-22*) : ;;
   *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;
   esac
@@ -7741,7 +7865,7 @@ function bl64_os_get_distro() {
 #######################################
 # BashLib64 / Module / Setup / Manage native OS packages
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -7786,10 +7910,13 @@ function bl64_pkg_setup() {
 function bl64_pkg_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
-  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -7825,7 +7952,19 @@ function bl64_pkg_set_options() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-*)
+    BL64_PKG_SET_ASSUME_YES='--assumeyes'
+    BL64_PKG_SET_SLIM='--nodocs'
+    BL64_PKG_SET_QUIET='--quiet'
+    BL64_PKG_SET_VERBOSE='--color=never --verbose'
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    BL64_PKG_SET_ASSUME_YES='--assumeyes'
+    BL64_PKG_SET_SLIM='--nodocs'
+    BL64_PKG_SET_QUIET='--quiet'
+    BL64_PKG_SET_VERBOSE='--color=never --verbose'
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
     BL64_PKG_SET_ASSUME_YES='--assumeyes'
     BL64_PKG_SET_SLIM='--nodocs'
     BL64_PKG_SET_QUIET='--quiet'
@@ -7878,7 +8017,17 @@ function bl64_pkg_set_alias() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+  ${BL64_OS_FD}-*)
+    BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
+    BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
+    BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
+    BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
+    BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
     BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
     BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
     BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
@@ -7927,10 +8076,13 @@ function bl64_pkg_set_paths() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-*)
     BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
     ;;
-  ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
     BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -7954,7 +8106,7 @@ function bl64_pkg_set_paths() {
 #######################################
 # BashLib64 / Module / Functions / Manage native OS packages
 #
-# Version: 2.1.0
+# Version: 2.2.0
 #######################################
 
 #######################################
@@ -7989,7 +8141,12 @@ function bl64_pkg_repository_add() {
 
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_REPOSITORY_ADD (${repository})"
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.* | ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+  ${BL64_OS_FD}-* | \
+    ${BL64_OS_RHEL}-8.* | ${BL64_OS_RHEL}-9.* | \
+    ${BL64_OS_ALM}-8.* | \
+    ${BL64_OS_RCK}-8.* | \
+    ${BL64_OS_CNT}-7.* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | \
+    ${BL64_OS_OL}-7.* | ${BL64_OS_OL}-8.* | ${BL64_OS_OL}-9.*)
 
     bl64_check_parameter 'gpgkey' || return $?
     definition="${BL64_PKG_PATH_YUM_REPOS_D}/${repository}.${BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY}"
@@ -8041,7 +8198,13 @@ function bl64_pkg_repository_refresh() {
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_REPOSITORY_REFRESH"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+  ${BL64_OS_FD}-*)
+    bl64_pkg_run_dnf 'makecache'
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    bl64_pkg_run_dnf 'makecache'
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
     bl64_pkg_run_dnf 'makecache'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -8125,7 +8288,13 @@ function bl64_pkg_install() {
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_INSTALL (${*})"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+  ${BL64_OS_FD}-*)
+    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -8167,7 +8336,13 @@ function bl64_pkg_upgrade() {
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_UPGRADE"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+  ${BL64_OS_FD}-*)
+    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -8209,8 +8384,14 @@ function bl64_pkg_cleanup() {
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_CLEAN"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-8.*)
+  ${BL64_OS_FD}-*)
     bl64_pkg_run_dnf 'clean' 'all'
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
+    BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     bl64_pkg_run_yum 'clean' 'all'
@@ -8432,7 +8613,7 @@ function bl64_pkg_run_brew() {
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.10.0
+# Version: 1.11.0
 #######################################
 
 #######################################
@@ -8513,11 +8694,11 @@ function bl64_py_set_command() {
     # shellcheck disable=SC2034
     case "$BL64_OS_DISTRO" in
     ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*) BL64_PY_CMD_PYTHON36='/usr/bin/python3' ;;
-    ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+    ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
       BL64_PY_CMD_PYTHON36='/usr/bin/python3'
       BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
       ;;
-    ${BL64_OS_CNT}-9.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_FD}-35.* | ${BL64_OS_FD}-36.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
     ${BL64_OS_DEB}-9.*) BL64_PY_CMD_PYTHON35='/usr/bin/python3.5' ;;
