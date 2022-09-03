@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with Ansible CLI
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -71,6 +71,8 @@ function bl64_ans_run_ansible() {
 # * Trust noone. Use default config
 #
 # Arguments:
+#   $1: command
+#   $2: subcommand
 #   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
@@ -80,19 +82,26 @@ function bl64_ans_run_ansible() {
 #######################################
 function bl64_ans_run_ansible_galaxy() {
   bl64_dbg_lib_show_function "$@"
+  local command="${1:-${BL64_LIB_VAR_NULL}}"
+  local subcommand="${2:-${BL64_LIB_VAR_NULL}}"
   local debug=' '
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_ANS_MODULE" ||
+  bl64_check_module_setup "$BL64_ANS_MODULE" &&
+    bl64_check_parameter 'command' &&
+    bl64_check_parameter 'subcommand' ||
     return $?
 
   bl64_msg_lib_verbose_enabled && debug="$BL64_ANS_SET_VERBOSE"
 
   bl64_ans_blank_ansible
 
+  shift
+  shift
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ANS_CMD_ANSIBLE_GALAXY" \
+    "$command" \
+    "$subcommand" \
     $debug \
     "$@"
   bl64_dbg_lib_trace_stop
@@ -146,11 +155,28 @@ function bl64_ans_run_ansible_playbook() {
 function bl64_ans_blank_ansible() {
   bl64_dbg_lib_show_function
 
-  bl64_dbg_lib_show_info 'unset inherited ANSIBLE_* shell variables'
-  bl64_dbg_lib_trace_start
-  unset ANSIBLE_CONFIG
-  unset ANSIBLE_COLLECTIONS
-  bl64_dbg_lib_trace_stop
+  if [[ "$BL64_ANS_ENV_IGNORE" == "$BL64_LIB_VAR_ON" ]]; then
+    bl64_dbg_lib_show_info 'unset inherited ANSIBLE_* shell variables'
+    bl64_dbg_lib_trace_start
+    unset ANSIBLE_CACHE_PLUGIN_CONNECTION
+    unset ANSIBLE_COLLECTIONS_PATHS
+    unset ANSIBLE_CONFIG
+    unset ANSIBLE_GALAXY_CACHE_DIR
+    unset ANSIBLE_GALAXY_TOKEN_PATH
+    unset ANSIBLE_INVENTORY
+    unset ANSIBLE_LOCAL_TEMP
+    unset ANSIBLE_LOG_PATH
+    unset ANSIBLE_PERSISTENT_CONTROL_PATH_DIR
+    unset ANSIBLE_PLAYBOOK_DIR
+    unset ANSIBLE_PRIVATE_KEY_FILE
+    unset ANSIBLE_ROLES_PATH
+    unset ANSIBLE_SSH_CONTROL_PATH_DIR
+    unset ANSIBLE_VAULT_PASSWORD_FILE
+    unset ANSIBLE_RETRY_FILES_SAVE_PATH
+    bl64_dbg_lib_trace_stop
+  fi
+
+  [[ -n "$BL64_ANS_PATH_USR_CONFIG" ]] && export ANSIBLE_CONFIG="$BL64_ANS_PATH_USR_CONFIG"
 
   return 0
 }

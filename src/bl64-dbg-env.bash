@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Show shell debugging information
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 export BL64_DBG_MODULE="$BL64_LIB_VAR_OFF"
@@ -16,6 +16,7 @@ export BL64_DBG_TARGET=''
 # * APP_TRACE: Shell tracing for selected application functions
 # * APP_TASK: Debugging messages from selected application functions
 # * APP_CMD: External commands: enable command specific debugging options used in the app
+# * APP_CUSTOM_X: Do nothing. Reserved to allow the application define custom debug
 # * APP_ALL: Enable full app debugging (task,trace,cmd)
 # * LIB_TRACE: Shell tracing for selected bashlib64 functions
 # * LIB_TASK: Debugging messages from selected bashlib64 functions
@@ -23,16 +24,19 @@ export BL64_DBG_TARGET=''
 # * LIB_ALL: Enable full bashlib64 debugging (task,trace,cmd)
 #
 
-export BL64_DBG_TARGET_NONE='0'
-export BL64_DBG_TARGET_APP_TRACE='1'
-export BL64_DBG_TARGET_APP_TASK='2'
-export BL64_DBG_TARGET_APP_CMD='3'
-export BL64_DBG_TARGET_APP_ALL='4'
-export BL64_DBG_TARGET_LIB_TRACE='5'
-export BL64_DBG_TARGET_LIB_TASK='6'
-export BL64_DBG_TARGET_LIB_CMD='7'
-export BL64_DBG_TARGET_LIB_ALL='8'
-export BL64_DBG_TARGET_ALL='9'
+export BL64_DBG_TARGET_NONE='APP0'
+export BL64_DBG_TARGET_APP_TRACE='APP1'
+export BL64_DBG_TARGET_APP_TASK='APP2'
+export BL64_DBG_TARGET_APP_CMD='APP3'
+export BL64_DBG_TARGET_APP_ALL='APP4'
+export BL64_DBG_TARGET_APP_CUSTOM_1='CST1'
+export BL64_DBG_TARGET_APP_CUSTOM_2='CST2'
+export BL64_DBG_TARGET_APP_CUSTOM_3='CST3'
+export BL64_DBG_TARGET_LIB_TRACE='LIB1'
+export BL64_DBG_TARGET_LIB_TASK='LIB2'
+export BL64_DBG_TARGET_LIB_CMD='LIB3'
+export BL64_DBG_TARGET_LIB_ALL='LIB4'
+export BL64_DBG_TARGET_ALL='ALL'
 
 export _BL64_DBG_TXT_FUNCTION_START='function tracing started'
 export _BL64_DBG_TXT_FUNCTION_STOP='function tracing stopped'

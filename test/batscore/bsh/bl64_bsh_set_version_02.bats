@@ -3,7 +3,7 @@ setup() {
 
 }
 
-@test "bl64_bsh_set_command: commands are set" {
+@test "bl64_bsh_set_version: commands are set" {
 
   assert_not_equal "${BL64_BSH_VERSION}" ''
 
