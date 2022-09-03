@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Display messages
 #
-# Version: 2.1.0
+# Version: 2.2.0
 #######################################
 
 export BL64_MSG_MODULE="$BL64_LIB_VAR_OFF"
@@ -17,10 +17,10 @@ export BL64_MSG_VERBOSE=''
 # * 2: bashlib64 and application messages
 #
 
-export BL64_MSG_VERBOSE_NONE='0'
-export BL64_MSG_VERBOSE_APP='1'
-export BL64_MSG_VERBOSE_LIB='2'
-export BL64_MSG_VERBOSE_ALL='3'
+export BL64_MSG_VERBOSE_NONE='NONE'
+export BL64_MSG_VERBOSE_APP='APP'
+export BL64_MSG_VERBOSE_LIB='LIB'
+export BL64_MSG_VERBOSE_ALL='ALL'
 
 #
 # Message type tag
