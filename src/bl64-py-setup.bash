@@ -86,7 +86,7 @@ function bl64_py_set_command() {
       BL64_PY_CMD_PYTHON36='/usr/bin/python3'
       BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
       ;;
-    ${BL64_OS_CNT}-9.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_FD}-35.* | ${BL64_OS_FD}-36.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
     ${BL64_OS_DEB}-9.*) BL64_PY_CMD_PYTHON35='/usr/bin/python3.5' ;;
