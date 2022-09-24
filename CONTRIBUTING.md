@@ -9,6 +9,8 @@
 
   ```shell
   git clone https://github.com/serdigital64/bashlib64.git
+  # Init git flow
+  git flow init
   ```
 
 - Adjust environment variables to reflect your configuration:
@@ -20,10 +22,10 @@
   # Review and update content for both files
   ```
 
-- Initialize dev environment variables
+- Initialize dev environment
 
   ```shell
-  source bin/devbl-set
+  ./bin/devbl-lib
   ```
 
 ## Update source code
