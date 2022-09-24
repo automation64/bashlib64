@@ -13,9 +13,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
