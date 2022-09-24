@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 2.0.0
+# Version: 2.0.1
 #######################################
 
 #######################################
@@ -571,7 +571,7 @@ function bl64_check_user() {
 #######################################
 function bl64_check_status() {
   bl64_dbg_lib_show_function "$@"
-  local -i status="${1:-}"
+  local status="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_STATUS_ERROR}}"
 
   bl64_check_parameter 'status' || return $?
@@ -579,7 +579,7 @@ function bl64_check_status() {
   if [[ "$status" != '0' ]]; then
     bl64_msg_show_error "${message} (status: ${status} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
     # shellcheck disable=SC2086
-    return $status
+    return "$status"
   else
     return 0
   fi
