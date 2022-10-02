@@ -417,7 +417,8 @@ function bl64_check_overwrite() {
 # Raise error: invalid parameter
 #
 # * Use to raise an error when the calling function has verified that the parameter is not valid
-# * This is a generic enough message to capture most validation use cases
+# * This is a generic enough message to capture most validation use cases when there is no specific bl64_check_*
+# * Can be used as the default value (*) for the bash command "case" to capture invalid options
 #
 # Arguments:
 #   $1: parameter name
