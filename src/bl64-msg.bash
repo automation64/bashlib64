@@ -145,11 +145,13 @@ function _bl64_msg_show_ascii() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_usage() {
-  local usage="${1:-${BL64_LIB_DEFAULT}}"
+  local usage="${1:-${BL64_LIB_VAR_NULL}}"
   local description="${2:-${BL64_LIB_DEFAULT}}"
   local commands="${3:-${BL64_LIB_DEFAULT}}"
   local flags="${4:-${BL64_LIB_DEFAULT}}"
   local parameters="${5:-${BL64_LIB_DEFAULT}}"
+
+  bl64_check_parameter 'usage' || return $?
 
   printf '\n%s: %s %s\n\n' "$_BL64_MSG_TXT_USAGE" "$BL64_SCRIPT_ID" "$usage"
 

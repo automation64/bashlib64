@@ -21,11 +21,11 @@
 #######################################
 function bl64_k8s_label_set() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_DEFAULT}}"
-  local resource="${2:-${BL64_LIB_DEFAULT}}"
-  local name="${3:-${BL64_LIB_DEFAULT}}"
-  local key="${4:-${BL64_LIB_DEFAULT}}"
-  local value="${5:-${BL64_LIB_DEFAULT}}"
+  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
+  local resource="${2:-${BL64_LIB_VAR_NULL}}"
+  local name="${3:-${BL64_LIB_VAR_NULL}}"
+  local key="${4:-${BL64_LIB_VAR_NULL}}"
+  local value="${5:-${BL64_LIB_VAR_NULL}}"
 
   bl64_check_parameter 'resource' &&
     bl64_check_parameter 'name' &&
@@ -56,8 +56,8 @@ function bl64_k8s_label_set() {
 #######################################
 function bl64_k8s_namespace_create() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_DEFAULT}}"
-  local namespace="${2:-${BL64_LIB_DEFAULT}}"
+  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
+  local namespace="${2:-${BL64_LIB_VAR_NULL}}"
 
   bl64_check_parameter 'namespace' ||
     return $?
@@ -80,9 +80,9 @@ function bl64_k8s_namespace_create() {
 #######################################
 function bl64_k8s_resource_update() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_DEFAULT}}"
-  local namespace="${2:-${BL64_LIB_DEFAULT}}"
-  local definition="${3:-${BL64_LIB_DEFAULT}}"
+  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
+  local namespace="${2:-${BL64_LIB_VAR_NULL}}"
+  local definition="${3:-${BL64_LIB_VAR_NULL}}"
 
   bl64_check_parameter 'namespace' &&
     bl64_check_parameter 'definition' &&

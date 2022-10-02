@@ -113,7 +113,7 @@ function bl64_rbac_check_sudoers() {
 #######################################
 function bl64_rbac_run_command() {
   bl64_dbg_lib_show_function "$@"
-  local user="${1:-${BL64_LIB_DEFAULT}}"
+  local user="${1:-${BL64_LIB_VAR_NULL}}"
   local target=''
 
   bl64_check_parameter 'user' &&
@@ -153,8 +153,8 @@ function bl64_rbac_run_command() {
 #######################################
 function bl64_rbac_run_bash_function() {
   bl64_dbg_lib_show_function "$@"
-  local library="${1:-${BL64_LIB_DEFAULT}}"
-  local user="${2:-${BL64_LIB_DEFAULT}}"
+  local library="${1:-${BL64_LIB_VAR_NULL}}"
+  local user="${2:-${BL64_LIB_VAR_NULL}}"
   local target=''
 
   bl64_check_parameter 'library' &&

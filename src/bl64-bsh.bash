@@ -122,7 +122,7 @@ function bl64_bsh_script_set_identity() {
 #######################################
 function bl64_bsh_env_export_variable() {
   bl64_dbg_lib_show_function "$@"
-  local variable="${1:-${BL64_LIB_DEFAULT}}"
+  local variable="${1:-${BL64_LIB_VAR_NULL}}"
   local value="${2:-}"
 
   bl64_check_parameter 'variable' ||
