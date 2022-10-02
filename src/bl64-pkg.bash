@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage native OS packages
 #
-# Version: 2.2.0
+# Version: 2.2.1
 #######################################
 
 #######################################
@@ -135,6 +135,8 @@ function bl64_pkg_repository_refresh() {
 function bl64_pkg_deploy() {
   bl64_dbg_lib_show_function "$@"
 
+  bl64_check_parameters_none $# || return $?
+
   bl64_pkg_prepare &&
     bl64_pkg_install "$@" &&
     bl64_pkg_upgrade &&
@@ -179,6 +181,8 @@ function bl64_pkg_prepare() {
 #######################################
 function bl64_pkg_install() {
   bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none $# || return $?
 
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_INSTALL (${*})"
   # shellcheck disable=SC2086
@@ -227,6 +231,8 @@ function bl64_pkg_install() {
 # shellcheck disable=SC2120
 function bl64_pkg_upgrade() {
   bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none $# || return $?
 
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_UPGRADE"
   # shellcheck disable=SC2086
