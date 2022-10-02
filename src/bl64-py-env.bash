@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #
-# Version: 1.11.0
+# Version: 1.11.1
 #######################################
 
 # Optional module. Not enabled by default
@@ -38,6 +38,7 @@ export BL64_PY_DEF_MODULE_PIP=''
 
 export _BL64_PY_TXT_PIP_PREPARE_PIP='upgrade pip module'
 export _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
+export _BL64_PY_TXT_PIP_CLEANUP_PIP='cleanup pip cache'
 export _BL64_PY_TXT_PIP_INSTALL='install modules'
 export _BL64_PY_TXT_VENV_MISSING='requested python virtual environment is missing'
 export _BL64_PY_TXT_VENV_INVALID='requested python virtual environment is invalid (no pyvenv.cfg found)'
