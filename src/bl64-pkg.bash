@@ -20,7 +20,7 @@
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
-#   package manager exist status
+#   package manager exit status
 #######################################
 function bl64_pkg_repository_add() {
   bl64_dbg_lib_show_function "$@"
@@ -85,7 +85,7 @@ gpgkey=%s\n' \
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
-#   n: package manager exist status
+#   n: package manager exit status
 #######################################
 function bl64_pkg_repository_refresh() {
   bl64_dbg_lib_show_function
@@ -154,7 +154,7 @@ function bl64_pkg_deploy() {
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
-#   n: package manager exist status
+#   n: package manager exit status
 #######################################
 function bl64_pkg_prepare() {
   bl64_dbg_lib_show_function
@@ -177,7 +177,7 @@ function bl64_pkg_prepare() {
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
-#   n: package manager exist status
+#   n: package manager exit status
 #######################################
 function bl64_pkg_install() {
   bl64_dbg_lib_show_function "$@"
@@ -226,13 +226,11 @@ function bl64_pkg_install() {
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
-#   n: package manager exist status
+#   n: package manager exit status
 #######################################
 # shellcheck disable=SC2120
 function bl64_pkg_upgrade() {
   bl64_dbg_lib_show_function "$@"
-
-  bl64_check_parameters_none $# || return $?
 
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_UPGRADE"
   # shellcheck disable=SC2086
@@ -276,7 +274,7 @@ function bl64_pkg_upgrade() {
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
-#   n: package manager exist status
+#   n: package manager exit status
 #######################################
 function bl64_pkg_cleanup() {
   bl64_dbg_lib_show_function
