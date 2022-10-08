@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Display messages
 #
-# Version: 3.1.1
+# Version: 3.2.0
 #######################################
 
 #######################################
@@ -33,6 +33,7 @@ function _bl64_msg_show() {
 }
 
 function _bl64_msg_show_ansi() {
+
   local attribute="${1:-}"
   local type="${2:-}"
   local message="${3:-}"
@@ -40,36 +41,38 @@ function _bl64_msg_show_ansi() {
   local style_fmttime="${BL64_MSG_THEME}_FMTTIME"
   local style_fmthost="${BL64_MSG_THEME}_FMTHOST"
   local style_fmtcaller="${BL64_MSG_THEME}_FMTCALLER"
+  local linefeed='\n'
 
   [[ -n "$attribute" && -n "$type" && -n "$message" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
   style="${BL64_MSG_THEME}_${attribute}"
+  [[ "$attribute" == "$BL64_MSG_TYPE_INPUT" ]] && linefeed=''
 
   case "$BL64_MSG_FORMAT" in
   "$BL64_MSG_FORMAT_PLAIN")
-    printf "%b: %s\n" \
+    printf "%b: %s${linefeed}" \
       "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_HOST")
-    printf "[%b] %b: %s\n" \
+    printf "[%b] %b: %s${linefeed}" \
       "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_TIME")
-    printf "[%b] %b: %s\n" \
+    printf "[%b] %b: %s${linefeed}" \
       "\e[${!style_fmttime}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_CALLER")
-    printf "[%b] %b: %s\n" \
+    printf "[%b] %b: %s${linefeed}" \
       "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_FULL")
-    printf "[%b] %b:%b | %b: %s\n" \
+    printf "[%b] %b:%b | %b: %s${linefeed}" \
       "\e[${!style_fmttime}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
@@ -88,36 +91,38 @@ function _bl64_msg_show_ascii() {
   local style_fmttime="${BL64_MSG_THEME}_FMTTIME"
   local style_fmthost="${BL64_MSG_THEME}_FMTHOST"
   local style_fmtcaller="${BL64_MSG_THEME}_FMTCALLER"
+  local linefeed='\n'
 
   [[ -n "$attribute" && -n "$type" && -n "$message" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
   style="${BL64_MSG_THEME}_${attribute}"
+  [[ "$attribute" == "$BL64_MSG_TYPE_INPUT" ]] && linefeed=''
 
   case "$BL64_MSG_FORMAT" in
   "$BL64_MSG_FORMAT_PLAIN")
-    printf "%s: %s\n" \
+    printf "%s: %s${linefeed}" \
       "${!style} $type" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_HOST")
-    printf "[%s] %s: %s\n" \
+    printf "[%s] %s: %s${linefeed}" \
       "${HOSTNAME}" \
       "${!style} $type" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_TIME")
-    printf "[%(%d/%b/%Y-%H:%M:%S-UTC%z)T] %s: %s\n" \
+    printf "[%(%d/%b/%Y-%H:%M:%S-UTC%z)T] %s: %s${linefeed}" \
       '-1' \
       "${!style} $type" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_CALLER")
-    printf "[%s] %s: %s\n" \
+    printf "[%s] %s: %s${linefeed}" \
       "$BL64_SCRIPT_ID" \
       "${!style} $type" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_FULL")
-    printf "[%(%d/%b/%Y-%H:%M:%S-UTC%z)T] %s:%s | %s: %s\n" \
+    printf "[%(%d/%b/%Y-%H:%M:%S-UTC%z)T] %s:%s | %s: %s${linefeed}" \
       '-1' \
       "$HOSTNAME" \
       "$BL64_SCRIPT_ID" \
@@ -342,4 +347,24 @@ function bl64_msg_show_batch_finish() {
   else
     _bl64_msg_show "$BL64_MSG_TYPE_BATCHERR" "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: exit-status-${status}"
   fi
+}
+
+#######################################
+# Display user input message
+#
+# * Used exclusively by the io module to show messages for user input from stdin
+#
+# Arguments:
+#   $1: message
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_input() {
+  local message="$1"
+
+  _bl64_msg_show "$BL64_MSG_TYPE_INPUT" "$_BL64_MSG_TXT_INPUT" "$message"
 }
