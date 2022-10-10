@@ -44,8 +44,6 @@ function bl64_xsv_dump() {
 #   STDERR: Error messages
 # Returns:
 #   0: successfull execution
-#   BL64_XSV_ERROR_MISSING_COMMAND
-#   BL64_XSV_ERROR_SEARCH_VALUES
 #   >0: awk command exit status
 #######################################
 function bl64_xsv_search_records() {
