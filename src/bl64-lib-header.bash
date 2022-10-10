@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 7.1.0
+# Version: 7.2.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -21,25 +21,3 @@
 # limitations under the License.
 #
 #######################################
-
-# Do not inherit aliases and commands
-unset -f unalias
-\unalias -a
-unset -f command
-
-# Normalize shtop defaults
-shopt -qu \
-  'dotglob' \
-  'extdebug' \
-  'failglob' \
-  'globstar' \
-  'gnu_errfmt' \
-  'huponexit' \
-  'lastpipe' \
-  'login_shell' \
-  'nocaseglob' \
-  'nocasematch' \
-  'nullglob' \
-  'xpg_echo'
-shopt -qs \
-  'extquote'
