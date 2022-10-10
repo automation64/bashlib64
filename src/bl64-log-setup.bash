@@ -113,7 +113,7 @@ function bl64_log_set_format() {
   case "$format" in
   "$BL64_LOG_FORMAT_CSV")
     BL64_LOG_FORMAT="$BL64_LOG_FORMAT_CSV"
-    BL64_LOG_FS="$BL64_XSV_FS_COLON"
+    BL64_LOG_FS=':'
     ;;
   *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
   esac
