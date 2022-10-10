@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 3.0.0
+# Version: 3.1.0
 #######################################
 
 #
@@ -70,6 +70,7 @@ bl64_dbg_setup &&
   bl64_iam_setup &&
   bl64_pkg_setup &&
   bl64_rbac_setup &&
+  bl64_ui_setup &&
   bl64_vcs_setup &&
   bl64_rxtx_setup ||
   return $?
