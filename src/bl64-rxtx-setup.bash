@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Transfer and Receive data over the network
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -26,6 +26,7 @@ function bl64_rxtx_setup() {
     bl64_rxtx_set_options &&
     BL64_RXTX_MODULE="$BL64_LIB_VAR_ON"
 
+  bl64_check_alert_module_setup 'rxtx'
 }
 
 #######################################

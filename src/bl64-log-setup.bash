@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Write messages to logs
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
 
 #######################################
@@ -32,10 +32,10 @@ function bl64_log_setup() {
   bl64_log_set_repository "$repository" &&
     bl64_log_set_target "$target" &&
     bl64_log_set_level "$level" &&
-    bl64_log_set_format "$format" ||
-    return $?
+    bl64_log_set_format "$format" &&
+    BL64_LOG_MODULE="$BL64_LIB_VAR_ON"
 
-  BL64_LOG_MODULE="$BL64_LIB_VAR_ON"
+  bl64_check_alert_module_setup 'log'
 }
 
 #######################################

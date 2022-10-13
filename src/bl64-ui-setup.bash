@@ -23,4 +23,5 @@ function bl64_ui_setup() {
 
   BL64_UI_MODULE="$BL64_LIB_VAR_ON"
 
+  bl64_check_alert_module_setup 'ui'
 }

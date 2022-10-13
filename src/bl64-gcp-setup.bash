@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with GCP
 #
-# Version: 1.2.1
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -31,6 +31,7 @@ function bl64_gcp_setup() {
     bl64_check_command "$BL64_GCP_CMD_GCLOUD" &&
     BL64_GCP_MODULE="$BL64_LIB_VAR_ON"
 
+  bl64_check_alert_module_setup 'gcp'
 }
 
 #######################################
