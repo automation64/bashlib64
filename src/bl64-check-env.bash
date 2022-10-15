@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
 #
-# Version: 1.14.0
+# Version: 1.15.0
 #######################################
 
 export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required bashlib64 module is not setup. Module must be initialized before usage'
@@ -40,11 +40,13 @@ export _BL64_CHECK_TXT_INCOMPATIBLE='the requested operation is not supported in
 export _BL64_CHECK_TXT_UNDEFINED='requested command is not defined or implemented'
 export _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one parameter and none was provided'
 export _BL64_CHECK_TXT_FAILED='task execution failed'
+export _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested bashlib64 module'
 
 export _BL64_CHECK_TXT_PARAMETER_INVALID='the requested operation was provided with an invalid parameter value'
 
 export _BL64_CHECK_TXT_FUNCTION='caller'
 export _BL64_CHECK_TXT_PARAMETER='parameter'
+export _BL64_CHECK_TXT_MODULE='module'
 
 export _BL64_CHECK_TXT_USER_NOT_FOUND='required user is not present in the operating system'
 

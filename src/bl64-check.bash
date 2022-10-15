@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 2.0.1
+# Version: 2.1.0
 #######################################
 
 #######################################
@@ -481,6 +481,36 @@ function bl64_check_alert_undefined() {
 }
 
 #######################################
+# Raise module setup error
+#
+# * Helper to check if the module was correctly setup and raise error if not
+# * Use as last function of bl64_*_setup
+# * Will take the last exit status
+#
+# Arguments:
+#   $1: bashlib64 module alias
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   $status
+#######################################
+function bl64_check_alert_module_setup() {
+  local -i last_status=$? # must be first line to catch $?
+  bl64_dbg_lib_show_function "$@"
+  local module="${1:-}"
+
+  bl64_check_parameter 'module' || return $?
+
+  if [[ "$last_status" != '0' ]]; then
+    bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_SETUP_FAILED} (${_BL64_CHECK_TXT_MODULE}: ${module} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    return $last_status
+  else
+    return 0
+  fi
+}
+
+#######################################
 # Check that parameters are passed
 #
 # Arguments:
@@ -559,7 +589,7 @@ function bl64_check_user() {
 # Check exit status
 #
 # * Helper to check for exit status of the last executed command and show error if failed
-# * Return the same status as the latest command. This is to facilitate chaining with &&
+# * Return the same status as the latest command. This is to facilitate chaining with && return $? or be the last command of the function
 #
 # Arguments:
 #   $1: exit status
