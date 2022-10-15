@@ -93,6 +93,10 @@ The library has been tested on the following operating systems:
   source "<PROJECT_DIR>/bashlib64.bash"
   ```
 
+- The library is also available in two smaller files:
+  - [bashlib64-core](https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64-core.bash): core modules
+  - [bashlib64-opt](https://raw.githubusercontent.com/serdigital64/bashlib64/main/bashlib64-opt.bash): optional modules
+
 ## Contributing
 
 Help on implementing new features and maintaining the code base is welcomed.
