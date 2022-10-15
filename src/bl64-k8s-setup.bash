@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Kubernetes
 #
-# Version: 1.0.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -29,9 +29,9 @@ function bl64_k8s_setup() {
   bl64_k8s_set_command "$kubectl_bin" &&
     bl64_k8s_set_options &&
     bl64_check_command "$BL64_K8S_CMD_KUBECTL" &&
-    BL64_K8S_MODULE="$BL64_LIB_VAR_ON" ||
-    return $?
+    BL64_K8S_MODULE="$BL64_LIB_VAR_ON"
 
+  bl64_check_alert_module_setup 'k8s'
 }
 
 #######################################
@@ -95,4 +95,5 @@ function bl64_k8s_set_options() {
   BL64_K8S_SET_OUTPUT_JSON='--output=json'
   BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
   BL64_K8S_SET_OUTPUT_TXT='--output=wide'
+  BL64_K8S_SET_OUTPUT_NAME='--output=name'
 }
