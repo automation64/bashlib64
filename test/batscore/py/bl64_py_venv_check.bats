@@ -1,4 +1,5 @@
 setup() {
+  [[ ! -f '/run/.containerenv' ]] && skip 'test-case for container mode'
   export TEST_SANDBOX
 
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
