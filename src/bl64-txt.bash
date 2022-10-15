@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manipulate text files content
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 #######################################
@@ -121,7 +121,7 @@ function bl64_txt_run_awk() {
 function bl64_txt_run_envsubst() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module_setup "$BL64_TXT_MODULE" &&
+  bl64_check_module 'BL64_TXT_MODULE' &&
     bl64_check_command "$BL64_TXT_CMD_ENVSUBST" ||
     return $?
 
@@ -147,7 +147,7 @@ function bl64_txt_run_grep() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_TXT_MODULE" &&
+    bl64_check_module 'BL64_TXT_MODULE' &&
     bl64_check_command "$BL64_TXT_CMD_GREP" ||
     return $?
 
@@ -173,7 +173,7 @@ function bl64_txt_run_sed() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_TXT_MODULE" &&
+    bl64_check_module 'BL64_TXT_MODULE' &&
     bl64_check_command "$BL64_TXT_CMD_SED" ||
     return $?
 
@@ -198,7 +198,7 @@ function bl64_txt_run_sed() {
 function bl64_txt_run_base64() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module_setup "$BL64_TXT_MODULE" &&
+  bl64_check_module 'BL64_TXT_MODULE' &&
     bl64_check_command "$BL64_TXT_CMD_BASE64" ||
     return $?
 
@@ -224,7 +224,7 @@ function bl64_txt_run_tr() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_TXT_MODULE" &&
+    bl64_check_module 'BL64_TXT_MODULE' &&
     bl64_check_command "$BL64_TXT_CMD_TR" ||
     return $?
 
@@ -250,7 +250,7 @@ function bl64_txt_run_cut() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_TXT_MODULE" &&
+    bl64_check_module 'BL64_TXT_MODULE' &&
     bl64_check_command "$BL64_TXT_CMD_CUT" ||
     return $?
 
