@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with GCP
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -21,7 +21,7 @@ function bl64_gcp_run_gcloud() {
   local debug=' '
   local config=' '
 
-  bl64_check_module_setup "$BL64_GCP_MODULE" ||
+  bl64_check_module 'BL64_GCP_MODULE' ||
     return $?
 
   if bl64_dbg_lib_command_enabled; then

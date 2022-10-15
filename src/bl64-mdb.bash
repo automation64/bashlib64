@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with MongoDB
 #
-# Version: 1.0.0
+# Version: 1.1.0
 #######################################
 
 #######################################
@@ -119,7 +119,7 @@ function bl64_mdb_run_mongosh_eval() {
   shift
   bl64_check_parameters_none "$#" &&
     bl64_check_parameter 'uri' &&
-    bl64_check_module_setup "$BL64_MDB_MODULE" ||
+    bl64_check_module 'BL64_MDB_MODULE' ||
     return $?
 
   bl64_dbg_lib_command_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
@@ -156,7 +156,7 @@ function bl64_mdb_run_mongosh() {
 
   shift
   bl64_check_parameter 'uri' &&
-    bl64_check_module_setup "$BL64_MDB_MODULE" ||
+    bl64_check_module 'BL64_MDB_MODULE' ||
     return $?
 
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
@@ -189,7 +189,7 @@ function bl64_mdb_run_mongorestore() {
   local verbosity="$BL64_MDB_SET_QUIET"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_MDB_MODULE" ||
+    bl64_check_module 'BL64_MDB_MODULE' ||
     return $?
 
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
@@ -220,7 +220,7 @@ function bl64_mdb_run_mongoexport() {
   local verbosity="$BL64_MDB_SET_QUIET"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_MDB_MODULE" ||
+    bl64_check_module 'BL64_MDB_MODULE' ||
     return $?
 
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_MDB_SET_VERBOSE"

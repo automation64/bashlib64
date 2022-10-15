@@ -11,13 +11,13 @@
 
 function bl64_aws_get_cli_config() {
   bl64_dbg_lib_show_function
-  bl64_check_module_setup "$BL64_AWS_MODULE" || return $?
+  bl64_check_module 'BL64_AWS_MODULE' || return $?
   echo "$BL64_AWS_CLI_CONFIG"
 }
 
 function bl64_aws_get_cli_credentials() {
   bl64_dbg_lib_show_function
-  bl64_check_module_setup "$BL64_AWS_MODULE" || return $?
+  bl64_check_module 'BL64_AWS_MODULE' || return $?
   echo "$BL64_AWS_CLI_CREDENTIALS"
 }
 

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 2.1.0
+# Version: 3.0.0
 #######################################
 
 #######################################
@@ -537,25 +537,31 @@ function bl64_check_parameters_none() {
 # Check that the optional module is loaded
 #
 # Arguments:
-#   $1: load status (eg: $BL64_XXXX_MODULE)
+#   $1: module name (eg: BL64_XXXX_MODULE)
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
 #   BL64_LIB_ERROR_TASK_UNDEFINED
 #######################################
-function bl64_check_module_setup() {
+function bl64_check_module() {
   bl64_dbg_lib_show_function "$@"
-  local setup_status="${1:-}"
+  local module="${1:-}"
 
-  bl64_check_parameter 'setup_status' || return $?
+  bl64_check_parameter 'module' || return $?
 
-  if [[ "$setup_status" == "$BL64_LIB_VAR_OFF" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_NOT_SETUP} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
-    return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
-  else
-    return 0
+  if [[ ! -v "$module" ]]; then
+    bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_SET} (${_BL64_CHECK_TXT_MODULE}: ${module} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    return $BL64_LIB_ERROR_EXPORT_SET
   fi
+
+  local -n setup_status="$module"
+  if [[ "$setup_status" == "$BL64_LIB_VAR_OFF" ]]; then
+    bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_NOT_SETUP} (${_BL64_CHECK_TXT_MODULE}: ${module} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
+  fi
+
+  return 0
 }
 
 #######################################

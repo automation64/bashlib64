@@ -1,10 +1,8 @@
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
 #
-# Version: 1.15.0
+# Version: 1.16.0
 #######################################
-
-export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required bashlib64 module is not setup. Module must be initialized before usage'
 
 export _BL64_CHECK_TXT_PARAMETER_MISSING='required parameter is missing'
 export _BL64_CHECK_TXT_PARAMETER_NOT_SET='required shell variable is not set'
@@ -40,7 +38,6 @@ export _BL64_CHECK_TXT_INCOMPATIBLE='the requested operation is not supported in
 export _BL64_CHECK_TXT_UNDEFINED='requested command is not defined or implemented'
 export _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one parameter and none was provided'
 export _BL64_CHECK_TXT_FAILED='task execution failed'
-export _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested bashlib64 module'
 
 export _BL64_CHECK_TXT_PARAMETER_INVALID='the requested operation was provided with an invalid parameter value'
 
@@ -51,5 +48,9 @@ export _BL64_CHECK_TXT_MODULE='module'
 export _BL64_CHECK_TXT_USER_NOT_FOUND='required user is not present in the operating system'
 
 export _BL64_CHECK_TXT_STATUS_ERROR='task execution failed'
+
+export _BL64_CHECK_TXT_MODULE_SET='required bashlib64 module was not imported. Please source the module before using it'
+export _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested bashlib64 module'
+export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required bashlib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module'
 
 export _BL64_CHECK_TXT_I='|'

@@ -115,7 +115,7 @@ function bl64_tf_log_set() {
   local level="${2:-$BL64_TF_SET_LOG_INFO}"
 
   bl64_check_parameter 'path' &&
-    bl64_check_module_setup "$BL64_TF_MODULE" ||
+    bl64_check_module 'BL64_TF_MODULE' ||
     return $?
 
   BL64_TF_LOG_PATH="$path"

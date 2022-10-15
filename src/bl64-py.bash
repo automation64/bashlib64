@@ -111,19 +111,23 @@ function bl64_py_pip_usr_prepare() {
   [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
 
   # shellcheck disable=SC2086
-  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_PIP" &&
-    bl64_py_run_pip \
-      'install' \
-      $BL64_PY_SET_PIP_UPGRADE \
-      $flag_user \
-      $modules_pip &&
-    bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP" &&
-    bl64_py_run_pip \
-      'install' \
-      $BL64_PY_SET_PIP_UPGRADE \
-      $flag_user \
-      $modules_setup
+  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_PIP"
+  bl64_py_run_pip \
+    'install' \
+    $BL64_PY_SET_PIP_UPGRADE \
+    $flag_user \
+    $modules_pip ||
+    return $?
 
+  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP"
+  bl64_py_run_pip \
+    'install' \
+    $BL64_PY_SET_PIP_UPGRADE \
+    $flag_user \
+    $modules_setup ||
+    return $?
+
+  return 0
 }
 
 #######################################
@@ -230,7 +234,7 @@ function bl64_py_run_python() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_PY_MODULE" ||
+    bl64_check_module 'BL64_PY_MODULE' ||
     return $?
 
   bl64_py_blank_python
