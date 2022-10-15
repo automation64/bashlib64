@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Version: 3.0.0
+# Version: 3.1.0
 #######################################
 
 # Declare imported variables
@@ -48,6 +48,8 @@ export BL64_LIB_VAR_FALSE='1'
 export BL64_LIB_VAR_ON='1'
 export BL64_LIB_VAR_OFF='0'
 export BL64_LIB_VAR_OK='0'
+export BL64_LIB_VAR_NONE='0'
+export BL64_LIB_VAR_ALL='1'
 
 #
 # Common error codes
