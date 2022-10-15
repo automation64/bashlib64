@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 3.1.0
+# Version: 4.0.0
 #######################################
 
 #
@@ -28,9 +28,7 @@ bl64_dbg_setup &&
   bl64_os_setup &&
   bl64_txt_setup &&
   bl64_fs_setup &&
-  bl64_arc_setup &&
   bl64_iam_setup &&
-  bl64_pkg_setup &&
   bl64_rbac_setup &&
   bl64_ui_setup &&
   bl64_vcs_setup &&
