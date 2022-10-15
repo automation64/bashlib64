@@ -110,8 +110,8 @@ function bl64_py_pip_usr_prepare() {
 
   [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
 
-  # shellcheck disable=SC2086
   bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_PIP"
+  # shellcheck disable=SC2086
   bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_UPGRADE \
@@ -120,6 +120,7 @@ function bl64_py_pip_usr_prepare() {
     return $?
 
   bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP"
+  # shellcheck disable=SC2086
   bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_UPGRADE \
