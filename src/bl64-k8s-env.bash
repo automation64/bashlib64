@@ -26,4 +26,5 @@ export BL64_K8S_RESOURCE_SA='serviceaccount'
 
 export _BL64_K8S_TXT_CREATE_NS='create namespace'
 export _BL64_K8S_TXT_CREATE_SA='create service account'
-export _BL64_K8S_TXT_SET_LABEL='set label'
+export _BL64_K8S_TXT_SET_LABEL='set or update label'
+export _BL64_K8S_TXT_SET_ANNOTATION='set or update annotation'

@@ -42,11 +42,59 @@ function bl64_k8s_label_set() {
   # shellcheck disable=SC2086
   bl64_k8s_run_kubectl \
     "$kubeconfig" \
-    label $verbosity \
+    'label' $verbosity \
     --overwrite \
     "$resource" \
     "$name" \
     "$key"="$value"
+}
+
+#######################################
+# Set annotation on resource
+#
+# * Overwrite existing
+#
+# Arguments:
+#   $1: full path to the kube/config file for the target cluster
+#   $2: namespace. If not required assign $BL64_LIB_VAR_NONE
+#   $2: resource type
+#   $3: resource name
+#   $@: remaining args are passed as is. Use the syntax: key=value
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_k8s_annotation_set() {
+  bl64_dbg_lib_show_function "$@"
+  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
+  local namespace="${2:-${BL64_LIB_VAR_NONE}}"
+  local resource="${3:-${BL64_LIB_VAR_NULL}}"
+  local name="${4:-${BL64_LIB_VAR_NULL}}"
+  local verbosity=''
+
+  bl64_check_parameter 'resource' &&
+    bl64_check_parameter 'name' ||
+    return $?
+
+  shift
+  shift
+  shift
+  shift
+
+  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_OUTPUT_JSON"
+  [[ "$namespace" == "$BL64_LIB_DEFAULT" ]] && namespace='' || namespace="--namespace ${namespace}"
+
+  bl64_msg_show_lib_task "${_BL64_K8S_TXT_SET_ANNOTATION} (${resource}/${name})"
+  # shellcheck disable=SC2086
+  bl64_k8s_run_kubectl \
+    "$kubeconfig" \
+    'annotate' $verbosity $namespace \
+    --overwrite \
+    "$resource" \
+    "$name" \
+    "$@"
 }
 
 #######################################
@@ -156,7 +204,7 @@ function bl64_k8s_resource_update() {
   # shellcheck disable=SC2086
   bl64_k8s_run_kubectl \
     "$kubeconfig" \
-    apply $verbosity \
+    'apply' $verbosity \
     --namespace="$namespace" \
     --force='false' \
     --force-conflicts='false' \
@@ -261,11 +309,11 @@ function bl64_k8s_resource_is_created() {
   # shellcheck disable=SC2086
   if bl64_dbg_lib_task_enabled; then
     bl64_k8s_run_kubectl "$kubeconfig" \
-      get "$type" "$name" \
+      'get' "$type" "$name" \
       $BL64_K8S_SET_OUTPUT_NAME $namespace
   else
     bl64_k8s_run_kubectl "$kubeconfig" \
-      get "$type" "$name" \
+      'get' "$type" "$name" \
       $BL64_K8S_SET_OUTPUT_NAME $namespace >/dev/null 2>&1
   fi
 }
