@@ -99,6 +99,9 @@ function bl64_k8s_set_options() {
     BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
     BL64_K8S_SET_OUTPUT_TXT='--output=wide'
     BL64_K8S_SET_OUTPUT_NAME='--output=name'
+
+    BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
+    BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
