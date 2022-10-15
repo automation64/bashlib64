@@ -1,11 +1,13 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with Kubernetes
 #
-# Version: 1.1.1
+# Version: 1.2.0
 #######################################
 
 #######################################
 # Set label on resource
+#
+# * Overwrite existing
 #
 # Arguments:
 #   $1: full path to the kube/config file for the target cluster
@@ -26,6 +28,7 @@ function bl64_k8s_label_set() {
   local name="${3:-${BL64_LIB_VAR_NULL}}"
   local key="${4:-${BL64_LIB_VAR_NULL}}"
   local value="${5:-${BL64_LIB_VAR_NULL}}"
+  local verbosity=''
 
   bl64_check_parameter 'resource' &&
     bl64_check_parameter 'name' &&
@@ -33,9 +36,13 @@ function bl64_k8s_label_set() {
     bl64_check_parameter 'value' ||
     return $?
 
+  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_OUTPUT_JSON"
+
+  bl64_msg_show_lib_task "${_BL64_K8S_TXT_SET_LABEL} (${resource}/${name}/${key})"
+  # shellcheck disable=SC2086
   bl64_k8s_run_kubectl \
     "$kubeconfig" \
-    label \
+    label $verbosity \
     --overwrite \
     "$resource" \
     "$name" \
@@ -44,6 +51,8 @@ function bl64_k8s_label_set() {
 
 #######################################
 # Create namespace
+#
+# * If already created do nothing
 #
 # Arguments:
 #   $1: full path to the kube/config file for the target cluster
@@ -58,20 +67,67 @@ function bl64_k8s_namespace_create() {
   bl64_dbg_lib_show_function "$@"
   local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
   local namespace="${2:-${BL64_LIB_VAR_NULL}}"
+  local verbosity=''
 
   bl64_check_parameter 'namespace' ||
     return $?
 
-  if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_NAMESPACE" "$namespace"; then
+  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_OUTPUT_JSON"
+
+  if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_NS" "$namespace"; then
     bl64_dbg_lib_show_info "requested namespace is already created. No need to take action. (${namespace})"
     return 0
   fi
 
-  bl64_k8s_run_kubectl "$kubeconfig" create namespace "$namespace"
+  bl64_msg_show_lib_task "${_BL64_K8S_TXT_CREATE_NS} (${namespace})"
+  # shellcheck disable=SC2086
+  bl64_k8s_run_kubectl "$kubeconfig" \
+    'create' $verbosity "$BL64_K8S_RESOURCE_NS" "$namespace"
+}
+
+#######################################
+# Create service account
+#
+# * If already created do nothing
+#
+# Arguments:
+#   $1: full path to the kube/config file for the target cluster
+#   $2: target namespace
+#   $3: service account name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_k8s_sa_create() {
+  bl64_dbg_lib_show_function "$@"
+  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
+  local namespace="${2:-${BL64_LIB_VAR_NULL}}"
+  local sa="${3:-${BL64_LIB_VAR_NULL}}"
+  local verbosity=''
+
+  bl64_check_parameter 'namespace' &&
+    bl64_check_parameter 'sa' ||
+    return $?
+
+  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_OUTPUT_JSON"
+
+  if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_SA" "$sa" "$namespace"; then
+    bl64_dbg_lib_show_info "requested service account is already created. No need to take action. (${sa})"
+    return 0
+  fi
+
+  bl64_msg_show_lib_task "${_BL64_K8S_TXT_CREATE_SA} (${namespace}/${sa})"
+  # shellcheck disable=SC2086
+  bl64_k8s_run_kubectl "$kubeconfig" \
+    'create' $verbosity --namespace="$namespace" "$BL64_K8S_RESOURCE_SA" "$sa"
 }
 
 #######################################
 # Apply updates to resources based on definition file
+#
+# * Overwrite
 #
 # Arguments:
 #   $1: full path to the kube/config file for the target cluster
@@ -88,16 +144,20 @@ function bl64_k8s_resource_update() {
   local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
   local namespace="${2:-${BL64_LIB_VAR_NULL}}"
   local definition="${3:-${BL64_LIB_VAR_NULL}}"
+  local verbosity=''
 
   bl64_check_parameter 'namespace' &&
     bl64_check_parameter 'definition' &&
     bl64_check_file "$definition" ||
     return $?
 
+  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_OUTPUT_JSON"
+
+  # shellcheck disable=SC2086
   bl64_k8s_run_kubectl \
     "$kubeconfig" \
-    --namespace "$namespace" \
-    apply \
+    apply $verbosity \
+    --namespace="$namespace" \
     --force='false' \
     --force-conflicts='false' \
     --grace-period='-1' \
@@ -202,10 +262,10 @@ function bl64_k8s_resource_is_created() {
   if bl64_dbg_lib_task_enabled; then
     bl64_k8s_run_kubectl "$kubeconfig" \
       get "$type" "$name" \
-      "$BL64_K8S_SET_OUTPUT_NAME" $namespace
+      $BL64_K8S_SET_OUTPUT_NAME $namespace
   else
     bl64_k8s_run_kubectl "$kubeconfig" \
       get "$type" "$name" \
-      "$BL64_K8S_SET_OUTPUT_NAME" $namespace >/dev/null 2>&1
+      $BL64_K8S_SET_OUTPUT_NAME $namespace >/dev/null 2>&1
   fi
 }

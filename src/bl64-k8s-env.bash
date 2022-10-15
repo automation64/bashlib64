@@ -21,4 +21,9 @@ export BL64_K8S_SET_DRY_RUN_CLIENT="$BL64_LIB_UNAVAILABLE"
 
 export BL64_K8S_VERSION_KUBECTL=''
 
-export BL64_K8S_RESOURCE_NAMESPACE='namespace'
+export BL64_K8S_RESOURCE_NS='namespace'
+export BL64_K8S_RESOURCE_SA='serviceaccount'
+
+export _BL64_K8S_TXT_CREATE_NS='create namespace'
+export _BL64_K8S_TXT_CREATE_SA='create service account'
+export _BL64_K8S_TXT_SET_LABEL='set label'
