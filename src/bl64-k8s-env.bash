@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with Kubernetes
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -15,3 +15,6 @@ export BL64_K8S_SET_VERBOSE_DEBUG=''
 export BL64_K8S_SET_OUTPUT_JSON=''
 export BL64_K8S_SET_OUTPUT_YAML=''
 export BL64_K8S_SET_OUTPUT_TXT=''
+export BL64_K8S_SET_OUTPUT_NAME=''
+
+export BL64_K8S_RESOURCE_NAMESPACE='namespace'

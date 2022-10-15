@@ -62,6 +62,11 @@ function bl64_k8s_namespace_create() {
   bl64_check_parameter 'namespace' ||
     return $?
 
+  if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_NAMESPACE" "$namespace"; then
+    bl64_dbg_lib_show_info "requested namespace is already created. No need to take action. (${namespace})"
+    return 0
+  fi
+
   bl64_k8s_run_kubectl "$kubeconfig" create namespace "$namespace"
 }
 
@@ -125,7 +130,7 @@ function bl64_k8s_run_kubectl() {
   bl64_check_parameters_none "$#" &&
     bl64_check_parameter 'kubeconfig' &&
     bl64_check_file "$kubeconfig" &&
-    bl64_check_module_setup "$BL64_K8S_MODULE" ||
+    bl64_check_module 'BL64_K8S_MODULE' ||
     return $?
 
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_VERBOSE_NORMAL"
@@ -134,13 +139,12 @@ function bl64_k8s_run_kubectl() {
   bl64_k8s_blank_kubectl
   shift
 
-  bl64_dbg_lib_trace_start
+  bl64_dbg_lib_command_trace_start
   # shellcheck disable=SC2086
   "$BL64_K8S_CMD_KUBECTL" \
     --kubeconfig="$kubeconfig" \
-    $verbosity \
-    "$@"
-  bl64_dbg_lib_trace_stop
+    $verbosity "$@"
+  bl64_dbg_lib_command_trace_stop
 }
 
 #######################################
@@ -164,4 +168,44 @@ function bl64_k8s_blank_kubectl() {
   bl64_dbg_lib_trace_stop
 
   return 0
+}
+
+#######################################
+# Verify that the resource is created
+#
+# Arguments:
+#   $1: full path to the kube/config file for the target cluster
+#   $2: resource type
+#   $3: resource name
+#   $4: namespace where resources are
+# Outputs:
+#   STDOUT: nothing
+#   STDERR: nothing unless debug
+# Returns:
+#   0: resource exists
+#   >0: resources does not exist or execution error
+#######################################
+function bl64_k8s_resource_is_created() {
+  bl64_dbg_lib_show_function "$@"
+  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
+  local type="${2:-${BL64_LIB_VAR_NULL}}"
+  local name="${3:-${BL64_LIB_VAR_NULL}}"
+  local namespace="${4:-}"
+
+  bl64_check_parameter 'type' &&
+    bl64_check_parameter 'name' ||
+    return $?
+
+  [[ -n "$namespace" ]] && namespace="--namespace ${namespace}"
+
+  # shellcheck disable=SC2086
+  if bl64_dbg_lib_task_enabled; then
+    bl64_k8s_run_kubectl "$kubeconfig" \
+      get "$type" "$name" \
+      "$BL64_K8S_SET_OUTPUT_NAME" $namespace
+  else
+    bl64_k8s_run_kubectl "$kubeconfig" \
+      get "$type" "$name" \
+      "$BL64_K8S_SET_OUTPUT_NAME" $namespace >/dev/null 2>&1
+  fi
 }
