@@ -1,6 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
+  bl64_arc_setup
 }
 
 @test "bl64_arc_set_options: common globals are set" {
