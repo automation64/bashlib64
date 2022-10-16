@@ -123,7 +123,7 @@ function bl64_k8s_namespace_create() {
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_NS" "$namespace"; then
-    bl64_dbg_lib_show_info "requested namespace is already created. No need to take action. (${namespace})"
+    bl64_msg_show_lib_info "${_BL64_K8S_TXT_RESOURCE_EXISTING} (${_BL64_K8S_TXT_CREATE_NS}:${namespace})"
     return 0
   fi
 
@@ -162,7 +162,7 @@ function bl64_k8s_sa_create() {
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_SA" "$sa" "$namespace"; then
-    bl64_dbg_lib_show_info "requested service account is already created. No need to take action. (${sa})"
+    bl64_msg_show_lib_info "${_BL64_K8S_TXT_RESOURCE_EXISTING} (${_BL64_K8S_TXT_CREATE_SA}:${sa})"
     return 0
   fi
 
@@ -170,6 +170,55 @@ function bl64_k8s_sa_create() {
   # shellcheck disable=SC2086
   bl64_k8s_run_kubectl "$kubeconfig" \
     'create' $verbosity --namespace="$namespace" "$BL64_K8S_RESOURCE_SA" "$sa"
+}
+
+#######################################
+# Create generic secret from file
+#
+# * If already created do nothing
+# * File must containe the secret value only
+#
+# Arguments:
+#   $1: full path to the kube/config file for the target cluster
+#   $2: target namespace
+#   $3: secret name
+#   $4: secret key
+#   $5: path to the file with the secret value
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_k8s_secret_create() {
+  bl64_dbg_lib_show_function "$@"
+  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
+  local namespace="${2:-${BL64_LIB_VAR_NULL}}"
+  local secret="${3:-${BL64_LIB_VAR_NULL}}"
+  local key="${4:-${BL64_LIB_VAR_NULL}}"
+  local file="${5:-${BL64_LIB_VAR_NULL}}"
+  local verbosity=''
+
+  bl64_check_parameter 'namespace' &&
+    bl64_check_parameter 'secret' &&
+    bl64_check_parameter 'file' &&
+    bl64_check_file "$file" ||
+    return $?
+
+  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
+
+  if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_SECRET" "$secret" "$namespace"; then
+    bl64_msg_show_lib_info "${_BL64_K8S_TXT_RESOURCE_EXISTING} (${BL64_K8S_RESOURCE_SECRET}:${secret})"
+    return 0
+  fi
+
+  bl64_msg_show_lib_task "${_BL64_K8S_TXT_CREATE_SECRET} (${namespace}/${secret}/${key})"
+  # shellcheck disable=SC2086
+  bl64_k8s_run_kubectl "$kubeconfig" \
+    'create' $verbosity --namespace="$namespace" \
+    "$BL64_K8S_RESOURCE_SECRET" 'generic' "$secret" \
+    --type 'Opaque' \
+    --from-file="${key}=${file}"
 }
 
 #######################################
