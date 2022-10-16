@@ -161,7 +161,9 @@ function bl64_k8s_set_version() {
 #   0: successfull execution
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
+# shellcheck disable=SC2120
 function bl64_k8s_set_kubectl_output() {
+  bl64_dbg_lib_show_function "$@"
   local output="${1:-${BL64_K8S_CFG_KUBECTL_OUTPUT_JSON}}"
 
   case "$output" in

@@ -547,6 +547,7 @@ function bl64_check_parameters_none() {
 function bl64_check_module() {
   bl64_dbg_lib_show_function "$@"
   local module="${1:-}"
+  local setup_status=''
 
   bl64_check_parameter 'module' || return $?
 
@@ -555,7 +556,7 @@ function bl64_check_module() {
     return $BL64_LIB_ERROR_EXPORT_SET
   fi
 
-  local -n setup_status="$module"
+  eval setup_status="\$$module"
   if [[ "$setup_status" == "$BL64_LIB_VAR_OFF" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_NOT_SETUP} (${_BL64_CHECK_TXT_MODULE}: ${module} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
     return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
