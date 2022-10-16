@@ -1,5 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  bl64_arc_setup
 }
 
 @test "bl64_arc_open_zip: both parameters are not present" {

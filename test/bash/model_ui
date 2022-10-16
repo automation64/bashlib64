@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+. bin/devbl-set
+. "$DEVBL_BUILD_BASHLIB64"
+
+bl64_ui_ask_confirmation

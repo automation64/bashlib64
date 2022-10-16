@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with AWS
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -35,7 +35,7 @@ function bl64_aws_cli_create_sso() {
     bl64_check_parameter 'sso_region' &&
     bl64_check_parameter 'sso_account_id' &&
     bl64_check_parameter 'sso_role_name' &&
-    bl64_check_module_setup "$BL64_AWS_MODULE" ||
+    bl64_check_module 'BL64_AWS_MODULE' ||
     return $?
 
   bl64_dbg_lib_show_info "create AWS CLI profile for AWS SSO login (${BL64_AWS_CLI_CONFIG})"
@@ -121,7 +121,7 @@ function bl64_aws_sso_get_token() {
   local start_url="${1:-}"
   local token_file=''
 
-  bl64_check_module_setup "$BL64_AWS_MODULE" &&
+  bl64_check_module 'BL64_AWS_MODULE' &&
     bl64_check_parameter 'start_url' &&
     bl64_check_directory "$BL64_AWS_CLI_CACHE" ||
     return $?
@@ -161,7 +161,7 @@ function bl64_aws_run_aws_profile() {
   bl64_dbg_lib_show_function "$@"
   local profile="${1:-}"
 
-  bl64_check_module_setup "$BL64_AWS_MODULE" &&
+  bl64_check_module 'BL64_AWS_MODULE' &&
     bl64_check_parameter 'profile' &&
     bl64_check_file "$BL64_AWS_CLI_CONFIG" ||
     return $?
@@ -190,7 +190,7 @@ function bl64_aws_run_aws() {
   local verbosity="$BL64_AWS_SET_OUPUT_NO_COLOR"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_AWS_MODULE" ||
+    bl64_check_module 'BL64_AWS_MODULE' ||
     return $?
 
   bl64_msg_lib_verbose_enabled && verbosity=' '

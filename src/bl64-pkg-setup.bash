@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage native OS packages
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -26,6 +26,8 @@ function bl64_pkg_setup() {
     bl64_pkg_set_alias &&
     bl64_pkg_set_options &&
     BL64_PKG_MODULE="$BL64_LIB_VAR_ON"
+
+  bl64_check_alert_module_setup 'pkg'
 }
 
 #######################################

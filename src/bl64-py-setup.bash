@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.11.0
+# Version: 1.12.0
 #######################################
 
 #######################################
@@ -38,6 +38,8 @@ function bl64_py_setup() {
     bl64_dbg_lib_show_info "no venv requested"
     _bl64_py_setup "$BL64_LIB_DEFAULT"
   fi
+
+  bl64_check_alert_module_setup 'py'
 }
 
 function _bl64_py_setup() {

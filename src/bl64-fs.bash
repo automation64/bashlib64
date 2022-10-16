@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 2.3.0
+# Version: 2.3.1
 #######################################
 
 #######################################
@@ -518,7 +518,8 @@ function bl64_fs_cleanup_caches() {
 #   0: always ok
 #######################################
 function bl64_fs_cleanup_full() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_show_function
+
   bl64_pkg_cleanup
   bl64_fs_cleanup_tmps
   bl64_fs_cleanup_logs

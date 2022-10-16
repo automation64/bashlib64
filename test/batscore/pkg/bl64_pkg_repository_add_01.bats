@@ -1,5 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  bl64_pkg_setup
 
 }
 

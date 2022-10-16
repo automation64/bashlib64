@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage Version Control System
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
 
 #######################################
@@ -25,6 +25,7 @@ function bl64_vcs_setup() {
     bl64_vcs_set_options &&
     BL64_VCS_MODULE="$BL64_LIB_VAR_ON"
 
+  bl64_check_alert_module_setup 'vcs'
 }
 
 #######################################

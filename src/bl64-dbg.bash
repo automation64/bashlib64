@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Show shell debugging information
 #
-# Version: 2.0.0
+# Version: 2.1.0
 #######################################
 
 function _bl64_dbg_show() {
@@ -306,5 +306,51 @@ function bl64_dbg_app_show_function() {
   bl64_dbg_app_task_enabled || return 0
 
   _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_APP_RUN}: [${*}]"
+  return 0
+}
+
+#######################################
+# Stop bashlib64 external command tracing
+#
+# * Saves the last exit status so the function will not disrupt the error flow
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   Saved exit status
+#######################################
+function bl64_dbg_lib_command_trace_stop() {
+  local -i state=$?
+
+  bl64_dbg_lib_task_enabled || return $state
+
+  set +x
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
+
+  return $state
+}
+
+#######################################
+# Start bashlib64 external command tracing if target is in scope
+#
+# * Use in functions: bl64_*_run_*
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: Tracing
+#   STDERR: Debug messages
+# Returns:
+#   0: always ok
+#######################################
+function bl64_dbg_lib_command_trace_start() {
+  bl64_dbg_lib_task_enabled || return 0
+
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_START}"
+  set -x
+
   return 0
 }

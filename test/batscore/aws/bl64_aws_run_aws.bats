@@ -3,7 +3,7 @@ setup() {
 }
 
 @test "bl64_aws_run_aws: CLI runs ok" {
-  bl64_aws_setup || skip
+  bl64_aws_setup || skip 'no aws cli found'
   run bl64_aws_run_aws --help
   assert_success
 }

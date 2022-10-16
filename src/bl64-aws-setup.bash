@@ -11,13 +11,13 @@
 
 function bl64_aws_get_cli_config() {
   bl64_dbg_lib_show_function
-  bl64_check_module_setup "$BL64_AWS_MODULE" || return $?
+  bl64_check_module 'BL64_AWS_MODULE' || return $?
   echo "$BL64_AWS_CLI_CONFIG"
 }
 
 function bl64_aws_get_cli_credentials() {
   bl64_dbg_lib_show_function
-  bl64_check_module_setup "$BL64_AWS_MODULE" || return $?
+  bl64_check_module 'BL64_AWS_MODULE' || return $?
   echo "$BL64_AWS_CLI_CREDENTIALS"
 }
 
@@ -39,11 +39,6 @@ function bl64_aws_setup() {
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_LIB_DEFAULT}}"
 
-  if [[ "$aws_bin" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_check_directory "$aws_bin" ||
-      return $?
-  fi
-
   bl64_aws_set_command "$aws_bin" &&
     bl64_aws_set_options &&
     bl64_aws_set_definitions &&
@@ -51,6 +46,7 @@ function bl64_aws_setup() {
     bl64_aws_set_paths &&
     BL64_AWS_MODULE="$BL64_LIB_VAR_ON"
 
+  bl64_check_alert_module_setup 'aws'
 }
 
 #######################################
@@ -70,6 +66,11 @@ function bl64_aws_setup() {
 function bl64_aws_set_command() {
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_LIB_DEFAULT}}"
+
+  if [[ "$aws_bin" != "$BL64_LIB_DEFAULT" ]]; then
+    bl64_check_directory "$aws_bin" ||
+      return $?
+  fi
 
   if [[ "$aws_bin" == "$BL64_LIB_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/aws' ]]; then

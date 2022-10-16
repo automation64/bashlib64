@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.0.0]
+
+### Changed
+
+- core:
+  - **Breaking change**: removed auto-setup of: arc, pkg
+- check
+  - **Breaking change**: refactored bl64_check_module_setup -> bl64_check_module, parameter is not the module name
+- k8s
+  - bl64_k8s_namespace_create: does nothing if ns is already there
+
+### Added
+
+- core
+  - added generation of `bashlib64-core` and `bashlib64-opt` libraries to reduce footprint
+- lib:
+  - in addition to the full bashlib64 library there are now two smaller ones: bashlib64-core (base library with core modules only) and bashlib64-opt (optional modules)
+- ui: new user interface module
+  - bl64_ui_ask_confirmation()
+- py
+  - new functions: bl64_py_pip_usr_cleanup, bl64_py_pip_usr_deploy
+- dbg
+  - new functions: bl64_dbg_lib_command_trace_start, bl64_dbg_lib_command_trace_stop, bl64_check_alert_module_setup
+- check
+  - new function: bl64_check_alert_module_setup
+- msg
+  - new function: bl64_msg_show_lib_info
+- k8s
+  - new function: bl64_k8s_resource_is_created, bl64_k8s_set_version, bl64_k8s_sa_create, bl64_k8s_annotation_set, bl64_k8s_secret_create, bl64_k8s_resource_get
+
+### Fixed
+
+- chk
+  - bl64_check_status: fix wrong parameter type
+
 ## [7.1.0]
 
 ### Added
@@ -664,7 +699,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/7.1.0...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/8.0.0...HEAD
+[8.0.0]: https://github.com/serdigital64/bashlib64/compare/7.1.0...8.0.0
 [7.1.0]: https://github.com/serdigital64/bashlib64/compare/7.0.0...7.1.0
 [7.0.0]: https://github.com/serdigital64/bashlib64/compare/6.0.0...7.0.0
 [6.0.0]: https://github.com/serdigital64/bashlib64/compare/5.0.0...6.0.0

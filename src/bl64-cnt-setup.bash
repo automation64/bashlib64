@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -22,16 +22,11 @@
 function bl64_cnt_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_cnt_set_command || return $?
-
-  if [[ ! -x "$BL64_CNT_CMD_DOCKER" && ! -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_msg_show_error "$_BL64_CNT_TXT_NO_CLI (docker or podman)"
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_MISSING
-  else
+  bl64_cnt_set_command &&
+    [[ -x "$BL64_CNT_CMD_DOCKER" || -x "$BL64_CNT_CMD_PODMAN" ]] &&
     BL64_CNT_MODULE="$BL64_LIB_VAR_ON"
-  fi
 
+  bl64_check_alert_module_setup 'cnt'
 }
 
 #######################################

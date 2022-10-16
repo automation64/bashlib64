@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with HLM
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -32,6 +32,7 @@ function bl64_hlm_setup() {
     bl64_hlm_set_runtime &&
     BL64_HLM_MODULE="$BL64_LIB_VAR_ON"
 
+  bl64_check_alert_module_setup 'hlm'
 }
 
 #######################################

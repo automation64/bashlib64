@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage role based access service
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -25,6 +25,7 @@ function bl64_rbac_setup() {
     bl64_rbac_set_alias &&
     BL64_RBAC_MODULE="$BL64_LIB_VAR_ON"
 
+  bl64_check_alert_module_setup 'rbac'
 }
 
 #######################################
