@@ -30,6 +30,7 @@ function bl64_k8s_setup() {
     bl64_check_command "$BL64_K8S_CMD_KUBECTL" &&
     bl64_k8s_set_version &&
     bl64_k8s_set_options &&
+    bl64_k8s_set_kubectl_output &&
     BL64_K8S_MODULE="$BL64_LIB_VAR_ON"
 
   bl64_check_alert_module_setup 'k8s'
@@ -143,4 +144,29 @@ function bl64_k8s_set_version() {
 
   bl64_dbg_lib_show_vars 'BL64_K8S_VERSION_KUBECTL'
   return 0
+}
+
+#######################################
+# Set default output type for kubectl
+#
+# * Not global, the function that needs to use the default must read the variable BL64_K8S_CFG_KUBECTL_OUTPUT
+# * Not all types are supported. The calling function is reponsible for checking compatibility
+#
+# Arguments:
+#   $1: output type. Default: json. One of BL64_K8S_CFG_KUBECTL_OUTPUT_*
+# Outputs:
+#   STDOUT: None
+#   STDERR: parameter error
+# Returns:
+#   0: successfull execution
+#   BL64_LIB_ERROR_PARAMETER_INVALID
+#######################################
+function bl64_k8s_set_kubectl_output() {
+  local output="${1:-${BL64_K8S_CFG_KUBECTL_OUTPUT_JSON}}"
+
+  case "$output" in
+  "$BL64_K8S_CFG_KUBECTL_OUTPUT_JSON") BL64_K8S_CFG_KUBECTL_OUTPUT="$BL64_K8S_SET_OUTPUT_JSON" ;;
+  "$BL64_K8S_CFG_KUBECTL_OUTPUT_YAML") BL64_K8S_CFG_KUBECTL_OUTPUT="$BL64_K8S_SET_OUTPUT_YAML" ;;
+  *) bl64_check_alert_parameter_invalid ;;
+  esac
 }

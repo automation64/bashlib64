@@ -36,7 +36,7 @@ function bl64_k8s_label_set() {
     bl64_check_parameter 'value' ||
     return $?
 
-  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_OUTPUT_JSON"
+  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   bl64_msg_show_lib_task "${_BL64_K8S_TXT_SET_LABEL} (${resource}/${name}/${key})"
   # shellcheck disable=SC2086
@@ -83,7 +83,7 @@ function bl64_k8s_annotation_set() {
   shift
   shift
 
-  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_OUTPUT_JSON"
+  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
   [[ "$namespace" == "$BL64_LIB_DEFAULT" ]] && namespace='' || namespace="--namespace ${namespace}"
 
   bl64_msg_show_lib_task "${_BL64_K8S_TXT_SET_ANNOTATION} (${resource}/${name})"
@@ -120,7 +120,7 @@ function bl64_k8s_namespace_create() {
   bl64_check_parameter 'namespace' ||
     return $?
 
-  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_OUTPUT_JSON"
+  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_NS" "$namespace"; then
     bl64_dbg_lib_show_info "requested namespace is already created. No need to take action. (${namespace})"
@@ -159,7 +159,7 @@ function bl64_k8s_sa_create() {
     bl64_check_parameter 'sa' ||
     return $?
 
-  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_OUTPUT_JSON"
+  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_SA" "$sa" "$namespace"; then
     bl64_dbg_lib_show_info "requested service account is already created. No need to take action. (${sa})"
@@ -170,6 +170,58 @@ function bl64_k8s_sa_create() {
   # shellcheck disable=SC2086
   bl64_k8s_run_kubectl "$kubeconfig" \
     'create' $verbosity --namespace="$namespace" "$BL64_K8S_RESOURCE_SA" "$sa"
+}
+
+#######################################
+# Copy secret between namespaces
+#
+# * Overwrite destination
+#
+# Arguments:
+#   $1: full path to the kube/config file for the target cluster
+#   $2: source namespace
+#   $3: target namespace
+#   $4: secret name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_k8s_secret_copy() {
+  bl64_dbg_lib_show_function "$@"
+  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
+  local namespace_src="${2:-${BL64_LIB_VAR_NULL}}"
+  local namespace_dst="${3:-${BL64_LIB_VAR_NULL}}"
+  local secret="${4:-${BL64_LIB_VAR_NULL}}"
+  local resource=''
+  local -i status=0
+
+  bl64_check_parameter 'namespace_src' &&
+    bl64_check_parameter 'namespace_dst' &&
+    bl64_check_parameter 'secret' ||
+    return $?
+
+  resource="$($BL64_FS_CMD_MKTEMP)" || return $?
+
+  bl64_msg_show_lib_task "${_BL64_K8S_TXT_GET_SECRET} (${namespace_src}/${secret})"
+  bl64_k8s_resource_get "$kubeconfig" "$BL64_K8S_RESOURCE_SECRET" "$secret" "$namespace_src" |
+    bl64_txt_run_awk $BL64_TXT_SET_AWS_FS ':' '
+      BEGIN { metadata = 0 }
+      $1 ~ /"metadata"/ { metadata = 1 }
+      metadata == 1 && $1 ~ /"namespace"/ { metadata = 0; next }
+      { print $0 }
+      ' >"$resource"
+  status=$?
+
+  if ((status == 0)); then
+    bl64_msg_show_lib_task "${_BL64_K8S_TXT_CREATE_SECRET} (${namespace_dst}/${secret})"
+    bl64_k8s_resource_update "$kubeconfig" "$namespace_dst" "$resource"
+    status=$?
+  fi
+
+  [[ -f "$resource" ]] && bl64_fs_rm_file "$resource"
+  return $status
 }
 
 #######################################
@@ -199,8 +251,9 @@ function bl64_k8s_resource_update() {
     bl64_check_file "$definition" ||
     return $?
 
-  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_OUTPUT_JSON"
+  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
+  bl64_msg_show_lib_task "${_BL64_K8S_TXT_RESOURCE_UPDATE} (${definition} -> ${namespace})"
   # shellcheck disable=SC2086
   bl64_k8s_run_kubectl \
     "$kubeconfig" \
@@ -213,7 +266,42 @@ function bl64_k8s_resource_update() {
     --validate='strict' \
     --wait='true' \
     --filename="$definition"
+}
 
+#######################################
+# Get resource definition
+#
+# * output type is json
+#
+# Arguments:
+#   $1: full path to the kube/config file for the target cluster
+#   $2: resource type
+#   $3: resource name
+#   $4: namespace where resources are (optional)
+# Outputs:
+#   STDOUT: resource definition
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_k8s_resource_get() {
+  bl64_dbg_lib_show_function "$@"
+  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
+  local resource="${2:-${BL64_LIB_VAR_NULL}}"
+  local name="${3:-${BL64_LIB_VAR_NULL}}"
+  local namespace="${4:-}"
+
+  bl64_check_parameter 'resource' &&
+    bl64_check_parameter 'name' ||
+    return $?
+
+  [[ -n "$namespace" ]] && namespace="--namespace ${namespace}"
+
+  # shellcheck disable=SC2086
+  bl64_k8s_run_kubectl \
+    "$kubeconfig" \
+    'get' $BL64_K8S_SET_OUTPUT_JSON \
+    $namespace "$resource" "$name"
 }
 
 #######################################
