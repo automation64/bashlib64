@@ -2,5 +2,3 @@
 
 . bin/devbl-set
 . "${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_FULL}"
-
-bl64_ui_ask_confirmation
