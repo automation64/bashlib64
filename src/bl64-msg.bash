@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Display messages
 #
-# Version: 3.2.0
+# Version: 3.3.0
 #######################################
 
 #######################################
@@ -278,6 +278,27 @@ function bl64_msg_show_lib_task() {
     bl64_msg_lib_verbose_enabled || return 0
 
   _bl64_msg_show "$BL64_MSG_TYPE_LIBTASK" "$_BL64_MSG_TXT_TASK" "$message"
+}
+
+#######################################
+# Display info message for bash64lib functions
+#
+# Arguments:
+#   $1: message
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_lib_info() {
+  local message="$1"
+
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBINFO}:${message}" &&
+    bl64_msg_lib_verbose_enabled || return 0
+
+  _bl64_msg_show "$BL64_MSG_TYPE_LIBINFO" "$_BL64_MSG_TXT_INFO" "$message"
 }
 
 #######################################

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Display messages
 #
-# Version: 2.3.0
+# Version: 2.4.0
 #######################################
 
 export BL64_MSG_MODULE="$BL64_LIB_VAR_OFF"
@@ -31,6 +31,7 @@ export BL64_MSG_TYPE_WARNING='WARNING'
 export BL64_MSG_TYPE_INFO='INFO'
 export BL64_MSG_TYPE_INPUT='INPUT'
 export BL64_MSG_TYPE_TASK='TASK'
+export BL64_MSG_TYPE_LIBINFO='LIBINFO'
 export BL64_MSG_TYPE_LIBTASK='LIBTASK'
 export BL64_MSG_TYPE_BATCH='BATCH'
 export BL64_MSG_TYPE_BATCHOK='BATCHOK'
