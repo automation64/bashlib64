@@ -224,7 +224,7 @@ function bl64_k8s_secret_create() {
 #######################################
 # Copy secret between namespaces
 #
-# * Overwrite destination
+# * If already created do nothing
 #
 # Arguments:
 #   $1: full path to the kube/config file for the target cluster
@@ -250,6 +250,11 @@ function bl64_k8s_secret_copy() {
     bl64_check_parameter 'namespace_dst' &&
     bl64_check_parameter 'secret' ||
     return $?
+
+  if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_SECRET" "$secret" "$namespace_dst"; then
+    bl64_msg_show_lib_info "${_BL64_K8S_TXT_RESOURCE_EXISTING} (${BL64_K8S_RESOURCE_SECRET}:${secret})"
+    return 0
+  fi
 
   resource="$($BL64_FS_CMD_MKTEMP)" || return $?
 
