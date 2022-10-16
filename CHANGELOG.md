@@ -32,8 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - new functions: bl64_dbg_lib_command_trace_start, bl64_dbg_lib_command_trace_stop, bl64_check_alert_module_setup
 - check
   - new function: bl64_check_alert_module_setup
+- msg
+  - new function: bl64_msg_show_lib_info
 - k8s
-  - new function: bl64_k8s_resource_is_created, bl64_k8s_set_version, bl64_k8s_sa_create, bl64_k8s_annotation_set
+  - new function: bl64_k8s_resource_is_created, bl64_k8s_set_version, bl64_k8s_sa_create, bl64_k8s_annotation_set, bl64_k8s_secret_create, bl64_k8s_resource_get
 
 ### Fixed
 

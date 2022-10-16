@@ -43,6 +43,7 @@ BashLib64 is a **Bash** automation library that provides a simple abstraction la
 | [bl64-time](https://serdigital64.github.io/bashlib64/bl64-time/)   | Manage date-time data                              |
 | [bl64-tf](https://serdigital64.github.io/bashlib64/bl64-tf/)       | Interact with Terraform                            |
 | [bl64-txt](https://serdigital64.github.io/bashlib64/bl64-txt/)     | Manipulate text files content                      |
+| [bl64-ui](https://serdigital64.github.io/bashlib64/bl64-ui/)       | User Interface                                     |
 | [bl64-vcs](https://serdigital64.github.io/bashlib64/bl64-vcs/)     | Manage Version Control System                      |
 | [bl64-xsv](https://serdigital64.github.io/bashlib64/bl64-xsv/)     | Manipulate CSV like text files                     |
 
