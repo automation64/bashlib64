@@ -1,5 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  bl64_iam_setup
 }
 
 @test "bl64_iam_user_is_created: check existing user" {

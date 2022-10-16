@@ -13,9 +13,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -24,7 +21,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e alpine-3-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e alpine-3-bash-test:latest"
 
   test_batscore_almalinux_8:
     runs-on: "ubuntu-latest"
@@ -33,9 +30,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -44,7 +38,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e almalinux-8-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e almalinux-8-bash-test:latest"
 
   test_batscore_rockylinux_8:
     runs-on: "ubuntu-latest"
@@ -53,9 +47,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -64,7 +55,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e rockylinux-8-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e rockylinux-8-bash-test:latest"
 
   test_batscore_rhel_8:
     runs-on: "ubuntu-latest"
@@ -73,9 +64,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -84,7 +72,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e rhel-8-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e rhel-8-bash-test:latest"
 
   test_batscore_centos_7:
     runs-on: "ubuntu-latest"
@@ -93,9 +81,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -104,7 +89,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e centos-7-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e centos-7-bash-test:latest"
 
   test_batscore_centos_8:
     runs-on: "ubuntu-latest"
@@ -113,9 +98,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -124,7 +106,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e centos-8-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e centos-8-bash-test:latest"
 
   test_batscore_centos_9:
     runs-on: "ubuntu-latest"
@@ -133,9 +115,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -144,7 +123,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e centos-9-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e centos-9-bash-test:latest"
 
   test_batscore_oraclelinux_7:
     runs-on: "ubuntu-latest"
@@ -153,9 +132,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -164,7 +140,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e oraclelinux-7-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e oraclelinux-7-bash-test:latest"
 
   test_batscore_oraclelinux_8:
     runs-on: "ubuntu-latest"
@@ -173,8 +149,22 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
+      - name: "Prepare build environment"
+        run: "./bin/devbl-lib"
+
+      - name: "Build app"
+        run: "./bin/devbl-build -t"
+
+      - name: "Run testmansh using batscore"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "bash lib/testmansh -b -o -e oraclelinux-8-bash-test:latest"
+
+  test_batscore_oraclelinux_9:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
@@ -184,7 +174,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e oraclelinux-8-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e oraclelinux-9-bash-test:latest"
 
   test_batscore_fedora_33:
     runs-on: "ubuntu-latest"
@@ -193,9 +183,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -204,7 +191,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e fedora-33-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e fedora-33-bash-test:latest"
 
   test_batscore_fedora_34:
     runs-on: "ubuntu-latest"
@@ -213,9 +200,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -224,7 +208,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e fedora-34-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e fedora-34-bash-test:latest"
 
   test_batscore_fedora_35:
     runs-on: "ubuntu-latest"
@@ -233,9 +217,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -244,7 +225,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e fedora-35-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e fedora-35-bash-test:latest"
 
   test_batscore_fedora_36:
     runs-on: "ubuntu-latest"
@@ -253,9 +234,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -264,7 +242,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e fedora-36-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e fedora-36-bash-test:latest"
 
   test_batscore_debian_9:
     runs-on: "ubuntu-latest"
@@ -273,9 +251,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -284,7 +259,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e debian-9-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e debian-9-bash-test:latest"
 
   test_batscore_debian_10:
     runs-on: "ubuntu-latest"
@@ -293,9 +268,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -304,7 +276,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e debian-10-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e debian-10-bash-test:latest"
 
   test_batscore_debian_11:
     runs-on: "ubuntu-latest"
@@ -313,9 +285,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -324,7 +293,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e debian-11-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e debian-11-bash-test:latest"
 
   test_batscore_ubuntu_204:
     runs-on: "ubuntu-latest"
@@ -333,9 +302,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -344,7 +310,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e ubuntu-20.4-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e ubuntu-20.4-bash-test:latest"
 
   test_batscore_ubuntu_214:
     runs-on: "ubuntu-latest"
@@ -353,9 +319,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -364,7 +327,7 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e ubuntu-21.4-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e ubuntu-21.4-bash-test:latest"
 
   test_batscore_ubuntu_224:
     runs-on: "ubuntu-latest"
@@ -373,9 +336,6 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Download testmansh"
-        run: "curl -O https://raw.githubusercontent.com/serdigital64/testmansh/main/testmansh"
-
       - name: "Prepare build environment"
         run: "./bin/devbl-lib"
 
@@ -384,4 +344,4 @@ jobs:
 
       - name: "Run testmansh using batscore"
         shell: 'script -q -e -c "bash {0}"'
-        run: "bash testmansh -b -o -e ubuntu-22.4-bash-test:latest"
+        run: "bash lib/testmansh -b -o -e ubuntu-22.4-bash-test:latest"

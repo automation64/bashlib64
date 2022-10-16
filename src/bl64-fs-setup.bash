@@ -26,6 +26,7 @@ function bl64_fs_setup() {
     bl64_fs_set_options &&
     BL64_FS_MODULE="$BL64_LIB_VAR_ON"
 
+  bl64_check_alert_module_setup 'fs'
 }
 
 #######################################

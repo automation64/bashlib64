@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Terraform
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -21,18 +21,13 @@ function bl64_tf_setup() {
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="${1:-${BL64_LIB_DEFAULT}}"
 
-  if [[ "$terraform_bin" != "$BL64_LIB_DEFAULT" ]]; then
-    bl64_check_directory "$terraform_bin" ||
-      return $?
-  fi
-
   bl64_tf_set_command "$terraform_bin" &&
     bl64_check_command "$BL64_TF_CMD_TERRAFORM" &&
     bl64_tf_set_options &&
     bl64_tf_set_definitions &&
-    BL64_TF_MODULE="$BL64_LIB_VAR_ON" ||
-    return $?
+    BL64_TF_MODULE="$BL64_LIB_VAR_ON"
 
+  bl64_check_alert_module_setup 'tf'
 }
 
 #######################################
@@ -52,6 +47,11 @@ function bl64_tf_setup() {
 function bl64_tf_set_command() {
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="${1:-}"
+
+  if [[ "$terraform_bin" != "$BL64_LIB_DEFAULT" ]]; then
+    bl64_check_directory "$terraform_bin" ||
+      return $?
+  fi
 
   if [[ "$terraform_bin" == "$BL64_LIB_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/terraform' ]]; then
@@ -115,7 +115,7 @@ function bl64_tf_log_set() {
   local level="${2:-$BL64_TF_SET_LOG_INFO}"
 
   bl64_check_parameter 'path' &&
-    bl64_check_module_setup "$BL64_TF_MODULE" ||
+    bl64_check_module 'BL64_TF_MODULE' ||
     return $?
 
   BL64_TF_LOG_PATH="$path"

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with system-wide Python
 #
-# Version: 1.10.0
+# Version: 1.11.0
 #######################################
 
 #######################################
@@ -100,7 +100,7 @@ function bl64_py_pip_get_version() {
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
-#   n: package manager exist status
+#   n: package manager exit status
 #######################################
 function bl64_py_pip_usr_prepare() {
   bl64_dbg_lib_show_function
@@ -110,20 +110,25 @@ function bl64_py_pip_usr_prepare() {
 
   [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
 
+  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_PIP"
   # shellcheck disable=SC2086
-  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_PIP" &&
-    bl64_py_run_pip \
-      'install' \
-      $BL64_PY_SET_PIP_UPGRADE \
-      $flag_user \
-      $modules_pip &&
-    bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP" &&
-    bl64_py_run_pip \
-      'install' \
-      $BL64_PY_SET_PIP_UPGRADE \
-      $flag_user \
-      $modules_setup
+  bl64_py_run_pip \
+    'install' \
+    $BL64_PY_SET_PIP_UPGRADE \
+    $flag_user \
+    $modules_pip ||
+    return $?
 
+  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP"
+  # shellcheck disable=SC2086
+  bl64_py_run_pip \
+    'install' \
+    $BL64_PY_SET_PIP_UPGRADE \
+    $flag_user \
+    $modules_setup ||
+    return $?
+
+  return 0
 }
 
 #######################################
@@ -139,12 +144,15 @@ function bl64_py_pip_usr_prepare() {
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
-#   n: package manager exist status
+#   n: package manager exit status
 #######################################
 function bl64_py_pip_usr_install() {
   bl64_dbg_lib_show_function "$@"
   local flag_user="$BL64_PY_SET_PIP_USER"
 
+  bl64_check_parameters_none $# || return $?
+
+  # If venv is in use no need to flag usr install
   [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
 
   bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_INSTALL ($*)"
@@ -155,6 +163,59 @@ function bl64_py_pip_usr_install() {
     $BL64_PY_SET_PIP_NO_WARN_SCRIPT \
     $flag_user \
     "$@"
+}
+
+#######################################
+# Deploy PIP packages
+#
+# * Before installation: prepares the package manager environment and cache
+# * After installation: removes cache and temporary files
+#
+# Arguments:
+#   package list, separated by spaces (expanded with $@)
+# Outputs:
+#   STDOUT: process output
+#   STDERR: process stderr
+# Returns:
+#   n: process exist status
+#######################################
+function bl64_py_pip_usr_deploy() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none $# || return $?
+
+  bl64_py_pip_usr_prepare &&
+    bl64_py_pip_usr_install "$@" ||
+    return $?
+
+  bl64_py_pip_usr_cleanup
+  return 0
+}
+
+#######################################
+# Clean up pip install environment
+#
+# * Empty cache
+# * Ignore errors and warnings
+# * Best effort
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   0: always ok
+#######################################
+function bl64_py_pip_usr_cleanup() {
+  bl64_dbg_lib_show_function
+
+  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_CLEANUP_PIP"
+  bl64_py_run_pip \
+    'cache' \
+    'purge'
+
+  return 0
 }
 
 #######################################
@@ -174,7 +235,7 @@ function bl64_py_run_python() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_PY_MODULE" ||
+    bl64_check_module 'BL64_PY_MODULE' ||
     return $?
 
   bl64_py_blank_python

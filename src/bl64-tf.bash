@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with Terraform
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -53,7 +53,7 @@ function bl64_tf_run_terraform() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_TF_MODULE" ||
+    bl64_check_module 'BL64_TF_MODULE' ||
     return $?
 
   bl64_tf_blank_terraform

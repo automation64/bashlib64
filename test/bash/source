@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+. bin/devbl-set
+. "${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_FULL}"

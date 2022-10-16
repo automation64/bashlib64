@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with Ansible CLI
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 #######################################
@@ -49,7 +49,7 @@ function bl64_ans_run_ansible() {
   local debug=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_ANS_MODULE" ||
+    bl64_check_module 'BL64_ANS_MODULE' ||
     return $?
 
   bl64_msg_lib_verbose_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
@@ -86,7 +86,7 @@ function bl64_ans_run_ansible_galaxy() {
   local subcommand="${2:-${BL64_LIB_VAR_NULL}}"
   local debug=' '
 
-  bl64_check_module_setup "$BL64_ANS_MODULE" &&
+  bl64_check_module 'BL64_ANS_MODULE' &&
     bl64_check_parameter 'command' &&
     bl64_check_parameter 'subcommand' ||
     return $?
@@ -125,7 +125,7 @@ function bl64_ans_run_ansible_playbook() {
   local debug=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_ANS_MODULE" ||
+    bl64_check_module 'BL64_ANS_MODULE' ||
     return $?
 
   bl64_msg_lib_verbose_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"

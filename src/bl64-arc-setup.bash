@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage archive files
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -25,6 +25,7 @@ function bl64_arc_setup() {
     bl64_arc_set_options &&
     BL64_ARC_MODULE="$BL64_LIB_VAR_ON"
 
+  bl64_check_alert_module_setup 'arc'
 }
 
 #######################################

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with HLM
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -104,7 +104,7 @@ function bl64_hlm_run_helm() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module_setup "$BL64_HLM_MODULE" ||
+    bl64_check_module 'BL64_HLM_MODULE' ||
     return $?
 
   bl64_dbg_lib_command_enabled && verbosity="$BL64_HLM_SET_DEBUG"

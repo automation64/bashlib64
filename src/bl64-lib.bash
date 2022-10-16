@@ -1,21 +1,12 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 3.0.0
+# Version: 4.0.0
 #######################################
 
 #
 # Main
 #
-
-# Do not inherit sensitive environment variables
-unset MAIL
-unset ENV
-unset IFS
-unset TMPDIR
-
-# Normalize terminal settings
-TERM="${TERM:-vt100}"
 
 # Normalize locales to C
 if [[ "$BL64_LIB_LANG" == '1' ]]; then
@@ -30,35 +21,6 @@ if [[ "$BL64_LIB_STRICT" == '1' ]]; then
   set -o 'privileged'
 fi
 
-# Ensure pipeline exit status is failed when any cmd fails
-set -o 'pipefail'
-
-# Enable error processing
-set -o 'errtrace'
-set -o 'functrace'
-
-# Disable fast-fail. Developer must implement error handling (check for exit status)
-set +o 'errexit'
-
-# Reset bash set options to defaults
-set -o 'braceexpand'
-set -o 'hashall'
-set +o 'allexport'
-set +o 'histexpand'
-set +o 'history'
-set +o 'ignoreeof'
-set +o 'monitor'
-set +o 'noclobber'
-set +o 'noglob'
-set +o 'nolog'
-set +o 'notify'
-set +o 'onecmd'
-set +o 'posix'
-
-# Do not set/unset - Breaks bats-core
-# set -o 'keyword'
-# set -o 'noexec'
-
 # Initialize mandatory modules
 bl64_dbg_setup &&
   bl64_msg_setup &&
@@ -66,10 +28,9 @@ bl64_dbg_setup &&
   bl64_os_setup &&
   bl64_txt_setup &&
   bl64_fs_setup &&
-  bl64_arc_setup &&
   bl64_iam_setup &&
-  bl64_pkg_setup &&
   bl64_rbac_setup &&
+  bl64_ui_setup &&
   bl64_vcs_setup &&
   bl64_rxtx_setup ||
   return $?

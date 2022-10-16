@@ -12,42 +12,66 @@ source './bin/devbl-set' || {
 # shellcheck source=SCRIPTDIR/../lib/bashlib64.bash
 source "$DEVBL_LIB_BASHLIB64" || exit 1
 
-function devbl_build_test() {
-  local file=''
-
-  bl64_dbg_app_show_vars 'DEVBL_MODULES'
-  cd "$DEVBL_SRC" || return 1
-
-  # Create header
-  bl64_msg_show_task "creating stand-alone library: $DEVBL_BUILD_BASHLIB64"
-  # shellcheck disable=SC2119
-  {
-    "$BL64_OS_CMD_CAT" "bl64-lib.header" && bl64_fmt_separator_line
-    "$BL64_OS_CMD_CAT" "bl64-lib-env.bash"
-  } >"$DEVBL_BUILD_BASHLIB64" || return 1
+function devbl_add_modules() {
+  local destination="$1"
+  local modules="$2"
 
   # shellcheck disable=SC2119
-  for file in $DEVBL_MODULES; do
+  for file in $modules; do
     [[ ! -f "bl64-${file}-env.bash" ]] && continue
     bl64_msg_show_task "adding module ${file} environment"
-    { "$BL64_OS_CMD_CAT" "bl64-${file}-env.bash" && bl64_fmt_separator_line; } >>"$DEVBL_BUILD_BASHLIB64" ||
+    { "$BL64_OS_CMD_CAT" "bl64-${file}-env.bash" && bl64_fmt_separator_line; } >>"$destination" ||
       return $?
   done
 
   # shellcheck disable=SC2119
-  for file in $DEVBL_MODULES; do
+  for file in $modules; do
     bl64_msg_show_task "adding module ${file} code"
     {
       [[ -f "bl64-${file}-setup.bash" ]] && "$BL64_OS_CMD_CAT" "bl64-${file}-setup.bash" && bl64_fmt_separator_line
       "$BL64_OS_CMD_CAT" "bl64-${file}.bash" && bl64_fmt_separator_line
-    } >>"$DEVBL_BUILD_BASHLIB64" ||
+    } >>"$destination" ||
       return $?
   done
+}
+
+function devbl_build_test() {
+  local file=''
+  local build_full="${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_FULL}"
+  local build_core="${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_CORE}"
+  local build_opt="${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_OPT}"
+
+  bl64_dbg_app_show_vars 'DEVBL_MODULES_CORE' 'DEVBL_MODULES_OPT'
+  cd "$DEVBL_SRC" || return 1
+
+  # Create header
+  bl64_msg_show_task "creating library header (${build_full})"
+  # shellcheck disable=SC2119
+  {
+    "$BL64_OS_CMD_CAT" "bl64-lib-header.bash" && bl64_fmt_separator_line
+    "$BL64_OS_CMD_CAT" "bl64-lib-bootstrap.bash" && bl64_fmt_separator_line
+    "$BL64_OS_CMD_CAT" "bl64-lib-env.bash"
+  } >"$build_full" || return 1
+
+  bl64_msg_show_task "creating library header (${build_core})"
+  bl64_fs_cp_file "$build_full" "$build_core" || return $?
+
+  bl64_msg_show_task "creating library header (${build_opt})"
+  # shellcheck disable=SC2119
+  {
+    "$BL64_OS_CMD_CAT" "bl64-lib-header.bash" && bl64_fmt_separator_line
+  } >"$build_opt" || return 1
+
+  devbl_add_modules "$build_full" "${DEVBL_MODULES_CORE} ${DEVBL_MODULES_OPT}"
+  devbl_add_modules "$build_core" "$DEVBL_MODULES_CORE"
+  devbl_add_modules "$build_opt" "$DEVBL_MODULES_OPT"
 
   bl64_msg_show_task 'adding core'
   # shellcheck disable=SC2119
-  { "$BL64_OS_CMD_CAT" "bl64-lib.bash" && bl64_fmt_separator_line; } >>"$DEVBL_BUILD_BASHLIB64"
-  bl64_fs_run_chmod '0755' "$DEVBL_BUILD_BASHLIB64"
+  { "$BL64_OS_CMD_CAT" "bl64-lib.bash" && bl64_fmt_separator_line; } >>"$build_full"
+  # shellcheck disable=SC2119
+  { "$BL64_OS_CMD_CAT" "bl64-lib.bash" && bl64_fmt_separator_line; } >>"$build_core"
+  bl64_fs_run_chmod '0755' "$build_full" "$build_core"
 }
 
 function devbl_build_docs() {
@@ -56,10 +80,10 @@ function devbl_build_docs() {
   local module_code=''
   local module_init=''
 
-  bl64_dbg_app_show_info "DEVBL_MODULES='${DEVBL_MODULES}'"
+  bl64_dbg_app_show_info "DEVBL_MODULES_CORE='${DEVBL_MODULES_CORE}'"
   cd "$DEVBL_SRC" || return 1
 
-  for file in lib $DEVBL_MODULES; do
+  for file in lib $DEVBL_MODULES_CORE; do
     module_env="bl64-${file}-env.bash"
     [[ ! -f "$module_env" ]] && module_env="$BL64_LIB_VAR_NULL"
     module_code="bl64-${file}.bash"
@@ -101,9 +125,17 @@ function devbl_build_md() {
 }
 
 function devbl_promote() {
+  local build_full="${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_FULL}"
+  local build_core="${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_CORE}"
+  local build_opt="${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_OPT}"
+
   devbl_build_test &&
-    bl64_msg_show_task "promoting library to: ${DEVBL_PROD_BASHLIB64}" &&
-    bl64_fs_cp_file "$DEVBL_BUILD_BASHLIB64" "$DEVBL_PROD_BASHLIB64"
+    bl64_msg_show_task "promoting library from: ${build_full}" &&
+    bl64_fs_cp_file "$build_full" "$DEVBL_PROD_BASHLIB64" &&
+    bl64_msg_show_task "promoting library from: ${build_core}" &&
+    bl64_fs_cp_file "$build_core" "$DEVBL_PROD_BASHLIB64" &&
+    bl64_msg_show_task "promoting library from: ${build_opt}" &&
+    bl64_fs_cp_file "$build_opt" "$DEVBL_PROD_BASHLIB64"
 }
 
 function devbl_build_check_requirements() {
