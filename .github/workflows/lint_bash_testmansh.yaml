@@ -20,4 +20,4 @@ jobs:
         run: "./bin/devbl-build -t"
 
       - name: "Run ShellCheck"
-        run: "bash testmansh -t -c build/bashlib64.bash"
+        run: "bash lib/testmansh -t -c build/bashlib64.bash"
