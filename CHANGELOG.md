@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.1.0]
+
+### Added
+
+- aws: set region for aws_run
+- msg: added subtask, phase
+
 ## [8.0.0]
 
 ### Changed
