@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with AWS
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -200,7 +200,8 @@ function bl64_aws_run_aws() {
 
   export AWS_CONFIG_FILE="$BL64_AWS_CLI_CONFIG"
   export AWS_SHARED_CREDENTIALS_FILE="$BL64_AWS_CLI_CREDENTIALS"
-  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE' 'AWS_SHARED_CREDENTIALS_FILE'
+  export AWS_REGION="$BL64_AWS_CLI_REGION"
+  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE' 'AWS_SHARED_CREDENTIALS_FILE' 'AWS_REGION'
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086

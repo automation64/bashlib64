@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with AWS
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -20,6 +20,7 @@ export BL64_AWS_CLI_HOME=''
 export BL64_AWS_CLI_CONFIG=''
 export BL64_AWS_CLI_CREDENTIALS=''
 export BL64_AWS_CLI_TOKEN=''
+export BL64_AWS_CLI_REGION=''
 
 export BL64_AWS_SET_FORMAT_JSON=''
 export BL64_AWS_SET_FORMAT_TEXT=''
