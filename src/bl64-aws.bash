@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with AWS
 #
-# Version: 1.4.0
+# Version: 1.4.1
 #######################################
 
 #######################################
@@ -198,10 +198,18 @@ function bl64_aws_run_aws() {
 
   bl64_aws_blank_aws
 
+  bl64_dbg_lib_show_info 'Set mandatory configuration and credential variables'
   export AWS_CONFIG_FILE="$BL64_AWS_CLI_CONFIG"
   export AWS_SHARED_CREDENTIALS_FILE="$BL64_AWS_CLI_CREDENTIALS"
-  export AWS_REGION="$BL64_AWS_CLI_REGION"
-  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE' 'AWS_SHARED_CREDENTIALS_FILE' 'AWS_REGION'
+  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE' 'AWS_SHARED_CREDENTIALS_FILE'
+
+  if [[ -n "$BL64_AWS_CLI_REGION" ]]; then
+    bl64_dbg_lib_show_info 'Set region as requested'
+    export AWS_REGION="$BL64_AWS_CLI_REGION"
+    bl64_dbg_lib_show_vars 'AWS_REGION'
+  else
+    bl64_dbg_lib_show_info 'Not setting region, not requested'
+  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
