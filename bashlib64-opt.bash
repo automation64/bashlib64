@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 8.0.0
+# Version: 8.1.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -68,7 +68,7 @@ export BL64_ANS_SET_DEBUG=''
 #######################################
 # BashLib64 / Module / Globals / Interact with AWS
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -87,6 +87,7 @@ export BL64_AWS_CLI_HOME=''
 export BL64_AWS_CLI_CONFIG=''
 export BL64_AWS_CLI_CREDENTIALS=''
 export BL64_AWS_CLI_TOKEN=''
+export BL64_AWS_CLI_REGION=''
 
 export BL64_AWS_SET_FORMAT_JSON=''
 export BL64_AWS_SET_FORMAT_TEXT=''
@@ -1048,7 +1049,7 @@ function bl64_ans_blank_ansible() {
 #######################################
 # BashLib64 / Module / Setup / Interact with AWS
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 
@@ -1234,9 +1235,35 @@ function bl64_aws_set_paths() {
 }
 
 #######################################
+# Set AWS region
+#
+# * Use anytime you neeto to change the target region
+#
+# Arguments:
+#   $1: AWS region
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_aws_set_region() {
+  bl64_dbg_lib_show_function "$@"
+  local region="${1:-}"
+
+  bl64_check_parameter 'region' || return $?
+
+  BL64_AWS_CLI_REGION="$region"
+
+  bl64_dbg_lib_show_vars 'BL64_AWS_CLI_REGION'
+  return 0
+}
+
+#######################################
 # BashLib64 / Module / Functions / Interact with AWS
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -1435,7 +1462,8 @@ function bl64_aws_run_aws() {
 
   export AWS_CONFIG_FILE="$BL64_AWS_CLI_CONFIG"
   export AWS_SHARED_CREDENTIALS_FILE="$BL64_AWS_CLI_CREDENTIALS"
-  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE' 'AWS_SHARED_CREDENTIALS_FILE'
+  export AWS_REGION="$BL64_AWS_CLI_REGION"
+  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE' 'AWS_SHARED_CREDENTIALS_FILE' 'AWS_REGION'
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086

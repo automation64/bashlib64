@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 8.0.0
+# Version: 8.1.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -402,7 +402,7 @@ export _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
 #######################################
 # BashLib64 / Module / Globals / Display messages
 #
-# Version: 2.4.0
+# Version: 2.5.0
 #######################################
 
 export BL64_MSG_MODULE="$BL64_LIB_VAR_OFF"
@@ -431,7 +431,9 @@ export BL64_MSG_TYPE_ERROR='ERROR'
 export BL64_MSG_TYPE_WARNING='WARNING'
 export BL64_MSG_TYPE_INFO='INFO'
 export BL64_MSG_TYPE_INPUT='INPUT'
+export BL64_MSG_TYPE_PHASE='PHASE'
 export BL64_MSG_TYPE_TASK='TASK'
+export BL64_MSG_TYPE_SUBTASK='SUBTASK'
 export BL64_MSG_TYPE_LIBINFO='LIBINFO'
 export BL64_MSG_TYPE_LIBTASK='LIBTASK'
 export BL64_MSG_TYPE_BATCH='BATCH'
@@ -469,7 +471,9 @@ export BL64_MSG_THEME_ASCII_STD_ERROR='(!)'
 export BL64_MSG_THEME_ASCII_STD_WARNING='(*)'
 export BL64_MSG_THEME_ASCII_STD_INFO='(I)'
 export BL64_MSG_THEME_ASCII_STD_INPUT='(?)'
+export BL64_MSG_THEME_ASCII_STD_PHASE='(=)'
 export BL64_MSG_THEME_ASCII_STD_TASK='(-)'
+export BL64_MSG_THEME_ASCII_STD_SUBTASK='(>)'
 export BL64_MSG_THEME_ASCII_STD_LIBTASK='(-)'
 export BL64_MSG_THEME_ASCII_STD_BATCH='(@)'
 export BL64_MSG_THEME_ASCII_STD_BATCHOK='(@)'
@@ -482,7 +486,9 @@ export BL64_MSG_THEME_ANSI_STD_ERROR='5;37;41'
 export BL64_MSG_THEME_ANSI_STD_WARNING='5;37;43'
 export BL64_MSG_THEME_ANSI_STD_INFO='36'
 export BL64_MSG_THEME_ANSI_STD_INPUT='5;30;47'
+export BL64_MSG_THEME_ANSI_STD_PHASE='7;1;36'
 export BL64_MSG_THEME_ANSI_STD_TASK='1;37'
+export BL64_MSG_THEME_ANSI_STD_SUBTASK='37'
 export BL64_MSG_THEME_ANSI_STD_LIBTASK='37'
 export BL64_MSG_THEME_ANSI_STD_BATCH='30;1;47'
 export BL64_MSG_THEME_ANSI_STD_BATCHOK='30;42'
@@ -539,6 +545,15 @@ export BL64_MSG_ANSI_CHAR_BLINK='5'
 export BL64_MSG_ANSI_CHAR_REVERSE='7'
 
 #
+# Cosmetic
+#
+
+export BL64_MSG_COSMETIC_ARROW='-->'
+export BL64_MSG_COSMETIC_ARROW2='==>'
+export BL64_MSG_COSMETIC_PHASE_PREFIX='===['
+export BL64_MSG_COSMETIC_PHASE_SUFIX=']==='
+
+#
 # Display messages
 #
 
@@ -549,7 +564,9 @@ export _BL64_MSG_TXT_PARAMETERS='Parameters'
 export _BL64_MSG_TXT_ERROR='Error'
 export _BL64_MSG_TXT_INFO='Info'
 export _BL64_MSG_TXT_INPUT='Input'
+export _BL64_MSG_TXT_PHASE='Phase'
 export _BL64_MSG_TXT_TASK='Task'
+export _BL64_MSG_TXT_SUBTASK='Subtask'
 export _BL64_MSG_TXT_WARNING='Warning'
 export _BL64_MSG_TXT_BATCH='Process'
 export _BL64_MSG_TXT_BATCH_START='started'
@@ -796,7 +813,7 @@ export BL64_ANS_SET_DEBUG=''
 #######################################
 # BashLib64 / Module / Globals / Interact with AWS
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -815,6 +832,7 @@ export BL64_AWS_CLI_HOME=''
 export BL64_AWS_CLI_CONFIG=''
 export BL64_AWS_CLI_CREDENTIALS=''
 export BL64_AWS_CLI_TOKEN=''
+export BL64_AWS_CLI_REGION=''
 
 export BL64_AWS_SET_FORMAT_JSON=''
 export BL64_AWS_SET_FORMAT_TEXT=''
@@ -3885,7 +3903,7 @@ function bl64_msg_set_output() {
 #######################################
 # BashLib64 / Module / Functions / Display messages
 #
-# Version: 3.3.0
+# Version: 3.4.0
 #######################################
 
 #######################################
@@ -4123,6 +4141,27 @@ function bl64_msg_show_info() {
 }
 
 #######################################
+# Display phase message
+#
+# Arguments:
+#   $1: message
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_phase() {
+  local message="$1"
+
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_PHASE}:${message}" &&
+    bl64_msg_app_verbose_enabled || return 0
+
+  _bl64_msg_show "$BL64_MSG_TYPE_PHASE" "$_BL64_MSG_TXT_PHASE" "${BL64_MSG_COSMETIC_PHASE_PREFIX} ${message} ${BL64_MSG_COSMETIC_PHASE_SUFIX}"
+}
+
+#######################################
 # Display task message
 #
 # Arguments:
@@ -4141,6 +4180,27 @@ function bl64_msg_show_task() {
     bl64_msg_app_verbose_enabled || return 0
 
   _bl64_msg_show "$BL64_MSG_TYPE_TASK" "$_BL64_MSG_TXT_TASK" "$message"
+}
+
+#######################################
+# Display subtask message
+#
+# Arguments:
+#   $1: message
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_subtask() {
+  local message="$1"
+
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_SUBTASK}:${message}" &&
+    bl64_msg_app_verbose_enabled || return 0
+
+  _bl64_msg_show "$BL64_MSG_TYPE_SUBTASK" "$_BL64_MSG_TXT_SUBTASK" "${BL64_MSG_COSMETIC_ARROW2} ${message}"
 }
 
 #######################################
@@ -5795,7 +5855,7 @@ function bl64_ui_setup() {
 #######################################
 # BashLib64 / Module / Functions / User Interface
 #
-# Version: 1.0.0
+# Version: 1.0.1
 #######################################
 
 #######################################
@@ -5814,6 +5874,7 @@ function bl64_ui_setup() {
 #   >0: not confirmed
 #######################################
 function bl64_ui_ask_confirmation() {
+  bl64_dbg_lib_show_function "$@"
   local question="${1:-${_BL64_UI_TXT_CONFIRMATION_QUESTION}}"
   local confirmation="${2:-${_BL64_UI_TXT_CONFIRMATION_MESSAGE}}"
   local input=''
@@ -6855,7 +6916,7 @@ function bl64_ans_blank_ansible() {
 #######################################
 # BashLib64 / Module / Setup / Interact with AWS
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 
@@ -7041,9 +7102,35 @@ function bl64_aws_set_paths() {
 }
 
 #######################################
+# Set AWS region
+#
+# * Use anytime you neeto to change the target region
+#
+# Arguments:
+#   $1: AWS region
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_aws_set_region() {
+  bl64_dbg_lib_show_function "$@"
+  local region="${1:-}"
+
+  bl64_check_parameter 'region' || return $?
+
+  BL64_AWS_CLI_REGION="$region"
+
+  bl64_dbg_lib_show_vars 'BL64_AWS_CLI_REGION'
+  return 0
+}
+
+#######################################
 # BashLib64 / Module / Functions / Interact with AWS
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -7242,7 +7329,8 @@ function bl64_aws_run_aws() {
 
   export AWS_CONFIG_FILE="$BL64_AWS_CLI_CONFIG"
   export AWS_SHARED_CREDENTIALS_FILE="$BL64_AWS_CLI_CREDENTIALS"
-  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE' 'AWS_SHARED_CREDENTIALS_FILE'
+  export AWS_REGION="$BL64_AWS_CLI_REGION"
+  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE' 'AWS_SHARED_CREDENTIALS_FILE' 'AWS_REGION'
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
