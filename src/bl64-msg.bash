@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Display messages
 #
-# Version: 3.3.0
+# Version: 3.4.0
 #######################################
 
 #######################################
@@ -239,6 +239,27 @@ function bl64_msg_show_info() {
 }
 
 #######################################
+# Display phase message
+#
+# Arguments:
+#   $1: message
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_phase() {
+  local message="$1"
+
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_PHASE}:${message}" &&
+    bl64_msg_app_verbose_enabled || return 0
+
+  _bl64_msg_show "$BL64_MSG_TYPE_PHASE" "$_BL64_MSG_TXT_PHASE" "${BL64_MSG_COSMETIC_PHASE_PREFIX} ${message} ${BL64_MSG_COSMETIC_PHASE_SUFIX}"
+}
+
+#######################################
 # Display task message
 #
 # Arguments:
@@ -257,6 +278,27 @@ function bl64_msg_show_task() {
     bl64_msg_app_verbose_enabled || return 0
 
   _bl64_msg_show "$BL64_MSG_TYPE_TASK" "$_BL64_MSG_TXT_TASK" "$message"
+}
+
+#######################################
+# Display subtask message
+#
+# Arguments:
+#   $1: message
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_subtask() {
+  local message="$1"
+
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_SUBTASK}:${message}" &&
+    bl64_msg_app_verbose_enabled || return 0
+
+  _bl64_msg_show "$BL64_MSG_TYPE_SUBTASK" "$_BL64_MSG_TXT_SUBTASK" "${BL64_MSG_COSMETIC_ARROW2} ${message}"
 }
 
 #######################################
