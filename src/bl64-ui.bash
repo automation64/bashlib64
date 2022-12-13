@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / User Interface
 #
-# Version: 1.0.0
+# Version: 1.0.1
 #######################################
 
 #######################################
@@ -20,6 +20,7 @@
 #   >0: not confirmed
 #######################################
 function bl64_ui_ask_confirmation() {
+  bl64_dbg_lib_show_function "$@"
   local question="${1:-${_BL64_UI_TXT_CONFIRMATION_QUESTION}}"
   local confirmation="${2:-${_BL64_UI_TXT_CONFIRMATION_MESSAGE}}"
   local input=''
