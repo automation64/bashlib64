@@ -156,7 +156,7 @@ function bl64_cnt_run_sh() {
 # * Attaches tty
 #
 # Arguments:
-#   $@: arguments are passes as-is
+#   $@: arguments are passed as-is
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -299,7 +299,7 @@ function bl64_cnt_run_docker() {
 # Builds a container source
 #
 # Arguments:
-#   $1: build context. Format: full path
+#   $1: ui context. Format: full path
 #   $2: dockerfile path. Format: relative to the build context
 #   $3: tag to be applied to the resulting source. Format: docker tag
 # Outputs:
@@ -626,7 +626,7 @@ function bl64_cnt_podman_tag() {
 # Runs a container image
 #
 # Arguments:
-#   $@: arguments are passes as-is
+#   $@: arguments are passed as-is
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
