@@ -1,13 +1,11 @@
 #######################################
 # BashLib64 / Module / Setup / Manage native OS packages
 #
-# Version: 1.5.0
+# Version: 1.5.1
 #######################################
 
 #######################################
 # Setup the bashlib64 module
-#
-# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -25,6 +23,15 @@ function bl64_pkg_setup() {
     bl64_pkg_set_paths &&
     bl64_pkg_set_alias &&
     bl64_pkg_set_options &&
+    case "$BL64_OS_DISTRO" in
+    ${BL64_OS_FD}-*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
+    ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
+    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
+    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*) bl64_check_command "$BL64_PKG_CMD_YUM" ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*) bl64_check_command "$BL64_PKG_CMD_APT" ;;
+    ${BL64_OS_ALP}-*) bl64_check_command "$BL64_PKG_CMD_APK" ;;
+    ${BL64_OS_MCOS}-*) bl64_check_command "$BL64_PKG_CMD_BRW" ;;
+    esac &&
     BL64_PKG_MODULE="$BL64_LIB_VAR_ON"
 
   bl64_check_alert_module_setup 'pkg'

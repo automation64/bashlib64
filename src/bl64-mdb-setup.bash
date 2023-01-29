@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with MongoDB
 #
-# Version: 1.1.0
+# Version: 1.1.1
 #######################################
 
 #######################################
@@ -34,6 +34,7 @@ function bl64_mdb_setup() {
     bl64_mdb_set_runtime &&
     BL64_MDB_MODULE="$BL64_LIB_VAR_ON"
 
+  bl64_check_alert_module_setup 'mdb'
 }
 
 #######################################
