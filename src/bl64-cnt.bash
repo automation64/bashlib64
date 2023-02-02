@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -302,6 +302,7 @@ function bl64_cnt_run_docker() {
 #   $1: ui context. Format: full path
 #   $2: dockerfile path. Format: relative to the build context
 #   $3: tag to be applied to the resulting source. Format: docker tag
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -319,13 +320,18 @@ function bl64_cnt_build() {
     bl64_check_file "${context}/${file}" ||
     return $?
 
+  # Remove used parameters
+  shift
+  shift
+  shift
+
   # shellcheck disable=SC2164
   cd "${context}"
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_build "$file" "$tag"
+    bl64_cnt_docker_build "$file" "$tag" "$@"
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_build "$file" "$tag"
+    bl64_cnt_podman_build "$file" "$tag" "$@"
   fi
 }
 
@@ -333,9 +339,9 @@ function bl64_cnt_build() {
 # Command wrapper: docker build
 #
 # Arguments:
-#   $1: context
-#   $2: file
-#   $3: tag
+#   $1: file
+#   $2: tag
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -348,22 +354,26 @@ function bl64_cnt_docker_build() {
   local file="$1"
   local tag="$2"
 
+  # Remove used parameters
+  shift
+  shift
+
   bl64_cnt_run_docker \
     build \
     --no-cache \
     --rm \
     --tag "$tag" \
     --file "$file" \
-    .
+    "$@" .
 }
 
 #######################################
 # Command wrapper: podman build
 #
 # Arguments:
-#   $1: context
-#   $2: file
-#   $3: tag
+#   $1: file
+#   $2: tag
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -376,13 +386,17 @@ function bl64_cnt_podman_build() {
   local file="$1"
   local tag="$2"
 
+  # Remove used parameters
+  shift
+  shift
+
   bl64_cnt_run_podman \
     build \
     --no-cache \
     --rm \
     --tag "$tag" \
     --file "$file" \
-    .
+    "$@" .
 }
 
 #######################################
