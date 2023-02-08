@@ -19,6 +19,7 @@
 function bl64_pkg_setup() {
   bl64_dbg_lib_show_function
 
+  # shellcheck disable=SC2249
   bl64_pkg_set_command &&
     bl64_pkg_set_paths &&
     bl64_pkg_set_alias &&
