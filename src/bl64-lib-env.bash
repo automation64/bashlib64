@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Version: 3.2.0
+# Version: 4.0.0
 #######################################
 
 # Declare imported variables
@@ -31,36 +31,25 @@ export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
 #
 
 # Default value for parameters
-export BL64_LIB_DEFAULT='_'
-export BL64_VAR_DEFAULT="$BL64_LIB_DEFAULT"
+export BL64_VAR_DEFAULT='_'
 
 # Flag for incompatible command or task
-export BL64_LIB_INCOMPATIBLE='_INC_'
-export BL64_VAR_INCOMPATIBLE="$BL64_LIB_INCOMPATIBLE"
+export BL64_VAR_INCOMPATIBLE='_INC_'
 
 # Flag for unavailable command or task
-export BL64_LIB_UNAVAILABLE='_UNV_'
-export BL64_VAR_UNAVAILABLE="$BL64_LIB_UNAVAILABLE"
+export BL64_VAR_UNAVAILABLE='_UNV_'
 
 # Pseudo null value
-export BL64_LIB_VAR_NULL='__'
-export BL64_VAR_NULL="$BL64_LIB_VAR_NULL"
+export BL64_VAR_NULL='__'
 
 # Logical values
-export BL64_LIB_VAR_TRUE='0'
-export BL64_LIB_VAR_FALSE='1'
-export BL64_LIB_VAR_ON='1'
-export BL64_LIB_VAR_OFF='0'
-export BL64_LIB_VAR_OK='0'
-export BL64_LIB_VAR_NONE='0'
-export BL64_LIB_VAR_ALL='1'
-export BL64_VAR_TRUE="$BL64_LIB_VAR_TRUE"
-export BL64_VAR_FALSE="$BL64_LIB_VAR_FALSE"
-export BL64_VAR_ON="$BL64_LIB_VAR_ON"
-export BL64_VAR_OFF="$BL64_LIB_VAR_OFF"
-export BL64_VAR_OK="$BL64_LIB_VAR_OK"
-export BL64_VAR_NONE="$BL64_LIB_VAR_NONE"
-export BL64_VAR_ALL="$BL64_LIB_VAR_ALL"
+export BL64_VAR_TRUE='0'
+export BL64_VAR_FALSE='1'
+export BL64_VAR_ON='1'
+export BL64_VAR_OFF='0'
+export BL64_VAR_OK='0'
+export BL64_VAR_NONE='0'
+export BL64_VAR_ALL='1'
 
 #
 # Common error codes
