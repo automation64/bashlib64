@@ -10,15 +10,15 @@ setup() {
 }
 
 @test "bl64_lib_env: public constants are set" {
-  assert_equal "$BL64_LIB_DEFAULT" '_'
-  assert_equal "$BL64_LIB_INCOMPATIBLE" '_INC_'
-  assert_equal "$BL64_LIB_UNAVAILABLE" '_UNV_'
-  assert_equal "$BL64_LIB_VAR_FALSE" '1'
-  assert_equal "$BL64_LIB_VAR_NULL" '__'
-  assert_equal "$BL64_LIB_VAR_OFF" '0'
-  assert_equal "$BL64_LIB_VAR_OK" '0'
-  assert_equal "$BL64_LIB_VAR_ON" '1'
-  assert_equal "$BL64_LIB_VAR_TRUE" '0'
+  assert_equal "$BL64_VAR_DEFAULT" '_'
+  assert_equal "$BL64_VAR_INCOMPATIBLE" '_INC_'
+  assert_equal "$BL64_VAR_UNAVAILABLE" '_UNV_'
+  assert_equal "$BL64_VAR_FALSE" '1'
+  assert_equal "$BL64_VAR_NULL" '__'
+  assert_equal "$BL64_VAR_OFF" '0'
+  assert_equal "$BL64_VAR_OK" '0'
+  assert_equal "$BL64_VAR_ON" '1'
+  assert_equal "$BL64_VAR_TRUE" '0'
 }
 
 @test "bl64_lib_env: error constants are set" {

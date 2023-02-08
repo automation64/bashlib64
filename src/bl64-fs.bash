@@ -706,7 +706,7 @@ function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
   local mode="${1:-${BL64_VAR_DEFAULT}}"
   local user="${2:-${BL64_VAR_DEFAULT}}"
-  local group="$3:-${BL64_VAR_DEFAULT}}"
+  local group="${3:-${BL64_VAR_DEFAULT}}"
   local path=''
 
   # Remove consumed parameters
