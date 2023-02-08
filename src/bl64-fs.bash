@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 2.3.1
+# Version: 3.0.0
 #######################################
 
 #######################################
@@ -44,7 +44,7 @@ function bl64_fs_create_dir() {
     [[ -d "$path" ]] && continue
 
     bl64_fs_run_mkdir "$path" &&
-      bl64_fs_set_permissions "$path" "$mode" "$user" "$group" ||
+      bl64_fs_set_permissions "$mode" "$user" "$group" "$path" ||
       return $?
 
   done
@@ -99,7 +99,7 @@ function bl64_fs_copy_files() {
     bl64_check_path_absolute "$path" &&
       target="${destination}/$(bl64_fmt_basename "$path")" &&
       bl64_fs_cp_file "$path" "$target" &&
-      bl64_fs_set_permissions "$target" "$mode" "$user" "$group" ||
+      bl64_fs_set_permissions "$mode" "$user" "$group" "$target" ||
       return $?
   done
 
@@ -162,7 +162,7 @@ function bl64_fs_merge_files() {
   done >>"$destination"
 
   if [[ "$status" == '0' ]]; then
-    bl64_fs_set_permissions "$destination" "$mode" "$user" "$group"
+    bl64_fs_set_permissions "$mode" "$user" "$group" "$destination"
     status=$?
   fi
 
@@ -692,10 +692,10 @@ function bl64_fs_restore() {
 # Set object permissions and ownership
 #
 # Arguments:
-#   $1: object path
-#   $2: permissions. Format: chown format. Default: use current umask
-#   $3: user name. Default: nonde
-#   $4: group name. Default: current
+#   $1: permissions. Format: chown format. Default: use current umask
+#   $2: user name. Default: nonde
+#   $3: group name. Default: current
+#   $@: list of objects. Must use full path for each
 # Outputs:
 #   STDOUT: command stdin
 #   STDERR: command stderr
@@ -704,28 +704,32 @@ function bl64_fs_restore() {
 #######################################
 function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
-  local path="${1:-}"
-  local mode="${2:-${BL64_VAR_DEFAULT}}"
-  local user="${3:-${BL64_VAR_DEFAULT}}"
-  local group="${4:-${BL64_VAR_DEFAULT}}"
+  local mode="${1:-${BL64_VAR_DEFAULT}}"
+  local user="${2:-${BL64_VAR_DEFAULT}}"
+  local group="$3:-${BL64_VAR_DEFAULT}}"
+  local path=''
 
-  bl64_check_parameter 'path' &&
-    bl64_check_path "$path" ||
-    return $?
+  # Remove consumed parameters
+  shift
+  shift
+  shift
+
+  bl64_check_parameters_none "$#" || return $?
+  bl64_dbg_lib_show_info "path list:[${*}]"
 
   # Determine if mode needs to be set
   if [[ "$mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_fs_run_chmod "$mode" "$path" || return $?
+    bl64_fs_run_chmod "$mode" "$@" || return $?
   fi
 
   # Determine if owner needs to be set
   if [[ "$user" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_fs_run_chown "${user}" "$path" || return $?
+    bl64_fs_run_chown "${user}" "$@" || return $?
   fi
 
   # Determine if group needs to be set
   if [[ "$group" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_fs_run_chown ":${group}" "$path" || return $?
+    bl64_fs_run_chown ":${group}" "$@" || return $?
   fi
 
   return 0
