@@ -19,13 +19,13 @@
 # shellcheck disable=SC2120
 function bl64_tf_setup() {
   bl64_dbg_lib_show_function "$@"
-  local terraform_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   bl64_tf_set_command "$terraform_bin" &&
     bl64_check_command "$BL64_TF_CMD_TERRAFORM" &&
     bl64_tf_set_options &&
     bl64_tf_set_definitions &&
-    BL64_TF_MODULE="$BL64_LIB_VAR_ON"
+    BL64_TF_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'tf'
 }
@@ -48,12 +48,12 @@ function bl64_tf_set_command() {
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="${1:-}"
 
-  if [[ "$terraform_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$terraform_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$terraform_bin" ||
       return $?
   fi
 
-  if [[ "$terraform_bin" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$terraform_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/terraform' ]]; then
       terraform_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/terraform' ]]; then
@@ -64,10 +64,10 @@ function bl64_tf_set_command() {
       terraform_bin='/usr/bin'
     fi
   else
-    [[ ! -x "${terraform_bin}/terraform" ]] && terraform_bin="$BL64_LIB_DEFAULT"
+    [[ ! -x "${terraform_bin}/terraform" ]] && terraform_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$terraform_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$terraform_bin" != "$BL64_VAR_DEFAULT" ]]; then
     [[ -x "${terraform_bin}/terraform" ]] && BL64_TF_CMD_TERRAFORM="${terraform_bin}/terraform"
   fi
 
@@ -111,7 +111,7 @@ function bl64_tf_set_options() {
 #######################################
 function bl64_tf_log_set() {
   bl64_dbg_lib_show_function "$@"
-  local path="${1:-$BL64_LIB_VAR_NULL}"
+  local path="${1:-$BL64_VAR_NULL}"
   local level="${2:-$BL64_TF_SET_LOG_INFO}"
 
   bl64_check_parameter 'path' &&

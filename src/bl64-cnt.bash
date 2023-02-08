@@ -30,9 +30,9 @@ function bl64_cnt_login_file() {
     return $?
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_login "$user" "$BL64_LIB_DEFAULT" "$file" "$registry"
+    bl64_cnt_docker_login "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_login "$user" "$BL64_LIB_DEFAULT" "$file" "$registry"
+    bl64_cnt_podman_login "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
   fi
 }
 
@@ -61,9 +61,9 @@ function bl64_cnt_login() {
     return $?
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_login "$user" "$password" "$BL64_LIB_DEFAULT" "$registry"
+    bl64_cnt_docker_login "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_login "$user" "$password" "$BL64_LIB_DEFAULT" "$registry"
+    bl64_cnt_podman_login "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
   fi
 }
 
@@ -552,9 +552,9 @@ function _bl64_cnt_login_put_password() {
   local password="$1"
   local file="$2"
 
-  if [[ "$password" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$password" != "$BL64_VAR_DEFAULT" ]]; then
     printf '%s\n' "$password"
-  elif [[ "$file" != "$BL64_LIB_DEFAULT" ]]; then
+  elif [[ "$file" != "$BL64_VAR_DEFAULT" ]]; then
     "$BL64_OS_CMD_CAT" "$file"
   fi
 

@@ -26,7 +26,7 @@ function bl64_pkg_repository_add() {
   bl64_dbg_lib_show_function "$@"
   local repository="$1"
   local source="$2"
-  local gpgkey="${3:-${BL64_LIB_VAR_NULL}}"
+  local gpgkey="${3:-${BL64_VAR_NULL}}"
   local definition=''
 
   bl64_check_privilege_root &&

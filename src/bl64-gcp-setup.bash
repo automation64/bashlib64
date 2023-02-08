@@ -19,9 +19,9 @@
 # shellcheck disable=SC2120
 function bl64_gcp_setup() {
   bl64_dbg_lib_show_function "$@"
-  local gcloud_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$gcloud_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$gcloud_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$gcloud_bin" ||
       return $?
   fi
@@ -29,7 +29,7 @@ function bl64_gcp_setup() {
   bl64_gcp_set_command "$gcloud_bin" &&
     bl64_gcp_set_options &&
     bl64_check_command "$BL64_GCP_CMD_GCLOUD" &&
-    BL64_GCP_MODULE="$BL64_LIB_VAR_ON"
+    BL64_GCP_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'gcp'
 }
@@ -50,9 +50,9 @@ function bl64_gcp_setup() {
 #######################################
 function bl64_gcp_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local gcloud_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$gcloud_bin" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$gcloud_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/gcloud' ]]; then
       gcloud_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/gcloud' ]]; then
@@ -63,10 +63,10 @@ function bl64_gcp_set_command() {
       gcloud_bin='/usr/bin'
     fi
   else
-    [[ ! -x "${gcloud_bin}/gcloud" ]] && gcloud_bin="$BL64_LIB_DEFAULT"
+    [[ ! -x "${gcloud_bin}/gcloud" ]] && gcloud_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$gcloud_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$gcloud_bin" != "$BL64_VAR_DEFAULT" ]]; then
     [[ -x "${gcloud_bin}/gcloud" ]] && BL64_GCP_CMD_GCLOUD="${gcloud_bin}/gcloud"
   fi
 

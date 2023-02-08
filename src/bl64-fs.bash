@@ -25,9 +25,9 @@
 #######################################
 function bl64_fs_create_dir() {
   bl64_dbg_lib_show_function "$@"
-  local mode="${1:-${BL64_LIB_DEFAULT}}"
-  local user="${2:-${BL64_LIB_DEFAULT}}"
-  local group="${3:-${BL64_LIB_DEFAULT}}"
+  local mode="${1:-${BL64_VAR_DEFAULT}}"
+  local user="${2:-${BL64_VAR_DEFAULT}}"
+  local group="${3:-${BL64_VAR_DEFAULT}}"
   local path=''
 
   # Remove consumed parameters
@@ -74,10 +74,10 @@ function bl64_fs_create_dir() {
 #######################################
 function bl64_fs_copy_files() {
   bl64_dbg_lib_show_function "$@"
-  local mode="${1:-${BL64_LIB_DEFAULT}}"
-  local user="${2:-${BL64_LIB_DEFAULT}}"
-  local group="${3:-${BL64_LIB_DEFAULT}}"
-  local destination="${4:-${BL64_LIB_DEFAULT}}"
+  local mode="${1:-${BL64_VAR_DEFAULT}}"
+  local user="${2:-${BL64_VAR_DEFAULT}}"
+  local group="${3:-${BL64_VAR_DEFAULT}}"
+  local destination="${4:-${BL64_VAR_DEFAULT}}"
   local path=''
   local target=''
 
@@ -116,7 +116,7 @@ function bl64_fs_copy_files() {
 #   $1: permissions. Format: chown format. Default: use current umask
 #   $2: user name. Default: current
 #   $3: group name. Default: current
-#   $4: replace existing content. Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)
+#   $4: replace existing content. Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
 #   $5: destination file. Full path
 #   $@: source files. Full path
 # Outputs:
@@ -129,11 +129,11 @@ function bl64_fs_copy_files() {
 #######################################
 function bl64_fs_merge_files() {
   bl64_dbg_lib_show_function "$@"
-  local mode="${1:-${BL64_LIB_DEFAULT}}"
-  local user="${2:-${BL64_LIB_DEFAULT}}"
-  local group="${3:-${BL64_LIB_DEFAULT}}"
-  local replace="${4:-${BL64_LIB_DEFAULT}}"
-  local destination="${5:-${BL64_LIB_DEFAULT}}"
+  local mode="${1:-${BL64_VAR_DEFAULT}}"
+  local user="${2:-${BL64_VAR_DEFAULT}}"
+  local group="${3:-${BL64_VAR_DEFAULT}}"
+  local replace="${4:-${BL64_VAR_DEFAULT}}"
+  local destination="${5:-${BL64_VAR_DEFAULT}}"
   local path=''
   local -i status=0
 
@@ -189,8 +189,8 @@ function bl64_fs_merge_files() {
 #######################################
 function bl64_fs_merge_dir() {
   bl64_dbg_lib_show_function "$@"
-  local source="${1:-${BL64_LIB_DEFAULT}}"
-  local target="${2:-${BL64_LIB_DEFAULT}}"
+  local source="${1:-${BL64_VAR_DEFAULT}}"
+  local target="${2:-${BL64_VAR_DEFAULT}}"
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'target' &&
@@ -568,17 +568,17 @@ function bl64_fs_run_find() {
 function bl64_fs_find_files() {
   bl64_dbg_lib_show_function "$@"
   local path="${1:-.}"
-  local pattern="${2:-${BL64_LIB_DEFAULT}}"
-  local content="${3:-${BL64_LIB_DEFAULT}}"
+  local pattern="${2:-${BL64_VAR_DEFAULT}}"
+  local content="${3:-${BL64_VAR_DEFAULT}}"
 
   bl64_check_command "$BL64_FS_CMD_FIND" &&
     bl64_check_directory "$path" || return $?
 
-  [[ "$pattern" == "$BL64_LIB_DEFAULT" ]] && pattern=''
+  [[ "$pattern" == "$BL64_VAR_DEFAULT" ]] && pattern=''
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  if [[ "$content" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$content" == "$BL64_VAR_DEFAULT" ]]; then
     "$BL64_FS_CMD_FIND" \
       "$path" \
       -type 'f' \
@@ -671,12 +671,12 @@ function bl64_fs_restore() {
   fi
 
   # Check if restore is needed based on the operation result
-  if [[ "$result" == "$BL64_LIB_VAR_OK" ]]; then
+  if [[ "$result" == "$BL64_VAR_OK" ]]; then
     bl64_dbg_lib_show_info 'operation was ok, backup no longer needed, remove it'
     [[ -e "$backup" ]] && bl64_fs_rm_full "$backup"
 
     # shellcheck disable=SC2086
-    return $BL64_LIB_VAR_OK
+    return $BL64_VAR_OK
   else
     bl64_dbg_lib_show_info 'operation was NOT ok, remove invalid content'
     [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
@@ -705,26 +705,26 @@ function bl64_fs_restore() {
 function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
-  local mode="${2:-${BL64_LIB_DEFAULT}}"
-  local user="${3:-${BL64_LIB_DEFAULT}}"
-  local group="${4:-${BL64_LIB_DEFAULT}}"
+  local mode="${2:-${BL64_VAR_DEFAULT}}"
+  local user="${3:-${BL64_VAR_DEFAULT}}"
+  local group="${4:-${BL64_VAR_DEFAULT}}"
 
   bl64_check_parameter 'path' &&
     bl64_check_path "$path" ||
     return $?
 
   # Determine if mode needs to be set
-  if [[ "$mode" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$mode" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_fs_run_chmod "$mode" "$path" || return $?
   fi
 
   # Determine if owner needs to be set
-  if [[ "$user" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$user" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_fs_run_chown "${user}" "$path" || return $?
   fi
 
   # Determine if group needs to be set
-  if [[ "$group" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$group" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_fs_run_chown ":${group}" "$path" || return $?
   fi
 
@@ -841,19 +841,19 @@ function bl64_fs_set_umask() {
 #######################################
 function bl64_fs_set_ephemeral() {
   bl64_dbg_lib_show_function "$@"
-  local temporal="${1:-${BL64_LIB_DEFAULT}}"
-  local cache="${2:-${BL64_LIB_DEFAULT}}"
-  local mode="${3:-${BL64_LIB_DEFAULT}}"
-  local user="${4:-${BL64_LIB_DEFAULT}}"
-  local group="${5:-${BL64_LIB_DEFAULT}}"
+  local temporal="${1:-${BL64_VAR_DEFAULT}}"
+  local cache="${2:-${BL64_VAR_DEFAULT}}"
+  local mode="${3:-${BL64_VAR_DEFAULT}}"
+  local user="${4:-${BL64_VAR_DEFAULT}}"
+  local group="${5:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$temporal" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$temporal" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_fs_create_dir "$mode" "$user" "$group" "$temporal" &&
       BL64_FS_PATH_TEMPORAL="$temporal" ||
       return $?
   fi
 
-  if [[ "$cache" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$cache" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_fs_create_dir "$mode" "$user" "$group" "$cache" &&
       BL64_FS_PATH_CACHE="$cache" ||
       return $?

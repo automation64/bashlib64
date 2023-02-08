@@ -24,7 +24,7 @@ function bl64_iam_setup() {
   bl64_iam_set_command &&
     bl64_iam_set_alias &&
     bl64_iam_set_options &&
-    BL64_IAM_MODULE="$BL64_LIB_VAR_ON"
+    BL64_IAM_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'iam'
 }

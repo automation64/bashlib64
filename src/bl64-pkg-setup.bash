@@ -32,7 +32,7 @@ function bl64_pkg_setup() {
     ${BL64_OS_ALP}-*) bl64_check_command "$BL64_PKG_CMD_APK" ;;
     ${BL64_OS_MCOS}-*) bl64_check_command "$BL64_PKG_CMD_BRW" ;;
     esac &&
-    BL64_PKG_MODULE="$BL64_LIB_VAR_ON"
+    BL64_PKG_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'pkg'
 }

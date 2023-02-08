@@ -46,7 +46,7 @@ function bl64_fmt_strip_starting_slash() {
 
   # shellcheck disable=SC2086
   if [[ -z "$path" ]]; then
-    return $BL64_LIB_VAR_OK
+    return $BL64_VAR_OK
   elif [[ "$path" == '/' ]]; then
     printf '%s' "${path}"
   elif [[ "$path" == /* ]]; then
@@ -76,7 +76,7 @@ function bl64_fmt_strip_ending_slash() {
 
   # shellcheck disable=SC2086
   if [[ -z "$path" ]]; then
-    return $BL64_LIB_VAR_OK
+    return $BL64_VAR_OK
   elif [[ "$path" == '/' ]]; then
     printf '%s' "${path}"
   elif [[ "$path" == */ ]]; then
@@ -162,7 +162,7 @@ function bl64_fmt_dirname() {
 
   # shellcheck disable=SC2086
   if [[ -z "$path" ]]; then
-    return $BL64_LIB_VAR_OK
+    return $BL64_VAR_OK
   elif [[ "$path" == '/' ]]; then
     printf '%s' "${path}"
   elif [[ "$path" != */* ]]; then
@@ -196,13 +196,13 @@ function bl64_fmt_dirname() {
 #######################################
 function bl64_fmt_list_to_string() {
   bl64_dbg_lib_show_function
-  local field_separator="${1:-${BL64_LIB_DEFAULT}}"
-  local prefix="${2:-${BL64_LIB_DEFAULT}}"
-  local postfix="${3:-${BL64_LIB_DEFAULT}}"
+  local field_separator="${1:-${BL64_VAR_DEFAULT}}"
+  local prefix="${2:-${BL64_VAR_DEFAULT}}"
+  local postfix="${3:-${BL64_VAR_DEFAULT}}"
 
-  [[ "$field_separator" == "$BL64_LIB_DEFAULT" ]] && field_separator=' '
-  [[ "$prefix" == "$BL64_LIB_DEFAULT" ]] && prefix=''
-  [[ "$postfix" == "$BL64_LIB_DEFAULT" ]] && postfix=''
+  [[ "$field_separator" == "$BL64_VAR_DEFAULT" ]] && field_separator=' '
+  [[ "$prefix" == "$BL64_VAR_DEFAULT" ]] && prefix=''
+  [[ "$postfix" == "$BL64_VAR_DEFAULT" ]] && postfix=''
 
   bl64_txt_run_awk \
     -v field_separator="$field_separator" \

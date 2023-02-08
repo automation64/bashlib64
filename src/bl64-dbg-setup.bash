@@ -54,7 +54,7 @@ function bl64_dbg_setup() {
   # Set default debug level
   bl64_dbg_all_disable
 
-  BL64_DBG_MODULE="$BL64_LIB_VAR_ON"
+  BL64_DBG_MODULE="$BL64_VAR_ON"
 }
 
 #######################################

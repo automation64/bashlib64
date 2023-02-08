@@ -32,7 +32,7 @@ function bl64_gcp_run_gcloud() {
 
   bl64_gcp_blank_gcloud
 
-  [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_LIB_VAR_TRUE" ]] && config="--configuration $BL64_GCP_CONFIGURATION_NAME"
+  [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_VAR_TRUE" ]] && config="--configuration $BL64_GCP_CONFIGURATION_NAME"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -86,14 +86,14 @@ function bl64_gcp_login_sa() {
 function _bl64_gcp_configure() {
   bl64_dbg_lib_show_function
 
-  if [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_LIB_VAR_FALSE" ]]; then
+  if [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_VAR_FALSE" ]]; then
 
     bl64_dbg_lib_show_info 'create BL64_GCP_CONFIGURATION'
     bl64_gcp_run_gcloud \
       config \
       configurations \
       create "$BL64_GCP_CONFIGURATION_NAME" &&
-      BL64_GCP_CONFIGURATION_CREATED="$BL64_LIB_VAR_TRUE"
+      BL64_GCP_CONFIGURATION_CREATED="$BL64_VAR_TRUE"
 
   else
     :

@@ -25,25 +25,25 @@
 #######################################
 function bl64_mdb_dump_restore() {
   bl64_dbg_lib_show_function "$@"
-  local dump="${1:-${BL64_LIB_DEFAULT}}"
-  local db="${2:-${BL64_LIB_DEFAULT}}"
-  local authdb="${3:-${BL64_LIB_DEFAULT}}"
-  local user="${4:-${BL64_LIB_DEFAULT}}"
-  local password="${5:-${BL64_LIB_DEFAULT}}"
-  local host="${6:-${BL64_LIB_DEFAULT}}"
-  local port="${7:-${BL64_LIB_DEFAULT}}"
+  local dump="${1:-${BL64_VAR_DEFAULT}}"
+  local db="${2:-${BL64_VAR_DEFAULT}}"
+  local authdb="${3:-${BL64_VAR_DEFAULT}}"
+  local user="${4:-${BL64_VAR_DEFAULT}}"
+  local password="${5:-${BL64_VAR_DEFAULT}}"
+  local host="${6:-${BL64_VAR_DEFAULT}}"
+  local port="${7:-${BL64_VAR_DEFAULT}}"
   local include=' '
 
   bl64_check_parameter 'dump' &&
     bl64_check_directory "$dump" ||
     return $?
 
-  [[ "$db" != "$BL64_LIB_DEFAULT" ]] && include="--nsInclude=${db}.*" && db="--db=${db}" || db=' '
-  [[ "$user" != "$BL64_LIB_DEFAULT" ]] && user="--username=${user}" || user=' '
-  [[ "$password" != "$BL64_LIB_DEFAULT" ]] && password="--password=${password}" || password=' '
-  [[ "$host" != "$BL64_LIB_DEFAULT" ]] && host="--host=${host}" || host=' '
-  [[ "$port" != "$BL64_LIB_DEFAULT" ]] && port="--port=${port}" || port=' '
-  [[ "$authdb" != "$BL64_LIB_DEFAULT" ]] && authdb="--authenticationDatabase=${authdb}" || authdb=' '
+  [[ "$db" != "$BL64_VAR_DEFAULT" ]] && include="--nsInclude=${db}.*" && db="--db=${db}" || db=' '
+  [[ "$user" != "$BL64_VAR_DEFAULT" ]] && user="--username=${user}" || user=' '
+  [[ "$password" != "$BL64_VAR_DEFAULT" ]] && password="--password=${password}" || password=' '
+  [[ "$host" != "$BL64_VAR_DEFAULT" ]] && host="--host=${host}" || host=' '
+  [[ "$port" != "$BL64_VAR_DEFAULT" ]] && port="--port=${port}" || port=' '
+  [[ "$authdb" != "$BL64_VAR_DEFAULT" ]] && authdb="--authenticationDatabase=${authdb}" || authdb=' '
 
   # shellcheck disable=SC2086
   bl64_mdb_run_mongorestore \
@@ -78,9 +78,9 @@ function bl64_mdb_dump_restore() {
 #######################################
 function bl64_mdb_role_grant() {
   bl64_dbg_lib_show_function "$@"
-  local uri="${1:-${BL64_LIB_DEFAULT}}"
-  local role="${2:-${BL64_LIB_DEFAULT}}"
-  local user="${3:-${BL64_LIB_DEFAULT}}"
+  local uri="${1:-${BL64_VAR_DEFAULT}}"
+  local role="${2:-${BL64_VAR_DEFAULT}}"
+  local user="${3:-${BL64_VAR_DEFAULT}}"
   local db="${4:-admin}"
 
   bl64_check_parameter 'uri' &&
@@ -151,7 +151,7 @@ function bl64_mdb_run_mongosh_eval() {
 #######################################
 function bl64_mdb_run_mongosh() {
   bl64_dbg_lib_show_function "$@"
-  local uri="${1:-${BL64_LIB_DEFAULT}}"
+  local uri="${1:-${BL64_VAR_DEFAULT}}"
   local verbosity="$BL64_MDB_SET_QUIET"
 
   shift

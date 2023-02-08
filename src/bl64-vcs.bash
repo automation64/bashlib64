@@ -101,7 +101,7 @@ function bl64_vcs_git_clone() {
     bl64_check_command "$BL64_VCS_CMD_GIT" ||
     return $?
 
-  bl64_fs_create_dir "${BL64_LIB_DEFAULT}" "${BL64_LIB_DEFAULT}" "${BL64_LIB_DEFAULT}" "$destination" || return $?
+  bl64_fs_create_dir "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" || return $?
 
   bl64_msg_show_lib_task "$_BL64_VCS_TXT_CLONE_REPO ($source)"
 
@@ -148,7 +148,7 @@ function bl64_vcs_git_sparse() {
     bl64_check_parameter 'destination' &&
     bl64_check_parameter 'pattern' || return $?
 
-  bl64_fs_create_dir "${BL64_LIB_DEFAULT}" "${BL64_LIB_DEFAULT}" "${BL64_LIB_DEFAULT}" "$destination" || returnn $?
+  bl64_fs_create_dir "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" || returnn $?
 
   # shellcheck disable=SC2164
   cd "$destination"

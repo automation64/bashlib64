@@ -13,7 +13,7 @@
 # Arguments:
 #   $1: (optional) Full path where commands are
 #   $2: (optional) Full path to the ansible configuration file
-#   $3: (optional) Ignore inherited shell environment? Default: BL64_LIB_VAR_ON
+#   $3: (optional) Ignore inherited shell environment? Default: BL64_VAR_ON
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -24,9 +24,9 @@
 # shellcheck disable=SC2120
 function bl64_ans_setup() {
   bl64_dbg_lib_show_function "$@"
-  local ansible_bin="${1:-${BL64_LIB_DEFAULT}}"
-  local ansible_config="${2:-${BL64_LIB_DEFAULT}}"
-  local env_ignore="${3:-${BL64_LIB_VAR_ON}}"
+  local ansible_bin="${1:-${BL64_VAR_DEFAULT}}"
+  local ansible_config="${2:-${BL64_VAR_DEFAULT}}"
+  local env_ignore="${3:-${BL64_VAR_ON}}"
 
   bl64_ans_set_command "$ansible_bin" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE" &&
@@ -35,7 +35,7 @@ function bl64_ans_setup() {
     bl64_ans_set_paths "$ansible_config" &&
     bl64_ans_set_options &&
     bl64_ans_set_version &&
-    BL64_ANS_MODULE="$BL64_LIB_VAR_ON" &&
+    BL64_ANS_MODULE="$BL64_VAR_ON" &&
     BL64_ANS_ENV_IGNORE="$env_ignore" ||
     return $?
 
@@ -60,7 +60,7 @@ function bl64_ans_set_command() {
   bl64_dbg_lib_show_function
   local ansible_bin="$1"
 
-  if [[ "$ansible_bin" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$ansible_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -n "$BL64_PY_VENV_PATH" && -x "${BL64_PY_VENV_PATH}/bin/ansible" ]]; then
       ansible_bin="${BL64_PY_VENV_PATH}/bin"
     elif [[ -n "$HOME" && -x "${HOME}/.local/bin/ansible" ]]; then
@@ -78,7 +78,7 @@ function bl64_ans_set_command() {
     fi
   fi
 
-  if [[ "$ansible_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$ansible_bin" != "$BL64_VAR_DEFAULT" ]]; then
     [[ -x "${ansible_bin}/ansible" ]] && BL64_ANS_CMD_ANSIBLE="${ansible_bin}/ansible"
     [[ -x "${ansible_bin}/ansible-galaxy" ]] && BL64_ANS_CMD_ANSIBLE_GALAXY="${ansible_bin}/ansible-galaxy"
     [[ -x "${ansible_bin}/ansible-playbook" ]] && BL64_ANS_CMD_ANSIBLE_PLAYBOOK="${ansible_bin}/ansible-playbook"
@@ -126,24 +126,24 @@ function bl64_ans_set_options() {
 #######################################
 function bl64_ans_set_paths() {
   bl64_dbg_lib_show_function
-  local config="${1:-${BL64_LIB_DEFAULT}}"
-  local collections="${2:-${BL64_LIB_DEFAULT}}"
-  local ansible="${3:-${BL64_LIB_DEFAULT}}"
+  local config="${1:-${BL64_VAR_DEFAULT}}"
+  local collections="${2:-${BL64_VAR_DEFAULT}}"
+  local ansible="${3:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$config" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$config" == "$BL64_VAR_DEFAULT" ]]; then
     BL64_ANS_PATH_USR_CONFIG=''
   else
     bl64_check_file "$config" || return $?
     BL64_ANS_PATH_USR_CONFIG="$config"
   fi
 
-  if [[ "$ansible" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$ansible" == "$BL64_VAR_DEFAULT" ]]; then
     BL64_ANS_PATH_USR_ANSIBLE="${HOME}/.ansible"
   else
     BL64_ANS_PATH_USR_ANSIBLE="$ansible"
   fi
 
-  if [[ "$collections" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$collections" == "$BL64_VAR_DEFAULT" ]]; then
     BL64_ANS_PATH_USR_COLLECTIONS="${BL64_ANS_PATH_USR_ANSIBLE}/collections/ansible_collections"
   else
     bl64_check_directory "$collections" || return $?

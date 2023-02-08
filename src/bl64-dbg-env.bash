@@ -4,7 +4,7 @@
 # Version: 1.9.0
 #######################################
 
-export BL64_DBG_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_DBG_MODULE="$BL64_VAR_OFF"
 
 # Debug target
 export BL64_DBG_TARGET=''

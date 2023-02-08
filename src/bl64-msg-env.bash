@@ -4,7 +4,7 @@
 # Version: 2.5.0
 #######################################
 
-export BL64_MSG_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_MSG_MODULE="$BL64_VAR_OFF"
 
 # Target verbosity)
 export BL64_MSG_VERBOSE=''

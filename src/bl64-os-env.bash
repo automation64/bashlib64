@@ -4,7 +4,7 @@
 # Version: 1.15.0
 #######################################
 
-export BL64_OS_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_OS_MODULE="$BL64_VAR_OFF"
 
 export BL64_OS_DISTRO=''
 
