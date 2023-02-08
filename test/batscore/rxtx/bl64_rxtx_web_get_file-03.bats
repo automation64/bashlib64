@@ -19,7 +19,7 @@ teardown() {
   test_file="${_bl64_rxtx_web_get_file_destination}/test"
   cat "$sample" > "$test_file"
 
-  run bl64_rxtx_web_get_file "$_bl64_rxtx_web_get_file_source" "$test_file" "$BL64_LIB_VAR_ON"
+  run bl64_rxtx_web_get_file "$_bl64_rxtx_web_get_file_source" "$test_file" "$BL64_VAR_ON"
   assert_success
 
   run diff "$sample" "$test_file"

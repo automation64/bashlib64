@@ -15,7 +15,7 @@ teardown() {
 
 @test "bl64_rxtx_web_get_file: fail download file + replace on" {
 
-  run bl64_rxtx_web_get_file "xx$_bl64_rxtx_web_get_file_source" "${_bl64_rxtx_web_get_file_destination}/test" "$BL64_LIB_VAR_ON"
+  run bl64_rxtx_web_get_file "xx$_bl64_rxtx_web_get_file_source" "${_bl64_rxtx_web_get_file_destination}/test" "$BL64_VAR_ON"
   assert_failure
 
 }

@@ -24,7 +24,7 @@ teardown() {
     "$_bl64_rxtx_git_get_dir_source" \
     'bin' \
     "$test_dir" \
-    "$BL64_LIB_VAR_ON"
+    "$BL64_VAR_ON"
   assert_success
 
   assert_file_exists "${test_dir}/devbl-set"

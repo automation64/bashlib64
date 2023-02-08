@@ -14,7 +14,7 @@ setup() {
   target1="$TEST_SANDBOX/target1"
   target2="$TEST_SANDBOX/target2"
 
-  run bl64_fs_create_dir "$BL64_LIB_DEFAULT" "$BL64_LIB_DEFAULT" "$BL64_LIB_DEFAULT" "$target1" "$target2"
+  run bl64_fs_create_dir "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$target1" "$target2"
   assert_success
   assert_dir_exist "${target1}"
   assert_dir_exist "${target2}"
@@ -27,7 +27,7 @@ setup() {
   target1="$TEST_SANDBOX/target3"
   target2="$TEST_SANDBOX/target4"
 
-  run bl64_fs_create_dir '0777' "$BL64_LIB_DEFAULT" "$BL64_LIB_DEFAULT" "$target1" "$target2"
+  run bl64_fs_create_dir '0777' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$target1" "$target2"
   assert_success
   assert_dir_exist "${target1}"
   assert_dir_exist "${target2}"
