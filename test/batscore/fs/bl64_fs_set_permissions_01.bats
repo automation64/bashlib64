@@ -7,7 +7,7 @@ setup() {
   assert_failure
 }
 
-@test "bl64_fs_set_permissions: bad path" {
-  run bl64_fs_set_permissions '/bad/path'
+@test "bl64_fs_set_permissions: no path" {
+  run bl64_fs_set_permissions "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT"
   assert_failure
 }

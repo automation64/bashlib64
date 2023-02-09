@@ -24,11 +24,11 @@
 
 function bl64_aws_cli_create_sso() {
   bl64_dbg_lib_show_function "$@"
-  local profile="${1:-${BL64_LIB_DEFAULT}}"
-  local start_url="${2:-${BL64_LIB_DEFAULT}}"
-  local sso_region="${3:-${BL64_LIB_DEFAULT}}"
-  local sso_account_id="${4:-${BL64_LIB_DEFAULT}}"
-  local sso_role_name="${5:-${BL64_LIB_DEFAULT}}"
+  local profile="${1:-${BL64_VAR_DEFAULT}}"
+  local start_url="${2:-${BL64_VAR_DEFAULT}}"
+  local sso_region="${3:-${BL64_VAR_DEFAULT}}"
+  local sso_account_id="${4:-${BL64_VAR_DEFAULT}}"
+  local sso_role_name="${5:-${BL64_VAR_DEFAULT}}"
 
   bl64_check_parameter 'profile' &&
     bl64_check_parameter 'start_url' &&
@@ -65,7 +65,7 @@ function bl64_aws_cli_create_sso() {
 #######################################
 function bl64_aws_sso_login() {
   bl64_dbg_lib_show_function "$@"
-  local profile="${1:-${BL64_LIB_DEFAULT}}"
+  local profile="${1:-${BL64_VAR_DEFAULT}}"
 
   bl64_aws_run_aws_profile \
     "$profile" \
@@ -89,7 +89,7 @@ function bl64_aws_sso_login() {
 #######################################
 function bl64_aws_sts_get_caller_arn() {
   bl64_dbg_lib_show_function "$@"
-  local profile="${1:-${BL64_LIB_DEFAULT}}"
+  local profile="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2086
   bl64_aws_run_aws_profile \

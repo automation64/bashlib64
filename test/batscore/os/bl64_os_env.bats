@@ -4,7 +4,6 @@ setup() {
 }
 
 @test "bl64_os_env: public OS constants are set" {
-  assert_equal "$BL64_OS_TAGS" 'ALM ALP AMZ CNT DEB FD MCOS OL RCK RHEL UB'
   assert_equal "$BL64_OS_ALM" 'ALMALINUX'
   assert_equal "$BL64_OS_ALP" 'ALPINE'
   assert_equal "$BL64_OS_AMZ" 'AMZN'

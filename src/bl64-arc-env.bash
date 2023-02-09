@@ -4,7 +4,7 @@
 # Version: 1.5.0
 #######################################
 
-export BL64_ARC_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_ARC_MODULE="$BL64_VAR_OFF"
 
 export BL64_ARC_CMD_TAR=''
 export BL64_ARC_CMD_UNZIP=''

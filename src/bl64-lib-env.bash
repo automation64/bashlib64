@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
 #
-# Version: 3.1.0
+# Version: 4.0.0
 #######################################
 
 # Declare imported variables
@@ -31,25 +31,25 @@ export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
 #
 
 # Default value for parameters
-export BL64_LIB_DEFAULT='_'
+export BL64_VAR_DEFAULT='_'
 
 # Flag for incompatible command or task
-export BL64_LIB_INCOMPATIBLE='_INC_'
+export BL64_VAR_INCOMPATIBLE='_INC_'
 
 # Flag for unavailable command or task
-export BL64_LIB_UNAVAILABLE='_UNV_'
+export BL64_VAR_UNAVAILABLE='_UNV_'
 
 # Pseudo null value
-export BL64_LIB_VAR_NULL='__'
+export BL64_VAR_NULL='__'
 
 # Logical values
-export BL64_LIB_VAR_TRUE='0'
-export BL64_LIB_VAR_FALSE='1'
-export BL64_LIB_VAR_ON='1'
-export BL64_LIB_VAR_OFF='0'
-export BL64_LIB_VAR_OK='0'
-export BL64_LIB_VAR_NONE='0'
-export BL64_LIB_VAR_ALL='1'
+export BL64_VAR_TRUE='0'
+export BL64_VAR_FALSE='1'
+export BL64_VAR_ON='1'
+export BL64_VAR_OFF='0'
+export BL64_VAR_OK='0'
+export BL64_VAR_NONE='0'
+export BL64_VAR_ALL='1'
 
 #
 # Common error codes

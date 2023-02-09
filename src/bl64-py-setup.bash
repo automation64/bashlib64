@@ -21,22 +21,22 @@
 # shellcheck disable=SC2120
 function bl64_py_setup() {
   bl64_dbg_lib_show_function "$@"
-  local venv_path="${1:-${BL64_LIB_DEFAULT}}"
+  local venv_path="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$venv_path" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$venv_path" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_dbg_lib_show_info "venv requested (${venv_path})"
     if [[ -d "$venv_path" ]]; then
       bl64_dbg_lib_show_info 'use already existing venv'
       _bl64_py_setup "$venv_path"
     else
       bl64_dbg_lib_show_info 'no previous venv, create one'
-      _bl64_py_setup "$BL64_LIB_DEFAULT" &&
+      _bl64_py_setup "$BL64_VAR_DEFAULT" &&
         bl64_py_venv_create "$venv_path" &&
         _bl64_py_setup "$venv_path"
     fi
   else
     bl64_dbg_lib_show_info "no venv requested"
-    _bl64_py_setup "$BL64_LIB_DEFAULT"
+    _bl64_py_setup "$BL64_VAR_DEFAULT"
   fi
 
   bl64_check_alert_module_setup 'py'
@@ -46,7 +46,7 @@ function _bl64_py_setup() {
   bl64_dbg_lib_show_function "$@"
   local venv_path="$1"
 
-  if [[ "$venv_path" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$venv_path" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_py_venv_check "$venv_path" ||
       return $?
   fi
@@ -55,7 +55,7 @@ function _bl64_py_setup() {
     bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
     bl64_py_set_options &&
     bl64_py_set_definitions &&
-    BL64_PY_MODULE="$BL64_LIB_VAR_ON"
+    BL64_PY_MODULE="$BL64_VAR_ON"
 }
 
 #######################################
@@ -78,7 +78,7 @@ function bl64_py_set_command() {
   bl64_dbg_lib_show_function "$@"
   local venv_path="$1"
 
-  if [[ "$venv_path" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$venv_path" == "$BL64_VAR_DEFAULT" ]]; then
     bl64_dbg_lib_show_info 'identify OS native python3 path'
     # Define distro native Python versions
     # shellcheck disable=SC2034

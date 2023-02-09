@@ -4,7 +4,7 @@
 # Version: 1.10.0
 #######################################
 
-export BL64_PKG_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_PKG_MODULE="$BL64_VAR_OFF"
 
 export BL64_PKG_CMD_APK=''
 export BL64_PKG_CMD_APT=''

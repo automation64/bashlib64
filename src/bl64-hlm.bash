@@ -18,8 +18,8 @@
 #######################################
 function bl64_hlm_repo_add() {
   bl64_dbg_lib_show_function "$@"
-  local repository="${1:-${BL64_LIB_DEFAULT}}"
-  local source="${2:-${BL64_LIB_DEFAULT}}"
+  local repository="${1:-${BL64_VAR_DEFAULT}}"
+  local source="${2:-${BL64_VAR_DEFAULT}}"
 
   bl64_check_parameter 'repository' &&
     bl64_check_parameter 'source' ||
@@ -55,10 +55,10 @@ function bl64_hlm_repo_add() {
 #######################################
 function bl64_hlm_chart_upgrade() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_DEFAULT}}"
-  local namespace="${2:-${BL64_LIB_DEFAULT}}"
-  local chart="${3:-${BL64_LIB_DEFAULT}}"
-  local source="${4:-${BL64_LIB_DEFAULT}}"
+  local kubeconfig="${1:-${BL64_VAR_DEFAULT}}"
+  local namespace="${2:-${BL64_VAR_DEFAULT}}"
+  local chart="${3:-${BL64_VAR_DEFAULT}}"
+  local source="${4:-${BL64_VAR_DEFAULT}}"
 
   bl64_check_parameter 'kubeconfig' &&
     bl64_check_parameter 'namespace' &&

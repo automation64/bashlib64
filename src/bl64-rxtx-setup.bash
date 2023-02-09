@@ -24,7 +24,7 @@ function bl64_rxtx_setup() {
   bl64_rxtx_set_command &&
     bl64_rxtx_set_alias &&
     bl64_rxtx_set_options &&
-    BL64_RXTX_MODULE="$BL64_LIB_VAR_ON"
+    BL64_RXTX_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'rxtx'
 }
@@ -53,7 +53,7 @@ function bl64_rxtx_set_command() {
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
-    BL64_RXTX_CMD_WGET="$BL64_LIB_INCOMPATIBLE"
+    BL64_RXTX_CMD_WGET="$BL64_VAR_INCOMPATIBLE"
     ;;
   *) bl64_check_alert_unsupported ;;
   esac

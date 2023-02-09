@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -30,9 +30,9 @@ function bl64_cnt_login_file() {
     return $?
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_login "$user" "$BL64_LIB_DEFAULT" "$file" "$registry"
+    bl64_cnt_docker_login "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_login "$user" "$BL64_LIB_DEFAULT" "$file" "$registry"
+    bl64_cnt_podman_login "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
   fi
 }
 
@@ -61,9 +61,9 @@ function bl64_cnt_login() {
     return $?
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_login "$user" "$password" "$BL64_LIB_DEFAULT" "$registry"
+    bl64_cnt_docker_login "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_login "$user" "$password" "$BL64_LIB_DEFAULT" "$registry"
+    bl64_cnt_podman_login "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
   fi
 }
 
@@ -156,7 +156,7 @@ function bl64_cnt_run_sh() {
 # * Attaches tty
 #
 # Arguments:
-#   $@: arguments are passes as-is
+#   $@: arguments are passed as-is
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -299,9 +299,10 @@ function bl64_cnt_run_docker() {
 # Builds a container source
 #
 # Arguments:
-#   $1: build context. Format: full path
+#   $1: ui context. Format: full path
 #   $2: dockerfile path. Format: relative to the build context
 #   $3: tag to be applied to the resulting source. Format: docker tag
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -319,13 +320,18 @@ function bl64_cnt_build() {
     bl64_check_file "${context}/${file}" ||
     return $?
 
+  # Remove used parameters
+  shift
+  shift
+  shift
+
   # shellcheck disable=SC2164
   cd "${context}"
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_build "$file" "$tag"
+    bl64_cnt_docker_build "$file" "$tag" "$@"
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_build "$file" "$tag"
+    bl64_cnt_podman_build "$file" "$tag" "$@"
   fi
 }
 
@@ -333,9 +339,9 @@ function bl64_cnt_build() {
 # Command wrapper: docker build
 #
 # Arguments:
-#   $1: context
-#   $2: file
-#   $3: tag
+#   $1: file
+#   $2: tag
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -348,22 +354,26 @@ function bl64_cnt_docker_build() {
   local file="$1"
   local tag="$2"
 
+  # Remove used parameters
+  shift
+  shift
+
   bl64_cnt_run_docker \
     build \
     --no-cache \
     --rm \
     --tag "$tag" \
     --file "$file" \
-    .
+    "$@" .
 }
 
 #######################################
 # Command wrapper: podman build
 #
 # Arguments:
-#   $1: context
-#   $2: file
-#   $3: tag
+#   $1: file
+#   $2: tag
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -376,13 +386,17 @@ function bl64_cnt_podman_build() {
   local file="$1"
   local tag="$2"
 
+  # Remove used parameters
+  shift
+  shift
+
   bl64_cnt_run_podman \
     build \
     --no-cache \
     --rm \
     --tag "$tag" \
     --file "$file" \
-    .
+    "$@" .
 }
 
 #######################################
@@ -538,9 +552,9 @@ function _bl64_cnt_login_put_password() {
   local password="$1"
   local file="$2"
 
-  if [[ "$password" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$password" != "$BL64_VAR_DEFAULT" ]]; then
     printf '%s\n' "$password"
-  elif [[ "$file" != "$BL64_LIB_DEFAULT" ]]; then
+  elif [[ "$file" != "$BL64_VAR_DEFAULT" ]]; then
     "$BL64_OS_CMD_CAT" "$file"
   fi
 
@@ -626,7 +640,7 @@ function bl64_cnt_podman_tag() {
 # Runs a container image
 #
 # Arguments:
-#   $@: arguments are passes as-is
+#   $@: arguments are passed as-is
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr

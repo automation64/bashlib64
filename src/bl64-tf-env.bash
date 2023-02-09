@@ -5,12 +5,12 @@
 #######################################
 
 # Optional module. Not enabled by default
-export BL64_TF_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_TF_MODULE="$BL64_VAR_OFF"
 
 export BL64_TF_LOG_PATH=''
 export BL64_TF_LOG_LEVEL=''
 
-export BL64_TF_CMD_TERRAFORM="$BL64_LIB_UNAVAILABLE"
+export BL64_TF_CMD_TERRAFORM="$BL64_VAR_UNAVAILABLE"
 
 # Output export formats
 export BL64_TF_OUTPUT_RAW='0'

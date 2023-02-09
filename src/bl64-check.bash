@@ -28,13 +28,13 @@ function bl64_check_command() {
 
   bl64_check_parameter 'path' || return $?
 
-  if [[ "$path" == "$BL64_LIB_INCOMPATIBLE" ]]; then
+  if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
 
-  if [[ "$path" == "$BL64_LIB_UNAVAILABLE" ]]; then
+  if [[ "$path" == "$BL64_VAR_UNAVAILABLE" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_INSTALLED} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
@@ -196,12 +196,12 @@ function bl64_check_parameter() {
     return $BL64_LIB_ERROR_PARAMETER_MISSING
   fi
 
-  if eval "[[ -z \"\${${parameter_name}}\" || \"\${${parameter_name}}\" == '${BL64_LIB_VAR_NULL}' ]]"; then
+  if eval "[[ -z \"\${${parameter_name}}\" || \"\${${parameter_name}}\" == '${BL64_VAR_NULL}' ]]"; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_MISSING} (${description} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_EMPTY
   fi
 
-  if eval "[[ \"\${${parameter_name}}\" == '${BL64_LIB_DEFAULT}' ]]"; then
+  if eval "[[ \"\${${parameter_name}}\" == '${BL64_VAR_DEFAULT}' ]]"; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_DEFAULT} (${description} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_INVALID
   fi
@@ -397,12 +397,12 @@ function bl64_check_privilege_not_root() {
 function bl64_check_overwrite() {
   bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
-  local overwrite="${2:-"$BL64_LIB_VAR_OFF"}"
+  local overwrite="${2:-"$BL64_VAR_OFF"}"
   local message="${3:-${_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}}"
 
   bl64_check_parameter 'path' || return $?
 
-  if [[ "$overwrite" == "$BL64_LIB_VAR_OFF" || "$overwrite" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$overwrite" == "$BL64_VAR_OFF" || "$overwrite" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_error "${message} (path: ${path} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
       # shellcheck disable=SC2086
@@ -432,10 +432,10 @@ function bl64_check_overwrite() {
 # shellcheck disable=SC2120
 function bl64_check_alert_parameter_invalid() {
   bl64_dbg_lib_show_function "$@"
-  local parameter="${1:-${BL64_LIB_DEFAULT}}"
+  local parameter="${1:-${BL64_VAR_DEFAULT}}"
   local message="${2:-${_BL64_CHECK_TXT_PARAMETER_INVALID}}"
 
-  [[ "$parameter" == "$BL64_LIB_DEFAULT" ]] && parameter=''
+  [[ "$parameter" == "$BL64_VAR_DEFAULT" ]] && parameter=''
   bl64_msg_show_error "${message} (${parameter:+${_BL64_CHECK_TXT_PARAMETER}: ${parameter}}${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
   return $BL64_LIB_ERROR_PARAMETER_INVALID
 }
@@ -557,7 +557,7 @@ function bl64_check_module() {
   fi
 
   eval setup_status="\$$module"
-  if [[ "$setup_status" == "$BL64_LIB_VAR_OFF" ]]; then
+  if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_NOT_SETUP} (${_BL64_CHECK_TXT_MODULE}: ${module} ${_BL64_CHECK_TXT_I} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
     return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
   fi

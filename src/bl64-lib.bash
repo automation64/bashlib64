@@ -37,7 +37,7 @@ bl64_dbg_setup &&
 
 # Set signal handlers
 # shellcheck disable=SC2064
-if [[ "$BL64_LIB_TRAPS" == "$BL64_LIB_VAR_ON" ]]; then
+if [[ "$BL64_LIB_TRAPS" == "$BL64_VAR_ON" ]]; then
   bl64_dbg_lib_show_info 'enable traps'
   trap "$BL64_LIB_SIGNAL_HUP" 'SIGHUP'
   trap "$BL64_LIB_SIGNAL_STOP" 'SIGINT'
@@ -55,7 +55,7 @@ bl64_fs_set_umask
 bl64_bsh_script_set_identity
 
 # Enable command mode: the library can be used as a stand-alone script to run embeded functions
-if [[ "$BL64_LIB_CMD" == "$BL64_LIB_VAR_ON" ]]; then
+if [[ "$BL64_LIB_CMD" == "$BL64_VAR_ON" ]]; then
   bl64_dbg_lib_show_info 'run bashlib64 in command mode'
   "$@"
 else

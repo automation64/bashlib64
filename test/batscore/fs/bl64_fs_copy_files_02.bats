@@ -12,9 +12,9 @@ setup() {
 
 @test "bl64_fs_copy_files: copy files" {
   run bl64_fs_copy_files \
-    "$BL64_LIB_DEFAULT" \
-    "$BL64_LIB_DEFAULT" \
-    "$BL64_LIB_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
     "$TEST_SANDBOX" \
     "${TEST_SOURCE}/${TEST_FILE1}" \
     "${TEST_SOURCE}/${TEST_FILE2}"
@@ -25,9 +25,9 @@ setup() {
 
 @test "bl64_fs_copy_files: copy files + missing target" {
   run bl64_fs_copy_files \
-    "$BL64_LIB_DEFAULT" \
-    "$BL64_LIB_DEFAULT" \
-    "$BL64_LIB_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
     "/fake/destination" \
     "${TEST_SOURCE}/${TEST_FILE1}" \
     "${TEST_SOURCE}/${TEST_FILE2}"
@@ -36,9 +36,9 @@ setup() {
 
 @test "bl64_fs_copy_files: copy files + missing source" {
   run bl64_fs_copy_files \
-    "$BL64_LIB_DEFAULT" \
-    "$BL64_LIB_DEFAULT" \
-    "$BL64_LIB_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
     "$TEST_SANDBOX" \
     "/fake/source" \
     "${TEST_SOURCE}/${TEST_FILE2}"

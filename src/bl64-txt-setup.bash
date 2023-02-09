@@ -23,7 +23,7 @@ function bl64_txt_setup() {
 
   bl64_txt_set_command &&
     bl64_txt_set_options &&
-    BL64_TXT_MODULE="$BL64_LIB_VAR_ON"
+    BL64_TXT_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'txt'
 }
@@ -81,7 +81,7 @@ function bl64_txt_set_command() {
   ${BL64_OS_MCOS}-*)
     BL64_TXT_CMD_AWK='/usr/bin/awk'
     BL64_TXT_CMD_CUT='/usr/bin/cut'
-    BL64_TXT_CMD_GAWK="$BL64_LIB_INCOMPATIBLE"
+    BL64_TXT_CMD_GAWK="$BL64_VAR_INCOMPATIBLE"
     BL64_TXT_CMD_GREP='/usr/bin/grep'
     BL64_TXT_CMD_SED='/usr/bin/sed'
     BL64_TXT_CMD_TR='/usr/bin/tr'

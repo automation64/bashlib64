@@ -4,7 +4,7 @@
 # Version: 1.7.0
 #######################################
 
-export BL64_RXTX_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_RXTX_MODULE="$BL64_VAR_OFF"
 
 export BL64_RXTX_CMD_CURL=''
 export BL64_RXTX_CMD_WGET=''

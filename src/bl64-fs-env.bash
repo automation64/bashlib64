@@ -4,7 +4,7 @@
 # Version: 1.9.0
 #######################################
 
-export BL64_FS_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_FS_MODULE="$BL64_VAR_OFF"
 
 export BL64_FS_PATH_TEMPORAL=''
 export BL64_FS_PATH_CACHE=''

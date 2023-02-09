@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with MongoDB
 #
-# Version: 1.1.0
+# Version: 1.1.1
 #######################################
 
 #######################################
@@ -19,9 +19,9 @@
 # shellcheck disable=SC2120
 function bl64_mdb_setup() {
   bl64_dbg_lib_show_function "$@"
-  local mdb_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$mdb_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$mdb_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$mdb_bin" ||
       return $?
   fi
@@ -32,8 +32,9 @@ function bl64_mdb_setup() {
     bl64_check_command "$BL64_MDB_CMD_MONGOEXPORT" &&
     bl64_mdb_set_options &&
     bl64_mdb_set_runtime &&
-    BL64_MDB_MODULE="$BL64_LIB_VAR_ON"
+    BL64_MDB_MODULE="$BL64_VAR_ON"
 
+  bl64_check_alert_module_setup 'mdb'
 }
 
 #######################################
@@ -52,9 +53,9 @@ function bl64_mdb_setup() {
 #######################################
 function bl64_mdb_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local mdb_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$mdb_bin" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$mdb_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/mongosh' ]]; then
       mdb_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/mongosh' ]]; then
@@ -67,10 +68,10 @@ function bl64_mdb_set_command() {
       mdb_bin='/usr/bin'
     fi
   else
-    [[ ! -x "${mdb_bin}/mongosh" ]] && mdb_bin="$BL64_LIB_DEFAULT"
+    [[ ! -x "${mdb_bin}/mongosh" ]] && mdb_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$mdb_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$mdb_bin" != "$BL64_VAR_DEFAULT" ]]; then
     [[ -x "${mdb_bin}/mongosh" ]] && BL64_MDB_CMD_MONGOSH="${mdb_bin}/mongosh"
     [[ -x "${mdb_bin}/mongorestore" ]] && BL64_MDB_CMD_MONGORESTORE="${mdb_bin}/mongorestore"
     [[ -x "${mdb_bin}/mongoexport" ]] && BL64_MDB_CMD_MONGOEXPORT="${mdb_bin}/mongoexport"

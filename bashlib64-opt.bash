@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 8.1.1
+# Version: 9.0.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -28,7 +28,7 @@
 # Version: 1.5.0
 #######################################
 
-export BL64_ARC_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_ARC_MODULE="$BL64_VAR_OFF"
 
 export BL64_ARC_CMD_TAR=''
 export BL64_ARC_CMD_UNZIP=''
@@ -47,15 +47,15 @@ export _BL64_ARC_TXT_OPEN_TAR='open tar archive'
 #######################################
 
 # Optional module. Not enabled by default
-export BL64_ANS_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_ANS_MODULE="$BL64_VAR_OFF"
 
 export BL64_ANS_ENV_IGNORE=''
 
 export BL64_ANS_VERSION_CORE=''
 
-export BL64_ANS_CMD_ANSIBLE="$BL64_LIB_UNAVAILABLE"
-export BL64_ANS_CMD_ANSIBLE_PLAYBOOK="$BL64_LIB_UNAVAILABLE"
-export BL64_ANS_CMD_ANSIBLE_GALAXY="$BL64_LIB_UNAVAILABLE"
+export BL64_ANS_CMD_ANSIBLE="$BL64_VAR_UNAVAILABLE"
+export BL64_ANS_CMD_ANSIBLE_PLAYBOOK="$BL64_VAR_UNAVAILABLE"
+export BL64_ANS_CMD_ANSIBLE_GALAXY="$BL64_VAR_UNAVAILABLE"
 
 export BL64_ANS_PATH_USR_ANSIBLE=''
 export BL64_ANS_PATH_USR_COLLECTIONS=''
@@ -72,9 +72,9 @@ export BL64_ANS_SET_DEBUG=''
 #######################################
 
 # Optional module. Not enabled by default
-export BL64_AWS_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_AWS_MODULE="$BL64_VAR_OFF"
 
-export BL64_AWS_CMD_AWS="$BL64_LIB_UNAVAILABLE"
+export BL64_AWS_CMD_AWS="$BL64_VAR_UNAVAILABLE"
 
 export BL64_AWS_DEF_SUFFIX_TOKEN=''
 export BL64_AWS_DEF_SUFFIX_HOME=''
@@ -106,7 +106,7 @@ export BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token fil
 #######################################
 
 # Optional module. Not enabled by default
-export BL64_CNT_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_CNT_MODULE="$BL64_VAR_OFF"
 
 export BL64_CNT_CMD_PODMAN=''
 export BL64_CNT_CMD_DOCKER=''
@@ -120,12 +120,12 @@ export _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
 #######################################
 
 # Optional module. Not enabled by default
-export BL64_GCP_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_GCP_MODULE="$BL64_VAR_OFF"
 
-export BL64_GCP_CMD_GCLOUD="$BL64_LIB_UNAVAILABLE"
+export BL64_GCP_CMD_GCLOUD="$BL64_VAR_UNAVAILABLE"
 
 export BL64_GCP_CONFIGURATION_NAME='bl64_gcp_configuration_private'
-export BL64_GCP_CONFIGURATION_CREATED="$BL64_LIB_VAR_FALSE"
+export BL64_GCP_CONFIGURATION_CREATED="$BL64_VAR_FALSE"
 
 export BL64_GCP_SET_FORMAT_YAML=''
 export BL64_GCP_SET_FORMAT_TEXT=''
@@ -138,9 +138,9 @@ export BL64_GCP_SET_FORMAT_JSON=''
 #######################################
 
 # Optional module. Not enabled by default
-export BL64_HLM_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_HLM_MODULE="$BL64_VAR_OFF"
 
-export BL64_HLM_CMD_HELM="$BL64_LIB_UNAVAILABLE"
+export BL64_HLM_CMD_HELM="$BL64_VAR_UNAVAILABLE"
 
 export BL64_HLM_SET_DEBUG=''
 export BL64_HLM_SET_OUTPUT_TABLE=''
@@ -155,7 +155,7 @@ export BL64_HLM_RUN_TIMEOUT=''
 # Version: 1.5.0
 #######################################
 
-export BL64_IAM_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_IAM_MODULE="$BL64_VAR_OFF"
 
 export BL64_IAM_CMD_USERADD=''
 export BL64_IAM_CMD_ID=''
@@ -174,23 +174,23 @@ export _BL64_IAM_TXT_ADD_USER='create user account'
 #######################################
 
 # Optional module. Not enabled by default
-export BL64_K8S_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_K8S_MODULE="$BL64_VAR_OFF"
 
-export BL64_K8S_CMD_KUBECTL="$BL64_LIB_UNAVAILABLE"
+export BL64_K8S_CMD_KUBECTL="$BL64_VAR_UNAVAILABLE"
 
 export BL64_K8S_CFG_KUBECTL_OUTPUT=''
 export BL64_K8S_CFG_KUBECTL_OUTPUT_JSON='j'
 export BL64_K8S_CFG_KUBECTL_OUTPUT_YAML='y'
 
-export BL64_K8S_SET_VERBOSE_NONE="$BL64_LIB_UNAVAILABLE"
-export BL64_K8S_SET_VERBOSE_NORMAL="$BL64_LIB_UNAVAILABLE"
-export BL64_K8S_SET_VERBOSE_DEBUG="$BL64_LIB_UNAVAILABLE"
-export BL64_K8S_SET_OUTPUT_JSON="$BL64_LIB_UNAVAILABLE"
-export BL64_K8S_SET_OUTPUT_YAML="$BL64_LIB_UNAVAILABLE"
-export BL64_K8S_SET_OUTPUT_TXT="$BL64_LIB_UNAVAILABLE"
-export BL64_K8S_SET_OUTPUT_NAME="$BL64_LIB_UNAVAILABLE"
-export BL64_K8S_SET_DRY_RUN_SERVER="$BL64_LIB_UNAVAILABLE"
-export BL64_K8S_SET_DRY_RUN_CLIENT="$BL64_LIB_UNAVAILABLE"
+export BL64_K8S_SET_VERBOSE_NONE="$BL64_VAR_UNAVAILABLE"
+export BL64_K8S_SET_VERBOSE_NORMAL="$BL64_VAR_UNAVAILABLE"
+export BL64_K8S_SET_VERBOSE_DEBUG="$BL64_VAR_UNAVAILABLE"
+export BL64_K8S_SET_OUTPUT_JSON="$BL64_VAR_UNAVAILABLE"
+export BL64_K8S_SET_OUTPUT_YAML="$BL64_VAR_UNAVAILABLE"
+export BL64_K8S_SET_OUTPUT_TXT="$BL64_VAR_UNAVAILABLE"
+export BL64_K8S_SET_OUTPUT_NAME="$BL64_VAR_UNAVAILABLE"
+export BL64_K8S_SET_DRY_RUN_SERVER="$BL64_VAR_UNAVAILABLE"
+export BL64_K8S_SET_DRY_RUN_CLIENT="$BL64_VAR_UNAVAILABLE"
 
 export BL64_K8S_VERSION_KUBECTL=''
 
@@ -215,7 +215,7 @@ export _BL64_K8S_TXT_RESOURCE_EXISTING='the resource is already created. No furt
 #######################################
 
 # Optional module. Not enabled by default
-export BL64_LOG_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_LOG_MODULE="$BL64_VAR_OFF"
 
 # Log file types
 export BL64_LOG_FORMAT_CSV='C'
@@ -249,11 +249,11 @@ export _BL64_LOG_TXT_CREATE_REPOSITORY='create log repository'
 #######################################
 
 # Optional module. Not enabled by default
-export BL64_MDB_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_MDB_MODULE="$BL64_VAR_OFF"
 
-export BL64_MDB_CMD_MONGOSH="$BL64_LIB_UNAVAILABLE"
-export BL64_MDB_CMD_MONGORESTORE="$BL64_LIB_UNAVAILABLE"
-export BL64_MDB_CMD_MONGOEXPORT="$BL64_LIB_UNAVAILABLE"
+export BL64_MDB_CMD_MONGOSH="$BL64_VAR_UNAVAILABLE"
+export BL64_MDB_CMD_MONGORESTORE="$BL64_VAR_UNAVAILABLE"
+export BL64_MDB_CMD_MONGOEXPORT="$BL64_VAR_UNAVAILABLE"
 
 export BL64_MDB_SET_VERBOSE=''
 export BL64_MDB_SET_QUIET=''
@@ -268,7 +268,7 @@ export BL64_MDB_REPLICA_TIMEOUT=''
 # Version: 1.10.0
 #######################################
 
-export BL64_PKG_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_PKG_MODULE="$BL64_VAR_OFF"
 
 export BL64_PKG_CMD_APK=''
 export BL64_PKG_CMD_APT=''
@@ -317,16 +317,16 @@ export _BL64_PKG_TXT_REPOSITORY_ADD='add remote package repository'
 #######################################
 
 # Optional module. Not enabled by default
-export BL64_PY_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_PY_MODULE="$BL64_VAR_OFF"
 
 # Define placeholders for optional distro native python versions
-export BL64_PY_CMD_PYTHON3="$BL64_LIB_UNAVAILABLE"
-export BL64_PY_CMD_PYTHON35="$BL64_LIB_UNAVAILABLE"
-export BL64_PY_CMD_PYTHON36="$BL64_LIB_UNAVAILABLE"
-export BL64_PY_CMD_PYTHON37="$BL64_LIB_UNAVAILABLE"
-export BL64_PY_CMD_PYTHON38="$BL64_LIB_UNAVAILABLE"
-export BL64_PY_CMD_PYTHON39="$BL64_LIB_UNAVAILABLE"
-export BL64_PY_CMD_PYTHON310="$BL64_LIB_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON3="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON35="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON36="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON37="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON38="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON39="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON310="$BL64_VAR_UNAVAILABLE"
 
 # Full path to the python venv activated by bl64_py_setup
 export BL64_PY_VENV_PATH=''
@@ -363,12 +363,12 @@ export _BL64_PY_TXT_VENV_CREATE='create python virtual environment'
 #######################################
 
 # Optional module. Not enabled by default
-export BL64_TF_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_TF_MODULE="$BL64_VAR_OFF"
 
 export BL64_TF_LOG_PATH=''
 export BL64_TF_LOG_LEVEL=''
 
-export BL64_TF_CMD_TERRAFORM="$BL64_LIB_UNAVAILABLE"
+export BL64_TF_CMD_TERRAFORM="$BL64_VAR_UNAVAILABLE"
 
 # Output export formats
 export BL64_TF_OUTPUT_RAW='0'
@@ -410,7 +410,7 @@ function bl64_arc_setup() {
 
   bl64_arc_set_command &&
     bl64_arc_set_options &&
-    BL64_ARC_MODULE="$BL64_LIB_VAR_ON"
+    BL64_ARC_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'arc'
 }
@@ -690,7 +690,7 @@ function bl64_arc_open_zip() {
 # Arguments:
 #   $1: (optional) Full path where commands are
 #   $2: (optional) Full path to the ansible configuration file
-#   $3: (optional) Ignore inherited shell environment? Default: BL64_LIB_VAR_ON
+#   $3: (optional) Ignore inherited shell environment? Default: BL64_VAR_ON
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -701,9 +701,9 @@ function bl64_arc_open_zip() {
 # shellcheck disable=SC2120
 function bl64_ans_setup() {
   bl64_dbg_lib_show_function "$@"
-  local ansible_bin="${1:-${BL64_LIB_DEFAULT}}"
-  local ansible_config="${2:-${BL64_LIB_DEFAULT}}"
-  local env_ignore="${3:-${BL64_LIB_VAR_ON}}"
+  local ansible_bin="${1:-${BL64_VAR_DEFAULT}}"
+  local ansible_config="${2:-${BL64_VAR_DEFAULT}}"
+  local env_ignore="${3:-${BL64_VAR_ON}}"
 
   bl64_ans_set_command "$ansible_bin" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE" &&
@@ -712,7 +712,7 @@ function bl64_ans_setup() {
     bl64_ans_set_paths "$ansible_config" &&
     bl64_ans_set_options &&
     bl64_ans_set_version &&
-    BL64_ANS_MODULE="$BL64_LIB_VAR_ON" &&
+    BL64_ANS_MODULE="$BL64_VAR_ON" &&
     BL64_ANS_ENV_IGNORE="$env_ignore" ||
     return $?
 
@@ -737,7 +737,7 @@ function bl64_ans_set_command() {
   bl64_dbg_lib_show_function
   local ansible_bin="$1"
 
-  if [[ "$ansible_bin" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$ansible_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -n "$BL64_PY_VENV_PATH" && -x "${BL64_PY_VENV_PATH}/bin/ansible" ]]; then
       ansible_bin="${BL64_PY_VENV_PATH}/bin"
     elif [[ -n "$HOME" && -x "${HOME}/.local/bin/ansible" ]]; then
@@ -755,7 +755,7 @@ function bl64_ans_set_command() {
     fi
   fi
 
-  if [[ "$ansible_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$ansible_bin" != "$BL64_VAR_DEFAULT" ]]; then
     [[ -x "${ansible_bin}/ansible" ]] && BL64_ANS_CMD_ANSIBLE="${ansible_bin}/ansible"
     [[ -x "${ansible_bin}/ansible-galaxy" ]] && BL64_ANS_CMD_ANSIBLE_GALAXY="${ansible_bin}/ansible-galaxy"
     [[ -x "${ansible_bin}/ansible-playbook" ]] && BL64_ANS_CMD_ANSIBLE_PLAYBOOK="${ansible_bin}/ansible-playbook"
@@ -803,24 +803,24 @@ function bl64_ans_set_options() {
 #######################################
 function bl64_ans_set_paths() {
   bl64_dbg_lib_show_function
-  local config="${1:-${BL64_LIB_DEFAULT}}"
-  local collections="${2:-${BL64_LIB_DEFAULT}}"
-  local ansible="${3:-${BL64_LIB_DEFAULT}}"
+  local config="${1:-${BL64_VAR_DEFAULT}}"
+  local collections="${2:-${BL64_VAR_DEFAULT}}"
+  local ansible="${3:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$config" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$config" == "$BL64_VAR_DEFAULT" ]]; then
     BL64_ANS_PATH_USR_CONFIG=''
   else
     bl64_check_file "$config" || return $?
     BL64_ANS_PATH_USR_CONFIG="$config"
   fi
 
-  if [[ "$ansible" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$ansible" == "$BL64_VAR_DEFAULT" ]]; then
     BL64_ANS_PATH_USR_ANSIBLE="${HOME}/.ansible"
   else
     BL64_ANS_PATH_USR_ANSIBLE="$ansible"
   fi
 
-  if [[ "$collections" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$collections" == "$BL64_VAR_DEFAULT" ]]; then
     BL64_ANS_PATH_USR_COLLECTIONS="${BL64_ANS_PATH_USR_ANSIBLE}/collections/ansible_collections"
   else
     bl64_check_directory "$collections" || return $?
@@ -947,8 +947,8 @@ function bl64_ans_run_ansible() {
 #######################################
 function bl64_ans_run_ansible_galaxy() {
   bl64_dbg_lib_show_function "$@"
-  local command="${1:-${BL64_LIB_VAR_NULL}}"
-  local subcommand="${2:-${BL64_LIB_VAR_NULL}}"
+  local command="${1:-${BL64_VAR_NULL}}"
+  local subcommand="${2:-${BL64_VAR_NULL}}"
   local debug=' '
 
   bl64_check_module 'BL64_ANS_MODULE' &&
@@ -1020,7 +1020,7 @@ function bl64_ans_run_ansible_playbook() {
 function bl64_ans_blank_ansible() {
   bl64_dbg_lib_show_function
 
-  if [[ "$BL64_ANS_ENV_IGNORE" == "$BL64_LIB_VAR_ON" ]]; then
+  if [[ "$BL64_ANS_ENV_IGNORE" == "$BL64_VAR_ON" ]]; then
     bl64_dbg_lib_show_info 'unset inherited ANSIBLE_* shell variables'
     bl64_dbg_lib_trace_start
     unset ANSIBLE_CACHE_PLUGIN_CONNECTION
@@ -1085,14 +1085,14 @@ function bl64_aws_get_cli_credentials() {
 # shellcheck disable=SC2120
 function bl64_aws_setup() {
   bl64_dbg_lib_show_function "$@"
-  local aws_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   bl64_aws_set_command "$aws_bin" &&
     bl64_aws_set_options &&
     bl64_aws_set_definitions &&
     bl64_check_command "$BL64_AWS_CMD_AWS" &&
     bl64_aws_set_paths &&
-    BL64_AWS_MODULE="$BL64_LIB_VAR_ON"
+    BL64_AWS_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'aws'
 }
@@ -1113,14 +1113,14 @@ function bl64_aws_setup() {
 #######################################
 function bl64_aws_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local aws_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$aws_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$aws_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$aws_bin" ||
       return $?
   fi
 
-  if [[ "$aws_bin" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$aws_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/aws' ]]; then
       aws_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/aws' ]]; then
@@ -1133,10 +1133,10 @@ function bl64_aws_set_command() {
       aws_bin='/usr/bin'
     fi
   else
-    [[ ! -x "${aws_bin}/aws" ]] && aws_bin="$BL64_LIB_DEFAULT"
+    [[ ! -x "${aws_bin}/aws" ]] && aws_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$aws_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$aws_bin" != "$BL64_VAR_DEFAULT" ]]; then
     [[ -x "${aws_bin}/aws" ]] && BL64_AWS_CMD_AWS="${aws_bin}/aws"
   fi
 
@@ -1222,7 +1222,7 @@ function bl64_aws_set_paths() {
   bl64_dbg_lib_show_info 'prepare AWS_HOME'
   bl64_check_home || return $?
   aws_home="${HOME}/${BL64_AWS_DEF_SUFFIX_HOME}"
-  bl64_fs_create_dir "$BL64_AWS_CLI_MODE" "$BL64_LIB_DEFAULT" "$BL64_LIB_DEFAULT" "$aws_home" || return $?
+  bl64_fs_create_dir "$BL64_AWS_CLI_MODE" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$aws_home" || return $?
 
   bl64_dbg_lib_show_info 'set configuration paths'
   BL64_AWS_CLI_HOME="$aws_home"
@@ -1286,11 +1286,11 @@ function bl64_aws_set_region() {
 
 function bl64_aws_cli_create_sso() {
   bl64_dbg_lib_show_function "$@"
-  local profile="${1:-${BL64_LIB_DEFAULT}}"
-  local start_url="${2:-${BL64_LIB_DEFAULT}}"
-  local sso_region="${3:-${BL64_LIB_DEFAULT}}"
-  local sso_account_id="${4:-${BL64_LIB_DEFAULT}}"
-  local sso_role_name="${5:-${BL64_LIB_DEFAULT}}"
+  local profile="${1:-${BL64_VAR_DEFAULT}}"
+  local start_url="${2:-${BL64_VAR_DEFAULT}}"
+  local sso_region="${3:-${BL64_VAR_DEFAULT}}"
+  local sso_account_id="${4:-${BL64_VAR_DEFAULT}}"
+  local sso_role_name="${5:-${BL64_VAR_DEFAULT}}"
 
   bl64_check_parameter 'profile' &&
     bl64_check_parameter 'start_url' &&
@@ -1327,7 +1327,7 @@ function bl64_aws_cli_create_sso() {
 #######################################
 function bl64_aws_sso_login() {
   bl64_dbg_lib_show_function "$@"
-  local profile="${1:-${BL64_LIB_DEFAULT}}"
+  local profile="${1:-${BL64_VAR_DEFAULT}}"
 
   bl64_aws_run_aws_profile \
     "$profile" \
@@ -1351,7 +1351,7 @@ function bl64_aws_sso_login() {
 #######################################
 function bl64_aws_sts_get_caller_arn() {
   bl64_dbg_lib_show_function "$@"
-  local profile="${1:-${BL64_LIB_DEFAULT}}"
+  local profile="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2086
   bl64_aws_run_aws_profile \
@@ -1552,7 +1552,7 @@ function bl64_cnt_setup() {
 
   bl64_cnt_set_command &&
     [[ -x "$BL64_CNT_CMD_DOCKER" || -x "$BL64_CNT_CMD_PODMAN" ]] &&
-    BL64_CNT_MODULE="$BL64_LIB_VAR_ON"
+    BL64_CNT_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'cnt'
 }
@@ -1581,7 +1581,7 @@ function bl64_cnt_set_command() {
     ;;
   ${BL64_OS_MCOS}-*)
     # Podman is not available for MacOS
-    BL64_CNT_CMD_PODMAN="$BL64_LIB_INCOMPATIBLE"
+    BL64_CNT_CMD_PODMAN="$BL64_VAR_INCOMPATIBLE"
     # Docker is available using docker-desktop
     BL64_CNT_CMD_DOCKER='/usr/local/bin/docker'
     ;;
@@ -1592,7 +1592,7 @@ function bl64_cnt_set_command() {
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -1621,9 +1621,9 @@ function bl64_cnt_login_file() {
     return $?
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_login "$user" "$BL64_LIB_DEFAULT" "$file" "$registry"
+    bl64_cnt_docker_login "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_login "$user" "$BL64_LIB_DEFAULT" "$file" "$registry"
+    bl64_cnt_podman_login "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
   fi
 }
 
@@ -1652,9 +1652,9 @@ function bl64_cnt_login() {
     return $?
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_login "$user" "$password" "$BL64_LIB_DEFAULT" "$registry"
+    bl64_cnt_docker_login "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_login "$user" "$password" "$BL64_LIB_DEFAULT" "$registry"
+    bl64_cnt_podman_login "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
   fi
 }
 
@@ -1747,7 +1747,7 @@ function bl64_cnt_run_sh() {
 # * Attaches tty
 #
 # Arguments:
-#   $@: arguments are passes as-is
+#   $@: arguments are passed as-is
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -1890,9 +1890,10 @@ function bl64_cnt_run_docker() {
 # Builds a container source
 #
 # Arguments:
-#   $1: build context. Format: full path
+#   $1: ui context. Format: full path
 #   $2: dockerfile path. Format: relative to the build context
 #   $3: tag to be applied to the resulting source. Format: docker tag
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -1910,13 +1911,18 @@ function bl64_cnt_build() {
     bl64_check_file "${context}/${file}" ||
     return $?
 
+  # Remove used parameters
+  shift
+  shift
+  shift
+
   # shellcheck disable=SC2164
   cd "${context}"
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_build "$file" "$tag"
+    bl64_cnt_docker_build "$file" "$tag" "$@"
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_build "$file" "$tag"
+    bl64_cnt_podman_build "$file" "$tag" "$@"
   fi
 }
 
@@ -1924,9 +1930,9 @@ function bl64_cnt_build() {
 # Command wrapper: docker build
 #
 # Arguments:
-#   $1: context
-#   $2: file
-#   $3: tag
+#   $1: file
+#   $2: tag
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -1939,22 +1945,26 @@ function bl64_cnt_docker_build() {
   local file="$1"
   local tag="$2"
 
+  # Remove used parameters
+  shift
+  shift
+
   bl64_cnt_run_docker \
     build \
     --no-cache \
     --rm \
     --tag "$tag" \
     --file "$file" \
-    .
+    "$@" .
 }
 
 #######################################
 # Command wrapper: podman build
 #
 # Arguments:
-#   $1: context
-#   $2: file
-#   $3: tag
+#   $1: file
+#   $2: tag
+#   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -1967,13 +1977,17 @@ function bl64_cnt_podman_build() {
   local file="$1"
   local tag="$2"
 
+  # Remove used parameters
+  shift
+  shift
+
   bl64_cnt_run_podman \
     build \
     --no-cache \
     --rm \
     --tag "$tag" \
     --file "$file" \
-    .
+    "$@" .
 }
 
 #######################################
@@ -2129,9 +2143,9 @@ function _bl64_cnt_login_put_password() {
   local password="$1"
   local file="$2"
 
-  if [[ "$password" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$password" != "$BL64_VAR_DEFAULT" ]]; then
     printf '%s\n' "$password"
-  elif [[ "$file" != "$BL64_LIB_DEFAULT" ]]; then
+  elif [[ "$file" != "$BL64_VAR_DEFAULT" ]]; then
     "$BL64_OS_CMD_CAT" "$file"
   fi
 
@@ -2217,7 +2231,7 @@ function bl64_cnt_podman_tag() {
 # Runs a container image
 #
 # Arguments:
-#   $@: arguments are passes as-is
+#   $@: arguments are passed as-is
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -2302,9 +2316,9 @@ function bl64_cnt_docker_run() {
 # shellcheck disable=SC2120
 function bl64_gcp_setup() {
   bl64_dbg_lib_show_function "$@"
-  local gcloud_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$gcloud_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$gcloud_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$gcloud_bin" ||
       return $?
   fi
@@ -2312,7 +2326,7 @@ function bl64_gcp_setup() {
   bl64_gcp_set_command "$gcloud_bin" &&
     bl64_gcp_set_options &&
     bl64_check_command "$BL64_GCP_CMD_GCLOUD" &&
-    BL64_GCP_MODULE="$BL64_LIB_VAR_ON"
+    BL64_GCP_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'gcp'
 }
@@ -2333,9 +2347,9 @@ function bl64_gcp_setup() {
 #######################################
 function bl64_gcp_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local gcloud_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$gcloud_bin" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$gcloud_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/gcloud' ]]; then
       gcloud_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/gcloud' ]]; then
@@ -2346,10 +2360,10 @@ function bl64_gcp_set_command() {
       gcloud_bin='/usr/bin'
     fi
   else
-    [[ ! -x "${gcloud_bin}/gcloud" ]] && gcloud_bin="$BL64_LIB_DEFAULT"
+    [[ ! -x "${gcloud_bin}/gcloud" ]] && gcloud_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$gcloud_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$gcloud_bin" != "$BL64_VAR_DEFAULT" ]]; then
     [[ -x "${gcloud_bin}/gcloud" ]] && BL64_GCP_CMD_GCLOUD="${gcloud_bin}/gcloud"
   fi
 
@@ -2409,7 +2423,7 @@ function bl64_gcp_run_gcloud() {
 
   bl64_gcp_blank_gcloud
 
-  [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_LIB_VAR_TRUE" ]] && config="--configuration $BL64_GCP_CONFIGURATION_NAME"
+  [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_VAR_TRUE" ]] && config="--configuration $BL64_GCP_CONFIGURATION_NAME"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -2463,14 +2477,14 @@ function bl64_gcp_login_sa() {
 function _bl64_gcp_configure() {
   bl64_dbg_lib_show_function
 
-  if [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_LIB_VAR_FALSE" ]]; then
+  if [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_VAR_FALSE" ]]; then
 
     bl64_dbg_lib_show_info 'create BL64_GCP_CONFIGURATION'
     bl64_gcp_run_gcloud \
       config \
       configurations \
       create "$BL64_GCP_CONFIGURATION_NAME" &&
-      BL64_GCP_CONFIGURATION_CREATED="$BL64_LIB_VAR_TRUE"
+      BL64_GCP_CONFIGURATION_CREATED="$BL64_VAR_TRUE"
 
   else
     :
@@ -2544,9 +2558,9 @@ function bl64_gcp_blank_gcloud() {
 # shellcheck disable=SC2120
 function bl64_hlm_setup() {
   bl64_dbg_lib_show_function "$@"
-  local helm_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$helm_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$helm_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$helm_bin" ||
       return $?
   fi
@@ -2555,7 +2569,7 @@ function bl64_hlm_setup() {
     bl64_check_command "$BL64_HLM_CMD_HELM" &&
     bl64_hlm_set_options &&
     bl64_hlm_set_runtime &&
-    BL64_HLM_MODULE="$BL64_LIB_VAR_ON"
+    BL64_HLM_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'hlm'
 }
@@ -2576,9 +2590,9 @@ function bl64_hlm_setup() {
 #######################################
 function bl64_hlm_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local helm_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$helm_bin" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$helm_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/helm' ]]; then
       helm_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/helm' ]]; then
@@ -2591,10 +2605,10 @@ function bl64_hlm_set_command() {
       helm_bin='/usr/bin'
     fi
   else
-    [[ ! -x "${helm_bin}/helm" ]] && helm_bin="$BL64_LIB_DEFAULT"
+    [[ ! -x "${helm_bin}/helm" ]] && helm_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$helm_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$helm_bin" != "$BL64_VAR_DEFAULT" ]]; then
     [[ -x "${helm_bin}/helm" ]] && BL64_HLM_CMD_HELM="${helm_bin}/helm"
   fi
 
@@ -2659,8 +2673,8 @@ function bl64_hlm_set_runtime() {
 #######################################
 function bl64_hlm_repo_add() {
   bl64_dbg_lib_show_function "$@"
-  local repository="${1:-${BL64_LIB_DEFAULT}}"
-  local source="${2:-${BL64_LIB_DEFAULT}}"
+  local repository="${1:-${BL64_VAR_DEFAULT}}"
+  local source="${2:-${BL64_VAR_DEFAULT}}"
 
   bl64_check_parameter 'repository' &&
     bl64_check_parameter 'source' ||
@@ -2696,10 +2710,10 @@ function bl64_hlm_repo_add() {
 #######################################
 function bl64_hlm_chart_upgrade() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_DEFAULT}}"
-  local namespace="${2:-${BL64_LIB_DEFAULT}}"
-  local chart="${3:-${BL64_LIB_DEFAULT}}"
-  local source="${4:-${BL64_LIB_DEFAULT}}"
+  local kubeconfig="${1:-${BL64_VAR_DEFAULT}}"
+  local namespace="${2:-${BL64_VAR_DEFAULT}}"
+  local chart="${3:-${BL64_VAR_DEFAULT}}"
+  local source="${4:-${BL64_VAR_DEFAULT}}"
 
   bl64_check_parameter 'kubeconfig' &&
     bl64_check_parameter 'namespace' &&
@@ -2825,7 +2839,7 @@ function bl64_iam_setup() {
   bl64_iam_set_command &&
     bl64_iam_set_alias &&
     bl64_iam_set_options &&
-    BL64_IAM_MODULE="$BL64_LIB_VAR_ON"
+    BL64_IAM_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'iam'
 }
@@ -3083,9 +3097,9 @@ function bl64_iam_user_get_current() {
 # shellcheck disable=SC2120
 function bl64_k8s_setup() {
   bl64_dbg_lib_show_function "$@"
-  local kubectl_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$kubectl_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$kubectl_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$kubectl_bin" ||
       return $?
   fi
@@ -3095,7 +3109,7 @@ function bl64_k8s_setup() {
     bl64_k8s_set_version &&
     bl64_k8s_set_options &&
     bl64_k8s_set_kubectl_output &&
-    BL64_K8S_MODULE="$BL64_LIB_VAR_ON"
+    BL64_K8S_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'k8s'
 }
@@ -3116,9 +3130,9 @@ function bl64_k8s_setup() {
 #######################################
 function bl64_k8s_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local kubectl_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$kubectl_bin" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$kubectl_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/kubectl' ]]; then
       kubectl_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/kubectl' ]]; then
@@ -3129,10 +3143,10 @@ function bl64_k8s_set_command() {
       kubectl_bin='/usr/bin'
     fi
   else
-    [[ ! -x "${kubectl_bin}/kubectl" ]] && kubectl_bin="$BL64_LIB_DEFAULT"
+    [[ ! -x "${kubectl_bin}/kubectl" ]] && kubectl_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$kubectl_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$kubectl_bin" != "$BL64_VAR_DEFAULT" ]]; then
     [[ -x "${kubectl_bin}/kubectl" ]] && BL64_K8S_CMD_KUBECTL="${kubectl_bin}/kubectl"
   fi
 
@@ -3262,11 +3276,11 @@ function bl64_k8s_set_kubectl_output() {
 #######################################
 function bl64_k8s_label_set() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local resource="${2:-${BL64_LIB_VAR_NULL}}"
-  local name="${3:-${BL64_LIB_VAR_NULL}}"
-  local key="${4:-${BL64_LIB_VAR_NULL}}"
-  local value="${5:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local resource="${2:-${BL64_VAR_NULL}}"
+  local name="${3:-${BL64_VAR_NULL}}"
+  local key="${4:-${BL64_VAR_NULL}}"
+  local value="${5:-${BL64_VAR_NULL}}"
   local verbosity=''
 
   bl64_check_parameter 'resource' &&
@@ -3295,7 +3309,7 @@ function bl64_k8s_label_set() {
 #
 # Arguments:
 #   $1: full path to the kube/config file for the target cluster
-#   $2: namespace. If not required assign $BL64_LIB_VAR_NONE
+#   $2: namespace. If not required assign $BL64_VAR_NONE
 #   $2: resource type
 #   $3: resource name
 #   $@: remaining args are passed as is. Use the syntax: key=value
@@ -3307,10 +3321,10 @@ function bl64_k8s_label_set() {
 #######################################
 function bl64_k8s_annotation_set() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local namespace="${2:-${BL64_LIB_VAR_NONE}}"
-  local resource="${3:-${BL64_LIB_VAR_NULL}}"
-  local name="${4:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local namespace="${2:-${BL64_VAR_NONE}}"
+  local resource="${3:-${BL64_VAR_NULL}}"
+  local name="${4:-${BL64_VAR_NULL}}"
   local verbosity=''
 
   bl64_check_parameter 'resource' &&
@@ -3323,7 +3337,7 @@ function bl64_k8s_annotation_set() {
   shift
 
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
-  [[ "$namespace" == "$BL64_LIB_DEFAULT" ]] && namespace='' || namespace="--namespace ${namespace}"
+  [[ "$namespace" == "$BL64_VAR_DEFAULT" ]] && namespace='' || namespace="--namespace ${namespace}"
 
   bl64_msg_show_lib_task "${_BL64_K8S_TXT_SET_ANNOTATION} (${resource}/${name})"
   # shellcheck disable=SC2086
@@ -3352,8 +3366,8 @@ function bl64_k8s_annotation_set() {
 #######################################
 function bl64_k8s_namespace_create() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local namespace="${2:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local namespace="${2:-${BL64_VAR_NULL}}"
   local verbosity=''
 
   bl64_check_parameter 'namespace' ||
@@ -3389,9 +3403,9 @@ function bl64_k8s_namespace_create() {
 #######################################
 function bl64_k8s_sa_create() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local namespace="${2:-${BL64_LIB_VAR_NULL}}"
-  local sa="${3:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local namespace="${2:-${BL64_VAR_NULL}}"
+  local sa="${3:-${BL64_VAR_NULL}}"
   local verbosity=''
 
   bl64_check_parameter 'namespace' &&
@@ -3431,11 +3445,11 @@ function bl64_k8s_sa_create() {
 #######################################
 function bl64_k8s_secret_create() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local namespace="${2:-${BL64_LIB_VAR_NULL}}"
-  local secret="${3:-${BL64_LIB_VAR_NULL}}"
-  local key="${4:-${BL64_LIB_VAR_NULL}}"
-  local file="${5:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local namespace="${2:-${BL64_VAR_NULL}}"
+  local secret="${3:-${BL64_VAR_NULL}}"
+  local key="${4:-${BL64_VAR_NULL}}"
+  local file="${5:-${BL64_VAR_NULL}}"
   local verbosity=''
 
   bl64_check_parameter 'namespace' &&
@@ -3478,10 +3492,10 @@ function bl64_k8s_secret_create() {
 #######################################
 function bl64_k8s_secret_copy() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local namespace_src="${2:-${BL64_LIB_VAR_NULL}}"
-  local namespace_dst="${3:-${BL64_LIB_VAR_NULL}}"
-  local secret="${4:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local namespace_src="${2:-${BL64_VAR_NULL}}"
+  local namespace_dst="${3:-${BL64_VAR_NULL}}"
+  local secret="${4:-${BL64_VAR_NULL}}"
   local resource=''
   local -i status=0
 
@@ -3534,9 +3548,9 @@ function bl64_k8s_secret_copy() {
 #######################################
 function bl64_k8s_resource_update() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local namespace="${2:-${BL64_LIB_VAR_NULL}}"
-  local definition="${3:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local namespace="${2:-${BL64_VAR_NULL}}"
+  local definition="${3:-${BL64_VAR_NULL}}"
   local verbosity=''
 
   bl64_check_parameter 'namespace' &&
@@ -3579,9 +3593,9 @@ function bl64_k8s_resource_update() {
 #######################################
 function bl64_k8s_resource_get() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local resource="${2:-${BL64_LIB_VAR_NULL}}"
-  local name="${3:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local resource="${2:-${BL64_VAR_NULL}}"
+  local name="${3:-${BL64_VAR_NULL}}"
   local namespace="${4:-}"
 
   bl64_check_parameter 'resource' &&
@@ -3676,9 +3690,9 @@ function bl64_k8s_blank_kubectl() {
 #######################################
 function bl64_k8s_resource_is_created() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local type="${2:-${BL64_LIB_VAR_NULL}}"
-  local name="${3:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local type="${2:-${BL64_VAR_NULL}}"
+  local name="${3:-${BL64_VAR_NULL}}"
   local namespace="${4:-}"
 
   bl64_check_parameter 'type' &&
@@ -3734,7 +3748,7 @@ function bl64_log_setup() {
     bl64_log_set_target "$target" &&
     bl64_log_set_level "$level" &&
     bl64_log_set_format "$format" &&
-    BL64_LOG_MODULE="$BL64_LIB_VAR_ON"
+    BL64_LOG_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'log'
 }
@@ -3922,7 +3936,7 @@ function _bl64_log_register() {
   local category="$2"
   local payload="$3"
 
-  [[ "$BL64_LOG_MODULE" == "$BL64_LIB_VAR_OFF" ]] && return 0
+  [[ "$BL64_LOG_MODULE" == "$BL64_VAR_OFF" ]] && return 0
   [[ -z "$source" || -z "$category" || -z "$payload" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
 
   case "$BL64_LOG_FORMAT" in
@@ -4032,7 +4046,7 @@ function bl64_log_warning() {
 #######################################
 # BashLib64 / Module / Setup / Interact with MongoDB
 #
-# Version: 1.1.0
+# Version: 1.1.1
 #######################################
 
 #######################################
@@ -4050,9 +4064,9 @@ function bl64_log_warning() {
 # shellcheck disable=SC2120
 function bl64_mdb_setup() {
   bl64_dbg_lib_show_function "$@"
-  local mdb_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$mdb_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$mdb_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$mdb_bin" ||
       return $?
   fi
@@ -4063,8 +4077,9 @@ function bl64_mdb_setup() {
     bl64_check_command "$BL64_MDB_CMD_MONGOEXPORT" &&
     bl64_mdb_set_options &&
     bl64_mdb_set_runtime &&
-    BL64_MDB_MODULE="$BL64_LIB_VAR_ON"
+    BL64_MDB_MODULE="$BL64_VAR_ON"
 
+  bl64_check_alert_module_setup 'mdb'
 }
 
 #######################################
@@ -4083,9 +4098,9 @@ function bl64_mdb_setup() {
 #######################################
 function bl64_mdb_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local mdb_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$mdb_bin" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$mdb_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/mongosh' ]]; then
       mdb_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/mongosh' ]]; then
@@ -4098,10 +4113,10 @@ function bl64_mdb_set_command() {
       mdb_bin='/usr/bin'
     fi
   else
-    [[ ! -x "${mdb_bin}/mongosh" ]] && mdb_bin="$BL64_LIB_DEFAULT"
+    [[ ! -x "${mdb_bin}/mongosh" ]] && mdb_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$mdb_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$mdb_bin" != "$BL64_VAR_DEFAULT" ]]; then
     [[ -x "${mdb_bin}/mongosh" ]] && BL64_MDB_CMD_MONGOSH="${mdb_bin}/mongosh"
     [[ -x "${mdb_bin}/mongorestore" ]] && BL64_MDB_CMD_MONGORESTORE="${mdb_bin}/mongorestore"
     [[ -x "${mdb_bin}/mongoexport" ]] && BL64_MDB_CMD_MONGOEXPORT="${mdb_bin}/mongoexport"
@@ -4175,25 +4190,25 @@ function bl64_mdb_set_runtime() {
 #######################################
 function bl64_mdb_dump_restore() {
   bl64_dbg_lib_show_function "$@"
-  local dump="${1:-${BL64_LIB_DEFAULT}}"
-  local db="${2:-${BL64_LIB_DEFAULT}}"
-  local authdb="${3:-${BL64_LIB_DEFAULT}}"
-  local user="${4:-${BL64_LIB_DEFAULT}}"
-  local password="${5:-${BL64_LIB_DEFAULT}}"
-  local host="${6:-${BL64_LIB_DEFAULT}}"
-  local port="${7:-${BL64_LIB_DEFAULT}}"
+  local dump="${1:-${BL64_VAR_DEFAULT}}"
+  local db="${2:-${BL64_VAR_DEFAULT}}"
+  local authdb="${3:-${BL64_VAR_DEFAULT}}"
+  local user="${4:-${BL64_VAR_DEFAULT}}"
+  local password="${5:-${BL64_VAR_DEFAULT}}"
+  local host="${6:-${BL64_VAR_DEFAULT}}"
+  local port="${7:-${BL64_VAR_DEFAULT}}"
   local include=' '
 
   bl64_check_parameter 'dump' &&
     bl64_check_directory "$dump" ||
     return $?
 
-  [[ "$db" != "$BL64_LIB_DEFAULT" ]] && include="--nsInclude=${db}.*" && db="--db=${db}" || db=' '
-  [[ "$user" != "$BL64_LIB_DEFAULT" ]] && user="--username=${user}" || user=' '
-  [[ "$password" != "$BL64_LIB_DEFAULT" ]] && password="--password=${password}" || password=' '
-  [[ "$host" != "$BL64_LIB_DEFAULT" ]] && host="--host=${host}" || host=' '
-  [[ "$port" != "$BL64_LIB_DEFAULT" ]] && port="--port=${port}" || port=' '
-  [[ "$authdb" != "$BL64_LIB_DEFAULT" ]] && authdb="--authenticationDatabase=${authdb}" || authdb=' '
+  [[ "$db" != "$BL64_VAR_DEFAULT" ]] && include="--nsInclude=${db}.*" && db="--db=${db}" || db=' '
+  [[ "$user" != "$BL64_VAR_DEFAULT" ]] && user="--username=${user}" || user=' '
+  [[ "$password" != "$BL64_VAR_DEFAULT" ]] && password="--password=${password}" || password=' '
+  [[ "$host" != "$BL64_VAR_DEFAULT" ]] && host="--host=${host}" || host=' '
+  [[ "$port" != "$BL64_VAR_DEFAULT" ]] && port="--port=${port}" || port=' '
+  [[ "$authdb" != "$BL64_VAR_DEFAULT" ]] && authdb="--authenticationDatabase=${authdb}" || authdb=' '
 
   # shellcheck disable=SC2086
   bl64_mdb_run_mongorestore \
@@ -4228,9 +4243,9 @@ function bl64_mdb_dump_restore() {
 #######################################
 function bl64_mdb_role_grant() {
   bl64_dbg_lib_show_function "$@"
-  local uri="${1:-${BL64_LIB_DEFAULT}}"
-  local role="${2:-${BL64_LIB_DEFAULT}}"
-  local user="${3:-${BL64_LIB_DEFAULT}}"
+  local uri="${1:-${BL64_VAR_DEFAULT}}"
+  local role="${2:-${BL64_VAR_DEFAULT}}"
+  local user="${3:-${BL64_VAR_DEFAULT}}"
   local db="${4:-admin}"
 
   bl64_check_parameter 'uri' &&
@@ -4301,7 +4316,7 @@ function bl64_mdb_run_mongosh_eval() {
 #######################################
 function bl64_mdb_run_mongosh() {
   bl64_dbg_lib_show_function "$@"
-  local uri="${1:-${BL64_LIB_DEFAULT}}"
+  local uri="${1:-${BL64_VAR_DEFAULT}}"
   local verbosity="$BL64_MDB_SET_QUIET"
 
   shift
@@ -4386,13 +4401,11 @@ function bl64_mdb_run_mongoexport() {
 #######################################
 # BashLib64 / Module / Setup / Manage native OS packages
 #
-# Version: 1.5.0
+# Version: 1.5.1
 #######################################
 
 #######################################
 # Setup the bashlib64 module
-#
-# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -4406,11 +4419,21 @@ function bl64_mdb_run_mongoexport() {
 function bl64_pkg_setup() {
   bl64_dbg_lib_show_function
 
+  # shellcheck disable=SC2249
   bl64_pkg_set_command &&
     bl64_pkg_set_paths &&
     bl64_pkg_set_alias &&
     bl64_pkg_set_options &&
-    BL64_PKG_MODULE="$BL64_LIB_VAR_ON"
+    case "$BL64_OS_DISTRO" in
+    ${BL64_OS_FD}-*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
+    ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
+    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
+    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*) bl64_check_command "$BL64_PKG_CMD_YUM" ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*) bl64_check_command "$BL64_PKG_CMD_APT" ;;
+    ${BL64_OS_ALP}-*) bl64_check_command "$BL64_PKG_CMD_APK" ;;
+    ${BL64_OS_MCOS}-*) bl64_check_command "$BL64_PKG_CMD_BRW" ;;
+    esac &&
+    BL64_PKG_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'pkg'
 }
@@ -4629,7 +4652,7 @@ function bl64_pkg_set_paths() {
 #######################################
 # BashLib64 / Module / Functions / Manage native OS packages
 #
-# Version: 2.2.1
+# Version: 2.2.2
 #######################################
 
 #######################################
@@ -4654,7 +4677,7 @@ function bl64_pkg_repository_add() {
   bl64_dbg_lib_show_function "$@"
   local repository="$1"
   local source="$2"
-  local gpgkey="${3:-${BL64_LIB_VAR_NULL}}"
+  local gpgkey="${3:-${BL64_VAR_NULL}}"
   local definition=''
 
   bl64_check_privilege_root &&
@@ -4959,7 +4982,8 @@ function bl64_pkg_run_dnf() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
   if bl64_dbg_lib_command_enabled; then
@@ -4992,7 +5016,8 @@ function bl64_pkg_run_yum() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
   if bl64_dbg_lib_command_enabled; then
@@ -5025,7 +5050,8 @@ function bl64_pkg_run_apt() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
   bl64_pkg_blank_apt
@@ -5089,7 +5115,8 @@ function bl64_pkg_run_apk() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
   if bl64_dbg_lib_command_enabled; then
@@ -5122,7 +5149,8 @@ function bl64_pkg_run_brew() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
   if bl64_dbg_lib_command_enabled; then
@@ -5160,22 +5188,22 @@ function bl64_pkg_run_brew() {
 # shellcheck disable=SC2120
 function bl64_py_setup() {
   bl64_dbg_lib_show_function "$@"
-  local venv_path="${1:-${BL64_LIB_DEFAULT}}"
+  local venv_path="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$venv_path" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$venv_path" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_dbg_lib_show_info "venv requested (${venv_path})"
     if [[ -d "$venv_path" ]]; then
       bl64_dbg_lib_show_info 'use already existing venv'
       _bl64_py_setup "$venv_path"
     else
       bl64_dbg_lib_show_info 'no previous venv, create one'
-      _bl64_py_setup "$BL64_LIB_DEFAULT" &&
+      _bl64_py_setup "$BL64_VAR_DEFAULT" &&
         bl64_py_venv_create "$venv_path" &&
         _bl64_py_setup "$venv_path"
     fi
   else
     bl64_dbg_lib_show_info "no venv requested"
-    _bl64_py_setup "$BL64_LIB_DEFAULT"
+    _bl64_py_setup "$BL64_VAR_DEFAULT"
   fi
 
   bl64_check_alert_module_setup 'py'
@@ -5185,7 +5213,7 @@ function _bl64_py_setup() {
   bl64_dbg_lib_show_function "$@"
   local venv_path="$1"
 
-  if [[ "$venv_path" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$venv_path" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_py_venv_check "$venv_path" ||
       return $?
   fi
@@ -5194,7 +5222,7 @@ function _bl64_py_setup() {
     bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
     bl64_py_set_options &&
     bl64_py_set_definitions &&
-    BL64_PY_MODULE="$BL64_LIB_VAR_ON"
+    BL64_PY_MODULE="$BL64_VAR_ON"
 }
 
 #######################################
@@ -5217,7 +5245,7 @@ function bl64_py_set_command() {
   bl64_dbg_lib_show_function "$@"
   local venv_path="$1"
 
-  if [[ "$venv_path" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$venv_path" == "$BL64_VAR_DEFAULT" ]]; then
     bl64_dbg_lib_show_info 'identify OS native python3 path'
     # Define distro native Python versions
     # shellcheck disable=SC2034
@@ -5659,13 +5687,13 @@ function bl64_py_run_pip() {
 # shellcheck disable=SC2120
 function bl64_tf_setup() {
   bl64_dbg_lib_show_function "$@"
-  local terraform_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   bl64_tf_set_command "$terraform_bin" &&
     bl64_check_command "$BL64_TF_CMD_TERRAFORM" &&
     bl64_tf_set_options &&
     bl64_tf_set_definitions &&
-    BL64_TF_MODULE="$BL64_LIB_VAR_ON"
+    BL64_TF_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'tf'
 }
@@ -5688,12 +5716,12 @@ function bl64_tf_set_command() {
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="${1:-}"
 
-  if [[ "$terraform_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$terraform_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$terraform_bin" ||
       return $?
   fi
 
-  if [[ "$terraform_bin" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$terraform_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/terraform' ]]; then
       terraform_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/terraform' ]]; then
@@ -5704,10 +5732,10 @@ function bl64_tf_set_command() {
       terraform_bin='/usr/bin'
     fi
   else
-    [[ ! -x "${terraform_bin}/terraform" ]] && terraform_bin="$BL64_LIB_DEFAULT"
+    [[ ! -x "${terraform_bin}/terraform" ]] && terraform_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$terraform_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$terraform_bin" != "$BL64_VAR_DEFAULT" ]]; then
     [[ -x "${terraform_bin}/terraform" ]] && BL64_TF_CMD_TERRAFORM="${terraform_bin}/terraform"
   fi
 
@@ -5751,7 +5779,7 @@ function bl64_tf_set_options() {
 #######################################
 function bl64_tf_log_set() {
   bl64_dbg_lib_show_function "$@"
-  local path="${1:-$BL64_LIB_VAR_NULL}"
+  local path="${1:-$BL64_VAR_NULL}"
   local level="${2:-$BL64_TF_SET_LOG_INFO}"
 
   bl64_check_parameter 'path' &&
