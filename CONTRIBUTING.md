@@ -4,28 +4,33 @@
 
 - Prepare dev tools
   - Install GIT
-  - Install [TestManSH](https://github.com/serdigital64/testmansh): for testing and linting
+  - Install Git-Flow
 - Clone GIT repository
 
   ```shell
   git clone https://github.com/serdigital64/bashlib64.git
-  # Init git flow
-  git flow init
   ```
 
-- Adjust environment variables to reflect your configuration:
+- Adjust environment variables to reflect your configuration
+  - Copy environment definition files from templates:
 
   ```shell
-  # Copy environment definition files from templates:
   cp dot.local .local
   cp dot.secrets .secrets
-  # Review and update content for both files
   ```
+
+  - Review and update content for both files
 
 - Initialize dev environment
 
   ```shell
   ./bin/devbl-lib
+  ```
+
+- Initialize git-flow. Leave defaults options
+
+  ```shell
+  git flow init
   ```
 
 ## Update source code
@@ -50,7 +55,7 @@
 - Run test-cases using container images bundled with the `testmansh` tool
 
 ```shell
-testmansh -b -o
+./lib/testmansh -b -o
 ```
 
 ## Repositories
