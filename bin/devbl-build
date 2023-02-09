@@ -85,11 +85,11 @@ function devbl_build_docs() {
 
   for file in lib $DEVBL_MODULES_CORE; do
     module_env="bl64-${file}-env.bash"
-    [[ ! -f "$module_env" ]] && module_env="$BL64_LIB_VAR_NULL"
+    [[ ! -f "$module_env" ]] && module_env="$BL64_VAR_NULL"
     module_code="bl64-${file}.bash"
-    [[ ! -f "$module_code" ]] && module_code="$BL64_LIB_VAR_NULL"
+    [[ ! -f "$module_code" ]] && module_code="$BL64_VAR_NULL"
     module_init="bl64-${file}.init"
-    [[ ! -f "$module_init" ]] && module_init="$BL64_LIB_VAR_NULL"
+    [[ ! -f "$module_init" ]] && module_init="$BL64_VAR_NULL"
 
     bl64_msg_show_task "creating document for: ${file}"
     devbl_build_md "$file" "$module_env" "$module_code" "$module_init" >"${DEVBL_DOCS}/bl64-${file}.md"
@@ -104,14 +104,14 @@ function devbl_build_md() {
 
   printf '# Module: %s\n\n' "${module}"
 
-  if [[ "$module_env" != "$BL64_LIB_VAR_NULL" ]]; then
+  if [[ "$module_env" != "$BL64_VAR_NULL" ]]; then
     printf '## Header\n\n'
     printf '```shell\n'
     [[ "$module" == 'lib' ]] && printf '{%% include "../src/bl64-%s.header" %%}\n' "$module"
     printf '{%% include "../src/bl64-%s-env.bash" %%}\n' "$module"
     printf '```\n\n'
   fi
-  if [[ "$module_init" != "$BL64_LIB_VAR_NULL" ]]; then
+  if [[ "$module_init" != "$BL64_VAR_NULL" ]]; then
     printf '## Setup\n\n'
     printf '```shell\n'
     printf '{%% include "../src/bl64-%s.init" %%}\n' "$module"

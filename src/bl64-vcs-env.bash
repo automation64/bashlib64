@@ -4,7 +4,7 @@
 # Version: 2.0.0
 #######################################
 
-export BL64_VCS_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_VCS_MODULE="$BL64_VAR_OFF"
 
 export BL64_VCS_CMD_GIT=''
 

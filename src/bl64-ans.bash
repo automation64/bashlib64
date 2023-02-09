@@ -82,8 +82,8 @@ function bl64_ans_run_ansible() {
 #######################################
 function bl64_ans_run_ansible_galaxy() {
   bl64_dbg_lib_show_function "$@"
-  local command="${1:-${BL64_LIB_VAR_NULL}}"
-  local subcommand="${2:-${BL64_LIB_VAR_NULL}}"
+  local command="${1:-${BL64_VAR_NULL}}"
+  local subcommand="${2:-${BL64_VAR_NULL}}"
   local debug=' '
 
   bl64_check_module 'BL64_ANS_MODULE' &&
@@ -155,7 +155,7 @@ function bl64_ans_run_ansible_playbook() {
 function bl64_ans_blank_ansible() {
   bl64_dbg_lib_show_function
 
-  if [[ "$BL64_ANS_ENV_IGNORE" == "$BL64_LIB_VAR_ON" ]]; then
+  if [[ "$BL64_ANS_ENV_IGNORE" == "$BL64_VAR_ON" ]]; then
     bl64_dbg_lib_show_info 'unset inherited ANSIBLE_* shell variables'
     bl64_dbg_lib_trace_start
     unset ANSIBLE_CACHE_PLUGIN_CONNECTION

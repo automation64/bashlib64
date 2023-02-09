@@ -38,7 +38,7 @@ function bl64_msg_setup() {
 
   bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI"
 
-  BL64_MSG_MODULE="$BL64_LIB_VAR_ON"
+  BL64_MSG_MODULE="$BL64_VAR_ON"
 }
 
 #######################################

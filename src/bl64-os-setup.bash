@@ -27,7 +27,7 @@ function bl64_os_setup() {
 
   bl64_os_get_distro &&
     bl64_os_set_command &&
-    BL64_OS_MODULE="$BL64_LIB_VAR_ON"
+    BL64_OS_MODULE="$BL64_VAR_ON"
 
 }
 

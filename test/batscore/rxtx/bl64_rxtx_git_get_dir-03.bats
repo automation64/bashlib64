@@ -17,7 +17,7 @@ teardown() {
     "$_bl64_rxtx_git_get_dir_source" \
     '.' \
     "${_bl64_rxtx_git_get_dir_destination}/dir" \
-    "$BL64_LIB_VAR_ON"
+    "$BL64_VAR_ON"
   assert_success
 
   assert_dir_exists "${_bl64_rxtx_git_get_dir_destination}/dir/src"

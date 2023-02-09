@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage native OS packages
 #
-# Version: 2.2.1
+# Version: 2.2.2
 #######################################
 
 #######################################
@@ -26,7 +26,7 @@ function bl64_pkg_repository_add() {
   bl64_dbg_lib_show_function "$@"
   local repository="$1"
   local source="$2"
-  local gpgkey="${3:-${BL64_LIB_VAR_NULL}}"
+  local gpgkey="${3:-${BL64_VAR_NULL}}"
   local definition=''
 
   bl64_check_privilege_root &&
@@ -331,7 +331,8 @@ function bl64_pkg_run_dnf() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
   if bl64_dbg_lib_command_enabled; then
@@ -364,7 +365,8 @@ function bl64_pkg_run_yum() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
   if bl64_dbg_lib_command_enabled; then
@@ -397,7 +399,8 @@ function bl64_pkg_run_apt() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
   bl64_pkg_blank_apt
@@ -461,7 +464,8 @@ function bl64_pkg_run_apk() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
   if bl64_dbg_lib_command_enabled; then
@@ -494,7 +498,8 @@ function bl64_pkg_run_brew() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
   if bl64_dbg_lib_command_enabled; then

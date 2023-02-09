@@ -23,7 +23,7 @@ function bl64_vcs_setup() {
 
   bl64_vcs_set_command &&
     bl64_vcs_set_options &&
-    BL64_VCS_MODULE="$BL64_LIB_VAR_ON"
+    BL64_VCS_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'vcs'
 }

@@ -23,7 +23,7 @@ function bl64_bsh_setup() {
 
   bl64_bsh_set_version ||
     return $?
-  BL64_BSH_MODULE="$BL64_LIB_VAR_ON"
+  BL64_BSH_MODULE="$BL64_VAR_ON"
 }
 
 #######################################

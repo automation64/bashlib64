@@ -10,10 +10,10 @@ setup() {
 @test "bl64_fs_merge_files: defaults, merge ok" {
 
   run bl64_fs_merge_files \
-    "$BL64_LIB_DEFAULT" \
-    "$BL64_LIB_DEFAULT" \
-    "$BL64_LIB_DEFAULT" \
-    "$BL64_LIB_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
     "${TEST_SANDBOX}/merge_result.txt" \
     "${TESTMANSH_TEST_SAMPLES}/merge_files_01/file1.txt" \
     "${TESTMANSH_TEST_SAMPLES}/merge_files_01/file2.txt" \

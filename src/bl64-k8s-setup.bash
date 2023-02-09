@@ -19,9 +19,9 @@
 # shellcheck disable=SC2120
 function bl64_k8s_setup() {
   bl64_dbg_lib_show_function "$@"
-  local kubectl_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$kubectl_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$kubectl_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$kubectl_bin" ||
       return $?
   fi
@@ -31,7 +31,7 @@ function bl64_k8s_setup() {
     bl64_k8s_set_version &&
     bl64_k8s_set_options &&
     bl64_k8s_set_kubectl_output &&
-    BL64_K8S_MODULE="$BL64_LIB_VAR_ON"
+    BL64_K8S_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'k8s'
 }
@@ -52,9 +52,9 @@ function bl64_k8s_setup() {
 #######################################
 function bl64_k8s_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local kubectl_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$kubectl_bin" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$kubectl_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/kubectl' ]]; then
       kubectl_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/kubectl' ]]; then
@@ -65,10 +65,10 @@ function bl64_k8s_set_command() {
       kubectl_bin='/usr/bin'
     fi
   else
-    [[ ! -x "${kubectl_bin}/kubectl" ]] && kubectl_bin="$BL64_LIB_DEFAULT"
+    [[ ! -x "${kubectl_bin}/kubectl" ]] && kubectl_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$kubectl_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$kubectl_bin" != "$BL64_VAR_DEFAULT" ]]; then
     [[ -x "${kubectl_bin}/kubectl" ]] && BL64_K8S_CMD_KUBECTL="${kubectl_bin}/kubectl"
   fi
 

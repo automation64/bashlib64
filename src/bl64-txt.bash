@@ -69,7 +69,7 @@ function bl64_txt_search_line() {
 function bl64_txt_run_awk() {
   bl64_dbg_lib_show_function "$@"
   bl64_check_parameters_none "$#" || return $?
-  local awk_cmd="$BL64_LIB_INCOMPATIBLE"
+  local awk_cmd="$BL64_VAR_INCOMPATIBLE"
   local awk_flags=' '
 
   case "$BL64_OS_DISTRO" in

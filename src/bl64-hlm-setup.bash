@@ -19,9 +19,9 @@
 # shellcheck disable=SC2120
 function bl64_hlm_setup() {
   bl64_dbg_lib_show_function "$@"
-  local helm_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$helm_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$helm_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$helm_bin" ||
       return $?
   fi
@@ -30,7 +30,7 @@ function bl64_hlm_setup() {
     bl64_check_command "$BL64_HLM_CMD_HELM" &&
     bl64_hlm_set_options &&
     bl64_hlm_set_runtime &&
-    BL64_HLM_MODULE="$BL64_LIB_VAR_ON"
+    BL64_HLM_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'hlm'
 }
@@ -51,9 +51,9 @@ function bl64_hlm_setup() {
 #######################################
 function bl64_hlm_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local helm_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$helm_bin" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$helm_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/helm' ]]; then
       helm_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/helm' ]]; then
@@ -66,10 +66,10 @@ function bl64_hlm_set_command() {
       helm_bin='/usr/bin'
     fi
   else
-    [[ ! -x "${helm_bin}/helm" ]] && helm_bin="$BL64_LIB_DEFAULT"
+    [[ ! -x "${helm_bin}/helm" ]] && helm_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$helm_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$helm_bin" != "$BL64_VAR_DEFAULT" ]]; then
     [[ -x "${helm_bin}/helm" ]] && BL64_HLM_CMD_HELM="${helm_bin}/helm"
   fi
 

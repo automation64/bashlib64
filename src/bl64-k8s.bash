@@ -23,11 +23,11 @@
 #######################################
 function bl64_k8s_label_set() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local resource="${2:-${BL64_LIB_VAR_NULL}}"
-  local name="${3:-${BL64_LIB_VAR_NULL}}"
-  local key="${4:-${BL64_LIB_VAR_NULL}}"
-  local value="${5:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local resource="${2:-${BL64_VAR_NULL}}"
+  local name="${3:-${BL64_VAR_NULL}}"
+  local key="${4:-${BL64_VAR_NULL}}"
+  local value="${5:-${BL64_VAR_NULL}}"
   local verbosity=''
 
   bl64_check_parameter 'resource' &&
@@ -56,7 +56,7 @@ function bl64_k8s_label_set() {
 #
 # Arguments:
 #   $1: full path to the kube/config file for the target cluster
-#   $2: namespace. If not required assign $BL64_LIB_VAR_NONE
+#   $2: namespace. If not required assign $BL64_VAR_NONE
 #   $2: resource type
 #   $3: resource name
 #   $@: remaining args are passed as is. Use the syntax: key=value
@@ -68,10 +68,10 @@ function bl64_k8s_label_set() {
 #######################################
 function bl64_k8s_annotation_set() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local namespace="${2:-${BL64_LIB_VAR_NONE}}"
-  local resource="${3:-${BL64_LIB_VAR_NULL}}"
-  local name="${4:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local namespace="${2:-${BL64_VAR_NONE}}"
+  local resource="${3:-${BL64_VAR_NULL}}"
+  local name="${4:-${BL64_VAR_NULL}}"
   local verbosity=''
 
   bl64_check_parameter 'resource' &&
@@ -84,7 +84,7 @@ function bl64_k8s_annotation_set() {
   shift
 
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
-  [[ "$namespace" == "$BL64_LIB_DEFAULT" ]] && namespace='' || namespace="--namespace ${namespace}"
+  [[ "$namespace" == "$BL64_VAR_DEFAULT" ]] && namespace='' || namespace="--namespace ${namespace}"
 
   bl64_msg_show_lib_task "${_BL64_K8S_TXT_SET_ANNOTATION} (${resource}/${name})"
   # shellcheck disable=SC2086
@@ -113,8 +113,8 @@ function bl64_k8s_annotation_set() {
 #######################################
 function bl64_k8s_namespace_create() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local namespace="${2:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local namespace="${2:-${BL64_VAR_NULL}}"
   local verbosity=''
 
   bl64_check_parameter 'namespace' ||
@@ -150,9 +150,9 @@ function bl64_k8s_namespace_create() {
 #######################################
 function bl64_k8s_sa_create() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local namespace="${2:-${BL64_LIB_VAR_NULL}}"
-  local sa="${3:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local namespace="${2:-${BL64_VAR_NULL}}"
+  local sa="${3:-${BL64_VAR_NULL}}"
   local verbosity=''
 
   bl64_check_parameter 'namespace' &&
@@ -192,11 +192,11 @@ function bl64_k8s_sa_create() {
 #######################################
 function bl64_k8s_secret_create() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local namespace="${2:-${BL64_LIB_VAR_NULL}}"
-  local secret="${3:-${BL64_LIB_VAR_NULL}}"
-  local key="${4:-${BL64_LIB_VAR_NULL}}"
-  local file="${5:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local namespace="${2:-${BL64_VAR_NULL}}"
+  local secret="${3:-${BL64_VAR_NULL}}"
+  local key="${4:-${BL64_VAR_NULL}}"
+  local file="${5:-${BL64_VAR_NULL}}"
   local verbosity=''
 
   bl64_check_parameter 'namespace' &&
@@ -239,10 +239,10 @@ function bl64_k8s_secret_create() {
 #######################################
 function bl64_k8s_secret_copy() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local namespace_src="${2:-${BL64_LIB_VAR_NULL}}"
-  local namespace_dst="${3:-${BL64_LIB_VAR_NULL}}"
-  local secret="${4:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local namespace_src="${2:-${BL64_VAR_NULL}}"
+  local namespace_dst="${3:-${BL64_VAR_NULL}}"
+  local secret="${4:-${BL64_VAR_NULL}}"
   local resource=''
   local -i status=0
 
@@ -295,9 +295,9 @@ function bl64_k8s_secret_copy() {
 #######################################
 function bl64_k8s_resource_update() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local namespace="${2:-${BL64_LIB_VAR_NULL}}"
-  local definition="${3:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local namespace="${2:-${BL64_VAR_NULL}}"
+  local definition="${3:-${BL64_VAR_NULL}}"
   local verbosity=''
 
   bl64_check_parameter 'namespace' &&
@@ -340,9 +340,9 @@ function bl64_k8s_resource_update() {
 #######################################
 function bl64_k8s_resource_get() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local resource="${2:-${BL64_LIB_VAR_NULL}}"
-  local name="${3:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local resource="${2:-${BL64_VAR_NULL}}"
+  local name="${3:-${BL64_VAR_NULL}}"
   local namespace="${4:-}"
 
   bl64_check_parameter 'resource' &&
@@ -437,9 +437,9 @@ function bl64_k8s_blank_kubectl() {
 #######################################
 function bl64_k8s_resource_is_created() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_LIB_VAR_NULL}}"
-  local type="${2:-${BL64_LIB_VAR_NULL}}"
-  local name="${3:-${BL64_LIB_VAR_NULL}}"
+  local kubeconfig="${1:-${BL64_VAR_NULL}}"
+  local type="${2:-${BL64_VAR_NULL}}"
+  local name="${3:-${BL64_VAR_NULL}}"
   local namespace="${4:-}"
 
   bl64_check_parameter 'type' &&

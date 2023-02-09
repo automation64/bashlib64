@@ -7,12 +7,12 @@
 #######################################
 # Pull data from web server
 #
-# * If the destination is already present no update is done unless $3=$BL64_LIB_VAR_ON
+# * If the destination is already present no update is done unless $3=$BL64_VAR_ON
 #
 # Arguments:
 #   $1: Source URL
 #   $2: Full path to the destination file
-#   $3: replace existing content Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)
+#   $3: replace existing content Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
 #   $4: permissions. Regular chown format accepted. Default: umask defined
 # Outputs:
 #   STDOUT: None unless BL64_DBG_TARGET_LIB_CMD
@@ -25,15 +25,15 @@ function bl64_rxtx_web_get_file() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
   local destination="$2"
-  local replace="${3:-${BL64_LIB_VAR_OFF}}"
-  local mode="${4:-${BL64_LIB_DEFAULT}}"
+  local replace="${3:-${BL64_VAR_OFF}}"
+  local mode="${4:-${BL64_VAR_DEFAULT}}"
   local -i status=0
 
   bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' || return $?
 
-  [[ "$replace" == "$BL64_LIB_VAR_OFF" && -e "$destination" ]] &&
+  [[ "$replace" == "$BL64_VAR_OFF" && -e "$destination" ]] &&
     bl64_dbg_lib_show_info "destination is already created (${destination}) and overwrite is disabled. No action taken" &&
     return 0
   bl64_fs_safeguard "$destination" >/dev/null || return $?
@@ -57,7 +57,7 @@ function bl64_rxtx_web_get_file() {
   fi
 
   # Determine if mode needs to be set
-  if [[ "$status" == '0' && "$mode" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$status" == '0' && "$mode" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_fs_run_chmod "$mode" "$destination"
     status=$?
   fi
@@ -71,7 +71,7 @@ function bl64_rxtx_web_get_file() {
 # Pull directory contents from git repo
 #
 # * Content of source path is downloaded into destination (source_path/* --> destionation/). Source path itself is not created
-# * If the destination is already present no update is done unless $4=$BL64_LIB_VAR_ON
+# * If the destination is already present no update is done unless $4=$BL64_VAR_ON
 # * If asked to replace destination, temporary backup is done in case git fails by moving the destination to a temp name
 # * Warning: git repo info is removed after pull (.git)
 #
@@ -79,7 +79,7 @@ function bl64_rxtx_web_get_file() {
 #   $1: URL to the GIT repository
 #   $2: source path. Format: relative to the repo URL. Use '.' to download the full repo
 #   $3: destination path. Format: full path
-#   $4: replace existing content. Values: $BL64_LIB_VAR_ON | $BL64_LIB_VAR_OFF (default)
+#   $4: replace existing content. Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
 #   $5: branch name. Default: main
 # Outputs:
 #   STDOUT: command stdout
@@ -93,7 +93,7 @@ function bl64_rxtx_git_get_dir() {
   local source_url="${1}"
   local source_path="${2}"
   local destination="${3}"
-  local replace="${4:-${BL64_LIB_VAR_OFF}}"
+  local replace="${4:-${BL64_VAR_OFF}}"
   local branch="${5:-main}"
   local -i status=0
 
@@ -105,7 +105,7 @@ function bl64_rxtx_git_get_dir() {
     return $?
 
   # shellcheck disable=SC2086
-  bl64_check_overwrite "$destination" "$replace" "$_BL64_RXTX_TXT_EXISTING_DESTINATION" || return $BL64_LIB_VAR_OK
+  bl64_check_overwrite "$destination" "$replace" "$_BL64_RXTX_TXT_EXISTING_DESTINATION" || return $BL64_VAR_OK
 
   # Asked to replace, backup first
   bl64_fs_safeguard "$destination" || return $?

@@ -150,29 +150,29 @@ function _bl64_msg_show_ascii() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_usage() {
-  local usage="${1:-${BL64_LIB_VAR_NULL}}"
-  local description="${2:-${BL64_LIB_DEFAULT}}"
-  local commands="${3:-${BL64_LIB_DEFAULT}}"
-  local flags="${4:-${BL64_LIB_DEFAULT}}"
-  local parameters="${5:-${BL64_LIB_DEFAULT}}"
+  local usage="${1:-${BL64_VAR_NULL}}"
+  local description="${2:-${BL64_VAR_DEFAULT}}"
+  local commands="${3:-${BL64_VAR_DEFAULT}}"
+  local flags="${4:-${BL64_VAR_DEFAULT}}"
+  local parameters="${5:-${BL64_VAR_DEFAULT}}"
 
   bl64_check_parameter 'usage' || return $?
 
   printf '\n%s: %s %s\n\n' "$_BL64_MSG_TXT_USAGE" "$BL64_SCRIPT_ID" "$usage"
 
-  if [[ "$description" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$description" != "$BL64_VAR_DEFAULT" ]]; then
     printf '%s\n\n' "$description"
   fi
 
-  if [[ "$commands" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$commands" != "$BL64_VAR_DEFAULT" ]]; then
     printf '%s\n%s\n' "$_BL64_MSG_TXT_COMMANDS" "$commands"
   fi
 
-  if [[ "$flags" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$flags" != "$BL64_VAR_DEFAULT" ]]; then
     printf '%s\n%s\n' "$_BL64_MSG_TXT_FLAGS" "$flags"
   fi
 
-  if [[ "$parameters" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$parameters" != "$BL64_VAR_DEFAULT" ]]; then
     printf '%s\n%s\n' "$_BL64_MSG_TXT_PARAMETERS" "$parameters"
   fi
 
@@ -400,7 +400,7 @@ function bl64_msg_show_batch_start() {
 #######################################
 function bl64_msg_show_batch_finish() {
   local status="$1"
-  local message="${2-${BL64_LIB_DEFAULT}}"
+  local message="${2-${BL64_VAR_DEFAULT}}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${status}:${message}" &&
     bl64_msg_app_verbose_enabled || return 0

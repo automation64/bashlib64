@@ -24,7 +24,7 @@ function bl64_cnt_setup() {
 
   bl64_cnt_set_command &&
     [[ -x "$BL64_CNT_CMD_DOCKER" || -x "$BL64_CNT_CMD_PODMAN" ]] &&
-    BL64_CNT_MODULE="$BL64_LIB_VAR_ON"
+    BL64_CNT_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'cnt'
 }
@@ -53,7 +53,7 @@ function bl64_cnt_set_command() {
     ;;
   ${BL64_OS_MCOS}-*)
     # Podman is not available for MacOS
-    BL64_CNT_CMD_PODMAN="$BL64_LIB_INCOMPATIBLE"
+    BL64_CNT_CMD_PODMAN="$BL64_VAR_INCOMPATIBLE"
     # Docker is available using docker-desktop
     BL64_CNT_CMD_DOCKER='/usr/local/bin/docker'
     ;;

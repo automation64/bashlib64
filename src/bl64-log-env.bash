@@ -5,7 +5,7 @@
 #######################################
 
 # Optional module. Not enabled by default
-export BL64_LOG_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_LOG_MODULE="$BL64_VAR_OFF"
 
 # Log file types
 export BL64_LOG_FORMAT_CSV='C'

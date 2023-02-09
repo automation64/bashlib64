@@ -11,19 +11,19 @@ setup() {
 
 @test "bl64_fs_set_permissions: all defaults" {
   run bl64_fs_set_permissions \
-    "$TEST_FILE" \
-    "$BL64_LIB_DEFAULT" \
-    "$BL64_LIB_DEFAULT" \
-    "$BL64_LIB_DEFAULT"
+    "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
+    "$TEST_FILE"
   assert_success
 }
 
 @test "bl64_fs_set_permissions: set perm" {
   run bl64_fs_set_permissions \
-    "$TEST_FILE" \
     "0755" \
-    "$BL64_LIB_DEFAULT" \
-    "$BL64_LIB_DEFAULT"
+    "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
+    "$TEST_FILE"
   assert_success
 }
 

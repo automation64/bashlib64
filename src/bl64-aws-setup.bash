@@ -37,14 +37,14 @@ function bl64_aws_get_cli_credentials() {
 # shellcheck disable=SC2120
 function bl64_aws_setup() {
   bl64_dbg_lib_show_function "$@"
-  local aws_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   bl64_aws_set_command "$aws_bin" &&
     bl64_aws_set_options &&
     bl64_aws_set_definitions &&
     bl64_check_command "$BL64_AWS_CMD_AWS" &&
     bl64_aws_set_paths &&
-    BL64_AWS_MODULE="$BL64_LIB_VAR_ON"
+    BL64_AWS_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'aws'
 }
@@ -65,14 +65,14 @@ function bl64_aws_setup() {
 #######################################
 function bl64_aws_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local aws_bin="${1:-${BL64_LIB_DEFAULT}}"
+  local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$aws_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$aws_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$aws_bin" ||
       return $?
   fi
 
-  if [[ "$aws_bin" == "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$aws_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/aws' ]]; then
       aws_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/aws' ]]; then
@@ -85,10 +85,10 @@ function bl64_aws_set_command() {
       aws_bin='/usr/bin'
     fi
   else
-    [[ ! -x "${aws_bin}/aws" ]] && aws_bin="$BL64_LIB_DEFAULT"
+    [[ ! -x "${aws_bin}/aws" ]] && aws_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$aws_bin" != "$BL64_LIB_DEFAULT" ]]; then
+  if [[ "$aws_bin" != "$BL64_VAR_DEFAULT" ]]; then
     [[ -x "${aws_bin}/aws" ]] && BL64_AWS_CMD_AWS="${aws_bin}/aws"
   fi
 
@@ -174,7 +174,7 @@ function bl64_aws_set_paths() {
   bl64_dbg_lib_show_info 'prepare AWS_HOME'
   bl64_check_home || return $?
   aws_home="${HOME}/${BL64_AWS_DEF_SUFFIX_HOME}"
-  bl64_fs_create_dir "$BL64_AWS_CLI_MODE" "$BL64_LIB_DEFAULT" "$BL64_LIB_DEFAULT" "$aws_home" || return $?
+  bl64_fs_create_dir "$BL64_AWS_CLI_MODE" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$aws_home" || return $?
 
   bl64_dbg_lib_show_info 'set configuration paths'
   BL64_AWS_CLI_HOME="$aws_home"

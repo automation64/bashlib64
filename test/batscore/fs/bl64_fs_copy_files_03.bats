@@ -13,8 +13,8 @@ setup() {
 @test "bl64_fs_copy_files: copy files + perm" {
   run bl64_fs_copy_files \
     "0600" \
-    "$BL64_LIB_DEFAULT" \
-    "$BL64_LIB_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
     "$TEST_SANDBOX" \
     "${TEST_SOURCE}/${TEST_FILE1}" \
     "${TEST_SOURCE}/${TEST_FILE2}"

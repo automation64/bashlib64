@@ -5,9 +5,9 @@
 #######################################
 
 # Optional module. Not enabled by default
-export BL64_AWS_MODULE="$BL64_LIB_VAR_OFF"
+export BL64_AWS_MODULE="$BL64_VAR_OFF"
 
-export BL64_AWS_CMD_AWS="$BL64_LIB_UNAVAILABLE"
+export BL64_AWS_CMD_AWS="$BL64_VAR_UNAVAILABLE"
 
 export BL64_AWS_DEF_SUFFIX_TOKEN=''
 export BL64_AWS_DEF_SUFFIX_HOME=''
