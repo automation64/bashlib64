@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 9.0.0
+# Version: 9.0.1
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -2645,7 +2645,7 @@ function bl64_fs_set_alias() {
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 3.0.0
+# Version: 3.0.1
 #######################################
 
 #######################################
@@ -3147,7 +3147,7 @@ function bl64_fs_cleanup_caches() {
 }
 
 #######################################
-# Performs a complete cleanup of the OS temporary content
+# Performs a complete cleanup of OS ephemeral content
 #
 # * Removes temporary files
 # * Cleans caches
@@ -3164,7 +3164,6 @@ function bl64_fs_cleanup_caches() {
 function bl64_fs_cleanup_full() {
   bl64_dbg_lib_show_function
 
-  bl64_pkg_cleanup
   bl64_fs_cleanup_tmps
   bl64_fs_cleanup_logs
   bl64_fs_cleanup_caches
