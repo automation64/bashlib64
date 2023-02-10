@@ -11,7 +11,7 @@
   git clone https://github.com/serdigital64/bashlib64.git
   ```
 
-- Adjust environment variables to reflect your configuration
+- Adjust environment variables to match your configuration:
   - Copy environment definition files from templates:
 
   ```shell
@@ -21,7 +21,7 @@
 
   - Review and update content for both files
 
-- Initialize dev environment
+- Download dev support scripts
 
   ```shell
   ./bin/devbl-lib
@@ -36,6 +36,9 @@
 ## Update source code
 
 - Add/Edit source code in: `src/`
+
+## Build library
+
 - Build production library and refresh docs:
 
 ```shell
