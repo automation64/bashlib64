@@ -7,26 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.1]
+
+### Fixed
+
+- fs
+  - bl64_fs_cleanup_full: removed bl64_pkg_cleanup as is out of scope for the function purpose
+
 ## [9.0.0]
 
 ### Changed
 
 - lib
-  - env: **Breaking change**: renamed constants: `BL64_LIB_VAR -> BL64_VAR`
+  - env: **Breaking change**: renamed constants
+    - `BL64_LIB_VAR_* -> BL64_VAR_*`
+    - `BL64_LIB_DEFAULT -> BL64_VAR_DEFAULT`
+    - `BL64_LIB_INCOMPATIBLE -> BL64_VAR_INCOMPATIBLE`
+    - `BL64_LIB_UNAVAILABLE -> BL64_VAR_UNAVAILABLE`
+    - `BL64_LIB_NULL -> BL64_VAR_NULL`
 - cnt
   - bl64_cnt_build*: now accepts free form args (@)
 - os
   - removed unused export: BL64_OS_TAGS
   - bl64_os_match: allow usage of BL64_OS_XXX variables for OS match
 - fs
-  - bl64_fs_set_permissions: **Breaking change**: moved `path` parameter to 4th position and converted to list
+  - bl64_fs_set_permissions: **Breaking change**: moved `path` parameter to 4th position and converted to list to allow multiple paths
 
 ### Fixed
 
 - os
   - _bl64_os_get_distro_from_os_release: normalized Alpine OS version to match X.Y
 
-## [8.1.0]
+## [8.1.1]
 
 ### Added
 
@@ -725,9 +737,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/9.0.0...HEAD
-[9.0.0]: https://github.com/serdigital64/bashlib64/compare/8.1.0...9.0.0
-[8.1.0]: https://github.com/serdigital64/bashlib64/compare/8.0.0...8.1.0
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/9.0.1...HEAD
+[9.0.1]: https://github.com/serdigital64/bashlib64/compare/9.0.0...9.0.1
+[9.0.0]: https://github.com/serdigital64/bashlib64/compare/8.1.1...9.0.0
+[8.1.1]: https://github.com/serdigital64/bashlib64/compare/8.0.0...8.1.1
 [8.0.0]: https://github.com/serdigital64/bashlib64/compare/7.1.0...8.0.0
 [7.1.0]: https://github.com/serdigital64/bashlib64/compare/7.0.0...7.1.0
 [7.0.0]: https://github.com/serdigital64/bashlib64/compare/6.0.0...7.0.0
