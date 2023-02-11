@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 9.0.1
+# Version: 9.1.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -343,7 +343,7 @@ export _BL64_DBG_TXT_DEBUG='Debug'
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
@@ -379,6 +379,11 @@ export BL64_FS_SET_CHOWN_VERBOSE=''
 export BL64_FS_SET_CP_FORCE=''
 export BL64_FS_SET_CP_RECURSIVE=''
 export BL64_FS_SET_CP_VERBOSE=''
+export BL64_FS_SET_FIND_PRINT=''
+export BL64_FS_SET_FIND_RUN=''
+export BL64_FS_SET_FIND_STAY=''
+export BL64_FS_SET_FIND_TYPE_DIR=''
+export BL64_FS_SET_FIND_TYPE_FILE=''
 export BL64_FS_SET_LN_SYMBOLIC=''
 export BL64_FS_SET_LN_VERBOSE=''
 export BL64_FS_SET_MKDIR_PARENTS=''
@@ -388,6 +393,7 @@ export BL64_FS_SET_MV_VERBOSE=''
 export BL64_FS_SET_RM_FORCE=''
 export BL64_FS_SET_RM_RECURSIVE=''
 export BL64_FS_SET_RM_VERBOSE=''
+
 
 export BL64_FS_UMASK_RW_USER='u=rwx,g=,o='
 export BL64_FS_UMASK_RW_GROUP='u=rwx,g=rwx,o='
@@ -2419,7 +2425,7 @@ function bl64_dbg_lib_command_trace_start() {
 #######################################
 # BashLib64 / Module / Setup / Manage local filesystem
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -2538,58 +2544,73 @@ function bl64_fs_set_options() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_FS_SET_MKDIR_VERBOSE='--verbose'
-    BL64_FS_SET_MKDIR_PARENTS='--parents'
-    BL64_FS_SET_CHOWN_VERBOSE='--verbose'
-    BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
-    BL64_FS_SET_CP_VERBOSE='--verbose'
-    BL64_FS_SET_CP_RECURSIVE='--recursive'
-    BL64_FS_SET_CP_FORCE='--force'
-    BL64_FS_SET_CHMOD_VERBOSE='--verbose'
     BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
+    BL64_FS_SET_CHMOD_VERBOSE='--verbose'
+    BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
+    BL64_FS_SET_CHOWN_VERBOSE='--verbose'
+    BL64_FS_SET_CP_FORCE='--force'
+    BL64_FS_SET_CP_RECURSIVE='--recursive'
+    BL64_FS_SET_CP_VERBOSE='--verbose'
+    BL64_FS_SET_FIND_PRINT='-print'
+    BL64_FS_SET_FIND_RUN='-exec'
+    BL64_FS_SET_FIND_STAY='-xdev'
+    BL64_FS_SET_FIND_TYPE_DIR='-type d'
+    BL64_FS_SET_FIND_TYPE_FILE='-type f'
     BL64_FS_SET_LN_SYMBOLIC='--symbolic'
     BL64_FS_SET_LN_VERBOSE='--verbose'
-    BL64_FS_SET_MV_VERBOSE='--verbose'
+    BL64_FS_SET_MKDIR_PARENTS='--parents'
+    BL64_FS_SET_MKDIR_VERBOSE='--verbose'
     BL64_FS_SET_MV_FORCE='--force'
-    BL64_FS_SET_RM_VERBOSE='--verbose'
+    BL64_FS_SET_MV_VERBOSE='--verbose'
     BL64_FS_SET_RM_FORCE='--force'
     BL64_FS_SET_RM_RECURSIVE='--recursive'
+    BL64_FS_SET_RM_VERBOSE='--verbose'
     ;;
   ${BL64_OS_ALP}-*)
-    BL64_FS_SET_MKDIR_VERBOSE=' '
-    BL64_FS_SET_MKDIR_PARENTS='-p'
-    BL64_FS_SET_CHOWN_VERBOSE='-v'
-    BL64_FS_SET_CHOWN_RECURSIVE='-R'
-    BL64_FS_SET_CP_VERBOSE='-v'
-    BL64_FS_SET_CP_RECURSIVE='-R'
-    BL64_FS_SET_CP_FORCE='-f'
-    BL64_FS_SET_CHMOD_VERBOSE='-v'
     BL64_FS_SET_CHMOD_RECURSIVE='-R'
+    BL64_FS_SET_CHMOD_VERBOSE='-v'
+    BL64_FS_SET_CHOWN_RECURSIVE='-R'
+    BL64_FS_SET_CHOWN_VERBOSE='-v'
+    BL64_FS_SET_CP_FORCE='-f'
+    BL64_FS_SET_CP_RECURSIVE='-R'
+    BL64_FS_SET_CP_VERBOSE='-v'
+    BL64_FS_SET_FIND_PRINT='-print'
+    BL64_FS_SET_FIND_RUN='-exec'
+    BL64_FS_SET_FIND_STAY='-xdev'
+    BL64_FS_SET_FIND_TYPE_DIR='-type d'
+    BL64_FS_SET_FIND_TYPE_FILE='-type f'
     BL64_FS_SET_LN_SYMBOLIC='-s'
     BL64_FS_SET_LN_VERBOSE='-v'
-    BL64_FS_SET_MV_VERBOSE=' '
+    BL64_FS_SET_MKDIR_PARENTS='-p'
+    BL64_FS_SET_MKDIR_VERBOSE=' '
     BL64_FS_SET_MV_FORCE='-f'
-    BL64_FS_SET_RM_VERBOSE=' '
+    BL64_FS_SET_MV_VERBOSE=' '
     BL64_FS_SET_RM_FORCE='-f'
     BL64_FS_SET_RM_RECURSIVE='-R'
+    BL64_FS_SET_RM_VERBOSE=' '
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_FS_SET_MKDIR_VERBOSE='-v'
-    BL64_FS_SET_MKDIR_PARENTS='-p'
-    BL64_FS_SET_CHOWN_VERBOSE='-v'
-    BL64_FS_SET_CHOWN_RECURSIVE='-R'
-    BL64_FS_SET_CP_VERBOSE='-v'
-    BL64_FS_SET_CP_RECURSIVE='-R'
-    BL64_FS_SET_CP_FORCE='-f'
-    BL64_FS_SET_CHMOD_VERBOSE='-v'
     BL64_FS_SET_CHMOD_RECURSIVE='-R'
+    BL64_FS_SET_CHMOD_VERBOSE='-v'
+    BL64_FS_SET_CHOWN_RECURSIVE='-R'
+    BL64_FS_SET_CHOWN_VERBOSE='-v'
+    BL64_FS_SET_CP_FORCE='-f'
+    BL64_FS_SET_CP_RECURSIVE='-R'
+    BL64_FS_SET_CP_VERBOSE='-v'
+    BL64_FS_SET_FIND_PRINT='-print'
+    BL64_FS_SET_FIND_RUN='-exec'
+    BL64_FS_SET_FIND_STAY='-xdev'
+    BL64_FS_SET_FIND_TYPE_DIR='-type d'
+    BL64_FS_SET_FIND_TYPE_FILE='-type f'
     BL64_FS_SET_LN_SYMBOLIC='-s'
     BL64_FS_SET_LN_VERBOSE='-v'
-    BL64_FS_SET_MV_VERBOSE='-v'
+    BL64_FS_SET_MKDIR_PARENTS='-p'
+    BL64_FS_SET_MKDIR_VERBOSE='-v'
     BL64_FS_SET_MV_FORCE='-f'
-    BL64_FS_SET_RM_VERBOSE='-v'
+    BL64_FS_SET_MV_VERBOSE='-v'
     BL64_FS_SET_RM_FORCE='-f'
     BL64_FS_SET_RM_RECURSIVE='-R'
+    BL64_FS_SET_RM_VERBOSE='-v'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -2645,7 +2666,7 @@ function bl64_fs_set_alias() {
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 3.0.1
+# Version: 3.1.0
 #######################################
 
 #######################################
@@ -2927,6 +2948,24 @@ function bl64_fs_chown_dir() {
 }
 
 #######################################
+# Change directory permissions recursively
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_chmod_dir() {
+  bl64_dbg_lib_show_function "$@"
+
+  # shellcheck disable=SC2086
+  bl64_fs_run_chmod "$BL64_FS_SET_CHMOD_RECURSIVE" "$@"
+}
+
+#######################################
 # Copy files with force flag
 #
 # Arguments:
@@ -3186,7 +3225,7 @@ function bl64_fs_run_find() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-  bl64_check_command "$BL64_FS_CMD_FIND" || return $?
+    bl64_check_command "$BL64_FS_CMD_FIND" || return $?
 
   bl64_dbg_lib_trace_start
   "$BL64_FS_CMD_FIND" "$@"
@@ -3233,10 +3272,10 @@ function bl64_fs_find_files() {
       -type 'f' \
       ${pattern:+-name "${pattern}"} \
       -exec \
-        "$BL64_TXT_CMD_GREP" \
-        "$BL64_TXT_SET_GREP_SHOW_FILE_ONLY" \
-        "$BL64_TXT_SET_GREP_ERE" "$content" \
-        "{}" \;
+      "$BL64_TXT_CMD_GREP" \
+      "$BL64_TXT_SET_GREP_SHOW_FILE_ONLY" \
+      "$BL64_TXT_SET_GREP_ERE" "$content" \
+      "{}" \;
   fi
   bl64_dbg_lib_trace_stop
 
@@ -3334,6 +3373,10 @@ function bl64_fs_restore() {
 #######################################
 # Set object permissions and ownership
 #
+# * work on individual files
+# * no recurse option
+# * all files get the same permissions, user, group
+#
 # Arguments:
 #   $1: permissions. Format: chown format. Default: use current umask
 #   $2: user name. Default: nonde
@@ -3373,6 +3416,60 @@ function bl64_fs_set_permissions() {
   # Determine if group needs to be set
   if [[ "$group" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_fs_run_chown ":${group}" "$@" || return $?
+  fi
+
+  return 0
+}
+
+#######################################
+# Fix path permissions
+#
+# * allow different permissions for files and directories
+# * recursive
+#
+# Arguments:
+#   $1: file permissions. Format: chown format. Default: no action
+#   $2: directory permissions. Format: chown format. Default: no action
+#   $@: list of paths. Must use full path for each
+# Outputs:
+#   STDOUT: command stdin
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_fix_permissions() {
+  bl64_dbg_lib_show_function "$@"
+  local file_mode="${1:-${BL64_VAR_DEFAULT}}"
+  local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
+  local path=''
+
+  # Remove consumed parameters
+  shift
+  shift
+
+  bl64_check_parameters_none "$#" || return $?
+  bl64_dbg_lib_show_info "path list:[${*}]"
+
+  if [[ "$file_mode" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_info "fix file permissions (${file_mode})"
+    # shellcheck disable=SC2086
+    bl64_fs_run_find \
+      "$@" \
+      ${BL64_FS_SET_FIND_STAY} \
+      ${BL64_FS_SET_FIND_TYPE_FILE} \
+      ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$file_mode" "{}" \; ||
+      return $?
+  fi
+
+  if [[ "$dir_mode" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_info "fix file permissions (${dir_mode})"
+    # shellcheck disable=SC2086
+    bl64_fs_run_find \
+      "$@" \
+      ${BL64_FS_SET_FIND_STAY} \
+      ${BL64_FS_SET_FIND_TYPE_DIR} \
+      ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$dir_mode" "{}" \; ||
+      return $?
   fi
 
   return 0

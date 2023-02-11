@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
@@ -37,6 +37,11 @@ export BL64_FS_SET_CHOWN_VERBOSE=''
 export BL64_FS_SET_CP_FORCE=''
 export BL64_FS_SET_CP_RECURSIVE=''
 export BL64_FS_SET_CP_VERBOSE=''
+export BL64_FS_SET_FIND_PRINT=''
+export BL64_FS_SET_FIND_RUN=''
+export BL64_FS_SET_FIND_STAY=''
+export BL64_FS_SET_FIND_TYPE_DIR=''
+export BL64_FS_SET_FIND_TYPE_FILE=''
 export BL64_FS_SET_LN_SYMBOLIC=''
 export BL64_FS_SET_LN_VERBOSE=''
 export BL64_FS_SET_MKDIR_PARENTS=''
@@ -46,6 +51,7 @@ export BL64_FS_SET_MV_VERBOSE=''
 export BL64_FS_SET_RM_FORCE=''
 export BL64_FS_SET_RM_RECURSIVE=''
 export BL64_FS_SET_RM_VERBOSE=''
+
 
 export BL64_FS_UMASK_RW_USER='u=rwx,g=,o='
 export BL64_FS_UMASK_RW_GROUP='u=rwx,g=rwx,o='
