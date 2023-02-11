@@ -7,14 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.1.0]
+
+### Added
+
+- fs
+  - new functions: bl64_fs_chmod_dir, bl64_fs_fix_permissions
+
 ## [9.0.1]
 
 ### Fixed
 
 - fs
   - bl64_fs_cleanup_full: removed bl64_pkg_cleanup as is out of scope for the function purpose
-
-## [9.0.0]
 
 ### Changed
 
@@ -738,8 +743,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - alias for useradd
 
 [unreleased]: https://github.com/serdigital64/bashlib64/compare/9.0.1...HEAD
-[9.0.1]: https://github.com/serdigital64/bashlib64/compare/9.0.0...9.0.1
-[9.0.0]: https://github.com/serdigital64/bashlib64/compare/8.1.1...9.0.0
+[9.1.0]: https://github.com/serdigital64/bashlib64/compare/9.1.0...9.0.1
+[9.0.1]: https://github.com/serdigital64/bashlib64/compare/8.1.1...9.0.1
 [8.1.1]: https://github.com/serdigital64/bashlib64/compare/8.0.0...8.1.1
 [8.0.0]: https://github.com/serdigital64/bashlib64/compare/7.1.0...8.0.0
 [7.1.0]: https://github.com/serdigital64/bashlib64/compare/7.0.0...7.1.0
