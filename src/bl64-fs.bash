@@ -560,7 +560,7 @@ function bl64_fs_run_find() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-  bl64_check_command "$BL64_FS_CMD_FIND" || return $?
+    bl64_check_command "$BL64_FS_CMD_FIND" || return $?
 
   bl64_dbg_lib_trace_start
   "$BL64_FS_CMD_FIND" "$@"
@@ -607,10 +607,10 @@ function bl64_fs_find_files() {
       -type 'f' \
       ${pattern:+-name "${pattern}"} \
       -exec \
-        "$BL64_TXT_CMD_GREP" \
-        "$BL64_TXT_SET_GREP_SHOW_FILE_ONLY" \
-        "$BL64_TXT_SET_GREP_ERE" "$content" \
-        "{}" \;
+      "$BL64_TXT_CMD_GREP" \
+      "$BL64_TXT_SET_GREP_SHOW_FILE_ONLY" \
+      "$BL64_TXT_SET_GREP_ERE" "$content" \
+      "{}" \;
   fi
   bl64_dbg_lib_trace_stop
 
@@ -708,6 +708,10 @@ function bl64_fs_restore() {
 #######################################
 # Set object permissions and ownership
 #
+# * work on individual files
+# * no recurse option
+# * all files get the same permissions, user, group
+#
 # Arguments:
 #   $1: permissions. Format: chown format. Default: use current umask
 #   $2: user name. Default: nonde
@@ -747,6 +751,60 @@ function bl64_fs_set_permissions() {
   # Determine if group needs to be set
   if [[ "$group" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_fs_run_chown ":${group}" "$@" || return $?
+  fi
+
+  return 0
+}
+
+#######################################
+# Fix path permissions
+#
+# * allow different permissions for files and directories
+# * recursive
+#
+# Arguments:
+#   $1: file permissions. Format: chown format. Default: no action
+#   $2: directory permissions. Format: chown format. Default: no action
+#   $@: list of paths. Must use full path for each
+# Outputs:
+#   STDOUT: command stdin
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_fix_permissions() {
+  bl64_dbg_lib_show_function "$@"
+  local file_mode="${1:-${BL64_VAR_DEFAULT}}"
+  local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
+  local path=''
+
+  # Remove consumed parameters
+  shift
+  shift
+
+  bl64_check_parameters_none "$#" || return $?
+  bl64_dbg_lib_show_info "path list:[${*}]"
+
+  if [[ "$file_mode" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_info "fix file permissions (${file_mode})"
+    # shellcheck disable=SC2086
+    bl64_fs_run_find \
+      "$@" \
+      ${BL64_FS_SET_FIND_STAY} \
+      ${BL64_FS_SET_FIND_TYPE_FILE} \
+      ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$file_mode" "{}" \; ||
+      return $?
+  fi
+
+  if [[ "$dir_mode" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_info "fix file permissions (${dir_mode})"
+    # shellcheck disable=SC2086
+    bl64_fs_run_find \
+      "$@" \
+      ${BL64_FS_SET_FIND_STAY} \
+      ${BL64_FS_SET_FIND_TYPE_DIR} \
+      ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$dir_mode" "{}" \; ||
+      return $?
   fi
 
   return 0
