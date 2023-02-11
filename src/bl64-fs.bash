@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 3.0.1
+# Version: 3.1.0
 #######################################
 
 #######################################
@@ -280,6 +280,24 @@ function bl64_fs_chown_dir() {
 
   # shellcheck disable=SC2086
   bl64_fs_run_chown "$BL64_FS_SET_CHOWN_RECURSIVE" "$@"
+}
+
+#######################################
+# Change directory permissions recursively
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_chmod_dir() {
+  bl64_dbg_lib_show_function "$@"
+
+  # shellcheck disable=SC2086
+  bl64_fs_run_chmod "$BL64_FS_SET_CHMOD_RECURSIVE" "$@"
 }
 
 #######################################
