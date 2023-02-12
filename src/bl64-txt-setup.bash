@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manipulate text files content
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -32,6 +32,7 @@ function bl64_txt_setup() {
 # Identify and normalize common *nix OS commands
 #
 # * Commands are exported as variables with full path
+# * For AWK the function will determine the best option to match posix awk
 # * Warning: bootstrap function
 #
 # Arguments:
@@ -57,6 +58,12 @@ function bl64_txt_set_command() {
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_BASE64='/usr/bin/base64'
     BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
+    if [[ -x '/usr/bin/gawk' ]]; then
+      BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
+      BL64_TXT_SET_AWK_POSIX='--posix'
+    elif [[ -x '/usr/bin/mawk' ]]; then
+      BL64_TXT_CMD_AWK_POSIX='/usr/bin/mawk'
+    fi
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_TXT_CMD_AWK='/usr/bin/awk'
@@ -67,6 +74,8 @@ function bl64_txt_set_command() {
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_BASE64='/usr/bin/base64'
     BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
+    BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
+    BL64_TXT_SET_AWK_POSIX='--posix'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_TXT_CMD_AWK='/usr/bin/awk'
@@ -77,6 +86,10 @@ function bl64_txt_set_command() {
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_BASE64='/bin/base64'
     BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
+    if [[ -x '/usr/bin/gawk' ]]; then
+      BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
+      BL64_TXT_SET_AWK_POSIX='--posix'
+    fi
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_TXT_CMD_AWK='/usr/bin/awk'
@@ -87,9 +100,13 @@ function bl64_txt_set_command() {
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_BASE64='/usr/bin/base64'
     BL64_TXT_CMD_ENVSUBST='/opt/homebrew/bin/envsubst'
+    BL64_TXT_CMD_AWK_POSIX='/usr/bin/awk'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
+
+
+
 }
 
 #######################################

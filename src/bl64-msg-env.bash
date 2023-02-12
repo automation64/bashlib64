@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Display messages
 #
-# Version: 2.5.0
+# Version: 2.6.0
 #######################################
 
 export BL64_MSG_MODULE="$BL64_VAR_OFF"
@@ -151,6 +151,7 @@ export BL64_MSG_COSMETIC_ARROW='-->'
 export BL64_MSG_COSMETIC_ARROW2='==>'
 export BL64_MSG_COSMETIC_PHASE_PREFIX='===['
 export BL64_MSG_COSMETIC_PHASE_SUFIX=']==='
+export BL64_MSG_COSMETIC_PIPE='|'
 
 #
 # Display messages
