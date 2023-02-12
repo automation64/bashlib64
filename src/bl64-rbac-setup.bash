@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage role based access service
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -23,6 +23,7 @@ function bl64_rbac_setup() {
 
   bl64_rbac_set_command &&
     bl64_rbac_set_alias &&
+    bl64_rbac_set_options &&
     BL64_RBAC_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'rbac'
@@ -79,4 +80,23 @@ function bl64_rbac_set_alias() {
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
+}
+
+#######################################
+# Create command sets for common options
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_rbac_set_options() {
+  bl64_dbg_lib_show_function
+
+  BL64_RBAC_SET_SUDO_CHECK='--check'
+  BL64_RBAC_SET_SUDO_FILE='--file'
+  BL64_RBAC_SET_SUDO_QUIET='--quiet'
 }
