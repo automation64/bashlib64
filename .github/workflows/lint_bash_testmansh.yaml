@@ -1,3 +1,5 @@
+---
+# Template: 1.1.0
 name: "Lint / Bash / TestManSH"
 
 on:
@@ -7,7 +9,7 @@ on:
       - "feature/*"
 
 jobs:
-  lint_shellcheck:
+  lint-bash-testmansh:
     runs-on: "ubuntu-latest"
     steps:
 
@@ -20,5 +22,9 @@ jobs:
       - name: "Build app"
         run: "./bin/devbl-build -t"
 
+      - name: "Build app"
+        run: "./bin/devbl-build -t"
+
       - name: "Run ShellCheck"
-        run: "bash lib/testmansh -t -c build/bashlib64.bash"
+        run: "./lib/testmansh -t -c build/bashlib64.bash"
+...

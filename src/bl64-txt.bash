@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manipulate text files content
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -68,39 +68,15 @@ function bl64_txt_search_line() {
 #######################################
 function bl64_txt_run_awk() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
-  local awk_cmd="$BL64_VAR_INCOMPATIBLE"
-  local awk_flags=' '
 
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    if [[ -x '/usr/bin/gawk' ]]; then
-      awk_cmd='/usr/bin/gawk'
-      awk_flags='--posix'
-    elif [[ -x '/usr/bin/mawk' ]]; then
-      awk_cmd='/usr/bin/mawk'
-    fi
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    awk_cmd='/usr/bin/gawk'
-    awk_flags='--posix'
-    ;;
-  ${BL64_OS_ALP}-*)
-    if [[ -x '/usr/bin/gawk' ]]; then
-      awk_cmd='/usr/bin/gawk'
-      awk_flags='--posix'
-    fi
-    ;;
-  ${BL64_OS_MCOS}-*)
-    awk_cmd='/usr/bin/awk'
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-  bl64_check_command "$awk_cmd" || return $?
+  bl64_check_parameters_none "$#" ||
+    return $?
+
+  bl64_check_command "$BL64_TXT_CMD_AWK_POSIX" ||
+    return $?
 
   bl64_dbg_lib_trace_start
-  # shellcheck disable=SC2086
-  "$awk_cmd" $awk_flags "$@"
+  "$BL64_TXT_CMD_AWK_POSIX" "$BL64_TXT_SET_AWK_POSIX" "$@"
   bl64_dbg_lib_trace_stop
 }
 
