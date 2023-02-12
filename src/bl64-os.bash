@@ -45,6 +45,7 @@ function _bl64_os_get_distro_from_uname() {
     bl64_msg_show_error "BashLib64 is not supported in the current OS ($(uname -a))"
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
   fi
+  bl64_dbg_lib_show_vars 'BL64_OS_DISTRO'
 
   return 0
 }
@@ -83,6 +84,7 @@ function _bl64_os_get_distro_from_os_release() {
     bl64_msg_show_error "Unable to normalize OS name and version from /etc/os-release (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE}). Review the bashlib64 OS compatibility list to verify it is supported"
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
   fi
+  bl64_dbg_lib_show_vars 'BL64_OS_DISTRO'
 
   return 0
 }
