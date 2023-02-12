@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
 #
-# Version: 1.16.0
+# Version: 1.17.0
 #######################################
 
 export _BL64_CHECK_TXT_PARAMETER_MISSING='required parameter is missing'
@@ -52,5 +52,3 @@ export _BL64_CHECK_TXT_STATUS_ERROR='task execution failed'
 export _BL64_CHECK_TXT_MODULE_SET='required bashlib64 module was not imported. Please source the module before using it'
 export _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested bashlib64 module'
 export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required bashlib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module'
-
-export _BL64_CHECK_TXT_I='|'
