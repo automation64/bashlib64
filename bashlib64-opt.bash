@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 9.1.1
+# Version: 9.1.2
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -4584,7 +4584,7 @@ function bl64_pkg_set_alias() {
     BL64_PKG_ALIAS_YUM_CLEAN="$BL64_PKG_CMD_YUM clean all"
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_PKG_ALIAS_APT_CACHE="$BL64_PKG_CMD_APT update ${BL64_PKG_SET_VERBOSE}"
+    BL64_PKG_ALIAS_APT_CACHE="$BL64_PKG_CMD_APT update"
     BL64_PKG_ALIAS_APT_INSTALL="$BL64_PKG_CMD_APT install ${BL64_PKG_SET_ASSUME_YES} ${BL64_PKG_SET_VERBOSE}"
     BL64_PKG_ALIAS_APT_CLEAN="$BL64_PKG_CMD_APT clean"
     ;;
@@ -5056,7 +5056,8 @@ function bl64_pkg_run_apt() {
 
   bl64_pkg_blank_apt
 
-  if bl64_dbg_lib_command_enabled; then
+  # Verbose is only available for a subset of commands
+  if bl64_dbg_lib_command_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     export DEBCONF_NOWARNINGS='yes'
