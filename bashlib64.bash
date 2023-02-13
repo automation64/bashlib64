@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 9.1.2
+# Version: 9.1.3
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -11140,7 +11140,7 @@ function bl64_pkg_run_brew() {
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.12.1
+# Version: 1.12.2
 #######################################
 
 #######################################
@@ -11236,8 +11236,8 @@ function bl64_py_set_command() {
     ${BL64_OS_UB}-20.*) BL64_PY_CMD_PYTHON38='/usr/bin/python3.8' ;;
     ${BL64_OS_UB}-21.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_UB}-22.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
-    ${BL64_OS_ALP}-3.14 | ${BL64_OS_ALP}-3.15) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-    ${BL64_OS_ALP}-3.16 | ${BL64_OS_ALP}-3.17) BL64_PY_CMD_PYTHON39='/usr/bin/python3.10' ;;
+    "${BL64_OS_ALP}-3.14" | "${BL64_OS_ALP}-3.15") BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    "${BL64_OS_ALP}-3.16" | "${BL64_OS_ALP}-3.17") BL64_PY_CMD_PYTHON39='/usr/bin/python3.10' ;;
     ${BL64_OS_MCOS}-12.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     *) bl64_check_alert_unsupported ;;
     esac
