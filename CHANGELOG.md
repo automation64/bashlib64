@@ -7,17 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [9.1.1]
+## [9.1.2]
 
 ### Fixed
 
 - py
   - bl64_py_set_command: added OS subversion check for Python version to Alpine
+- pkg
+  - bl64_pkg_run_apt: restrict verbose mode to install,remove,upgrade in apt-get
+- rback
+  - bl64_rbac_add_root: fixed backup check when original sudoers is empty
 
 ### Added
 
 - fs
   - new functions: bl64_fs_chmod_dir, bl64_fs_fix_permissions
+- rbac
+  - new set options for sudo
 
 ### Changed
 
@@ -753,7 +759,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - alias for useradd
 
 [unreleased]: https://github.com/serdigital64/bashlib64/compare/9.0.1...HEAD
-[9.1.1]: https://github.com/serdigital64/bashlib64/compare/9.1.1...9.0.1
+[9.1.2]: https://github.com/serdigital64/bashlib64/compare/9.1.2...9.0.1
 [9.0.1]: https://github.com/serdigital64/bashlib64/compare/8.1.1...9.0.1
 [8.1.1]: https://github.com/serdigital64/bashlib64/compare/8.0.0...8.1.1
 [8.0.0]: https://github.com/serdigital64/bashlib64/compare/7.1.0...8.0.0
