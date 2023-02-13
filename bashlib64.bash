@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 9.1.1
+# Version: 9.1.2
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -627,7 +627,7 @@ export BL64_OS_UNK='UNKNOWN'
 #######################################
 # BashLib64 / Module / Globals / Manage role based access service
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 export BL64_RBAC_MODULE="$BL64_VAR_OFF"
@@ -637,6 +637,10 @@ export BL64_RBAC_CMD_VISUDO=''
 export BL64_RBAC_FILE_SUDOERS=''
 
 export BL64_RBAC_ALIAS_SUDO_ENV=''
+
+export BL64_RBAC_SET_SUDO_CHECK=''
+export BL64_RBAC_SET_SUDO_FILE=''
+export BL64_RBAC_SET_SUDO_QUIET=''
 
 export _BL64_RBAC_TXT_INVALID_SUDOERS='the sudoers file is corrupt or invalid'
 export _BL64_RBAC_TXT_ADD_ROOT='add password-less root privilege to user'
@@ -4684,7 +4688,7 @@ function bl64_os_get_distro() {
 #######################################
 # BashLib64 / Module / Setup / Manage role based access service
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -4706,6 +4710,7 @@ function bl64_rbac_setup() {
 
   bl64_rbac_set_command &&
     bl64_rbac_set_alias &&
+    bl64_rbac_set_options &&
     BL64_RBAC_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'rbac'
@@ -4765,9 +4770,28 @@ function bl64_rbac_set_alias() {
 }
 
 #######################################
+# Create command sets for common options
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_rbac_set_options() {
+  bl64_dbg_lib_show_function
+
+  BL64_RBAC_SET_SUDO_CHECK='--check'
+  BL64_RBAC_SET_SUDO_FILE='--file'
+  BL64_RBAC_SET_SUDO_QUIET='--quiet'
+}
+
+#######################################
 # BashLib64 / Module / Functions / Manage role based access service
 #
-# Version: 1.10.1
+# Version: 1.11.0
 #######################################
 
 #######################################
@@ -4797,6 +4821,15 @@ function bl64_rbac_add_root() {
 
   bl64_msg_show_lib_task "$_BL64_RBAC_TXT_ADD_ROOT ($user)"
   umask 0266
+
+  if [[ -s "$BL64_RBAC_FILE_SUDOERS" ]]; then
+    bl64_dbg_lib_show_info "backup original sudoers (${BL64_RBAC_FILE_SUDOERS} -> ${old_sudoers})"
+    bl64_fs_cp_file "${BL64_RBAC_FILE_SUDOERS}" "$old_sudoers"
+    status=$?
+    ((status != 0)) && bl64_msg_show_error "unable to backup sudoers file (${BL64_RBAC_FILE_SUDOERS})" && return $status
+  fi
+
+  bl64_dbg_lib_show_info "create new sudoers (${new_sudoers})"
   # shellcheck disable=SC2016
   bl64_txt_run_awk \
     -v ControlUsr="$user" \
@@ -4811,19 +4844,14 @@ function bl64_rbac_add_root() {
       }
     ' \
     "$BL64_RBAC_FILE_SUDOERS" >"$new_sudoers"
+  status=$?
+  ((status != 0)) && bl64_msg_show_error "unable to create new sudoers file (${new_sudoers})" && return $status
 
-  if [[ -s "$new_sudoers" ]]; then
-    bl64_fs_cp_file "${BL64_RBAC_FILE_SUDOERS}" "$old_sudoers"
-  fi
-  if [[ -s "$new_sudoers" && -s "$old_sudoers" ]]; then
-    "$BL64_OS_CMD_CAT" "${BL64_RBAC_FILE_SUDOERS}.bl64_new" >"${BL64_RBAC_FILE_SUDOERS}" &&
-      bl64_rbac_check_sudoers "$BL64_RBAC_FILE_SUDOERS"
-    status=$?
-  else
-    status=$BL64_LIB_ERROR_TASK_FAILED
-  fi
+  bl64_dbg_lib_show_info "replace original sudoers with new version (${new_sudoers} ->${BL64_RBAC_FILE_SUDOERS})"
+  "$BL64_OS_CMD_CAT" "$new_sudoers" >"${BL64_RBAC_FILE_SUDOERS}" &&
+    bl64_rbac_check_sudoers "$BL64_RBAC_FILE_SUDOERS"
+  status=$?
 
-  # shellcheck disable=SC2086
   return $status
 }
 
@@ -4843,7 +4871,7 @@ function bl64_rbac_check_sudoers() {
   bl64_dbg_lib_show_function "$@"
   local sudoers="$1"
   local -i status=0
-  local debug='--quiet'
+  local debug="$BL64_RBAC_SET_SUDO_QUIET"
 
   bl64_check_parameter 'sudoers' &&
     bl64_check_command "$BL64_RBAC_CMD_VISUDO" ||
@@ -4854,8 +4882,8 @@ function bl64_rbac_check_sudoers() {
   # shellcheck disable=SC2086
   "$BL64_RBAC_CMD_VISUDO" \
     $debug \
-    --check \
-    --file="$sudoers"
+    $BL64_RBAC_SET_SUDO_CHECK \
+    ${BL64_RBAC_SET_SUDO_FILE}="$sudoers"
   status=$?
 
   if ((status != 0)); then
@@ -10527,7 +10555,7 @@ function bl64_pkg_set_alias() {
     BL64_PKG_ALIAS_YUM_CLEAN="$BL64_PKG_CMD_YUM clean all"
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_PKG_ALIAS_APT_CACHE="$BL64_PKG_CMD_APT update ${BL64_PKG_SET_VERBOSE}"
+    BL64_PKG_ALIAS_APT_CACHE="$BL64_PKG_CMD_APT update"
     BL64_PKG_ALIAS_APT_INSTALL="$BL64_PKG_CMD_APT install ${BL64_PKG_SET_ASSUME_YES} ${BL64_PKG_SET_VERBOSE}"
     BL64_PKG_ALIAS_APT_CLEAN="$BL64_PKG_CMD_APT clean"
     ;;
@@ -10999,7 +11027,8 @@ function bl64_pkg_run_apt() {
 
   bl64_pkg_blank_apt
 
-  if bl64_dbg_lib_command_enabled; then
+  # Verbose is only available for a subset of commands
+  if bl64_dbg_lib_command_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     export DEBCONF_NOWARNINGS='yes'

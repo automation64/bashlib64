@@ -405,7 +405,8 @@ function bl64_pkg_run_apt() {
 
   bl64_pkg_blank_apt
 
-  if bl64_dbg_lib_command_enabled; then
+  # Verbose is only available for a subset of commands
+  if bl64_dbg_lib_command_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     export DEBCONF_NOWARNINGS='yes'
