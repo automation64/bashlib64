@@ -760,7 +760,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - alias for useradd
 
-[unreleased]: https://github.com/serdigital64/bashlib64/compare/9.0.1...HEAD
+[unreleased]: https://github.com/serdigital64/bashlib64/compare/9.1.4...HEAD
 [9.1.4]: https://github.com/serdigital64/bashlib64/compare/9.1.4...9.0.1
 [9.0.1]: https://github.com/serdigital64/bashlib64/compare/8.1.1...9.0.1
 [8.1.1]: https://github.com/serdigital64/bashlib64/compare/8.0.0...8.1.1
