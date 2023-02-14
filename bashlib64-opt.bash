@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 9.1.3
+# Version: 9.1.4
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -1592,7 +1592,7 @@ function bl64_cnt_set_command() {
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.7.0
+# Version: 1.7.1
 #######################################
 
 #######################################
@@ -1614,7 +1614,8 @@ function bl64_cnt_login_file() {
   local file="$2"
   local registry="$3"
 
-  bl64_check_parameter 'user' &&
+  bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_parameter 'user' &&
     bl64_check_parameter 'file' &&
     bl64_check_parameter 'registry' &&
     bl64_check_file "$file" ||
@@ -1646,7 +1647,8 @@ function bl64_cnt_login() {
   local password="$2"
   local registry="$3"
 
-  bl64_check_parameter 'user' &&
+  bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_parameter 'user' &&
     bl64_check_parameter 'password' &&
     bl64_check_parameter 'registry' ||
     return $?
@@ -1756,6 +1758,9 @@ function bl64_cnt_run_sh() {
 #######################################
 function bl64_cnt_run_interactive() {
   bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_CNT_MODULE' ||
+    return $?
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
     bl64_cnt_docker_run_interactive "$@"
@@ -1906,7 +1911,8 @@ function bl64_cnt_build() {
   local file="${2:-Dockerfile}"
   local tag="${3:-latest}"
 
-  bl64_check_parameter 'context' &&
+  bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_parameter 'context' &&
     bl64_check_directory "$context" &&
     bl64_check_file "${context}/${file}" ||
     return $?
@@ -2009,7 +2015,8 @@ function bl64_cnt_push() {
   local source="$1"
   local destination="$2"
 
-  bl64_check_parameter 'source' &&
+  bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' ||
     return $?
 
@@ -2087,7 +2094,8 @@ function bl64_cnt_pull() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
 
-  bl64_check_parameter 'source' ||
+  bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_parameter 'source' ||
     return $?
 
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
@@ -2168,7 +2176,8 @@ function bl64_cnt_tag() {
   local source="$1"
   local target="$2"
 
-  bl64_check_parameter 'source' &&
+  bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_parameter 'source' &&
     bl64_check_parameter 'target' ||
     return $?
 
@@ -2241,6 +2250,8 @@ function bl64_cnt_podman_tag() {
 function bl64_cnt_run() {
   bl64_dbg_lib_show_function "$@"
 
+  bl64_check_module 'BL64_CNT_MODULE' ||
+    return $?
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
     bl64_cnt_docker_run "$@"
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
