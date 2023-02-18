@@ -11,7 +11,7 @@ setup() {
 }
 
 @test "bl64_py_setup: create venv" {
-  [[ ! -f '/run/.containerenv' ]] && skip 'test-case for container mode'
+  bl64_cnt_is_inside_container || skip 'test-case for container mode'
 
   target="${TEST_SANDBOX}/venv"
   bl64_py_setup

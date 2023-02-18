@@ -1,8 +1,46 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.7.1
+# Version: 1.8.0
 #######################################
+
+#######################################
+# Check if the current process is running inside a container
+#
+# * detection is best effort and not guaranteed to cover all possible implementations
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   check status
+#######################################
+function bl64_cnt_is_inside_container() {
+  bl64_dbg_lib_show_function
+
+  _bl64_cnt_check_file_marker '/run/.containerenv' && return 0
+  _bl64_cnt_check_file_marker '/run/container_id' && return 0
+  _bl64_cnt_check_variable_marker 'container' && return 0
+  _bl64_cnt_check_variable_marker 'DOCKER_CONTAINER' && return 0
+  _bl64_cnt_check_variable_marker 'KUBERNETES_SERVICE_HOST' && return 0
+
+  return 1
+}
+
+function _bl64_cnt_check_file_marker() {
+  local marker="$1"
+  bl64_dbg_lib_show_info "check for file marker (${marker})"
+  [[ -f "$marker" ]]
+}
+
+function _bl64_cnt_check_variable_marker() {
+  local name="$1"
+  local -n marker="$1"
+  bl64_dbg_lib_show_info "check for variable marker (${name})"
+  [[ -n "$marker" ]]
+}
 
 #######################################
 # Logins the container engine to a container registry. The password is stored in a regular file

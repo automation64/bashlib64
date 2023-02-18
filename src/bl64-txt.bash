@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manipulate text files content
 #
-# Version: 1.7.0
+# Version: 1.7.1
 #######################################
 
 #######################################
@@ -76,7 +76,8 @@ function bl64_txt_run_awk() {
     return $?
 
   bl64_dbg_lib_trace_start
-  "$BL64_TXT_CMD_AWK_POSIX" "$BL64_TXT_SET_AWK_POSIX" "$@"
+  # shellcheck disable=SC2086
+  "$BL64_TXT_CMD_AWK_POSIX" $BL64_TXT_SET_AWK_POSIX "$@"
   bl64_dbg_lib_trace_stop
 }
 
