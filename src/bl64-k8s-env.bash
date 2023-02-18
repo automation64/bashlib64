@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with Kubernetes
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -38,3 +38,4 @@ export _BL64_K8S_TXT_GET_SECRET='get secret definition from source'
 export _BL64_K8S_TXT_CREATE_SECRET='copy secret to destination'
 export _BL64_K8S_TXT_RESOURCE_UPDATE='create or update resource definition'
 export _BL64_K8S_TXT_RESOURCE_EXISTING='the resource is already created. No further actions are needed'
+export _BL64_K8S_TXT_ERROR_KUBECTL_VERSION='unable to determine kubectl version'

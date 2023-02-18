@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Kubernetes
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -127,23 +127,30 @@ function bl64_k8s_set_version() {
   local version=''
 
   bl64_dbg_lib_show_info "run kubectl to obtain client version"
-  version="$(
-    "$BL64_K8S_CMD_KUBECTL" version --client --output=json | bl64_txt_run_awk $BL64_TXT_SET_AWS_FS ':' '
-      $1 ~ /^ +"major"$/ { gsub( /[" ,]/, "", $2 ); Major = $2 }
-      $1 ~ /^ +"minor"$/ { gsub( /[" ,]/, "", $2 ); Minor = $2 }
-      END { print Major "." Minor }
-    '
-  )"
+  version="$(_bl64_k8s_get_version_1_22)"
 
   if [[ -n "$version" ]]; then
     BL64_K8S_VERSION_KUBECTL="$version"
   else
-    # shellcheck disable=SC2086
+    bl64_msg_show_error "$_BL64_K8S_TXT_ERROR_KUBECTL_VERSION"
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
 
   bl64_dbg_lib_show_vars 'BL64_K8S_VERSION_KUBECTL'
   return 0
+}
+
+function _bl64_k8s_get_version_1_22() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info "try with kubectl v1.22 options"
+  # shellcheck disable=SC2086
+  "$BL64_K8S_CMD_KUBECTL" version --client --output=json |
+  bl64_txt_run_awk $BL64_TXT_SET_AWS_FS ':' '
+    $1 ~ /^ +"major"$/ { gsub( /[" ,]/, "", $2 ); Major = $2 }
+    $1 ~ /^ +"minor"$/ { gsub( /[" ,]/, "", $2 ); Minor = $2 }
+    END { print Major "." Minor }
+  '
 }
 
 #######################################
