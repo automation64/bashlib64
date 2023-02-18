@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [9.2.0]
+## [9.2.1]
 
 ### Fixed
 
@@ -156,7 +156,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
-[9.2.0]: https://github.com/serdigital64/bashlib64/compare/9.2.0...9.1.4
+[9.2.1]: https://github.com/serdigital64/bashlib64/compare/9.2.1...9.1.4
 [9.1.4]: https://github.com/serdigital64/bashlib64/compare/9.1.4...9.0.1
 [9.0.1]: https://github.com/serdigital64/bashlib64/compare/8.1.1...9.0.1
 [8.1.1]: https://github.com/serdigital64/bashlib64/compare/8.0.0...8.1.1
