@@ -1,6 +1,6 @@
 setup() {
-  [[ ! -f '/run/.containerenv' ]] && skip 'test-case for container mode'
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  bl64_cnt_is_inside_container || skip 'test-case for container mode'
   bl64_py_setup
 }
 

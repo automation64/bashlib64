@@ -13,8 +13,8 @@ setup() {
 }
 
 @test "bl64_fs_fix_permissions: fix all" {
-  run bl64_fs_fix_permissions '0700' '0600' "$TEST_TARGET"
-  assert_equal "$status" '0'
+  run bl64_fs_fix_permissions '0600' '0700' "$TEST_TARGET"
+  assert_success
 }
 
 teardown() {

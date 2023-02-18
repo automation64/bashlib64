@@ -4,7 +4,7 @@ setup() {
 }
 
 @test "bl64_py_run_pip: run pip + ephemeral" {
-  [[ ! -f '/run/.containerenv' ]] && skip 'test-case for container mode'
+  bl64_cnt_is_inside_container || skip 'test-case for container mode'
 
   export BL64_FS_PATH_TEMPORAL=/tmp
   export BL64_FS_PATH_CACHE=/tmp
