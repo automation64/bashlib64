@@ -26,12 +26,15 @@ function bl64_cnt_setup() {
   bl64_cnt_set_command
   status=$?
   if ((status == 0)); then
-    [[ -x "$BL64_CNT_CMD_DOCKER" || -x "$BL64_CNT_CMD_PODMAN" ]] ||
-      bl64_msg_show_error "unable to find a container manager (${BL64_CNT_CMD_DOCKER}, ${BL64_CNT_CMD_PODMAN})" && status=$BL64_LIB_ERROR_APP_MISSING
+    if [[ ! -x "$BL64_CNT_CMD_DOCKER" && ! -x "$BL64_CNT_CMD_PODMAN" ]]; then
+      bl64_msg_show_error "unable to find a container manager (${BL64_CNT_CMD_DOCKER}, ${BL64_CNT_CMD_PODMAN})"
+      status=$BL64_LIB_ERROR_APP_MISSING
+    else
+      BL64_CNT_MODULE="$BL64_VAR_ON"
+    fi
   fi
 
-  ((status == 0)) && BL64_CNT_MODULE="$BL64_VAR_ON"
-
+  ((status == 0))
   bl64_check_alert_module_setup 'cnt'
 }
 
