@@ -797,7 +797,7 @@ function bl64_fs_fix_permissions() {
   fi
 
   if [[ "$dir_mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_info "fix file permissions (${dir_mode})"
+    bl64_dbg_lib_show_info "fix directory permissions (${dir_mode})"
     # shellcheck disable=SC2086
     bl64_fs_run_find \
       "$@" \
