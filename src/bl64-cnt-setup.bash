@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 #######################################
@@ -21,10 +21,16 @@
 #######################################
 function bl64_cnt_setup() {
   bl64_dbg_lib_show_function
+  local -i status=0
 
-  bl64_cnt_set_command &&
-    [[ -x "$BL64_CNT_CMD_DOCKER" || -x "$BL64_CNT_CMD_PODMAN" ]] &&
-    BL64_CNT_MODULE="$BL64_VAR_ON"
+  bl64_cnt_set_command
+  status=$?
+  if ((status == 0)); then
+    [[ -x "$BL64_CNT_CMD_DOCKER" || -x "$BL64_CNT_CMD_PODMAN" ]] ||
+      bl64_msg_show_error "unable to find a container manager (${BL64_CNT_CMD_DOCKER}, ${BL64_CNT_CMD_PODMAN})" && status=$BL64_LIB_ERROR_APP_MISSING
+  fi
+
+  ((status == 0)) && BL64_CNT_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'cnt'
 }

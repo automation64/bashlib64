@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 9.1.4
+# Version: 9.2.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -170,7 +170,7 @@ export _BL64_IAM_TXT_ADD_USER='create user account'
 #######################################
 # BashLib64 / Module / Globals / Interact with Kubernetes
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -207,6 +207,7 @@ export _BL64_K8S_TXT_GET_SECRET='get secret definition from source'
 export _BL64_K8S_TXT_CREATE_SECRET='copy secret to destination'
 export _BL64_K8S_TXT_RESOURCE_UPDATE='create or update resource definition'
 export _BL64_K8S_TXT_RESOURCE_EXISTING='the resource is already created. No further actions are needed'
+export _BL64_K8S_TXT_ERROR_KUBECTL_VERSION='unable to determine kubectl version'
 
 #######################################
 # BashLib64 / Module / Globals / Write messages to logs
@@ -1529,7 +1530,7 @@ function bl64_aws_blank_aws() {
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 #######################################
@@ -1549,10 +1550,16 @@ function bl64_aws_blank_aws() {
 #######################################
 function bl64_cnt_setup() {
   bl64_dbg_lib_show_function
+  local -i status=0
 
-  bl64_cnt_set_command &&
-    [[ -x "$BL64_CNT_CMD_DOCKER" || -x "$BL64_CNT_CMD_PODMAN" ]] &&
-    BL64_CNT_MODULE="$BL64_VAR_ON"
+  bl64_cnt_set_command
+  status=$?
+  if ((status == 0)); then
+    [[ -x "$BL64_CNT_CMD_DOCKER" || -x "$BL64_CNT_CMD_PODMAN" ]] ||
+      bl64_msg_show_error "unable to find a container manager (${BL64_CNT_CMD_DOCKER}, ${BL64_CNT_CMD_PODMAN})" && status=$BL64_LIB_ERROR_APP_MISSING
+  fi
+
+  ((status == 0)) && BL64_CNT_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'cnt'
 }
@@ -1592,8 +1599,46 @@ function bl64_cnt_set_command() {
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.7.1
+# Version: 1.8.0
 #######################################
+
+#######################################
+# Check if the current process is running inside a container
+#
+# * detection is best effort and not guaranteed to cover all possible implementations
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   check status
+#######################################
+function bl64_cnt_is_inside_container() {
+  bl64_dbg_lib_show_function
+
+  _bl64_cnt_check_file_marker '/run/.containerenv' && return 0
+  _bl64_cnt_check_file_marker '/run/container_id' && return 0
+  _bl64_cnt_check_variable_marker 'container' && return 0
+  _bl64_cnt_check_variable_marker 'DOCKER_CONTAINER' && return 0
+  _bl64_cnt_check_variable_marker 'KUBERNETES_SERVICE_HOST' && return 0
+
+  return 1
+}
+
+function _bl64_cnt_check_file_marker() {
+  local marker="$1"
+  bl64_dbg_lib_show_info "check for file marker (${marker})"
+  [[ -f "$marker" ]]
+}
+
+function _bl64_cnt_check_variable_marker() {
+  local name="$1"
+  local -n marker="$1"
+  bl64_dbg_lib_show_info "check for variable marker (${name})"
+  [[ -n "$marker" ]]
+}
 
 #######################################
 # Logins the container engine to a container registry. The password is stored in a regular file
@@ -3090,7 +3135,7 @@ function bl64_iam_user_get_current() {
 #######################################
 # BashLib64 / Module / Setup / Interact with Kubernetes
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -3216,23 +3261,30 @@ function bl64_k8s_set_version() {
   local version=''
 
   bl64_dbg_lib_show_info "run kubectl to obtain client version"
-  version="$(
-    "$BL64_K8S_CMD_KUBECTL" version --client --output=json | bl64_txt_run_awk $BL64_TXT_SET_AWS_FS ':' '
-      $1 ~ /^ +"major"$/ { gsub( /[" ,]/, "", $2 ); Major = $2 }
-      $1 ~ /^ +"minor"$/ { gsub( /[" ,]/, "", $2 ); Minor = $2 }
-      END { print Major "." Minor }
-    '
-  )"
+  version="$(_bl64_k8s_get_version_1_22)"
 
   if [[ -n "$version" ]]; then
     BL64_K8S_VERSION_KUBECTL="$version"
   else
-    # shellcheck disable=SC2086
+    bl64_msg_show_error "$_BL64_K8S_TXT_ERROR_KUBECTL_VERSION"
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
 
   bl64_dbg_lib_show_vars 'BL64_K8S_VERSION_KUBECTL'
   return 0
+}
+
+function _bl64_k8s_get_version_1_22() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info "try with kubectl v1.22 options"
+  # shellcheck disable=SC2086
+  "$BL64_K8S_CMD_KUBECTL" version --client --output=json |
+  bl64_txt_run_awk $BL64_TXT_SET_AWS_FS ':' '
+    $1 ~ /^ +"major"$/ { gsub( /[" ,]/, "", $2 ); Major = $2 }
+    $1 ~ /^ +"minor"$/ { gsub( /[" ,]/, "", $2 ); Minor = $2 }
+    END { print Major "." Minor }
+  '
 }
 
 #######################################
