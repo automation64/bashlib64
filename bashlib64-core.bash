@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 9.1.4
+# Version: 9.2.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -3105,7 +3105,7 @@ function bl64_fs_fix_permissions() {
   fi
 
   if [[ "$dir_mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_info "fix file permissions (${dir_mode})"
+    bl64_dbg_lib_show_info "fix directory permissions (${dir_mode})"
     # shellcheck disable=SC2086
     bl64_fs_run_find \
       "$@" \
@@ -5331,7 +5331,7 @@ function bl64_txt_set_options() {
 #######################################
 # BashLib64 / Module / Functions / Manipulate text files content
 #
-# Version: 1.7.0
+# Version: 1.7.1
 #######################################
 
 #######################################
@@ -5406,7 +5406,8 @@ function bl64_txt_run_awk() {
     return $?
 
   bl64_dbg_lib_trace_start
-  "$BL64_TXT_CMD_AWK_POSIX" "$BL64_TXT_SET_AWK_POSIX" "$@"
+  # shellcheck disable=SC2086
+  "$BL64_TXT_CMD_AWK_POSIX" $BL64_TXT_SET_AWK_POSIX "$@"
   bl64_dbg_lib_trace_stop
 }
 
