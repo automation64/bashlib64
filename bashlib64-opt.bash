@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 9.2.1
+# Version: 9.2.2
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -2599,7 +2599,7 @@ function bl64_gcp_blank_gcloud() {
 #######################################
 # BashLib64 / Module / Setup / Interact with HLM
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -2695,7 +2695,7 @@ function bl64_hlm_set_options() {
 }
 
 #######################################
-# Set runtime variables
+# Set runtime variables to defaults
 #
 # Arguments:
 #   None
@@ -2708,8 +2708,28 @@ function bl64_hlm_set_options() {
 function bl64_hlm_set_runtime() {
   bl64_dbg_lib_show_function
 
-  # Command timeout
-  BL64_HLM_RUN_TIMEOUT='5m0s'
+  bl64_hlm_set_timeout '5m0s'
+}
+
+#######################################
+# Update runtime variables: timeout
+#
+# Arguments:
+#   $1: timeout value. Format: same as helm --timeout parameter
+# Outputs:
+#   STDOUT: None
+#   STDERR: Validation
+# Returns:
+#   0: set ok
+#   >0: set error
+#######################################
+function bl64_hlm_set_timeout() {
+  bl64_dbg_lib_show_function "$@"
+  local timeout="$1"
+
+  bl64_check_parameter 'timeout' || return $?
+
+  BL64_HLM_RUN_TIMEOUT="$timeout"
 }
 
 #######################################

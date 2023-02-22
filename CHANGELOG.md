@@ -7,20 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [9.2.1]
+## [9.2.2]
 
 ### Fixed
 
 - txt
   - bl64_txt_run_awk: removed extra quotes that can cause null run
+- rbac
+  - bl64_rbac_add_root: now create new sudoers when there is no previous one
 
 ### Added
 
+- hlm
+  - new function: bl64_hlm_set_timeout
 - cnd
   - new function: bl64_cnt_is_inside_container
 
 ### Changed
 
+- os
+  - bl64_os_match: **Breaking change** removed support for plain OS alias. Use predefined variables BL64_OS_XXX. For example: "$BL64_OS_<ALIAS>" "${BL64_OS_<ALIAS>}-V" "${BL64_OS_<ALIAS>}-V.S"
 - k8s
   - bl64_k8s_set_version: optimized to allow support for different cli versions
 
@@ -156,7 +162,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
-[9.2.1]: https://github.com/serdigital64/bashlib64/compare/9.2.1...9.1.4
+[9.2.2]: https://github.com/serdigital64/bashlib64/compare/9.2.2...9.1.4
 [9.1.4]: https://github.com/serdigital64/bashlib64/compare/9.1.4...9.0.1
 [9.0.1]: https://github.com/serdigital64/bashlib64/compare/8.1.1...9.0.1
 [8.1.1]: https://github.com/serdigital64/bashlib64/compare/8.0.0...8.1.1
