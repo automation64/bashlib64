@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 9.2.1
+# Version: 9.2.2
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -582,7 +582,7 @@ export _BL64_MSG_TXT_BATCH_FINISH_ERROR='finished with errors'
 #######################################
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.15.0
+# Version: 1.16.0
 #######################################
 
 export BL64_OS_MODULE="$BL64_VAR_OFF"
@@ -623,6 +623,12 @@ export BL64_OS_RHEL='RHEL'
 export BL64_OS_UB='UBUNTU'
 # UNK  -> Unknown OS
 export BL64_OS_UNK='UNKNOWN'
+
+export _BL64_OS_TXT_CHECK_OS_MATRIX='Please check that the OS is listed in the current BashLib64 OS compatibility matrix'
+export _BL64_OS_TXT_FAILED_TO_NORMALIZE_OS='Unable to normalize OS name and version from /etc/os-release'
+export _BL64_OS_TXT_INVALID_OS_PATTERN='invalid OS pattern'
+export _BL64_OS_TXT_OS_NOT_SUPPORTED='BashLib64 is not supported in the current OS'
+
 
 #######################################
 # BashLib64 / Module / Globals / Manage role based access service
@@ -4169,28 +4175,30 @@ function bl64_os_set_command() {
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.17.0
+# Version: 1.18.0
 #######################################
 
 function _bl64_os_match() {
   bl64_dbg_lib_show_function "$@"
   local os="$1"
-  local item="$2"
-  local version="${item##*-}"
+  local target="$2"
+  local version="${target##*-}"
 
-  # Pattern: OOO-V.V
-  if [[ "$item" == +([[:alpha:]])-+([[:digit:]]).+([[:digit:]]) ]]; then
-    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${os}-${version}]"
-    [[ "$BL64_OS_DISTRO" == "${os}-${version}" ]]
-  # Pattern: OOO-V
-  elif [[ "$item" == +([[:alpha:]])-+([[:digit:]]) ]]; then
-    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${os}-${version}.+([[:digit:]])]"
-    [[ "$BL64_OS_DISTRO" == ${os}-${version}.+([[:digit:]]) ]]
-  # Pattern: OOO
+  if [[ "$target" == +([[:alpha:]])-+([[:digit:]]).+([[:digit:]]) ]]; then
+    bl64_dbg_lib_show_info "Pattern: OOO-V.V [${BL64_OS_DISTRO}] == [${os}-${version}]"
+    [[ "$BL64_OS_DISTRO" == "${os}-${version}" ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+  elif [[ "$target" == +([[:alpha:]])-+([[:digit:]]) ]]; then
+    bl64_dbg_lib_show_info "Pattern: OOO-V [${BL64_OS_DISTRO}] == [${os}-${version}.+([[:digit:]])]"
+    [[ "$BL64_OS_DISTRO" == ${os}-${version}.+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+  elif [[ "$target" == +([[:alpha:]]) ]]; then
+    bl64_dbg_lib_show_info "Pattern: OOO [${BL64_OS_DISTRO}] == [${os}]"
+    [[ "$BL64_OS_DISTRO" == ${os}-+([[:digit:]]).+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
   else
-    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${os}-+([[:digit:]]).+([[:digit:]])]"
-    [[ "$BL64_OS_DISTRO" == ${os}-+([[:digit:]]).+([[:digit:]]) ]]
+    bl64_msg_error "${_BL64_OS_TXT_INVALID_OS_PATTERN} (${target})"
+    return $BL64_LIB_ERROR_OS_TAG_INVALID
   fi
+
+  return 0
 }
 
 # Warning: bootstrap function
@@ -4210,7 +4218,7 @@ function _bl64_os_get_distro_from_uname() {
   esac
 
   if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" ]]; then
-    bl64_msg_show_error "BashLib64 is not supported in the current OS ($(uname -a))"
+    bl64_msg_show_error "${_BL64_OS_TXT_OS_NOT_SUPPORTED} ($(uname -a))"
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
   fi
   bl64_dbg_lib_show_vars 'BL64_OS_DISTRO'
@@ -4249,7 +4257,7 @@ function _bl64_os_get_distro_from_os_release() {
   esac
 
   if [[ "$BL64_OS_DISTRO" == "$BL64_OS_UNK" ]]; then
-    bl64_msg_show_error "Unable to normalize OS name and version from /etc/os-release (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE}). Review the bashlib64 OS compatibility list to verify it is supported"
+    bl64_msg_show_error "${_BL64_OS_TXT_FAILED_TO_NORMALIZE_OS} (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE}). ${_BL64_OS_TXT_CHECK_OS_MATRIX}"
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
   fi
   bl64_dbg_lib_show_vars 'BL64_OS_DISTRO'
@@ -4261,7 +4269,7 @@ function _bl64_os_get_distro_from_os_release() {
 # Check if the current OS matches the target list
 #
 # Arguments:
-#   $@: list of OS tags. Can use the full tag using BL64_OS_XXX variables or the short form using the sufix XXX
+#   $@: each argument is an OS target. Any combintation of the formats: "$BL64_OS_<ALIAS>" "${BL64_OS_<ALIAS>}-V" "${BL64_OS_<ALIAS>}-V.S"
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -4273,27 +4281,61 @@ function _bl64_os_get_distro_from_os_release() {
 function bl64_os_match() {
   bl64_dbg_lib_show_function "$@"
   local item=''
+  local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
 
   bl64_dbg_lib_show_info "Look for [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
     case "$item" in
-    "$BL64_OS_ALM" | ${BL64_OS_ALM}-* | 'ALM' | ALM-*) _bl64_os_match "$BL64_OS_ALM" "$item" && return 0 ;;
-    "$BL64_OS_ALP" | ${BL64_OS_ALP}-* | 'ALP' | ALP-*) _bl64_os_match "$BL64_OS_ALP" "$item" && return 0 ;;
-    "$BL64_OS_CNT" | ${BL64_OS_CNT}-* | 'CNT' | CNT-*) _bl64_os_match "$BL64_OS_CNT" "$item" && return 0 ;;
-    "$BL64_OS_DEB" | ${BL64_OS_DEB}-* | 'DEB' | DEB-*) _bl64_os_match "$BL64_OS_DEB" "$item" && return 0 ;;
-    "$BL64_OS_FD" | ${BL64_OS_FD}-* | 'FD' | FD-*) _bl64_os_match "$BL64_OS_FD" "$item" && return 0 ;;
-    "$BL64_OS_MCOS" | ${BL64_OS_MCOS}-* | 'MCOS' | MCOS-*) _bl64_os_match "$BL64_OS_MCOS" "$item" && return 0 ;;
-    "$BL64_OS_OL" | ${BL64_OS_OL}-* | 'OL' | OL-*) _bl64_os_match "$BL64_OS_OL" "$item" && return 0 ;;
-    "$BL64_OS_RCK" | ${BL64_OS_RCK}-* | 'RCK' | RCK-*) _bl64_os_match "$BL64_OS_RCK" "$item" && return 0 ;;
-    "$BL64_OS_RHEL" | ${BL64_OS_RHEL}-* | 'RHEL' | RHEL-*) _bl64_os_match "$BL64_OS_RHEL" "$item" && return 0 ;;
-    "$BL64_OS_UB" | ${BL64_OS_UB}-* | 'UB' | UB-*) _bl64_os_match "$BL64_OS_UB" "$item" && return 0 ;;
-    *) return $BL64_LIB_ERROR_OS_TAG_INVALID ;;
+    "$BL64_OS_ALM" | ${BL64_OS_ALM}-*)
+      _bl64_os_match "$BL64_OS_ALM" "$item"
+      status=$?
+      ;;
+    "$BL64_OS_ALP" | ${BL64_OS_ALP}-*)
+      _bl64_os_match "$BL64_OS_ALP" "$item"
+      status=$?
+      ;;
+    "$BL64_OS_CNT" | ${BL64_OS_CNT}-*)
+      _bl64_os_match "$BL64_OS_CNT" "$item"
+      status=$?
+      ;;
+    "$BL64_OS_DEB" | ${BL64_OS_DEB}-*)
+      _bl64_os_match "$BL64_OS_DEB" "$item"
+      status=$?
+      ;;
+    "$BL64_OS_FD" | ${BL64_OS_FD}-*)
+      _bl64_os_match "$BL64_OS_FD" "$item"
+      status=$?
+      ;;
+    "$BL64_OS_MCOS" | ${BL64_OS_MCOS}-*)
+      _bl64_os_match "$BL64_OS_MCOS" "$item"
+      status=$?
+      ;;
+    "$BL64_OS_OL" | ${BL64_OS_OL}-*)
+      _bl64_os_match "$BL64_OS_OL" "$item"
+      status=$?
+      ;;
+    "$BL64_OS_RCK" | ${BL64_OS_RCK}-*)
+      _bl64_os_match "$BL64_OS_RCK" "$item"
+      status=$?
+      ;;
+    "$BL64_OS_RHEL" | ${BL64_OS_RHEL}-*)
+      _bl64_os_match "$BL64_OS_RHEL" "$item"
+      status=$?
+      ;;
+    "$BL64_OS_UB" | ${BL64_OS_UB}-*)
+      _bl64_os_match "$BL64_OS_UB" "$item"
+      status=$?
+      ;;
+    *)
+      bl64_msg_error "${_BL64_OS_TXT_INVALID_OS_PATTERN} (${item})"
+      return $BL64_LIB_ERROR_OS_TAG_INVALID ;;
     esac
+    ((status == 0)) && break
   done
 
   # shellcheck disable=SC2086
-  return $BL64_LIB_ERROR_OS_NOT_MATCH
+  return $status
 }
 
 #######################################
@@ -4428,7 +4470,7 @@ function bl64_rbac_set_options() {
 #######################################
 # BashLib64 / Module / Functions / Manage role based access service
 #
-# Version: 1.11.0
+# Version: 1.12.0
 #######################################
 
 #######################################
@@ -4464,29 +4506,36 @@ function bl64_rbac_add_root() {
     bl64_fs_cp_file "${BL64_RBAC_FILE_SUDOERS}" "$old_sudoers"
     status=$?
     ((status != 0)) && bl64_msg_show_error "unable to backup sudoers file (${BL64_RBAC_FILE_SUDOERS})" && return $status
+
+    bl64_dbg_lib_show_info "create new sudoers (${new_sudoers})"
+    # shellcheck disable=SC2016
+    bl64_txt_run_awk \
+      -v ControlUsr="$user" \
+      '
+        BEGIN { Found = 0 }
+        ControlUsr " ALL=(ALL) NOPASSWD: ALL" == $0 { Found = 1 }
+        { print $0 }
+        END {
+          if( Found == 0) {
+            print( ControlUsr " ALL=(ALL) NOPASSWD: ALL" )
+          }
+        }
+      ' \
+      "$BL64_RBAC_FILE_SUDOERS" >"$new_sudoers"
+    status=$?
+    ((status != 0)) && bl64_msg_show_error "unable to create new sudoers file (${new_sudoers})" && return $status
+
+    bl64_dbg_lib_show_info "replace original sudoers with new version (${new_sudoers} ->${BL64_RBAC_FILE_SUDOERS})"
+    "$BL64_OS_CMD_CAT" "$new_sudoers" >"${BL64_RBAC_FILE_SUDOERS}"
+    status=$?
+    ((status != 0)) && bl64_msg_show_error "unable to promote new sudoers file (${new_sudoers}->${BL64_RBAC_FILE_SUDOERS})" && return $status
+  else
+    printf '%s ALL=(ALL) NOPASSWD: ALL\n' "$user" > "$BL64_RBAC_FILE_SUDOERS"
+    status=$?
+    ((status != 0)) && bl64_msg_show_error "unable to create new sudoers file (${BL64_RBAC_FILE_SUDOERS})" && return $status
   fi
 
-  bl64_dbg_lib_show_info "create new sudoers (${new_sudoers})"
-  # shellcheck disable=SC2016
-  bl64_txt_run_awk \
-    -v ControlUsr="$user" \
-    '
-      BEGIN { Found = 0 }
-      ControlUsr " ALL=(ALL) NOPASSWD: ALL" == $0 { Found = 1 }
-      { print $0 }
-      END {
-        if( Found == 0) {
-          print( ControlUsr " ALL=(ALL) NOPASSWD: ALL" )
-        }
-      }
-    ' \
-    "$BL64_RBAC_FILE_SUDOERS" >"$new_sudoers"
-  status=$?
-  ((status != 0)) && bl64_msg_show_error "unable to create new sudoers file (${new_sudoers})" && return $status
-
-  bl64_dbg_lib_show_info "replace original sudoers with new version (${new_sudoers} ->${BL64_RBAC_FILE_SUDOERS})"
-  "$BL64_OS_CMD_CAT" "$new_sudoers" >"${BL64_RBAC_FILE_SUDOERS}" &&
-    bl64_rbac_check_sudoers "$BL64_RBAC_FILE_SUDOERS"
+  bl64_rbac_check_sudoers "$BL64_RBAC_FILE_SUDOERS"
   status=$?
 
   return $status
@@ -5710,7 +5759,7 @@ function bl64_vcs_set_options() {
 #######################################
 # BashLib64 / Module / Functions / Manage Version Control System
 #
-# Version: 1.10.0
+# Version: 1.10.1
 #######################################
 
 #######################################
@@ -5862,7 +5911,7 @@ function bl64_vcs_git_sparse() {
   # shellcheck disable=SC2164
   cd "$destination"
 
-  if bl64_os_match 'DEB-9' 'DEB-10' 'UB-20' 'OL-7' 'CNT-7'; then
+  if bl64_os_match "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_UB}-20" "${BL64_OS_OL}-7" "${BL64_OS_CNT}-7"; then
     # shellcheck disable=SC2086
     bl64_vcs_run_git init &&
       bl64_vcs_run_git remote add origin "$source" &&

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage Version Control System
 #
-# Version: 1.10.0
+# Version: 1.10.1
 #######################################
 
 #######################################
@@ -153,7 +153,7 @@ function bl64_vcs_git_sparse() {
   # shellcheck disable=SC2164
   cd "$destination"
 
-  if bl64_os_match 'DEB-9' 'DEB-10' 'UB-20' 'OL-7' 'CNT-7'; then
+  if bl64_os_match "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_UB}-20" "${BL64_OS_OL}-7" "${BL64_OS_CNT}-7"; then
     # shellcheck disable=SC2086
     bl64_vcs_run_git init &&
       bl64_vcs_run_git remote add origin "$source" &&
