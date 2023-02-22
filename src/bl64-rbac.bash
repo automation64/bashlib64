@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage role based access service
 #
-# Version: 1.11.0
+# Version: 1.12.0
 #######################################
 
 #######################################
@@ -37,29 +37,36 @@ function bl64_rbac_add_root() {
     bl64_fs_cp_file "${BL64_RBAC_FILE_SUDOERS}" "$old_sudoers"
     status=$?
     ((status != 0)) && bl64_msg_show_error "unable to backup sudoers file (${BL64_RBAC_FILE_SUDOERS})" && return $status
+
+    bl64_dbg_lib_show_info "create new sudoers (${new_sudoers})"
+    # shellcheck disable=SC2016
+    bl64_txt_run_awk \
+      -v ControlUsr="$user" \
+      '
+        BEGIN { Found = 0 }
+        ControlUsr " ALL=(ALL) NOPASSWD: ALL" == $0 { Found = 1 }
+        { print $0 }
+        END {
+          if( Found == 0) {
+            print( ControlUsr " ALL=(ALL) NOPASSWD: ALL" )
+          }
+        }
+      ' \
+      "$BL64_RBAC_FILE_SUDOERS" >"$new_sudoers"
+    status=$?
+    ((status != 0)) && bl64_msg_show_error "unable to create new sudoers file (${new_sudoers})" && return $status
+
+    bl64_dbg_lib_show_info "replace original sudoers with new version (${new_sudoers} ->${BL64_RBAC_FILE_SUDOERS})"
+    "$BL64_OS_CMD_CAT" "$new_sudoers" >"${BL64_RBAC_FILE_SUDOERS}"
+    status=$?
+    ((status != 0)) && bl64_msg_show_error "unable to promote new sudoers file (${new_sudoers}->${BL64_RBAC_FILE_SUDOERS})" && return $status
+  else
+    printf '%s ALL=(ALL) NOPASSWD: ALL\n' "$user" > "$BL64_RBAC_FILE_SUDOERS"
+    status=$?
+    ((status != 0)) && bl64_msg_show_error "unable to create new sudoers file (${BL64_RBAC_FILE_SUDOERS})" && return $status
   fi
 
-  bl64_dbg_lib_show_info "create new sudoers (${new_sudoers})"
-  # shellcheck disable=SC2016
-  bl64_txt_run_awk \
-    -v ControlUsr="$user" \
-    '
-      BEGIN { Found = 0 }
-      ControlUsr " ALL=(ALL) NOPASSWD: ALL" == $0 { Found = 1 }
-      { print $0 }
-      END {
-        if( Found == 0) {
-          print( ControlUsr " ALL=(ALL) NOPASSWD: ALL" )
-        }
-      }
-    ' \
-    "$BL64_RBAC_FILE_SUDOERS" >"$new_sudoers"
-  status=$?
-  ((status != 0)) && bl64_msg_show_error "unable to create new sudoers file (${new_sudoers})" && return $status
-
-  bl64_dbg_lib_show_info "replace original sudoers with new version (${new_sudoers} ->${BL64_RBAC_FILE_SUDOERS})"
-  "$BL64_OS_CMD_CAT" "$new_sudoers" >"${BL64_RBAC_FILE_SUDOERS}" &&
-    bl64_rbac_check_sudoers "$BL64_RBAC_FILE_SUDOERS"
+  bl64_rbac_check_sudoers "$BL64_RBAC_FILE_SUDOERS"
   status=$?
 
   return $status
