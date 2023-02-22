@@ -5,7 +5,7 @@ setup() {
 @test "bl64_os_match: fail os = ALM" {
 
   export BL64_OS_DISTRO="${BL64_OS_ALM}-8.5"
-  run bl64_os_match 'CNT'
+  run bl64_os_match "$BL64_OS_CNT"
   assert_failure
   assert_equal $status $BL64_LIB_ERROR_OS_NOT_MATCH
 
@@ -23,7 +23,7 @@ setup() {
 @test "bl64_os_match: os = ALP" {
 
   export BL64_OS_DISTRO="${BL64_OS_ALP}-3.0"
-  run bl64_os_match 'ALP'
+  run bl64_os_match "$BL64_OS_ALP"
   assert_success
 
 }
@@ -31,7 +31,7 @@ setup() {
 @test "bl64_os_match: os = CNT" {
 
   export BL64_OS_DISTRO="${BL64_OS_CNT}-8.5"
-  run bl64_os_match 'CNT'
+  run bl64_os_match "$BL64_OS_CNT"
   assert_success
 
 }
@@ -39,7 +39,7 @@ setup() {
 @test "bl64_os_match: os = DEB" {
 
   export BL64_OS_DISTRO="${BL64_OS_DEB}-10.0"
-  run bl64_os_match 'DEB'
+  run bl64_os_match "$BL64_OS_DEB"
   assert_success
 
 }
@@ -47,7 +47,7 @@ setup() {
 @test "bl64_os_match: os = FD" {
 
   export BL64_OS_DISTRO="${BL64_OS_FD}-33.0"
-  run bl64_os_match 'FD'
+  run bl64_os_match "$BL64_OS_FD"
   assert_success
 
 }
@@ -55,7 +55,7 @@ setup() {
 @test "bl64_os_match: os = OL" {
 
   export BL64_OS_DISTRO="${BL64_OS_OL}-8.5"
-  run bl64_os_match 'OL'
+  run bl64_os_match "$BL64_OS_OL"
   assert_success
 
 }
@@ -63,7 +63,7 @@ setup() {
 @test "bl64_os_match: os = RHEL" {
 
   export BL64_OS_DISTRO="${BL64_OS_RHEL}-8.5"
-  run bl64_os_match 'RHEL'
+  run bl64_os_match "$BL64_OS_RHEL"
   assert_success
 
 }
@@ -71,7 +71,7 @@ setup() {
 @test "bl64_os_match: os = UB" {
 
   export BL64_OS_DISTRO="${BL64_OS_UB}-20.4"
-  run bl64_os_match 'UB'
+  run bl64_os_match "$BL64_OS_UB"
   assert_success
 
 }
