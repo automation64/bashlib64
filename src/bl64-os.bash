@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.18.0
+# Version: 1.19.0
 #######################################
 
 function _bl64_os_match() {
@@ -109,6 +109,8 @@ function bl64_os_match() {
   local item=''
   local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
 
+  bl64_check_module 'BL64_OS_MODULE' || return $?
+
   bl64_dbg_lib_show_info "Look for [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
@@ -155,7 +157,8 @@ function bl64_os_match() {
       ;;
     *)
       bl64_msg_error "${_BL64_OS_TXT_INVALID_OS_PATTERN} (${item})"
-      return $BL64_LIB_ERROR_OS_TAG_INVALID ;;
+      return $BL64_LIB_ERROR_OS_TAG_INVALID
+      ;;
     esac
     ((status == 0)) && break
   done
@@ -188,4 +191,37 @@ function bl64_os_get_distro() {
   else
     _bl64_os_get_distro_from_uname
   fi
+}
+
+#######################################
+# Check if locale resources for language are installed in the OS
+#
+# Arguments:
+#   $1: locale name
+# Outputs:
+#   STDOUT: None
+#   STDERR: Validation errors
+# Returns:
+#   0: resources are installed
+#   >0: no resources
+#######################################
+function bl64_os_lang_is_available() {
+  bl64_dbg_lib_show_function "$@"
+  local locale="$1"
+  local line=''
+
+  bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_parameter 'locale' &&
+    bl64_check_command "$BL64_OS_CMD_LOCALE" ||
+    return $?
+
+  bl64_dbg_lib_show_info 'look for the requested locale using the locale command'
+  IFS=$'\n'
+  for line in $("$BL64_OS_CMD_LOCALE" "$BL64_OS_SET_LOCALE_ALL"); do
+    unset IFS
+    bl64_dbg_lib_show_info "checking [${line}] == [${locale}]"
+    [[ "$line" == "$locale" ]] && return 0
+  done
+
+  return 1
 }
