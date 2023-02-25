@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Manipulate text files content
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 export BL64_TXT_MODULE="$BL64_VAR_OFF"
@@ -20,6 +20,7 @@ export BL64_TXT_SET_AWK_POSIX=''
 export BL64_TXT_SET_GREP_ERE="$BL64_VAR_UNAVAILABLE"
 export BL64_TXT_SET_GREP_INVERT="$BL64_VAR_UNAVAILABLE"
 export BL64_TXT_SET_GREP_NO_CASE="$BL64_VAR_UNAVAILABLE"
+export BL64_TXT_SET_GREP_QUIET="$BL64_VAR_UNAVAILABLE"
 export BL64_TXT_SET_GREP_SHOW_FILE_ONLY="$BL64_VAR_UNAVAILABLE"
 
 export BL64_TXT_SET_AWS_FS="$BL64_VAR_UNAVAILABLE"
