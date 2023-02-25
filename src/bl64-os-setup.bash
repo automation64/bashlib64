@@ -25,7 +25,8 @@ function bl64_os_setup() {
     bl64_msg_show_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
     return $BL64_LIB_ERROR_OS_BASH_VERSION
 
-  bl64_os_get_distro &&
+  bl64_os_set_runtime &&
+    bl64_os_get_distro &&
     bl64_os_set_command &&
     bl64_os_set_options &&
     BL64_OS_MODULE="$BL64_VAR_ON"
@@ -110,6 +111,27 @@ function bl64_os_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_OS_SET_LOCALE_ALL='--all-locales'
+}
+
+#######################################
+# Set runtime defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_os_set_runtime() {
+  bl64_dbg_lib_show_function
+
+  # Reset language to modern specification of C locale
+  if [[ "$BL64_LIB_LANG" == '1' ]]; then
+    bl64_os_set_lang 'C.UTF-8'
+  fi
+
 }
 
 #######################################
