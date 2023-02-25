@@ -5,7 +5,7 @@
 #######################################
 
 # Field separators
-export BL64_XSV_FS='_@64@_'       # Custom
+export BL64_XSV_FS='_@64@_' # Custom
 export BL64_XSV_FS_SPACE=' '
 export BL64_XSV_FS_NEWLINE=$'\n'
 export BL64_XSV_FS_TAB=$'\t'

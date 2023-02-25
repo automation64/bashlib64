@@ -184,7 +184,7 @@ function bl64_os_match() {
 #   0: always ok, even when the OS is not supported
 #######################################
 # Warning: bootstrap function
-function bl64_os_get_distro() {
+function _bl64_os_set_distro() {
   bl64_dbg_lib_show_function
   if [[ -r '/etc/os-release' ]]; then
     _bl64_os_get_distro_from_os_release

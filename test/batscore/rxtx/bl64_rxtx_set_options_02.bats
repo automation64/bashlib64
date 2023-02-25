@@ -3,7 +3,7 @@ setup() {
 
 }
 
-@test "bl64_rxtx_set_options: options are set" {
+@test "_bl64_rxtx_set_options: options are set" {
 
   assert_not_equal "$BL64_RXTX_SET_CURL_VERBOSE" ''
   assert_not_equal "$BL64_RXTX_SET_CURL_OUTPUT" ''

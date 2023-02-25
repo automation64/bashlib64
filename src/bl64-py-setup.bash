@@ -51,10 +51,10 @@ function _bl64_py_setup() {
       return $?
   fi
 
-  bl64_py_set_command "$venv_path" &&
+  _bl64_py_set_command "$venv_path" &&
     bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
-    bl64_py_set_options &&
-    bl64_py_set_definitions &&
+    _bl64_py_set_options &&
+    _bl64_py_set_resources &&
     BL64_PY_MODULE="$BL64_VAR_ON"
 }
 
@@ -74,7 +74,7 @@ function _bl64_py_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_py_set_command() {
+function _bl64_py_set_command() {
   bl64_dbg_lib_show_function "$@"
   local venv_path="$1"
 
@@ -154,7 +154,7 @@ function bl64_py_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_py_set_options() {
+function _bl64_py_set_options() {
   bl64_dbg_lib_show_function
   # Common sets - unversioned
   BL64_PY_SET_PIP_VERBOSE='--verbose'
@@ -182,7 +182,7 @@ function bl64_py_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_py_set_definitions() {
+function _bl64_py_set_resources() {
   bl64_dbg_lib_show_function
 
   BL64_PY_DEF_VENV_CFG='pyvenv.cfg'

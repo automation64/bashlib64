@@ -21,8 +21,8 @@
 function bl64_txt_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_txt_set_command &&
-    bl64_txt_set_options &&
+  _bl64_txt_set_command &&
+    _bl64_txt_set_options &&
     BL64_TXT_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'txt'
@@ -44,7 +44,7 @@ function bl64_txt_setup() {
 #   0: always ok, even when the OS is not supported
 #######################################
 # Warning: bootstrap function
-function bl64_txt_set_command() {
+function _bl64_txt_set_command() {
   bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2034
@@ -120,7 +120,7 @@ function bl64_txt_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_txt_set_options() {
+function _bl64_txt_set_options() {
   bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2034

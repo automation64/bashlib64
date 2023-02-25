@@ -21,9 +21,9 @@
 function bl64_fs_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_fs_set_command &&
-    bl64_fs_set_alias &&
-    bl64_fs_set_options &&
+  _bl64_fs_set_command &&
+    _bl64_fs_set_alias &&
+    _bl64_fs_set_options &&
     BL64_FS_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'fs'
@@ -44,7 +44,7 @@ function bl64_fs_setup() {
 #   0: always ok, even when the OS is not supported
 #######################################
 # Warning: bootstrap function
-function bl64_fs_set_command() {
+function _bl64_fs_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -116,7 +116,7 @@ function bl64_fs_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_fs_set_options() {
+function _bl64_fs_set_options() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
@@ -208,7 +208,7 @@ function bl64_fs_set_options() {
 #   0: always ok
 #######################################
 # shellcheck disable=SC2034
-function bl64_fs_set_alias() {
+function _bl64_fs_set_alias() {
   local cmd_mawk='/usr/bin/mawk'
 
   case "$BL64_OS_DISTRO" in

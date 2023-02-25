@@ -3,7 +3,7 @@ setup() {
 
 }
 
-@test "bl64_os_set_command: commands are set" {
+@test "_bl64_os_set_command: commands are set" {
 
   assert_not_equal "${BL64_OS_CMD_CAT}" ''
   assert_not_equal "${BL64_OS_CMD_DATE}" ''
@@ -16,7 +16,7 @@ setup() {
 
 }
 
-@test "bl64_os_set_command: commands are present" {
+@test "_bl64_os_set_command: commands are present" {
 
   assert_file_executable "${BL64_OS_CMD_CAT}"
   assert_file_executable "${BL64_OS_CMD_DATE}"

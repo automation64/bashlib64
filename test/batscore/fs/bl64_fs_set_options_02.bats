@@ -3,7 +3,7 @@ setup() {
 
 }
 
-@test "bl64_fs_set_options: common sets are defined" {
+@test "_bl64_fs_set_options: common sets are defined" {
 
     assert_not_equal "$BL64_FS_SET_CHMOD_RECURSIVE" ''
     assert_not_equal "$BL64_FS_SET_CHMOD_VERBOSE" ''
