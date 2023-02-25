@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Show shell debugging information
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 export BL64_DBG_MODULE="$BL64_VAR_OFF"
@@ -24,18 +24,18 @@ export BL64_DBG_TARGET=''
 # * LIB_ALL: Enable full bashlib64 debugging (task,trace,cmd)
 #
 
-export BL64_DBG_TARGET_NONE='APP0'
-export BL64_DBG_TARGET_APP_TRACE='APP1'
-export BL64_DBG_TARGET_APP_TASK='APP2'
-export BL64_DBG_TARGET_APP_CMD='APP3'
-export BL64_DBG_TARGET_APP_ALL='APP4'
-export BL64_DBG_TARGET_APP_CUSTOM_1='CST1'
-export BL64_DBG_TARGET_APP_CUSTOM_2='CST2'
-export BL64_DBG_TARGET_APP_CUSTOM_3='CST3'
-export BL64_DBG_TARGET_LIB_TRACE='LIB1'
-export BL64_DBG_TARGET_LIB_TASK='LIB2'
-export BL64_DBG_TARGET_LIB_CMD='LIB3'
-export BL64_DBG_TARGET_LIB_ALL='LIB4'
+export BL64_DBG_TARGET_NONE='NONE'
+export BL64_DBG_TARGET_APP_TRACE='APP_TRACE'
+export BL64_DBG_TARGET_APP_TASK='APP_TASK'
+export BL64_DBG_TARGET_APP_CMD='APP_CMD'
+export BL64_DBG_TARGET_APP_ALL='APP'
+export BL64_DBG_TARGET_APP_CUSTOM_1='CUSTOM_1'
+export BL64_DBG_TARGET_APP_CUSTOM_2='CUSTOM_2'
+export BL64_DBG_TARGET_APP_CUSTOM_3='CUSTOM_3'
+export BL64_DBG_TARGET_LIB_TRACE='LIB_TRACE'
+export BL64_DBG_TARGET_LIB_TASK='LIB_TASK'
+export BL64_DBG_TARGET_LIB_CMD='LIB_CMD'
+export BL64_DBG_TARGET_LIB_ALL='LIB'
 export BL64_DBG_TARGET_ALL='ALL'
 
 export _BL64_DBG_TXT_FUNCTION_START='function tracing started'
