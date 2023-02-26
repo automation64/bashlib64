@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manipulate text files content
 #
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 #######################################
@@ -21,8 +21,8 @@
 function bl64_txt_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_txt_set_command &&
-    bl64_txt_set_options &&
+  _bl64_txt_set_command &&
+    _bl64_txt_set_options &&
     BL64_TXT_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'txt'
@@ -44,7 +44,7 @@ function bl64_txt_setup() {
 #   0: always ok, even when the OS is not supported
 #######################################
 # Warning: bootstrap function
-function bl64_txt_set_command() {
+function _bl64_txt_set_command() {
   bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2034
@@ -120,38 +120,42 @@ function bl64_txt_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_txt_set_options() {
+function _bl64_txt_set_options() {
   bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_TXT_SET_AWS_FS='-F'
     BL64_TXT_SET_GREP_ERE='-E'
     BL64_TXT_SET_GREP_INVERT='-v'
     BL64_TXT_SET_GREP_NO_CASE='-i'
+    BL64_TXT_SET_GREP_QUIET='--quiet'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
-    BL64_TXT_SET_AWS_FS='-F'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_TXT_SET_AWS_FS='-F'
     BL64_TXT_SET_GREP_ERE='-E'
     BL64_TXT_SET_GREP_INVERT='-v'
     BL64_TXT_SET_GREP_NO_CASE='-i'
+    BL64_TXT_SET_GREP_QUIET='--quiet'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
-    BL64_TXT_SET_AWS_FS='-F'
     ;;
   ${BL64_OS_ALP}-*)
+    BL64_TXT_SET_AWS_FS='-F'
     BL64_TXT_SET_GREP_ERE='-E'
     BL64_TXT_SET_GREP_INVERT='-v'
     BL64_TXT_SET_GREP_NO_CASE='-i'
+    BL64_TXT_SET_GREP_QUIET='-q'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
-    BL64_TXT_SET_AWS_FS='-F'
     ;;
   ${BL64_OS_MCOS}-*)
+    BL64_TXT_SET_AWS_FS='-F'
     BL64_TXT_SET_GREP_ERE='-E'
     BL64_TXT_SET_GREP_INVERT='-v'
     BL64_TXT_SET_GREP_NO_CASE='-i'
+    BL64_TXT_SET_GREP_QUIET='-q'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
-    BL64_TXT_SET_AWS_FS='-F'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac

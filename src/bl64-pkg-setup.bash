@@ -20,10 +20,10 @@ function bl64_pkg_setup() {
   bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2249
-  bl64_pkg_set_command &&
-    bl64_pkg_set_paths &&
-    bl64_pkg_set_alias &&
-    bl64_pkg_set_options &&
+  _bl64_pkg_set_command &&
+    _bl64_pkg_set_runtime &&
+    _bl64_pkg_set_alias &&
+    _bl64_pkg_set_options &&
     case "$BL64_OS_DISTRO" in
     ${BL64_OS_FD}-*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
     ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
@@ -53,7 +53,7 @@ function bl64_pkg_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_pkg_set_command() {
+function _bl64_pkg_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-*)
@@ -94,7 +94,7 @@ function bl64_pkg_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_pkg_set_options() {
+function _bl64_pkg_set_options() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -159,7 +159,7 @@ function bl64_pkg_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_pkg_set_alias() {
+function _bl64_pkg_set_alias() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -200,6 +200,24 @@ function bl64_pkg_set_alias() {
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
+}
+
+#######################################
+# Set runtime defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: setting errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function _bl64_pkg_set_runtime() {
+  bl64_dbg_lib_show_function
+
+  bl64_pkg_set_paths
 }
 
 #######################################

@@ -28,13 +28,13 @@ function bl64_ans_setup() {
   local ansible_config="${2:-${BL64_VAR_DEFAULT}}"
   local env_ignore="${3:-${BL64_VAR_ON}}"
 
-  bl64_ans_set_command "$ansible_bin" &&
+  _bl64_ans_set_command "$ansible_bin" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE_GALAXY" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE_PLAYBOOK" &&
-    bl64_ans_set_paths "$ansible_config" &&
-    bl64_ans_set_options &&
-    bl64_ans_set_version &&
+    _bl64_ans_set_runtime "$ansible_config" &&
+    _bl64_ans_set_options &&
+    _bl64_ans_set_version &&
     BL64_ANS_MODULE="$BL64_VAR_ON" &&
     BL64_ANS_ENV_IGNORE="$env_ignore" ||
     return $?
@@ -56,8 +56,8 @@ function bl64_ans_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_ans_set_command() {
-  bl64_dbg_lib_show_function
+function _bl64_ans_set_command() {
+  bl64_dbg_lib_show_function "$@"
   local ansible_bin="$1"
 
   if [[ "$ansible_bin" == "$BL64_VAR_DEFAULT" ]]; then
@@ -99,12 +99,31 @@ function bl64_ans_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_ans_set_options() {
+function _bl64_ans_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_ANS_SET_VERBOSE='-v'
   BL64_ANS_SET_DIFF='--diff'
   BL64_ANS_SET_DEBUG='-vvvvv'
+}
+
+#######################################
+# Set runtime defaults
+#
+# Arguments:
+#   $1: path to ansible_config
+# Outputs:
+#   STDOUT: None
+#   STDERR: setting errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function _bl64_ans_set_runtime() {
+  bl64_dbg_lib_show_function "$@"
+  local config="$1"
+
+  bl64_ans_set_paths "$config"
 }
 
 #######################################
@@ -125,7 +144,7 @@ function bl64_ans_set_options() {
 #   >0: failed to prepare paths
 #######################################
 function bl64_ans_set_paths() {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_show_function "$@"
   local config="${1:-${BL64_VAR_DEFAULT}}"
   local collections="${2:-${BL64_VAR_DEFAULT}}"
   local ansible="${3:-${BL64_VAR_DEFAULT}}"
@@ -168,7 +187,7 @@ function bl64_ans_set_paths() {
 #   0: version set ok
 #   >0: command error
 #######################################
-function bl64_ans_set_version() {
+function _bl64_ans_set_version() {
   bl64_dbg_lib_show_function
   local version=''
 

@@ -1,20 +1,21 @@
 #######################################
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.16.0
+# Version: 1.17.0
 #######################################
 
 export BL64_OS_MODULE="$BL64_VAR_OFF"
 
 export BL64_OS_DISTRO=''
 
+export BL64_OS_CMD_BASH=''
 export BL64_OS_CMD_CAT=''
 export BL64_OS_CMD_DATE=''
 export BL64_OS_CMD_FALSE=''
 export BL64_OS_CMD_HOSTNAME=''
+export BL64_OS_CMD_LOCALE=''
 export BL64_OS_CMD_TRUE=''
 export BL64_OS_CMD_UNAME=''
-export BL64_OS_CMD_BASH=''
 
 export BL64_OS_ALIAS_ID_USER=''
 
@@ -42,6 +43,8 @@ export BL64_OS_RHEL='RHEL'
 export BL64_OS_UB='UBUNTU'
 # UNK  -> Unknown OS
 export BL64_OS_UNK='UNKNOWN'
+
+export BL64_OS_SET_LOCALE_ALL=''
 
 export _BL64_OS_TXT_CHECK_OS_MATRIX='Please check that the OS is listed in the current BashLib64 OS compatibility matrix'
 export _BL64_OS_TXT_FAILED_TO_NORMALIZE_OS='Unable to normalize OS name and version from /etc/os-release'

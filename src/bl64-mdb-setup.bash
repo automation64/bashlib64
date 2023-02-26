@@ -26,12 +26,12 @@ function bl64_mdb_setup() {
       return $?
   fi
 
-  bl64_mdb_set_command "$mdb_bin" &&
+  _bl64_mdb_set_command "$mdb_bin" &&
     bl64_check_command "$BL64_MDB_CMD_MONGOSH" &&
     bl64_check_command "$BL64_MDB_CMD_MONGORESTORE" &&
     bl64_check_command "$BL64_MDB_CMD_MONGOEXPORT" &&
-    bl64_mdb_set_options &&
-    bl64_mdb_set_runtime &&
+    _bl64_mdb_set_options &&
+    _bl64_mdb_set_runtime &&
     BL64_MDB_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'mdb'
@@ -51,7 +51,7 @@ function bl64_mdb_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_mdb_set_command() {
+function _bl64_mdb_set_command() {
   bl64_dbg_lib_show_function "$@"
   local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -91,7 +91,7 @@ function bl64_mdb_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_mdb_set_options() {
+function _bl64_mdb_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_MDB_SET_VERBOSE='--verbose'
@@ -110,7 +110,7 @@ function bl64_mdb_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_mdb_set_runtime() {
+function _bl64_mdb_set_runtime() {
   bl64_dbg_lib_show_function
 
   # Write concern defaults

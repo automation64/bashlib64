@@ -26,11 +26,11 @@ function bl64_k8s_setup() {
       return $?
   fi
 
-  bl64_k8s_set_command "$kubectl_bin" &&
+  _bl64_k8s_set_command "$kubectl_bin" &&
     bl64_check_command "$BL64_K8S_CMD_KUBECTL" &&
     bl64_k8s_set_version &&
-    bl64_k8s_set_options &&
-    bl64_k8s_set_kubectl_output &&
+    _bl64_k8s_set_options &&
+    _bl64_k8s_set_runtime &&
     BL64_K8S_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'k8s'
@@ -50,7 +50,7 @@ function bl64_k8s_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_k8s_set_command() {
+function _bl64_k8s_set_command() {
   bl64_dbg_lib_show_function "$@"
   local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -86,7 +86,7 @@ function bl64_k8s_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_k8s_set_options() {
+function _bl64_k8s_set_options() {
   bl64_dbg_lib_show_function
 
   case "$BL64_K8S_VERSION_KUBECTL" in
@@ -151,6 +151,24 @@ function _bl64_k8s_get_version_1_22() {
     $1 ~ /^ +"minor"$/ { gsub( /[" ,]/, "", $2 ); Minor = $2 }
     END { print Major "." Minor }
   '
+}
+
+#######################################
+# Set runtime defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: setting errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function _bl64_k8s_set_runtime() {
+  bl64_dbg_lib_show_function
+
+  bl64_k8s_set_kubectl_output
 }
 
 #######################################

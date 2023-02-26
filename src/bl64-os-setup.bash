@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / OS / Identify OS attributes and provide command aliases
 #
-# Version: 2.1.0
+# Version: 2.3.0
 #######################################
 
 #######################################
@@ -25,8 +25,10 @@ function bl64_os_setup() {
     bl64_msg_show_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
     return $BL64_LIB_ERROR_OS_BASH_VERSION
 
-  bl64_os_get_distro &&
-    bl64_os_set_command &&
+  _bl64_os_set_runtime &&
+    _bl64_os_set_distro &&
+    _bl64_os_set_command &&
+    _bl64_os_set_options &&
     BL64_OS_MODULE="$BL64_VAR_ON"
 
 }
@@ -46,46 +48,116 @@ function bl64_os_setup() {
 #   0: always ok, even when the OS is not supported
 #######################################
 # Warning: bootstrap function
-function bl64_os_set_command() {
+function _bl64_os_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
+    BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
-    BL64_OS_CMD_BASH='/bin/bash'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/usr/bin/cat'
     BL64_OS_CMD_DATE=/usr'/bin/date'
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
+    BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
-    BL64_OS_CMD_BASH='/bin/bash'
     ;;
   ${BL64_OS_ALP}-*)
+    BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
+    BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
-    BL64_OS_CMD_BASH='/bin/bash'
     ;;
   ${BL64_OS_MCOS}-*)
     # Homebrew used when no native option available
+    BL64_OS_CMD_BASH='/opt/homebre/bin/bash'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
+    BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/usr/bin/uname'
-    BL64_OS_CMD_BASH='/opt/homebre/bin/bash'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
+}
+
+#######################################
+# Create command sets for common options
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_os_set_options() {
+  bl64_dbg_lib_show_function
+
+  BL64_OS_SET_LOCALE_ALL='--all-locales'
+}
+
+#######################################
+# Set runtime defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_os_set_runtime() {
+  bl64_dbg_lib_show_function
+
+  # Reset language to modern specification of C locale
+  if [[ "$BL64_LIB_LANG" == '1' ]]; then
+    bl64_os_set_lang 'C.UTF-8'
+  fi
+
+}
+
+#######################################
+# Set locale related shell variables
+#
+# * Locale variables are set as is, no extra validation on the locale availability
+#
+# Arguments:
+#   $1: locale name
+# Outputs:
+#   STDOUT: None
+#   STDERR: Validation errors
+# Returns:
+#   0: set ok
+#   >0: set error
+#######################################
+function bl64_os_set_lang() {
+  bl64_dbg_lib_show_function "$@"
+  local locale="$1"
+
+  bl64_check_parameter 'locale' || return $?
+
+  LANG="$locale"
+  LC_ALL="$locale"
+  LANGUAGE="$locale"
+  bl64_dbg_lib_show_vars 'LANG' 'LC_ALL' 'LANGUAGE'
+
+  return 0
 }

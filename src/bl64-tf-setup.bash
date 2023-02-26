@@ -21,10 +21,10 @@ function bl64_tf_setup() {
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  bl64_tf_set_command "$terraform_bin" &&
+  _bl64_tf_set_command "$terraform_bin" &&
     bl64_check_command "$BL64_TF_CMD_TERRAFORM" &&
-    bl64_tf_set_options &&
-    bl64_tf_set_definitions &&
+    _bl64_tf_set_command &&
+    _bl64_tf_set_resources &&
     BL64_TF_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'tf'
@@ -44,7 +44,7 @@ function bl64_tf_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_tf_set_command() {
+function _bl64_tf_set_command() {
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="${1:-}"
 
@@ -85,7 +85,7 @@ function bl64_tf_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_tf_set_options() {
+function _bl64_tf_set_command() {
   bl64_dbg_lib_show_function
 
   # TF_LOG values
@@ -136,7 +136,7 @@ function bl64_tf_log_set() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_tf_set_definitions() {
+function _bl64_tf_set_resources() {
   bl64_dbg_lib_show_function
 
   # Terraform configuration lock file name

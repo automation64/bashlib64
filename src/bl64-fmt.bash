@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Format text data
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -23,7 +23,7 @@ function bl64_fmt_strip_comments() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:--}"
 
-  "$BL64_TXT_CMD_GREP" "$BL64_TXT_SET_GREP_INVERT" "$BL64_TXT_SET_GREP_ERE" '^#.*$|^ *#.*$' "$source"
+  bl64_txt_run_egrep "$BL64_TXT_SET_GREP_INVERT" '^#.*$|^ *#.*$' "$source"
 }
 
 #######################################

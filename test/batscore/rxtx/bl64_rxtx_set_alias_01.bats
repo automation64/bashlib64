@@ -3,6 +3,6 @@ setup() {
 }
 
 @test "bl64_os_set_alias: run function" {
-  run bl64_rxtx_set_alias
+  run _bl64_rxtx_set_alias
   assert_success
 }
