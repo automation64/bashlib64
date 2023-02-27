@@ -25,7 +25,7 @@ setup() {
 
 }
 
-@test "bl64_check_command: command parameter is not present" {
+@test "bl64_check_command: parameter is not present" {
 
   run bl64_check_command
   assert_failure
