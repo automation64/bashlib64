@@ -1,5 +1,5 @@
 #######################################
-# BashLib64 / Module / Functions / Interact with Bash shell
+# BashLib64 / Module / Globals / Interact with Bash shell
 #
 # Version: 1.0.0
 #######################################
