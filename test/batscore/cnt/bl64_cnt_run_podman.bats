@@ -6,7 +6,7 @@ setup() {
 }
 
 @test "bl64_cnt_run_podman: CLI runs ok" {
-  [[ ! -x "$BL64_CNT_CMD_PODMAN" ]] && skip
+  [[ ! -x "$BL64_CNT_CMD_PODMAN" ]] && skip 'podman not found'
 
   run bl64_cnt_run_podman --version
   assert_success
