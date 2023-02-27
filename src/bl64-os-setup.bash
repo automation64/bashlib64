@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / OS / Identify OS attributes and provide command aliases
 #
-# Version: 2.3.0
+# Version: 2.3.1
 #######################################
 
 #######################################
@@ -25,8 +25,8 @@ function bl64_os_setup() {
     bl64_msg_show_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
     return $BL64_LIB_ERROR_OS_BASH_VERSION
 
-  _bl64_os_set_runtime &&
-    _bl64_os_set_distro &&
+  _bl64_os_set_distro &&
+    _bl64_os_set_runtime &&
     _bl64_os_set_command &&
     _bl64_os_set_options &&
     BL64_OS_MODULE="$BL64_VAR_ON"
@@ -129,9 +129,34 @@ function _bl64_os_set_runtime() {
 
   # Reset language to modern specification of C locale
   if [[ "$BL64_LIB_LANG" == '1' ]]; then
-    bl64_os_set_lang 'C.UTF-8'
+    # shellcheck disable=SC2034
+    case "$BL64_OS_DISTRO" in
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+      bl64_os_set_lang 'C.UTF-8'
+      ;;
+    ${BL64_OS_FD}-*)
+      bl64_os_set_lang 'C.UTF-8'
+      ;;
+    ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-8.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RCK}-*)
+      bl64_os_set_lang 'C.UTF-8'
+      ;;
+    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+      # Not installed by default, skipping
+      ;;
+    ${BL64_OS_ALP}-*)
+      # Not installed by default, skipping
+      ;;
+    ${BL64_OS_MCOS}-*)
+      # Not installed by default, skipping
+      ;;
+    *)
+      bl64_check_alert_unsupported
+      return $?
+      ;;
+    esac
   fi
 
+  return 0
 }
 
 #######################################

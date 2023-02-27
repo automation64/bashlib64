@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - os
-  - **Breaking change**: now using C.UTF-8 instead of C as default locale. Setting can still be overwired or completely ignored as needed
+  - **Breaking change**: now using C.UTF-8 instead of C as default locale where supported. Setting can still be overwired or completely ignored as needed
 - dbg
   - normalize debugging values when using -D in scripts
 - all
