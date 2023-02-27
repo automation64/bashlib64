@@ -1,8 +1,10 @@
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
 #
-# Version: 1.17.0
+# Version: 1.18.0
 #######################################
+
+export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 
 export _BL64_CHECK_TXT_PARAMETER_MISSING='required parameter is missing'
 export _BL64_CHECK_TXT_PARAMETER_NOT_SET='required shell variable is not set'
