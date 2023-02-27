@@ -26,10 +26,10 @@ function bl64_hlm_setup() {
       return $?
   fi
 
-  bl64_hlm_set_command "$helm_bin" &&
+  _bl64_hlm_set_command "$helm_bin" &&
     bl64_check_command "$BL64_HLM_CMD_HELM" &&
-    bl64_hlm_set_options &&
-    bl64_hlm_set_runtime &&
+    _bl64_hlm_set_options &&
+    _bl64_hlm_set_runtime &&
     BL64_HLM_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'hlm'
@@ -49,7 +49,7 @@ function bl64_hlm_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_hlm_set_command() {
+function _bl64_hlm_set_command() {
   bl64_dbg_lib_show_function "$@"
   local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -87,7 +87,7 @@ function bl64_hlm_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_hlm_set_options() {
+function _bl64_hlm_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_HLM_SET_DEBUG='--debug'
@@ -97,7 +97,7 @@ function bl64_hlm_set_options() {
 }
 
 #######################################
-# Set runtime variables to defaults
+# Set runtime defaults
 #
 # Arguments:
 #   None
@@ -107,7 +107,7 @@ function bl64_hlm_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_hlm_set_runtime() {
+function _bl64_hlm_set_runtime() {
   bl64_dbg_lib_show_function
 
   bl64_hlm_set_timeout '5m0s'

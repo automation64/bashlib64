@@ -3,7 +3,7 @@ setup() {
 }
 
 @test "bl64_hlm_run_helm: CLI runs ok" {
-  bl64_hlm_setup || skip
+  bl64_hlm_setup || skip 'helm cli not found'
   run bl64_hlm_run_helm --help
   assert_success
 }

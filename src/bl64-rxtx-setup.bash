@@ -21,9 +21,9 @@
 function bl64_rxtx_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_rxtx_set_command &&
-    bl64_rxtx_set_alias &&
-    bl64_rxtx_set_options &&
+  _bl64_rxtx_set_command &&
+    _bl64_rxtx_set_alias &&
+    _bl64_rxtx_set_options &&
     BL64_RXTX_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'rxtx'
@@ -44,7 +44,7 @@ function bl64_rxtx_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_rxtx_set_command() {
+function _bl64_rxtx_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-*)
@@ -72,7 +72,7 @@ function bl64_rxtx_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_rxtx_set_options() {
+function _bl64_rxtx_set_options() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -135,7 +135,7 @@ function bl64_rxtx_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_rxtx_set_alias() {
+function _bl64_rxtx_set_alias() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-*)

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.8.0
+# Version: 1.8.1
 #######################################
 
 #######################################
@@ -30,16 +30,18 @@ function bl64_cnt_is_inside_container() {
 }
 
 function _bl64_cnt_check_file_marker() {
+  bl64_dbg_lib_show_function "$@"
   local marker="$1"
   bl64_dbg_lib_show_info "check for file marker (${marker})"
   [[ -f "$marker" ]]
 }
 
 function _bl64_cnt_check_variable_marker() {
-  local name="$1"
-  local -n marker="$1"
-  bl64_dbg_lib_show_info "check for variable marker (${name})"
-  [[ -n "$marker" ]]
+  bl64_dbg_lib_show_function "$@"
+  local marker="$1"
+  bl64_dbg_lib_show_info "check for variable marker (${marker})"
+
+  eval "[[ -n \"\${${marker}}\" ]]"
 }
 
 #######################################

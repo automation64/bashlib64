@@ -1,14 +1,14 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 4.0.0
+# Version: 4.0.1
 #######################################
 
 #
-# Main
+# Library Bootstrap
 #
 
-# Normalize locales to C
+# Normalize locales to C until a better locale is found in bl64_os_setup
 if [[ "$BL64_LIB_LANG" == '1' ]]; then
   LANG='C'
   LC_ALL='C'
@@ -21,16 +21,19 @@ if [[ "$BL64_LIB_STRICT" == '1' ]]; then
   set -o 'privileged'
 fi
 
-# Initialize mandatory modules
+# Initialize OS independant modules
 bl64_dbg_setup &&
   bl64_msg_setup &&
   bl64_bsh_setup &&
-  bl64_os_setup &&
+  bl64_ui_setup ||
+  return $?
+
+# Initialize OS dependant modules
+bl64_os_setup &&
   bl64_txt_setup &&
   bl64_fs_setup &&
   bl64_iam_setup &&
   bl64_rbac_setup &&
-  bl64_ui_setup &&
   bl64_vcs_setup &&
   bl64_rxtx_setup ||
   return $?

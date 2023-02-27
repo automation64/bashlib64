@@ -39,9 +39,9 @@ function bl64_aws_setup() {
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  bl64_aws_set_command "$aws_bin" &&
-    bl64_aws_set_options &&
-    bl64_aws_set_definitions &&
+  _bl64_aws_set_command "$aws_bin" &&
+    _bl64_aws_set_options &&
+    _bl64_aws_set_resources &&
     bl64_check_command "$BL64_AWS_CMD_AWS" &&
     bl64_aws_set_paths &&
     BL64_AWS_MODULE="$BL64_VAR_ON"
@@ -63,7 +63,7 @@ function bl64_aws_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_aws_set_command() {
+function _bl64_aws_set_command() {
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -106,7 +106,7 @@ function bl64_aws_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_aws_set_options() {
+function _bl64_aws_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_AWS_SET_FORMAT_JSON='--output json'
@@ -136,7 +136,7 @@ function bl64_aws_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_aws_set_definitions() {
+function _bl64_aws_set_resources() {
   bl64_dbg_lib_show_function
 
   BL64_AWS_DEF_SUFFIX_TOKEN='json'
@@ -146,6 +146,24 @@ function bl64_aws_set_definitions() {
   BL64_AWS_DEF_SUFFIX_CREDENTIALS='secret'
 
   return 0
+}
+
+#######################################
+# Set runtime defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: setting errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function _bl64_aws_set_runtime() {
+  bl64_dbg_lib_show_function
+
+  bl64_aws_set_paths
 }
 
 #######################################

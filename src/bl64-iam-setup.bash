@@ -21,9 +21,9 @@
 function bl64_iam_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_iam_set_command &&
-    bl64_iam_set_alias &&
-    bl64_iam_set_options &&
+  _bl64_iam_set_command &&
+    _bl64_iam_set_alias &&
+    _bl64_iam_set_options &&
     BL64_IAM_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'iam'
@@ -44,7 +44,7 @@ function bl64_iam_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_iam_set_command() {
+function _bl64_iam_set_command() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
@@ -79,7 +79,7 @@ function bl64_iam_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_iam_set_alias() {
+function _bl64_iam_set_alias() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
@@ -109,7 +109,7 @@ function bl64_iam_set_alias() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_iam_set_options() {
+function _bl64_iam_set_options() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in

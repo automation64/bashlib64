@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manipulate text files content
 #
-# Version: 1.7.1
+# Version: 1.8.0
 #######################################
 
 #######################################
@@ -31,10 +31,10 @@ function bl64_txt_replace_env() {
 }
 
 #######################################
-# Search for a whole line in a given text file
+# Search for a whole line in a given text file or stdin
 #
 # Arguments:
-#   $1: source file path
+#   $1: source file path. Use - for stdin
 #   $2: text to look for
 # Outputs:
 #   STDOUT: none
@@ -48,7 +48,7 @@ function bl64_txt_search_line() {
   local source="${1:--}"
   local line="${2:-}"
 
-  "$BL64_TXT_CMD_GREP" "$BL64_TXT_SET_GREP_ERE" "^${line}$" "$source" >/dev/null
+  bl64_txt_run_egrep "$BL64_TXT_SET_GREP_QUIET" "^${line}$" "$source"
 }
 
 #######################################
@@ -131,6 +131,23 @@ function bl64_txt_run_grep() {
   bl64_dbg_lib_trace_start
   "$BL64_TXT_CMD_GREP" "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Run grep with regular expression matching
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_txt_run_egrep() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_txt_run_grep "$BL64_TXT_SET_GREP_ERE" "$@"
 }
 
 #######################################

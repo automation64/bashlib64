@@ -5,7 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [10.0.0]
+
+### Added
+
+- os
+  - new function: bl64_os_lang_is_available, bl64_os_set_lang
+- txt
+  - new function: bl64_txt_run_egrep
+
+### Changed
+
+- os
+  - **Breaking change**: now using C.UTF-8 instead of C as default locale. Setting can still be overwired or completely ignored as needed
+- dbg
+  - normalize debugging values when using -D in scripts
+- all
+  - renamed internal functions to use the prefix `_`
+
+### Fixed
+
+- cnt
+  - bl64_cnt_is_inside_container: replaced local-n bash for eval for compatibility
 
 ## [9.2.4]
 
@@ -162,6 +183,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[10.0.0]: https://github.com/serdigital64/bashlib64/compare/10.0.0...9.2.4
 [9.2.4]: https://github.com/serdigital64/bashlib64/compare/9.2.4...9.1.4
 [9.1.4]: https://github.com/serdigital64/bashlib64/compare/9.1.4...9.0.1
 [9.0.1]: https://github.com/serdigital64/bashlib64/compare/8.1.1...9.0.1

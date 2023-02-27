@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 9.2.4
+# Version: 10.0.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -271,7 +271,7 @@ export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required bashlib64 module is not setup.
 #######################################
 # BashLib64 / Module / Globals / Show shell debugging information
 #
-# Version: 1.9.0
+# Version: 1.10.0
 #######################################
 
 export BL64_DBG_MODULE="$BL64_VAR_OFF"
@@ -294,18 +294,18 @@ export BL64_DBG_TARGET=''
 # * LIB_ALL: Enable full bashlib64 debugging (task,trace,cmd)
 #
 
-export BL64_DBG_TARGET_NONE='APP0'
-export BL64_DBG_TARGET_APP_TRACE='APP1'
-export BL64_DBG_TARGET_APP_TASK='APP2'
-export BL64_DBG_TARGET_APP_CMD='APP3'
-export BL64_DBG_TARGET_APP_ALL='APP4'
-export BL64_DBG_TARGET_APP_CUSTOM_1='CST1'
-export BL64_DBG_TARGET_APP_CUSTOM_2='CST2'
-export BL64_DBG_TARGET_APP_CUSTOM_3='CST3'
-export BL64_DBG_TARGET_LIB_TRACE='LIB1'
-export BL64_DBG_TARGET_LIB_TASK='LIB2'
-export BL64_DBG_TARGET_LIB_CMD='LIB3'
-export BL64_DBG_TARGET_LIB_ALL='LIB4'
+export BL64_DBG_TARGET_NONE='NONE'
+export BL64_DBG_TARGET_APP_TRACE='APP_TRACE'
+export BL64_DBG_TARGET_APP_TASK='APP_TASK'
+export BL64_DBG_TARGET_APP_CMD='APP_CMD'
+export BL64_DBG_TARGET_APP_ALL='APP'
+export BL64_DBG_TARGET_APP_CUSTOM_1='CUSTOM_1'
+export BL64_DBG_TARGET_APP_CUSTOM_2='CUSTOM_2'
+export BL64_DBG_TARGET_APP_CUSTOM_3='CUSTOM_3'
+export BL64_DBG_TARGET_LIB_TRACE='LIB_TRACE'
+export BL64_DBG_TARGET_LIB_TASK='LIB_TASK'
+export BL64_DBG_TARGET_LIB_CMD='LIB_CMD'
+export BL64_DBG_TARGET_LIB_ALL='LIB'
 export BL64_DBG_TARGET_ALL='ALL'
 
 export _BL64_DBG_TXT_FUNCTION_START='function tracing started'
@@ -582,20 +582,21 @@ export _BL64_MSG_TXT_BATCH_FINISH_ERROR='finished with errors'
 #######################################
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.16.0
+# Version: 1.17.0
 #######################################
 
 export BL64_OS_MODULE="$BL64_VAR_OFF"
 
 export BL64_OS_DISTRO=''
 
+export BL64_OS_CMD_BASH=''
 export BL64_OS_CMD_CAT=''
 export BL64_OS_CMD_DATE=''
 export BL64_OS_CMD_FALSE=''
 export BL64_OS_CMD_HOSTNAME=''
+export BL64_OS_CMD_LOCALE=''
 export BL64_OS_CMD_TRUE=''
 export BL64_OS_CMD_UNAME=''
-export BL64_OS_CMD_BASH=''
 
 export BL64_OS_ALIAS_ID_USER=''
 
@@ -623,6 +624,8 @@ export BL64_OS_RHEL='RHEL'
 export BL64_OS_UB='UBUNTU'
 # UNK  -> Unknown OS
 export BL64_OS_UNK='UNKNOWN'
+
+export BL64_OS_SET_LOCALE_ALL=''
 
 export _BL64_OS_TXT_CHECK_OS_MATRIX='Please check that the OS is listed in the current BashLib64 OS compatibility matrix'
 export _BL64_OS_TXT_FAILED_TO_NORMALIZE_OS='Unable to normalize OS name and version from /etc/os-release'
@@ -709,7 +712,7 @@ export _BL64_RXTX_TXT_DOWNLOAD_FILE='download file'
 #######################################
 # BashLib64 / Module / Globals / Manipulate text files content
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 export BL64_TXT_MODULE="$BL64_VAR_OFF"
@@ -728,6 +731,7 @@ export BL64_TXT_SET_AWK_POSIX=''
 export BL64_TXT_SET_GREP_ERE="$BL64_VAR_UNAVAILABLE"
 export BL64_TXT_SET_GREP_INVERT="$BL64_VAR_UNAVAILABLE"
 export BL64_TXT_SET_GREP_NO_CASE="$BL64_VAR_UNAVAILABLE"
+export BL64_TXT_SET_GREP_QUIET="$BL64_VAR_UNAVAILABLE"
 export BL64_TXT_SET_GREP_SHOW_FILE_ONLY="$BL64_VAR_UNAVAILABLE"
 
 export BL64_TXT_SET_AWS_FS="$BL64_VAR_UNAVAILABLE"
@@ -768,7 +772,7 @@ export _BL64_VCS_TXT_CLONE_REPO='clone single branch from GIT repository'
 #######################################
 
 # Field separators
-export BL64_XSV_FS='_@64@_'       # Custom
+export BL64_XSV_FS='_@64@_' # Custom
 export BL64_XSV_FS_SPACE=' '
 export BL64_XSV_FS_NEWLINE=$'\n'
 export BL64_XSV_FS_TAB=$'\t'
@@ -857,7 +861,7 @@ export BL64_AWS_SET_FORMAT_STREAM=''
 export BL64_AWS_SET_DEBUG=''
 export BL64_AWS_SET_OUPUT_NO_PAGER=''
 
-export BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token file'
+export _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token file'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with container engines
@@ -2458,9 +2462,9 @@ function bl64_dbg_lib_command_trace_start() {
 function bl64_fs_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_fs_set_command &&
-    bl64_fs_set_alias &&
-    bl64_fs_set_options &&
+  _bl64_fs_set_command &&
+    _bl64_fs_set_alias &&
+    _bl64_fs_set_options &&
     BL64_FS_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'fs'
@@ -2481,7 +2485,7 @@ function bl64_fs_setup() {
 #   0: always ok, even when the OS is not supported
 #######################################
 # Warning: bootstrap function
-function bl64_fs_set_command() {
+function _bl64_fs_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -2553,7 +2557,7 @@ function bl64_fs_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_fs_set_options() {
+function _bl64_fs_set_options() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
@@ -2645,7 +2649,7 @@ function bl64_fs_set_options() {
 #   0: always ok
 #######################################
 # shellcheck disable=SC2034
-function bl64_fs_set_alias() {
+function _bl64_fs_set_alias() {
   local cmd_mawk='/usr/bin/mawk'
 
   case "$BL64_OS_DISTRO" in
@@ -3622,7 +3626,7 @@ function bl64_fs_set_ephemeral() {
 #######################################
 # BashLib64 / Module / Functions / Format text data
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -3644,7 +3648,7 @@ function bl64_fmt_strip_comments() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:--}"
 
-  "$BL64_TXT_CMD_GREP" "$BL64_TXT_SET_GREP_INVERT" "$BL64_TXT_SET_GREP_ERE" '^#.*$|^ *#.*$' "$source"
+  bl64_txt_run_egrep "$BL64_TXT_SET_GREP_INVERT" '^#.*$|^ *#.*$' "$source"
 }
 
 #######################################
@@ -4447,7 +4451,7 @@ function bl64_msg_show_input() {
 #######################################
 # BashLib64 / Module / Setup / OS / Identify OS attributes and provide command aliases
 #
-# Version: 2.1.0
+# Version: 2.3.0
 #######################################
 
 #######################################
@@ -4471,8 +4475,10 @@ function bl64_os_setup() {
     bl64_msg_show_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
     return $BL64_LIB_ERROR_OS_BASH_VERSION
 
-  bl64_os_get_distro &&
-    bl64_os_set_command &&
+  _bl64_os_set_runtime &&
+    _bl64_os_set_distro &&
+    _bl64_os_set_command &&
+    _bl64_os_set_options &&
     BL64_OS_MODULE="$BL64_VAR_ON"
 
 }
@@ -4492,54 +4498,124 @@ function bl64_os_setup() {
 #   0: always ok, even when the OS is not supported
 #######################################
 # Warning: bootstrap function
-function bl64_os_set_command() {
+function _bl64_os_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
+    BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
-    BL64_OS_CMD_BASH='/bin/bash'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/usr/bin/cat'
     BL64_OS_CMD_DATE=/usr'/bin/date'
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
+    BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
-    BL64_OS_CMD_BASH='/bin/bash'
     ;;
   ${BL64_OS_ALP}-*)
+    BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
+    BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
-    BL64_OS_CMD_BASH='/bin/bash'
     ;;
   ${BL64_OS_MCOS}-*)
     # Homebrew used when no native option available
+    BL64_OS_CMD_BASH='/opt/homebre/bin/bash'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
+    BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/usr/bin/uname'
-    BL64_OS_CMD_BASH='/opt/homebre/bin/bash'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
 }
 
 #######################################
+# Create command sets for common options
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_os_set_options() {
+  bl64_dbg_lib_show_function
+
+  BL64_OS_SET_LOCALE_ALL='--all-locales'
+}
+
+#######################################
+# Set runtime defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_os_set_runtime() {
+  bl64_dbg_lib_show_function
+
+  # Reset language to modern specification of C locale
+  if [[ "$BL64_LIB_LANG" == '1' ]]; then
+    bl64_os_set_lang 'C.UTF-8'
+  fi
+
+}
+
+#######################################
+# Set locale related shell variables
+#
+# * Locale variables are set as is, no extra validation on the locale availability
+#
+# Arguments:
+#   $1: locale name
+# Outputs:
+#   STDOUT: None
+#   STDERR: Validation errors
+# Returns:
+#   0: set ok
+#   >0: set error
+#######################################
+function bl64_os_set_lang() {
+  bl64_dbg_lib_show_function "$@"
+  local locale="$1"
+
+  bl64_check_parameter 'locale' || return $?
+
+  LANG="$locale"
+  LC_ALL="$locale"
+  LANGUAGE="$locale"
+  bl64_dbg_lib_show_vars 'LANG' 'LC_ALL' 'LANGUAGE'
+
+  return 0
+}
+
+#######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.18.0
+# Version: 1.19.0
 #######################################
 
 function _bl64_os_match() {
@@ -4647,6 +4723,8 @@ function bl64_os_match() {
   local item=''
   local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
 
+  bl64_check_module 'BL64_OS_MODULE' || return $?
+
   bl64_dbg_lib_show_info "Look for [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
@@ -4693,7 +4771,8 @@ function bl64_os_match() {
       ;;
     *)
       bl64_msg_error "${_BL64_OS_TXT_INVALID_OS_PATTERN} (${item})"
-      return $BL64_LIB_ERROR_OS_TAG_INVALID ;;
+      return $BL64_LIB_ERROR_OS_TAG_INVALID
+      ;;
     esac
     ((status == 0)) && break
   done
@@ -4719,13 +4798,46 @@ function bl64_os_match() {
 #   0: always ok, even when the OS is not supported
 #######################################
 # Warning: bootstrap function
-function bl64_os_get_distro() {
+function _bl64_os_set_distro() {
   bl64_dbg_lib_show_function
   if [[ -r '/etc/os-release' ]]; then
     _bl64_os_get_distro_from_os_release
   else
     _bl64_os_get_distro_from_uname
   fi
+}
+
+#######################################
+# Check if locale resources for language are installed in the OS
+#
+# Arguments:
+#   $1: locale name
+# Outputs:
+#   STDOUT: None
+#   STDERR: Validation errors
+# Returns:
+#   0: resources are installed
+#   >0: no resources
+#######################################
+function bl64_os_lang_is_available() {
+  bl64_dbg_lib_show_function "$@"
+  local locale="$1"
+  local line=''
+
+  bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_parameter 'locale' &&
+    bl64_check_command "$BL64_OS_CMD_LOCALE" ||
+    return $?
+
+  bl64_dbg_lib_show_info 'look for the requested locale using the locale command'
+  IFS=$'\n'
+  for line in $("$BL64_OS_CMD_LOCALE" "$BL64_OS_SET_LOCALE_ALL"); do
+    unset IFS
+    bl64_dbg_lib_show_info "checking [${line}] == [${locale}]"
+    [[ "$line" == "$locale" ]] && return 0
+  done
+
+  return 1
 }
 
 #######################################
@@ -4751,9 +4863,9 @@ function bl64_os_get_distro() {
 function bl64_rbac_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_rbac_set_command &&
-    bl64_rbac_set_alias &&
-    bl64_rbac_set_options &&
+  _bl64_rbac_set_command &&
+    _bl64_rbac_set_alias &&
+    _bl64_rbac_set_options &&
     BL64_RBAC_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'rbac'
@@ -4774,7 +4886,7 @@ function bl64_rbac_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_rbac_set_command() {
+function _bl64_rbac_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
@@ -4801,7 +4913,7 @@ function bl64_rbac_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_rbac_set_alias() {
+function _bl64_rbac_set_alias() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -4823,7 +4935,7 @@ function bl64_rbac_set_alias() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_rbac_set_options() {
+function _bl64_rbac_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_RBAC_SET_SUDO_CHECK='--check'
@@ -5155,9 +5267,9 @@ function bl64_rnd_get_alphanumeric() {
 function bl64_rxtx_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_rxtx_set_command &&
-    bl64_rxtx_set_alias &&
-    bl64_rxtx_set_options &&
+  _bl64_rxtx_set_command &&
+    _bl64_rxtx_set_alias &&
+    _bl64_rxtx_set_options &&
     BL64_RXTX_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'rxtx'
@@ -5178,7 +5290,7 @@ function bl64_rxtx_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_rxtx_set_command() {
+function _bl64_rxtx_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-*)
@@ -5206,7 +5318,7 @@ function bl64_rxtx_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_rxtx_set_options() {
+function _bl64_rxtx_set_options() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -5269,7 +5381,7 @@ function bl64_rxtx_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_rxtx_set_alias() {
+function _bl64_rxtx_set_alias() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-*)
@@ -5584,7 +5696,7 @@ function bl64_tm_create_timestamp_file() {
 #######################################
 # BashLib64 / Module / Setup / Manipulate text files content
 #
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 #######################################
@@ -5604,8 +5716,8 @@ function bl64_tm_create_timestamp_file() {
 function bl64_txt_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_txt_set_command &&
-    bl64_txt_set_options &&
+  _bl64_txt_set_command &&
+    _bl64_txt_set_options &&
     BL64_TXT_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'txt'
@@ -5627,7 +5739,7 @@ function bl64_txt_setup() {
 #   0: always ok, even when the OS is not supported
 #######################################
 # Warning: bootstrap function
-function bl64_txt_set_command() {
+function _bl64_txt_set_command() {
   bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2034
@@ -5703,38 +5815,42 @@ function bl64_txt_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_txt_set_options() {
+function _bl64_txt_set_options() {
   bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_TXT_SET_AWS_FS='-F'
     BL64_TXT_SET_GREP_ERE='-E'
     BL64_TXT_SET_GREP_INVERT='-v'
     BL64_TXT_SET_GREP_NO_CASE='-i'
+    BL64_TXT_SET_GREP_QUIET='--quiet'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
-    BL64_TXT_SET_AWS_FS='-F'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_TXT_SET_AWS_FS='-F'
     BL64_TXT_SET_GREP_ERE='-E'
     BL64_TXT_SET_GREP_INVERT='-v'
     BL64_TXT_SET_GREP_NO_CASE='-i'
+    BL64_TXT_SET_GREP_QUIET='--quiet'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
-    BL64_TXT_SET_AWS_FS='-F'
     ;;
   ${BL64_OS_ALP}-*)
+    BL64_TXT_SET_AWS_FS='-F'
     BL64_TXT_SET_GREP_ERE='-E'
     BL64_TXT_SET_GREP_INVERT='-v'
     BL64_TXT_SET_GREP_NO_CASE='-i'
+    BL64_TXT_SET_GREP_QUIET='-q'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
-    BL64_TXT_SET_AWS_FS='-F'
     ;;
   ${BL64_OS_MCOS}-*)
+    BL64_TXT_SET_AWS_FS='-F'
     BL64_TXT_SET_GREP_ERE='-E'
     BL64_TXT_SET_GREP_INVERT='-v'
     BL64_TXT_SET_GREP_NO_CASE='-i'
+    BL64_TXT_SET_GREP_QUIET='-q'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
-    BL64_TXT_SET_AWS_FS='-F'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -5744,7 +5860,7 @@ function bl64_txt_set_options() {
 #######################################
 # BashLib64 / Module / Functions / Manipulate text files content
 #
-# Version: 1.7.1
+# Version: 1.8.0
 #######################################
 
 #######################################
@@ -5774,10 +5890,10 @@ function bl64_txt_replace_env() {
 }
 
 #######################################
-# Search for a whole line in a given text file
+# Search for a whole line in a given text file or stdin
 #
 # Arguments:
-#   $1: source file path
+#   $1: source file path. Use - for stdin
 #   $2: text to look for
 # Outputs:
 #   STDOUT: none
@@ -5791,7 +5907,7 @@ function bl64_txt_search_line() {
   local source="${1:--}"
   local line="${2:-}"
 
-  "$BL64_TXT_CMD_GREP" "$BL64_TXT_SET_GREP_ERE" "^${line}$" "$source" >/dev/null
+  bl64_txt_run_egrep "$BL64_TXT_SET_GREP_QUIET" "^${line}$" "$source"
 }
 
 #######################################
@@ -5874,6 +5990,23 @@ function bl64_txt_run_grep() {
   bl64_dbg_lib_trace_start
   "$BL64_TXT_CMD_GREP" "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Run grep with regular expression matching
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_txt_run_egrep() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_txt_run_grep "$BL64_TXT_SET_GREP_ERE" "$@"
 }
 
 #######################################
@@ -6068,8 +6201,8 @@ function bl64_ui_ask_confirmation() {
 function bl64_vcs_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_vcs_set_command &&
-    bl64_vcs_set_options &&
+  _bl64_vcs_set_command &&
+    _bl64_vcs_set_options &&
     BL64_VCS_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'vcs'
@@ -6090,7 +6223,7 @@ function bl64_vcs_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_vcs_set_command() {
+function _bl64_vcs_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
@@ -6113,7 +6246,7 @@ function bl64_vcs_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_vcs_set_options() {
+function _bl64_vcs_set_options() {
   bl64_dbg_lib_show_function
   # Common sets - unversioned
   BL64_VCS_SET_GIT_NO_PAGER='--no-pager'
@@ -6305,7 +6438,7 @@ function bl64_vcs_git_sparse() {
 #######################################
 # BashLib64 / Module / Functions / Manipulate CSV like text files
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -6327,7 +6460,7 @@ function bl64_xsv_dump() {
   bl64_check_parameter 'source' &&
     bl64_check_file "$source" "$_BL64_XSV_TXT_SOURCE_NOT_FOUND" || return $?
 
-  "$BL64_TXT_CMD_GREP" "$BL64_TXT_SET_GREP_INVERT" "$BL64_TXT_SET_GREP_ERE" '^#.*$|^$' "$source"
+  bl64_txt_run_egrep "$BL64_TXT_SET_GREP_INVERT" '^#.*$|^$' "$source"
 
 }
 
@@ -6430,8 +6563,8 @@ function bl64_xsv_search_records() {
 function bl64_arc_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_arc_set_command &&
-    bl64_arc_set_options &&
+  _bl64_arc_set_command &&
+    _bl64_arc_set_options &&
     BL64_ARC_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'arc'
@@ -6452,7 +6585,7 @@ function bl64_arc_setup() {
 #   0: always ok, even when the OS is not supported
 #######################################
 # Warning: bootstrap function
-function bl64_arc_set_command() {
+function _bl64_arc_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-*)
@@ -6480,7 +6613,7 @@ function bl64_arc_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_arc_set_options() {
+function _bl64_arc_set_options() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_MCOS}-*)
     BL64_ARC_SET_TAR_VERBOSE='--verbose'
@@ -6727,13 +6860,13 @@ function bl64_ans_setup() {
   local ansible_config="${2:-${BL64_VAR_DEFAULT}}"
   local env_ignore="${3:-${BL64_VAR_ON}}"
 
-  bl64_ans_set_command "$ansible_bin" &&
+  _bl64_ans_set_command "$ansible_bin" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE_GALAXY" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE_PLAYBOOK" &&
-    bl64_ans_set_paths "$ansible_config" &&
-    bl64_ans_set_options &&
-    bl64_ans_set_version &&
+    _bl64_ans_set_runtime "$ansible_config" &&
+    _bl64_ans_set_options &&
+    _bl64_ans_set_version &&
     BL64_ANS_MODULE="$BL64_VAR_ON" &&
     BL64_ANS_ENV_IGNORE="$env_ignore" ||
     return $?
@@ -6755,8 +6888,8 @@ function bl64_ans_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_ans_set_command() {
-  bl64_dbg_lib_show_function
+function _bl64_ans_set_command() {
+  bl64_dbg_lib_show_function "$@"
   local ansible_bin="$1"
 
   if [[ "$ansible_bin" == "$BL64_VAR_DEFAULT" ]]; then
@@ -6798,12 +6931,31 @@ function bl64_ans_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_ans_set_options() {
+function _bl64_ans_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_ANS_SET_VERBOSE='-v'
   BL64_ANS_SET_DIFF='--diff'
   BL64_ANS_SET_DEBUG='-vvvvv'
+}
+
+#######################################
+# Set runtime defaults
+#
+# Arguments:
+#   $1: path to ansible_config
+# Outputs:
+#   STDOUT: None
+#   STDERR: setting errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function _bl64_ans_set_runtime() {
+  bl64_dbg_lib_show_function "$@"
+  local config="$1"
+
+  bl64_ans_set_paths "$config"
 }
 
 #######################################
@@ -6824,7 +6976,7 @@ function bl64_ans_set_options() {
 #   >0: failed to prepare paths
 #######################################
 function bl64_ans_set_paths() {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_show_function "$@"
   local config="${1:-${BL64_VAR_DEFAULT}}"
   local collections="${2:-${BL64_VAR_DEFAULT}}"
   local ansible="${3:-${BL64_VAR_DEFAULT}}"
@@ -6867,7 +7019,7 @@ function bl64_ans_set_paths() {
 #   0: version set ok
 #   >0: command error
 #######################################
-function bl64_ans_set_version() {
+function _bl64_ans_set_version() {
   bl64_dbg_lib_show_function
   local version=''
 
@@ -7109,9 +7261,9 @@ function bl64_aws_setup() {
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  bl64_aws_set_command "$aws_bin" &&
-    bl64_aws_set_options &&
-    bl64_aws_set_definitions &&
+  _bl64_aws_set_command "$aws_bin" &&
+    _bl64_aws_set_options &&
+    _bl64_aws_set_resources &&
     bl64_check_command "$BL64_AWS_CMD_AWS" &&
     bl64_aws_set_paths &&
     BL64_AWS_MODULE="$BL64_VAR_ON"
@@ -7133,7 +7285,7 @@ function bl64_aws_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_aws_set_command() {
+function _bl64_aws_set_command() {
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -7176,7 +7328,7 @@ function bl64_aws_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_aws_set_options() {
+function _bl64_aws_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_AWS_SET_FORMAT_JSON='--output json'
@@ -7206,7 +7358,7 @@ function bl64_aws_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_aws_set_definitions() {
+function _bl64_aws_set_resources() {
   bl64_dbg_lib_show_function
 
   BL64_AWS_DEF_SUFFIX_TOKEN='json'
@@ -7216,6 +7368,24 @@ function bl64_aws_set_definitions() {
   BL64_AWS_DEF_SUFFIX_CREDENTIALS='secret'
 
   return 0
+}
+
+#######################################
+# Set runtime defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: setting errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function _bl64_aws_set_runtime() {
+  bl64_dbg_lib_show_function
+
+  bl64_aws_set_paths
 }
 
 #######################################
@@ -7421,7 +7591,7 @@ function bl64_aws_sso_get_token() {
   if [[ -n "$token_file" && -r "$token_file" ]]; then
     echo "$token_file"
   else
-    bl64_msg_show_error "$BL64_AWS_TXT_TOKEN_NOT_FOUND"
+    bl64_msg_show_error "$_BL64_AWS_TXT_TOKEN_NOT_FOUND"
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
 
@@ -7573,7 +7743,7 @@ function bl64_cnt_setup() {
   bl64_dbg_lib_show_function
   local -i status=0
 
-  bl64_cnt_set_command
+  _bl64_cnt_set_command
   status=$?
   if ((status == 0)); then
     if [[ ! -x "$BL64_CNT_CMD_DOCKER" && ! -x "$BL64_CNT_CMD_PODMAN" ]]; then
@@ -7602,7 +7772,7 @@ function bl64_cnt_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_cnt_set_command() {
+function _bl64_cnt_set_command() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
@@ -7623,7 +7793,7 @@ function bl64_cnt_set_command() {
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.8.0
+# Version: 1.8.1
 #######################################
 
 #######################################
@@ -7652,16 +7822,18 @@ function bl64_cnt_is_inside_container() {
 }
 
 function _bl64_cnt_check_file_marker() {
+  bl64_dbg_lib_show_function "$@"
   local marker="$1"
   bl64_dbg_lib_show_info "check for file marker (${marker})"
   [[ -f "$marker" ]]
 }
 
 function _bl64_cnt_check_variable_marker() {
-  local name="$1"
-  local -n marker="$1"
-  bl64_dbg_lib_show_info "check for variable marker (${name})"
-  [[ -n "$marker" ]]
+  bl64_dbg_lib_show_function "$@"
+  local marker="$1"
+  bl64_dbg_lib_show_info "check for variable marker (${marker})"
+
+  eval "[[ -n \"\${${marker}}\" ]]"
 }
 
 #######################################
@@ -8403,8 +8575,8 @@ function bl64_gcp_setup() {
       return $?
   fi
 
-  bl64_gcp_set_command "$gcloud_bin" &&
-    bl64_gcp_set_options &&
+  _bl64_gcp_set_command "$gcloud_bin" &&
+    _bl64_gcp_set_options &&
     bl64_check_command "$BL64_GCP_CMD_GCLOUD" &&
     BL64_GCP_MODULE="$BL64_VAR_ON"
 
@@ -8425,7 +8597,7 @@ function bl64_gcp_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_gcp_set_command() {
+function _bl64_gcp_set_command() {
   bl64_dbg_lib_show_function "$@"
   local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -8461,7 +8633,7 @@ function bl64_gcp_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_gcp_set_options() {
+function _bl64_gcp_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_GCP_SET_FORMAT_YAML='--format yaml'
@@ -8645,10 +8817,10 @@ function bl64_hlm_setup() {
       return $?
   fi
 
-  bl64_hlm_set_command "$helm_bin" &&
+  _bl64_hlm_set_command "$helm_bin" &&
     bl64_check_command "$BL64_HLM_CMD_HELM" &&
-    bl64_hlm_set_options &&
-    bl64_hlm_set_runtime &&
+    _bl64_hlm_set_options &&
+    _bl64_hlm_set_runtime &&
     BL64_HLM_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'hlm'
@@ -8668,7 +8840,7 @@ function bl64_hlm_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_hlm_set_command() {
+function _bl64_hlm_set_command() {
   bl64_dbg_lib_show_function "$@"
   local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -8706,7 +8878,7 @@ function bl64_hlm_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_hlm_set_options() {
+function _bl64_hlm_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_HLM_SET_DEBUG='--debug'
@@ -8716,7 +8888,7 @@ function bl64_hlm_set_options() {
 }
 
 #######################################
-# Set runtime variables to defaults
+# Set runtime defaults
 #
 # Arguments:
 #   None
@@ -8726,7 +8898,7 @@ function bl64_hlm_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_hlm_set_runtime() {
+function _bl64_hlm_set_runtime() {
   bl64_dbg_lib_show_function
 
   bl64_hlm_set_timeout '5m0s'
@@ -8936,9 +9108,9 @@ function bl64_hlm_blank_helm() {
 function bl64_iam_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_iam_set_command &&
-    bl64_iam_set_alias &&
-    bl64_iam_set_options &&
+  _bl64_iam_set_command &&
+    _bl64_iam_set_alias &&
+    _bl64_iam_set_options &&
     BL64_IAM_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'iam'
@@ -8959,7 +9131,7 @@ function bl64_iam_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_iam_set_command() {
+function _bl64_iam_set_command() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
@@ -8994,7 +9166,7 @@ function bl64_iam_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_iam_set_alias() {
+function _bl64_iam_set_alias() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
@@ -9024,7 +9196,7 @@ function bl64_iam_set_alias() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_iam_set_options() {
+function _bl64_iam_set_options() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
@@ -9204,11 +9376,11 @@ function bl64_k8s_setup() {
       return $?
   fi
 
-  bl64_k8s_set_command "$kubectl_bin" &&
+  _bl64_k8s_set_command "$kubectl_bin" &&
     bl64_check_command "$BL64_K8S_CMD_KUBECTL" &&
     bl64_k8s_set_version &&
-    bl64_k8s_set_options &&
-    bl64_k8s_set_kubectl_output &&
+    _bl64_k8s_set_options &&
+    _bl64_k8s_set_runtime &&
     BL64_K8S_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'k8s'
@@ -9228,7 +9400,7 @@ function bl64_k8s_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_k8s_set_command() {
+function _bl64_k8s_set_command() {
   bl64_dbg_lib_show_function "$@"
   local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -9264,7 +9436,7 @@ function bl64_k8s_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_k8s_set_options() {
+function _bl64_k8s_set_options() {
   bl64_dbg_lib_show_function
 
   case "$BL64_K8S_VERSION_KUBECTL" in
@@ -9329,6 +9501,24 @@ function _bl64_k8s_get_version_1_22() {
     $1 ~ /^ +"minor"$/ { gsub( /[" ,]/, "", $2 ); Minor = $2 }
     END { print Major "." Minor }
   '
+}
+
+#######################################
+# Set runtime defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: setting errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function _bl64_k8s_set_runtime() {
+  bl64_dbg_lib_show_function
+
+  bl64_k8s_set_kubectl_output
 }
 
 #######################################
@@ -10178,12 +10368,12 @@ function bl64_mdb_setup() {
       return $?
   fi
 
-  bl64_mdb_set_command "$mdb_bin" &&
+  _bl64_mdb_set_command "$mdb_bin" &&
     bl64_check_command "$BL64_MDB_CMD_MONGOSH" &&
     bl64_check_command "$BL64_MDB_CMD_MONGORESTORE" &&
     bl64_check_command "$BL64_MDB_CMD_MONGOEXPORT" &&
-    bl64_mdb_set_options &&
-    bl64_mdb_set_runtime &&
+    _bl64_mdb_set_options &&
+    _bl64_mdb_set_runtime &&
     BL64_MDB_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'mdb'
@@ -10203,7 +10393,7 @@ function bl64_mdb_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_mdb_set_command() {
+function _bl64_mdb_set_command() {
   bl64_dbg_lib_show_function "$@"
   local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -10243,7 +10433,7 @@ function bl64_mdb_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_mdb_set_options() {
+function _bl64_mdb_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_MDB_SET_VERBOSE='--verbose'
@@ -10262,7 +10452,7 @@ function bl64_mdb_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_mdb_set_runtime() {
+function _bl64_mdb_set_runtime() {
   bl64_dbg_lib_show_function
 
   # Write concern defaults
@@ -10527,10 +10717,10 @@ function bl64_pkg_setup() {
   bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2249
-  bl64_pkg_set_command &&
-    bl64_pkg_set_paths &&
-    bl64_pkg_set_alias &&
-    bl64_pkg_set_options &&
+  _bl64_pkg_set_command &&
+    _bl64_pkg_set_runtime &&
+    _bl64_pkg_set_alias &&
+    _bl64_pkg_set_options &&
     case "$BL64_OS_DISTRO" in
     ${BL64_OS_FD}-*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
     ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
@@ -10560,7 +10750,7 @@ function bl64_pkg_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_pkg_set_command() {
+function _bl64_pkg_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-*)
@@ -10601,7 +10791,7 @@ function bl64_pkg_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_pkg_set_options() {
+function _bl64_pkg_set_options() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -10666,7 +10856,7 @@ function bl64_pkg_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_pkg_set_alias() {
+function _bl64_pkg_set_alias() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -10707,6 +10897,24 @@ function bl64_pkg_set_alias() {
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
+}
+
+#######################################
+# Set runtime defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: setting errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function _bl64_pkg_set_runtime() {
+  bl64_dbg_lib_show_function
+
+  bl64_pkg_set_paths
 }
 
 #######################################
@@ -11326,10 +11534,10 @@ function _bl64_py_setup() {
       return $?
   fi
 
-  bl64_py_set_command "$venv_path" &&
+  _bl64_py_set_command "$venv_path" &&
     bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
-    bl64_py_set_options &&
-    bl64_py_set_definitions &&
+    _bl64_py_set_options &&
+    _bl64_py_set_resources &&
     BL64_PY_MODULE="$BL64_VAR_ON"
 }
 
@@ -11349,7 +11557,7 @@ function _bl64_py_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_py_set_command() {
+function _bl64_py_set_command() {
   bl64_dbg_lib_show_function "$@"
   local venv_path="$1"
 
@@ -11429,7 +11637,7 @@ function bl64_py_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_py_set_options() {
+function _bl64_py_set_options() {
   bl64_dbg_lib_show_function
   # Common sets - unversioned
   BL64_PY_SET_PIP_VERBOSE='--verbose'
@@ -11457,7 +11665,7 @@ function bl64_py_set_options() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_py_set_definitions() {
+function _bl64_py_set_resources() {
   bl64_dbg_lib_show_function
 
   BL64_PY_DEF_VENV_CFG='pyvenv.cfg'
@@ -11798,10 +12006,10 @@ function bl64_tf_setup() {
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  bl64_tf_set_command "$terraform_bin" &&
+  _bl64_tf_set_command "$terraform_bin" &&
     bl64_check_command "$BL64_TF_CMD_TERRAFORM" &&
-    bl64_tf_set_options &&
-    bl64_tf_set_definitions &&
+    _bl64_tf_set_command &&
+    _bl64_tf_set_resources &&
     BL64_TF_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'tf'
@@ -11821,7 +12029,7 @@ function bl64_tf_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_tf_set_command() {
+function _bl64_tf_set_command() {
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="${1:-}"
 
@@ -11862,7 +12070,7 @@ function bl64_tf_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_tf_set_options() {
+function _bl64_tf_set_command() {
   bl64_dbg_lib_show_function
 
   # TF_LOG values
@@ -11913,7 +12121,7 @@ function bl64_tf_log_set() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_tf_set_definitions() {
+function _bl64_tf_set_resources() {
   bl64_dbg_lib_show_function
 
   # Terraform configuration lock file name
@@ -12031,14 +12239,14 @@ function bl64_tf_blank_terraform() {
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 4.0.0
+# Version: 4.0.1
 #######################################
 
 #
-# Main
+# Library Bootstrap
 #
 
-# Normalize locales to C
+# Normalize locales to C until a better locale is found in bl64_os_setup
 if [[ "$BL64_LIB_LANG" == '1' ]]; then
   LANG='C'
   LC_ALL='C'
@@ -12051,16 +12259,19 @@ if [[ "$BL64_LIB_STRICT" == '1' ]]; then
   set -o 'privileged'
 fi
 
-# Initialize mandatory modules
+# Initialize OS independant modules
 bl64_dbg_setup &&
   bl64_msg_setup &&
   bl64_bsh_setup &&
-  bl64_os_setup &&
+  bl64_ui_setup ||
+  return $?
+
+# Initialize OS dependant modules
+bl64_os_setup &&
   bl64_txt_setup &&
   bl64_fs_setup &&
   bl64_iam_setup &&
   bl64_rbac_setup &&
-  bl64_ui_setup &&
   bl64_vcs_setup &&
   bl64_rxtx_setup ||
   return $?

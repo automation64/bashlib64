@@ -26,8 +26,8 @@ function bl64_gcp_setup() {
       return $?
   fi
 
-  bl64_gcp_set_command "$gcloud_bin" &&
-    bl64_gcp_set_options &&
+  _bl64_gcp_set_command "$gcloud_bin" &&
+    _bl64_gcp_set_options &&
     bl64_check_command "$BL64_GCP_CMD_GCLOUD" &&
     BL64_GCP_MODULE="$BL64_VAR_ON"
 
@@ -48,7 +48,7 @@ function bl64_gcp_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_gcp_set_command() {
+function _bl64_gcp_set_command() {
   bl64_dbg_lib_show_function "$@"
   local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -84,7 +84,7 @@ function bl64_gcp_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_gcp_set_options() {
+function _bl64_gcp_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_GCP_SET_FORMAT_YAML='--format yaml'

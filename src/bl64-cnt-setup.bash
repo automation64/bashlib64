@@ -23,7 +23,7 @@ function bl64_cnt_setup() {
   bl64_dbg_lib_show_function
   local -i status=0
 
-  bl64_cnt_set_command
+  _bl64_cnt_set_command
   status=$?
   if ((status == 0)); then
     if [[ ! -x "$BL64_CNT_CMD_DOCKER" && ! -x "$BL64_CNT_CMD_PODMAN" ]]; then
@@ -52,7 +52,7 @@ function bl64_cnt_setup() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_cnt_set_command() {
+function _bl64_cnt_set_command() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
