@@ -1,6 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  [[ -x "$BL64_TXT_CMD_ENVSUBST" ]] || skip
+  [[ -x "$BL64_TXT_CMD_ENVSUBST" ]] || skip 'envsubst not found'
 }
 
 function _test_bl64_txt_run_envsubst() {

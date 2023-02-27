@@ -3,7 +3,7 @@ setup() {
 }
 
 @test "bl64_mdb_run_mongosh: CLI runs ok" {
-  bl64_mdb_setup || skip
+  bl64_mdb_setup ||  'mongosh cli not found'
   run bl64_mdb_run_mongosh --help
   assert_success
 }

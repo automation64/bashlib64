@@ -1,6 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  [[ ! -x "$BL64_PY_CMD_PYTHON3" ]] && skip
+  [[ ! -x "$BL64_PY_CMD_PYTHON3" ]] && skip 'python3 not found'
   bl64_py_setup
 }
 

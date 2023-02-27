@@ -23,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - all
   - renamed internal functions to use the prefix `_`
 
+### Fixed
+
+- cnt
+  - bl64_cnt_is_inside_container: replaced local-n bash for eval for compatibility
+
 ## [9.2.4]
 
 ### Fixed
