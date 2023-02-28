@@ -5,14 +5,9 @@ setup() {
   bl64_cnt_setup
 }
 
-@test "bl64_cnt_run_podman: CLI runs ok" {
+@test "bl64_cnt_docker_login: CLI runs ok" {
   [[ ! -x "$BL64_CNT_CMD_PODMAN" ]] && skip 'podman not found'
 
-  run bl64_cnt_run_podman --version
+  run bl64_cnt_docker_login --version
   assert_success
-}
-
-@test "bl64_cnt_run_podman: parameters are not present" {
-  run bl64_cnt_run_podman
-  assert_failure
 }
