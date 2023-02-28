@@ -10,3 +10,8 @@ setup() {
   run bl64_cnt_run_podman --version
   assert_success
 }
+
+@test "bl64_cnt_run_docker: parameters are not present" {
+  run bl64_cnt_run_docker
+  assert_failure
+}
