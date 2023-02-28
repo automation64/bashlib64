@@ -202,7 +202,7 @@ export BL64_LIB_SIGNAL_DEBUG='-'
 export BL64_LIB_SIGNAL_ERR='-'
 export BL64_LIB_SIGNAL_EXIT='bl64_dbg_runtime_show'
 #######################################
-# BashLib64 / Module / Functions / Interact with Bash shell
+# BashLib64 / Module / Globals / Interact with Bash shell
 #
 # Version: 1.0.0
 #######################################
@@ -216,8 +216,10 @@ export _BL64_BSH_TXT_UNSUPPORTED='BashLib64 is not supported in the current Bash
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
 #
-# Version: 1.17.0
+# Version: 1.18.0
 #######################################
+
+export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 
 export _BL64_CHECK_TXT_PARAMETER_MISSING='required parameter is missing'
 export _BL64_CHECK_TXT_PARAMETER_NOT_SET='required shell variable is not set'
@@ -403,6 +405,14 @@ export BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
 export BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
 
 export _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
+
+#######################################
+# BashLib64 / Module / Globals / Format text data
+#
+# Version: 1.0.0
+#######################################
+
+export BL64_FMT_MODULE="$BL64_VAR_OFF"
 
 #######################################
 # BashLib64 / Module / Globals / Display messages
@@ -657,8 +667,10 @@ export _BL64_RBAC_TXT_ADD_ROOT='add password-less root privilege to user'
 #######################################
 # BashLib64 / Module / Globals / Generate random data
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
+
+export BL64_RND_MODULE="$BL64_VAR_OFF"
 
 declare -ig BL64_RND_LENGTH_1=1
 declare -ig BL64_RND_LENGTH_20=20
@@ -787,7 +799,7 @@ export BL64_XSV_FS_SLASH='/'
 export _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
 
 #######################################
-# BashLib64 / Module / Functions / Interact with Bash shell
+# BashLib64 / Module / Setup / Interact with Bash shell
 #
 # Version: 1.1.0
 #######################################
@@ -976,6 +988,32 @@ function bl64_bsh_env_export_variable() {
 
   printf "export %s='%s'\n" "$variable" "$value"
 
+}
+
+#######################################
+# BashLib64 / Module / Setup / Check for conditions and report status
+#
+# Version: 1.0.0
+#######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_check_setup() {
+  bl64_dbg_lib_show_function
+
+  BL64_CHECK_MODULE="$BL64_VAR_ON"
 }
 
 #######################################
@@ -3260,6 +3298,32 @@ function bl64_fs_set_ephemeral() {
 }
 
 #######################################
+# BashLib64 / Module / Setup / Format text data
+#
+# Version: 1.0.0
+#######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_fmt_setup() {
+  bl64_dbg_lib_show_function
+
+  BL64_FMT_MODULE="$BL64_VAR_ON"
+}
+
+#######################################
 # BashLib64 / Module / Functions / Format text data
 #
 # Version: 1.5.0
@@ -4087,7 +4151,7 @@ function bl64_msg_show_input() {
 #######################################
 # BashLib64 / Module / Setup / OS / Identify OS attributes and provide command aliases
 #
-# Version: 2.3.0
+# Version: 2.3.1
 #######################################
 
 #######################################
@@ -4111,8 +4175,8 @@ function bl64_os_setup() {
     bl64_msg_show_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
     return $BL64_LIB_ERROR_OS_BASH_VERSION
 
-  _bl64_os_set_runtime &&
-    _bl64_os_set_distro &&
+  _bl64_os_set_distro &&
+    _bl64_os_set_runtime &&
     _bl64_os_set_command &&
     _bl64_os_set_options &&
     BL64_OS_MODULE="$BL64_VAR_ON"
@@ -4215,9 +4279,34 @@ function _bl64_os_set_runtime() {
 
   # Reset language to modern specification of C locale
   if [[ "$BL64_LIB_LANG" == '1' ]]; then
-    bl64_os_set_lang 'C.UTF-8'
+    # shellcheck disable=SC2034
+    case "$BL64_OS_DISTRO" in
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+      bl64_os_set_lang 'C.UTF-8'
+      ;;
+    ${BL64_OS_FD}-*)
+      bl64_os_set_lang 'C.UTF-8'
+      ;;
+    ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-8.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RCK}-*)
+      bl64_os_set_lang 'C.UTF-8'
+      ;;
+    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+      # Not installed by default, skipping
+      ;;
+    ${BL64_OS_ALP}-*)
+      # Not installed by default, skipping
+      ;;
+    ${BL64_OS_MCOS}-*)
+      # Not installed by default, skipping
+      ;;
+    *)
+      bl64_check_alert_unsupported
+      return $?
+      ;;
+    esac
   fi
 
+  return 0
 }
 
 #######################################
@@ -4771,6 +4860,32 @@ function bl64_rbac_run_bash_function() {
     $BL64_RBAC_ALIAS_SUDO_ENV -u "$user" "$BL64_OS_CMD_BASH" -c ". ${library}; ${*}"
     bl64_dbg_lib_trace_stop
   fi
+}
+
+#######################################
+# BashLib64 / Module / Setup / Generate random data
+#
+# Version: 1.0.0
+#######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_rnd_setup() {
+  bl64_dbg_lib_show_function
+
+  BL64_RND_MODULE="$BL64_VAR_ON"
 }
 
 #######################################
@@ -6179,7 +6294,7 @@ function bl64_xsv_search_records() {
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 4.0.1
+# Version: 4.1.0
 #######################################
 
 #
@@ -6201,6 +6316,7 @@ fi
 
 # Initialize OS independant modules
 bl64_dbg_setup &&
+  bl64_check_setup &&
   bl64_msg_setup &&
   bl64_bsh_setup &&
   bl64_ui_setup ||
@@ -6209,6 +6325,8 @@ bl64_dbg_setup &&
 # Initialize OS dependant modules
 bl64_os_setup &&
   bl64_txt_setup &&
+  bl64_fmt_setup &&
+  bl64_rnd_setup &&
   bl64_fs_setup &&
   bl64_iam_setup &&
   bl64_rbac_setup &&

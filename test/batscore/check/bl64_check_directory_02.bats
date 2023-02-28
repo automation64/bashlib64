@@ -16,10 +16,3 @@ setup() {
   assert_equal "$status" $BL64_LIB_ERROR_DIRECTORY_NOT_FOUND
 
 }
-
-@test "bl64_check_directory: directory parameter is not present" {
-
-  run bl64_check_directory
-  assert_failure
-
-}

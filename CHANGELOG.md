@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - new function: bl64_os_lang_is_available, bl64_os_set_lang
 - txt
   - new function: bl64_txt_run_egrep
+- check,fmt,rnd
+  - added module setup
 
 ### Changed
 
