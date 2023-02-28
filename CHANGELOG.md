@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - cnt
   - bl64_cnt_is_inside_container: replaced local-n bash for eval for compatibility
+- check
+  - bl64_check_export: add missing parameter check
 
 ## [9.2.4]
 
