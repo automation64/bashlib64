@@ -1,8 +1,10 @@
 #######################################
 # BashLib64 / Module / Globals / Generate random data
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
+
+export BL64_RND_MODULE="$BL64_VAR_OFF"
 
 declare -ig BL64_RND_LENGTH_1=1
 declare -ig BL64_RND_LENGTH_20=20
