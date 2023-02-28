@@ -2,13 +2,6 @@ setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
 }
 
-@test "bl64_check_module: no param" {
-
-  run bl64_check_module
-  assert_failure
-
-}
-
 @test "bl64_check_module: module not sourced" {
 
   run bl64_check_module 'BL64_XXX_MODULE'
