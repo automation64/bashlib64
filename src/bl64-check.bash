@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 3.0.0
+# Version: 3.0.1
 #######################################
 
 #######################################
@@ -229,6 +229,8 @@ function bl64_check_export() {
   bl64_dbg_lib_show_function "$@"
   local export_name="${1:-}"
   local description="${2:-export: $export_name}"
+
+  bl64_check_parameter 'export_name' || return $?
 
   if [[ ! -v "$export_name" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_EXPORT_SET} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
