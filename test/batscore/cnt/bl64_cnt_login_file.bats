@@ -1,7 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  bl64_cnt_is_inside_container && skip 'not applicable to container mode'
-  bl64_cnt_setup
+  bl64_cnt_setup || skip 'no container CLI found'
 }
 
 @test "bl64_cnt_login_file: parameters are not present" {

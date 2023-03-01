@@ -1,13 +1,9 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  bl64_cnt_is_inside_container && skip 'not applicable to container mode'
-
-  bl64_cnt_setup
+  bl64_cnt_setup || skip 'no container CLI found'
 }
 
-@test "bl64_cnt_podman_login: CLI runs ok" {
-  [[ ! -x "$BL64_CNT_CMD_PODMAN" ]] && skip 'podman not found'
-
-  run bl64_cnt_podman_login --version
-  assert_success
+@test "bl64_cnt_podman_login: parameters are not present" {
+  run bl64_cnt_podman_login
+  assert_failure
 }
