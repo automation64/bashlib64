@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 3.1.0
+# Version: 3.2.0
 #######################################
 
 #######################################
@@ -229,9 +229,9 @@ function bl64_fs_merge_dir() {
 #######################################
 function bl64_fs_run_chown() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
+  bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHOWN_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -253,9 +253,9 @@ function bl64_fs_run_chown() {
 #######################################
 function bl64_fs_run_chmod() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
+  bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -366,9 +366,9 @@ function bl64_fs_ln_symbolic() {
 #######################################
 function bl64_fs_run_mkdir() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
+  bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -407,9 +407,9 @@ function bl64_fs_mkdir_full() {
 #######################################
 function bl64_fs_run_mv() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
+  bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MV_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -431,12 +431,10 @@ function bl64_fs_run_mv() {
 #######################################
 function bl64_fs_rm_file() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_RM_VERBOSE"
+  bl64_check_parameters_none "$#" || return $?
 
-  # shellcheck disable=SC2086
-  "$BL64_FS_CMD_RM" $verbose "$BL64_FS_SET_RM_FORCE" "$@"
+  bl64_fs_run_rm "$BL64_FS_SET_RM_FORCE" "$@"
 }
 
 #######################################
@@ -452,12 +450,10 @@ function bl64_fs_rm_file() {
 #######################################
 function bl64_fs_rm_full() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_RM_VERBOSE"
+  bl64_check_parameters_none "$#" || return $?
 
-  # shellcheck disable=SC2086
-  "$BL64_FS_CMD_RM" $verbose "$BL64_FS_SET_RM_FORCE" "$BL64_FS_SET_RM_RECURSIVE" "$@"
+  bl64_fs_run_rm "$BL64_FS_SET_RM_FORCE" "$BL64_FS_SET_RM_RECURSIVE" "$@"
 }
 
 #######################################
@@ -823,9 +819,9 @@ function bl64_fs_fix_permissions() {
 #######################################
 function bl64_fs_run_cp() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
+  bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -845,8 +841,33 @@ function bl64_fs_run_cp() {
 # Returns:
 #   command exit status
 #######################################
+function bl64_fs_run_rm() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_parameters_none "$#" || return $?
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_FS_CMD_RM" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
 function bl64_fs_run_ls() {
   bl64_dbg_lib_show_function "$@"
+
   bl64_check_parameters_none "$#" || return $?
 
   bl64_dbg_lib_trace_start
@@ -867,9 +888,9 @@ function bl64_fs_run_ls() {
 #######################################
 function bl64_fs_run_ln() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
+  bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_LN_VERBOSE"
 
   bl64_dbg_lib_trace_start
