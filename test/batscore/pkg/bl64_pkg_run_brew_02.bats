@@ -3,7 +3,7 @@ setup() {
   bl64_pkg_setup
 }
 
-@test "bl64_pkg_repository_add: root privilege" {
-  run bl64_pkg_repository_add
+@test "bl64_pkg_run_brew: root privilege" {
+  run bl64_pkg_run_brew
   assert_failure
 }
