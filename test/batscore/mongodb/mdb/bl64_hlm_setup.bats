@@ -2,7 +2,7 @@ setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
 }
 
-@test "bl64_hlm_setup: module setup ok" {
-  run bl64_hlm_setup
+@test "bl64_mdb_setup: module setup ok" {
+  run bl64_mdb_setup
   assert_success
 }
