@@ -333,73 +333,73 @@ jobs:
         shell: 'script -q -e -c "bash {0}"'
         run: "./lib/testmansh -b -o -e bash-test/ubuntu-22.4-bash-test:latest -c test/batscore/bash"
 
-  # test-batscore-k8s:
-  #     runs-on: "ubuntu-latest"
-  #     steps:
+  test-batscore-kubernetes:
+      runs-on: "ubuntu-latest"
+      steps:
 
-  #       - name: "Check out repository code"
-  #         uses: "actions/checkout@main"
+        - name: "Check out repository code"
+          uses: "actions/checkout@main"
 
-  #       - name: "Prepare build environment"
-  #         run: "./bin/devbl-lib"
+        - name: "Prepare build environment"
+          run: "./bin/devbl-lib"
 
-  #       - name: "Run tests"
-  #         shell: 'script -q -e -c "bash {0}"'
-  #         run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-k8s:latest -c test/batscore/bash"
+        - name: "Run tests"
+          shell: 'script -q -e -c "bash {0}"'
+          run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-k8s:latest -c test/batscore/kubernetes"
 
-  # test-batscore-terraform:
-  #     runs-on: "ubuntu-latest"
-  #     steps:
+  test-batscore-terraform:
+      runs-on: "ubuntu-latest"
+      steps:
 
-  #       - name: "Check out repository code"
-  #         uses: "actions/checkout@main"
+        - name: "Check out repository code"
+          uses: "actions/checkout@main"
 
-  #       - name: "Prepare build environment"
-  #         run: "./bin/devbl-lib"
+        - name: "Prepare build environment"
+          run: "./bin/devbl-lib"
 
-  #       - name: "Run tests"
-  #         shell: 'script -q -e -c "bash {0}"'
-  #         run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-terraform:latest -c test/batscore/bash"
+        - name: "Run tests"
+          shell: 'script -q -e -c "bash {0}"'
+          run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-terraform:latest -c test/batscore/terraform"
 
-  # test-batscore-mongodb:
-  #     runs-on: "ubuntu-latest"
-  #     steps:
+  test-batscore-mongodb:
+      runs-on: "ubuntu-latest"
+      steps:
 
-  #       - name: "Check out repository code"
-  #         uses: "actions/checkout@main"
+        - name: "Check out repository code"
+          uses: "actions/checkout@main"
 
-  #       - name: "Prepare build environment"
-  #         run: "./bin/devbl-lib"
+        - name: "Prepare build environment"
+          run: "./bin/devbl-lib"
 
-  #       - name: "Run tests"
-  #         shell: 'script -q -e -c "bash {0}"'
-  #         run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-mongosh-6:latest -c test/batscore/bash"
+        - name: "Run tests"
+          shell: 'script -q -e -c "bash {0}"'
+          run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-mongosh-6:latest -c test/batscore/mongodb"
 
-  # test-batscore-cloud:
-  #     runs-on: "ubuntu-latest"
-  #     steps:
+  test-batscore-cloud:
+      runs-on: "ubuntu-latest"
+      steps:
 
-  #       - name: "Check out repository code"
-  #         uses: "actions/checkout@main"
+        - name: "Check out repository code"
+          uses: "actions/checkout@main"
 
-  #       - name: "Prepare build environment"
-  #         run: "./bin/devbl-lib"
+        - name: "Prepare build environment"
+          run: "./bin/devbl-lib"
 
-  #       - name: "Run tests"
-  #         shell: 'script -q -e -c "bash {0}"'
-  #         run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-cloud:latest -c test/batscore/bash"
+        - name: "Run tests"
+          shell: 'script -q -e -c "bash {0}"'
+          run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-cloud:latest -c test/batscore/cloud"
 
-  # test-batscore-ansible:
-  #     runs-on: "ubuntu-latest"
-  #     steps:
+  test-batscore-ansible:
+      runs-on: "ubuntu-latest"
+      steps:
 
-  #       - name: "Check out repository code"
-  #         uses: "actions/checkout@main"
+        - name: "Check out repository code"
+          uses: "actions/checkout@main"
 
-  #       - name: "Prepare build environment"
-  #         run: "./bin/devbl-lib"
+        - name: "Prepare build environment"
+          run: "./bin/devbl-lib"
 
-  #       - name: "Run tests"
-  #         shell: 'script -q -e -c "bash {0}"'
-  #         run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-ansible-2:latest -c test/batscore/bash"
+        - name: "Run tests"
+          shell: 'script -q -e -c "bash {0}"'
+          run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-ansible-2:latest -c test/batscore/ansible"
 ...
