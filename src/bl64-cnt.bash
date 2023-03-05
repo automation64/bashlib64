@@ -235,6 +235,8 @@ function bl64_cnt_run_interactive() {
 function bl64_cnt_podman_run_interactive() {
   bl64_dbg_lib_show_function "$@"
 
+  bl64_check_parameters_none "$#" || return $?
+
   bl64_cnt_run_podman \
     run \
     --rm \
@@ -259,6 +261,8 @@ function bl64_cnt_podman_run_interactive() {
 
 function bl64_cnt_docker_run_interactive() {
   bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" || return $?
 
   bl64_cnt_run_docker \
     run \
@@ -285,10 +289,10 @@ function bl64_cnt_docker_run_interactive() {
 
 function bl64_cnt_run_podman() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose='error'
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_command "$BL64_CNT_CMD_PODMAN" ||
     return $?
 
@@ -318,10 +322,10 @@ function bl64_cnt_run_podman() {
 
 function bl64_cnt_run_docker() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose='error'
   local debug=' '
 
+  bl64_check_parameters_none "$#" &&
   bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_command "$BL64_CNT_CMD_DOCKER" ||
     return $?
