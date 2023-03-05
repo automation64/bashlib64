@@ -20,23 +20,23 @@
 function bl64_cnt_is_inside_container() {
   bl64_dbg_lib_show_function
 
-  _bl64_cnt_check_file_marker '/run/.containerenv' && return 0
-  _bl64_cnt_check_file_marker '/run/container_id' && return 0
-  _bl64_cnt_check_variable_marker 'container' && return 0
-  _bl64_cnt_check_variable_marker 'DOCKER_CONTAINER' && return 0
-  _bl64_cnt_check_variable_marker 'KUBERNETES_SERVICE_HOST' && return 0
+  _bl64_cnt_find_file_marker '/run/.containerenv' && return 0
+  _bl64_cnt_find_file_marker '/run/container_id' && return 0
+  _bl64_cnt_find_variable_marker 'container' && return 0
+  _bl64_cnt_find_variable_marker 'DOCKER_CONTAINER' && return 0
+  _bl64_cnt_find_variable_marker 'KUBERNETES_SERVICE_HOST' && return 0
 
   return 1
 }
 
-function _bl64_cnt_check_file_marker() {
+function _bl64_cnt_find_file_marker() {
   bl64_dbg_lib_show_function "$@"
   local marker="$1"
   bl64_dbg_lib_show_info "check for file marker (${marker})"
   [[ -f "$marker" ]]
 }
 
-function _bl64_cnt_check_variable_marker() {
+function _bl64_cnt_find_variable_marker() {
   bl64_dbg_lib_show_function "$@"
   local marker="$1"
   bl64_dbg_lib_show_info "check for variable marker (${marker})"
