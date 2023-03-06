@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 10.0.0
+# Version: 10.1.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -592,7 +592,7 @@ export _BL64_MSG_TXT_BATCH_FINISH_ERROR='finished with errors'
 #######################################
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.17.0
+# Version: 1.18.0
 #######################################
 
 export BL64_OS_MODULE="$BL64_VAR_OFF"
@@ -641,7 +641,8 @@ export _BL64_OS_TXT_CHECK_OS_MATRIX='Please check that the OS is listed in the c
 export _BL64_OS_TXT_FAILED_TO_NORMALIZE_OS='Unable to normalize OS name and version from /etc/os-release'
 export _BL64_OS_TXT_INVALID_OS_PATTERN='invalid OS pattern'
 export _BL64_OS_TXT_OS_NOT_SUPPORTED='BashLib64 is not supported in the current OS'
-
+export _BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED='the current OS version is not compatible with the task'
+export _BL64_OS_TXT_OS_MATRIX='Supported OS Versions'
 
 #######################################
 # BashLib64 / Module / Globals / Manage role based access service
@@ -878,7 +879,7 @@ export _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token fi
 #######################################
 # BashLib64 / Module / Globals / Interact with container engines
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -886,6 +887,11 @@ export BL64_CNT_MODULE="$BL64_VAR_OFF"
 
 export BL64_CNT_CMD_PODMAN=''
 export BL64_CNT_CMD_DOCKER=''
+
+export BL64_CNT_SET_DOCKER_VERSION=''
+export BL64_CNT_SET_PODMAN_VERSION=''
+
+export BL64_CNT_PATH_DOCKER_SOCKET=''
 
 export _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
 
@@ -1383,7 +1389,7 @@ function bl64_check_setup() {
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 3.0.0
+# Version: 3.0.2
 #######################################
 
 #######################################
@@ -1611,6 +1617,8 @@ function bl64_check_export() {
   bl64_dbg_lib_show_function "$@"
   local export_name="${1:-}"
   local description="${2:-export: $export_name}"
+
+  bl64_check_parameter 'export_name' || return $?
 
   if [[ ! -v "$export_name" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_EXPORT_SET} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
@@ -1893,10 +1901,10 @@ function bl64_check_alert_module_setup() {
 }
 
 #######################################
-# Check that parameters are passed
+# Check that at least 1 parameter is passed when using dynamic arguments
 #
 # Arguments:
-#   $1: total number of parameters from the calling function ($#)
+#   $1: must be $# to capture number of parameters from the calling function
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
@@ -1905,7 +1913,9 @@ function bl64_check_alert_module_setup() {
 #######################################
 function bl64_check_parameters_none() {
   bl64_dbg_lib_show_function "$@"
-  local count="${1:-0}"
+  local count="$1"
+
+  bl64_check_parameter 'count' || return $?
 
   if [[ "$count" == '0' ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_NOARGS} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
@@ -2721,7 +2731,7 @@ function _bl64_fs_set_alias() {
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 3.1.0
+# Version: 3.2.0
 #######################################
 
 #######################################
@@ -2949,9 +2959,9 @@ function bl64_fs_merge_dir() {
 #######################################
 function bl64_fs_run_chown() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
+  bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHOWN_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -2973,9 +2983,9 @@ function bl64_fs_run_chown() {
 #######################################
 function bl64_fs_run_chmod() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
+  bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -3086,9 +3096,9 @@ function bl64_fs_ln_symbolic() {
 #######################################
 function bl64_fs_run_mkdir() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
+  bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -3127,9 +3137,9 @@ function bl64_fs_mkdir_full() {
 #######################################
 function bl64_fs_run_mv() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
+  bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MV_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -3151,12 +3161,10 @@ function bl64_fs_run_mv() {
 #######################################
 function bl64_fs_rm_file() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_RM_VERBOSE"
+  bl64_check_parameters_none "$#" || return $?
 
-  # shellcheck disable=SC2086
-  "$BL64_FS_CMD_RM" $verbose "$BL64_FS_SET_RM_FORCE" "$@"
+  bl64_fs_run_rm "$BL64_FS_SET_RM_FORCE" "$@"
 }
 
 #######################################
@@ -3172,12 +3180,10 @@ function bl64_fs_rm_file() {
 #######################################
 function bl64_fs_rm_full() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_RM_VERBOSE"
+  bl64_check_parameters_none "$#" || return $?
 
-  # shellcheck disable=SC2086
-  "$BL64_FS_CMD_RM" $verbose "$BL64_FS_SET_RM_FORCE" "$BL64_FS_SET_RM_RECURSIVE" "$@"
+  bl64_fs_run_rm "$BL64_FS_SET_RM_FORCE" "$BL64_FS_SET_RM_RECURSIVE" "$@"
 }
 
 #######################################
@@ -3543,9 +3549,9 @@ function bl64_fs_fix_permissions() {
 #######################################
 function bl64_fs_run_cp() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
+  bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -3565,8 +3571,33 @@ function bl64_fs_run_cp() {
 # Returns:
 #   command exit status
 #######################################
+function bl64_fs_run_rm() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_parameters_none "$#" || return $?
+  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_FS_CMD_RM" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
 function bl64_fs_run_ls() {
   bl64_dbg_lib_show_function "$@"
+
   bl64_check_parameters_none "$#" || return $?
 
   bl64_dbg_lib_trace_start
@@ -3587,9 +3618,9 @@ function bl64_fs_run_ls() {
 #######################################
 function bl64_fs_run_ln() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
+  bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_LN_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -4704,7 +4735,7 @@ function bl64_os_set_lang() {
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.19.0
+# Version: 1.20.0
 #######################################
 
 function _bl64_os_match() {
@@ -4795,10 +4826,10 @@ function _bl64_os_get_distro_from_os_release() {
 }
 
 #######################################
-# Check if the current OS matches the target list
+# Compare the current OS version against a list of OS versions
 #
 # Arguments:
-#   $@: each argument is an OS target. Any combintation of the formats: "$BL64_OS_<ALIAS>" "${BL64_OS_<ALIAS>}-V" "${BL64_OS_<ALIAS>}-V.S"
+#   $@: each argument is an OS target. The list is any combintation of the formats: "$BL64_OS_<ALIAS>" "${BL64_OS_<ALIAS>}-V" "${BL64_OS_<ALIAS>}-V.S"
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -4897,7 +4928,7 @@ function _bl64_os_set_distro() {
 }
 
 #######################################
-# Check if locale resources for language are installed in the OS
+# Determine if locale resources for language are installed in the OS
 #
 # Arguments:
 #   $1: locale name
@@ -4927,6 +4958,32 @@ function bl64_os_lang_is_available() {
   done
 
   return 1
+}
+
+#######################################
+# Check the current OS version is in the supported list
+#
+# * Target use case is script compatibility. Use in the init part to halt execution if OS is not supported
+# * Not recommended for checking individual functions. Instead, use if or case structures to support multiple values based on the OS version
+# * The check is done against the provided list
+# * This is a wrapper to the bl64_os_match so it can be used as a check function
+#
+# Arguments:
+#   $@: list of OS versions to check against. Format: same as bl64_os_match
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: check ok
+#   $BL64_LIB_ERROR_APP_INCOMPATIBLE
+#######################################
+function bl64_os_check_version() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_os_match "$@" && return 0
+
+  bl64_msg_show_error "${_BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED} (OS: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*})"
+  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }
 
 #######################################
@@ -7836,7 +7893,7 @@ function bl64_aws_blank_aws() {
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -7858,7 +7915,9 @@ function bl64_cnt_setup() {
   bl64_dbg_lib_show_function
   local -i status=0
 
-  _bl64_cnt_set_command
+  _bl64_cnt_set_command &&
+    _bl64_cnt_set_options &&
+    bl64_cnt_set_paths
   status=$?
   if ((status == 0)); then
     if [[ ! -x "$BL64_CNT_CMD_DOCKER" && ! -x "$BL64_CNT_CMD_PODMAN" ]]; then
@@ -7906,6 +7965,60 @@ function _bl64_cnt_set_command() {
 }
 
 #######################################
+# Create command sets for common options
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_cnt_set_options() {
+  bl64_dbg_lib_show_function
+
+  BL64_CNT_SET_DOCKER_VERSION='version'
+  BL64_CNT_SET_PODMAN_VERSION='version'
+
+  return 0
+}
+
+#######################################
+# Set and prepare module paths
+#
+# * Global paths only
+# * If preparation fails the whole module fails
+#
+# Arguments:
+#   $1: configuration file name
+#   $2: credential file name
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: paths prepared ok
+#   >0: failed to prepare paths
+#######################################
+# shellcheck disable=SC2120
+function bl64_cnt_set_paths() {
+  bl64_dbg_lib_show_function "$@"
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-*)
+    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+
+  bl64_dbg_lib_show_vars 'BL64_CNT_PATH_DOCKER_SOCKET'
+  return 0
+}
+
+#######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
 # Version: 1.8.1
@@ -7927,23 +8040,23 @@ function _bl64_cnt_set_command() {
 function bl64_cnt_is_inside_container() {
   bl64_dbg_lib_show_function
 
-  _bl64_cnt_check_file_marker '/run/.containerenv' && return 0
-  _bl64_cnt_check_file_marker '/run/container_id' && return 0
-  _bl64_cnt_check_variable_marker 'container' && return 0
-  _bl64_cnt_check_variable_marker 'DOCKER_CONTAINER' && return 0
-  _bl64_cnt_check_variable_marker 'KUBERNETES_SERVICE_HOST' && return 0
+  _bl64_cnt_find_file_marker '/run/.containerenv' && return 0
+  _bl64_cnt_find_file_marker '/run/container_id' && return 0
+  _bl64_cnt_find_variable_marker 'container' && return 0
+  _bl64_cnt_find_variable_marker 'DOCKER_CONTAINER' && return 0
+  _bl64_cnt_find_variable_marker 'KUBERNETES_SERVICE_HOST' && return 0
 
   return 1
 }
 
-function _bl64_cnt_check_file_marker() {
+function _bl64_cnt_find_file_marker() {
   bl64_dbg_lib_show_function "$@"
   local marker="$1"
   bl64_dbg_lib_show_info "check for file marker (${marker})"
   [[ -f "$marker" ]]
 }
 
-function _bl64_cnt_check_variable_marker() {
+function _bl64_cnt_find_variable_marker() {
   bl64_dbg_lib_show_function "$@"
   local marker="$1"
   bl64_dbg_lib_show_info "check for variable marker (${marker})"
@@ -8142,6 +8255,8 @@ function bl64_cnt_run_interactive() {
 function bl64_cnt_podman_run_interactive() {
   bl64_dbg_lib_show_function "$@"
 
+  bl64_check_parameters_none "$#" || return $?
+
   bl64_cnt_run_podman \
     run \
     --rm \
@@ -8166,6 +8281,8 @@ function bl64_cnt_podman_run_interactive() {
 
 function bl64_cnt_docker_run_interactive() {
   bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" || return $?
 
   bl64_cnt_run_docker \
     run \
@@ -8192,10 +8309,10 @@ function bl64_cnt_docker_run_interactive() {
 
 function bl64_cnt_run_podman() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose='error'
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_command "$BL64_CNT_CMD_PODMAN" ||
     return $?
 
@@ -8225,10 +8342,10 @@ function bl64_cnt_run_podman() {
 
 function bl64_cnt_run_docker() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose='error'
   local debug=' '
 
+  bl64_check_parameters_none "$#" &&
   bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_command "$BL64_CNT_CMD_DOCKER" ||
     return $?
@@ -12101,7 +12218,7 @@ function bl64_py_run_pip() {
 #######################################
 # BashLib64 / Module / Setup / Interact with Terraform
 #
-# Version: 1.2.0
+# Version: 1.2.1
 #######################################
 
 #######################################
@@ -12123,7 +12240,7 @@ function bl64_tf_setup() {
 
   _bl64_tf_set_command "$terraform_bin" &&
     bl64_check_command "$BL64_TF_CMD_TERRAFORM" &&
-    _bl64_tf_set_command &&
+    _bl64_tf_set_options &&
     _bl64_tf_set_resources &&
     BL64_TF_MODULE="$BL64_VAR_ON"
 
@@ -12146,7 +12263,7 @@ function bl64_tf_setup() {
 #######################################
 function _bl64_tf_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local terraform_bin="${1:-}"
+  local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   if [[ "$terraform_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$terraform_bin" ||
@@ -12185,7 +12302,7 @@ function _bl64_tf_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function _bl64_tf_set_command() {
+function _bl64_tf_set_options() {
   bl64_dbg_lib_show_function
 
   # TF_LOG values
