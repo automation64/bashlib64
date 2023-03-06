@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.17.0
+# Version: 1.18.0
 #######################################
 
 export BL64_OS_MODULE="$BL64_VAR_OFF"
@@ -50,4 +50,5 @@ export _BL64_OS_TXT_CHECK_OS_MATRIX='Please check that the OS is listed in the c
 export _BL64_OS_TXT_FAILED_TO_NORMALIZE_OS='Unable to normalize OS name and version from /etc/os-release'
 export _BL64_OS_TXT_INVALID_OS_PATTERN='invalid OS pattern'
 export _BL64_OS_TXT_OS_NOT_SUPPORTED='BashLib64 is not supported in the current OS'
-
+export _BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED='the current OS version is not compatible with the task'
+export _BL64_OS_TXT_OS_MATRIX='Supported OS Versions'

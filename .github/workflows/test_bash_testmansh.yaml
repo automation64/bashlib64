@@ -25,7 +25,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/alpine-3-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/alpine-3-bash-test:latest -c test/batscore/bash"
 
   test-batscore-almalinux-8:
     runs-on: "ubuntu-latest"
@@ -42,7 +42,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/almalinux-8-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/almalinux-8-bash-test:latest -c test/batscore/bash"
 
   test-batscore-rockylinux-8:
     runs-on: "ubuntu-latest"
@@ -59,7 +59,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/rockylinux-8-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/rockylinux-8-bash-test:latest -c test/batscore/bash"
 
   test-batscore-rhel-8:
     runs-on: "ubuntu-latest"
@@ -76,7 +76,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/rhel-8-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/rhel-8-bash-test:latest -c test/batscore/bash"
 
   test-batscore-centos-7:
     runs-on: "ubuntu-latest"
@@ -93,7 +93,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/centos-7-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/centos-7-bash-test:latest -c test/batscore/bash"
 
   test-batscore-centos-8:
     runs-on: "ubuntu-latest"
@@ -110,7 +110,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/centos-8-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/centos-8-bash-test:latest -c test/batscore/bash"
 
   test-batscore-centos-9:
     runs-on: "ubuntu-latest"
@@ -127,7 +127,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/centos-9-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/centos-9-bash-test:latest -c test/batscore/bash"
 
   test-batscore-oraclelinux-7:
     runs-on: "ubuntu-latest"
@@ -144,7 +144,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/oraclelinux-7-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/oraclelinux-7-bash-test:latest -c test/batscore/bash"
 
   test-batscore-oraclelinux-8:
     runs-on: "ubuntu-latest"
@@ -161,7 +161,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/oraclelinux-8-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/oraclelinux-8-bash-test:latest -c test/batscore/bash"
 
   test-batscore-fedora-33:
     runs-on: "ubuntu-latest"
@@ -178,7 +178,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/fedora-33-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/fedora-33-bash-test:latest -c test/batscore/bash"
 
   test-batscore-fedora-34:
     runs-on: "ubuntu-latest"
@@ -195,7 +195,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/fedora-34-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/fedora-34-bash-test:latest -c test/batscore/bash"
 
   test-batscore-fedora-35:
     runs-on: "ubuntu-latest"
@@ -212,7 +212,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/fedora-35-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/fedora-35-bash-test:latest -c test/batscore/bash"
 
   test-batscore-fedora-36:
     runs-on: "ubuntu-latest"
@@ -229,7 +229,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/fedora-36-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/fedora-36-bash-test:latest -c test/batscore/bash"
 
   test-batscore-debian-9:
     runs-on: "ubuntu-latest"
@@ -246,7 +246,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/debian-9-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/debian-9-bash-test:latest -c test/batscore/bash"
 
   test-batscore-debian-10:
     runs-on: "ubuntu-latest"
@@ -263,7 +263,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/debian-10-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/debian-10-bash-test:latest -c test/batscore/bash"
 
   test-batscore-debian-11:
     runs-on: "ubuntu-latest"
@@ -280,7 +280,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/debian-11-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/debian-11-bash-test:latest -c test/batscore/bash"
 
   test-batscore-ubuntu-204:
     runs-on: "ubuntu-latest"
@@ -297,7 +297,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/ubuntu-20.4-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/ubuntu-20.4-bash-test:latest -c test/batscore/bash"
 
   test-batscore-ubuntu-214:
     runs-on: "ubuntu-latest"
@@ -314,7 +314,7 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/ubuntu-21.4-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/ubuntu-21.4-bash-test:latest -c test/batscore/bash"
 
   test-batscore-ubuntu-224:
     runs-on: "ubuntu-latest"
@@ -331,75 +331,90 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/ubuntu-22.4-bash-test:latest"
+        run: "./lib/testmansh -b -o -e bash-test/ubuntu-22.4-bash-test:latest -c test/batscore/bash"
 
-  # test-batscore-k8s:
-  #     runs-on: "ubuntu-latest"
-  #     steps:
+  test-batscore-kubernetes:
+    runs-on: "ubuntu-latest"
+    steps:
 
-  #       - name: "Check out repository code"
-  #         uses: "actions/checkout@main"
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
 
-  #       - name: "Prepare build environment"
-  #         run: "./bin/devbl-lib"
+      - name: "Prepare build environment"
+        run: "./bin/devbl-lib"
 
-  #       - name: "Run tests"
-  #         shell: 'script -q -e -c "bash {0}"'
-  #         run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-k8s:latest"
+      - name: "Build app"
+        run: "./bin/devbl-build -t"
 
-  # test-batscore-terraform:
-  #     runs-on: "ubuntu-latest"
-  #     steps:
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-k8s:latest -c test/batscore/kubernetes"
 
-  #       - name: "Check out repository code"
-  #         uses: "actions/checkout@main"
+  test-batscore-terraform:
+    runs-on: "ubuntu-latest"
+    steps:
 
-  #       - name: "Prepare build environment"
-  #         run: "./bin/devbl-lib"
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
 
-  #       - name: "Run tests"
-  #         shell: 'script -q -e -c "bash {0}"'
-  #         run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-terraform:latest"
+      - name: "Prepare build environment"
+        run: "./bin/devbl-lib"
 
-  # test-batscore-mongodb:
-  #     runs-on: "ubuntu-latest"
-  #     steps:
+      - name: "Build app"
+        run: "./bin/devbl-build -t"
 
-  #       - name: "Check out repository code"
-  #         uses: "actions/checkout@main"
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-terraform:latest -c test/batscore/terraform"
 
-  #       - name: "Prepare build environment"
-  #         run: "./bin/devbl-lib"
+  test-batscore-mongodb:
+    runs-on: "ubuntu-latest"
+    steps:
 
-  #       - name: "Run tests"
-  #         shell: 'script -q -e -c "bash {0}"'
-  #         run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-mongosh-6:latest"
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
 
-  # test-batscore-cloud:
-  #     runs-on: "ubuntu-latest"
-  #     steps:
+      - name: "Prepare build environment"
+        run: "./bin/devbl-lib"
 
-  #       - name: "Check out repository code"
-  #         uses: "actions/checkout@main"
+      - name: "Build app"
+        run: "./bin/devbl-build -t"
 
-  #       - name: "Prepare build environment"
-  #         run: "./bin/devbl-lib"
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-mongosh-6:latest -c test/batscore/mongodb"
 
-  #       - name: "Run tests"
-  #         shell: 'script -q -e -c "bash {0}"'
-  #         run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-cloud:latest"
+  test-batscore-cloud:
+      runs-on: "ubuntu-latest"
+      steps:
 
-  # test-batscore-ansible:
-  #     runs-on: "ubuntu-latest"
-  #     steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
 
-  #       - name: "Check out repository code"
-  #         uses: "actions/checkout@main"
+      - name: "Prepare build environment"
+        run: "./bin/devbl-lib"
 
-  #       - name: "Prepare build environment"
-  #         run: "./bin/devbl-lib"
+      - name: "Build app"
+        run: "./bin/devbl-build -t"
 
-  #       - name: "Run tests"
-  #         shell: 'script -q -e -c "bash {0}"'
-  #         run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-ansible-2:latest"
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-cloud:latest -c test/batscore/cloud"
+
+  test-batscore-ansible:
+      runs-on: "ubuntu-latest"
+      steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare build environment"
+        run: "./bin/devbl-lib"
+
+      - name: "Build app"
+        run: "./bin/devbl-build -t"
+
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-ansible-2:latest -c test/batscore/ansible"
 ...

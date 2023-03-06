@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.19.0
+# Version: 1.20.0
 #######################################
 
 function _bl64_os_match() {
@@ -92,10 +92,10 @@ function _bl64_os_get_distro_from_os_release() {
 }
 
 #######################################
-# Check if the current OS matches the target list
+# Compare the current OS version against a list of OS versions
 #
 # Arguments:
-#   $@: each argument is an OS target. Any combintation of the formats: "$BL64_OS_<ALIAS>" "${BL64_OS_<ALIAS>}-V" "${BL64_OS_<ALIAS>}-V.S"
+#   $@: each argument is an OS target. The list is any combintation of the formats: "$BL64_OS_<ALIAS>" "${BL64_OS_<ALIAS>}-V" "${BL64_OS_<ALIAS>}-V.S"
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -194,7 +194,7 @@ function _bl64_os_set_distro() {
 }
 
 #######################################
-# Check if locale resources for language are installed in the OS
+# Determine if locale resources for language are installed in the OS
 #
 # Arguments:
 #   $1: locale name
@@ -224,4 +224,30 @@ function bl64_os_lang_is_available() {
   done
 
   return 1
+}
+
+#######################################
+# Check the current OS version is in the supported list
+#
+# * Target use case is script compatibility. Use in the init part to halt execution if OS is not supported
+# * Not recommended for checking individual functions. Instead, use if or case structures to support multiple values based on the OS version
+# * The check is done against the provided list
+# * This is a wrapper to the bl64_os_match so it can be used as a check function
+#
+# Arguments:
+#   $@: list of OS versions to check against. Format: same as bl64_os_match
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: check ok
+#   $BL64_LIB_ERROR_APP_INCOMPATIBLE
+#######################################
+function bl64_os_check_version() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_os_match "$@" && return 0
+
+  bl64_msg_show_error "${_BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED} (OS: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*})"
+  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }

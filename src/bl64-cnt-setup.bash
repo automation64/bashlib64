@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -23,7 +23,9 @@ function bl64_cnt_setup() {
   bl64_dbg_lib_show_function
   local -i status=0
 
-  _bl64_cnt_set_command
+  _bl64_cnt_set_command &&
+    _bl64_cnt_set_options &&
+    bl64_cnt_set_paths
   status=$?
   if ((status == 0)); then
     if [[ ! -x "$BL64_CNT_CMD_DOCKER" && ! -x "$BL64_CNT_CMD_PODMAN" ]]; then
@@ -68,4 +70,58 @@ function _bl64_cnt_set_command() {
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
+}
+
+#######################################
+# Create command sets for common options
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_cnt_set_options() {
+  bl64_dbg_lib_show_function
+
+  BL64_CNT_SET_DOCKER_VERSION='version'
+  BL64_CNT_SET_PODMAN_VERSION='version'
+
+  return 0
+}
+
+#######################################
+# Set and prepare module paths
+#
+# * Global paths only
+# * If preparation fails the whole module fails
+#
+# Arguments:
+#   $1: configuration file name
+#   $2: credential file name
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: paths prepared ok
+#   >0: failed to prepare paths
+#######################################
+# shellcheck disable=SC2120
+function bl64_cnt_set_paths() {
+  bl64_dbg_lib_show_function "$@"
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-*)
+    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+
+  bl64_dbg_lib_show_vars 'BL64_CNT_PATH_DOCKER_SOCKET'
+  return 0
 }
