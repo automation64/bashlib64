@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 10.0.0
+# Version: 10.1.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -102,7 +102,7 @@ export _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token fi
 #######################################
 # BashLib64 / Module / Globals / Interact with container engines
 #
-# Version: 1.1.0
+# Version: 1.2.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -110,6 +110,11 @@ export BL64_CNT_MODULE="$BL64_VAR_OFF"
 
 export BL64_CNT_CMD_PODMAN=''
 export BL64_CNT_CMD_DOCKER=''
+
+export BL64_CNT_SET_DOCKER_VERSION=''
+export BL64_CNT_SET_PODMAN_VERSION=''
+
+export BL64_CNT_PATH_DOCKER_SOCKET=''
 
 export _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
 
@@ -1567,7 +1572,7 @@ function bl64_aws_blank_aws() {
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -1589,7 +1594,9 @@ function bl64_cnt_setup() {
   bl64_dbg_lib_show_function
   local -i status=0
 
-  _bl64_cnt_set_command
+  _bl64_cnt_set_command &&
+    _bl64_cnt_set_options &&
+    bl64_cnt_set_paths
   status=$?
   if ((status == 0)); then
     if [[ ! -x "$BL64_CNT_CMD_DOCKER" && ! -x "$BL64_CNT_CMD_PODMAN" ]]; then
@@ -1637,6 +1644,60 @@ function _bl64_cnt_set_command() {
 }
 
 #######################################
+# Create command sets for common options
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_cnt_set_options() {
+  bl64_dbg_lib_show_function
+
+  BL64_CNT_SET_DOCKER_VERSION='version'
+  BL64_CNT_SET_PODMAN_VERSION='version'
+
+  return 0
+}
+
+#######################################
+# Set and prepare module paths
+#
+# * Global paths only
+# * If preparation fails the whole module fails
+#
+# Arguments:
+#   $1: configuration file name
+#   $2: credential file name
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: paths prepared ok
+#   >0: failed to prepare paths
+#######################################
+# shellcheck disable=SC2120
+function bl64_cnt_set_paths() {
+  bl64_dbg_lib_show_function "$@"
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-*)
+    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+
+  bl64_dbg_lib_show_vars 'BL64_CNT_PATH_DOCKER_SOCKET'
+  return 0
+}
+
+#######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
 # Version: 1.8.1
@@ -1658,23 +1719,23 @@ function _bl64_cnt_set_command() {
 function bl64_cnt_is_inside_container() {
   bl64_dbg_lib_show_function
 
-  _bl64_cnt_check_file_marker '/run/.containerenv' && return 0
-  _bl64_cnt_check_file_marker '/run/container_id' && return 0
-  _bl64_cnt_check_variable_marker 'container' && return 0
-  _bl64_cnt_check_variable_marker 'DOCKER_CONTAINER' && return 0
-  _bl64_cnt_check_variable_marker 'KUBERNETES_SERVICE_HOST' && return 0
+  _bl64_cnt_find_file_marker '/run/.containerenv' && return 0
+  _bl64_cnt_find_file_marker '/run/container_id' && return 0
+  _bl64_cnt_find_variable_marker 'container' && return 0
+  _bl64_cnt_find_variable_marker 'DOCKER_CONTAINER' && return 0
+  _bl64_cnt_find_variable_marker 'KUBERNETES_SERVICE_HOST' && return 0
 
   return 1
 }
 
-function _bl64_cnt_check_file_marker() {
+function _bl64_cnt_find_file_marker() {
   bl64_dbg_lib_show_function "$@"
   local marker="$1"
   bl64_dbg_lib_show_info "check for file marker (${marker})"
   [[ -f "$marker" ]]
 }
 
-function _bl64_cnt_check_variable_marker() {
+function _bl64_cnt_find_variable_marker() {
   bl64_dbg_lib_show_function "$@"
   local marker="$1"
   bl64_dbg_lib_show_info "check for variable marker (${marker})"
@@ -1873,6 +1934,8 @@ function bl64_cnt_run_interactive() {
 function bl64_cnt_podman_run_interactive() {
   bl64_dbg_lib_show_function "$@"
 
+  bl64_check_parameters_none "$#" || return $?
+
   bl64_cnt_run_podman \
     run \
     --rm \
@@ -1897,6 +1960,8 @@ function bl64_cnt_podman_run_interactive() {
 
 function bl64_cnt_docker_run_interactive() {
   bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" || return $?
 
   bl64_cnt_run_docker \
     run \
@@ -1923,10 +1988,10 @@ function bl64_cnt_docker_run_interactive() {
 
 function bl64_cnt_run_podman() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose='error'
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_command "$BL64_CNT_CMD_PODMAN" ||
     return $?
 
@@ -1956,10 +2021,10 @@ function bl64_cnt_run_podman() {
 
 function bl64_cnt_run_docker() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose='error'
   local debug=' '
 
+  bl64_check_parameters_none "$#" &&
   bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_command "$BL64_CNT_CMD_DOCKER" ||
     return $?
@@ -5832,7 +5897,7 @@ function bl64_py_run_pip() {
 #######################################
 # BashLib64 / Module / Setup / Interact with Terraform
 #
-# Version: 1.2.0
+# Version: 1.2.1
 #######################################
 
 #######################################
@@ -5854,7 +5919,7 @@ function bl64_tf_setup() {
 
   _bl64_tf_set_command "$terraform_bin" &&
     bl64_check_command "$BL64_TF_CMD_TERRAFORM" &&
-    _bl64_tf_set_command &&
+    _bl64_tf_set_options &&
     _bl64_tf_set_resources &&
     BL64_TF_MODULE="$BL64_VAR_ON"
 
@@ -5877,7 +5942,7 @@ function bl64_tf_setup() {
 #######################################
 function _bl64_tf_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local terraform_bin="${1:-}"
+  local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   if [[ "$terraform_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$terraform_bin" ||
@@ -5916,7 +5981,7 @@ function _bl64_tf_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function _bl64_tf_set_command() {
+function _bl64_tf_set_options() {
   bl64_dbg_lib_show_function
 
   # TF_LOG values

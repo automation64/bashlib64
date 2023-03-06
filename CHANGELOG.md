@@ -5,7 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [10.0.0]
+## [10.1.0]
+
+### Added
+
+- os
+  - new function: bl64_os_check_version
+- fs
+  - new wrapper: bl64_fs_run_rm
+- cnt
+  - module setup: added options and paths
+
+### Fixed
+
+- tf
+  - module setup
+
+## [10.0.2]
 
 ### Added
 
@@ -187,7 +203,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
-[10.0.0]: https://github.com/serdigital64/bashlib64/compare/10.0.0...9.2.4
+[10.1.0]: https://github.com/serdigital64/bashlib64/compare/10.0.1...10.1.0
+[10.0.2]: https://github.com/serdigital64/bashlib64/compare/10.0.2...9.2.4
 [9.2.4]: https://github.com/serdigital64/bashlib64/compare/9.2.4...9.1.4
 [9.1.4]: https://github.com/serdigital64/bashlib64/compare/9.1.4...9.0.1
 [9.0.1]: https://github.com/serdigital64/bashlib64/compare/8.1.1...9.0.1

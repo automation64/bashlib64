@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Terraform
 #
-# Version: 1.2.0
+# Version: 1.2.1
 #######################################
 
 #######################################
@@ -23,7 +23,7 @@ function bl64_tf_setup() {
 
   _bl64_tf_set_command "$terraform_bin" &&
     bl64_check_command "$BL64_TF_CMD_TERRAFORM" &&
-    _bl64_tf_set_command &&
+    _bl64_tf_set_options &&
     _bl64_tf_set_resources &&
     BL64_TF_MODULE="$BL64_VAR_ON"
 
@@ -46,7 +46,7 @@ function bl64_tf_setup() {
 #######################################
 function _bl64_tf_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local terraform_bin="${1:-}"
+  local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   if [[ "$terraform_bin" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_check_directory "$terraform_bin" ||
@@ -85,7 +85,7 @@ function _bl64_tf_set_command() {
 # Returns:
 #   0: always ok
 #######################################
-function _bl64_tf_set_command() {
+function _bl64_tf_set_options() {
   bl64_dbg_lib_show_function
 
   # TF_LOG values

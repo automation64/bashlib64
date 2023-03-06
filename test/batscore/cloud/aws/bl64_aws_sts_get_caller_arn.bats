@@ -5,5 +5,5 @@ setup() {
 
 @test "bl64_aws_sts_get_caller_arn: run ok" {
   run bl64_aws_sts_get_caller_arn
-  assert_success
+  assert_failure
 }

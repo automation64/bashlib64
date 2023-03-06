@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 3.0.1
+# Version: 3.0.2
 #######################################
 
 #######################################
@@ -513,10 +513,10 @@ function bl64_check_alert_module_setup() {
 }
 
 #######################################
-# Check that parameters are passed
+# Check that at least 1 parameter is passed when using dynamic arguments
 #
 # Arguments:
-#   $1: total number of parameters from the calling function ($#)
+#   $1: must be $# to capture number of parameters from the calling function
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
@@ -525,7 +525,9 @@ function bl64_check_alert_module_setup() {
 #######################################
 function bl64_check_parameters_none() {
   bl64_dbg_lib_show_function "$@"
-  local count="${1:-0}"
+  local count="$1"
+
+  bl64_check_parameter 'count' || return $?
 
   if [[ "$count" == '0' ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_NOARGS} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
