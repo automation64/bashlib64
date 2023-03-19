@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.8.2
+# Version: 1.9.0
 #######################################
 
 #######################################
@@ -287,6 +287,29 @@ function bl64_cnt_run() {
     return $?
 
   "_bl64_cnt_${BL64_CNT_DRIVER}_run" "$@"
+}
+
+#######################################
+# Runs the container manager CLI
+#
+# * Function provided as-is to catch cases where there is no wrapper
+# * Calling function must make sure that the current driver supports provided arguments
+#
+# Arguments:
+#   $@: arguments are passed as-is
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_cnt_cli() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_CNT_MODULE' ||
+    return $?
+
+  "bl64_cnt_run_${BL64_CNT_DRIVER}" "$@"
 }
 
 #
