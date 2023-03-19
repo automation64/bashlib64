@@ -70,7 +70,7 @@ function bl64_cnt_login_file() {
     bl64_check_file "$file" ||
     return $?
 
-  "bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
 }
 
 #######################################
@@ -98,7 +98,7 @@ function bl64_cnt_login() {
     bl64_check_parameter 'registry' ||
     return $?
 
-  "bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
 }
 
 #######################################
@@ -143,7 +143,7 @@ function bl64_cnt_run_interactive() {
   bl64_check_module 'BL64_CNT_MODULE' ||
     return $?
 
-  "bl64_cnt_${BL64_CNT_DRIVER}_run_interactive" "$@"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_run_interactive" "$@"
 }
 
 #######################################
@@ -180,7 +180,7 @@ function bl64_cnt_build() {
   # shellcheck disable=SC2164
   cd "${context}"
 
-  "bl64_cnt_${BL64_CNT_DRIVER}_build" "$file" "$tag" "$@"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_build" "$file" "$tag" "$@"
 }
 
 #######################################
@@ -207,7 +207,7 @@ function bl64_cnt_push() {
     bl64_check_parameter 'destination' ||
     return $?
 
-  "bl64_cnt_${BL64_CNT_DRIVER}_push" "$source" "$destination"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_push" "$source" "$destination"
 }
 
 #######################################
@@ -229,7 +229,7 @@ function bl64_cnt_pull() {
     bl64_check_parameter 'source' ||
     return $?
 
-  "bl64_cnt_${BL64_CNT_DRIVER}_pull" "$source"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_pull" "$source"
 }
 
 function _bl64_cnt_login_put_password() {
@@ -266,7 +266,7 @@ function bl64_cnt_tag() {
     bl64_check_parameter 'target' ||
     return $?
 
-  "bl64_cnt_${BL64_CNT_DRIVER}_tag" "$source" "$target"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_tag" "$source" "$target"
 }
 
 #######################################
@@ -286,7 +286,7 @@ function bl64_cnt_run() {
   bl64_check_module 'BL64_CNT_MODULE' ||
     return $?
 
-  "bl64_cnt_${BL64_CNT_DRIVER}_run" "$@"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_run" "$@"
 }
 
 #
@@ -308,7 +308,7 @@ function bl64_cnt_run() {
 #   command exit status
 #######################################
 
-function bl64_cnt_docker_login() {
+function _bl64_cnt_docker_login() {
   bl64_dbg_lib_show_function "$@"
   local user="$1"
   local password="$2"
@@ -316,7 +316,7 @@ function bl64_cnt_docker_login() {
   local registry="$4"
 
   _bl64_cnt_login_put_password "$password" "$file" |
-    bl64_cnt_run_docker \
+    _bl64_cnt_run_docker \
       login \
       --username "$user" \
       --password-stdin \
@@ -337,12 +337,12 @@ function bl64_cnt_docker_login() {
 #   command exit status
 #######################################
 
-function bl64_cnt_docker_run_interactive() {
+function _bl64_cnt_docker_run_interactive() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" || return $?
 
-  bl64_cnt_run_docker \
+  _bl64_cnt_run_docker \
     run \
     --rm \
     --interactive \
@@ -365,7 +365,7 @@ function bl64_cnt_docker_run_interactive() {
 #   command exit status
 #######################################
 
-function bl64_cnt_run_docker() {
+function _bl64_cnt_run_docker() {
   bl64_dbg_lib_show_function "$@"
   local verbose='error'
   local debug=' '
@@ -403,7 +403,7 @@ function bl64_cnt_run_docker() {
 #   command exit status
 #######################################
 
-function bl64_cnt_docker_build() {
+function _bl64_cnt_docker_build() {
   bl64_dbg_lib_show_function "$@"
   local file="$1"
   local tag="$2"
@@ -412,7 +412,7 @@ function bl64_cnt_docker_build() {
   shift
   shift
 
-  bl64_cnt_run_docker \
+  _bl64_cnt_run_docker \
     build \
     --no-cache \
     --rm \
@@ -434,17 +434,17 @@ function bl64_cnt_docker_build() {
 #   command exit status
 #######################################
 
-function bl64_cnt_docker_push() {
+function _bl64_cnt_docker_push() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
   local destination="$2"
 
-  bl64_cnt_run_docker \
+  _bl64_cnt_run_docker \
     tag \
     "$source" \
     "$destination"
 
-  bl64_cnt_run_docker \
+  _bl64_cnt_run_docker \
     push \
     "$destination"
 }
@@ -461,11 +461,11 @@ function bl64_cnt_docker_push() {
 #   command exit status
 #######################################
 
-function bl64_cnt_docker_pull() {
+function _bl64_cnt_docker_pull() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
 
-  bl64_cnt_run_docker \
+  _bl64_cnt_run_docker \
     pull \
     "${source}"
 }
@@ -483,12 +483,12 @@ function bl64_cnt_docker_pull() {
 #   command exit status
 #######################################
 
-function bl64_cnt_docker_tag() {
+function _bl64_cnt_docker_tag() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
   local target="$2"
 
-  bl64_cnt_run_docker \
+  _bl64_cnt_run_docker \
     tag \
     "$source" \
     "$target"
@@ -508,10 +508,10 @@ function bl64_cnt_docker_tag() {
 #   command exit status
 #######################################
 
-function bl64_cnt_docker_run() {
+function _bl64_cnt_docker_run() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_cnt_run_docker \
+  _bl64_cnt_run_docker \
     run \
     --rm \
     "$@"
@@ -537,7 +537,7 @@ function bl64_cnt_docker_run() {
 #   command exit status
 #######################################
 
-function bl64_cnt_podman_login() {
+function _bl64_cnt_podman_login() {
   bl64_dbg_lib_show_function "$@"
   local user="$1"
   local password="$2"
@@ -545,7 +545,7 @@ function bl64_cnt_podman_login() {
   local registry="$4"
 
   _bl64_cnt_login_put_password "$password" "$file" |
-    bl64_cnt_run_podman \
+    _bl64_cnt_run_podman \
       login \
       --username "$user" \
       --password-stdin \
@@ -566,12 +566,12 @@ function bl64_cnt_podman_login() {
 #   command exit status
 #######################################
 
-function bl64_cnt_podman_run_interactive() {
+function _bl64_cnt_podman_run_interactive() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" || return $?
 
-  bl64_cnt_run_podman \
+  _bl64_cnt_run_podman \
     run \
     --rm \
     --interactive \
@@ -593,7 +593,7 @@ function bl64_cnt_podman_run_interactive() {
 #   command exit status
 #######################################
 
-function bl64_cnt_run_podman() {
+function _bl64_cnt_run_podman() {
   bl64_dbg_lib_show_function "$@"
   local verbose='error'
 
@@ -626,7 +626,7 @@ function bl64_cnt_run_podman() {
 #   command exit status
 #######################################
 
-function bl64_cnt_podman_build() {
+function _bl64_cnt_podman_build() {
   bl64_dbg_lib_show_function "$@"
   local file="$1"
   local tag="$2"
@@ -635,7 +635,7 @@ function bl64_cnt_podman_build() {
   shift
   shift
 
-  bl64_cnt_run_podman \
+  _bl64_cnt_run_podman \
     build \
     --no-cache \
     --rm \
@@ -657,12 +657,12 @@ function bl64_cnt_podman_build() {
 #   command exit status
 #######################################
 
-function bl64_cnt_podman_push() {
+function _bl64_cnt_podman_push() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
   local destination="$2"
 
-  bl64_cnt_run_podman \
+  _bl64_cnt_run_podman \
     push \
     "localhost/${source}" \
     "$destination"
@@ -680,11 +680,11 @@ function bl64_cnt_podman_push() {
 #   command exit status
 #######################################
 
-function bl64_cnt_podman_pull() {
+function _bl64_cnt_podman_pull() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
 
-  bl64_cnt_run_podman \
+  _bl64_cnt_run_podman \
     pull \
     "${source}"
 }
@@ -702,12 +702,12 @@ function bl64_cnt_podman_pull() {
 #   command exit status
 #######################################
 
-function bl64_cnt_podman_tag() {
+function _bl64_cnt_podman_tag() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
   local target="$2"
 
-  bl64_cnt_run_podman \
+  _bl64_cnt_run_podman \
     tag \
     "$source" \
     "$target"
@@ -727,10 +727,10 @@ function bl64_cnt_podman_tag() {
 #   command exit status
 #######################################
 
-function bl64_cnt_podman_run() {
+function _bl64_cnt_podman_run() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_cnt_run_podman \
+  _bl64_cnt_run_podman \
     run \
     --rm \
     "$@"
