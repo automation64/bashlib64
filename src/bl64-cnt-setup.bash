@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 #######################################
@@ -87,7 +87,12 @@ function _bl64_cnt_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_CNT_SET_DOCKER_VERSION='version'
+  BL64_CNT_SET_DOCKER_QUIET='--quiet'
+  BL64_CNT_SET_DOCKER_FILTER='--filter'
+
   BL64_CNT_SET_PODMAN_VERSION='version'
+  BL64_CNT_SET_PODMAN_QUIET='--quier'
+  BL64_CNT_SET_PODMAN_FILTER='--filter'
 
   return 0
 }
