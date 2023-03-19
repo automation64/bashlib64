@@ -70,6 +70,7 @@ function bl64_cnt_login_file() {
     bl64_check_file "$file" ||
     return $?
 
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
 }
 
@@ -98,6 +99,7 @@ function bl64_cnt_login() {
     bl64_check_parameter 'registry' ||
     return $?
 
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
 }
 
@@ -180,6 +182,7 @@ function bl64_cnt_build() {
   # shellcheck disable=SC2164
   cd "${context}"
 
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_BUILD} (${file}:${tag})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_build" "$file" "$tag" "$@"
 }
 
@@ -207,6 +210,7 @@ function bl64_cnt_push() {
     bl64_check_parameter 'destination' ||
     return $?
 
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_PUSH} (${source} -> ${destination})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_push" "$source" "$destination"
 }
 
@@ -229,6 +233,7 @@ function bl64_cnt_pull() {
     bl64_check_parameter 'source' ||
     return $?
 
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_PULL} (${source})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_pull" "$source"
 }
 
@@ -266,6 +271,7 @@ function bl64_cnt_tag() {
     bl64_check_parameter 'target' ||
     return $?
 
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_TAG} (${source} -> ${target})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_tag" "$source" "$target"
 }
 
@@ -355,12 +361,12 @@ function bl64_cnt_network_create() {
     bl64_check_parameter 'network' ||
     return $?
 
-  bl64_msg_show_lib_task "${_BL64_CNT_TXT_CREATE_NETWORK} (${network})"
   if bl64_cnt_network_is_defined "$network"; then
-    bl64_msg_show_lib_info "${_BL64_CNT_TXT_EXISTING_NETWORK}"
+    bl64_msg_show_lib_info "${_BL64_CNT_TXT_EXISTING_NETWORK} (${network})"
     return 0
   fi
 
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_CREATE_NETWORK} (${network})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_network_create" "$network"
 }
 
