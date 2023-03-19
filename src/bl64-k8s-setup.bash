@@ -104,7 +104,7 @@ function _bl64_k8s_set_options() {
     BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
     BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
     ;;
-  *) bl64_check_alert_unsupported ;;
+  *) bl64_check_alert_unsupported "k8s-api: ${BL64_K8S_VERSION_KUBECTL}";;
   esac
 }
 
