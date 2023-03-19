@@ -110,66 +110,6 @@ function bl64_cnt_login() {
 }
 
 #######################################
-# Command wrapper: docker login
-#
-# Arguments:
-#   $1: user
-#   $2: password
-#   $3: file
-#   $4: registry
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_docker_login() {
-  bl64_dbg_lib_show_function "$@"
-  local user="$1"
-  local password="$2"
-  local file="$3"
-  local registry="$4"
-
-  _bl64_cnt_login_put_password "$password" "$file" |
-    bl64_cnt_run_docker \
-      login \
-      --username "$user" \
-      --password-stdin \
-      "$registry"
-}
-
-#######################################
-# Command wrapper: podman login
-#
-# Arguments:
-#   $1: user
-#   $2: password
-#   $3: file
-#   $4: registry
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_podman_login() {
-  bl64_dbg_lib_show_function "$@"
-  local user="$1"
-  local password="$2"
-  local file="$3"
-  local registry="$4"
-
-  _bl64_cnt_login_put_password "$password" "$file" |
-    bl64_cnt_run_podman \
-      login \
-      --username "$user" \
-      --password-stdin \
-      "$registry"
-}
-
-#######################################
 # Open a container image using sh
 #
 # * Ignores entrypointt
@@ -219,132 +159,6 @@ function bl64_cnt_run_interactive() {
 }
 
 #######################################
-# Command wrapper: podman run
-#
-# * Provides verbose and debug support
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_podman_run_interactive() {
-  bl64_dbg_lib_show_function "$@"
-
-  bl64_check_parameters_none "$#" || return $?
-
-  bl64_cnt_run_podman \
-    run \
-    --rm \
-    --interactive \
-    --tty \
-    "$@"
-}
-
-#######################################
-# Command wrapper: docker run
-#
-# * Provides verbose and debug support
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_docker_run_interactive() {
-  bl64_dbg_lib_show_function "$@"
-
-  bl64_check_parameters_none "$#" || return $?
-
-  bl64_cnt_run_docker \
-    run \
-    --rm \
-    --interactive \
-    --tty \
-    "$@"
-
-}
-
-#######################################
-# Command wrapper: podman
-#
-# * Provides debug support
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_run_podman() {
-  bl64_dbg_lib_show_function "$@"
-  local verbose='error'
-
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_CNT_MODULE' &&
-    bl64_check_command "$BL64_CNT_CMD_PODMAN" ||
-    return $?
-
-  bl64_dbg_lib_command_enabled && verbose='debug'
-  bl64_dbg_runtime_show_paths
-
-  bl64_dbg_lib_trace_start
-  "$BL64_CNT_CMD_PODMAN" \
-    --log-level "$verbose" \
-    "$@"
-  bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Command wrapper: docker
-#
-# * Provides debug support
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_run_docker() {
-  bl64_dbg_lib_show_function "$@"
-  local verbose='error'
-  local debug=' '
-
-  bl64_check_parameters_none "$#" &&
-  bl64_check_module 'BL64_CNT_MODULE' &&
-    bl64_check_command "$BL64_CNT_CMD_DOCKER" ||
-    return $?
-
-  if bl64_dbg_lib_command_enabled; then
-    verbose='debug'
-    debug='--debug'
-  fi
-  bl64_dbg_runtime_show_paths
-
-  bl64_dbg_lib_trace_start
-  "$BL64_CNT_CMD_DOCKER" \
-    --log-level "$verbose" \
-    $debug \
-    "$@"
-  bl64_dbg_lib_trace_stop
-}
-
-#######################################
 # Builds a container source
 #
 # Arguments:
@@ -386,70 +200,6 @@ function bl64_cnt_build() {
 }
 
 #######################################
-# Command wrapper: docker build
-#
-# Arguments:
-#   $1: file
-#   $2: tag
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_docker_build() {
-  bl64_dbg_lib_show_function "$@"
-  local file="$1"
-  local tag="$2"
-
-  # Remove used parameters
-  shift
-  shift
-
-  bl64_cnt_run_docker \
-    build \
-    --no-cache \
-    --rm \
-    --tag "$tag" \
-    --file "$file" \
-    "$@" .
-}
-
-#######################################
-# Command wrapper: podman build
-#
-# Arguments:
-#   $1: file
-#   $2: tag
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_podman_build() {
-  bl64_dbg_lib_show_function "$@"
-  local file="$1"
-  local tag="$2"
-
-  # Remove used parameters
-  shift
-  shift
-
-  bl64_cnt_run_podman \
-    build \
-    --no-cache \
-    --rm \
-    --tag "$tag" \
-    --file "$file" \
-    "$@" .
-}
-
-#######################################
 # Push a local source to the target container registry
 #
 # * Image is already present in the local destination
@@ -481,58 +231,6 @@ function bl64_cnt_push() {
 }
 
 #######################################
-# Command wrapper: docker push
-#
-# Arguments:
-#   $1: source
-#   $2: destination
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_docker_push() {
-  bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local destination="$2"
-
-  bl64_cnt_run_docker \
-    tag \
-    "$source" \
-    "$destination"
-
-  bl64_cnt_run_docker \
-    push \
-    "$destination"
-}
-
-#######################################
-# Command wrapper: podman push
-#
-# Arguments:
-#   $1: source
-#   $2: destination
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_podman_push() {
-  bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local destination="$2"
-
-  bl64_cnt_run_podman \
-    push \
-    "localhost/${source}" \
-    "$destination"
-}
-
-#######################################
 # Pull a remote container image to the local registry
 #
 # Arguments:
@@ -556,48 +254,6 @@ function bl64_cnt_pull() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     bl64_cnt_podman_pull "$source"
   fi
-}
-
-#######################################
-# Command wrapper: docker pull
-#
-# Arguments:
-#   $1: source
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_docker_pull() {
-  bl64_dbg_lib_show_function "$@"
-  local source="$1"
-
-  bl64_cnt_run_docker \
-    pull \
-    "${source}"
-}
-
-#######################################
-# Command wrapper: podman pull
-#
-# Arguments:
-#   $1: source
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_podman_pull() {
-  bl64_dbg_lib_show_function "$@"
-  local source="$1"
-
-  bl64_cnt_run_podman \
-    pull \
-    "${source}"
 }
 
 function _bl64_cnt_login_put_password() {
@@ -642,6 +298,210 @@ function bl64_cnt_tag() {
 }
 
 #######################################
+# Runs a container image
+#
+# Arguments:
+#   $@: arguments are passed as-is
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_cnt_run() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_CNT_MODULE' ||
+    return $?
+  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
+    bl64_cnt_docker_run "$@"
+  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
+    bl64_cnt_podman_run "$@"
+  fi
+}
+
+#
+# Docker
+#
+
+#######################################
+# Command wrapper: docker login
+#
+# Arguments:
+#   $1: user
+#   $2: password
+#   $3: file
+#   $4: registry
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_docker_login() {
+  bl64_dbg_lib_show_function "$@"
+  local user="$1"
+  local password="$2"
+  local file="$3"
+  local registry="$4"
+
+  _bl64_cnt_login_put_password "$password" "$file" |
+    bl64_cnt_run_docker \
+      login \
+      --username "$user" \
+      --password-stdin \
+      "$registry"
+}
+
+#######################################
+# Command wrapper: docker run
+#
+# * Provides verbose and debug support
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_docker_run_interactive() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" || return $?
+
+  bl64_cnt_run_docker \
+    run \
+    --rm \
+    --interactive \
+    --tty \
+    "$@"
+
+}
+
+#######################################
+# Command wrapper: docker
+#
+# * Provides debug support
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_run_docker() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose='error'
+  local debug=' '
+
+  bl64_check_parameters_none "$#" &&
+  bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_command "$BL64_CNT_CMD_DOCKER" ||
+    return $?
+
+  if bl64_dbg_lib_command_enabled; then
+    verbose='debug'
+    debug='--debug'
+  fi
+  bl64_dbg_runtime_show_paths
+
+  bl64_dbg_lib_trace_start
+  "$BL64_CNT_CMD_DOCKER" \
+    --log-level "$verbose" \
+    $debug \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper: docker build
+#
+# Arguments:
+#   $1: file
+#   $2: tag
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_docker_build() {
+  bl64_dbg_lib_show_function "$@"
+  local file="$1"
+  local tag="$2"
+
+  # Remove used parameters
+  shift
+  shift
+
+  bl64_cnt_run_docker \
+    build \
+    --no-cache \
+    --rm \
+    --tag "$tag" \
+    --file "$file" \
+    "$@" .
+}
+
+#######################################
+# Command wrapper: docker push
+#
+# Arguments:
+#   $1: source
+#   $2: destination
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_docker_push() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local destination="$2"
+
+  bl64_cnt_run_docker \
+    tag \
+    "$source" \
+    "$destination"
+
+  bl64_cnt_run_docker \
+    push \
+    "$destination"
+}
+
+#######################################
+# Command wrapper: docker pull
+#
+# Arguments:
+#   $1: source
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_docker_pull() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+
+  bl64_cnt_run_docker \
+    pull \
+    "${source}"
+}
+
+#######################################
 # Command wrapper: docker tag
 #
 # Arguments:
@@ -663,6 +523,201 @@ function bl64_cnt_docker_tag() {
     tag \
     "$source" \
     "$target"
+}
+
+#######################################
+# Command wrapper: docker run
+#
+# * Provides verbose and debug support
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_docker_run() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_cnt_run_docker \
+    run \
+    --rm \
+    "$@"
+
+}
+
+#
+# Podman
+#
+
+#######################################
+# Command wrapper: podman login
+#
+# Arguments:
+#   $1: user
+#   $2: password
+#   $3: file
+#   $4: registry
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_podman_login() {
+  bl64_dbg_lib_show_function "$@"
+  local user="$1"
+  local password="$2"
+  local file="$3"
+  local registry="$4"
+
+  _bl64_cnt_login_put_password "$password" "$file" |
+    bl64_cnt_run_podman \
+      login \
+      --username "$user" \
+      --password-stdin \
+      "$registry"
+}
+
+#######################################
+# Command wrapper: podman run
+#
+# * Provides verbose and debug support
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_podman_run_interactive() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" || return $?
+
+  bl64_cnt_run_podman \
+    run \
+    --rm \
+    --interactive \
+    --tty \
+    "$@"
+}
+
+#######################################
+# Command wrapper: podman
+#
+# * Provides debug support
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_run_podman() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose='error'
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_command "$BL64_CNT_CMD_PODMAN" ||
+    return $?
+
+  bl64_dbg_lib_command_enabled && verbose='debug'
+  bl64_dbg_runtime_show_paths
+
+  bl64_dbg_lib_trace_start
+  "$BL64_CNT_CMD_PODMAN" \
+    --log-level "$verbose" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper: podman build
+#
+# Arguments:
+#   $1: file
+#   $2: tag
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_podman_build() {
+  bl64_dbg_lib_show_function "$@"
+  local file="$1"
+  local tag="$2"
+
+  # Remove used parameters
+  shift
+  shift
+
+  bl64_cnt_run_podman \
+    build \
+    --no-cache \
+    --rm \
+    --tag "$tag" \
+    --file "$file" \
+    "$@" .
+}
+
+#######################################
+# Command wrapper: podman push
+#
+# Arguments:
+#   $1: source
+#   $2: destination
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_podman_push() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local destination="$2"
+
+  bl64_cnt_run_podman \
+    push \
+    "localhost/${source}" \
+    "$destination"
+}
+
+#######################################
+# Command wrapper: podman pull
+#
+# Arguments:
+#   $1: source
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_podman_pull() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+
+  bl64_cnt_run_podman \
+    pull \
+    "${source}"
 }
 
 #######################################
@@ -690,29 +745,6 @@ function bl64_cnt_podman_tag() {
 }
 
 #######################################
-# Runs a container image
-#
-# Arguments:
-#   $@: arguments are passed as-is
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_cnt_run() {
-  bl64_dbg_lib_show_function "$@"
-
-  bl64_check_module 'BL64_CNT_MODULE' ||
-    return $?
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_run "$@"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_run "$@"
-  fi
-}
-
-#######################################
 # Command wrapper: podman run
 #
 # * Provides verbose and debug support
@@ -733,28 +765,4 @@ function bl64_cnt_podman_run() {
     run \
     --rm \
     "$@"
-}
-
-#######################################
-# Command wrapper: docker run
-#
-# * Provides verbose and debug support
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_docker_run() {
-  bl64_dbg_lib_show_function "$@"
-
-  bl64_cnt_run_docker \
-    run \
-    --rm \
-    "$@"
-
 }
