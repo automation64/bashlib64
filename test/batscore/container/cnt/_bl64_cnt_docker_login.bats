@@ -3,7 +3,7 @@ setup() {
   bl64_cnt_setup || skip 'no container CLI found'
 }
 
-@test "bl64_cnt_docker_run: parameters are not present" {
-  run bl64_cnt_docker_run
+@test "_bl64_cnt_docker_login: parameters are not present" {
+  run _bl64_cnt_docker_login
   assert_failure
 }
