@@ -312,6 +312,58 @@ function bl64_cnt_cli() {
   "bl64_cnt_run_${BL64_CNT_DRIVER}" "$@"
 }
 
+#######################################
+# Determine if the container network is defined
+#
+# Arguments:
+#   $1: network name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function bl64_cnt_network_is_defined() {
+  bl64_dbg_lib_show_function "$@"
+  local network="$1"
+
+  bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_parameter 'network' ||
+    return $?
+
+  "_bl64_cnt_${BL64_CNT_DRIVER}_network_is_defined" "$network"
+}
+
+#######################################
+# Create a container network
+#
+# Arguments:
+#   $1: network name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function bl64_cnt_network_create() {
+  bl64_dbg_lib_show_function "$@"
+  local network="$1"
+
+  bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_parameter 'network' ||
+    return $?
+
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_CREATE_NETWORK} (${network})"
+  if bl64_cnt_network_is_defined "$network"; then
+    bl64_msg_show_lib_info "${_BL64_CNT_TXT_EXISTING_NETWORK}"
+    return 0
+  fi
+
+  "_bl64_cnt_${BL64_CNT_DRIVER}_network_create" "$network"
+}
+
 #
 # Docker
 #
@@ -541,6 +593,55 @@ function _bl64_cnt_docker_run() {
 
 }
 
+#######################################
+# Command wrapper: detect network
+#
+# Arguments:
+#   $1: network name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function _bl64_cnt_docker_network_is_defined() {
+  bl64_dbg_lib_show_function "$@"
+  local network="$1"
+  local network_id=''
+
+  network_id="$(
+    bl64_cnt_run_docker \
+      network ls \
+      "$BL64_CNT_SET_DOCKER_QUIET" "$BL64_CNT_SET_DOCKER_FILTER" \
+      'name' "$network"
+  )"
+
+  bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
+  [[ -n "$network_id" ]]
+}
+
+#######################################
+# Command wrapper: create network
+#
+# Arguments:
+#   $1: network name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function _bl64_cnt_docker_network_create() {
+  bl64_dbg_lib_show_function "$@"
+  local network="$1"
+
+  bl64_cnt_run_docker \
+    network create \
+    "$network"
+}
+
 #
 # Podman
 #
@@ -757,4 +858,53 @@ function _bl64_cnt_podman_run() {
     run \
     --rm \
     "$@"
+}
+
+#######################################
+# Command wrapper: detect network
+#
+# Arguments:
+#   $1: network name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function _bl64_cnt_podman_network_is_defined() {
+  bl64_dbg_lib_show_function "$@"
+  local network="$1"
+  local network_id=''
+
+  network_id="$(
+    bl64_cnt_run_podman \
+      network ls \
+      "$BL64_CNT_SET_PODMAN_QUIET" "$BL64_CNT_SET_PODMAN_FILTER" \
+      'name' "$network"
+  )"
+
+  bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
+  [[ -n "$network_id" ]]
+}
+
+#######################################
+# Command wrapper: create network
+#
+# Arguments:
+#   $1: network name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function _bl64_cnt_podman_network_create() {
+  bl64_dbg_lib_show_function "$@"
+  local network="$1"
+
+  bl64_cnt_run_podman \
+    network create \
+    "$network"
 }
