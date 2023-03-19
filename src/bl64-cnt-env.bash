@@ -7,6 +7,10 @@
 # Optional module. Not enabled by default
 export BL64_CNT_MODULE="$BL64_VAR_OFF"
 
+export BL64_CNT_DRIVER_DOCKER='docker'
+export BL64_CNT_DRIVER_PODMAN='podman'
+export BL64_CNT_DRIVER=''
+
 export BL64_CNT_CMD_PODMAN=''
 export BL64_CNT_CMD_DOCKER=''
 

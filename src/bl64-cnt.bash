@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.8.1
+# Version: 1.8.2
 #######################################
 
 #######################################
@@ -70,11 +70,7 @@ function bl64_cnt_login_file() {
     bl64_check_file "$file" ||
     return $?
 
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_login "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_login "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
-  fi
+  "bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
 }
 
 #######################################
@@ -102,11 +98,7 @@ function bl64_cnt_login() {
     bl64_check_parameter 'registry' ||
     return $?
 
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_login "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_login "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
-  fi
+  "bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
 }
 
 #######################################
@@ -151,11 +143,7 @@ function bl64_cnt_run_interactive() {
   bl64_check_module 'BL64_CNT_MODULE' ||
     return $?
 
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_run_interactive "$@"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_run_interactive "$@"
-  fi
+  "bl64_cnt_${BL64_CNT_DRIVER}_run_interactive" "$@"
 }
 
 #######################################
@@ -192,11 +180,7 @@ function bl64_cnt_build() {
   # shellcheck disable=SC2164
   cd "${context}"
 
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_build "$file" "$tag" "$@"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_build "$file" "$tag" "$@"
-  fi
+  "bl64_cnt_${BL64_CNT_DRIVER}_build" "$file" "$tag" "$@"
 }
 
 #######################################
@@ -223,11 +207,7 @@ function bl64_cnt_push() {
     bl64_check_parameter 'destination' ||
     return $?
 
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_push "$source" "$destination"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_push "$source" "$destination"
-  fi
+  "bl64_cnt_${BL64_CNT_DRIVER}_push" "$source" "$destination"
 }
 
 #######################################
@@ -249,11 +229,7 @@ function bl64_cnt_pull() {
     bl64_check_parameter 'source' ||
     return $?
 
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_pull "$source"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_pull "$source"
-  fi
+  "bl64_cnt_${BL64_CNT_DRIVER}_pull" "$source"
 }
 
 function _bl64_cnt_login_put_password() {
@@ -290,11 +266,7 @@ function bl64_cnt_tag() {
     bl64_check_parameter 'target' ||
     return $?
 
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_tag "$source" "$target"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_tag "$source" "$target"
-  fi
+  "bl64_cnt_${BL64_CNT_DRIVER}_tag" "$source" "$target"
 }
 
 #######################################
@@ -313,11 +285,8 @@ function bl64_cnt_run() {
 
   bl64_check_module 'BL64_CNT_MODULE' ||
     return $?
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_run "$@"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_run "$@"
-  fi
+
+  "bl64_cnt_${BL64_CNT_DRIVER}_run" "$@"
 }
 
 #
@@ -402,7 +371,7 @@ function bl64_cnt_run_docker() {
   local debug=' '
 
   bl64_check_parameters_none "$#" &&
-  bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_command "$BL64_CNT_CMD_DOCKER" ||
     return $?
 
