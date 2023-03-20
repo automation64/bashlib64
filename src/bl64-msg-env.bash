@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Display messages
 #
-# Version: 2.6.0
+# Version: 2.7.0
 #######################################
 
 export BL64_MSG_MODULE="$BL64_VAR_OFF"
@@ -74,6 +74,7 @@ export BL64_MSG_THEME_ASCII_STD_PHASE='(=)'
 export BL64_MSG_THEME_ASCII_STD_TASK='(-)'
 export BL64_MSG_THEME_ASCII_STD_SUBTASK='(>)'
 export BL64_MSG_THEME_ASCII_STD_LIBTASK='(-)'
+export BL64_MSG_THEME_ASCII_STD_LIBINFO='(I)'
 export BL64_MSG_THEME_ASCII_STD_BATCH='(@)'
 export BL64_MSG_THEME_ASCII_STD_BATCHOK='(@)'
 export BL64_MSG_THEME_ASCII_STD_BATCHERR='(@)'
@@ -89,6 +90,7 @@ export BL64_MSG_THEME_ANSI_STD_PHASE='7;1;36'
 export BL64_MSG_THEME_ANSI_STD_TASK='1;37'
 export BL64_MSG_THEME_ANSI_STD_SUBTASK='37'
 export BL64_MSG_THEME_ANSI_STD_LIBTASK='37'
+export BL64_MSG_THEME_ANSI_STD_LIBINFO='36'
 export BL64_MSG_THEME_ANSI_STD_BATCH='30;1;47'
 export BL64_MSG_THEME_ANSI_STD_BATCHOK='30;42'
 export BL64_MSG_THEME_ANSI_STD_BATCHERR='5;30;41'
@@ -172,3 +174,4 @@ export _BL64_MSG_TXT_BATCH='Process'
 export _BL64_MSG_TXT_BATCH_START='started'
 export _BL64_MSG_TXT_BATCH_FINISH_OK='finished successfully'
 export _BL64_MSG_TXT_BATCH_FINISH_ERROR='finished with errors'
+export _BL64_MSG_TXT_INVALID_VALUE='invalid value. Not one of'
