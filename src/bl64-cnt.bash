@@ -619,8 +619,8 @@ function _bl64_cnt_docker_network_is_defined() {
   network_id="$(
     bl64_cnt_run_docker \
       network ls \
-      "$BL64_CNT_SET_DOCKER_QUIET" "$BL64_CNT_SET_DOCKER_FILTER" \
-      'name' "$network"
+      "$BL64_CNT_SET_DOCKER_QUIET" \
+      "$BL64_CNT_SET_DOCKER_FILTER" "name=${network}"
   )"
 
   bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
@@ -886,8 +886,8 @@ function _bl64_cnt_podman_network_is_defined() {
   network_id="$(
     bl64_cnt_run_podman \
       network ls \
-      "$BL64_CNT_SET_PODMAN_QUIET" "$BL64_CNT_SET_PODMAN_FILTER" \
-      'name' "$network"
+      "$BL64_CNT_SET_PODMAN_QUIET" \
+      "$BL64_CNT_SET_PODMAN_FILTER" "name=${network}"
   )"
 
   bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
