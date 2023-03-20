@@ -22,10 +22,12 @@ BashLib64 is a **Bash** automation library that provides a simple abstraction la
 | [bl64-ans](https://serdigital64.github.io/bashlib64/bl64-ans/)     | Interact with Ansible                              |
 | [bl64-arc](https://serdigital64.github.io/bashlib64/bl64-arc/)     | Manage archive files                               |
 | [bl64-aws](https://serdigital64.github.io/bashlib64/bl64-aws/)     | Interact with Amazon AWS                           |
+| [bl64-bsh](https://serdigital64.github.io/bashlib64/bl64-bsh/)     | Interact with Bash shell                           |
 | [bl64-check](https://serdigital64.github.io/bashlib64/bl64-check/) | Check for conditions and report status             |
 | [bl64-cnt](https://serdigital64.github.io/bashlib64/bl64-cnt/)     | Interact with container engines                    |
 | [bl64-dbg](https://serdigital64.github.io/bashlib64/bl64-dbg/)     | Show shell debugging information                   |
 | [bl64-fmt](https://serdigital64.github.io/bashlib64/bl64-fmt/)     | Format text data                                   |
+| [bl64-fs](https://serdigital64.github.io/bashlib64/bl64-fs/)       | Manage local filesystem                            |
 | [bl64-gcp](https://serdigital64.github.io/bashlib64/bl64-gcp/)     | Interact with Google Cloud                         |
 | [bl64-hlm](https://serdigital64.github.io/bashlib64/bl64-hlm/)     | Interact with Helm                                 |
 | [bl64-iam](https://serdigital64.github.io/bashlib64/bl64-iam/)     | Manage OS identity and access service              |
@@ -40,8 +42,8 @@ BashLib64 is a **Bash** automation library that provides a simple abstraction la
 | [bl64-rbac](https://serdigital64.github.io/bashlib64/bl64-rbac/)   | Manage role based access service                   |
 | [bl64-rnd](https://serdigital64.github.io/bashlib64/bl64-rnd/)     | Generate random data                               |
 | [bl64-rxtx](https://serdigital64.github.io/bashlib64/bl64-rxtx/)   | Transfer and Receive data over the network         |
-| [bl64-time](https://serdigital64.github.io/bashlib64/bl64-time/)   | Manage date-time data                              |
 | [bl64-tf](https://serdigital64.github.io/bashlib64/bl64-tf/)       | Interact with Terraform                            |
+| [bl64-time](https://serdigital64.github.io/bashlib64/bl64-time/)   | Manage date-time data                              |
 | [bl64-txt](https://serdigital64.github.io/bashlib64/bl64-txt/)     | Manipulate text files content                      |
 | [bl64-ui](https://serdigital64.github.io/bashlib64/bl64-ui/)       | User Interface                                     |
 | [bl64-vcs](https://serdigital64.github.io/bashlib64/bl64-vcs/)     | Manage Version Control System                      |

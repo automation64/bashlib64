@@ -1,18 +1,33 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with container engines
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 # Optional module. Not enabled by default
 export BL64_CNT_MODULE="$BL64_VAR_OFF"
 
+export BL64_CNT_DRIVER_DOCKER='docker'
+export BL64_CNT_DRIVER_PODMAN='podman'
+export BL64_CNT_DRIVER=''
+
 export BL64_CNT_CMD_PODMAN=''
 export BL64_CNT_CMD_DOCKER=''
 
+export BL64_CNT_SET_DOCKER_FILTER=''
+export BL64_CNT_SET_DOCKER_QUIET=''
 export BL64_CNT_SET_DOCKER_VERSION=''
+export BL64_CNT_SET_PODMAN_FILTER=''
+export BL64_CNT_SET_PODMAN_QUIET=''
 export BL64_CNT_SET_PODMAN_VERSION=''
 
 export BL64_CNT_PATH_DOCKER_SOCKET=''
 
 export _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
+export _BL64_CNT_TXT_EXISTING_NETWORK='container network already created. No further action needed'
+export _BL64_CNT_TXT_CREATE_NETWORK='creating container network'
+export _BL64_CNT_TXT_LOGIN_REGISTRY='loging to container registry'
+export _BL64_CNT_TXT_BUILD='build container image'
+export _BL64_CNT_TXT_PUSH='push container image to registry'
+export _BL64_CNT_TXT_PULL='pull container image from registry'
+export _BL64_CNT_TXT_TAG='add tag to container image'

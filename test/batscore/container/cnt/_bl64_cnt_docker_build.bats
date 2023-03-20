@@ -3,7 +3,7 @@ setup() {
   bl64_cnt_setup || skip 'no container CLI found'
 }
 
-@test "bl64_cnt_podman_pull: parameters are not present" {
-  run bl64_cnt_podman_pull
+@@test "_bl64_cnt_docker_build: parameters are not present" {
+  run _bl64_cnt_docker_build
   assert_failure
 }

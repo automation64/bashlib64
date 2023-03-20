@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 10.1.0
+# Version: 10.2.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -102,21 +102,36 @@ export _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token fi
 #######################################
 # BashLib64 / Module / Globals / Interact with container engines
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 # Optional module. Not enabled by default
 export BL64_CNT_MODULE="$BL64_VAR_OFF"
 
+export BL64_CNT_DRIVER_DOCKER='docker'
+export BL64_CNT_DRIVER_PODMAN='podman'
+export BL64_CNT_DRIVER=''
+
 export BL64_CNT_CMD_PODMAN=''
 export BL64_CNT_CMD_DOCKER=''
 
+export BL64_CNT_SET_DOCKER_FILTER=''
+export BL64_CNT_SET_DOCKER_QUIET=''
 export BL64_CNT_SET_DOCKER_VERSION=''
+export BL64_CNT_SET_PODMAN_FILTER=''
+export BL64_CNT_SET_PODMAN_QUIET=''
 export BL64_CNT_SET_PODMAN_VERSION=''
 
 export BL64_CNT_PATH_DOCKER_SOCKET=''
 
 export _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
+export _BL64_CNT_TXT_EXISTING_NETWORK='container network already created. No further action needed'
+export _BL64_CNT_TXT_CREATE_NETWORK='creating container network'
+export _BL64_CNT_TXT_LOGIN_REGISTRY='loging to container registry'
+export _BL64_CNT_TXT_BUILD='build container image'
+export _BL64_CNT_TXT_PUSH='push container image to registry'
+export _BL64_CNT_TXT_PULL='pull container image from registry'
+export _BL64_CNT_TXT_TAG='add tag to container image'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with GCP
@@ -1572,7 +1587,7 @@ function bl64_aws_blank_aws() {
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 #######################################
@@ -1603,6 +1618,13 @@ function bl64_cnt_setup() {
       bl64_msg_show_error "unable to find a container manager (${BL64_CNT_CMD_DOCKER}, ${BL64_CNT_CMD_PODMAN})"
       status=$BL64_LIB_ERROR_APP_MISSING
     else
+      bl64_dbg_lib_show_info 'detect and set current container driver'
+      if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
+        BL64_CNT_DRIVER="$BL64_CNT_DRIVER_DOCKER"
+      elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
+        BL64_CNT_DRIVER="$BL64_CNT_DRIVER_PODMAN"
+      fi
+      bl64_dbg_lib_show_vars 'BL64_CNT_DRIVER'
       BL64_CNT_MODULE="$BL64_VAR_ON"
     fi
   fi
@@ -1658,7 +1680,12 @@ function _bl64_cnt_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_CNT_SET_DOCKER_VERSION='version'
+  BL64_CNT_SET_DOCKER_QUIET='--quiet'
+  BL64_CNT_SET_DOCKER_FILTER='--filter'
+
   BL64_CNT_SET_PODMAN_VERSION='version'
+  BL64_CNT_SET_PODMAN_QUIET='--quier'
+  BL64_CNT_SET_PODMAN_FILTER='--filter'
 
   return 0
 }
@@ -1700,7 +1727,7 @@ function bl64_cnt_set_paths() {
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.8.1
+# Version: 1.9.0
 #######################################
 
 #######################################
@@ -1769,11 +1796,8 @@ function bl64_cnt_login_file() {
     bl64_check_file "$file" ||
     return $?
 
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_login "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_login "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
-  fi
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
 }
 
 #######################################
@@ -1801,71 +1825,8 @@ function bl64_cnt_login() {
     bl64_check_parameter 'registry' ||
     return $?
 
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_login "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_login "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
-  fi
-}
-
-#######################################
-# Command wrapper: docker login
-#
-# Arguments:
-#   $1: user
-#   $2: password
-#   $3: file
-#   $4: registry
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_docker_login() {
-  bl64_dbg_lib_show_function "$@"
-  local user="$1"
-  local password="$2"
-  local file="$3"
-  local registry="$4"
-
-  _bl64_cnt_login_put_password "$password" "$file" |
-    bl64_cnt_run_docker \
-      login \
-      --username "$user" \
-      --password-stdin \
-      "$registry"
-}
-
-#######################################
-# Command wrapper: podman login
-#
-# Arguments:
-#   $1: user
-#   $2: password
-#   $3: file
-#   $4: registry
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_podman_login() {
-  bl64_dbg_lib_show_function "$@"
-  local user="$1"
-  local password="$2"
-  local file="$3"
-  local registry="$4"
-
-  _bl64_cnt_login_put_password "$password" "$file" |
-    bl64_cnt_run_podman \
-      login \
-      --username "$user" \
-      --password-stdin \
-      "$registry"
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
 }
 
 #######################################
@@ -1910,137 +1871,7 @@ function bl64_cnt_run_interactive() {
   bl64_check_module 'BL64_CNT_MODULE' ||
     return $?
 
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_run_interactive "$@"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_run_interactive "$@"
-  fi
-}
-
-#######################################
-# Command wrapper: podman run
-#
-# * Provides verbose and debug support
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_podman_run_interactive() {
-  bl64_dbg_lib_show_function "$@"
-
-  bl64_check_parameters_none "$#" || return $?
-
-  bl64_cnt_run_podman \
-    run \
-    --rm \
-    --interactive \
-    --tty \
-    "$@"
-}
-
-#######################################
-# Command wrapper: docker run
-#
-# * Provides verbose and debug support
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_docker_run_interactive() {
-  bl64_dbg_lib_show_function "$@"
-
-  bl64_check_parameters_none "$#" || return $?
-
-  bl64_cnt_run_docker \
-    run \
-    --rm \
-    --interactive \
-    --tty \
-    "$@"
-
-}
-
-#######################################
-# Command wrapper: podman
-#
-# * Provides debug support
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_run_podman() {
-  bl64_dbg_lib_show_function "$@"
-  local verbose='error'
-
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_CNT_MODULE' &&
-    bl64_check_command "$BL64_CNT_CMD_PODMAN" ||
-    return $?
-
-  bl64_dbg_lib_command_enabled && verbose='debug'
-  bl64_dbg_runtime_show_paths
-
-  bl64_dbg_lib_trace_start
-  "$BL64_CNT_CMD_PODMAN" \
-    --log-level "$verbose" \
-    "$@"
-  bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Command wrapper: docker
-#
-# * Provides debug support
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_run_docker() {
-  bl64_dbg_lib_show_function "$@"
-  local verbose='error'
-  local debug=' '
-
-  bl64_check_parameters_none "$#" &&
-  bl64_check_module 'BL64_CNT_MODULE' &&
-    bl64_check_command "$BL64_CNT_CMD_DOCKER" ||
-    return $?
-
-  if bl64_dbg_lib_command_enabled; then
-    verbose='debug'
-    debug='--debug'
-  fi
-  bl64_dbg_runtime_show_paths
-
-  bl64_dbg_lib_trace_start
-  "$BL64_CNT_CMD_DOCKER" \
-    --log-level "$verbose" \
-    $debug \
-    "$@"
-  bl64_dbg_lib_trace_stop
+  "_bl64_cnt_${BL64_CNT_DRIVER}_run_interactive" "$@"
 }
 
 #######################################
@@ -2077,75 +1908,8 @@ function bl64_cnt_build() {
   # shellcheck disable=SC2164
   cd "${context}"
 
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_build "$file" "$tag" "$@"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_build "$file" "$tag" "$@"
-  fi
-}
-
-#######################################
-# Command wrapper: docker build
-#
-# Arguments:
-#   $1: file
-#   $2: tag
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_docker_build() {
-  bl64_dbg_lib_show_function "$@"
-  local file="$1"
-  local tag="$2"
-
-  # Remove used parameters
-  shift
-  shift
-
-  bl64_cnt_run_docker \
-    build \
-    --no-cache \
-    --rm \
-    --tag "$tag" \
-    --file "$file" \
-    "$@" .
-}
-
-#######################################
-# Command wrapper: podman build
-#
-# Arguments:
-#   $1: file
-#   $2: tag
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_podman_build() {
-  bl64_dbg_lib_show_function "$@"
-  local file="$1"
-  local tag="$2"
-
-  # Remove used parameters
-  shift
-  shift
-
-  bl64_cnt_run_podman \
-    build \
-    --no-cache \
-    --rm \
-    --tag "$tag" \
-    --file "$file" \
-    "$@" .
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_BUILD} (${file}:${tag})"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_build" "$file" "$tag" "$@"
 }
 
 #######################################
@@ -2172,63 +1936,8 @@ function bl64_cnt_push() {
     bl64_check_parameter 'destination' ||
     return $?
 
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_push "$source" "$destination"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_push "$source" "$destination"
-  fi
-}
-
-#######################################
-# Command wrapper: docker push
-#
-# Arguments:
-#   $1: source
-#   $2: destination
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_docker_push() {
-  bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local destination="$2"
-
-  bl64_cnt_run_docker \
-    tag \
-    "$source" \
-    "$destination"
-
-  bl64_cnt_run_docker \
-    push \
-    "$destination"
-}
-
-#######################################
-# Command wrapper: podman push
-#
-# Arguments:
-#   $1: source
-#   $2: destination
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_podman_push() {
-  bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local destination="$2"
-
-  bl64_cnt_run_podman \
-    push \
-    "localhost/${source}" \
-    "$destination"
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_PUSH} (${source} -> ${destination})"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_push" "$source" "$destination"
 }
 
 #######################################
@@ -2250,53 +1959,8 @@ function bl64_cnt_pull() {
     bl64_check_parameter 'source' ||
     return $?
 
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_pull "$source"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_pull "$source"
-  fi
-}
-
-#######################################
-# Command wrapper: docker pull
-#
-# Arguments:
-#   $1: source
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_docker_pull() {
-  bl64_dbg_lib_show_function "$@"
-  local source="$1"
-
-  bl64_cnt_run_docker \
-    pull \
-    "${source}"
-}
-
-#######################################
-# Command wrapper: podman pull
-#
-# Arguments:
-#   $1: source
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_podman_pull() {
-  bl64_dbg_lib_show_function "$@"
-  local source="$1"
-
-  bl64_cnt_run_podman \
-    pull \
-    "${source}"
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_PULL} (${source})"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_pull" "$source"
 }
 
 function _bl64_cnt_login_put_password() {
@@ -2333,59 +1997,8 @@ function bl64_cnt_tag() {
     bl64_check_parameter 'target' ||
     return $?
 
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_tag "$source" "$target"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_tag "$source" "$target"
-  fi
-}
-
-#######################################
-# Command wrapper: docker tag
-#
-# Arguments:
-#   $1: source. Format: image[:tag]
-#   $2: target. Format: image[:tag]
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_docker_tag() {
-  bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local target="$2"
-
-  bl64_cnt_run_docker \
-    tag \
-    "$source" \
-    "$target"
-}
-
-#######################################
-# Command wrapper: podman tag
-#
-# Arguments:
-#   $1: source. Format: image[:tag]
-#   $2: target. Format: image[:tag]
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-
-function bl64_cnt_podman_tag() {
-  bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local target="$2"
-
-  bl64_cnt_run_podman \
-    tag \
-    "$source" \
-    "$target"
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_TAG} (${source} -> ${target})"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_tag" "$source" "$target"
 }
 
 #######################################
@@ -2404,20 +2017,97 @@ function bl64_cnt_run() {
 
   bl64_check_module 'BL64_CNT_MODULE' ||
     return $?
-  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-    bl64_cnt_docker_run "$@"
-  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-    bl64_cnt_podman_run "$@"
-  fi
+
+  "_bl64_cnt_${BL64_CNT_DRIVER}_run" "$@"
 }
 
 #######################################
-# Command wrapper: podman run
+# Runs the container manager CLI
 #
-# * Provides verbose and debug support
+# * Function provided as-is to catch cases where there is no wrapper
+# * Calling function must make sure that the current driver supports provided arguments
 #
 # Arguments:
-#   $@: arguments are passed as-is to the command
+#   $@: arguments are passed as-is
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_cnt_cli() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_CNT_MODULE' ||
+    return $?
+
+  "bl64_cnt_run_${BL64_CNT_DRIVER}" "$@"
+}
+
+#######################################
+# Determine if the container network is defined
+#
+# Arguments:
+#   $1: network name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function bl64_cnt_network_is_defined() {
+  bl64_dbg_lib_show_function "$@"
+  local network="$1"
+
+  bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_parameter 'network' ||
+    return $?
+
+  "_bl64_cnt_${BL64_CNT_DRIVER}_network_is_defined" "$network"
+}
+
+#######################################
+# Create a container network
+#
+# Arguments:
+#   $1: network name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function bl64_cnt_network_create() {
+  bl64_dbg_lib_show_function "$@"
+  local network="$1"
+
+  bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_parameter 'network' ||
+    return $?
+
+  if bl64_cnt_network_is_defined "$network"; then
+    bl64_msg_show_lib_info "${_BL64_CNT_TXT_EXISTING_NETWORK} (${network})"
+    return 0
+  fi
+
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_CREATE_NETWORK} (${network})"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_network_create" "$network"
+}
+
+#
+# Docker
+#
+
+#######################################
+# Command wrapper: docker login
+#
+# Arguments:
+#   $1: user
+#   $2: password
+#   $3: file
+#   $4: registry
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -2425,13 +2115,19 @@ function bl64_cnt_run() {
 #   command exit status
 #######################################
 
-function bl64_cnt_podman_run() {
+function _bl64_cnt_docker_login() {
   bl64_dbg_lib_show_function "$@"
+  local user="$1"
+  local password="$2"
+  local file="$3"
+  local registry="$4"
 
-  bl64_cnt_run_podman \
-    run \
-    --rm \
-    "$@"
+  _bl64_cnt_login_put_password "$password" "$file" |
+    bl64_cnt_run_docker \
+      login \
+      --username "$user" \
+      --password-stdin \
+      "$registry"
 }
 
 #######################################
@@ -2448,7 +2144,178 @@ function bl64_cnt_podman_run() {
 #   command exit status
 #######################################
 
-function bl64_cnt_docker_run() {
+function _bl64_cnt_docker_run_interactive() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" || return $?
+
+  bl64_cnt_run_docker \
+    run \
+    --rm \
+    --interactive \
+    --tty \
+    "$@"
+
+}
+
+#######################################
+# Command wrapper: docker
+#
+# * Provides debug support
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_run_docker() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose='error'
+  local debug=' '
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_command "$BL64_CNT_CMD_DOCKER" ||
+    return $?
+
+  if bl64_dbg_lib_command_enabled; then
+    verbose='debug'
+    debug='--debug'
+  fi
+  bl64_dbg_runtime_show_paths
+
+  bl64_dbg_lib_trace_start
+  "$BL64_CNT_CMD_DOCKER" \
+    --log-level "$verbose" \
+    $debug \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper: docker build
+#
+# Arguments:
+#   $1: file
+#   $2: tag
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function _bl64_cnt_docker_build() {
+  bl64_dbg_lib_show_function "$@"
+  local file="$1"
+  local tag="$2"
+
+  # Remove used parameters
+  shift
+  shift
+
+  bl64_cnt_run_docker \
+    build \
+    --no-cache \
+    --rm \
+    --tag "$tag" \
+    --file "$file" \
+    "$@" .
+}
+
+#######################################
+# Command wrapper: docker push
+#
+# Arguments:
+#   $1: source
+#   $2: destination
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function _bl64_cnt_docker_push() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local destination="$2"
+
+  bl64_cnt_run_docker \
+    tag \
+    "$source" \
+    "$destination"
+
+  bl64_cnt_run_docker \
+    push \
+    "$destination"
+}
+
+#######################################
+# Command wrapper: docker pull
+#
+# Arguments:
+#   $1: source
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function _bl64_cnt_docker_pull() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+
+  bl64_cnt_run_docker \
+    pull \
+    "${source}"
+}
+
+#######################################
+# Command wrapper: docker tag
+#
+# Arguments:
+#   $1: source. Format: image[:tag]
+#   $2: target. Format: image[:tag]
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function _bl64_cnt_docker_tag() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local target="$2"
+
+  bl64_cnt_run_docker \
+    tag \
+    "$source" \
+    "$target"
+}
+
+#######################################
+# Command wrapper: docker run
+#
+# * Provides verbose and debug support
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function _bl64_cnt_docker_run() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_cnt_run_docker \
@@ -2456,6 +2323,322 @@ function bl64_cnt_docker_run() {
     --rm \
     "$@"
 
+}
+
+#######################################
+# Command wrapper: detect network
+#
+# Arguments:
+#   $1: network name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function _bl64_cnt_docker_network_is_defined() {
+  bl64_dbg_lib_show_function "$@"
+  local network="$1"
+  local network_id=''
+
+  network_id="$(
+    bl64_cnt_run_docker \
+      network ls \
+      "$BL64_CNT_SET_DOCKER_QUIET" \
+      "$BL64_CNT_SET_DOCKER_FILTER" "name=${network}"
+  )"
+
+  bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
+  [[ -n "$network_id" ]]
+}
+
+#######################################
+# Command wrapper: create network
+#
+# Arguments:
+#   $1: network name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function _bl64_cnt_docker_network_create() {
+  bl64_dbg_lib_show_function "$@"
+  local network="$1"
+
+  bl64_cnt_run_docker \
+    network create \
+    "$network"
+}
+
+#
+# Podman
+#
+
+#######################################
+# Command wrapper: podman login
+#
+# Arguments:
+#   $1: user
+#   $2: password
+#   $3: file
+#   $4: registry
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function _bl64_cnt_podman_login() {
+  bl64_dbg_lib_show_function "$@"
+  local user="$1"
+  local password="$2"
+  local file="$3"
+  local registry="$4"
+
+  _bl64_cnt_login_put_password "$password" "$file" |
+    bl64_cnt_run_podman \
+      login \
+      --username "$user" \
+      --password-stdin \
+      "$registry"
+}
+
+#######################################
+# Command wrapper: podman run
+#
+# * Provides verbose and debug support
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function _bl64_cnt_podman_run_interactive() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" || return $?
+
+  bl64_cnt_run_podman \
+    run \
+    --rm \
+    --interactive \
+    --tty \
+    "$@"
+}
+
+#######################################
+# Command wrapper: podman
+#
+# * Provides debug support
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function bl64_cnt_run_podman() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose='error'
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_command "$BL64_CNT_CMD_PODMAN" ||
+    return $?
+
+  bl64_dbg_lib_command_enabled && verbose='debug'
+  bl64_dbg_runtime_show_paths
+
+  bl64_dbg_lib_trace_start
+  "$BL64_CNT_CMD_PODMAN" \
+    --log-level "$verbose" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper: podman build
+#
+# Arguments:
+#   $1: file
+#   $2: tag
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function _bl64_cnt_podman_build() {
+  bl64_dbg_lib_show_function "$@"
+  local file="$1"
+  local tag="$2"
+
+  # Remove used parameters
+  shift
+  shift
+
+  bl64_cnt_run_podman \
+    build \
+    --no-cache \
+    --rm \
+    --tag "$tag" \
+    --file "$file" \
+    "$@" .
+}
+
+#######################################
+# Command wrapper: podman push
+#
+# Arguments:
+#   $1: source
+#   $2: destination
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function _bl64_cnt_podman_push() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local destination="$2"
+
+  bl64_cnt_run_podman \
+    push \
+    "localhost/${source}" \
+    "$destination"
+}
+
+#######################################
+# Command wrapper: podman pull
+#
+# Arguments:
+#   $1: source
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function _bl64_cnt_podman_pull() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+
+  bl64_cnt_run_podman \
+    pull \
+    "${source}"
+}
+
+#######################################
+# Command wrapper: podman tag
+#
+# Arguments:
+#   $1: source. Format: image[:tag]
+#   $2: target. Format: image[:tag]
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function _bl64_cnt_podman_tag() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local target="$2"
+
+  bl64_cnt_run_podman \
+    tag \
+    "$source" \
+    "$target"
+}
+
+#######################################
+# Command wrapper: podman run
+#
+# * Provides verbose and debug support
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+
+function _bl64_cnt_podman_run() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_cnt_run_podman \
+    run \
+    --rm \
+    "$@"
+}
+
+#######################################
+# Command wrapper: detect network
+#
+# Arguments:
+#   $1: network name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function _bl64_cnt_podman_network_is_defined() {
+  bl64_dbg_lib_show_function "$@"
+  local network="$1"
+  local network_id=''
+
+  network_id="$(
+    bl64_cnt_run_podman \
+      network ls \
+      "$BL64_CNT_SET_PODMAN_QUIET" \
+      "$BL64_CNT_SET_PODMAN_FILTER" "name=${network}"
+  )"
+
+  bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
+  [[ -n "$network_id" ]]
+}
+
+#######################################
+# Command wrapper: create network
+#
+# Arguments:
+#   $1: network name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function _bl64_cnt_podman_network_create() {
+  bl64_dbg_lib_show_function "$@"
+  local network="$1"
+
+  bl64_cnt_run_podman \
+    network create \
+    "$network"
 }
 
 #######################################
@@ -3262,7 +3445,7 @@ function bl64_iam_user_get_current() {
 #######################################
 # BashLib64 / Module / Setup / Interact with Kubernetes
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -3351,7 +3534,7 @@ function _bl64_k8s_set_options() {
   bl64_dbg_lib_show_function
 
   case "$BL64_K8S_VERSION_KUBECTL" in
-  1.22 | 1.23 | 1.24 | 1.25 )
+  1.22 | 1.23 | 1.24 | 1.25 | 1.26)
     BL64_K8S_SET_VERBOSE_NONE='--v=0'
     BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
     BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
@@ -3365,7 +3548,7 @@ function _bl64_k8s_set_options() {
     BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
     BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
     ;;
-  *) bl64_check_alert_unsupported ;;
+  *) bl64_check_alert_unsupported "k8s-api: ${BL64_K8S_VERSION_KUBECTL}";;
   esac
 }
 
