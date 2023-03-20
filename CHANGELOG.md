@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - normalized internal function names to avoid external use (bl64_cnt_docker_*, bl64_cnt_podman_*)
   - added task process msg
 
+### Fixed
+
+- msg
+  - added missing lib info style
+
 ## [10.1.1]
 
 ### Added
