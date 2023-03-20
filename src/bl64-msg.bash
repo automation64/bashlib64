@@ -312,7 +312,6 @@ function bl64_msg_show_subtask() {
 
 #######################################
 # Display task message for bash64lib functions
-bl64_dbg_lib_show_function "@"
 #
 # Arguments:
 #   $1: message
@@ -335,7 +334,6 @@ function bl64_msg_show_lib_task() {
 
 #######################################
 # Display info message for bash64lib functions
-bl64_dbg_lib_show_function "@"
 #
 # Arguments:
 #   $1: message
