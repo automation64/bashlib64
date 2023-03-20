@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.7.0
+# Version: 1.8.0
 #######################################
 
 #######################################
@@ -32,6 +32,13 @@ function bl64_cnt_setup() {
       bl64_msg_show_error "unable to find a container manager (${BL64_CNT_CMD_DOCKER}, ${BL64_CNT_CMD_PODMAN})"
       status=$BL64_LIB_ERROR_APP_MISSING
     else
+      bl64_dbg_lib_show_info 'detect and set current container driver'
+      if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
+        BL64_CNT_DRIVER="$BL64_CNT_DRIVER_DOCKER"
+      elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
+        BL64_CNT_DRIVER="$BL64_CNT_DRIVER_PODMAN"
+      fi
+      bl64_dbg_lib_show_vars 'BL64_CNT_DRIVER'
       BL64_CNT_MODULE="$BL64_VAR_ON"
     fi
   fi
@@ -87,7 +94,12 @@ function _bl64_cnt_set_options() {
   bl64_dbg_lib_show_function
 
   BL64_CNT_SET_DOCKER_VERSION='version'
+  BL64_CNT_SET_DOCKER_QUIET='--quiet'
+  BL64_CNT_SET_DOCKER_FILTER='--filter'
+
   BL64_CNT_SET_PODMAN_VERSION='version'
+  BL64_CNT_SET_PODMAN_QUIET='--quier'
+  BL64_CNT_SET_PODMAN_FILTER='--filter'
 
   return 0
 }
