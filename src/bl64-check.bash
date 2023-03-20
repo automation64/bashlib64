@@ -438,7 +438,7 @@ function bl64_check_alert_parameter_invalid() {
   local message="${2:-${_BL64_CHECK_TXT_PARAMETER_INVALID}}"
 
   [[ "$parameter" == "$BL64_VAR_DEFAULT" ]] && parameter=''
-  bl64_msg_show_error "${message} (${parameter:+${_BL64_CHECK_TXT_PARAMETER}: ${parameter}}${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+  bl64_msg_show_error "${message} (${parameter:+${_BL64_CHECK_TXT_PARAMETER}: ${parameter} ${BL64_MSG_COSMETIC_PIPE} }${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
   return $BL64_LIB_ERROR_PARAMETER_INVALID
 }
 
