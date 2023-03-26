@@ -45,6 +45,32 @@ function _bl64_cnt_find_variable_marker() {
 }
 
 #######################################
+# Logins the container engine to a container registry. The password is taken from STDIN
+#
+# Arguments:
+#   $1: user
+#   $2: registry
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_cnt_login_stdin() {
+  bl64_dbg_lib_show_function "$@"
+  local user="${1:-}"
+  local registry="${2:-}"
+
+  bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_parameter 'user' &&
+    bl64_check_parameter 'registry' ||
+    return $?
+
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$BL64_VAR_DEFAULT" "$BL64_CNT_FLAG_STDIN" "$registry"
+}
+
+#######################################
 # Logins the container engine to a container registry. The password is stored in a regular file
 #
 # Arguments:
@@ -59,9 +85,9 @@ function _bl64_cnt_find_variable_marker() {
 #######################################
 function bl64_cnt_login_file() {
   bl64_dbg_lib_show_function "$@"
-  local user="$1"
-  local file="$2"
-  local registry="$3"
+  local user="${1:-}"
+  local file="${2:-}"
+  local registry="${3:-}"
 
   bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_parameter 'user' &&
@@ -89,9 +115,9 @@ function bl64_cnt_login_file() {
 #######################################
 function bl64_cnt_login() {
   bl64_dbg_lib_show_function "$@"
-  local user="$1"
-  local password="$2"
-  local registry="$3"
+  local user="${1:-}"
+  local password="${2:-}"
+  local registry="${3:-}"
 
   bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_parameter 'user' &&
@@ -238,6 +264,7 @@ function bl64_cnt_pull() {
 }
 
 function _bl64_cnt_login_put_password() {
+  bl64_dbg_lib_show_function "$@"
   local password="$1"
   local file="$2"
 
@@ -245,8 +272,9 @@ function _bl64_cnt_login_put_password() {
     printf '%s\n' "$password"
   elif [[ "$file" != "$BL64_VAR_DEFAULT" ]]; then
     "$BL64_OS_CMD_CAT" "$file"
+  elif [[ "$file" == "$BL64_CNT_FLAG_STDIN" ]]; then
+    "$BL64_OS_CMD_CAT"
   fi
-
 }
 
 #######################################
@@ -316,6 +344,48 @@ function bl64_cnt_cli() {
     return $?
 
   "bl64_cnt_run_${BL64_CNT_DRIVER}" "$@"
+}
+
+#######################################
+# Determine if the container is running
+#
+# * Look for one or more instances of the container
+# * The container status is Running
+# * Filter by one of: name, id
+#
+# Arguments:
+#   $1: name. Exact match
+#   $2: id
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: true
+#   >0: false or cmd error
+#######################################
+function bl64_cnt_container_is_running() {
+  bl64_dbg_lib_show_function "$@"
+  local name="${1:-${BL64_VAR_DEFAULT}}"
+  local id="${2:-${BL64_VAR_DEFAULT}}"
+  local result=''
+
+  if [[ "$name" == "$BL64_VAR_DEFAULT" && "$id" == "$BL64_VAR_DEFAULT" ]]; then
+    bl64_check_alert_parameter_invalid "$BL64_VAR_DEFAULT" "$_BL64_CNT_TXT_MISSING_FILTER (ID, Name)"
+    return $?
+  fi
+
+  bl64_check_module 'BL64_CNT_MODULE' ||
+    return $?
+
+  result="$("_bl64_cnt_${BL64_CNT_DRIVER}_ps_filter" "$name" "$id" "$BL64_CNT_SET_STATUS_RUNNING")" ||
+    return $?
+  bl64_dbg_lib_show_var 'result'
+
+  if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
+    [[ "$result" == "$name" ]]
+  elif [[ "$id" == "$BL64_VAR_DEFAULT" ]]; then
+    [[ "$result" != "$id" ]]
+  fi
 }
 
 #######################################
@@ -619,8 +689,8 @@ function _bl64_cnt_docker_network_is_defined() {
   network_id="$(
     bl64_cnt_run_docker \
       network ls \
-      "$BL64_CNT_SET_DOCKER_QUIET" \
-      "$BL64_CNT_SET_DOCKER_FILTER" "name=${network}"
+      "$BL64_CNT_SET_QUIET" \
+      "$BL64_CNT_SET_FILTER" "name=${network}"
   )"
 
   bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
@@ -646,6 +716,43 @@ function _bl64_cnt_docker_network_create() {
   bl64_cnt_run_docker \
     network create \
     "$network"
+}
+
+#######################################
+# Command wrapper: ps with filters
+#
+# Arguments:
+#   $1: name
+#   $2: id
+#   $3: status
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function _bl64_cnt_docker_ps_filter() {
+  bl64_dbg_lib_show_function "$@"
+  local name="$1"
+  local id="$2"
+  local status="$3"
+  local format=''
+  local filter=''
+
+  if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
+    filter="--filter name=${name}"
+    format="$BL64_CNT_SET_FILTER_NAME"
+  elif [[ "$id" != "$BL64_VAR_DEFAULT" ]]; then
+    filter="--filter id=${id}"
+    format="$BL64_CNT_SET_FILTER_ID"
+  fi
+  [[ "$status" != "$BL64_VAR_DEFAULT" ]] && filter_status="--filter status=${status}"
+
+  # shellcheck disable=SC2086
+  bl64_cnt_run_docker \
+    ps \
+    ${filter} ${filter_status} --format "$format"
 }
 
 #
@@ -886,8 +993,8 @@ function _bl64_cnt_podman_network_is_defined() {
   network_id="$(
     bl64_cnt_run_podman \
       network ls \
-      "$BL64_CNT_SET_PODMAN_QUIET" \
-      "$BL64_CNT_SET_PODMAN_FILTER" "name=${network}"
+      "$BL64_CNT_SET_QUIET" \
+      "$BL64_CNT_SET_FILTER" "name=${network}"
   )"
 
   bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
@@ -913,4 +1020,41 @@ function _bl64_cnt_podman_network_create() {
   bl64_cnt_run_podman \
     network create \
     "$network"
+}
+
+#######################################
+# Command wrapper: ps with filters
+#
+# Arguments:
+#   $1: name
+#   $2: id
+#   $3: status
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function _bl64_cnt_podman_ps_filter() {
+  bl64_dbg_lib_show_function "$@"
+  local name="$1"
+  local id="$2"
+  local status="$3"
+  local format=''
+  local filter=''
+
+  if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
+    filter="--filter name=${name}"
+    format='{{.NAME}}'
+  elif [[ "$id" != "$BL64_VAR_DEFAULT" ]]; then
+    filter="--filter id=${id}"
+    format='{{.ID}}'
+  fi
+  [[ "$status" != "$BL64_VAR_DEFAULT" ]] && filter_status="--filter status=${status}"
+
+  # shellcheck disable=SC2086
+  bl64_cnt_run_podman \
+    ps \
+    ${filter} ${filter_status} --format "$format"
 }
