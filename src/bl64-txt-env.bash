@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Manipulate text files content
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 export BL64_TXT_MODULE="$BL64_VAR_OFF"
@@ -14,7 +14,9 @@ export BL64_TXT_CMD_ENVSUBST=''
 export BL64_TXT_CMD_GAWK=''
 export BL64_TXT_CMD_GREP=''
 export BL64_TXT_CMD_SED=''
+export BL64_TXT_CMD_SORT=''
 export BL64_TXT_CMD_TR=''
+export BL64_TXT_CMD_UNIQ=''
 
 export BL64_TXT_SET_AWK_POSIX=''
 export BL64_TXT_SET_GREP_ERE="$BL64_VAR_UNAVAILABLE"
