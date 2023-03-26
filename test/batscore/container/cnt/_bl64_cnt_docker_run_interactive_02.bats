@@ -5,6 +5,6 @@ setup() {
 }
 
 @test "_bl64_cnt_docker_run_interactive: CLI runs ok" {
-  run _bl64_cnt_docker_run_interactive "$BL64_CNT_SET_DOCKER_VERSION"
+  run _bl64_cnt_docker_run_interactive "$BL64_CNT_SET_VERSION"
   assert_success
 }
