@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 #######################################
@@ -23,9 +23,7 @@ function bl64_cnt_setup() {
   bl64_dbg_lib_show_function
   local -i status=0
 
-  _bl64_cnt_set_command &&
-    _bl64_cnt_set_options &&
-    bl64_cnt_set_paths
+  _bl64_cnt_set_command
   status=$?
   if ((status == 0)); then
     if [[ ! -x "$BL64_CNT_CMD_DOCKER" && ! -x "$BL64_CNT_CMD_PODMAN" ]]; then
@@ -41,6 +39,11 @@ function bl64_cnt_setup() {
       bl64_dbg_lib_show_vars 'BL64_CNT_DRIVER'
       BL64_CNT_MODULE="$BL64_VAR_ON"
     fi
+
+    # Engine specific sets
+    bl64_cnt_set_paths &&
+      _bl64_cnt_set_options
+    status=$?
   fi
 
   ((status == 0))
@@ -93,14 +96,16 @@ function _bl64_cnt_set_command() {
 function _bl64_cnt_set_options() {
   bl64_dbg_lib_show_function
 
-  BL64_CNT_SET_DOCKER_VERSION='version'
-  BL64_CNT_SET_DOCKER_QUIET='--quiet'
-  BL64_CNT_SET_DOCKER_FILTER='--filter'
+  BL64_CNT_SET_VERSION='version'
+  BL64_CNT_SET_QUIET='--quiet'
+  BL64_CNT_SET_FILTER='--filter'
 
-  BL64_CNT_SET_PODMAN_VERSION='version'
-  BL64_CNT_SET_PODMAN_QUIET='--quier'
-  BL64_CNT_SET_PODMAN_FILTER='--filter'
+  # Container status
+  BL64_CNT_SET_STATUS_RUNNING='running'
 
+  # Format field names
+  BL64_CNT_SET_FILTER_ID='{{.ID}}'
+  BL64_CNT_SET_FILTER_NAME='{{.Names}}'
   return 0
 }
 

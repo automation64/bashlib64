@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 10.2.0
+# Version: 10.3.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -728,7 +728,7 @@ export _BL64_RXTX_TXT_DOWNLOAD_FILE='download file'
 #######################################
 # BashLib64 / Module / Globals / Manipulate text files content
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 export BL64_TXT_MODULE="$BL64_VAR_OFF"
@@ -741,7 +741,9 @@ export BL64_TXT_CMD_ENVSUBST=''
 export BL64_TXT_CMD_GAWK=''
 export BL64_TXT_CMD_GREP=''
 export BL64_TXT_CMD_SED=''
+export BL64_TXT_CMD_SORT=''
 export BL64_TXT_CMD_TR=''
+export BL64_TXT_CMD_UNIQ=''
 
 export BL64_TXT_SET_AWK_POSIX=''
 export BL64_TXT_SET_GREP_ERE="$BL64_VAR_UNAVAILABLE"
@@ -882,7 +884,7 @@ export _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token fi
 #######################################
 # BashLib64 / Module / Globals / Interact with container engines
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -892,15 +894,17 @@ export BL64_CNT_DRIVER_DOCKER='docker'
 export BL64_CNT_DRIVER_PODMAN='podman'
 export BL64_CNT_DRIVER=''
 
+export BL64_CNT_FLAG_STDIN='-'
+
 export BL64_CNT_CMD_PODMAN=''
 export BL64_CNT_CMD_DOCKER=''
 
-export BL64_CNT_SET_DOCKER_FILTER=''
-export BL64_CNT_SET_DOCKER_QUIET=''
-export BL64_CNT_SET_DOCKER_VERSION=''
-export BL64_CNT_SET_PODMAN_FILTER=''
-export BL64_CNT_SET_PODMAN_QUIET=''
-export BL64_CNT_SET_PODMAN_VERSION=''
+export BL64_CNT_SET_FILTER=''
+export BL64_CNT_SET_QUIET=''
+export BL64_CNT_SET_VERSION=''
+export BL64_CNT_SET_STATUS_RUNNING=''
+export BL64_CNT_SET_FILTER_ID=''
+export BL64_CNT_SET_FILTER_NAME=''
 
 export BL64_CNT_PATH_DOCKER_SOCKET=''
 
@@ -912,6 +916,7 @@ export _BL64_CNT_TXT_BUILD='build container image'
 export _BL64_CNT_TXT_PUSH='push container image to registry'
 export _BL64_CNT_TXT_PULL='pull container image from registry'
 export _BL64_CNT_TXT_TAG='add tag to container image'
+export _BL64_CNT_TXT_MISSING_FILTER='no filter was selected. Task requires one of them'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with GCP
@@ -5906,7 +5911,7 @@ function bl64_tm_create_timestamp_file() {
 #######################################
 # BashLib64 / Module / Setup / Manipulate text files content
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 #######################################
@@ -5956,13 +5961,16 @@ function _bl64_txt_set_command() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_TXT_CMD_AWK='/usr/bin/awk'
+    BL64_TXT_CMD_BASE64='/usr/bin/base64'
     BL64_TXT_CMD_CUT='/usr/bin/cut'
+    BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
     BL64_TXT_CMD_GAWK='/usr/bin/gawk'
     BL64_TXT_CMD_GREP='/bin/grep'
     BL64_TXT_CMD_SED='/bin/sed'
+    BL64_TXT_CMD_SORT='/usr/bin/sort'
     BL64_TXT_CMD_TR='/usr/bin/tr'
-    BL64_TXT_CMD_BASE64='/usr/bin/base64'
-    BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
+    BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
+
     if [[ -x '/usr/bin/gawk' ]]; then
       BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
       BL64_TXT_SET_AWK_POSIX='--posix'
@@ -5971,26 +5979,32 @@ function _bl64_txt_set_command() {
     fi
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
     BL64_TXT_CMD_AWK='/usr/bin/awk'
+    BL64_TXT_CMD_BASE64='/usr/bin/base64'
     BL64_TXT_CMD_CUT='/usr/bin/cut'
+    BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
     BL64_TXT_CMD_GAWK='/usr/bin/gawk'
     BL64_TXT_CMD_GREP='/usr/bin/grep'
     BL64_TXT_CMD_SED='/usr/bin/sed'
+    BL64_TXT_CMD_SORT='/usr/bin/sort'
     BL64_TXT_CMD_TR='/usr/bin/tr'
-    BL64_TXT_CMD_BASE64='/usr/bin/base64'
-    BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
-    BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
+    BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
+
     BL64_TXT_SET_AWK_POSIX='--posix'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_TXT_CMD_AWK='/usr/bin/awk'
+    BL64_TXT_CMD_BASE64='/bin/base64'
     BL64_TXT_CMD_CUT='/usr/bin/cut'
+    BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
     BL64_TXT_CMD_GAWK='/usr/bin/gawk'
     BL64_TXT_CMD_GREP='/bin/grep'
     BL64_TXT_CMD_SED='/bin/sed'
+    BL64_TXT_CMD_SORT='/usr/bin/sort'
     BL64_TXT_CMD_TR='/usr/bin/tr'
-    BL64_TXT_CMD_BASE64='/bin/base64'
-    BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
+    BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
+
     if [[ -x '/usr/bin/gawk' ]]; then
       BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
       BL64_TXT_SET_AWK_POSIX='--posix'
@@ -5998,13 +6012,16 @@ function _bl64_txt_set_command() {
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_TXT_CMD_AWK='/usr/bin/awk'
+    BL64_TXT_CMD_BASE64='/usr/bin/base64'
     BL64_TXT_CMD_CUT='/usr/bin/cut'
+    BL64_TXT_CMD_ENVSUBST='/opt/homebrew/bin/envsubst'
     BL64_TXT_CMD_GAWK="$BL64_VAR_INCOMPATIBLE"
     BL64_TXT_CMD_GREP='/usr/bin/grep'
     BL64_TXT_CMD_SED='/usr/bin/sed'
+    BL64_TXT_CMD_SORT='/usr/bin/sort'
     BL64_TXT_CMD_TR='/usr/bin/tr'
-    BL64_TXT_CMD_BASE64='/usr/bin/base64'
-    BL64_TXT_CMD_ENVSUBST='/opt/homebrew/bin/envsubst'
+    BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
+
     BL64_TXT_CMD_AWK_POSIX='/usr/bin/awk'
     ;;
   *) bl64_check_alert_unsupported ;;
@@ -6070,7 +6087,7 @@ function _bl64_txt_set_options() {
 #######################################
 # BashLib64 / Module / Functions / Manipulate text files content
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 #######################################
@@ -6319,6 +6336,58 @@ function bl64_txt_run_cut() {
 
   bl64_dbg_lib_trace_start
   "$BL64_TXT_CMD_CUT" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_txt_run_uniq() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_command "$BL64_TXT_CMD_UNIQ" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_TXT_CMD_UNIQ" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_txt_run_sort() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_command "$BL64_TXT_CMD_SORT" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_TXT_CMD_SORT" "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -7931,7 +8000,7 @@ function bl64_aws_blank_aws() {
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.8.0
+# Version: 1.9.0
 #######################################
 
 #######################################
@@ -7953,9 +8022,7 @@ function bl64_cnt_setup() {
   bl64_dbg_lib_show_function
   local -i status=0
 
-  _bl64_cnt_set_command &&
-    _bl64_cnt_set_options &&
-    bl64_cnt_set_paths
+  _bl64_cnt_set_command
   status=$?
   if ((status == 0)); then
     if [[ ! -x "$BL64_CNT_CMD_DOCKER" && ! -x "$BL64_CNT_CMD_PODMAN" ]]; then
@@ -7971,6 +8038,11 @@ function bl64_cnt_setup() {
       bl64_dbg_lib_show_vars 'BL64_CNT_DRIVER'
       BL64_CNT_MODULE="$BL64_VAR_ON"
     fi
+
+    # Engine specific sets
+    bl64_cnt_set_paths &&
+      _bl64_cnt_set_options
+    status=$?
   fi
 
   ((status == 0))
@@ -8023,14 +8095,16 @@ function _bl64_cnt_set_command() {
 function _bl64_cnt_set_options() {
   bl64_dbg_lib_show_function
 
-  BL64_CNT_SET_DOCKER_VERSION='version'
-  BL64_CNT_SET_DOCKER_QUIET='--quiet'
-  BL64_CNT_SET_DOCKER_FILTER='--filter'
+  BL64_CNT_SET_VERSION='version'
+  BL64_CNT_SET_QUIET='--quiet'
+  BL64_CNT_SET_FILTER='--filter'
 
-  BL64_CNT_SET_PODMAN_VERSION='version'
-  BL64_CNT_SET_PODMAN_QUIET='--quier'
-  BL64_CNT_SET_PODMAN_FILTER='--filter'
+  # Container status
+  BL64_CNT_SET_STATUS_RUNNING='running'
 
+  # Format field names
+  BL64_CNT_SET_FILTER_ID='{{.ID}}'
+  BL64_CNT_SET_FILTER_NAME='{{.Names}}'
   return 0
 }
 
@@ -8115,6 +8189,32 @@ function _bl64_cnt_find_variable_marker() {
 }
 
 #######################################
+# Logins the container engine to a container registry. The password is taken from STDIN
+#
+# Arguments:
+#   $1: user
+#   $2: registry
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_cnt_login_stdin() {
+  bl64_dbg_lib_show_function "$@"
+  local user="${1:-}"
+  local registry="${2:-}"
+
+  bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_parameter 'user' &&
+    bl64_check_parameter 'registry' ||
+    return $?
+
+  bl64_msg_show_lib_task "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
+  "_bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$BL64_VAR_DEFAULT" "$BL64_CNT_FLAG_STDIN" "$registry"
+}
+
+#######################################
 # Logins the container engine to a container registry. The password is stored in a regular file
 #
 # Arguments:
@@ -8129,9 +8229,9 @@ function _bl64_cnt_find_variable_marker() {
 #######################################
 function bl64_cnt_login_file() {
   bl64_dbg_lib_show_function "$@"
-  local user="$1"
-  local file="$2"
-  local registry="$3"
+  local user="${1:-}"
+  local file="${2:-}"
+  local registry="${3:-}"
 
   bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_parameter 'user' &&
@@ -8159,9 +8259,9 @@ function bl64_cnt_login_file() {
 #######################################
 function bl64_cnt_login() {
   bl64_dbg_lib_show_function "$@"
-  local user="$1"
-  local password="$2"
-  local registry="$3"
+  local user="${1:-}"
+  local password="${2:-}"
+  local registry="${3:-}"
 
   bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_parameter 'user' &&
@@ -8308,6 +8408,7 @@ function bl64_cnt_pull() {
 }
 
 function _bl64_cnt_login_put_password() {
+  bl64_dbg_lib_show_function "$@"
   local password="$1"
   local file="$2"
 
@@ -8315,8 +8416,9 @@ function _bl64_cnt_login_put_password() {
     printf '%s\n' "$password"
   elif [[ "$file" != "$BL64_VAR_DEFAULT" ]]; then
     "$BL64_OS_CMD_CAT" "$file"
+  elif [[ "$file" == "$BL64_CNT_FLAG_STDIN" ]]; then
+    "$BL64_OS_CMD_CAT"
   fi
-
 }
 
 #######################################
@@ -8386,6 +8488,48 @@ function bl64_cnt_cli() {
     return $?
 
   "bl64_cnt_run_${BL64_CNT_DRIVER}" "$@"
+}
+
+#######################################
+# Determine if the container is running
+#
+# * Look for one or more instances of the container
+# * The container status is Running
+# * Filter by one of: name, id
+#
+# Arguments:
+#   $1: name. Exact match
+#   $2: id
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: true
+#   >0: false or cmd error
+#######################################
+function bl64_cnt_container_is_running() {
+  bl64_dbg_lib_show_function "$@"
+  local name="${1:-${BL64_VAR_DEFAULT}}"
+  local id="${2:-${BL64_VAR_DEFAULT}}"
+  local result=''
+
+  if [[ "$name" == "$BL64_VAR_DEFAULT" && "$id" == "$BL64_VAR_DEFAULT" ]]; then
+    bl64_check_alert_parameter_invalid "$BL64_VAR_DEFAULT" "$_BL64_CNT_TXT_MISSING_FILTER (ID, Name)"
+    return $?
+  fi
+
+  bl64_check_module 'BL64_CNT_MODULE' ||
+    return $?
+
+  result="$("_bl64_cnt_${BL64_CNT_DRIVER}_ps_filter" "$name" "$id" "$BL64_CNT_SET_STATUS_RUNNING")" ||
+    return $?
+  bl64_dbg_lib_show_var 'result'
+
+  if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
+    [[ "$result" == "$name" ]]
+  elif [[ "$id" == "$BL64_VAR_DEFAULT" ]]; then
+    [[ "$result" != "$id" ]]
+  fi
 }
 
 #######################################
@@ -8689,8 +8833,8 @@ function _bl64_cnt_docker_network_is_defined() {
   network_id="$(
     bl64_cnt_run_docker \
       network ls \
-      "$BL64_CNT_SET_DOCKER_QUIET" \
-      "$BL64_CNT_SET_DOCKER_FILTER" "name=${network}"
+      "$BL64_CNT_SET_QUIET" \
+      "$BL64_CNT_SET_FILTER" "name=${network}"
   )"
 
   bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
@@ -8716,6 +8860,43 @@ function _bl64_cnt_docker_network_create() {
   bl64_cnt_run_docker \
     network create \
     "$network"
+}
+
+#######################################
+# Command wrapper: ps with filters
+#
+# Arguments:
+#   $1: name
+#   $2: id
+#   $3: status
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function _bl64_cnt_docker_ps_filter() {
+  bl64_dbg_lib_show_function "$@"
+  local name="$1"
+  local id="$2"
+  local status="$3"
+  local format=''
+  local filter=''
+
+  if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
+    filter="--filter name=${name}"
+    format="$BL64_CNT_SET_FILTER_NAME"
+  elif [[ "$id" != "$BL64_VAR_DEFAULT" ]]; then
+    filter="--filter id=${id}"
+    format="$BL64_CNT_SET_FILTER_ID"
+  fi
+  [[ "$status" != "$BL64_VAR_DEFAULT" ]] && filter_status="--filter status=${status}"
+
+  # shellcheck disable=SC2086
+  bl64_cnt_run_docker \
+    ps \
+    ${filter} ${filter_status} --format "$format"
 }
 
 #
@@ -8956,8 +9137,8 @@ function _bl64_cnt_podman_network_is_defined() {
   network_id="$(
     bl64_cnt_run_podman \
       network ls \
-      "$BL64_CNT_SET_PODMAN_QUIET" \
-      "$BL64_CNT_SET_PODMAN_FILTER" "name=${network}"
+      "$BL64_CNT_SET_QUIET" \
+      "$BL64_CNT_SET_FILTER" "name=${network}"
   )"
 
   bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
@@ -8983,6 +9164,43 @@ function _bl64_cnt_podman_network_create() {
   bl64_cnt_run_podman \
     network create \
     "$network"
+}
+
+#######################################
+# Command wrapper: ps with filters
+#
+# Arguments:
+#   $1: name
+#   $2: id
+#   $3: status
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: defined
+#   >0: not defined or error
+#######################################
+function _bl64_cnt_podman_ps_filter() {
+  bl64_dbg_lib_show_function "$@"
+  local name="$1"
+  local id="$2"
+  local status="$3"
+  local format=''
+  local filter=''
+
+  if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
+    filter="--filter name=${name}"
+    format='{{.NAME}}'
+  elif [[ "$id" != "$BL64_VAR_DEFAULT" ]]; then
+    filter="--filter id=${id}"
+    format='{{.ID}}'
+  fi
+  [[ "$status" != "$BL64_VAR_DEFAULT" ]] && filter_status="--filter status=${status}"
+
+  # shellcheck disable=SC2086
+  bl64_cnt_run_podman \
+    ps \
+    ${filter} ${filter_status} --format "$format"
 }
 
 #######################################
@@ -9366,7 +9584,7 @@ function bl64_hlm_set_timeout() {
 #######################################
 # BashLib64 / Module / Functions / Interact with HLM
 #
-# Version: 1.2.0
+# Version: 1.2.1
 #######################################
 
 #######################################
@@ -9390,14 +9608,14 @@ function bl64_hlm_repo_add() {
     bl64_check_parameter 'source' ||
     return $?
 
-  bl64_dbg_app_show_info "add helm repository (${repository})"
+  bl64_dbg_lib_show_info "add helm repository (${repository})"
   bl64_hlm_run_helm \
     repo add \
     "$repository" \
     "$source" ||
     return $?
 
-  bl64_dbg_app_show_info "try to update repository from source (${source})"
+  bl64_dbg_lib_show_info "try to update repository from source (${source})"
   bl64_hlm_run_helm repo update "$repository"
 
   return 0

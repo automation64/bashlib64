@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with HLM
 #
-# Version: 1.2.0
+# Version: 1.2.1
 #######################################
 
 #######################################
@@ -25,14 +25,14 @@ function bl64_hlm_repo_add() {
     bl64_check_parameter 'source' ||
     return $?
 
-  bl64_dbg_app_show_info "add helm repository (${repository})"
+  bl64_dbg_lib_show_info "add helm repository (${repository})"
   bl64_hlm_run_helm \
     repo add \
     "$repository" \
     "$source" ||
     return $?
 
-  bl64_dbg_app_show_info "try to update repository from source (${source})"
+  bl64_dbg_lib_show_info "try to update repository from source (${source})"
   bl64_hlm_run_helm repo update "$repository"
 
   return 0
