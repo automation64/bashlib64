@@ -74,6 +74,7 @@ The library has been tested on the following operating systems:
 - RedHatLinux8
 - RedHatLinux9
 - RockyLinux8
+- RockyLinux9
 - Ubuntu20
 - Ubuntu21
 - Ubuntu22
