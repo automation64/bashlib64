@@ -63,7 +63,7 @@ function _bl64_os_get_distro_from_os_release() {
   fi
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_ALM}-8*) : ;;
+  ${BL64_OS_ALM}-8* | ${BL64_OS_ALM}-9*) : ;;
   ${BL64_OS_ALP}-3*) BL64_OS_DISTRO="${BL64_OS_ALP}-${VERSION_ID%.*}" ;;
   ${BL64_OS_CNT}-7*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_CNT}-7" ]] && BL64_OS_DISTRO="${BL64_OS_CNT}-7.0" ;;
   ${BL64_OS_CNT}-8*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_CNT}-8" ]] && BL64_OS_DISTRO="${BL64_OS_CNT}-8.0" ;;
