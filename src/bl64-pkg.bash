@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage native OS packages
 #
-# Version: 2.2.2
+# Version: 3.0.0
 #######################################
 
 #######################################
@@ -38,7 +38,7 @@ function bl64_pkg_repository_add() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | \
     ${BL64_OS_RHEL}-8.* | ${BL64_OS_RHEL}-9.* | \
-    ${BL64_OS_ALM}-8.* | \
+    ${BL64_OS_ALM}-8.* | ${BL64_OS_ALM}-9.* | \
     ${BL64_OS_RCK}-8.* | ${BL64_OS_RCK}-9.* | \
     ${BL64_OS_CNT}-7.* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | \
     ${BL64_OS_OL}-7.* | ${BL64_OS_OL}-8.* | ${BL64_OS_OL}-9.*)
@@ -99,7 +99,7 @@ function bl64_pkg_repository_refresh() {
   ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
     bl64_pkg_run_dnf 'makecache'
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_RCK}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     bl64_pkg_run_dnf 'makecache'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -193,7 +193,7 @@ function bl64_pkg_install() {
   ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_RCK}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -241,7 +241,7 @@ function bl64_pkg_upgrade() {
   ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_RCK}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -289,7 +289,7 @@ function bl64_pkg_cleanup() {
   ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_RCK}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)

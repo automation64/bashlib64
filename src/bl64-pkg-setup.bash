@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage native OS packages
 #
-# Version: 1.5.1
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -27,7 +27,7 @@ function bl64_pkg_setup() {
     case "$BL64_OS_DISTRO" in
     ${BL64_OS_FD}-*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
     ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
-    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_RCK}-9.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
+    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
     ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*) bl64_check_command "$BL64_PKG_CMD_YUM" ;;
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*) bl64_check_command "$BL64_PKG_CMD_APT" ;;
     ${BL64_OS_ALP}-*) bl64_check_command "$BL64_PKG_CMD_APK" ;;
@@ -62,7 +62,7 @@ function _bl64_pkg_set_command() {
   ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_RCK}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -110,7 +110,7 @@ function _bl64_pkg_set_options() {
     BL64_PKG_SET_QUIET='--quiet'
     BL64_PKG_SET_VERBOSE='--color=never --verbose'
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_RCK}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     BL64_PKG_SET_ASSUME_YES='--assumeyes'
     BL64_PKG_SET_SLIM='--nodocs'
     BL64_PKG_SET_QUIET='--quiet'
@@ -173,7 +173,7 @@ function _bl64_pkg_set_alias() {
     BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
     BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_RCK}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
     BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
     BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
@@ -246,7 +246,7 @@ function bl64_pkg_set_paths() {
   ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
     BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_RCK}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)

@@ -56,6 +56,7 @@ BashLib64 is a **Bash** automation library that provides a simple abstraction la
 The library has been tested on the following operating systems:
 
 - AlmaLinux8
+- AlmaLinux9
 - Alpine3
 - CentOS7
 - CentOS8
