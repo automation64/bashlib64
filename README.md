@@ -69,6 +69,7 @@ The library has been tested on the following operating systems:
 - Fedora35
 - Fedora37
 - MacOS12
+- MacOS13
   - Requires Bash4 (e.g. homebrew install bash)
 - OracleLinux7
 - OracleLinux8
