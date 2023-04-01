@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 10.3.0
+# Version: 11.0.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -4391,7 +4391,7 @@ function bl64_os_set_lang() {
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.20.0
+# Version: 2.00.0
 #######################################
 
 function _bl64_os_match() {
@@ -4417,7 +4417,22 @@ function _bl64_os_match() {
   return 0
 }
 
-# Warning: bootstrap function
+#######################################
+# Get normalized OS distro and version from uname
+#
+# * Warning: bootstrap function
+# * Use only for OS that do not have /etc/os-release
+# * Normalized data is stored in the global variable BL64_OS_DISTRO
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: os match
+#   >0: error or os not recognized
+#######################################
 function _bl64_os_get_distro_from_uname() {
   bl64_dbg_lib_show_function
   local os_type=''
@@ -4442,7 +4457,21 @@ function _bl64_os_get_distro_from_uname() {
   return 0
 }
 
-# Warning: bootstrap function
+#######################################
+# Get normalized OS distro and version from os-release
+#
+# * Warning: bootstrap function
+# * Normalized data is stored in the global variable BL64_OS_DISTRO
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: os match
+#   >0: error or os not recognized
+#######################################
 function _bl64_os_get_distro_from_os_release() {
   bl64_dbg_lib_show_function
 
@@ -4453,7 +4482,7 @@ function _bl64_os_get_distro_from_os_release() {
   fi
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_ALM}-8*) : ;;
+  ${BL64_OS_ALM}-8* | ${BL64_OS_ALM}-9*) : ;;
   ${BL64_OS_ALP}-3*) BL64_OS_DISTRO="${BL64_OS_ALP}-${VERSION_ID%.*}" ;;
   ${BL64_OS_CNT}-7*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_CNT}-7" ]] && BL64_OS_DISTRO="${BL64_OS_CNT}-7.0" ;;
   ${BL64_OS_CNT}-8*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_CNT}-8" ]] && BL64_OS_DISTRO="${BL64_OS_CNT}-8.0" ;;
@@ -4465,8 +4494,9 @@ function _bl64_os_get_distro_from_os_release() {
   ${BL64_OS_FD}-34*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-34" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-34.0" ;;
   ${BL64_OS_FD}-35*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-35" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-35.0" ;;
   ${BL64_OS_FD}-36*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-36" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-36.0" ;;
+  ${BL64_OS_FD}-37*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-37" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-37.0" ;;
   ${BL64_OS_OL}-7* | ${BL64_OS_OL}-8* | ${BL64_OS_OL}-9*) : ;;
-  ${BL64_OS_RCK}-8*) : ;;
+  ${BL64_OS_RCK}-8* | ${BL64_OS_RCK}-9*) : ;;
   ${BL64_OS_RHEL}-8* | ${BL64_OS_RHEL}-9*) : ;;
   ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21* | ${BL64_OS_UB}-22*) : ;;
   *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;

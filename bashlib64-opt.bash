@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 10.3.0
+# Version: 11.0.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -337,7 +337,7 @@ export _BL64_PKG_TXT_REPOSITORY_ADD='add remote package repository'
 #######################################
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #
-# Version: 1.11.1
+# Version: 1.12.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -351,6 +351,7 @@ export BL64_PY_CMD_PYTHON37="$BL64_VAR_UNAVAILABLE"
 export BL64_PY_CMD_PYTHON38="$BL64_VAR_UNAVAILABLE"
 export BL64_PY_CMD_PYTHON39="$BL64_VAR_UNAVAILABLE"
 export BL64_PY_CMD_PYTHON310="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON311="$BL64_VAR_UNAVAILABLE"
 
 # Full path to the python venv activated by bl64_py_setup
 export BL64_PY_VENV_PATH=''
@@ -4944,7 +4945,7 @@ function bl64_mdb_run_mongoexport() {
 #######################################
 # BashLib64 / Module / Setup / Manage native OS packages
 #
-# Version: 1.5.1
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -4970,7 +4971,7 @@ function bl64_pkg_setup() {
     case "$BL64_OS_DISTRO" in
     ${BL64_OS_FD}-*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
     ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
-    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
+    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
     ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*) bl64_check_command "$BL64_PKG_CMD_YUM" ;;
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*) bl64_check_command "$BL64_PKG_CMD_APT" ;;
     ${BL64_OS_ALP}-*) bl64_check_command "$BL64_PKG_CMD_APK" ;;
@@ -5005,7 +5006,7 @@ function _bl64_pkg_set_command() {
   ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -5053,7 +5054,7 @@ function _bl64_pkg_set_options() {
     BL64_PKG_SET_QUIET='--quiet'
     BL64_PKG_SET_VERBOSE='--color=never --verbose'
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     BL64_PKG_SET_ASSUME_YES='--assumeyes'
     BL64_PKG_SET_SLIM='--nodocs'
     BL64_PKG_SET_QUIET='--quiet'
@@ -5116,7 +5117,7 @@ function _bl64_pkg_set_alias() {
     BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
     BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
     BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
     BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
@@ -5189,7 +5190,7 @@ function bl64_pkg_set_paths() {
   ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
     BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -5213,7 +5214,7 @@ function bl64_pkg_set_paths() {
 #######################################
 # BashLib64 / Module / Functions / Manage native OS packages
 #
-# Version: 2.2.2
+# Version: 3.0.0
 #######################################
 
 #######################################
@@ -5250,8 +5251,8 @@ function bl64_pkg_repository_add() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-* | \
     ${BL64_OS_RHEL}-8.* | ${BL64_OS_RHEL}-9.* | \
-    ${BL64_OS_ALM}-8.* | \
-    ${BL64_OS_RCK}-8.* | \
+    ${BL64_OS_ALM}-8.* | ${BL64_OS_ALM}-9.* | \
+    ${BL64_OS_RCK}-8.* | ${BL64_OS_RCK}-9.* | \
     ${BL64_OS_CNT}-7.* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | \
     ${BL64_OS_OL}-7.* | ${BL64_OS_OL}-8.* | ${BL64_OS_OL}-9.*)
 
@@ -5311,7 +5312,7 @@ function bl64_pkg_repository_refresh() {
   ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
     bl64_pkg_run_dnf 'makecache'
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     bl64_pkg_run_dnf 'makecache'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -5405,7 +5406,7 @@ function bl64_pkg_install() {
   ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -5453,7 +5454,7 @@ function bl64_pkg_upgrade() {
   ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -5501,7 +5502,7 @@ function bl64_pkg_cleanup() {
   ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*)
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -5730,7 +5731,7 @@ function bl64_pkg_run_brew() {
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.12.2
+# Version: 3.0.0
 #######################################
 
 #######################################
@@ -5817,9 +5818,10 @@ function _bl64_py_set_command() {
       BL64_PY_CMD_PYTHON36='/usr/bin/python3'
       BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
       ;;
-    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_FD}-35.* | ${BL64_OS_FD}-36.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
+    ${BL64_OS_FD}-37.*) BL64_PY_CMD_PYTHON311='/usr/bin/python3.11' ;;
     ${BL64_OS_DEB}-9.*) BL64_PY_CMD_PYTHON35='/usr/bin/python3.5' ;;
     ${BL64_OS_DEB}-10.*) BL64_PY_CMD_PYTHON37='/usr/bin/python3.7' ;;
     ${BL64_OS_DEB}-11.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
@@ -5828,12 +5830,15 @@ function _bl64_py_set_command() {
     ${BL64_OS_UB}-22.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
     "${BL64_OS_ALP}-3.14" | "${BL64_OS_ALP}-3.15") BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     "${BL64_OS_ALP}-3.16" | "${BL64_OS_ALP}-3.17") BL64_PY_CMD_PYTHON39='/usr/bin/python3.10' ;;
-    ${BL64_OS_MCOS}-12.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_MCOS}-12.* | ${BL64_OS_MCOS}-13.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     *) bl64_check_alert_unsupported ;;
     esac
 
     # Select best match for default python3
-    if [[ -x "$BL64_PY_CMD_PYTHON310" ]]; then
+    if [[ -x "$BL64_PY_CMD_PYTHON311" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON311"
+      BL64_PY_VERSION_PYTHON3='3.11'
+    elif [[ -x "$BL64_PY_CMD_PYTHON310" ]]; then
       BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON310"
       BL64_PY_VERSION_PYTHON3='3.10'
     elif [[ -x "$BL64_PY_CMD_PYTHON39" ]]; then
