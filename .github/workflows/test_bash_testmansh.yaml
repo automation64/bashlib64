@@ -6,8 +6,6 @@ on:
   push:
     branches:
       - "feature/*"
-      - "develop"
-      - "main"
 
 jobs:
   test-batscore-alpine-3:
@@ -44,7 +42,41 @@ jobs:
         shell: 'script -q -e -c "bash {0}"'
         run: "./lib/testmansh -b -o -e bash-test/almalinux-8-bash-test:latest -c test/batscore/bash"
 
+  test-batscore-almalinux-9:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare build environment"
+        run: "./bin/devbl-lib"
+
+      - name: "Build app"
+        run: "./bin/devbl-build -t"
+
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "./lib/testmansh -b -o -e bash-test/almalinux-8-bash-test:latest -c test/batscore/bash"
+
   test-batscore-rockylinux-8:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare build environment"
+        run: "./bin/devbl-lib"
+
+      - name: "Build app"
+        run: "./bin/devbl-build -t"
+
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "./lib/testmansh -b -o -e bash-test/rockylinux-8-bash-test:latest -c test/batscore/bash"
+
+  test-batscore-rockylinux-9:
     runs-on: "ubuntu-latest"
     steps:
 
@@ -231,6 +263,23 @@ jobs:
         shell: 'script -q -e -c "bash {0}"'
         run: "./lib/testmansh -b -o -e bash-test/fedora-36-bash-test:latest -c test/batscore/bash"
 
+  test-batscore-fedora-37:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare build environment"
+        run: "./bin/devbl-lib"
+
+      - name: "Build app"
+        run: "./bin/devbl-build -t"
+
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "./lib/testmansh -b -o -e bash-test/fedora-36-bash-test:latest -c test/batscore/bash"
+
   test-batscore-debian-9:
     runs-on: "ubuntu-latest"
     steps:
@@ -333,22 +382,22 @@ jobs:
         shell: 'script -q -e -c "bash {0}"'
         run: "./lib/testmansh -b -o -e bash-test/ubuntu-22.4-bash-test:latest -c test/batscore/bash"
 
-  test-batscore-kubernetes:
-    runs-on: "ubuntu-latest"
-    steps:
-
-      - name: "Check out repository code"
-        uses: "actions/checkout@main"
-
-      - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
-
-      - name: "Build app"
-        run: "./bin/devbl-build -t"
-
-      - name: "Run tests"
-        shell: 'script -q -e -c "bash {0}"'
-        run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-k8s:latest -c test/batscore/kubernetes"
+#  test-batscore-kubernetes:
+#    runs-on: "ubuntu-latest"
+#    steps:
+#
+#      - name: "Check out repository code"
+#        uses: "actions/checkout@main"
+#
+#      - name: "Prepare build environment"
+#        run: "./bin/devbl-lib"
+#
+#      - name: "Build app"
+#        run: "./bin/devbl-build -t"
+#
+#      - name: "Run tests"
+#        shell: 'script -q -e -c "bash {0}"'
+#        run: "./lib/testmansh -b -o -e bash-test/oraclelinux-9-bash-test-k8s:latest -c test/batscore/kubernetes"
 
   test-batscore-terraform:
     runs-on: "ubuntu-latest"

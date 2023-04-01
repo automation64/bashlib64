@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- all: added rockylinux9 and almalinux9 support
+- all: added rockylinux9, almalinux9, fedora37, mcos13 support
 
 ## [10.3.0]
 
