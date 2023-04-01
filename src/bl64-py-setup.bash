@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 1.12.2
+# Version: 3.0.0
 #######################################
 
 #######################################
@@ -88,9 +88,10 @@ function _bl64_py_set_command() {
       BL64_PY_CMD_PYTHON36='/usr/bin/python3'
       BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
       ;;
-    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_FD}-35.* | ${BL64_OS_FD}-36.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
+    ${BL64_OS_FD}-37.*) BL64_PY_CMD_PYTHON311='/usr/bin/python3.11' ;;
     ${BL64_OS_DEB}-9.*) BL64_PY_CMD_PYTHON35='/usr/bin/python3.5' ;;
     ${BL64_OS_DEB}-10.*) BL64_PY_CMD_PYTHON37='/usr/bin/python3.7' ;;
     ${BL64_OS_DEB}-11.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
@@ -99,12 +100,15 @@ function _bl64_py_set_command() {
     ${BL64_OS_UB}-22.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
     "${BL64_OS_ALP}-3.14" | "${BL64_OS_ALP}-3.15") BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     "${BL64_OS_ALP}-3.16" | "${BL64_OS_ALP}-3.17") BL64_PY_CMD_PYTHON39='/usr/bin/python3.10' ;;
-    ${BL64_OS_MCOS}-12.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_MCOS}-12.* | ${BL64_OS_MCOS}-13.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     *) bl64_check_alert_unsupported ;;
     esac
 
     # Select best match for default python3
-    if [[ -x "$BL64_PY_CMD_PYTHON310" ]]; then
+    if [[ -x "$BL64_PY_CMD_PYTHON311" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON311"
+      BL64_PY_VERSION_PYTHON3='3.11'
+    elif [[ -x "$BL64_PY_CMD_PYTHON310" ]]; then
       BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON310"
       BL64_PY_VERSION_PYTHON3='3.10'
     elif [[ -x "$BL64_PY_CMD_PYTHON39" ]]; then

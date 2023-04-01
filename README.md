@@ -56,6 +56,7 @@ BashLib64 is a **Bash** automation library that provides a simple abstraction la
 The library has been tested on the following operating systems:
 
 - AlmaLinux8
+- AlmaLinux9
 - Alpine3
 - CentOS7
 - CentOS8
@@ -66,17 +67,21 @@ The library has been tested on the following operating systems:
 - Fedora33
 - Fedora34
 - Fedora35
-- MacOS12
-  - Requires Bash4 (e.g. homebrew install bash)
+- Fedora37
+- MacOS12 (*)
+- MacOS13 (*)
 - OracleLinux7
 - OracleLinux8
 - OracleLinux9
 - RedHatLinux8
 - RedHatLinux9
 - RockyLinux8
+- RockyLinux9
 - Ubuntu20
 - Ubuntu21
 - Ubuntu22
+
+(*) Requires Bash4 (e.g. homebrew install bash)
 
 ### Prerequisites
 
