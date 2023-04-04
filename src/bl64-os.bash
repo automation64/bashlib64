@@ -108,6 +108,12 @@ function _bl64_os_get_distro_from_os_release() {
   ${BL64_OS_OL}-7* | ${BL64_OS_OL}-8* | ${BL64_OS_OL}-9*) : ;;
   ${BL64_OS_RCK}-8* | ${BL64_OS_RCK}-9*) : ;;
   ${BL64_OS_RHEL}-8* | ${BL64_OS_RHEL}-9*) : ;;
+  ${BL64_OS_SLES}-15*)
+    # patern:
+    #  NAME="SLES"
+    #  VERSION_ID="15.4"
+    :
+    ;;
   ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21* | ${BL64_OS_UB}-22*) : ;;
   *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;
   esac
