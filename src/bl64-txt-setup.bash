@@ -34,6 +34,7 @@ function bl64_txt_setup() {
 # * Commands are exported as variables with full path
 # * For AWK the function will determine the best option to match posix awk
 # * Warning: bootstrap function
+# * AWS: provide legacy AWS, posix AWS and modern AWS when available
 #
 # Arguments:
 #   None
@@ -63,14 +64,13 @@ function _bl64_txt_set_command() {
 
     if [[ -x '/usr/bin/gawk' ]]; then
       BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
-      BL64_TXT_SET_AWK_POSIX='--posix'
     elif [[ -x '/usr/bin/mawk' ]]; then
       BL64_TXT_CMD_AWK_POSIX='/usr/bin/mawk'
     fi
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
     BL64_TXT_CMD_AWK='/usr/bin/awk'
+    BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
     BL64_TXT_CMD_BASE64='/usr/bin/base64'
     BL64_TXT_CMD_CUT='/usr/bin/cut'
     BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
@@ -80,8 +80,19 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_SORT='/usr/bin/sort'
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
-
-    BL64_TXT_SET_AWK_POSIX='--posix'
+    ;;
+  ${BL64_OS_SLES}-*)
+    BL64_TXT_CMD_AWK='/var/lib/alternatives/awk'
+    BL64_TXT_CMD_AWK_POSIX='/var/lib/alternatives/awk'
+    BL64_TXT_CMD_BASE64='/usr/bin/base64'
+    BL64_TXT_CMD_CUT='/usr/bin/cut'
+    BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
+    BL64_TXT_CMD_GAWK='/var/lib/alternatives/awk'
+    BL64_TXT_CMD_GREP='/usr/bin/grep'
+    BL64_TXT_CMD_SED='/usr/bin/sed'
+    BL64_TXT_CMD_SORT='/usr/bin/sort'
+    BL64_TXT_CMD_TR='/usr/bin/tr'
+    BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_TXT_CMD_AWK='/usr/bin/awk'
@@ -97,11 +108,11 @@ function _bl64_txt_set_command() {
 
     if [[ -x '/usr/bin/gawk' ]]; then
       BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
-      BL64_TXT_SET_AWK_POSIX='--posix'
     fi
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_TXT_CMD_AWK='/usr/bin/awk'
+    BL64_TXT_CMD_AWK_POSIX='/usr/bin/awk'
     BL64_TXT_CMD_BASE64='/usr/bin/base64'
     BL64_TXT_CMD_CUT='/usr/bin/cut'
     BL64_TXT_CMD_ENVSUBST='/opt/homebrew/bin/envsubst'
@@ -111,14 +122,9 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_SORT='/usr/bin/sort'
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
-
-    BL64_TXT_CMD_AWK_POSIX='/usr/bin/awk'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
-
-
-
 }
 
 #######################################
@@ -144,8 +150,13 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='--quiet'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+
+    if [[ -x '/usr/bin/gawk' ]]; then
+      BL64_TXT_SET_AWK_POSIX='--posix'
+    fi
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_TXT_SET_AWK_POSIX='--posix'
     BL64_TXT_SET_AWS_FS='-F'
     BL64_TXT_SET_GREP_ERE='-E'
     BL64_TXT_SET_GREP_INVERT='-v'
@@ -153,7 +164,17 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_QUIET='--quiet'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
     ;;
+  ${BL64_OS_SLES}-*)
+    BL64_TXT_SET_AWK_POSIX='--posix'
+    BL64_TXT_SET_AWS_FS='-F'
+    BL64_TXT_SET_GREP_ERE='-E'
+    BL64_TXT_SET_GREP_INVERT='-v'
+    BL64_TXT_SET_GREP_NO_CASE='-i'
+    BL64_TXT_SET_GREP_QUIET='-q'
+    BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    ;;
   ${BL64_OS_ALP}-*)
+    BL64_TXT_SET_AWK_POSIX=''
     BL64_TXT_SET_AWS_FS='-F'
     BL64_TXT_SET_GREP_ERE='-E'
     BL64_TXT_SET_GREP_INVERT='-v'
@@ -162,6 +183,7 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
     ;;
   ${BL64_OS_MCOS}-*)
+    BL64_TXT_SET_AWK_POSIX=''
     BL64_TXT_SET_AWS_FS='-F'
     BL64_TXT_SET_GREP_ERE='-E'
     BL64_TXT_SET_GREP_INVERT='-v'
