@@ -51,6 +51,7 @@ export BL64_FS_SET_MV_VERBOSE=''
 export BL64_FS_SET_RM_FORCE=''
 export BL64_FS_SET_RM_RECURSIVE=''
 export BL64_FS_SET_RM_VERBOSE=''
+export BL64_FS_SET_LS_NOCOLOR=''
 
 
 export BL64_FS_UMASK_RW_USER='u=rwx,g=,o='
