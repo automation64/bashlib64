@@ -22,8 +22,8 @@ function bl64_rxtx_setup() {
   bl64_dbg_lib_show_function
 
   _bl64_rxtx_set_command &&
-    _bl64_rxtx_set_alias &&
     _bl64_rxtx_set_options &&
+    _bl64_rxtx_set_alias &&
     BL64_RXTX_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'rxtx'
@@ -57,7 +57,7 @@ function _bl64_rxtx_set_command() {
     ;;
   ${BL64_OS_SLES}-*)
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
-    BL64_RXTX_CMD_WGET='' 
+    BL64_RXTX_CMD_WGET='/usr/bin/wget'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
