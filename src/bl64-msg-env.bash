@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Display messages
 #
-# Version: 2.7.0
+# Version: 2.8.0
 #######################################
 
 export BL64_MSG_MODULE="$BL64_VAR_OFF"
@@ -66,6 +66,7 @@ export BL64_MSG_FORMAT="${BL64_MSG_FORMAT:-$BL64_MSG_FORMAT_FULL}"
 # Message Themes
 #
 
+export BL64_MSG_THEME_ID_ASCII_STD='ascii-std'
 export BL64_MSG_THEME_ASCII_STD_ERROR='(!)'
 export BL64_MSG_THEME_ASCII_STD_WARNING='(*)'
 export BL64_MSG_THEME_ASCII_STD_INFO='(I)'
@@ -82,6 +83,7 @@ export BL64_MSG_THEME_ASCII_STD_FMTHOST=''
 export BL64_MSG_THEME_ASCII_STD_FMTCALLER=''
 export BL64_MSG_THEME_ASCII_STD_FMTTIME=''
 
+export BL64_MSG_THEME_ID_ANSI_STD='ansi-std'
 export BL64_MSG_THEME_ANSI_STD_ERROR='5;37;41'
 export BL64_MSG_THEME_ANSI_STD_WARNING='5;37;43'
 export BL64_MSG_THEME_ANSI_STD_INFO='36'

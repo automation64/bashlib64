@@ -18,7 +18,7 @@ setup() {
 
 @test "bl64_msg_set_theme: set ok" {
 
-  run bl64_msg_set_theme 'BL64_MSG_THEME_ASCII_STD'
+  run bl64_msg_set_theme 'ansi-std'
   assert_success
 
 }
