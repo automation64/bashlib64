@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage OS identity and access service
 #
-# Version: 1.8.0
+# Version: 2.0.0
 #######################################
 
 #######################################

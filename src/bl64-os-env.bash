@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.19.0
+# Version: 2.0.0
 #######################################
 
 export BL64_OS_MODULE="$BL64_VAR_OFF"

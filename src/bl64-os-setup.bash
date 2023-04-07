@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / OS / Identify OS attributes and provide command aliases
 #
-# Version: 2.3.2
+# Version: 3.0.0
 #######################################
 
 #######################################
