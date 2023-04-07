@@ -82,12 +82,12 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
     ;;
   ${BL64_OS_SLES}-*)
-    BL64_TXT_CMD_AWK='/var/lib/alternatives/awk'
-    BL64_TXT_CMD_AWK_POSIX='/var/lib/alternatives/awk'
+    BL64_TXT_CMD_AWK='/usr/bin/gawk'
+    BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
     BL64_TXT_CMD_BASE64='/usr/bin/base64'
     BL64_TXT_CMD_CUT='/usr/bin/cut'
     BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
-    BL64_TXT_CMD_GAWK='/var/lib/alternatives/awk'
+    BL64_TXT_CMD_GAWK='/usr/bin/gawk'
     BL64_TXT_CMD_GREP='/usr/bin/grep'
     BL64_TXT_CMD_SED='/usr/bin/sed'
     BL64_TXT_CMD_SORT='/usr/bin/sort'

@@ -211,7 +211,7 @@ function bl64_pkg_install() {
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
     ;;
-  ${BL64_OS_SLESS}-*)
+  ${BL64_OS_SLES}-*)
     bl64_pkg_run_zypper 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
     ;;
   ${BL64_OS_ALP}-*)
@@ -314,7 +314,7 @@ function bl64_pkg_cleanup() {
     bl64_pkg_run_yum 'clean' 'all'
     ;;
   ${BL64_OS_SLES}-*)
-    bl64_pkg_run_zypper 'clean' 'all'
+    bl64_pkg_run_zypper 'clean' '--all'
     ;;
   ${BL64_OS_ALP}-*)
     bl64_pkg_run_apk 'cache' 'clean'
