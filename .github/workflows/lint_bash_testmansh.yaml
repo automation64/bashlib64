@@ -17,13 +17,13 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run ShellCheck"
         run: "./lib/testmansh -t -c build/bashlib64.bash"

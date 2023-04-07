@@ -16,10 +16,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -33,10 +33,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -50,10 +50,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -67,10 +67,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -84,10 +84,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -101,10 +101,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -118,10 +118,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -135,10 +135,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -152,10 +152,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -169,10 +169,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -186,10 +186,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -203,10 +203,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -220,10 +220,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -237,10 +237,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -254,10 +254,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -271,10 +271,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -288,10 +288,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -305,10 +305,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -322,10 +322,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -339,10 +339,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -356,10 +356,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -373,10 +373,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -390,10 +390,10 @@ jobs:
 #        uses: "actions/checkout@main"
 #
 #      - name: "Prepare build environment"
-#        run: "./bin/devbl-lib"
+#        run: "./bin/dev-lib"
 #
 #      - name: "Build app"
-#        run: "./bin/devbl-build -t"
+#        run: "./bin/dev-build -t"
 #
 #      - name: "Run tests"
 #        shell: 'script -q -e -c "bash {0}"'
@@ -407,10 +407,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -424,10 +424,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -441,10 +441,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
@@ -458,10 +458,10 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/devbl-lib"
+        run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/devbl-build -t"
+        run: "./bin/dev-build -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
