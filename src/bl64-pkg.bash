@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage native OS packages
 #
-# Version: 3.0.0
+# Version: 4.0.0
 #######################################
 
 #######################################
@@ -27,7 +27,6 @@ function bl64_pkg_repository_add() {
   local repository="$1"
   local source="$2"
   local gpgkey="${3:-${BL64_VAR_NULL}}"
-  local definition=''
 
   bl64_check_privilege_root &&
     bl64_check_parameter 'repository' &&
@@ -36,31 +35,13 @@ function bl64_pkg_repository_add() {
 
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_REPOSITORY_ADD (${repository})"
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | \
-    ${BL64_OS_RHEL}-8.* | ${BL64_OS_RHEL}-9.* | \
-    ${BL64_OS_ALM}-8.* | ${BL64_OS_ALM}-9.* | \
-    ${BL64_OS_RCK}-8.* | ${BL64_OS_RCK}-9.* | \
-    ${BL64_OS_CNT}-7.* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | \
-    ${BL64_OS_OL}-7.* | ${BL64_OS_OL}-8.* | ${BL64_OS_OL}-9.*)
-
-    bl64_check_parameter 'gpgkey' || return $?
-    definition="${BL64_PKG_PATH_YUM_REPOS_D}/${repository}.${BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY}"
-    [[ -f "$definition" ]] && bl64_dbg_lib_show_info "repository already created (${definition}). No action taken" && return 0
-
-    bl64_dbg_lib_show_info "create repository definition (${definition})"
-    printf '[%s]
-name=%s
-baseurl=%s
-gpgcheck=1
-enabled=1
-gpgkey=%s\n' \
-      "$repository" \
-      "$repository" \
-      "$source" \
-      "$gpgkey" \
-      >"$definition"
-    ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_check_alert_unsupported
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    _bl64_pkg_repository_add_yum "$repository" "$source" "$gpgkey"
+    ;;
+  ${BL64_OS_SLES}-*)
     bl64_check_alert_unsupported
     ;;
   ${BL64_OS_ALP}-*)
@@ -72,6 +53,31 @@ gpgkey=%s\n' \
   *) bl64_check_alert_unsupported ;;
 
   esac
+}
+
+function _bl64_pkg_repository_add_yum() {
+  bl64_dbg_lib_show_function "$@"
+  local repository="$1"
+  local source="$2"
+  local gpgkey="${3:-${BL64_VAR_NULL}}"
+  local definition=''
+
+  bl64_check_parameter 'gpgkey' || return $?
+  definition="${BL64_PKG_PATH_YUM_REPOS_D}/${repository}.${BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY}"
+  [[ -f "$definition" ]] && bl64_dbg_lib_show_info "repository already created (${definition}). No action taken" && return 0
+
+  bl64_dbg_lib_show_info "create repository definition (${definition})"
+  printf '[%s]
+name=%s
+baseurl=%s
+gpgcheck=1
+enabled=1
+gpgkey=%s\n' \
+    "$repository" \
+    "$repository" \
+    "$source" \
+    "$gpgkey" \
+    >"$definition"
 }
 
 #######################################
@@ -93,6 +99,9 @@ function bl64_pkg_repository_refresh() {
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_REPOSITORY_REFRESH"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'update'
+    ;;
   ${BL64_OS_FD}-*)
     bl64_pkg_run_dnf 'makecache'
     ;;
@@ -105,8 +114,8 @@ function bl64_pkg_repository_refresh() {
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     bl64_pkg_run_yum 'makecache'
     ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'update'
+  ${BL64_OS_SLES}-*)
+    bl64_pkg_run_zypper 'refresh'
     ;;
   ${BL64_OS_ALP}-*)
     bl64_pkg_run_apk 'update'
@@ -187,6 +196,9 @@ function bl64_pkg_install() {
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_INSTALL (${*})"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
+    ;;
   ${BL64_OS_FD}-*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
     ;;
@@ -199,8 +211,8 @@ function bl64_pkg_install() {
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
     ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
+  ${BL64_OS_SLESS}-*)
+    bl64_pkg_run_zypper 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
     ;;
   ${BL64_OS_ALP}-*)
     bl64_pkg_run_apk 'add' -- "$@"
@@ -235,6 +247,9 @@ function bl64_pkg_upgrade() {
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_UPGRADE"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES -- "$@"
+    ;;
   ${BL64_OS_FD}-*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
     ;;
@@ -247,8 +262,8 @@ function bl64_pkg_upgrade() {
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
     ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES -- "$@"
+  ${BL64_OS_SLES}-*)
+    bl64_pkg_run_zypper 'update' $BL64_PKG_SET_ASSUME_YES -- "$@"
     ;;
   ${BL64_OS_ALP}-*)
     bl64_pkg_run_apk 'upgrade' -- "$@"
@@ -283,6 +298,9 @@ function bl64_pkg_cleanup() {
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_CLEAN"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'clean'
+    ;;
   ${BL64_OS_FD}-*)
     bl64_pkg_run_dnf 'clean' 'all'
     ;;
@@ -295,8 +313,8 @@ function bl64_pkg_cleanup() {
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     bl64_pkg_run_yum 'clean' 'all'
     ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'clean'
+  ${BL64_OS_SLES}-*)
+    bl64_pkg_run_zypper 'clean' 'all'
     ;;
   ${BL64_OS_ALP}-*)
     bl64_pkg_run_apk 'cache' 'clean'
@@ -512,5 +530,39 @@ function bl64_pkg_run_brew() {
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_PKG_CMD_BRW" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_pkg_run_zypper() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
+    return $?
+
+  if bl64_dbg_lib_command_enabled; then
+    verbose="$BL64_PKG_SET_VERBOSE"
+  else
+    verbose="$BL64_PKG_SET_QUIET"
+  fi
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_PKG_CMD_ZYPPER" $verbose "$@"
   bl64_dbg_lib_trace_stop
 }
