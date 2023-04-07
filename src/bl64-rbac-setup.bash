@@ -22,8 +22,8 @@ function bl64_rbac_setup() {
   bl64_dbg_lib_show_function
 
   _bl64_rbac_set_command &&
-    _bl64_rbac_set_alias &&
     _bl64_rbac_set_options &&
+    _bl64_rbac_set_alias &&
     BL64_RBAC_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'rbac'
@@ -52,7 +52,17 @@ function _bl64_rbac_set_command() {
     BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
     BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
+    BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
+    BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
+    ;;
+  ${BL64_OS_SLES}-*)
+    BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
+    BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
+    BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
+    ;;
+  ${BL64_OS_ALP}-*)
     BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
     BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
     BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
@@ -88,7 +98,13 @@ function _bl64_rbac_set_alias() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_RBAC_ALIAS_SUDO_ENV="$BL64_RBAC_CMD_SUDO --preserve-env --set-home"
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_RBAC_ALIAS_SUDO_ENV="$BL64_RBAC_CMD_SUDO --preserve-env --set-home"
+    ;;
+   ${BL64_OS_SLES}-*)
+    BL64_RBAC_ALIAS_SUDO_ENV="$BL64_RBAC_CMD_SUDO --preserve-env --set-home"
+    ;;
+   ${BL64_OS_ALP}-*)
     BL64_RBAC_ALIAS_SUDO_ENV="$BL64_RBAC_CMD_SUDO --preserve-env --set-home"
     ;;
   ${BL64_OS_MCOS}-*)
