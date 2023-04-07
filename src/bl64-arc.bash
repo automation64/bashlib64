@@ -22,7 +22,7 @@ function bl64_arc_run_unzip() {
   local verbosity='-qq'
 
   bl64_check_module 'BL64_ARC_MODULE' &&
-  bl64_check_parameters_none "$#" &&
+    bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
   bl64_msg_lib_verbose_enabled && verbosity='-q'
@@ -125,7 +125,18 @@ function bl64_arc_open_tar() {
   cd "$destination"
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_arc_run_tar \
+      --overwrite \
+      --extract \
+      --no-same-owner \
+      --preserve-permissions \
+      --no-acls \
+      --force-local \
+      --auto-compress \
+      --file="$source"
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     bl64_arc_run_tar \
       --overwrite \
       --extract \
