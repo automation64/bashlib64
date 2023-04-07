@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage archive files
 #
-# Version: 1.11.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -137,6 +137,17 @@ function bl64_arc_open_tar() {
       --file="$source"
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    bl64_arc_run_tar \
+      --overwrite \
+      --extract \
+      --no-same-owner \
+      --preserve-permissions \
+      --no-acls \
+      --force-local \
+      --auto-compress \
+      --file="$source"
+    ;;
+  ${BL64_OS_SLES}-*)
     bl64_arc_run_tar \
       --overwrite \
       --extract \
