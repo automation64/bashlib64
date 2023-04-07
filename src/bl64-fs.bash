@@ -208,15 +208,15 @@ function bl64_fs_merge_dir() {
   ${BL64_OS_SLES}-*)
     bl64_fs_cp_dir --no-target-directory "$source" "$target"
     ;;
-  ${BL64_OS_MCOS}-*)
-    # shellcheck disable=SC2086
-    bl64_fs_cp_dir ${source}/ "$target"
-    ;;
   ${BL64_OS_ALP}-*)
     # shellcheck disable=SC2086
     shopt -sq dotglob &&
       bl64_fs_cp_dir ${source}/* -t "$target" &&
       shopt -uq dotglob
+    ;;
+  ${BL64_OS_MCOS}-*)
+    # shellcheck disable=SC2086
+    bl64_fs_cp_dir ${source}/ "$target"
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
