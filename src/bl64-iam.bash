@@ -47,6 +47,12 @@ function bl64_iam_user_add() {
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
       "$login"
     ;;
+  ${BL64_OS_SLES}-*)
+    "$BL64_IAM_CMD_USERADD" \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+      "$login"
+    ;;
   ${BL64_OS_ALP}-*)
     "$BL64_IAM_CMD_USERADD" \
       $BL64_IAM_SET_USERADD_CREATE_HOME \
@@ -108,6 +114,9 @@ function bl64_iam_user_get_id() {
     "${BL64_IAM_CMD_ID}" -u $user
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    "${BL64_IAM_CMD_ID}" -u $user
+    ;;
+  ${BL64_OS_SLES}-*)
     "${BL64_IAM_CMD_ID}" -u $user
     ;;
   ${BL64_OS_ALP}-*)
