@@ -6,21 +6,26 @@
 
 function _bl64_os_match() {
   bl64_dbg_lib_show_function "$@"
-  local os="$1"
-  local target="$2"
-  local version="${target##*-}"
+  local target="$1"
+  local os=''
+  local version=''
 
   if [[ "$target" == +([[:alpha:]])-+([[:digit:]]).+([[:digit:]]) ]]; then
+    os="${target%%-*}"
+    version="${target##*-}"
     bl64_dbg_lib_show_info "Pattern: OOO-V.V [${BL64_OS_DISTRO}] == [${os}-${version}]"
     [[ "$BL64_OS_DISTRO" == "${os}-${version}" ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
   elif [[ "$target" == +([[:alpha:]])-+([[:digit:]]) ]]; then
+    os="${target%%-*}"
+    version="${target##*-}"
     bl64_dbg_lib_show_info "Pattern: OOO-V [${BL64_OS_DISTRO}] == [${os}-${version}.+([[:digit:]])]"
     [[ "$BL64_OS_DISTRO" == ${os}-${version}.+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
   elif [[ "$target" == +([[:alpha:]]) ]]; then
+    os="$target"
     bl64_dbg_lib_show_info "Pattern: OOO [${BL64_OS_DISTRO}] == [${os}]"
     [[ "$BL64_OS_DISTRO" == ${os}-+([[:digit:]]).+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
   else
-    bl64_msg_error "${_BL64_OS_TXT_INVALID_OS_PATTERN} (${target})"
+    bl64_msg_show_error "${_BL64_OS_TXT_INVALID_OS_PATTERN} (${target})"
     return $BL64_LIB_ERROR_OS_TAG_INVALID
   fi
 
@@ -150,52 +155,8 @@ function bl64_os_match() {
   bl64_dbg_lib_show_info "Look for [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
-    case "$item" in
-    "$BL64_OS_ALM" | ${BL64_OS_ALM}-*)
-      _bl64_os_match "$BL64_OS_ALM" "$item"
-      status=$?
-      ;;
-    "$BL64_OS_ALP" | ${BL64_OS_ALP}-*)
-      _bl64_os_match "$BL64_OS_ALP" "$item"
-      status=$?
-      ;;
-    "$BL64_OS_CNT" | ${BL64_OS_CNT}-*)
-      _bl64_os_match "$BL64_OS_CNT" "$item"
-      status=$?
-      ;;
-    "$BL64_OS_DEB" | ${BL64_OS_DEB}-*)
-      _bl64_os_match "$BL64_OS_DEB" "$item"
-      status=$?
-      ;;
-    "$BL64_OS_FD" | ${BL64_OS_FD}-*)
-      _bl64_os_match "$BL64_OS_FD" "$item"
-      status=$?
-      ;;
-    "$BL64_OS_MCOS" | ${BL64_OS_MCOS}-*)
-      _bl64_os_match "$BL64_OS_MCOS" "$item"
-      status=$?
-      ;;
-    "$BL64_OS_OL" | ${BL64_OS_OL}-*)
-      _bl64_os_match "$BL64_OS_OL" "$item"
-      status=$?
-      ;;
-    "$BL64_OS_RCK" | ${BL64_OS_RCK}-*)
-      _bl64_os_match "$BL64_OS_RCK" "$item"
-      status=$?
-      ;;
-    "$BL64_OS_RHEL" | ${BL64_OS_RHEL}-*)
-      _bl64_os_match "$BL64_OS_RHEL" "$item"
-      status=$?
-      ;;
-    "$BL64_OS_UB" | ${BL64_OS_UB}-*)
-      _bl64_os_match "$BL64_OS_UB" "$item"
-      status=$?
-      ;;
-    *)
-      bl64_msg_error "${_BL64_OS_TXT_INVALID_OS_PATTERN} (${item})"
-      return $BL64_LIB_ERROR_OS_TAG_INVALID
-      ;;
-    esac
+    _bl64_os_match "$item"
+    status=$?
     ((status == 0)) && break
   done
 

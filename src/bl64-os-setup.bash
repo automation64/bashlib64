@@ -154,6 +154,9 @@ function _bl64_os_set_runtime() {
     ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
       # Not installed by default, skipping
       ;;
+    ${BL64_OS_SLES}-*)
+      bl64_os_set_lang 'C.UTF-8'
+      ;;
     ${BL64_OS_ALP}-*)
       # Not installed by default, skipping
       ;;
