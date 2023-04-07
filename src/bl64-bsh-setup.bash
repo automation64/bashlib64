@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Bash shell
 #
-# Version: 1.1.0
+# Version: 1.1.1
 #######################################
 
 #######################################
@@ -21,9 +21,10 @@
 function bl64_bsh_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_bsh_set_version ||
-    return $?
-  BL64_BSH_MODULE="$BL64_VAR_ON"
+  bl64_bsh_set_version &&
+    BL64_BSH_MODULE="$BL64_VAR_ON"
+
+  bl64_check_alert_module_setup 'bsh'
 }
 
 #######################################

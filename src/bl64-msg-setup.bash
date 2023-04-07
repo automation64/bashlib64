@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Display messages
 #
-# Version: 3.0.0
+# Version: 3.0.1
 #######################################
 
 #
@@ -37,6 +37,8 @@ function bl64_msg_setup() {
     bl64_msg_set_theme "$BL64_MSG_THEME_ID_ANSI_STD" &&
     bl64_msg_app_enable_verbose &&
     BL64_MSG_MODULE="$BL64_VAR_ON"
+
+  bl64_check_alert_module_setup 'msg'
 }
 
 #######################################

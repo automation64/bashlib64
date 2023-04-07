@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / OS / Identify OS attributes and provide command aliases
 #
-# Version: 2.3.1
+# Version: 2.3.2
 #######################################
 
 #######################################
@@ -31,6 +31,7 @@ function bl64_os_setup() {
     _bl64_os_set_options &&
     BL64_OS_MODULE="$BL64_VAR_ON"
 
+  bl64_check_alert_module_setup 'os'
 }
 
 #######################################
