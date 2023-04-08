@@ -1,9 +1,8 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with AWS
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
-
 
 #
 # Module attributes getters
@@ -20,7 +19,6 @@ function bl64_aws_get_cli_credentials() {
   bl64_check_module 'BL64_AWS_MODULE' || return $?
   echo "$BL64_AWS_CLI_CREDENTIALS"
 }
-
 
 #######################################
 # Setup the bashlib64 module
@@ -67,11 +65,6 @@ function _bl64_aws_set_command() {
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$aws_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_check_directory "$aws_bin" ||
-      return $?
-  fi
-
   if [[ "$aws_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/aws' ]]; then
       aws_bin='/home/linuxbrew/.linuxbrew/bin'
@@ -83,14 +76,14 @@ function _bl64_aws_set_command() {
       aws_bin='/opt/aws/bin'
     elif [[ -x '/usr/bin/aws' ]]; then
       aws_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'aws-cli'
+      return $?
     fi
-  else
-    [[ ! -x "${aws_bin}/aws" ]] && aws_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$aws_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ -x "${aws_bin}/aws" ]] && BL64_AWS_CMD_AWS="${aws_bin}/aws"
-  fi
+  bl64_check_directory "$aws_bin" || return $?
+  [[ -x "${aws_bin}/aws" ]] && BL64_AWS_CMD_AWS="${aws_bin}/aws"
 
   bl64_dbg_lib_show_vars 'BL64_AWS_CMD_AWS'
 }

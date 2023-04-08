@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with HLM
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -64,14 +64,14 @@ function _bl64_hlm_set_command() {
       helm_bin='/opt/helm/bin'
     elif [[ -x '/usr/bin/helm' ]]; then
       helm_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'helm'
+      return $?
     fi
-  else
-    [[ ! -x "${helm_bin}/helm" ]] && helm_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$helm_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ -x "${helm_bin}/helm" ]] && BL64_HLM_CMD_HELM="${helm_bin}/helm"
-  fi
+  bl64_check_directory "$helm_bin" || return $?
+  [[ -x "${helm_bin}/helm" ]] && BL64_HLM_CMD_HELM="${helm_bin}/helm"
 
   bl64_dbg_lib_show_vars 'BL64_HLM_CMD_HELM'
 }

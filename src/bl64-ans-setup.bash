@@ -75,6 +75,9 @@ function _bl64_ans_set_command() {
       ansible_bin='/opt/ansible/bin'
     elif [[ -x '/usr/bin/ansible' ]]; then
       ansible_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'ansible'
+      return $?
     fi
   fi
 
