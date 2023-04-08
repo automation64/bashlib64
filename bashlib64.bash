@@ -4,11 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-<<<<<<< HEAD
-# Version: 11.0.0
-=======
 # Version: 12.0.0
->>>>>>> release/12.0.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -4900,11 +4896,7 @@ function bl64_os_set_lang() {
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-<<<<<<< HEAD
-# Version: 2.00.0
-=======
 # Version: 3.0.0
->>>>>>> release/12.0.0
 #######################################
 
 function _bl64_os_match() {
@@ -11748,11 +11740,7 @@ function bl64_mdb_run_mongoexport() {
 #######################################
 # BashLib64 / Module / Setup / Manage native OS packages
 #
-<<<<<<< HEAD
-# Version: 2.0.0
-=======
 # Version: 3.0.0
->>>>>>> release/12.0.0
 #######################################
 
 #######################################
@@ -11774,19 +11762,7 @@ function bl64_pkg_setup() {
   _bl64_pkg_set_command &&
     _bl64_pkg_set_runtime &&
     _bl64_pkg_set_options &&
-<<<<<<< HEAD
-    case "$BL64_OS_DISTRO" in
-    ${BL64_OS_FD}-*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
-    ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
-    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
-    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*) bl64_check_command "$BL64_PKG_CMD_YUM" ;;
-    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*) bl64_check_command "$BL64_PKG_CMD_APT" ;;
-    ${BL64_OS_ALP}-*) bl64_check_command "$BL64_PKG_CMD_APK" ;;
-    ${BL64_OS_MCOS}-*) bl64_check_command "$BL64_PKG_CMD_BRW" ;;
-    esac &&
-=======
     _bl64_pkg_set_alias &&
->>>>>>> release/12.0.0
     BL64_PKG_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'pkg'
@@ -12039,11 +12015,7 @@ function bl64_pkg_set_paths() {
 #######################################
 # BashLib64 / Module / Functions / Manage native OS packages
 #
-<<<<<<< HEAD
-# Version: 3.0.0
-=======
 # Version: 4.0.0
->>>>>>> release/12.0.0
 #######################################
 
 #######################################
@@ -12077,33 +12049,6 @@ function bl64_pkg_repository_add() {
 
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_REPOSITORY_ADD (${repository})"
   case "$BL64_OS_DISTRO" in
-<<<<<<< HEAD
-  ${BL64_OS_FD}-* | \
-    ${BL64_OS_RHEL}-8.* | ${BL64_OS_RHEL}-9.* | \
-    ${BL64_OS_ALM}-8.* | ${BL64_OS_ALM}-9.* | \
-    ${BL64_OS_RCK}-8.* | ${BL64_OS_RCK}-9.* | \
-    ${BL64_OS_CNT}-7.* | ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | \
-    ${BL64_OS_OL}-7.* | ${BL64_OS_OL}-8.* | ${BL64_OS_OL}-9.*)
-
-    bl64_check_parameter 'gpgkey' || return $?
-    definition="${BL64_PKG_PATH_YUM_REPOS_D}/${repository}.${BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY}"
-    [[ -f "$definition" ]] && bl64_dbg_lib_show_info "repository already created (${definition}). No action taken" && return 0
-
-    bl64_dbg_lib_show_info "create repository definition (${definition})"
-    printf '[%s]
-name=%s
-baseurl=%s
-gpgcheck=1
-enabled=1
-gpgkey=%s\n' \
-      "$repository" \
-      "$repository" \
-      "$source" \
-      "$gpgkey" \
-      >"$definition"
-    ;;
-=======
->>>>>>> release/12.0.0
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_check_alert_unsupported
     ;;
@@ -12639,11 +12584,7 @@ function bl64_pkg_run_zypper() {
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-<<<<<<< HEAD
-# Version: 3.0.0
-=======
 # Version: 4.0.0
->>>>>>> release/12.0.0
 #######################################
 
 #######################################
