@@ -4,7 +4,11 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
+<<<<<<< HEAD
+# Version: 11.0.0
+=======
 # Version: 12.0.0
+>>>>>>> release/12.0.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -4507,7 +4511,11 @@ function bl64_os_set_lang() {
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
+<<<<<<< HEAD
+# Version: 2.00.0
+=======
 # Version: 3.0.0
+>>>>>>> release/12.0.0
 #######################################
 
 function _bl64_os_match() {
