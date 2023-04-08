@@ -65,7 +65,7 @@ function _bl64_os_set_command() {
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/usr/bin/cat'
-    BL64_OS_CMD_DATE=/usr'/bin/date'
+    BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
@@ -75,9 +75,9 @@ function _bl64_os_set_command() {
   ${BL64_OS_SLES}-*)
     BL64_OS_CMD_BASH='/usr/bin/bash'
     BL64_OS_CMD_CAT='/usr/bin/cat'
-    BL64_OS_CMD_DATE=/usr'/usr/bin/date'
+    BL64_OS_CMD_DATE='/usr/bin/date'
     BL64_OS_CMD_FALSE='/usr/bin/false'
-    BL64_OS_CMD_HOSTNAME='/etc/hostname'
+    BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/usr/bin/uname'
