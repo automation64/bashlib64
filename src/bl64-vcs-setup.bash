@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage Version Control System
 #
-# Version: 2.1.0
+# Version: 3.0.0
 #######################################
 
 #######################################
@@ -46,7 +46,19 @@ function bl64_vcs_setup() {
 function _bl64_vcs_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-* | ${BL64_OS_MCOS}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_VCS_CMD_GIT='/usr/bin/git'
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_VCS_CMD_GIT='/usr/bin/git'
+    ;;
+  ${BL64_OS_SLES}-*)
+    BL64_VCS_CMD_GIT='/usr/bin/git'
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_VCS_CMD_GIT='/usr/bin/git'
+    ;;
+  ${BL64_OS_MCOS}-*)
     BL64_VCS_CMD_GIT='/usr/bin/git'
     ;;
   *) bl64_check_alert_unsupported ;;

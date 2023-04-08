@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with GCP
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -20,11 +20,6 @@
 function bl64_gcp_setup() {
   bl64_dbg_lib_show_function "$@"
   local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
-
-  if [[ "$gcloud_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_check_directory "$gcloud_bin" ||
-      return $?
-  fi
 
   _bl64_gcp_set_command "$gcloud_bin" &&
     _bl64_gcp_set_options &&
@@ -61,14 +56,14 @@ function _bl64_gcp_set_command() {
       gcloud_bin='/usr/local/bin'
     elif [[ -x '/usr/bin/gcloud' ]]; then
       gcloud_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'gcloud'
+      return $?
     fi
-  else
-    [[ ! -x "${gcloud_bin}/gcloud" ]] && gcloud_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$gcloud_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ -x "${gcloud_bin}/gcloud" ]] && BL64_GCP_CMD_GCLOUD="${gcloud_bin}/gcloud"
-  fi
+  bl64_check_directory "$gcloud_bin" || return $?
+  [[ -x "${gcloud_bin}/gcloud" ]] && BL64_GCP_CMD_GCLOUD="${gcloud_bin}/gcloud"
 
   bl64_dbg_lib_show_vars 'BL64_GCP_CMD_GCLOUD'
 }

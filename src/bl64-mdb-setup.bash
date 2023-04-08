@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with MongoDB
 #
-# Version: 1.1.1
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -20,11 +20,6 @@
 function bl64_mdb_setup() {
   bl64_dbg_lib_show_function "$@"
   local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
-
-  if [[ "$mdb_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_check_directory "$mdb_bin" ||
-      return $?
-  fi
 
   _bl64_mdb_set_command "$mdb_bin" &&
     bl64_check_command "$BL64_MDB_CMD_MONGOSH" &&
@@ -66,16 +61,16 @@ function _bl64_mdb_set_command() {
       mdb_bin='/opt/mongosh/bin'
     elif [[ -x '/usr/bin/mongosh' ]]; then
       mdb_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'mongo-shell'
+      return $?
     fi
-  else
-    [[ ! -x "${mdb_bin}/mongosh" ]] && mdb_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$mdb_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ -x "${mdb_bin}/mongosh" ]] && BL64_MDB_CMD_MONGOSH="${mdb_bin}/mongosh"
-    [[ -x "${mdb_bin}/mongorestore" ]] && BL64_MDB_CMD_MONGORESTORE="${mdb_bin}/mongorestore"
-    [[ -x "${mdb_bin}/mongoexport" ]] && BL64_MDB_CMD_MONGOEXPORT="${mdb_bin}/mongoexport"
-  fi
+  bl64_check_directory "$mdb_bin" || return $?
+  [[ -x "${mdb_bin}/mongosh" ]] && BL64_MDB_CMD_MONGOSH="${mdb_bin}/mongosh"
+  [[ -x "${mdb_bin}/mongorestore" ]] && BL64_MDB_CMD_MONGORESTORE="${mdb_bin}/mongorestore"
+  [[ -x "${mdb_bin}/mongoexport" ]] && BL64_MDB_CMD_MONGOEXPORT="${mdb_bin}/mongoexport"
 
   bl64_dbg_lib_show_vars 'BL64_MDB_CMD_MONGOSH'
 }

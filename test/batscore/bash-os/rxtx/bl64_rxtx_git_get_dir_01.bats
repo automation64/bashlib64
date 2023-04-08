@@ -21,6 +21,6 @@ teardown() {
     "$test_dir"
   assert_success
 
-  assert_file_exists "${test_dir}/devbl-set"
+  assert_file_exists "${test_dir}/dev-set"
 
 }

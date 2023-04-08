@@ -6,6 +6,12 @@
 {% include "../src/bl64-fmt-env.bash" %}
 ```
 
+## Setup
+
+```shell
+{% include "../src/bl64-fmt.init" %}
+```
+
 ## Code
 
 ```shell

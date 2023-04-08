@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Ansible CLI
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 #######################################
@@ -36,8 +36,7 @@ function bl64_ans_setup() {
     _bl64_ans_set_options &&
     _bl64_ans_set_version &&
     BL64_ANS_MODULE="$BL64_VAR_ON" &&
-    BL64_ANS_ENV_IGNORE="$env_ignore" ||
-    return $?
+    BL64_ANS_ENV_IGNORE="$env_ignore"
 
   bl64_check_alert_module_setup 'ans'
 }
@@ -61,6 +60,7 @@ function _bl64_ans_set_command() {
   local ansible_bin="$1"
 
   if [[ "$ansible_bin" == "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_info 'no custom path provided. Using known locations to detect ansible'
     if [[ -n "$BL64_PY_VENV_PATH" && -x "${BL64_PY_VENV_PATH}/bin/ansible" ]]; then
       ansible_bin="${BL64_PY_VENV_PATH}/bin"
     elif [[ -n "$HOME" && -x "${HOME}/.local/bin/ansible" ]]; then
@@ -75,14 +75,16 @@ function _bl64_ans_set_command() {
       ansible_bin='/opt/ansible/bin'
     elif [[ -x '/usr/bin/ansible' ]]; then
       ansible_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'ansible'
+      return $?
     fi
   fi
 
-  if [[ "$ansible_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ -x "${ansible_bin}/ansible" ]] && BL64_ANS_CMD_ANSIBLE="${ansible_bin}/ansible"
-    [[ -x "${ansible_bin}/ansible-galaxy" ]] && BL64_ANS_CMD_ANSIBLE_GALAXY="${ansible_bin}/ansible-galaxy"
-    [[ -x "${ansible_bin}/ansible-playbook" ]] && BL64_ANS_CMD_ANSIBLE_PLAYBOOK="${ansible_bin}/ansible-playbook"
-  fi
+  bl64_check_directory "$ansible_bin" || return $?
+  [[ -x "${ansible_bin}/ansible" ]] && BL64_ANS_CMD_ANSIBLE="${ansible_bin}/ansible"
+  [[ -x "${ansible_bin}/ansible-galaxy" ]] && BL64_ANS_CMD_ANSIBLE_GALAXY="${ansible_bin}/ansible-galaxy"
+  [[ -x "${ansible_bin}/ansible-playbook" ]] && BL64_ANS_CMD_ANSIBLE_PLAYBOOK="${ansible_bin}/ansible-playbook"
 
   bl64_dbg_lib_show_vars 'BL64_ANS_CMD_ANSIBLE' 'BL64_ANS_CMD_ANSIBLE_GALAXY' 'BL64_ANS_CMD_ANSIBLE_PLAYBOOK'
   return 0

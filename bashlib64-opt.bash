@@ -4,7 +4,11 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
+<<<<<<< HEAD
 # Version: 11.0.0
+=======
+# Version: 12.0.0
+>>>>>>> release/12.0.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -289,7 +293,7 @@ export BL64_MDB_REPLICA_TIMEOUT=''
 #######################################
 # BashLib64 / Module / Globals / Manage native OS packages
 #
-# Version: 1.10.0
+# Version: 1.11.0
 #######################################
 
 export BL64_PKG_MODULE="$BL64_VAR_OFF"
@@ -299,6 +303,7 @@ export BL64_PKG_CMD_APT=''
 export BL64_PKG_CMD_BRW=''
 export BL64_PKG_CMD_DNF=''
 export BL64_PKG_CMD_YUM=''
+export BL64_PKG_CMD_ZYPPER=''
 
 export BL64_PKG_ALIAS_APK_CLEAN=''
 export BL64_PKG_ALIAS_APK_INSTALL=''
@@ -413,7 +418,7 @@ export BL64_TF_DEF_PATH_RUNTIME=''
 #######################################
 # BashLib64 / Module / Setup / Manage archive files
 #
-# Version: 1.5.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -458,7 +463,19 @@ function bl64_arc_setup() {
 function _bl64_arc_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_ARC_CMD_TAR='/bin/tar'
+    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_ARC_CMD_TAR='/bin/tar'
+    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    ;;
+  ${BL64_OS_SLES}-*)
+    BL64_ARC_CMD_TAR='/bin/tar'
+    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    ;;
+  ${BL64_OS_ALP}-*)
     BL64_ARC_CMD_TAR='/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
     ;;
@@ -485,12 +502,24 @@ function _bl64_arc_set_command() {
 #######################################
 function _bl64_arc_set_options() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_MCOS}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_ARC_SET_TAR_VERBOSE='--verbose'
+    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_ARC_SET_TAR_VERBOSE='--verbose'
+    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+    ;;
+  ${BL64_OS_SLES}-*)
     BL64_ARC_SET_TAR_VERBOSE='--verbose'
     BL64_ARC_SET_UNZIP_OVERWRITE='-o'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_ARC_SET_TAR_VERBOSE='-v'
+    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_ARC_SET_TAR_VERBOSE='--verbose'
     BL64_ARC_SET_UNZIP_OVERWRITE='-o'
     ;;
   *) bl64_check_alert_unsupported ;;
@@ -500,7 +529,7 @@ function _bl64_arc_set_options() {
 #######################################
 # BashLib64 / Module / Functions / Manage archive files
 #
-# Version: 1.11.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -521,7 +550,7 @@ function bl64_arc_run_unzip() {
   local verbosity='-qq'
 
   bl64_check_module 'BL64_ARC_MODULE' &&
-  bl64_check_parameters_none "$#" &&
+    bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
   bl64_msg_lib_verbose_enabled && verbosity='-q'
@@ -624,7 +653,29 @@ function bl64_arc_open_tar() {
   cd "$destination"
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_arc_run_tar \
+      --overwrite \
+      --extract \
+      --no-same-owner \
+      --preserve-permissions \
+      --no-acls \
+      --force-local \
+      --auto-compress \
+      --file="$source"
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    bl64_arc_run_tar \
+      --overwrite \
+      --extract \
+      --no-same-owner \
+      --preserve-permissions \
+      --no-acls \
+      --force-local \
+      --auto-compress \
+      --file="$source"
+    ;;
+  ${BL64_OS_SLES}-*)
     bl64_arc_run_tar \
       --overwrite \
       --extract \
@@ -703,7 +754,7 @@ function bl64_arc_open_zip() {
 #######################################
 # BashLib64 / Module / Setup / Interact with Ansible CLI
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 #######################################
@@ -738,8 +789,7 @@ function bl64_ans_setup() {
     _bl64_ans_set_options &&
     _bl64_ans_set_version &&
     BL64_ANS_MODULE="$BL64_VAR_ON" &&
-    BL64_ANS_ENV_IGNORE="$env_ignore" ||
-    return $?
+    BL64_ANS_ENV_IGNORE="$env_ignore"
 
   bl64_check_alert_module_setup 'ans'
 }
@@ -763,6 +813,7 @@ function _bl64_ans_set_command() {
   local ansible_bin="$1"
 
   if [[ "$ansible_bin" == "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_info 'no custom path provided. Using known locations to detect ansible'
     if [[ -n "$BL64_PY_VENV_PATH" && -x "${BL64_PY_VENV_PATH}/bin/ansible" ]]; then
       ansible_bin="${BL64_PY_VENV_PATH}/bin"
     elif [[ -n "$HOME" && -x "${HOME}/.local/bin/ansible" ]]; then
@@ -777,14 +828,16 @@ function _bl64_ans_set_command() {
       ansible_bin='/opt/ansible/bin'
     elif [[ -x '/usr/bin/ansible' ]]; then
       ansible_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'ansible'
+      return $?
     fi
   fi
 
-  if [[ "$ansible_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ -x "${ansible_bin}/ansible" ]] && BL64_ANS_CMD_ANSIBLE="${ansible_bin}/ansible"
-    [[ -x "${ansible_bin}/ansible-galaxy" ]] && BL64_ANS_CMD_ANSIBLE_GALAXY="${ansible_bin}/ansible-galaxy"
-    [[ -x "${ansible_bin}/ansible-playbook" ]] && BL64_ANS_CMD_ANSIBLE_PLAYBOOK="${ansible_bin}/ansible-playbook"
-  fi
+  bl64_check_directory "$ansible_bin" || return $?
+  [[ -x "${ansible_bin}/ansible" ]] && BL64_ANS_CMD_ANSIBLE="${ansible_bin}/ansible"
+  [[ -x "${ansible_bin}/ansible-galaxy" ]] && BL64_ANS_CMD_ANSIBLE_GALAXY="${ansible_bin}/ansible-galaxy"
+  [[ -x "${ansible_bin}/ansible-playbook" ]] && BL64_ANS_CMD_ANSIBLE_PLAYBOOK="${ansible_bin}/ansible-playbook"
 
   bl64_dbg_lib_show_vars 'BL64_ANS_CMD_ANSIBLE' 'BL64_ANS_CMD_ANSIBLE_GALAXY' 'BL64_ANS_CMD_ANSIBLE_PLAYBOOK'
   return 0
@@ -1093,9 +1146,8 @@ function bl64_ans_blank_ansible() {
 #######################################
 # BashLib64 / Module / Setup / Interact with AWS
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
-
 
 #
 # Module attributes getters
@@ -1112,7 +1164,6 @@ function bl64_aws_get_cli_credentials() {
   bl64_check_module 'BL64_AWS_MODULE' || return $?
   echo "$BL64_AWS_CLI_CREDENTIALS"
 }
-
 
 #######################################
 # Setup the bashlib64 module
@@ -1159,11 +1210,6 @@ function _bl64_aws_set_command() {
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$aws_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_check_directory "$aws_bin" ||
-      return $?
-  fi
-
   if [[ "$aws_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/aws' ]]; then
       aws_bin='/home/linuxbrew/.linuxbrew/bin'
@@ -1175,14 +1221,14 @@ function _bl64_aws_set_command() {
       aws_bin='/opt/aws/bin'
     elif [[ -x '/usr/bin/aws' ]]; then
       aws_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'aws-cli'
+      return $?
     fi
-  else
-    [[ ! -x "${aws_bin}/aws" ]] && aws_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$aws_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ -x "${aws_bin}/aws" ]] && BL64_AWS_CMD_AWS="${aws_bin}/aws"
-  fi
+  bl64_check_directory "$aws_bin" || return $?
+  [[ -x "${aws_bin}/aws" ]] && BL64_AWS_CMD_AWS="${aws_bin}/aws"
 
   bl64_dbg_lib_show_vars 'BL64_AWS_CMD_AWS'
 }
@@ -1591,7 +1637,7 @@ function bl64_aws_blank_aws() {
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.9.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -1658,7 +1704,19 @@ function _bl64_cnt_set_command() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_CNT_CMD_PODMAN='/usr/bin/podman'
+    BL64_CNT_CMD_DOCKER='/usr/bin/docker'
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_CNT_CMD_PODMAN='/usr/bin/podman'
+    BL64_CNT_CMD_DOCKER='/usr/bin/docker'
+    ;;
+  ${BL64_OS_SLES}-*)
+    BL64_CNT_CMD_PODMAN='/usr/bin/podman'
+    BL64_CNT_CMD_DOCKER='/usr/bin/docker'
+    ;;
+  ${BL64_OS_ALP}-*)
     BL64_CNT_CMD_PODMAN='/usr/bin/podman'
     BL64_CNT_CMD_DOCKER='/usr/bin/docker'
     ;;
@@ -1720,7 +1778,16 @@ function bl64_cnt_set_paths() {
   bl64_dbg_lib_show_function "$@"
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
+    ;;
+  ${BL64_OS_SLES}-*)
+    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
+    ;;
+  ${BL64_OS_ALP}-*)
     BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
     ;;
   ${BL64_OS_MCOS}-*)
@@ -2797,7 +2864,7 @@ function _bl64_cnt_podman_ps_filter() {
 #######################################
 # BashLib64 / Module / Setup / Interact with GCP
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -2816,11 +2883,6 @@ function _bl64_cnt_podman_ps_filter() {
 function bl64_gcp_setup() {
   bl64_dbg_lib_show_function "$@"
   local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
-
-  if [[ "$gcloud_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_check_directory "$gcloud_bin" ||
-      return $?
-  fi
 
   _bl64_gcp_set_command "$gcloud_bin" &&
     _bl64_gcp_set_options &&
@@ -2857,14 +2919,14 @@ function _bl64_gcp_set_command() {
       gcloud_bin='/usr/local/bin'
     elif [[ -x '/usr/bin/gcloud' ]]; then
       gcloud_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'gcloud'
+      return $?
     fi
-  else
-    [[ ! -x "${gcloud_bin}/gcloud" ]] && gcloud_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$gcloud_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ -x "${gcloud_bin}/gcloud" ]] && BL64_GCP_CMD_GCLOUD="${gcloud_bin}/gcloud"
-  fi
+  bl64_check_directory "$gcloud_bin" || return $?
+  [[ -x "${gcloud_bin}/gcloud" ]] && BL64_GCP_CMD_GCLOUD="${gcloud_bin}/gcloud"
 
   bl64_dbg_lib_show_vars 'BL64_GCP_CMD_GCLOUD'
 }
@@ -3039,7 +3101,7 @@ function bl64_gcp_blank_gcloud() {
 #######################################
 # BashLib64 / Module / Setup / Interact with HLM
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -3102,14 +3164,14 @@ function _bl64_hlm_set_command() {
       helm_bin='/opt/helm/bin'
     elif [[ -x '/usr/bin/helm' ]]; then
       helm_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'helm'
+      return $?
     fi
-  else
-    [[ ! -x "${helm_bin}/helm" ]] && helm_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$helm_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ -x "${helm_bin}/helm" ]] && BL64_HLM_CMD_HELM="${helm_bin}/helm"
-  fi
+  bl64_check_directory "$helm_bin" || return $?
+  [[ -x "${helm_bin}/helm" ]] && BL64_HLM_CMD_HELM="${helm_bin}/helm"
 
   bl64_dbg_lib_show_vars 'BL64_HLM_CMD_HELM'
 }
@@ -3335,7 +3397,7 @@ function bl64_hlm_blank_helm() {
 #######################################
 # BashLib64 / Module / Setup / Manage OS identity and access service
 #
-# Version: 1.4.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -3382,7 +3444,15 @@ function _bl64_iam_set_command() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
+    BL64_IAM_CMD_ID='/usr/bin/id'
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
+    BL64_IAM_CMD_ID='/usr/bin/id'
+    ;;
+  ${BL64_OS_SLES}-*)
     BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
     BL64_IAM_CMD_ID='/usr/bin/id'
     ;;
@@ -3417,7 +3487,13 @@ function _bl64_iam_set_alias() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
+    ;;
+  ${BL64_OS_SLES}-*)
     BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
     ;;
   ${BL64_OS_ALP}-*)
@@ -3447,7 +3523,15 @@ function _bl64_iam_set_options() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
+    BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
+    BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
+    ;;
+  ${BL64_OS_SLES}-*)
     BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
     BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
     ;;
@@ -3468,7 +3552,7 @@ function _bl64_iam_set_options() {
 #######################################
 # BashLib64 / Module / Functions / Manage OS identity and access service
 #
-# Version: 1.8.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -3502,7 +3586,19 @@ function bl64_iam_user_add() {
   bl64_msg_show_lib_task "$_BL64_IAM_TXT_ADD_USER ($login)"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    "$BL64_IAM_CMD_USERADD" \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+      "$login"
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    "$BL64_IAM_CMD_USERADD" \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+      "$login"
+    ;;
+  ${BL64_OS_SLES}-*)
     "$BL64_IAM_CMD_USERADD" \
       $BL64_IAM_SET_USERADD_CREATE_HOME \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
@@ -3565,7 +3661,13 @@ function bl64_iam_user_get_id() {
 
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    "${BL64_IAM_CMD_ID}" -u $user
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    "${BL64_IAM_CMD_ID}" -u $user
+    ;;
+  ${BL64_OS_SLES}-*)
     "${BL64_IAM_CMD_ID}" -u $user
     ;;
   ${BL64_OS_ALP}-*)
@@ -3598,7 +3700,7 @@ function bl64_iam_user_get_current() {
 #######################################
 # BashLib64 / Module / Setup / Interact with Kubernetes
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -3652,6 +3754,7 @@ function _bl64_k8s_set_command() {
   local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   if [[ "$kubectl_bin" == "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_info 'no custom path provided. Using known locations to detect ansible'
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/kubectl' ]]; then
       kubectl_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/kubectl' ]]; then
@@ -3660,14 +3763,14 @@ function _bl64_k8s_set_command() {
       kubectl_bin='/usr/local/bin'
     elif [[ -x '/usr/bin/kubectl' ]]; then
       kubectl_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'kubectl'
+      return $?
     fi
-  else
-    [[ ! -x "${kubectl_bin}/kubectl" ]] && kubectl_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$kubectl_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ -x "${kubectl_bin}/kubectl" ]] && BL64_K8S_CMD_KUBECTL="${kubectl_bin}/kubectl"
-  fi
+  bl64_check_directory "$kubectl_bin" || return $?
+  [[ -x "${kubectl_bin}/kubectl" ]] && BL64_K8S_CMD_KUBECTL="${kubectl_bin}/kubectl"
 
   bl64_dbg_lib_show_vars 'BL64_K8S_CMD_KUBECTL'
 }
@@ -4590,7 +4693,7 @@ function bl64_log_warning() {
 #######################################
 # BashLib64 / Module / Setup / Interact with MongoDB
 #
-# Version: 1.1.1
+# Version: 1.2.0
 #######################################
 
 #######################################
@@ -4609,11 +4712,6 @@ function bl64_log_warning() {
 function bl64_mdb_setup() {
   bl64_dbg_lib_show_function "$@"
   local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
-
-  if [[ "$mdb_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_check_directory "$mdb_bin" ||
-      return $?
-  fi
 
   _bl64_mdb_set_command "$mdb_bin" &&
     bl64_check_command "$BL64_MDB_CMD_MONGOSH" &&
@@ -4655,16 +4753,16 @@ function _bl64_mdb_set_command() {
       mdb_bin='/opt/mongosh/bin'
     elif [[ -x '/usr/bin/mongosh' ]]; then
       mdb_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'mongo-shell'
+      return $?
     fi
-  else
-    [[ ! -x "${mdb_bin}/mongosh" ]] && mdb_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$mdb_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ -x "${mdb_bin}/mongosh" ]] && BL64_MDB_CMD_MONGOSH="${mdb_bin}/mongosh"
-    [[ -x "${mdb_bin}/mongorestore" ]] && BL64_MDB_CMD_MONGORESTORE="${mdb_bin}/mongorestore"
-    [[ -x "${mdb_bin}/mongoexport" ]] && BL64_MDB_CMD_MONGOEXPORT="${mdb_bin}/mongoexport"
-  fi
+  bl64_check_directory "$mdb_bin" || return $?
+  [[ -x "${mdb_bin}/mongosh" ]] && BL64_MDB_CMD_MONGOSH="${mdb_bin}/mongosh"
+  [[ -x "${mdb_bin}/mongorestore" ]] && BL64_MDB_CMD_MONGORESTORE="${mdb_bin}/mongorestore"
+  [[ -x "${mdb_bin}/mongoexport" ]] && BL64_MDB_CMD_MONGOEXPORT="${mdb_bin}/mongoexport"
 
   bl64_dbg_lib_show_vars 'BL64_MDB_CMD_MONGOSH'
 }
@@ -4945,7 +5043,11 @@ function bl64_mdb_run_mongoexport() {
 #######################################
 # BashLib64 / Module / Setup / Manage native OS packages
 #
+<<<<<<< HEAD
 # Version: 2.0.0
+=======
+# Version: 3.0.0
+>>>>>>> release/12.0.0
 #######################################
 
 #######################################
@@ -4966,8 +5068,8 @@ function bl64_pkg_setup() {
   # shellcheck disable=SC2249
   _bl64_pkg_set_command &&
     _bl64_pkg_set_runtime &&
-    _bl64_pkg_set_alias &&
     _bl64_pkg_set_options &&
+<<<<<<< HEAD
     case "$BL64_OS_DISTRO" in
     ${BL64_OS_FD}-*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
     ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
@@ -4977,6 +5079,9 @@ function bl64_pkg_setup() {
     ${BL64_OS_ALP}-*) bl64_check_command "$BL64_PKG_CMD_APK" ;;
     ${BL64_OS_MCOS}-*) bl64_check_command "$BL64_PKG_CMD_BRW" ;;
     esac &&
+=======
+    _bl64_pkg_set_alias &&
+>>>>>>> release/12.0.0
     BL64_PKG_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'pkg'
@@ -5000,6 +5105,9 @@ function bl64_pkg_setup() {
 function _bl64_pkg_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_PKG_CMD_APT='/usr/bin/apt-get'
+    ;;
   ${BL64_OS_FD}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
@@ -5012,8 +5120,8 @@ function _bl64_pkg_set_command() {
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     BL64_PKG_CMD_YUM='/usr/bin/yum'
     ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_PKG_CMD_APT='/usr/bin/apt-get'
+  ${BL64_OS_SLES}-*)
+    BL64_PKG_CMD_ZYPPER='/usr/bin/zypper'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_PKG_CMD_APK='/sbin/apk'
@@ -5042,6 +5150,12 @@ function _bl64_pkg_set_options() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_PKG_SET_ASSUME_YES='--assume-yes'
+    BL64_PKG_SET_SLIM=' '
+    BL64_PKG_SET_QUIET='--quiet --quiet'
+    BL64_PKG_SET_VERBOSE='--show-progress'
+    ;;
   ${BL64_OS_FD}-*)
     BL64_PKG_SET_ASSUME_YES='--assumeyes'
     BL64_PKG_SET_SLIM='--nodocs'
@@ -5066,11 +5180,11 @@ function _bl64_pkg_set_options() {
     BL64_PKG_SET_QUIET='--quiet'
     BL64_PKG_SET_VERBOSE='--color=never --verbose'
     ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_PKG_SET_ASSUME_YES='--assume-yes'
+  ${BL64_OS_SLES}-15.*)
+    BL64_PKG_SET_ASSUME_YES='--no-confirm'
     BL64_PKG_SET_SLIM=' '
-    BL64_PKG_SET_QUIET='--quiet --quiet'
-    BL64_PKG_SET_VERBOSE='--show-progress'
+    BL64_PKG_SET_QUIET='--quiet'
+    BL64_PKG_SET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_PKG_SET_ASSUME_YES=' '
@@ -5131,6 +5245,9 @@ function _bl64_pkg_set_alias() {
     BL64_PKG_ALIAS_APT_CACHE="$BL64_PKG_CMD_APT update"
     BL64_PKG_ALIAS_APT_INSTALL="$BL64_PKG_CMD_APT install ${BL64_PKG_SET_ASSUME_YES} ${BL64_PKG_SET_VERBOSE}"
     BL64_PKG_ALIAS_APT_CLEAN="$BL64_PKG_CMD_APT clean"
+    ;;
+  ${BL64_OS_SLES}-*)
+    :
     ;;
   ${BL64_OS_ALP}-*)
     BL64_PKG_ALIAS_APK_CACHE="$BL64_PKG_CMD_APK update ${BL64_PKG_SET_VERBOSE}"
@@ -5199,6 +5316,9 @@ function bl64_pkg_set_paths() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     :
     ;;
+  ${BL64_OS_SLES}-*)
+    :
+    ;;
   ${BL64_OS_ALP}-*)
     :
     ;;
@@ -5214,7 +5334,11 @@ function bl64_pkg_set_paths() {
 #######################################
 # BashLib64 / Module / Functions / Manage native OS packages
 #
+<<<<<<< HEAD
 # Version: 3.0.0
+=======
+# Version: 4.0.0
+>>>>>>> release/12.0.0
 #######################################
 
 #######################################
@@ -5240,7 +5364,6 @@ function bl64_pkg_repository_add() {
   local repository="$1"
   local source="$2"
   local gpgkey="${3:-${BL64_VAR_NULL}}"
-  local definition=''
 
   bl64_check_privilege_root &&
     bl64_check_parameter 'repository' &&
@@ -5249,6 +5372,7 @@ function bl64_pkg_repository_add() {
 
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_REPOSITORY_ADD (${repository})"
   case "$BL64_OS_DISTRO" in
+<<<<<<< HEAD
   ${BL64_OS_FD}-* | \
     ${BL64_OS_RHEL}-8.* | ${BL64_OS_RHEL}-9.* | \
     ${BL64_OS_ALM}-8.* | ${BL64_OS_ALM}-9.* | \
@@ -5273,7 +5397,15 @@ gpgkey=%s\n' \
       "$gpgkey" \
       >"$definition"
     ;;
+=======
+>>>>>>> release/12.0.0
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_check_alert_unsupported
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    _bl64_pkg_repository_add_yum "$repository" "$source" "$gpgkey"
+    ;;
+  ${BL64_OS_SLES}-*)
     bl64_check_alert_unsupported
     ;;
   ${BL64_OS_ALP}-*)
@@ -5285,6 +5417,31 @@ gpgkey=%s\n' \
   *) bl64_check_alert_unsupported ;;
 
   esac
+}
+
+function _bl64_pkg_repository_add_yum() {
+  bl64_dbg_lib_show_function "$@"
+  local repository="$1"
+  local source="$2"
+  local gpgkey="${3:-${BL64_VAR_NULL}}"
+  local definition=''
+
+  bl64_check_parameter 'gpgkey' || return $?
+  definition="${BL64_PKG_PATH_YUM_REPOS_D}/${repository}.${BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY}"
+  [[ -f "$definition" ]] && bl64_dbg_lib_show_info "repository already created (${definition}). No action taken" && return 0
+
+  bl64_dbg_lib_show_info "create repository definition (${definition})"
+  printf '[%s]
+name=%s
+baseurl=%s
+gpgcheck=1
+enabled=1
+gpgkey=%s\n' \
+    "$repository" \
+    "$repository" \
+    "$source" \
+    "$gpgkey" \
+    >"$definition"
 }
 
 #######################################
@@ -5306,6 +5463,9 @@ function bl64_pkg_repository_refresh() {
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_REPOSITORY_REFRESH"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'update'
+    ;;
   ${BL64_OS_FD}-*)
     bl64_pkg_run_dnf 'makecache'
     ;;
@@ -5318,8 +5478,8 @@ function bl64_pkg_repository_refresh() {
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     bl64_pkg_run_yum 'makecache'
     ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'update'
+  ${BL64_OS_SLES}-*)
+    bl64_pkg_run_zypper 'refresh'
     ;;
   ${BL64_OS_ALP}-*)
     bl64_pkg_run_apk 'update'
@@ -5400,6 +5560,9 @@ function bl64_pkg_install() {
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_INSTALL (${*})"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
+    ;;
   ${BL64_OS_FD}-*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
     ;;
@@ -5412,8 +5575,8 @@ function bl64_pkg_install() {
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
     ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
+  ${BL64_OS_SLES}-*)
+    bl64_pkg_run_zypper 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
     ;;
   ${BL64_OS_ALP}-*)
     bl64_pkg_run_apk 'add' -- "$@"
@@ -5448,6 +5611,9 @@ function bl64_pkg_upgrade() {
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_UPGRADE"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES -- "$@"
+    ;;
   ${BL64_OS_FD}-*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
     ;;
@@ -5460,8 +5626,8 @@ function bl64_pkg_upgrade() {
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
     ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES -- "$@"
+  ${BL64_OS_SLES}-*)
+    bl64_pkg_run_zypper 'update' $BL64_PKG_SET_ASSUME_YES -- "$@"
     ;;
   ${BL64_OS_ALP}-*)
     bl64_pkg_run_apk 'upgrade' -- "$@"
@@ -5496,6 +5662,9 @@ function bl64_pkg_cleanup() {
   bl64_msg_show_lib_task "$_BL64_PKG_TXT_CLEAN"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'clean'
+    ;;
   ${BL64_OS_FD}-*)
     bl64_pkg_run_dnf 'clean' 'all'
     ;;
@@ -5508,8 +5677,8 @@ function bl64_pkg_cleanup() {
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     bl64_pkg_run_yum 'clean' 'all'
     ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'clean'
+  ${BL64_OS_SLES}-*)
+    bl64_pkg_run_zypper 'clean' '--all'
     ;;
   ${BL64_OS_ALP}-*)
     bl64_pkg_run_apk 'cache' 'clean'
@@ -5729,9 +5898,47 @@ function bl64_pkg_run_brew() {
 }
 
 #######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_pkg_run_zypper() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
+    return $?
+
+  if bl64_dbg_lib_command_enabled; then
+    verbose="$BL64_PKG_SET_VERBOSE"
+  else
+    verbose="$BL64_PKG_SET_QUIET"
+  fi
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_PKG_CMD_ZYPPER" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
+<<<<<<< HEAD
 # Version: 3.0.0
+=======
+# Version: 4.0.0
+>>>>>>> release/12.0.0
 #######################################
 
 #######################################
@@ -5810,7 +6017,6 @@ function _bl64_py_set_command() {
 
   if [[ "$venv_path" == "$BL64_VAR_DEFAULT" ]]; then
     bl64_dbg_lib_show_info 'identify OS native python3 path'
-    # Define distro native Python versions
     # shellcheck disable=SC2034
     case "$BL64_OS_DISTRO" in
     ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*) BL64_PY_CMD_PYTHON36='/usr/bin/python3' ;;
@@ -5828,6 +6034,14 @@ function _bl64_py_set_command() {
     ${BL64_OS_UB}-20.*) BL64_PY_CMD_PYTHON38='/usr/bin/python3.8' ;;
     ${BL64_OS_UB}-21.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_UB}-22.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
+    ${BL64_OS_SLES}-15.*)
+      # Default
+      BL64_PY_CMD_PYTHON36='/usr/bin/python3.6'
+      # SP3
+      BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
+      # SP4
+      BL64_PY_CMD_PYTHON310='/usr/bin/python3.10'
+      ;;
     "${BL64_OS_ALP}-3.14" | "${BL64_OS_ALP}-3.15") BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     "${BL64_OS_ALP}-3.16" | "${BL64_OS_ALP}-3.17") BL64_PY_CMD_PYTHON39='/usr/bin/python3.10' ;;
     ${BL64_OS_MCOS}-12.* | ${BL64_OS_MCOS}-13.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
@@ -6237,7 +6451,7 @@ function bl64_py_run_pip() {
 #######################################
 # BashLib64 / Module / Setup / Interact with Terraform
 #
-# Version: 1.2.1
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -6284,11 +6498,6 @@ function _bl64_tf_set_command() {
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$terraform_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_check_directory "$terraform_bin" ||
-      return $?
-  fi
-
   if [[ "$terraform_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/terraform' ]]; then
       terraform_bin='/home/linuxbrew/.linuxbrew/bin'
@@ -6298,14 +6507,14 @@ function _bl64_tf_set_command() {
       terraform_bin='/usr/local/bin'
     elif [[ -x '/usr/bin/terraform' ]]; then
       terraform_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'terraform'
+      return $?
     fi
-  else
-    [[ ! -x "${terraform_bin}/terraform" ]] && terraform_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$terraform_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ -x "${terraform_bin}/terraform" ]] && BL64_TF_CMD_TERRAFORM="${terraform_bin}/terraform"
-  fi
+  terraform_bin "$ansible_bin" || return $?
+  [[ -x "${terraform_bin}/terraform" ]] && BL64_TF_CMD_TERRAFORM="${terraform_bin}/terraform"
 
   bl64_dbg_lib_show_vars 'BL64_TF_CMD_TERRAFORM'
 }

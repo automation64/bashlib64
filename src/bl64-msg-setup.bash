@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Display messages
 #
-# Version: 2.4.0
+# Version: 3.0.1
 #######################################
 
 #
@@ -33,12 +33,12 @@ function bl64_msg_app_enable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_APP";
 function bl64_msg_setup() {
   bl64_dbg_lib_show_function
 
-  # Set default verbosity
-  bl64_msg_app_enable_verbose
+  bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI" &&
+    bl64_msg_set_theme "$BL64_MSG_THEME_ID_ANSI_STD" &&
+    bl64_msg_app_enable_verbose &&
+    BL64_MSG_MODULE="$BL64_VAR_ON"
 
-  bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI"
-
-  BL64_MSG_MODULE="$BL64_VAR_ON"
+  bl64_check_alert_module_setup 'msg'
 }
 
 #######################################
@@ -100,7 +100,7 @@ function bl64_msg_set_format() {
 # Set message display theme
 #
 # Arguments:
-#   $1: theme name. One of BL64_MSG_THEME_* (variable name, not value)
+#   $1: theme name. One of BL64_MSG_THEME_ID_*
 # Outputs:
 #   STDOUT: None
 #   STDERR: parameter error
@@ -115,9 +115,9 @@ function bl64_msg_set_theme() {
   bl64_check_parameter 'theme' || return $?
 
   case "$theme" in
-  'BL64_MSG_THEME_ASCII_STD') BL64_MSG_THEME='BL64_MSG_THEME_ASCII_STD' ;;
-  'BL64_MSG_THEME_ANSI_STD') BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD' ;;
-  *) bl64_check_alert_parameter_invalid 'BL64_MSG_THEME' "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_THEME_ASCII_STD}|${BL64_MSG_THEME_ANSI_STD}" ;;
+  "$BL64_MSG_THEME_ID_ASCII_STD") BL64_MSG_THEME='BL64_MSG_THEME_ASCII_STD' ;;
+  "$BL64_MSG_THEME_ID_ANSI_STD") BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD' ;;
+  *) bl64_check_alert_parameter_invalid 'BL64_MSG_THEME' "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_THEME_ID_ASCII_STD}|${BL64_MSG_THEME_ID_ANSI_STD}" ;;
   esac
 }
 
@@ -136,16 +136,15 @@ function bl64_msg_set_theme() {
 function bl64_msg_set_output() {
   bl64_dbg_lib_show_function "@"
   local output="$1"
+
   bl64_check_parameter 'output' || return $?
 
   case "$output" in
   "$BL64_MSG_OUTPUT_ASCII")
     BL64_MSG_OUTPUT="$output"
-    BL64_MSG_THEME='BL64_MSG_THEME_ASCII_STD'
     ;;
   "$BL64_MSG_OUTPUT_ANSI")
     BL64_MSG_OUTPUT="$output"
-    BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD'
     ;;
   *) bl64_check_alert_parameter_invalid 'BL64_MSG_OUTPUT' "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_OUTPUT_ASCII}|${BL64_MSG_OUTPUT_ANSI}" ;;
   esac

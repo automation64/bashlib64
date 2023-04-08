@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage native OS packages
 #
-# Version: 2.0.0
+# Version: 3.0.0
 #######################################
 
 #######################################
@@ -22,17 +22,8 @@ function bl64_pkg_setup() {
   # shellcheck disable=SC2249
   _bl64_pkg_set_command &&
     _bl64_pkg_set_runtime &&
-    _bl64_pkg_set_alias &&
     _bl64_pkg_set_options &&
-    case "$BL64_OS_DISTRO" in
-    ${BL64_OS_FD}-*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
-    ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
-    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*) bl64_check_command "$BL64_PKG_CMD_DNF" ;;
-    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*) bl64_check_command "$BL64_PKG_CMD_YUM" ;;
-    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*) bl64_check_command "$BL64_PKG_CMD_APT" ;;
-    ${BL64_OS_ALP}-*) bl64_check_command "$BL64_PKG_CMD_APK" ;;
-    ${BL64_OS_MCOS}-*) bl64_check_command "$BL64_PKG_CMD_BRW" ;;
-    esac &&
+    _bl64_pkg_set_alias &&
     BL64_PKG_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'pkg'
@@ -56,6 +47,9 @@ function bl64_pkg_setup() {
 function _bl64_pkg_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_PKG_CMD_APT='/usr/bin/apt-get'
+    ;;
   ${BL64_OS_FD}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
@@ -68,8 +62,8 @@ function _bl64_pkg_set_command() {
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     BL64_PKG_CMD_YUM='/usr/bin/yum'
     ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_PKG_CMD_APT='/usr/bin/apt-get'
+  ${BL64_OS_SLES}-*)
+    BL64_PKG_CMD_ZYPPER='/usr/bin/zypper'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_PKG_CMD_APK='/sbin/apk'
@@ -98,6 +92,12 @@ function _bl64_pkg_set_options() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_PKG_SET_ASSUME_YES='--assume-yes'
+    BL64_PKG_SET_SLIM=' '
+    BL64_PKG_SET_QUIET='--quiet --quiet'
+    BL64_PKG_SET_VERBOSE='--show-progress'
+    ;;
   ${BL64_OS_FD}-*)
     BL64_PKG_SET_ASSUME_YES='--assumeyes'
     BL64_PKG_SET_SLIM='--nodocs'
@@ -122,11 +122,11 @@ function _bl64_pkg_set_options() {
     BL64_PKG_SET_QUIET='--quiet'
     BL64_PKG_SET_VERBOSE='--color=never --verbose'
     ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_PKG_SET_ASSUME_YES='--assume-yes'
+  ${BL64_OS_SLES}-15.*)
+    BL64_PKG_SET_ASSUME_YES='--no-confirm'
     BL64_PKG_SET_SLIM=' '
-    BL64_PKG_SET_QUIET='--quiet --quiet'
-    BL64_PKG_SET_VERBOSE='--show-progress'
+    BL64_PKG_SET_QUIET='--quiet'
+    BL64_PKG_SET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_PKG_SET_ASSUME_YES=' '
@@ -187,6 +187,9 @@ function _bl64_pkg_set_alias() {
     BL64_PKG_ALIAS_APT_CACHE="$BL64_PKG_CMD_APT update"
     BL64_PKG_ALIAS_APT_INSTALL="$BL64_PKG_CMD_APT install ${BL64_PKG_SET_ASSUME_YES} ${BL64_PKG_SET_VERBOSE}"
     BL64_PKG_ALIAS_APT_CLEAN="$BL64_PKG_CMD_APT clean"
+    ;;
+  ${BL64_OS_SLES}-*)
+    :
     ;;
   ${BL64_OS_ALP}-*)
     BL64_PKG_ALIAS_APK_CACHE="$BL64_PKG_CMD_APK update ${BL64_PKG_SET_VERBOSE}"
@@ -253,6 +256,9 @@ function bl64_pkg_set_paths() {
     BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    :
+    ;;
+  ${BL64_OS_SLES}-*)
     :
     ;;
   ${BL64_OS_ALP}-*)

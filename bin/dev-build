@@ -3,8 +3,8 @@
 # Create the BashLib64 stand-alone distributable file
 #
 
-# shellcheck source=SCRIPTDIR/devbl-set
-source './bin/devbl-set' || {
+# shellcheck source=SCRIPTDIR/dev-set
+source './bin/dev-set' || {
   echo 'unable to load dev env'
   exit 1
 }
@@ -12,7 +12,7 @@ source './bin/devbl-set' || {
 # shellcheck source=SCRIPTDIR/../lib/bashlib64.bash
 source "$DEVBL_LIB_BASHLIB64" || exit 1
 
-function devbl_add_modules() {
+function dev_add_modules() {
   local destination="$1"
   local modules="$2"
 
@@ -35,7 +35,7 @@ function devbl_add_modules() {
   done
 }
 
-function devbl_build_test() {
+function dev_build_test() {
   local file=''
   local build_full="${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_FULL}"
   local build_core="${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_CORE}"
@@ -62,9 +62,9 @@ function devbl_build_test() {
     "$BL64_OS_CMD_CAT" "bl64-lib-header.bash" && bl64_fmt_separator_line
   } >"$build_opt" || return 1
 
-  devbl_add_modules "$build_full" "${DEVBL_MODULES_CORE} ${DEVBL_MODULES_OPT}"
-  devbl_add_modules "$build_core" "$DEVBL_MODULES_CORE"
-  devbl_add_modules "$build_opt" "$DEVBL_MODULES_OPT"
+  dev_add_modules "$build_full" "${DEVBL_MODULES_CORE} ${DEVBL_MODULES_OPT}"
+  dev_add_modules "$build_core" "$DEVBL_MODULES_CORE"
+  dev_add_modules "$build_opt" "$DEVBL_MODULES_OPT"
 
   bl64_msg_show_task 'adding core'
   # shellcheck disable=SC2119
@@ -74,7 +74,7 @@ function devbl_build_test() {
   bl64_fs_run_chmod '0755' "$build_full" "$build_core"
 }
 
-function devbl_build_docs() {
+function dev_build_docs() {
   local file=''
   local module_env=''
   local module_code=''
@@ -83,20 +83,20 @@ function devbl_build_docs() {
   bl64_dbg_app_show_info "DEVBL_MODULES_CORE='${DEVBL_MODULES_CORE}'"
   cd "$DEVBL_SRC" || return 1
 
-  for file in lib $DEVBL_MODULES_CORE; do
+  for file in lib $DEVBL_MODULES_CORE $DEVBL_MODULES_OPT; do
     module_env="bl64-${file}-env.bash"
     [[ ! -f "$module_env" ]] && module_env="$BL64_VAR_NULL"
     module_code="bl64-${file}.bash"
     [[ ! -f "$module_code" ]] && module_code="$BL64_VAR_NULL"
-    module_init="bl64-${file}.init"
+    module_init="bl64-${file}-setup.bash"
     [[ ! -f "$module_init" ]] && module_init="$BL64_VAR_NULL"
 
     bl64_msg_show_task "creating document for: ${file}"
-    devbl_build_md "$file" "$module_env" "$module_code" "$module_init" >"${DEVBL_DOCS}/bl64-${file}.md"
+    dev_build_md "$file" "$module_env" "$module_code" "$module_init" >"${DEVBL_DOCS}/bl64-${file}.md"
   done
 }
 
-function devbl_build_md() {
+function dev_build_md() {
   local module="$1"
   local module_env="$2"
   local module_code="$3"
@@ -124,12 +124,12 @@ function devbl_build_md() {
 
 }
 
-function devbl_promote() {
+function dev_promote() {
   local build_full="${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_FULL}"
   local build_core="${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_CORE}"
   local build_opt="${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_OPT}"
 
-  devbl_build_test &&
+  dev_build_test &&
     bl64_msg_show_task "promoting library from: ${build_full}" &&
     bl64_fs_cp_file "$build_full" "$DEVBL_PROD_BASHLIB64" &&
     bl64_msg_show_task "promoting library from: ${build_core}" &&
@@ -138,12 +138,12 @@ function devbl_promote() {
     bl64_fs_cp_file "$build_opt" "$DEVBL_PROD_BASHLIB64"
 }
 
-function devbl_build_check_requirements() {
-  [[ -z "$devbl_build_command" ]] && devbl_build_help return 1
+function dev_build_check_requirements() {
+  [[ -z "$dev_build_command" ]] && dev_build_help return 1
   bl64_check_directory "$DEVBL_SRC" || return 1
 }
 
-function devbl_build_help() {
+function dev_build_help() {
   bl64_msg_show_usage \
     '<-p|-t|-d> [-h]' \
     'Create the BashLib64 stand-alone distributable file' \
@@ -160,37 +160,28 @@ function devbl_build_help() {
 # Main
 #
 
-declare -i devbl_build_status=1
-declare devbl_build_command=''
-declare devbl_build_option=''
+declare -i dev_build_status=1
+declare dev_build_command=''
+declare dev_build_option=''
 
-(($# == 0)) && devbl_build_help && exit 1
-while getopts ':ptdh' devbl_build_option; do
-  case "$devbl_build_option" in
-  p)
-    devbl_build_command='devbl_promote'
-    devbl_build_command_tag='build stand-alone library and promote to production'
-    ;;
-  t)
-    devbl_build_command='devbl_build_test'
-    devbl_build_command_tag='build stand-alone library for testing'
-    ;;
-  d)
-    devbl_build_command='devbl_build_docs'
-    devbl_build_command_tag='build library documentation'
-    ;;
-  h) devbl_build_help && exit ;;
-  *) devbl_build_help && exit 1 ;;
+(($# == 0)) && dev_build_help && exit 1
+while getopts ':ptdh' dev_build_option; do
+  case "$dev_build_option" in
+  p) dev_build_command='dev_promote' ;;
+  t) dev_build_command='dev_build_test' ;;
+  d) dev_build_command='dev_build_docs' ;;
+  h) dev_build_help && exit ;;
+  *) dev_build_help && exit 1 ;;
   esac
 done
-devbl_build_check_requirements || exit 1
+dev_build_check_requirements || exit 1
 
-bl64_msg_show_batch_start "$devbl_build_command_tag"
-case "$devbl_build_command" in
-'devbl_build_docs' | 'devbl_build_test' | 'devbl_promote') "$devbl_build_command" ;;
-*) bl64_check_alert_undefined "$devbl_build_command" ;;
+bl64_msg_show_batch_start "$dev_build_command"
+case "$dev_build_command" in
+'dev_build_docs' | 'dev_build_test' | 'dev_promote') "$dev_build_command" ;;
+*) bl64_check_alert_undefined "$dev_build_command" ;;
 esac
-devbl_build_status=$?
+dev_build_status=$?
 
-bl64_msg_show_batch_finish $devbl_build_status "$devbl_build_command_tag"
-exit $devbl_build_status
+bl64_msg_show_batch_finish $dev_build_status "$dev_build_command"
+exit $dev_build_status

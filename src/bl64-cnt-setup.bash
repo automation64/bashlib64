@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #
-# Version: 1.9.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -68,7 +68,19 @@ function _bl64_cnt_set_command() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_CNT_CMD_PODMAN='/usr/bin/podman'
+    BL64_CNT_CMD_DOCKER='/usr/bin/docker'
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_CNT_CMD_PODMAN='/usr/bin/podman'
+    BL64_CNT_CMD_DOCKER='/usr/bin/docker'
+    ;;
+  ${BL64_OS_SLES}-*)
+    BL64_CNT_CMD_PODMAN='/usr/bin/podman'
+    BL64_CNT_CMD_DOCKER='/usr/bin/docker'
+    ;;
+  ${BL64_OS_ALP}-*)
     BL64_CNT_CMD_PODMAN='/usr/bin/podman'
     BL64_CNT_CMD_DOCKER='/usr/bin/docker'
     ;;
@@ -130,7 +142,16 @@ function bl64_cnt_set_paths() {
   bl64_dbg_lib_show_function "$@"
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_ALP}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
+    ;;
+  ${BL64_OS_SLES}-*)
+    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
+    ;;
+  ${BL64_OS_ALP}-*)
     BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
     ;;
   ${BL64_OS_MCOS}-*)

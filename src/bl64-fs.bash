@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 3.2.0
+# Version: 4.0.0
 #######################################
 
 #######################################
@@ -199,18 +199,24 @@ function bl64_fs_merge_dir() {
     return $?
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_fs_cp_dir --no-target-directory "$source" "$target"
     ;;
-  ${BL64_OS_MCOS}-*)
-    # shellcheck disable=SC2086
-    bl64_fs_cp_dir ${source}/ "$target"
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    bl64_fs_cp_dir --no-target-directory "$source" "$target"
+    ;;
+  ${BL64_OS_SLES}-*)
+    bl64_fs_cp_dir --no-target-directory "$source" "$target"
     ;;
   ${BL64_OS_ALP}-*)
     # shellcheck disable=SC2086
     shopt -sq dotglob &&
       bl64_fs_cp_dir ${source}/* -t "$target" &&
       shopt -uq dotglob
+    ;;
+  ${BL64_OS_MCOS}-*)
+    # shellcheck disable=SC2086
+    bl64_fs_cp_dir ${source}/ "$target"
     ;;
   *) bl64_check_alert_unsupported ;;
   esac

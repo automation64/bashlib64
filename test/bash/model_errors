@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. bin/devbl-set
+. bin/dev-set
 . "${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_FULL}"
 
 #

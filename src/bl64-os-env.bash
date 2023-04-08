@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #
-# Version: 1.18.0
+# Version: 2.0.0
 #######################################
 
 export BL64_OS_MODULE="$BL64_VAR_OFF"
@@ -35,13 +35,15 @@ export BL64_OS_FD='FEDORA'
 export BL64_OS_MCOS='DARWIN'
 # OL  -> OracleLinux
 export BL64_OS_OL='OL'
-# RCK-> Rocky Linux
+# RCK -> Rocky Linux
 export BL64_OS_RCK='ROCKY'
 # RHEL-> RedHat Enterprise Linux
 export BL64_OS_RHEL='RHEL'
+# SLES-> SUSE Linux Enterprise Server
+export BL64_OS_SLES='SLES'
 # UB  -> Ubuntu
 export BL64_OS_UB='UBUNTU'
-# UNK  -> Unknown OS
+# UNK -> Unknown OS
 export BL64_OS_UNK='UNKNOWN'
 
 export BL64_OS_SET_LOCALE_ALL=''

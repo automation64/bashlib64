@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Check for conditions and report status
 #
-# Version: 1.0.0
+# Version: 1.0.1
 #######################################
 
 #######################################
@@ -22,4 +22,6 @@ function bl64_check_setup() {
   bl64_dbg_lib_show_function
 
   BL64_CHECK_MODULE="$BL64_VAR_ON"
+
+  bl64_check_alert_module_setup 'check'
 }

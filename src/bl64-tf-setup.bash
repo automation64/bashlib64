@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Terraform
 #
-# Version: 1.2.1
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -48,11 +48,6 @@ function _bl64_tf_set_command() {
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$terraform_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_check_directory "$terraform_bin" ||
-      return $?
-  fi
-
   if [[ "$terraform_bin" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/terraform' ]]; then
       terraform_bin='/home/linuxbrew/.linuxbrew/bin'
@@ -62,14 +57,14 @@ function _bl64_tf_set_command() {
       terraform_bin='/usr/local/bin'
     elif [[ -x '/usr/bin/terraform' ]]; then
       terraform_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'terraform'
+      return $?
     fi
-  else
-    [[ ! -x "${terraform_bin}/terraform" ]] && terraform_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$terraform_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ -x "${terraform_bin}/terraform" ]] && BL64_TF_CMD_TERRAFORM="${terraform_bin}/terraform"
-  fi
+  terraform_bin "$ansible_bin" || return $?
+  [[ -x "${terraform_bin}/terraform" ]] && BL64_TF_CMD_TERRAFORM="${terraform_bin}/terraform"
 
   bl64_dbg_lib_show_vars 'BL64_TF_CMD_TERRAFORM'
 }
