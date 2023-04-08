@@ -6,6 +6,12 @@
 {% include "../src/bl64-pkg-env.bash" %}
 ```
 
+## Setup
+
+```shell
+{% include "../src/bl64-pkg.init" %}
+```
+
 ## Code
 
 ```shell
