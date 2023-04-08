@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Check for conditions and report status
 #
-# Version: 3.1.0
+# Version: 3.2.0
 #######################################
 
 #######################################
@@ -459,6 +459,28 @@ function bl64_check_alert_unsupported() {
 
   bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
   return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+}
+
+#######################################
+# Raise resource not detected error
+#
+# * Generic error used when a required external resource is not found on the system
+# * Common use case: module setup looking for command in known locations
+#
+# Arguments:
+#   $1: resource name. Default: none
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_APP_MISSING
+#######################################
+function bl64_check_alert_resource_not_found() {
+  bl64_dbg_lib_show_function "$@"
+  local resource="${1:-}"
+
+  bl64_msg_show_error "${_BL64_CHECK_TXT_RESOURCE_NOT_FOUND} (${resource:+resource: ${resource} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+  return $BL64_LIB_ERROR_APP_MISSING
 }
 
 #######################################

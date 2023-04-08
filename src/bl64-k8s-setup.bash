@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Kubernetes
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
 
 #######################################
@@ -55,6 +55,7 @@ function _bl64_k8s_set_command() {
   local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   if [[ "$kubectl_bin" == "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_info 'no custom path provided. Using known locations to detect ansible'
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/kubectl' ]]; then
       kubectl_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/kubectl' ]]; then
@@ -63,14 +64,14 @@ function _bl64_k8s_set_command() {
       kubectl_bin='/usr/local/bin'
     elif [[ -x '/usr/bin/kubectl' ]]; then
       kubectl_bin='/usr/bin'
+    else
+      bl64_check_alert_resource_not_found 'kubectl'
+      return $?
     fi
-  else
-    [[ ! -x "${kubectl_bin}/kubectl" ]] && kubectl_bin="$BL64_VAR_DEFAULT"
   fi
 
-  if [[ "$kubectl_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ -x "${kubectl_bin}/kubectl" ]] && BL64_K8S_CMD_KUBECTL="${kubectl_bin}/kubectl"
-  fi
+  bl64_check_directory "$kubectl_bin" || return $?
+  [[ -x "${kubectl_bin}/kubectl" ]] && BL64_K8S_CMD_KUBECTL="${kubectl_bin}/kubectl"
 
   bl64_dbg_lib_show_vars 'BL64_K8S_CMD_KUBECTL'
 }

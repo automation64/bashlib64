@@ -83,12 +83,12 @@ function dev_build_docs() {
   bl64_dbg_app_show_info "DEVBL_MODULES_CORE='${DEVBL_MODULES_CORE}'"
   cd "$DEVBL_SRC" || return 1
 
-  for file in lib $DEVBL_MODULES_CORE; do
+  for file in lib $DEVBL_MODULES_CORE $DEVBL_MODULES_OPT; do
     module_env="bl64-${file}-env.bash"
     [[ ! -f "$module_env" ]] && module_env="$BL64_VAR_NULL"
     module_code="bl64-${file}.bash"
     [[ ! -f "$module_code" ]] && module_code="$BL64_VAR_NULL"
-    module_init="bl64-${file}.init"
+    module_init="bl64-${file}-setup.bash"
     [[ ! -f "$module_init" ]] && module_init="$BL64_VAR_NULL"
 
     bl64_msg_show_task "creating document for: ${file}"
@@ -167,30 +167,21 @@ declare dev_build_option=''
 (($# == 0)) && dev_build_help && exit 1
 while getopts ':ptdh' dev_build_option; do
   case "$dev_build_option" in
-  p)
-    dev_build_command='dev_promote'
-    dev_build_command_tag='build stand-alone library and promote to production'
-    ;;
-  t)
-    dev_build_command='dev_build_test'
-    dev_build_command_tag='build stand-alone library for testing'
-    ;;
-  d)
-    dev_build_command='dev_build_docs'
-    dev_build_command_tag='build library documentation'
-    ;;
+  p) dev_build_command='dev_promote' ;;
+  t) dev_build_command='dev_build_test' ;;
+  d) dev_build_command='dev_build_docs' ;;
   h) dev_build_help && exit ;;
   *) dev_build_help && exit 1 ;;
   esac
 done
 dev_build_check_requirements || exit 1
 
-bl64_msg_show_batch_start "$dev_build_command_tag"
+bl64_msg_show_batch_start "$dev_build_command"
 case "$dev_build_command" in
 'dev_build_docs' | 'dev_build_test' | 'dev_promote') "$dev_build_command" ;;
 *) bl64_check_alert_undefined "$dev_build_command" ;;
 esac
 dev_build_status=$?
 
-bl64_msg_show_batch_finish $dev_build_status "$dev_build_command_tag"
+bl64_msg_show_batch_finish $dev_build_status "$dev_build_command"
 exit $dev_build_status

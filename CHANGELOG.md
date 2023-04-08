@@ -10,11 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - all: sles-15 support
+- check: bl64_check_alert_resource_not_found
 
 ### Changed
 
 - msg:
   - **Breaking change** Normalized theme ID value. Now use one of BL64_MSG_THEME_ID_ASCII_STD, BL64_MSG_THEME_ID_ANSI_STD
+
+### Fixed
+
+- ans
+  - setup: path definition when using custom location
 
 ## [11.0.0]
 
