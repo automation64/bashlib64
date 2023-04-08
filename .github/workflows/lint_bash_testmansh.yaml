@@ -1,5 +1,5 @@
 ---
-# Template: 1.1.0
+# Template: 2.0.0
 name: "Lint / Bash / TestManSH"
 
 on:
@@ -20,11 +20,5 @@ jobs:
         run: "./bin/dev-lib"
 
       - name: "Build app"
-        run: "./bin/dev-build -t"
-
-      - name: "Build app"
-        run: "./bin/dev-build -t"
-
-      - name: "Run ShellCheck"
-        run: "./lib/testmansh -t -c build/bashlib64.bash"
+        run: "./bin/dev-lint"
 ...
