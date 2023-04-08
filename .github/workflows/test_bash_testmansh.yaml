@@ -5,6 +5,7 @@ name: "Test / Bash / TestManSH"
 on:
   push:
     branches:
+      - "develop"
       - "feature/*"
 
 jobs:
@@ -21,4 +22,17 @@ jobs:
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
         run: "./bin/dev-test-non-os"
+  test-batscore-opt:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare build environment"
+        run: "./bin/dev-lib"
+
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "./bin/dev-test-opt"
 ...
