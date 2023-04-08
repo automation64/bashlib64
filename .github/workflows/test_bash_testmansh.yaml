@@ -20,5 +20,5 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./bin/dev-test"
+        run: "./bin/dev-test-non-os"
 ...
