@@ -15,7 +15,7 @@
 
 ## Overview
 
-BashLib64 is a **Bash** automation library that provides a simple abstraction layer for developing multi-platform scripts.
+BashLib64 is a **Bash** library that provides a simple abstraction layer for developing multi-platform automation scripts.
 
 | Module                                                             | Purpose                                            |
 | ------------------------------------------------------------------ | -------------------------------------------------- |
@@ -73,10 +73,11 @@ The library has been tested on the following operating systems:
 - OracleLinux7
 - OracleLinux8
 - OracleLinux9
-- RedHatLinux8
-- RedHatLinux9
+- RedHatEnterpriseLinux8
+- RedHatEnterpriseLinux9
 - RockyLinux8
 - RockyLinux9
+- SuSELinuxEnterpriseServer15
 - Ubuntu20
 - Ubuntu21
 - Ubuntu22

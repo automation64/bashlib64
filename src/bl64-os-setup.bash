@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / OS / Identify OS attributes and provide command aliases
 #
-# Version: 2.3.1
+# Version: 3.0.0
 #######################################
 
 #######################################
@@ -31,6 +31,7 @@ function bl64_os_setup() {
     _bl64_os_set_options &&
     BL64_OS_MODULE="$BL64_VAR_ON"
 
+  bl64_check_alert_module_setup 'os'
 }
 
 #######################################
@@ -64,12 +65,22 @@ function _bl64_os_set_command() {
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/usr/bin/cat'
-    BL64_OS_CMD_DATE=/usr'/bin/date'
+    BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
+    ;;
+  ${BL64_OS_SLES}-*)
+    BL64_OS_CMD_BASH='/usr/bin/bash'
+    BL64_OS_CMD_CAT='/usr/bin/cat'
+    BL64_OS_CMD_DATE='/usr/bin/date'
+    BL64_OS_CMD_FALSE='/usr/bin/false'
+    BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
+    BL64_OS_CMD_LOCALE='/usr/bin/locale'
+    BL64_OS_CMD_TRUE='/usr/bin/true'
+    BL64_OS_CMD_UNAME='/usr/bin/uname'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_OS_CMD_BASH='/bin/bash'
@@ -142,6 +153,9 @@ function _bl64_os_set_runtime() {
       ;;
     ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
       # Not installed by default, skipping
+      ;;
+    ${BL64_OS_SLES}-*)
+      bl64_os_set_lang 'C.UTF-8'
       ;;
     ${BL64_OS_ALP}-*)
       # Not installed by default, skipping

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Show shell debugging inlevelion
 #
-# Version: 1.2.0
+# Version: 1.2.1
 #######################################
 
 #
@@ -52,9 +52,10 @@ function bl64_dbg_setup() {
   bl64_dbg_lib_show_function
 
   # Set default debug level
-  bl64_dbg_all_disable
+  bl64_dbg_all_disable &&
+    BL64_DBG_MODULE="$BL64_VAR_ON"
 
-  BL64_DBG_MODULE="$BL64_VAR_ON"
+  # bl64_check_alert_module_setup # Disabled as check is loaded after dbg
 }
 
 #######################################
@@ -79,9 +80,9 @@ function bl64_dbg_set_level() {
   "$BL64_DBG_TARGET_APP_TRACE") bl64_dbg_app_trace_enable ;;
   "$BL64_DBG_TARGET_APP_TASK") bl64_dbg_app_task_enable ;;
   "$BL64_DBG_TARGET_APP_CMD") bl64_dbg_app_command_enable ;;
-  "$BL64_DBG_TARGET_APP_CUSTOM_1" ) bl64_dbg_app_custom_1_enable ;;
-  "$BL64_DBG_TARGET_APP_CUSTOM_2" ) bl64_dbg_app_custom_2_enable ;;
-  "$BL64_DBG_TARGET_APP_CUSTOM_3" ) bl64_dbg_app_custom_3_enable ;;
+  "$BL64_DBG_TARGET_APP_CUSTOM_1") bl64_dbg_app_custom_1_enable ;;
+  "$BL64_DBG_TARGET_APP_CUSTOM_2") bl64_dbg_app_custom_2_enable ;;
+  "$BL64_DBG_TARGET_APP_CUSTOM_3") bl64_dbg_app_custom_3_enable ;;
   "$BL64_DBG_TARGET_APP_ALL") bl64_dbg_app_enable ;;
   "$BL64_DBG_TARGET_LIB_TRACE") bl64_dbg_lib_trace_enable ;;
   "$BL64_DBG_TARGET_LIB_TASK") bl64_dbg_lib_task_enable ;;

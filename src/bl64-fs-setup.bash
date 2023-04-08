@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Manage local filesystem
 #
-# Version: 1.5.0
+# Version: 2.0.0
 #######################################
 
 #######################################
@@ -73,6 +73,19 @@ function _bl64_fs_set_command() {
     BL64_FS_CMD_RM='/usr/bin/rm'
     BL64_FS_CMD_TOUCH='/usr/bin/touch'
     ;;
+  ${BL64_OS_SLES}-*)
+    BL64_FS_CMD_CHMOD='/usr/bin/chmod'
+    BL64_FS_CMD_CHOWN='/usr/bin/chown'
+    BL64_FS_CMD_CP='/usr/bin/cp'
+    BL64_FS_CMD_FIND='/usr/bin/find'
+    BL64_FS_CMD_LN='/usr/bin/ln'
+    BL64_FS_CMD_LS='/usr/bin/ls'
+    BL64_FS_CMD_MKDIR='/usr/bin/mkdir'
+    BL64_FS_CMD_MKTEMP='/usr/bin/mktemp'
+    BL64_FS_CMD_MV='/usr/bin/mv'
+    BL64_FS_CMD_RM='/usr/bin/rm'
+    BL64_FS_CMD_TOUCH='/usr/bin/touch'
+    ;;
   ${BL64_OS_ALP}-*)
     BL64_FS_CMD_CHMOD='/bin/chmod'
     BL64_FS_CMD_CHOWN='/bin/chown'
@@ -119,7 +132,7 @@ function _bl64_fs_set_command() {
 function _bl64_fs_set_options() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
     BL64_FS_SET_CHMOD_VERBOSE='--verbose'
     BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
@@ -134,6 +147,55 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_FIND_TYPE_FILE='-type f'
     BL64_FS_SET_LN_SYMBOLIC='--symbolic'
     BL64_FS_SET_LN_VERBOSE='--verbose'
+    BL64_FS_SET_LS_NOCOLOR='--color=never'
+    BL64_FS_SET_MKDIR_PARENTS='--parents'
+    BL64_FS_SET_MKDIR_VERBOSE='--verbose'
+    BL64_FS_SET_MV_FORCE='--force'
+    BL64_FS_SET_MV_VERBOSE='--verbose'
+    BL64_FS_SET_RM_FORCE='--force'
+    BL64_FS_SET_RM_RECURSIVE='--recursive'
+    BL64_FS_SET_RM_VERBOSE='--verbose'
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
+    BL64_FS_SET_CHMOD_VERBOSE='--verbose'
+    BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
+    BL64_FS_SET_CHOWN_VERBOSE='--verbose'
+    BL64_FS_SET_CP_FORCE='--force'
+    BL64_FS_SET_CP_RECURSIVE='--recursive'
+    BL64_FS_SET_CP_VERBOSE='--verbose'
+    BL64_FS_SET_FIND_PRINT='-print'
+    BL64_FS_SET_FIND_RUN='-exec'
+    BL64_FS_SET_FIND_STAY='-xdev'
+    BL64_FS_SET_FIND_TYPE_DIR='-type d'
+    BL64_FS_SET_FIND_TYPE_FILE='-type f'
+    BL64_FS_SET_LN_SYMBOLIC='--symbolic'
+    BL64_FS_SET_LN_VERBOSE='--verbose'
+    BL64_FS_SET_LS_NOCOLOR='--color=never'
+    BL64_FS_SET_MKDIR_PARENTS='--parents'
+    BL64_FS_SET_MKDIR_VERBOSE='--verbose'
+    BL64_FS_SET_MV_FORCE='--force'
+    BL64_FS_SET_MV_VERBOSE='--verbose'
+    BL64_FS_SET_RM_FORCE='--force'
+    BL64_FS_SET_RM_RECURSIVE='--recursive'
+    BL64_FS_SET_RM_VERBOSE='--verbose'
+    ;;
+  ${BL64_OS_SLES}-*)
+    BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
+    BL64_FS_SET_CHMOD_VERBOSE='--verbose'
+    BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
+    BL64_FS_SET_CHOWN_VERBOSE='--verbose'
+    BL64_FS_SET_CP_FORCE='--force'
+    BL64_FS_SET_CP_RECURSIVE='--recursive'
+    BL64_FS_SET_CP_VERBOSE='--verbose'
+    BL64_FS_SET_FIND_PRINT='-print'
+    BL64_FS_SET_FIND_RUN='-exec'
+    BL64_FS_SET_FIND_STAY='-xdev'
+    BL64_FS_SET_FIND_TYPE_DIR='-type d'
+    BL64_FS_SET_FIND_TYPE_FILE='-type f'
+    BL64_FS_SET_LN_SYMBOLIC='--symbolic'
+    BL64_FS_SET_LN_VERBOSE='--verbose'
+    BL64_FS_SET_LS_NOCOLOR='--color=never'
     BL64_FS_SET_MKDIR_PARENTS='--parents'
     BL64_FS_SET_MKDIR_VERBOSE='--verbose'
     BL64_FS_SET_MV_FORCE='--force'
@@ -157,6 +219,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_FIND_TYPE_FILE='-type f'
     BL64_FS_SET_LN_SYMBOLIC='-s'
     BL64_FS_SET_LN_VERBOSE='-v'
+    BL64_FS_SET_LS_NOCOLOR='--color=never'
     BL64_FS_SET_MKDIR_PARENTS='-p'
     BL64_FS_SET_MKDIR_VERBOSE=' '
     BL64_FS_SET_MV_FORCE='-f'
@@ -180,6 +243,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_FIND_TYPE_FILE='-type f'
     BL64_FS_SET_LN_SYMBOLIC='-s'
     BL64_FS_SET_LN_VERBOSE='-v'
+    BL64_FS_SET_LS_NOCOLOR='--color=never'
     BL64_FS_SET_MKDIR_PARENTS='-p'
     BL64_FS_SET_MKDIR_VERBOSE='-v'
     BL64_FS_SET_MV_FORCE='-f'
@@ -211,25 +275,13 @@ function _bl64_fs_set_options() {
 function _bl64_fs_set_alias() {
   local cmd_mawk='/usr/bin/mawk'
 
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} --color=never"
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} --color=never"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} --color=never"
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-
   BL64_FS_ALIAS_CHOWN_DIR="${BL64_FS_CMD_CHOWN} ${BL64_FS_SET_CHOWN_VERBOSE} ${BL64_FS_SET_CHOWN_RECURSIVE}"
   BL64_FS_ALIAS_CP_DFIND="/usr/bin/find"
   BL64_FS_ALIAS_CP_DIR="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE} ${BL64_FS_SET_CP_RECURSIVE}"
   BL64_FS_ALIAS_CP_FIFIND="/usr/bin/find"
   BL64_FS_ALIAS_CP_FILE="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE}"
   BL64_FS_ALIAS_LN_SYMBOLIC="${BL64_FS_CMD_LN} ${BL64_FS_SET_LN_SYMBOLIC} ${BL64_FS_SET_LN_VERBOSE}"
+  BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} ${BL64_FS_SET_LS_NOCOLOR}"
   BL64_FS_ALIAS_MKDIR_FULL="${BL64_FS_CMD_MKDIR} ${BL64_FS_SET_MKDIR_VERBOSE} ${BL64_FS_SET_MKDIR_PARENTS}"
   BL64_FS_ALIAS_MKTEMP_DIR="${BL64_FS_CMD_MKTEMP} -d"
   BL64_FS_ALIAS_MKTEMP_FILE="${BL64_FS_CMD_MKTEMP}"

@@ -24,7 +24,7 @@
 - Download dev support scripts
 
   ```shell
-  ./bin/devbl-lib
+  ./bin/dev-lib
   ```
 
 - Initialize git-flow. Leave defaults options
@@ -42,8 +42,8 @@
 - Build production library and refresh docs:
 
 ```shell
- ./bin/devbl-build -p
- ./bin/devbl-build -d
+ ./bin/dev-build -p
+ ./bin/dev-build -d
 ```
 
 ## Test source code
@@ -52,7 +52,7 @@
 - Build testing library:
 
 ```shell
- ./bin/devbl-build -t
+ ./bin/dev-build -t
 ```
 
 - Run test-cases using container images bundled with the `testmansh` tool

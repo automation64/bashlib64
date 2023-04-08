@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #
-# Version: 4.1.0
+# Version: 4.2.0
 #######################################
 
 #
@@ -26,6 +26,7 @@ bl64_dbg_setup &&
   bl64_check_setup &&
   bl64_msg_setup &&
   bl64_bsh_setup &&
+  bl64_rnd_setup &&
   bl64_ui_setup ||
   return $?
 
@@ -33,7 +34,6 @@ bl64_dbg_setup &&
 bl64_os_setup &&
   bl64_txt_setup &&
   bl64_fmt_setup &&
-  bl64_rnd_setup &&
   bl64_fs_setup &&
   bl64_iam_setup &&
   bl64_rbac_setup &&

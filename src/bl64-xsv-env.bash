@@ -1,8 +1,10 @@
 #######################################
 # BashLib64 / Module / Globals / Manipulate CSV like text files
 #
-# Version: 1.4.0
+# Version: 1.5.0
 #######################################
+
+export BL64_XSV_MODULE="$BL64_VAR_OFF"
 
 # Field separators
 export BL64_XSV_FS='_@64@_' # Custom

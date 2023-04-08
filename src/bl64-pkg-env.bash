@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Manage native OS packages
 #
-# Version: 1.10.0
+# Version: 1.11.0
 #######################################
 
 export BL64_PKG_MODULE="$BL64_VAR_OFF"
@@ -11,6 +11,7 @@ export BL64_PKG_CMD_APT=''
 export BL64_PKG_CMD_BRW=''
 export BL64_PKG_CMD_DNF=''
 export BL64_PKG_CMD_YUM=''
+export BL64_PKG_CMD_ZYPPER=''
 
 export BL64_PKG_ALIAS_APK_CLEAN=''
 export BL64_PKG_ALIAS_APK_INSTALL=''

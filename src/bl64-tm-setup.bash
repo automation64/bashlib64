@@ -1,7 +1,7 @@
 #######################################
-# BashLib64 / Module / Setup / Format text data
+# BashLib64 / Module / Setup / Manage date-time data
 #
-# Version: 1.0.1
+# Version: 1.0.0
 #######################################
 
 #######################################
@@ -18,10 +18,10 @@
 #   0: setup ok
 #   >0: setup failed
 #######################################
-function bl64_fmt_setup() {
+function bl64_tm_setup() {
   bl64_dbg_lib_show_function
 
-  BL64_FMT_MODULE="$BL64_VAR_ON"
+  BL64_TM_MODULE="$BL64_VAR_ON"
 
-  bl64_check_alert_module_setup 'fmt'
+  bl64_check_alert_module_setup 'tm'
 }

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Ansible CLI
 #
-# Version: 1.5.0
+# Version: 1.5.1
 #######################################
 
 #######################################
@@ -36,8 +36,7 @@ function bl64_ans_setup() {
     _bl64_ans_set_options &&
     _bl64_ans_set_version &&
     BL64_ANS_MODULE="$BL64_VAR_ON" &&
-    BL64_ANS_ENV_IGNORE="$env_ignore" ||
-    return $?
+    BL64_ANS_ENV_IGNORE="$env_ignore"
 
   bl64_check_alert_module_setup 'ans'
 }

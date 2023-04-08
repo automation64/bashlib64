@@ -3,7 +3,7 @@
 . bin/dev-set
 . "${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_FULL}"
 
-bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI"
+bl64_msg_set_output "$BL64_MSG_OUTPUT_ASCII"
 bl64_msg_show_error 'test'
 bl64_msg_show_warning 'test'
 bl64_msg_show_info 'test'

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 3.0.0
+# Version: 4.0.0
 #######################################
 
 #######################################
@@ -80,7 +80,6 @@ function _bl64_py_set_command() {
 
   if [[ "$venv_path" == "$BL64_VAR_DEFAULT" ]]; then
     bl64_dbg_lib_show_info 'identify OS native python3 path'
-    # Define distro native Python versions
     # shellcheck disable=SC2034
     case "$BL64_OS_DISTRO" in
     ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*) BL64_PY_CMD_PYTHON36='/usr/bin/python3' ;;
@@ -98,6 +97,14 @@ function _bl64_py_set_command() {
     ${BL64_OS_UB}-20.*) BL64_PY_CMD_PYTHON38='/usr/bin/python3.8' ;;
     ${BL64_OS_UB}-21.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_UB}-22.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
+    ${BL64_OS_SLES}-15.*)
+      # Default
+      BL64_PY_CMD_PYTHON36='/usr/bin/python3.6'
+      # SP3
+      BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
+      # SP4
+      BL64_PY_CMD_PYTHON310='/usr/bin/python3.10'
+      ;;
     "${BL64_OS_ALP}-3.14" | "${BL64_OS_ALP}-3.15") BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     "${BL64_OS_ALP}-3.16" | "${BL64_OS_ALP}-3.17") BL64_PY_CMD_PYTHON39='/usr/bin/python3.10' ;;
     ${BL64_OS_MCOS}-12.* | ${BL64_OS_MCOS}-13.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
