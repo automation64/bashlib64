@@ -116,6 +116,7 @@ function bl64_fs_copy_files() {
 #
 # * If the destination is already present no update is done unless requested
 # * If asked to replace destination, no backup is done. User must take one if needed
+# * If merge fails the incomplete file will be removed
 #
 # Arguments:
 #   $1: permissions. Format: chown format. Default: use current umask
@@ -141,6 +142,7 @@ function bl64_fs_merge_files() {
   local destination="${5:-${BL64_VAR_DEFAULT}}"
   local path=''
   local -i status=0
+  local -i first=1
 
   bl64_check_parameter 'destination' || return $?
   bl64_check_overwrite "$destination" "$replace" || return $?
@@ -157,16 +159,26 @@ function bl64_fs_merge_files() {
   bl64_msg_show_lib_task "${_BL64_FS_TXT_MERGE_FILES} (${destination})"
   for path in "$@"; do
     bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_ADD_SOURCE} (${path})"
-    bl64_check_path_absolute "$path" &&
-      "$BL64_OS_CMD_CAT" "$path" >>"$destination"
+    if ((first == 1)); then
+      first=0
+      bl64_check_path_absolute "$path" &&
+        "$BL64_OS_CMD_CAT" "$path" >"$destination"
+    else
+      bl64_check_path_absolute "$path" &&
+        "$BL64_OS_CMD_CAT" "$path" >>"$destination"
+    fi
     status=$?
     ((status != 0)) && break
     :
   done
 
-  if [[ "$status" == '0' ]]; then
+  if ((status == 0)); then
+    bl64_dbg_lib_show_info "merge commplete, update permissions if needed (${destination})"
     bl64_fs_set_permissions "$mode" "$user" "$group" "$destination"
     status=$?
+  else
+    bl64_dbg_lib_show_info "merge failed, removing incomplete file (${destination})"
+    [[ -f "$destination" ]] && bl64_fs_rm_file "$destination"
   fi
 
   return $status
