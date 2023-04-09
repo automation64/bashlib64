@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 12.0.0
+# Version: 12.1.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -1799,7 +1799,7 @@ function bl64_cnt_set_paths() {
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.9.0
+# Version: 1.9.1
 #######################################
 
 #######################################
@@ -2177,7 +2177,7 @@ function bl64_cnt_container_is_running() {
 
   result="$("_bl64_cnt_${BL64_CNT_DRIVER}_ps_filter" "$name" "$id" "$BL64_CNT_SET_STATUS_RUNNING")" ||
     return $?
-  bl64_dbg_lib_show_var 'result'
+  bl64_dbg_lib_show_vars 'result'
 
   if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
     [[ "$result" == "$name" ]]
@@ -6458,7 +6458,7 @@ function _bl64_tf_set_command() {
     fi
   fi
 
-  terraform_bin "$ansible_bin" || return $?
+  bl64_check_directory "$terraform_bin" || return $?
   [[ -x "${terraform_bin}/terraform" ]] && BL64_TF_CMD_TERRAFORM="${terraform_bin}/terraform"
 
   bl64_dbg_lib_show_vars 'BL64_TF_CMD_TERRAFORM'
