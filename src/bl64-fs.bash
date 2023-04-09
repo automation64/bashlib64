@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 4.0.0
+# Version: 4.0.1
 #######################################
 
 #######################################
@@ -155,11 +155,11 @@ function bl64_fs_merge_files() {
   for path in "$@"; do
     bl64_dbg_lib_show_info "concatenate file (${path})"
     bl64_check_path_absolute "$path" &&
-      "$BL64_OS_CMD_CAT" "$path"
+      "$BL64_OS_CMD_CAT" "$path" >>"$destination"
     status=$?
     ((status != 0)) && break
     :
-  done >>"$destination"
+  done
 
   if [[ "$status" == '0' ]]; then
     bl64_fs_set_permissions "$mode" "$user" "$group" "$destination"
