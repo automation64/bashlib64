@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #
-# Version: 1.10.0
+# Version: 1.11.0
 #######################################
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
@@ -44,6 +44,7 @@ export BL64_FS_SET_FIND_TYPE_DIR=''
 export BL64_FS_SET_FIND_TYPE_FILE=''
 export BL64_FS_SET_LN_SYMBOLIC=''
 export BL64_FS_SET_LN_VERBOSE=''
+export BL64_FS_SET_LS_NOCOLOR=''
 export BL64_FS_SET_MKDIR_PARENTS=''
 export BL64_FS_SET_MKDIR_VERBOSE=''
 export BL64_FS_SET_MV_FORCE=''
@@ -51,7 +52,6 @@ export BL64_FS_SET_MV_VERBOSE=''
 export BL64_FS_SET_RM_FORCE=''
 export BL64_FS_SET_RM_RECURSIVE=''
 export BL64_FS_SET_RM_VERBOSE=''
-export BL64_FS_SET_LS_NOCOLOR=''
 
 
 export BL64_FS_UMASK_RW_USER='u=rwx,g=,o='
@@ -62,4 +62,12 @@ export BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
 
 export BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
 
+export _BL64_FS_TXT_COPY_FILE_PATH='copy source file'
+export _BL64_FS_TXT_COPY_FILES='copy multiple files to a single destination'
+export _BL64_FS_TXT_CREATE_DIR_PATH='create directory'
+export _BL64_FS_TXT_CREATE_DIR='create multiple directories'
+export _BL64_FS_TXT_MERGE_ADD_SOURCE='add source file'
+export _BL64_FS_TXT_MERGE_FILES='create single file by concatenating sources in order'
+export _BL64_FS_TXT_RESTORE_OBJECT='restore original file from backup'
 export _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
+export _BL64_FS_TXT_SAFEGUARD_OBJECT='backup original file'

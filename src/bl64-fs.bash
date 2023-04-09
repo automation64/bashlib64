@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 4.0.1
+# Version: 4.1.0
 #######################################
 
 #######################################
@@ -38,11 +38,13 @@ function bl64_fs_create_dir() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "path list:[${*}]"
 
+  bl64_msg_show_lib_task "$_BL64_FS_TXT_CREATE_DIR"
   for path in "$@"; do
 
     bl64_check_path_absolute "$path" || return $?
     [[ -d "$path" ]] && continue
 
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CREATE_DIR_PATH} (${path})"
     bl64_fs_run_mkdir "$path" &&
       bl64_fs_set_permissions "$mode" "$user" "$group" "$path" ||
       return $?
@@ -93,12 +95,15 @@ function bl64_fs_copy_files() {
   # shellcheck disable=SC2086
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "paths:[${*}]"
+  bl64_msg_show_lib_task "${_BL64_FS_TXT_CREATE_DIR} (${destination})"
   for path in "$@"; do
 
     target=''
     bl64_check_path_absolute "$path" &&
-      target="${destination}/$(bl64_fmt_basename "$path")" &&
-      bl64_fs_cp_file "$path" "$target" &&
+      target="${destination}/$(bl64_fmt_basename "$path")" || return $?
+
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_COPY_FILE_PATH} ($target)"
+    bl64_fs_cp_file "$path" "$target" &&
       bl64_fs_set_permissions "$mode" "$user" "$group" "$target" ||
       return $?
   done
@@ -110,7 +115,7 @@ function bl64_fs_copy_files() {
 # Merge 2 or more files into a new one, then set owner and permissions
 #
 # * If the destination is already present no update is done unless requested
-# * If asked to replace destination, temporary backup is done in case git fails by moving the destination to a temp name
+# * If asked to replace destination, no backup is done. User must take one if needed
 #
 # Arguments:
 #   $1: permissions. Format: chown format. Default: use current umask
@@ -149,11 +154,9 @@ function bl64_fs_merge_files() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "source files:[${*}]"
 
-  # Asked to replace, backup first
-  bl64_fs_safeguard "$destination" || return $?
-
+  bl64_msg_show_lib_task "${_BL64_FS_TXT_MERGE_FILES} (${destination})"
   for path in "$@"; do
-    bl64_dbg_lib_show_info "concatenate file (${path})"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_ADD_SOURCE} (${path})"
     bl64_check_path_absolute "$path" &&
       "$BL64_OS_CMD_CAT" "$path" >>"$destination"
     status=$?
@@ -166,8 +169,6 @@ function bl64_fs_merge_files() {
     status=$?
   fi
 
-  # Rollback if error
-  bl64_fs_restore "$destination" "$status" || return $?
   return $status
 }
 
@@ -648,7 +649,7 @@ function bl64_fs_safeguard() {
     return 0
   fi
 
-  bl64_dbg_lib_show_info "safeguard object: [${destination}]->[${backup}]"
+  bl64_msg_show_lib_task "${_BL64_FS_TXT_SAFEGUARD_OBJECT} ([${destination}]->[${backup}])"
   if ! bl64_fs_run_mv "$destination" "$backup"; then
     bl64_msg_show_error "$_BL64_FS_TXT_SAFEGUARD_FAILED ($destination)"
     return $BL64_LIB_ERROR_TASK_BACKUP
@@ -700,7 +701,7 @@ function bl64_fs_restore() {
     bl64_dbg_lib_show_info 'operation was NOT ok, remove invalid content'
     [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
 
-    bl64_dbg_lib_show_info 'restore content from backup'
+    bl64_msg_show_lib_task "${_BL64_FS_TXT_RESTORE_OBJECT} ([${backup}]->[${destination}])"
     # shellcheck disable=SC2086
     bl64_fs_run_mv "$backup" "$destination" ||
       return $BL64_LIB_ERROR_TASK_RESTORE
