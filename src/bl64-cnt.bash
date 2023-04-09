@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.9.0
+# Version: 1.9.1
 #######################################
 
 #######################################
@@ -379,7 +379,7 @@ function bl64_cnt_container_is_running() {
 
   result="$("_bl64_cnt_${BL64_CNT_DRIVER}_ps_filter" "$name" "$id" "$BL64_CNT_SET_STATUS_RUNNING")" ||
     return $?
-  bl64_dbg_lib_show_var 'result'
+  bl64_dbg_lib_show_vars 'result'
 
   if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
     [[ "$result" == "$name" ]]

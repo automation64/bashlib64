@@ -63,7 +63,7 @@ function _bl64_tf_set_command() {
     fi
   fi
 
-  terraform_bin "$ansible_bin" || return $?
+  bl64_check_directory "$terraform_bin" || return $?
   [[ -x "${terraform_bin}/terraform" ]] && BL64_TF_CMD_TERRAFORM="${terraform_bin}/terraform"
 
   bl64_dbg_lib_show_vars 'BL64_TF_CMD_TERRAFORM'

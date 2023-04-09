@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 12.0.0
+# Version: 12.1.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -346,7 +346,7 @@ export _BL64_DBG_TXT_DEBUG='Debug'
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #
-# Version: 1.10.0
+# Version: 1.11.0
 #######################################
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
@@ -389,6 +389,7 @@ export BL64_FS_SET_FIND_TYPE_DIR=''
 export BL64_FS_SET_FIND_TYPE_FILE=''
 export BL64_FS_SET_LN_SYMBOLIC=''
 export BL64_FS_SET_LN_VERBOSE=''
+export BL64_FS_SET_LS_NOCOLOR=''
 export BL64_FS_SET_MKDIR_PARENTS=''
 export BL64_FS_SET_MKDIR_VERBOSE=''
 export BL64_FS_SET_MV_FORCE=''
@@ -396,7 +397,6 @@ export BL64_FS_SET_MV_VERBOSE=''
 export BL64_FS_SET_RM_FORCE=''
 export BL64_FS_SET_RM_RECURSIVE=''
 export BL64_FS_SET_RM_VERBOSE=''
-export BL64_FS_SET_LS_NOCOLOR=''
 
 
 export BL64_FS_UMASK_RW_USER='u=rwx,g=,o='
@@ -407,7 +407,15 @@ export BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
 
 export BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
 
+export _BL64_FS_TXT_COPY_FILE_PATH='copy source file'
+export _BL64_FS_TXT_COPY_FILES='copy multiple files to a single destination'
+export _BL64_FS_TXT_CREATE_DIR_PATH='create directory'
+export _BL64_FS_TXT_CREATE_DIR='create multiple directories'
+export _BL64_FS_TXT_MERGE_ADD_SOURCE='add source file'
+export _BL64_FS_TXT_MERGE_FILES='create single file by concatenating sources in order'
+export _BL64_FS_TXT_RESTORE_OBJECT='restore original file from backup'
 export _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
+export _BL64_FS_TXT_SAFEGUARD_OBJECT='backup original file'
 
 #######################################
 # BashLib64 / Module / Globals / Format text data
@@ -420,7 +428,7 @@ export BL64_FMT_MODULE="$BL64_VAR_OFF"
 #######################################
 # BashLib64 / Module / Globals / Display messages
 #
-# Version: 2.8.0
+# Version: 2.9.0
 #######################################
 
 export BL64_MSG_MODULE="$BL64_VAR_OFF"
@@ -445,18 +453,19 @@ export BL64_MSG_VERBOSE_ALL='ALL'
 # Message type tag
 #
 
+export BL64_MSG_TYPE_BATCH='BATCH'
+export BL64_MSG_TYPE_BATCHERR='BATCHERR'
+export BL64_MSG_TYPE_BATCHOK='BATCHOK'
 export BL64_MSG_TYPE_ERROR='ERROR'
-export BL64_MSG_TYPE_WARNING='WARNING'
 export BL64_MSG_TYPE_INFO='INFO'
 export BL64_MSG_TYPE_INPUT='INPUT'
-export BL64_MSG_TYPE_PHASE='PHASE'
-export BL64_MSG_TYPE_TASK='TASK'
-export BL64_MSG_TYPE_SUBTASK='SUBTASK'
 export BL64_MSG_TYPE_LIBINFO='LIBINFO'
+export BL64_MSG_TYPE_LIBSUBTASK='LIBSUBTASK'
 export BL64_MSG_TYPE_LIBTASK='LIBTASK'
-export BL64_MSG_TYPE_BATCH='BATCH'
-export BL64_MSG_TYPE_BATCHOK='BATCHOK'
-export BL64_MSG_TYPE_BATCHERR='BATCHERR'
+export BL64_MSG_TYPE_PHASE='PHASE'
+export BL64_MSG_TYPE_SUBTASK='SUBTASK'
+export BL64_MSG_TYPE_TASK='TASK'
+export BL64_MSG_TYPE_WARNING='WARNING'
 
 #
 # Message output type
@@ -486,38 +495,40 @@ export BL64_MSG_FORMAT="${BL64_MSG_FORMAT:-$BL64_MSG_FORMAT_FULL}"
 #
 
 export BL64_MSG_THEME_ID_ASCII_STD='ascii-std'
+export BL64_MSG_THEME_ASCII_STD_BATCH='(@)'
+export BL64_MSG_THEME_ASCII_STD_BATCHERR='(@)'
+export BL64_MSG_THEME_ASCII_STD_BATCHOK='(@)'
 export BL64_MSG_THEME_ASCII_STD_ERROR='(!)'
-export BL64_MSG_THEME_ASCII_STD_WARNING='(*)'
+export BL64_MSG_THEME_ASCII_STD_FMTCALLER=''
+export BL64_MSG_THEME_ASCII_STD_FMTHOST=''
+export BL64_MSG_THEME_ASCII_STD_FMTTIME=''
 export BL64_MSG_THEME_ASCII_STD_INFO='(I)'
 export BL64_MSG_THEME_ASCII_STD_INPUT='(?)'
+export BL64_MSG_THEME_ASCII_STD_LIBINFO='(II)'
+export BL64_MSG_THEME_ASCII_STD_LIBSUBTASK='(>>)'
+export BL64_MSG_THEME_ASCII_STD_LIBTASK='(--)'
 export BL64_MSG_THEME_ASCII_STD_PHASE='(=)'
-export BL64_MSG_THEME_ASCII_STD_TASK='(-)'
 export BL64_MSG_THEME_ASCII_STD_SUBTASK='(>)'
-export BL64_MSG_THEME_ASCII_STD_LIBTASK='(-)'
-export BL64_MSG_THEME_ASCII_STD_LIBINFO='(I)'
-export BL64_MSG_THEME_ASCII_STD_BATCH='(@)'
-export BL64_MSG_THEME_ASCII_STD_BATCHOK='(@)'
-export BL64_MSG_THEME_ASCII_STD_BATCHERR='(@)'
-export BL64_MSG_THEME_ASCII_STD_FMTHOST=''
-export BL64_MSG_THEME_ASCII_STD_FMTCALLER=''
-export BL64_MSG_THEME_ASCII_STD_FMTTIME=''
+export BL64_MSG_THEME_ASCII_STD_TASK='(-)'
+export BL64_MSG_THEME_ASCII_STD_WARNING='(*)'
 
 export BL64_MSG_THEME_ID_ANSI_STD='ansi-std'
+export BL64_MSG_THEME_ANSI_STD_BATCH='30;1;47'
+export BL64_MSG_THEME_ANSI_STD_BATCHERR='5;30;41'
+export BL64_MSG_THEME_ANSI_STD_BATCHOK='30;42'
 export BL64_MSG_THEME_ANSI_STD_ERROR='5;37;41'
-export BL64_MSG_THEME_ANSI_STD_WARNING='5;37;43'
+export BL64_MSG_THEME_ANSI_STD_FMTCALLER='33'
+export BL64_MSG_THEME_ANSI_STD_FMTHOST='34'
+export BL64_MSG_THEME_ANSI_STD_FMTTIME='36'
 export BL64_MSG_THEME_ANSI_STD_INFO='36'
 export BL64_MSG_THEME_ANSI_STD_INPUT='5;30;47'
+export BL64_MSG_THEME_ANSI_STD_LIBINFO='1;32'
+export BL64_MSG_THEME_ANSI_STD_LIBSUBTASK='1;36'
+export BL64_MSG_THEME_ANSI_STD_LIBTASK='1;35'
 export BL64_MSG_THEME_ANSI_STD_PHASE='7;1;36'
-export BL64_MSG_THEME_ANSI_STD_TASK='1;37'
 export BL64_MSG_THEME_ANSI_STD_SUBTASK='37'
-export BL64_MSG_THEME_ANSI_STD_LIBTASK='37'
-export BL64_MSG_THEME_ANSI_STD_LIBINFO='36'
-export BL64_MSG_THEME_ANSI_STD_BATCH='30;1;47'
-export BL64_MSG_THEME_ANSI_STD_BATCHOK='30;42'
-export BL64_MSG_THEME_ANSI_STD_BATCHERR='5;30;41'
-export BL64_MSG_THEME_ANSI_STD_FMTHOST='34'
-export BL64_MSG_THEME_ANSI_STD_FMTCALLER='33'
-export BL64_MSG_THEME_ANSI_STD_FMTTIME='36'
+export BL64_MSG_THEME_ANSI_STD_TASK='1;37'
+export BL64_MSG_THEME_ANSI_STD_WARNING='5;37;43'
 
 # Selected message theme
 export BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD'
@@ -580,22 +591,22 @@ export BL64_MSG_COSMETIC_PIPE='|'
 # Display messages
 #
 
-export _BL64_MSG_TXT_USAGE='Usage'
+export _BL64_MSG_TXT_BATCH_FINISH_ERROR='finished with errors'
+export _BL64_MSG_TXT_BATCH_FINISH_OK='finished successfully'
+export _BL64_MSG_TXT_BATCH_START='started'
+export _BL64_MSG_TXT_BATCH='Process'
 export _BL64_MSG_TXT_COMMANDS='Commands'
-export _BL64_MSG_TXT_FLAGS='Flags'
-export _BL64_MSG_TXT_PARAMETERS='Parameters'
 export _BL64_MSG_TXT_ERROR='Error'
+export _BL64_MSG_TXT_FLAGS='Flags'
 export _BL64_MSG_TXT_INFO='Info'
 export _BL64_MSG_TXT_INPUT='Input'
-export _BL64_MSG_TXT_PHASE='Phase'
-export _BL64_MSG_TXT_TASK='Task'
-export _BL64_MSG_TXT_SUBTASK='Subtask'
-export _BL64_MSG_TXT_WARNING='Warning'
-export _BL64_MSG_TXT_BATCH='Process'
-export _BL64_MSG_TXT_BATCH_START='started'
-export _BL64_MSG_TXT_BATCH_FINISH_OK='finished successfully'
-export _BL64_MSG_TXT_BATCH_FINISH_ERROR='finished with errors'
 export _BL64_MSG_TXT_INVALID_VALUE='invalid value. Not one of'
+export _BL64_MSG_TXT_PARAMETERS='Parameters'
+export _BL64_MSG_TXT_PHASE='Phase'
+export _BL64_MSG_TXT_SUBTASK='Subtask'
+export _BL64_MSG_TXT_TASK='Task'
+export _BL64_MSG_TXT_USAGE='Usage'
+export _BL64_MSG_TXT_WARNING='Warning'
 
 #######################################
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
@@ -2852,7 +2863,7 @@ function _bl64_fs_set_alias() {
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 4.0.0
+# Version: 4.1.0
 #######################################
 
 #######################################
@@ -2889,11 +2900,13 @@ function bl64_fs_create_dir() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "path list:[${*}]"
 
+  bl64_msg_show_lib_task "$_BL64_FS_TXT_CREATE_DIR"
   for path in "$@"; do
 
     bl64_check_path_absolute "$path" || return $?
     [[ -d "$path" ]] && continue
 
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CREATE_DIR_PATH} (${path})"
     bl64_fs_run_mkdir "$path" &&
       bl64_fs_set_permissions "$mode" "$user" "$group" "$path" ||
       return $?
@@ -2944,12 +2957,15 @@ function bl64_fs_copy_files() {
   # shellcheck disable=SC2086
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "paths:[${*}]"
+  bl64_msg_show_lib_task "${_BL64_FS_TXT_CREATE_DIR} (${destination})"
   for path in "$@"; do
 
     target=''
     bl64_check_path_absolute "$path" &&
-      target="${destination}/$(bl64_fmt_basename "$path")" &&
-      bl64_fs_cp_file "$path" "$target" &&
+      target="${destination}/$(bl64_fmt_basename "$path")" || return $?
+
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_COPY_FILE_PATH} ($target)"
+    bl64_fs_cp_file "$path" "$target" &&
       bl64_fs_set_permissions "$mode" "$user" "$group" "$target" ||
       return $?
   done
@@ -2961,7 +2977,8 @@ function bl64_fs_copy_files() {
 # Merge 2 or more files into a new one, then set owner and permissions
 #
 # * If the destination is already present no update is done unless requested
-# * If asked to replace destination, temporary backup is done in case git fails by moving the destination to a temp name
+# * If asked to replace destination, no backup is done. User must take one if needed
+# * If merge fails the incomplete file will be removed
 #
 # Arguments:
 #   $1: permissions. Format: chown format. Default: use current umask
@@ -2987,6 +3004,7 @@ function bl64_fs_merge_files() {
   local destination="${5:-${BL64_VAR_DEFAULT}}"
   local path=''
   local -i status=0
+  local -i first=1
 
   bl64_check_parameter 'destination' || return $?
   bl64_check_overwrite "$destination" "$replace" || return $?
@@ -3000,25 +3018,31 @@ function bl64_fs_merge_files() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "source files:[${*}]"
 
-  # Asked to replace, backup first
-  bl64_fs_safeguard "$destination" || return $?
-
+  bl64_msg_show_lib_task "${_BL64_FS_TXT_MERGE_FILES} (${destination})"
   for path in "$@"; do
-    bl64_dbg_lib_show_info "concatenate file (${path})"
-    bl64_check_path_absolute "$path" &&
-      "$BL64_OS_CMD_CAT" "$path"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_ADD_SOURCE} (${path})"
+    if ((first == 1)); then
+      first=0
+      bl64_check_path_absolute "$path" &&
+        "$BL64_OS_CMD_CAT" "$path" >"$destination"
+    else
+      bl64_check_path_absolute "$path" &&
+        "$BL64_OS_CMD_CAT" "$path" >>"$destination"
+    fi
     status=$?
     ((status != 0)) && break
     :
-  done >>"$destination"
+  done
 
-  if [[ "$status" == '0' ]]; then
+  if ((status == 0)); then
+    bl64_dbg_lib_show_info "merge commplete, update permissions if needed (${destination})"
     bl64_fs_set_permissions "$mode" "$user" "$group" "$destination"
     status=$?
+  else
+    bl64_dbg_lib_show_info "merge failed, removing incomplete file (${destination})"
+    [[ -f "$destination" ]] && bl64_fs_rm_file "$destination"
   fi
 
-  # Rollback if error
-  bl64_fs_restore "$destination" "$status" || return $?
   return $status
 }
 
@@ -3499,7 +3523,7 @@ function bl64_fs_safeguard() {
     return 0
   fi
 
-  bl64_dbg_lib_show_info "safeguard object: [${destination}]->[${backup}]"
+  bl64_msg_show_lib_task "${_BL64_FS_TXT_SAFEGUARD_OBJECT} ([${destination}]->[${backup}])"
   if ! bl64_fs_run_mv "$destination" "$backup"; then
     bl64_msg_show_error "$_BL64_FS_TXT_SAFEGUARD_FAILED ($destination)"
     return $BL64_LIB_ERROR_TASK_BACKUP
@@ -3551,7 +3575,7 @@ function bl64_fs_restore() {
     bl64_dbg_lib_show_info 'operation was NOT ok, remove invalid content'
     [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
 
-    bl64_dbg_lib_show_info 'restore content from backup'
+    bl64_msg_show_lib_task "${_BL64_FS_TXT_RESTORE_OBJECT} ([${backup}]->[${destination}])"
     # shellcheck disable=SC2086
     bl64_fs_run_mv "$backup" "$destination" ||
       return $BL64_LIB_ERROR_TASK_RESTORE
@@ -4092,20 +4116,8 @@ function bl64_fmt_separator_line() {
 #######################################
 # BashLib64 / Module / Setup / Display messages
 #
-# Version: 3.0.1
+# Version: 3.1.0
 #######################################
-
-#
-# Verbosity control
-#
-
-function bl64_msg_app_verbose_enabled { [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
-function bl64_msg_lib_verbose_enabled { [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
-
-function bl64_msg_all_disable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_NONE"; }
-function bl64_msg_all_enable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_ALL"; }
-function bl64_msg_lib_enable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_LIB"; }
-function bl64_msg_app_enable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_APP"; }
 
 #######################################
 # Setup the bashlib64 module
@@ -4125,7 +4137,6 @@ function bl64_msg_setup() {
   bl64_dbg_lib_show_function
 
   bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI" &&
-    bl64_msg_set_theme "$BL64_MSG_THEME_ID_ANSI_STD" &&
     bl64_msg_app_enable_verbose &&
     BL64_MSG_MODULE="$BL64_VAR_ON"
 
@@ -4145,17 +4156,29 @@ function bl64_msg_setup() {
 #   >0: unable to set
 #######################################
 function bl64_msg_set_level() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local level="$1"
 
   bl64_check_parameter 'level' || return $?
 
   case "$level" in
-  "$BL64_MSG_VERBOSE_NONE") bl64_msg_all_disable_verbose ;;
-  "$BL64_MSG_VERBOSE_APP") bl64_msg_app_enable_verbose ;;
-  "$BL64_MSG_VERBOSE_LIB") bl64_msg_lib_enable_verbose ;;
-  "$BL64_MSG_VERBOSE_ALL") bl64_msg_all_enable_verbose ;;
-  *) bl64_check_alert_parameter_invalid 'BL64_MSG_VERBOSE' "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_VERBOSE_NONE}|${BL64_MSG_VERBOSE_ALL}|${BL64_MSG_VERBOSE_APP}|${BL64_MSG_VERBOSE_LIB}" ;;
+  "$BL64_MSG_VERBOSE_NONE")
+    bl64_msg_all_disable_verbose
+    ;;
+  "$BL64_MSG_VERBOSE_APP")
+    bl64_msg_app_enable_verbose
+    ;;
+  "$BL64_MSG_VERBOSE_LIB")
+    bl64_msg_lib_enable_verbose
+    ;;
+  "$BL64_MSG_VERBOSE_ALL")
+    bl64_msg_all_enable_verbose
+    ;;
+  *)
+    bl64_check_alert_parameter_invalid 'BL64_MSG_VERBOSE' \
+      "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_VERBOSE_NONE}|${BL64_MSG_VERBOSE_ALL}|${BL64_MSG_VERBOSE_APP}|${BL64_MSG_VERBOSE_LIB}"
+    return $?
+    ;;
   esac
 }
 
@@ -4172,19 +4195,34 @@ function bl64_msg_set_level() {
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
 function bl64_msg_set_format() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local format="$1"
 
   bl64_check_parameter 'format' || return $?
 
   case "$format" in
-  "$BL64_MSG_FORMAT_PLAIN") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN" ;;
-  "$BL64_MSG_FORMAT_HOST") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST" ;;
-  "$BL64_MSG_FORMAT_TIME") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME" ;;
-  "$BL64_MSG_FORMAT_CALLER") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER" ;;
-  "$BL64_MSG_FORMAT_FULL") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL" ;;
-  *) bl64_check_alert_parameter_invalid 'BL64_MSG_FORMAT' "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_FORMAT_PLAIN}|${BL64_MSG_FORMAT_HOST}|${BL64_MSG_FORMAT_TIME}|${BL64_MSG_FORMAT_CALLER}|${BL64_MSG_FORMAT_FULL}" ;;
+  "$BL64_MSG_FORMAT_PLAIN")
+    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN"
+    ;;
+  "$BL64_MSG_FORMAT_HOST")
+    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST"
+    ;;
+  "$BL64_MSG_FORMAT_TIME")
+    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME"
+    ;;
+  "$BL64_MSG_FORMAT_CALLER")
+    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER"
+    ;;
+  "$BL64_MSG_FORMAT_FULL")
+    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL"
+    ;;
+  *)
+    bl64_check_alert_parameter_invalid 'BL64_MSG_FORMAT' \
+      "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_FORMAT_PLAIN}|${BL64_MSG_FORMAT_HOST}|${BL64_MSG_FORMAT_TIME}|${BL64_MSG_FORMAT_CALLER}|${BL64_MSG_FORMAT_FULL}"
+    return $?
+    ;;
   esac
+  bl64_dbg_lib_show_vars 'BL64_MSG_FORMAT'
 }
 
 #######################################
@@ -4200,23 +4238,36 @@ function bl64_msg_set_format() {
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
 function bl64_msg_set_theme() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local theme="$1"
 
   bl64_check_parameter 'theme' || return $?
 
   case "$theme" in
-  "$BL64_MSG_THEME_ID_ASCII_STD") BL64_MSG_THEME='BL64_MSG_THEME_ASCII_STD' ;;
-  "$BL64_MSG_THEME_ID_ANSI_STD") BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD' ;;
-  *) bl64_check_alert_parameter_invalid 'BL64_MSG_THEME' "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_THEME_ID_ASCII_STD}|${BL64_MSG_THEME_ID_ANSI_STD}" ;;
+  "$BL64_MSG_THEME_ID_ASCII_STD")
+    BL64_MSG_THEME='BL64_MSG_THEME_ASCII_STD'
+    ;;
+  "$BL64_MSG_THEME_ID_ANSI_STD")
+    BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD'
+    ;;
+  *)
+    bl64_check_alert_parameter_invalid 'BL64_MSG_THEME' \
+      "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_THEME_ID_ASCII_STD}|${BL64_MSG_THEME_ID_ANSI_STD}"
+    return $?
+    ;;
   esac
+  bl64_dbg_lib_show_vars 'BL64_MSG_THEME'
 }
 
 #######################################
 # Set message output type
 #
+# * Will also setup the theme
+# * If no theme is provided then the STD is used (ansi or ascii)
+#
 # Arguments:
 #   $1: output type. One of BL64_MSG_OUTPUT_*
+#   $2: (optional) theme. Default: STD
 # Outputs:
 #   STDOUT: None
 #   STDERR: parameter error
@@ -4225,26 +4276,76 @@ function bl64_msg_set_theme() {
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
 function bl64_msg_set_output() {
-  bl64_dbg_lib_show_function "@"
-  local output="$1"
+  bl64_dbg_lib_show_function "$@"
+  local output="${1:-}"
+  local theme="${2:-${BL64_VAR_DEFAULT}}"
 
   bl64_check_parameter 'output' || return $?
 
   case "$output" in
   "$BL64_MSG_OUTPUT_ASCII")
+    [[ "$theme" == "$BL64_VAR_DEFAULT" ]] && theme="$BL64_MSG_THEME_ID_ASCII_STD"
     BL64_MSG_OUTPUT="$output"
     ;;
   "$BL64_MSG_OUTPUT_ANSI")
+    [[ "$theme" == "$BL64_VAR_DEFAULT" ]] && theme="$BL64_MSG_THEME_ID_ANSI_STD"
     BL64_MSG_OUTPUT="$output"
     ;;
-  *) bl64_check_alert_parameter_invalid 'BL64_MSG_OUTPUT' "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_OUTPUT_ASCII}|${BL64_MSG_OUTPUT_ANSI}" ;;
+  *)
+    bl64_check_alert_parameter_invalid 'BL64_MSG_OUTPUT' \
+      "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_OUTPUT_ASCII}|${BL64_MSG_OUTPUT_ANSI}"
+    return $?
+    ;;
   esac
+  bl64_dbg_lib_show_vars 'BL64_MSG_OUTPUT'
+  bl64_msg_set_theme "$theme"
+}
+
+#
+# Verbosity control
+#
+
+function bl64_msg_app_verbose_enabled {
+  bl64_dbg_lib_show_function
+  local -i enabled=0
+  [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
+  enabled=$?
+  bl64_dbg_lib_show_info "app verbose enabled: ${enabled}"
+  return $enabled
+}
+function bl64_msg_lib_verbose_enabled {
+  bl64_dbg_lib_show_function
+  [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
+  enabled=$?
+  bl64_dbg_lib_show_info "lib verbose enabled: ${enabled}"
+  return $enabled
+}
+
+function bl64_msg_all_disable_verbose {
+  bl64_dbg_lib_show_function
+  BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_NONE"
+  bl64_dbg_lib_show_vars 'BL64_MSG_VERBOSE'
+}
+function bl64_msg_all_enable_verbose {
+  bl64_dbg_lib_show_function
+  BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_ALL"
+  bl64_dbg_lib_show_vars 'BL64_MSG_VERBOSE'
+}
+function bl64_msg_lib_enable_verbose {
+  bl64_dbg_lib_show_function
+  BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_LIB"
+  bl64_dbg_lib_show_vars 'BL64_MSG_VERBOSE'
+}
+function bl64_msg_app_enable_verbose {
+  bl64_dbg_lib_show_function
+  BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_APP"
+  bl64_dbg_lib_show_vars 'BL64_MSG_VERBOSE'
 }
 
 #######################################
 # BashLib64 / Module / Functions / Display messages
 #
-# Version: 3.5.0
+# Version: 3.6.0
 #######################################
 
 #######################################
@@ -4262,7 +4363,7 @@ function bl64_msg_set_output() {
 #   BL64_LIB_ERROR_MODULE_SETUP_INVALID
 #######################################
 function _bl64_msg_show() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local attribute="${1:-}"
   local type="${2:-}"
   local message="${3:-}"
@@ -4277,7 +4378,7 @@ function _bl64_msg_show() {
 }
 
 function _bl64_msg_show_ansi() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local attribute="${1:-}"
   local type="${2:-}"
   local message="${3:-}"
@@ -4328,7 +4429,7 @@ function _bl64_msg_show_ansi() {
 }
 
 function _bl64_msg_show_ascii() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local attribute="${1:-}"
   local type="${2:-}"
   local message="${3:-}"
@@ -4395,7 +4496,7 @@ function _bl64_msg_show_ascii() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_usage() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local usage="${1:-${BL64_VAR_NULL}}"
   local description="${2:-${BL64_VAR_DEFAULT}}"
   local commands="${3:-${BL64_VAR_DEFAULT}}"
@@ -4438,7 +4539,7 @@ function bl64_msg_show_usage() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_error() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local message="$1"
 
   bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
@@ -4458,7 +4559,7 @@ function bl64_msg_show_error() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_warning() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local message="$1"
 
   bl64_log_warning "${FUNCNAME[1]:-MAIN}" "$message" &&
@@ -4478,7 +4579,7 @@ function bl64_msg_show_warning() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_info() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
@@ -4500,7 +4601,7 @@ function bl64_msg_show_info() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_phase() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_PHASE}:${message}" &&
@@ -4522,7 +4623,7 @@ function bl64_msg_show_phase() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_task() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_TASK}:${message}" &&
@@ -4544,7 +4645,7 @@ function bl64_msg_show_task() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_subtask() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_SUBTASK}:${message}" &&
@@ -4566,13 +4667,35 @@ function bl64_msg_show_subtask() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_lib_task() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBTASK}:${message}" &&
     bl64_msg_lib_verbose_enabled || return 0
 
   _bl64_msg_show "$BL64_MSG_TYPE_LIBTASK" "$_BL64_MSG_TXT_TASK" "$message"
+}
+
+#######################################
+# Display subtask message for bash64lib functions
+#
+# Arguments:
+#   $1: message
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_lib_subtask() {
+  bl64_dbg_lib_show_function "$@"
+  local message="$1"
+
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBSUBTASK}:${message}" &&
+    bl64_msg_app_verbose_enabled || return 0
+
+  _bl64_msg_show "$BL64_MSG_TYPE_LIBSUBTASK" "$_BL64_MSG_TXT_SUBTASK" "${BL64_MSG_COSMETIC_ARROW2} ${message}"
 }
 
 #######################################
@@ -4588,7 +4711,7 @@ function bl64_msg_show_lib_task() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_lib_info() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBINFO}:${message}" &&
@@ -4610,7 +4733,7 @@ function bl64_msg_show_lib_info() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_text() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
@@ -4632,7 +4755,7 @@ function bl64_msg_show_text() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_batch_start() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${message}" &&
@@ -4655,7 +4778,7 @@ function bl64_msg_show_batch_start() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_batch_finish() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local status="$1"
   local message="${2-${BL64_VAR_DEFAULT}}"
 
@@ -4684,7 +4807,7 @@ function bl64_msg_show_batch_finish() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_input() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local message="$1"
 
   _bl64_msg_show "$BL64_MSG_TYPE_INPUT" "$_BL64_MSG_TXT_INPUT" "$message"
@@ -8500,7 +8623,7 @@ function bl64_cnt_set_paths() {
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
 #
-# Version: 1.9.0
+# Version: 1.9.1
 #######################################
 
 #######################################
@@ -8878,7 +9001,7 @@ function bl64_cnt_container_is_running() {
 
   result="$("_bl64_cnt_${BL64_CNT_DRIVER}_ps_filter" "$name" "$id" "$BL64_CNT_SET_STATUS_RUNNING")" ||
     return $?
-  bl64_dbg_lib_show_var 'result'
+  bl64_dbg_lib_show_vars 'result'
 
   if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
     [[ "$result" == "$name" ]]
@@ -13159,7 +13282,7 @@ function _bl64_tf_set_command() {
     fi
   fi
 
-  terraform_bin "$ansible_bin" || return $?
+  bl64_check_directory "$terraform_bin" || return $?
   [[ -x "${terraform_bin}/terraform" ]] && BL64_TF_CMD_TERRAFORM="${terraform_bin}/terraform"
 
   bl64_dbg_lib_show_vars 'BL64_TF_CMD_TERRAFORM'

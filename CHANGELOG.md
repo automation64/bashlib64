@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [12.1.0]
+
+### Added
+
+- msg: bl64_msg_show_lib_task
+
+### Fixed
+
+- msg:
+  - bl64_msg_set_output: default theme setting
+- fs:
+  - bl64_fs_merge_files: wrong stdout redirection placement
+
+### Changed
+
+- fs: increased function verbosity
+
 ## [12.0.0]
 
 ### Added
@@ -257,6 +274,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[12.1.0]: https://github.com/serdigital64/bashlib64/compare/12.0.0...12.1.0
 [12.0.0]: https://github.com/serdigital64/bashlib64/compare/11.0.0...12.0.0
 [11.0.0]: https://github.com/serdigital64/bashlib64/compare/10.3.0...11.0.0
 [10.3.0]: https://github.com/serdigital64/bashlib64/compare/10.2.2...10.3.0
