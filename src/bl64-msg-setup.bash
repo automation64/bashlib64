@@ -194,7 +194,6 @@ function bl64_msg_app_verbose_enabled {
   bl64_dbg_lib_show_function
   local -i enabled=0
   [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
-  local -i enabled=0
   enabled=$?
   bl64_dbg_lib_show_info "app verbose enabled: ${enabled}"
   return $enabled
