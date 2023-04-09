@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - all: sles-15 support
 - check: bl64_check_alert_resource_not_found
+- msg: bl64_msg_show_lib_task
 
 ### Changed
 
