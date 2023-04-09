@@ -1,20 +1,50 @@
 #######################################
 # BashLib64 / Module / Setup / Display messages
 #
-# Version: 3.0.1
+# Version: 3.0.2
 #######################################
 
 #
 # Verbosity control
 #
 
-function bl64_msg_app_verbose_enabled { [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
-function bl64_msg_lib_verbose_enabled { [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]; }
+function bl64_msg_app_verbose_enabled {
+  bl64_dbg_lib_show_function
+  local -i enabled=0
+  [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
+  local -i enabled=0
+  enabled=$?
+  bl64_dbg_lib_show_info "app verbose enabled: ${enabled}"
+  return $enabled
+}
+function bl64_msg_lib_verbose_enabled {
+  bl64_dbg_lib_show_function
+  [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
+  enabled=$?
+  bl64_dbg_lib_show_info "lib verbose enabled: ${enabled}"
+  return $enabled
+}
 
-function bl64_msg_all_disable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_NONE"; }
-function bl64_msg_all_enable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_ALL"; }
-function bl64_msg_lib_enable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_LIB"; }
-function bl64_msg_app_enable_verbose { BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_APP"; }
+function bl64_msg_all_disable_verbose {
+  bl64_dbg_lib_show_function
+  BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_NONE"
+  bl64_dbg_lib_show_vars 'BL64_MSG_VERBOSE'
+}
+function bl64_msg_all_enable_verbose {
+  bl64_dbg_lib_show_function
+  BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_ALL"
+  bl64_dbg_lib_show_vars 'BL64_MSG_VERBOSE'
+}
+function bl64_msg_lib_enable_verbose {
+  bl64_dbg_lib_show_function
+  BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_LIB"
+  bl64_dbg_lib_show_vars 'BL64_MSG_VERBOSE'
+}
+function bl64_msg_app_enable_verbose {
+  bl64_dbg_lib_show_function
+  BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_APP"
+  bl64_dbg_lib_show_vars 'BL64_MSG_VERBOSE'
+}
 
 #######################################
 # Setup the bashlib64 module
@@ -54,7 +84,7 @@ function bl64_msg_setup() {
 #   >0: unable to set
 #######################################
 function bl64_msg_set_level() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local level="$1"
 
   bl64_check_parameter 'level' || return $?
@@ -81,7 +111,7 @@ function bl64_msg_set_level() {
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
 function bl64_msg_set_format() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local format="$1"
 
   bl64_check_parameter 'format' || return $?
@@ -94,6 +124,7 @@ function bl64_msg_set_format() {
   "$BL64_MSG_FORMAT_FULL") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL" ;;
   *) bl64_check_alert_parameter_invalid 'BL64_MSG_FORMAT' "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_FORMAT_PLAIN}|${BL64_MSG_FORMAT_HOST}|${BL64_MSG_FORMAT_TIME}|${BL64_MSG_FORMAT_CALLER}|${BL64_MSG_FORMAT_FULL}" ;;
   esac
+  bl64_dbg_lib_show_vars 'BL64_MSG_FORMAT'
 }
 
 #######################################
@@ -109,7 +140,7 @@ function bl64_msg_set_format() {
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
 function bl64_msg_set_theme() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local theme="$1"
 
   bl64_check_parameter 'theme' || return $?
@@ -119,6 +150,7 @@ function bl64_msg_set_theme() {
   "$BL64_MSG_THEME_ID_ANSI_STD") BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD' ;;
   *) bl64_check_alert_parameter_invalid 'BL64_MSG_THEME' "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_THEME_ID_ASCII_STD}|${BL64_MSG_THEME_ID_ANSI_STD}" ;;
   esac
+  bl64_dbg_lib_show_vars 'BL64_MSG_THEME'
 }
 
 #######################################
@@ -134,7 +166,7 @@ function bl64_msg_set_theme() {
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
 function bl64_msg_set_output() {
-  bl64_dbg_lib_show_function "@"
+  bl64_dbg_lib_show_function "$@"
   local output="$1"
 
   bl64_check_parameter 'output' || return $?
@@ -148,4 +180,5 @@ function bl64_msg_set_output() {
     ;;
   *) bl64_check_alert_parameter_invalid 'BL64_MSG_OUTPUT' "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_OUTPUT_ASCII}|${BL64_MSG_OUTPUT_ANSI}" ;;
   esac
+  bl64_dbg_lib_show_vars 'BL64_MSG_OUTPUT_ASCII'
 }
