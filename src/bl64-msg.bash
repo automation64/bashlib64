@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Display messages
 #
-# Version: 3.5.1
+# Version: 3.6.0
 #######################################
 
 #######################################
@@ -330,6 +330,28 @@ function bl64_msg_show_lib_task() {
     bl64_msg_lib_verbose_enabled || return 0
 
   _bl64_msg_show "$BL64_MSG_TYPE_LIBTASK" "$_BL64_MSG_TXT_TASK" "$message"
+}
+
+#######################################
+# Display subtask message for bash64lib functions
+#
+# Arguments:
+#   $1: message
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_lib_subtask() {
+  bl64_dbg_lib_show_function "$@"
+  local message="$1"
+
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBSUBTASK}:${message}" &&
+    bl64_msg_app_verbose_enabled || return 0
+
+  _bl64_msg_show "$BL64_MSG_TYPE_LIBSUBTASK" "$_BL64_MSG_TXT_SUBTASK" "${BL64_MSG_COSMETIC_ARROW2} ${message}"
 }
 
 #######################################
