@@ -7,6 +7,7 @@ on:
     branches:
       - "develop"
       - "feature/*"
+      - "bugfix/*"
 
 jobs:
   test-batscore-os:
