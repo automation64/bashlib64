@@ -81,6 +81,7 @@ The library has been tested on the following operating systems:
 - Ubuntu20
 - Ubuntu21
 - Ubuntu22
+- Ubuntu23
 
 (*) Requires Bash4 (e.g. homebrew install bash)
 
