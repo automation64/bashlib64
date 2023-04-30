@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with system-wide Python
 #
-# Version: 4.0.0
+# Version: 4.1.0
 #######################################
 
 #######################################
@@ -97,6 +97,7 @@ function _bl64_py_set_command() {
     ${BL64_OS_UB}-20.*) BL64_PY_CMD_PYTHON38='/usr/bin/python3.8' ;;
     ${BL64_OS_UB}-21.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_UB}-22.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
+    ${BL64_OS_UB}-23.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.11' ;;
     ${BL64_OS_SLES}-15.*)
       # Default
       BL64_PY_CMD_PYTHON36='/usr/bin/python3.6'
