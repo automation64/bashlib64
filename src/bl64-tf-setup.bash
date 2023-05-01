@@ -169,7 +169,6 @@ function _bl64_tf_set_version() {
     BL64_TF_VERSION="$version"
   else
     bl64_msg_show_error "${_BL64_TF_TXT_ERROR_GET_VERSION} (${BL64_TF_CMD_TERRAFORM} --version)"
-    # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
 

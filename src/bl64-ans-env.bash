@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with Ansible CLI
 #
-# Version: 1.5.0
+# Version: 1.6.0
 #######################################
 
 # Optional module. Not enabled by default
@@ -22,3 +22,5 @@ export BL64_ANS_PATH_USR_CONFIG=''
 export BL64_ANS_SET_VERBOSE=''
 export BL64_ANS_SET_DIFF=''
 export BL64_ANS_SET_DEBUG=''
+
+export _BL64_ANS_TXT_ERROR_GET_VERSION='failed to get CLI version'

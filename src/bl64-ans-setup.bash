@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Ansible CLI
 #
-# Version: 1.6.0
+# Version: 1.7.0
 #######################################
 
 #######################################
@@ -193,12 +193,14 @@ function _bl64_ans_set_version() {
   bl64_dbg_lib_show_function
   local version=''
 
-  bl64_dbg_lib_show_info "run ansible to obtain ansible-core version"
+  bl64_dbg_lib_show_info "run ansible to obtain ansible-core version (${BL64_ANS_CMD_ANSIBLE} --version)"
   version="$("$BL64_ANS_CMD_ANSIBLE" --version | bl64_txt_run_awk '/^ansible..core.*$/ { gsub( /\[|\]/, "" ); print $3 }')"
+  bl64_dbg_lib_show_vars 'version'
 
   if [[ -n "$version" ]]; then
     BL64_ANS_VERSION_CORE="$version"
   else
+    bl64_msg_show_error "${_BL64_ANS_TXT_ERROR_GET_VERSION} (${BL64_ANS_CMD_ANSIBLE} --version)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
