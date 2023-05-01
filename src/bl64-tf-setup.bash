@@ -159,14 +159,14 @@ function _bl64_tf_set_resources() {
 #######################################
 function _bl64_tf_set_version() {
   bl64_dbg_lib_show_function
-  local version=''
+  local cli_version=''
 
   bl64_dbg_lib_show_info "run terraforn to obtain ansible-core version"
-  version="$("$BL64_TF_CMD_TERRAFORM" --version | bl64_txt_run_awk '/^Terraform v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
-  bl64_dbg_lib_show_vars 'version'
+  cli_version="$("$BL64_TF_CMD_TERRAFORM" --version | bl64_txt_run_awk '/^Terraform v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
+  bl64_dbg_lib_show_vars 'cli_version'
 
-  if [[ -n "$version" ]]; then
-    BL64_TF_VERSION="$version"
+  if [[ -n "$cli_version" ]]; then
+    BL64_TF_VERSION="$cli_version"
   else
     bl64_msg_show_error "${_BL64_TF_TXT_ERROR_GET_VERSION} (${BL64_TF_CMD_TERRAFORM} --version)"
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE

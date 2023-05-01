@@ -100,7 +100,7 @@ function bl64_fs_copy_files() {
     bl64_check_path_absolute "$path" &&
       target="${destination}/$(bl64_fmt_basename "$path")" || return $?
 
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_COPY_FILE_PATH} ($target)"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_COPY_FILE_PATH} (${target})"
     bl64_fs_cp_file "$path" "$target" &&
       bl64_fs_set_permissions "$mode" "$user" "$group" "$target" ||
       return $?
