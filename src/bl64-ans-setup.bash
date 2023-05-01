@@ -191,14 +191,14 @@ function bl64_ans_set_paths() {
 #######################################
 function _bl64_ans_set_version() {
   bl64_dbg_lib_show_function
-  local version=''
+  local cli_version=''
 
   bl64_dbg_lib_show_info "run ansible to obtain ansible-core version (${BL64_ANS_CMD_ANSIBLE} --version)"
-  version="$("$BL64_ANS_CMD_ANSIBLE" --version | bl64_txt_run_awk '/^ansible..core.*$/ { gsub( /\[|\]/, "" ); print $3 }')"
-  bl64_dbg_lib_show_vars 'version'
+  cli_version="$("$BL64_ANS_CMD_ANSIBLE" --version | bl64_txt_run_awk '/^ansible..core.*$/ { gsub( /\[|\]/, "" ); print $3 }')"
+  bl64_dbg_lib_show_vars 'cli_version'
 
-  if [[ -n "$version" ]]; then
-    BL64_ANS_VERSION_CORE="$version"
+  if [[ -n "$cli_version" ]]; then
+    BL64_ANS_VERSION_CORE="$cli_version"
   else
     bl64_msg_show_error "${_BL64_ANS_TXT_ERROR_GET_VERSION} (${BL64_ANS_CMD_ANSIBLE} --version)"
     # shellcheck disable=SC2086

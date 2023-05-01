@@ -125,13 +125,14 @@ function _bl64_k8s_set_options() {
 #######################################
 function _bl64_k8s_set_version() {
   bl64_dbg_lib_show_function
-  local version=''
+  local cli_version=''
 
   bl64_dbg_lib_show_info "run kubectl to obtain client version"
-  version="$(_bl64_k8s_get_version_1_22)"
+  cli_version="$(_bl64_k8s_get_version_1_22)"
+  bl64_dbg_lib_show_vars 'cli_version'
 
-  if [[ -n "$version" ]]; then
-    BL64_K8S_VERSION_KUBECTL="$version"
+  if [[ -n "$cli_version" ]]; then
+    BL64_K8S_VERSION_KUBECTL="$cli_version"
   else
     bl64_msg_show_error "$_BL64_K8S_TXT_ERROR_KUBECTL_VERSION"
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE

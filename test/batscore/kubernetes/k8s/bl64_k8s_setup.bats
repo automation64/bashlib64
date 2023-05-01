@@ -1,6 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  [[ - x /usr/local/bin/kubectl ]] || skip 'k8s cli not found'
+  [[ -x /usr/local/bin/kubectl ]] || skip 'k8s cli not found'
 }
 
 @test "bl64_k8s_setup: module setup ok" {
