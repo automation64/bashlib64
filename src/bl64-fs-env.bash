@@ -62,7 +62,7 @@ export BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
 
 export BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
 
-export _BL64_FS_TXT_COPY_FILES='copy multiple files to a single destination'
+export _BL64_FS_TXT_COPY_FILE_PATH='copy source file'
 export _BL64_FS_TXT_CREATE_DIR_PATH='create directory'
 export _BL64_FS_TXT_MERGE_ADD_SOURCE='merge content from source'
 export _BL64_FS_TXT_RESTORE_OBJECT='restore original file from backup'
