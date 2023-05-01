@@ -1,25 +1,25 @@
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Version: 3.1.0
+# Version: 3.1.1
 #######################################
 
 function _bl64_os_match() {
   bl64_dbg_lib_show_function "$@"
   local target="$1"
   local os=''
-  local version=''
+  local os_version=''
 
   if [[ "$target" == +([[:alpha:]])-+([[:digit:]]).+([[:digit:]]) ]]; then
     os="${target%%-*}"
-    version="${target##*-}"
-    bl64_dbg_lib_show_info "Pattern: OOO-V.V [${BL64_OS_DISTRO}] == [${os}-${version}]"
-    [[ "$BL64_OS_DISTRO" == "${os}-${version}" ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+    os_version="${target##*-}"
+    bl64_dbg_lib_show_info "Pattern: OOO-V.V [${BL64_OS_DISTRO}] == [${os}-${os_version}]"
+    [[ "$BL64_OS_DISTRO" == "${os}-${os_version}" ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
   elif [[ "$target" == +([[:alpha:]])-+([[:digit:]]) ]]; then
     os="${target%%-*}"
-    version="${target##*-}"
-    bl64_dbg_lib_show_info "Pattern: OOO-V [${BL64_OS_DISTRO}] == [${os}-${version}.+([[:digit:]])]"
-    [[ "$BL64_OS_DISTRO" == ${os}-${version}.+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+    os_version="${target##*-}"
+    bl64_dbg_lib_show_info "Pattern: OOO-V [${BL64_OS_DISTRO}] == [${os}-${os_version}.+([[:digit:]])]"
+    [[ "$BL64_OS_DISTRO" == ${os}-${os_version}.+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
   elif [[ "$target" == +([[:alpha:]]) ]]; then
     os="$target"
     bl64_dbg_lib_show_info "Pattern: OOO [${BL64_OS_DISTRO}] == [${os}]"
