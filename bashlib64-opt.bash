@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 12.2.0
+# Version: 12.2.1
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -946,14 +946,14 @@ function bl64_ans_set_paths() {
 #######################################
 function _bl64_ans_set_version() {
   bl64_dbg_lib_show_function
-  local version=''
+  local cli_version=''
 
   bl64_dbg_lib_show_info "run ansible to obtain ansible-core version (${BL64_ANS_CMD_ANSIBLE} --version)"
-  version="$("$BL64_ANS_CMD_ANSIBLE" --version | bl64_txt_run_awk '/^ansible..core.*$/ { gsub( /\[|\]/, "" ); print $3 }')"
-  bl64_dbg_lib_show_vars 'version'
+  cli_version="$("$BL64_ANS_CMD_ANSIBLE" --version | bl64_txt_run_awk '/^ansible..core.*$/ { gsub( /\[|\]/, "" ); print $3 }')"
+  bl64_dbg_lib_show_vars 'cli_version'
 
-  if [[ -n "$version" ]]; then
-    BL64_ANS_VERSION_CORE="$version"
+  if [[ -n "$cli_version" ]]; then
+    BL64_ANS_VERSION_CORE="$cli_version"
   else
     bl64_msg_show_error "${_BL64_ANS_TXT_ERROR_GET_VERSION} (${BL64_ANS_CMD_ANSIBLE} --version)"
     # shellcheck disable=SC2086
@@ -3828,13 +3828,14 @@ function _bl64_k8s_set_options() {
 #######################################
 function _bl64_k8s_set_version() {
   bl64_dbg_lib_show_function
-  local version=''
+  local cli_version=''
 
   bl64_dbg_lib_show_info "run kubectl to obtain client version"
-  version="$(_bl64_k8s_get_version_1_22)"
+  cli_version="$(_bl64_k8s_get_version_1_22)"
+  bl64_dbg_lib_show_vars 'cli_version'
 
-  if [[ -n "$version" ]]; then
-    BL64_K8S_VERSION_KUBECTL="$version"
+  if [[ -n "$cli_version" ]]; then
+    BL64_K8S_VERSION_KUBECTL="$cli_version"
   else
     bl64_msg_show_error "$_BL64_K8S_TXT_ERROR_KUBECTL_VERSION"
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
@@ -6563,14 +6564,14 @@ function _bl64_tf_set_resources() {
 #######################################
 function _bl64_tf_set_version() {
   bl64_dbg_lib_show_function
-  local version=''
+  local cli_version=''
 
   bl64_dbg_lib_show_info "run terraforn to obtain ansible-core version"
-  version="$("$BL64_TF_CMD_TERRAFORM" --version | bl64_txt_run_awk '/^Terraform v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
-  bl64_dbg_lib_show_vars 'version'
+  cli_version="$("$BL64_TF_CMD_TERRAFORM" --version | bl64_txt_run_awk '/^Terraform v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
+  bl64_dbg_lib_show_vars 'cli_version'
 
-  if [[ -n "$version" ]]; then
-    BL64_TF_VERSION="$version"
+  if [[ -n "$cli_version" ]]; then
+    BL64_TF_VERSION="$cli_version"
   else
     bl64_msg_show_error "${_BL64_TF_TXT_ERROR_GET_VERSION} (${BL64_TF_CMD_TERRAFORM} --version)"
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE

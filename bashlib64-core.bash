@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 12.2.0
+# Version: 12.2.1
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -407,7 +407,7 @@ export BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
 
 export BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
 
-export _BL64_FS_TXT_COPY_FILES='copy multiple files to a single destination'
+export _BL64_FS_TXT_COPY_FILE_PATH='copy source file'
 export _BL64_FS_TXT_CREATE_DIR_PATH='create directory'
 export _BL64_FS_TXT_MERGE_ADD_SOURCE='merge content from source'
 export _BL64_FS_TXT_RESTORE_OBJECT='restore original file from backup'
@@ -2570,7 +2570,7 @@ function bl64_fs_copy_files() {
     bl64_check_path_absolute "$path" &&
       target="${destination}/$(bl64_fmt_basename "$path")" || return $?
 
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_COPY_FILE_PATH} ($target)"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_COPY_FILE_PATH} (${target})"
     bl64_fs_cp_file "$path" "$target" &&
       bl64_fs_set_permissions "$mode" "$user" "$group" "$target" ||
       return $?
@@ -4624,25 +4624,25 @@ function bl64_os_set_lang() {
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Version: 3.1.0
+# Version: 3.1.1
 #######################################
 
 function _bl64_os_match() {
   bl64_dbg_lib_show_function "$@"
   local target="$1"
   local os=''
-  local version=''
+  local os_version=''
 
   if [[ "$target" == +([[:alpha:]])-+([[:digit:]]).+([[:digit:]]) ]]; then
     os="${target%%-*}"
-    version="${target##*-}"
-    bl64_dbg_lib_show_info "Pattern: OOO-V.V [${BL64_OS_DISTRO}] == [${os}-${version}]"
-    [[ "$BL64_OS_DISTRO" == "${os}-${version}" ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+    os_version="${target##*-}"
+    bl64_dbg_lib_show_info "Pattern: OOO-V.V [${BL64_OS_DISTRO}] == [${os}-${os_version}]"
+    [[ "$BL64_OS_DISTRO" == "${os}-${os_version}" ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
   elif [[ "$target" == +([[:alpha:]])-+([[:digit:]]) ]]; then
     os="${target%%-*}"
-    version="${target##*-}"
-    bl64_dbg_lib_show_info "Pattern: OOO-V [${BL64_OS_DISTRO}] == [${os}-${version}.+([[:digit:]])]"
-    [[ "$BL64_OS_DISTRO" == ${os}-${version}.+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+    os_version="${target##*-}"
+    bl64_dbg_lib_show_info "Pattern: OOO-V [${BL64_OS_DISTRO}] == [${os}-${os_version}.+([[:digit:]])]"
+    [[ "$BL64_OS_DISTRO" == ${os}-${os_version}.+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
   elif [[ "$target" == +([[:alpha:]]) ]]; then
     os="$target"
     bl64_dbg_lib_show_info "Pattern: OOO [${BL64_OS_DISTRO}] == [${os}]"
