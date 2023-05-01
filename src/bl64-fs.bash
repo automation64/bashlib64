@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 4.1.0
+# Version: 4.2.0
 #######################################
 
 #######################################
@@ -38,7 +38,6 @@ function bl64_fs_create_dir() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "path list:[${*}]"
 
-  bl64_msg_show_lib_task "$_BL64_FS_TXT_CREATE_DIR"
   for path in "$@"; do
 
     bl64_check_path_absolute "$path" || return $?
@@ -95,7 +94,6 @@ function bl64_fs_copy_files() {
   # shellcheck disable=SC2086
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "paths:[${*}]"
-  bl64_msg_show_lib_task "${_BL64_FS_TXT_CREATE_DIR} (${destination})"
   for path in "$@"; do
 
     target=''
@@ -156,7 +154,6 @@ function bl64_fs_merge_files() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "source files:[${*}]"
 
-  bl64_msg_show_lib_task "${_BL64_FS_TXT_MERGE_FILES} (${destination})"
   for path in "$@"; do
     bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_ADD_SOURCE} (${path})"
     if ((first == 1)); then

@@ -28,7 +28,7 @@ function bl64_k8s_setup() {
 
   _bl64_k8s_set_command "$kubectl_bin" &&
     bl64_check_command "$BL64_K8S_CMD_KUBECTL" &&
-    bl64_k8s_set_version &&
+    _bl64_k8s_set_version &&
     _bl64_k8s_set_options &&
     _bl64_k8s_set_runtime &&
     BL64_K8S_MODULE="$BL64_VAR_ON"
@@ -123,7 +123,7 @@ function _bl64_k8s_set_options() {
 #   0: version set ok
 #   >0: command error
 #######################################
-function bl64_k8s_set_version() {
+function _bl64_k8s_set_version() {
   bl64_dbg_lib_show_function
   local version=''
 
