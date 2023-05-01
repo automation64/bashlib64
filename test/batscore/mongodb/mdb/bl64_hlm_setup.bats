@@ -1,6 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  bl64_mdb_setup || skip 'mongosh cli not found'
+  [[ -x /usr/bin/mongosh ]] || skip 'mongosh cli not found'
 }
 
 @test "bl64_mdb_setup: module setup ok" {

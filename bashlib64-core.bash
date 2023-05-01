@@ -4,7 +4,7 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 12.1.0
+# Version: 12.2.0
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -346,7 +346,7 @@ export _BL64_DBG_TXT_DEBUG='Debug'
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #
-# Version: 1.11.0
+# Version: 1.12.0
 #######################################
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
@@ -407,12 +407,9 @@ export BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
 
 export BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
 
-export _BL64_FS_TXT_COPY_FILE_PATH='copy source file'
 export _BL64_FS_TXT_COPY_FILES='copy multiple files to a single destination'
 export _BL64_FS_TXT_CREATE_DIR_PATH='create directory'
-export _BL64_FS_TXT_CREATE_DIR='create multiple directories'
-export _BL64_FS_TXT_MERGE_ADD_SOURCE='add source file'
-export _BL64_FS_TXT_MERGE_FILES='create single file by concatenating sources in order'
+export _BL64_FS_TXT_MERGE_ADD_SOURCE='merge content from source'
 export _BL64_FS_TXT_RESTORE_OBJECT='restore original file from backup'
 export _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
 export _BL64_FS_TXT_SAFEGUARD_OBJECT='backup original file'
@@ -855,7 +852,7 @@ export _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
 function bl64_bsh_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_bsh_set_version &&
+  _bl64_bsh_set_version &&
     BL64_BSH_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'bsh'
@@ -875,7 +872,7 @@ function bl64_bsh_setup() {
 #   0: version set ok
 #   >0: command error
 #######################################
-function bl64_bsh_set_version() {
+function _bl64_bsh_set_version() {
   bl64_dbg_lib_show_function
 
   case "${BASH_VERSINFO[0]}" in
@@ -2474,7 +2471,7 @@ function _bl64_fs_set_alias() {
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
 #
-# Version: 4.1.0
+# Version: 4.2.0
 #######################################
 
 #######################################
@@ -2511,7 +2508,6 @@ function bl64_fs_create_dir() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "path list:[${*}]"
 
-  bl64_msg_show_lib_task "$_BL64_FS_TXT_CREATE_DIR"
   for path in "$@"; do
 
     bl64_check_path_absolute "$path" || return $?
@@ -2568,7 +2564,6 @@ function bl64_fs_copy_files() {
   # shellcheck disable=SC2086
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "paths:[${*}]"
-  bl64_msg_show_lib_task "${_BL64_FS_TXT_CREATE_DIR} (${destination})"
   for path in "$@"; do
 
     target=''
@@ -2629,7 +2624,6 @@ function bl64_fs_merge_files() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "source files:[${*}]"
 
-  bl64_msg_show_lib_task "${_BL64_FS_TXT_MERGE_FILES} (${destination})"
   for path in "$@"; do
     bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_ADD_SOURCE} (${path})"
     if ((first == 1)); then
@@ -4630,7 +4624,7 @@ function bl64_os_set_lang() {
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Version: 3.0.0
+# Version: 3.1.0
 #######################################
 
 function _bl64_os_match() {
@@ -4748,7 +4742,7 @@ function _bl64_os_get_distro_from_os_release() {
     #  VERSION_ID="15.4"
     :
     ;;
-  ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21* | ${BL64_OS_UB}-22*) : ;;
+  ${BL64_OS_UB}-20.* | ${BL64_OS_UB}-21.* | ${BL64_OS_UB}-22.* | ${BL64_OS_UB}-23.*) : ;;
   *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;
   esac
 

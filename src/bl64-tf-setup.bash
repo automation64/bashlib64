@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Terraform
 #
-# Version: 1.3.0
+# Version: 1.4.0
 #######################################
 
 #######################################
@@ -23,6 +23,7 @@ function bl64_tf_setup() {
 
   _bl64_tf_set_command "$terraform_bin" &&
     bl64_check_command "$BL64_TF_CMD_TERRAFORM" &&
+    _bl64_tf_set_version &&
     _bl64_tf_set_options &&
     _bl64_tf_set_resources &&
     BL64_TF_MODULE="$BL64_VAR_ON"
@@ -93,11 +94,11 @@ function _bl64_tf_set_options() {
 }
 
 #######################################
-# Create command sets for common options
+# Set logging configuration
 #
 # Arguments:
-#   $1: full path to the log file
-#   $2: log level. One of BL64_TF_SET_LOG_*
+#   $1: full path to the log file. Default: STDERR
+#   $2: log level. One of BL64_TF_SET_LOG_*. Default: INFO
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -106,11 +107,10 @@ function _bl64_tf_set_options() {
 #######################################
 function bl64_tf_log_set() {
   bl64_dbg_lib_show_function "$@"
-  local path="${1:-$BL64_VAR_NULL}"
+  local path="${1:-$BL64_VAR_DEFAULT}"
   local level="${2:-$BL64_TF_SET_LOG_INFO}"
 
-  bl64_check_parameter 'path' &&
-    bl64_check_module 'BL64_TF_MODULE' ||
+  bl64_check_module 'BL64_TF_MODULE' ||
     return $?
 
   BL64_TF_LOG_PATH="$path"
@@ -140,5 +140,38 @@ function _bl64_tf_set_resources() {
   # Runtime directory created by terraform init
   BL64_TF_DEF_PATH_RUNTIME='.terraform'
 
+  return 0
+}
+
+#######################################
+# Identify and set module components versions
+#
+# * Version information is stored in module global variables
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: command errors
+# Returns:
+#   0: version set ok
+#   >0: command error
+#######################################
+function _bl64_tf_set_version() {
+  bl64_dbg_lib_show_function
+  local version=''
+
+  bl64_dbg_lib_show_info "run terraforn to obtain ansible-core version"
+  version="$("$BL64_TF_CMD_TERRAFORM" --version | bl64_txt_run_awk '/^Terraform v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
+  bl64_dbg_lib_show_vars 'version'
+
+  if [[ -n "$version" ]]; then
+    BL64_TF_VERSION="$version"
+  else
+    bl64_msg_show_error "${_BL64_TF_TXT_ERROR_GET_VERSION} (${BL64_TF_CMD_TERRAFORM} --version)"
+    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+  fi
+
+  bl64_dbg_lib_show_vars 'BL64_TF_VERSION'
   return 0
 }

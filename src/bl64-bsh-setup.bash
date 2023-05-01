@@ -21,7 +21,7 @@
 function bl64_bsh_setup() {
   bl64_dbg_lib_show_function
 
-  bl64_bsh_set_version &&
+  _bl64_bsh_set_version &&
     BL64_BSH_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'bsh'
@@ -41,7 +41,7 @@ function bl64_bsh_setup() {
 #   0: version set ok
 #   >0: command error
 #######################################
-function bl64_bsh_set_version() {
+function _bl64_bsh_set_version() {
   bl64_dbg_lib_show_function
 
   case "${BASH_VERSINFO[0]}" in

@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #
-# Version: 3.0.0
+# Version: 3.1.0
 #######################################
 
 function _bl64_os_match() {
@@ -119,7 +119,7 @@ function _bl64_os_get_distro_from_os_release() {
     #  VERSION_ID="15.4"
     :
     ;;
-  ${BL64_OS_UB}-20* | ${BL64_OS_UB}-21* | ${BL64_OS_UB}-22*) : ;;
+  ${BL64_OS_UB}-20.* | ${BL64_OS_UB}-21.* | ${BL64_OS_UB}-22.* | ${BL64_OS_UB}-23.*) : ;;
   *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;
   esac
 

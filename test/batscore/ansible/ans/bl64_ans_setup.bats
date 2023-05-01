@@ -1,6 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  bl64_ans_setup || skip 'no ansible cli found'
+  [[ -x /opt/ansible/bin/ansible ]] || skip 'no ansible cli found'
 }
 
 @test "bl64_ans_setup: module setup - ok" {

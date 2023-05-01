@@ -1,6 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  bl64_hlm_setup || skip 'helm cli not found'
+  [[ -x /usr/local/bin/helm ]] || skip 'helm cli not found'
 }
 
 @test "bl64_hlm_setup: module setup ok" {

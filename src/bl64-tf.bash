@@ -1,7 +1,7 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with Terraform
 #
-# Version: 1.2.0
+# Version: 1.3.0
 #######################################
 
 #######################################
@@ -58,8 +58,12 @@ function bl64_tf_run_terraform() {
 
   bl64_tf_blank_terraform
 
-  export TF_LOG="$BL64_TF_LOG_LEVEL"
-  export TF_LOG_PATH="$BL64_TF_LOG_PATH"
+  if bl64_dbg_lib_command_enabled; then
+    export TF_LOG="$BL64_TF_SET_LOG_TRACE"
+  else
+    export TF_LOG="$BL64_TF_LOG_LEVEL"
+  fi
+  [[ "$BL64_TF_LOG_PATH" != "$BL64_VAR_DEFAULT" ]] && export TF_LOG_PATH="$BL64_TF_LOG_PATH"
   bl64_dbg_lib_show_vars 'TF_LOG' 'TF_LOG_PATH'
 
   bl64_dbg_lib_trace_start
