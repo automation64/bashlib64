@@ -9,7 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- add ubuntu 23.04 support
+- all
+  - added ubuntu 23.04 support
+- tf
+  - added set version. Available on BL64_TF_VERSION
+
+### Changed
+
+- tf
+  - bl64_tf_log_set: log file is now optional. Default set to STDERR
+- bsh
+  - normalized internal set version function
+- k8s
+  - normalized internal set version function
+- ans
+  - normalized internal set version function
 
 ## [12.1.0]
 
@@ -24,16 +38,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fs:
   - bl64_fs_merge_files: wrong stdout redirection placement
 
-### Changed
-
-- fs: increased function verbosity
-
 ## [12.0.0]
 
 ### Added
 
-- all: sles-15 support
-- check: bl64_check_alert_resource_not_found
+- all
+  - sles-15 support
+- check
+  - new function: bl64_check_alert_resource_not_found
 
 ### Changed
 
@@ -49,7 +61,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- all: added rockylinux9, almalinux9, fedora37, mcos13 support
+- all
+  - added rockylinux9, almalinux9, fedora37, mcos13 support
 
 ## [10.3.0]
 
