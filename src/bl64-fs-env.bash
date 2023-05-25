@@ -1,8 +1,8 @@
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
-#
-# Version: 1.12.0
 #######################################
+
+export BL64_FS_VERSION='4.2.0'
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
 

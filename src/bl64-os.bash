@@ -1,7 +1,5 @@
 #######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
-#
-# Version: 3.1.1
 #######################################
 
 function _bl64_os_match() {

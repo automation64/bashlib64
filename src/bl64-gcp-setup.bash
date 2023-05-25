@@ -1,7 +1,5 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with GCP
-#
-# Version: 1.4.0
 #######################################
 
 #######################################
@@ -85,4 +83,56 @@ function _bl64_gcp_set_options() {
   BL64_GCP_SET_FORMAT_YAML='--format yaml'
   BL64_GCP_SET_FORMAT_TEXT='--format text'
   BL64_GCP_SET_FORMAT_JSON='--format json'
+}
+
+#######################################
+# Set target GCP Project
+#
+# * Available to all gcloud related commands
+#
+# Arguments:
+#   $1: GCP project ID
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_gcp_set_project() {
+  bl64_dbg_lib_show_function "$@"
+  local project="${1:-}"
+
+  bl64_check_parameter 'project' || return $?
+
+  BL64_GCP_CLI_PROJECT="$project"
+
+  bl64_dbg_lib_show_vars 'BL64_GCP_CLI_PROJECT'
+  return 0
+}
+
+#######################################
+# Enable service account impersonation
+#
+# * Available to all gcloud related commands
+#
+# Arguments:
+#   $1: Service Account email
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_gcp_set_impersonate_sa() {
+  bl64_dbg_lib_show_function "$@"
+  local impersonate_sa="${1:-}"
+
+  bl64_check_parameter 'impersonate_sa' || return $?
+
+  BL64_GCP_CLI_IMPERSONATE_SA="$impersonate_sa"
+
+  bl64_dbg_lib_show_vars 'BL64_GCP_CLI_IMPERSONATE_SA'
+  return 0
 }

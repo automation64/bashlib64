@@ -1,7 +1,5 @@
 #######################################
 # BashLib64 / Module / Setup / Show shell debugging inlevelion
-#
-# Version: 1.2.1
 #######################################
 
 #

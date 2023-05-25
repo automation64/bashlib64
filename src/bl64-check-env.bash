@@ -1,8 +1,8 @@
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
-#
-# Version: 1.19.0
 #######################################
+
+export BL64_CHECK_VERSION='3.2.0'
 
 export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 

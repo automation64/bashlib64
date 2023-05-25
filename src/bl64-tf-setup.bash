@@ -1,7 +1,5 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Terraform
-#
-# Version: 1.4.0
 #######################################
 
 #######################################
@@ -166,12 +164,12 @@ function _bl64_tf_set_version() {
   bl64_dbg_lib_show_vars 'cli_version'
 
   if [[ -n "$cli_version" ]]; then
-    BL64_TF_VERSION="$cli_version"
+    BL64_TF_VERSION_CLI="$cli_version"
   else
     bl64_msg_show_error "${_BL64_TF_TXT_ERROR_GET_VERSION} (${BL64_TF_CMD_TERRAFORM} --version)"
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
 
-  bl64_dbg_lib_show_vars 'BL64_TF_VERSION'
+  bl64_dbg_lib_show_vars 'BL64_TF_VERSION_CLI'
   return 0
 }

@@ -1,8 +1,8 @@
 #######################################
 # BashLib64 / Module / Globals / Setup script run-time environment
-#
-# Version: 4.0.0
 #######################################
+
+export BL64_VERSION='12.3.0'
 
 # Declare imported variables
 export LANG
