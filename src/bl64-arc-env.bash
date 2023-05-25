@@ -1,8 +1,8 @@
 #######################################
 # BashLib64 / Module / Globals / Manage archive files
-#
-# Version: 1.5.0
 #######################################
+
+export BL64_ARC_VERSION='2.0.0'
 
 export BL64_ARC_MODULE="$BL64_VAR_OFF"
 

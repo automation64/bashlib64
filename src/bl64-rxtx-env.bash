@@ -1,8 +1,8 @@
 #######################################
 # BashLib64 / Module / Globals / Transfer and Receive data over the network
-#
-# Version: 1.7.0
 #######################################
+
+export BL64_RXTX_VERSION='1.15.0'
 
 export BL64_RXTX_MODULE="$BL64_VAR_OFF"
 

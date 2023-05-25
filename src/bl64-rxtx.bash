@@ -1,7 +1,5 @@
 #######################################
 # BashLib64 / Module / Functions / Transfer and Receive data over the network
-#
-# Version: 1.15.0
 #######################################
 
 #######################################
