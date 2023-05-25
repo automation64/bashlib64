@@ -1,6 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  [[ -x /usr/bin/gccloud ]] || skip 'gcp cli not found'
+  [[ -x /usr/bin/gcloud ]] || skip 'gcp cli not found'
 }
 
 @test "bl64_gcp_setup: module setup ok" {

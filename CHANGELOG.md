@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - added version info
 - k8s
   - added kubectl 1.27 support
+- gcp
+  - added CLI settings: project, impersonate sa
 
 ## [12.2.1]
 
