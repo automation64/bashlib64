@@ -148,3 +148,35 @@ function bl64_gcp_blank_gcloud() {
 
   return 0
 }
+
+#######################################
+# GCP Secrets / Get secret value
+#
+# * Warning: not intended for Binary payloads as gcloud will return UTF-8 by default
+#
+# Arguments:
+#   $1: Secret Name
+#   $2: Version Number
+# Outputs:
+#   STDOUT: secret value
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_gcp_secret_get() {
+  bl64_dbg_lib_show_function "$@"
+  local name="$1"
+  local version="$2"
+
+  bl64_check_parameter 'name' &&
+    bl64_check_parameter 'version' &&
+    bl64_check_file "$name" || return $?
+
+  bl64_gcp_run_gcloud \
+    'secrets' \
+    'versions' \
+    'access' \
+    "$version" \
+    --secret="$name"
+
+}

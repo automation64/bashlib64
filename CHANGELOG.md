@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - added kubectl 1.27 support
 - gcp
   - added CLI settings: project, impersonate sa
+  - added get GCP Secret value
 
 ## [12.2.1]
 
