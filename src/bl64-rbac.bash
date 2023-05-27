@@ -27,7 +27,7 @@ function bl64_rbac_add_root() {
     bl64_rbac_check_sudoers "$BL64_RBAC_FILE_SUDOERS" ||
     return $?
 
-  bl64_msg_show_lib_task "$_BL64_RBAC_TXT_ADD_ROOT ($user)"
+  bl64_msg_show_lib_subtask "$_BL64_RBAC_TXT_ADD_ROOT ($user)"
   umask 0266
 
   if [[ -s "$BL64_RBAC_FILE_SUDOERS" ]]; then

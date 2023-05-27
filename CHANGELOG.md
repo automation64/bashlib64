@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - gcp
   - added CLI settings: project, impersonate sa
   - added get GCP Secret value
+- vcs
+  - added github api call, get latest release
+- rxtx
+  - added github asset download
 
 ## [12.2.1]
 

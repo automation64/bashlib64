@@ -31,7 +31,7 @@ function bl64_pkg_repository_add() {
     bl64_check_parameter 'source' ||
     return $?
 
-  bl64_msg_show_lib_task "$_BL64_PKG_TXT_REPOSITORY_ADD (${repository})"
+  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_REPOSITORY_ADD (${repository})"
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_check_alert_unsupported
@@ -94,7 +94,7 @@ gpgkey=%s\n' \
 function bl64_pkg_repository_refresh() {
   bl64_dbg_lib_show_function
 
-  bl64_msg_show_lib_task "$_BL64_PKG_TXT_REPOSITORY_REFRESH"
+  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_REPOSITORY_REFRESH"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -166,7 +166,7 @@ function bl64_pkg_deploy() {
 function bl64_pkg_prepare() {
   bl64_dbg_lib_show_function
 
-  bl64_msg_show_lib_task "$_BL64_PKG_TXT_PREPARE"
+  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_PREPARE"
   bl64_pkg_repository_refresh
 }
 
@@ -191,7 +191,7 @@ function bl64_pkg_install() {
 
   bl64_check_parameters_none $# || return $?
 
-  bl64_msg_show_lib_task "$_BL64_PKG_TXT_INSTALL (${*})"
+  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_INSTALL (${*})"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -242,7 +242,7 @@ function bl64_pkg_install() {
 function bl64_pkg_upgrade() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_msg_show_lib_task "$_BL64_PKG_TXT_UPGRADE"
+  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_UPGRADE"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -293,7 +293,7 @@ function bl64_pkg_cleanup() {
   bl64_dbg_lib_show_function
   local target=''
 
-  bl64_msg_show_lib_task "$_BL64_PKG_TXT_CLEAN"
+  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_CLEAN"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
