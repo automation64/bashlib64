@@ -31,6 +31,7 @@ function bl64_rxtx_web_get_file() {
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' || return $?
 
+  [[ "$replace" == "$BL64_VAR_DEFAULT" ]] && replace="$BL64_VAR_OFF"
   [[ "$replace" == "$BL64_VAR_OFF" && -e "$destination" ]] &&
     bl64_dbg_lib_show_info "destination is already created (${destination}) and overwrite is disabled. No action taken" &&
     return 0
@@ -102,6 +103,7 @@ function bl64_rxtx_git_get_dir() {
     bl64_check_path_relative "$source_path" ||
     return $?
 
+  [[ "$replace" == "$BL64_VAR_DEFAULT" ]] && replace="$BL64_VAR_OFF"
   # shellcheck disable=SC2086
   bl64_check_overwrite "$destination" "$replace" "$_BL64_RXTX_TXT_EXISTING_DESTINATION" || return $BL64_VAR_OK
 
