@@ -65,7 +65,7 @@ The library has been tested on the following operating systems:
 - RedHatEnterpriseLinux: 8,9
 - RockyLinux: 8,9
 - SuSELinuxEnterpriseServer: 15
-- Ubuntu: 20,21,22,23
+- Ubuntu: 20,21,22,23,18
 
 (*) Requires Bash4 (e.g. homebrew install bash)
 
