@@ -63,6 +63,7 @@ function _bl64_py_setup() {
 # * The caller function is responsible for checking that the target command is present (installed)
 # * (Optional) Enable requested virtual environment
 # * If virtual environment is requested, instead of running bin/activate manually set the same variables that it would
+# * Python versions are detected up to the subversion, minor is ignored. Example: use python3.6 instead of python3.6.1
 #
 # Arguments:
 #   $1: full path to the virtual environment
@@ -92,6 +93,7 @@ function _bl64_py_set_command() {
     ${BL64_OS_DEB}-9.*) BL64_PY_CMD_PYTHON35='/usr/bin/python3.5' ;;
     ${BL64_OS_DEB}-10.*) BL64_PY_CMD_PYTHON37='/usr/bin/python3.7' ;;
     ${BL64_OS_DEB}-11.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_UB}-18.*) BL64_PY_CMD_PYTHON36='/usr/bin/python3.6' ;;
     ${BL64_OS_UB}-20.*) BL64_PY_CMD_PYTHON38='/usr/bin/python3.8' ;;
     ${BL64_OS_UB}-21.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_UB}-22.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;

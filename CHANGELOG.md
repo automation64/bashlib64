@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - all
   - added version info
+  - added ubuntu 18.4 support
 - k8s
   - added kubectl 1.27 support
 - gcp
