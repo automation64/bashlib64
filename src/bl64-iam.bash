@@ -1,7 +1,5 @@
 #######################################
 # BashLib64 / Module / Functions / Manage OS identity and access service
-#
-# Version: 2.0.0
 #######################################
 
 #######################################
@@ -32,7 +30,7 @@ function bl64_iam_user_add() {
     return 0
   fi
 
-  bl64_msg_show_lib_task "$_BL64_IAM_TXT_ADD_USER ($login)"
+  bl64_msg_show_lib_subtask "$_BL64_IAM_TXT_ADD_USER ($login)"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)

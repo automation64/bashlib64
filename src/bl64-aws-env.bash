@@ -1,8 +1,8 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with AWS
-#
-# Version: 1.3.0
 #######################################
+
+export BL64_AWS_VERSION='1.4.1'
 
 # Optional module. Not enabled by default
 export BL64_AWS_MODULE="$BL64_VAR_OFF"

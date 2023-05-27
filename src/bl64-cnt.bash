@@ -1,7 +1,5 @@
 #######################################
 # BashLib64 / Module / Functions / Interact with container engines
-#
-# Version: 1.9.1
 #######################################
 
 #######################################
@@ -66,7 +64,7 @@ function bl64_cnt_login_stdin() {
     bl64_check_parameter 'registry' ||
     return $?
 
-  bl64_msg_show_lib_task "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
+  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$BL64_VAR_DEFAULT" "$BL64_CNT_FLAG_STDIN" "$registry"
 }
 
@@ -96,7 +94,7 @@ function bl64_cnt_login_file() {
     bl64_check_file "$file" ||
     return $?
 
-  bl64_msg_show_lib_task "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
+  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
 }
 
@@ -125,7 +123,7 @@ function bl64_cnt_login() {
     bl64_check_parameter 'registry' ||
     return $?
 
-  bl64_msg_show_lib_task "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
+  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
 }
 
@@ -208,7 +206,7 @@ function bl64_cnt_build() {
   # shellcheck disable=SC2164
   cd "${context}"
 
-  bl64_msg_show_lib_task "${_BL64_CNT_TXT_BUILD} (${file}:${tag})"
+  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_BUILD} (${file}:${tag})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_build" "$file" "$tag" "$@"
 }
 
@@ -236,7 +234,7 @@ function bl64_cnt_push() {
     bl64_check_parameter 'destination' ||
     return $?
 
-  bl64_msg_show_lib_task "${_BL64_CNT_TXT_PUSH} (${source} -> ${destination})"
+  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_PUSH} (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_push" "$source" "$destination"
 }
 
@@ -259,7 +257,7 @@ function bl64_cnt_pull() {
     bl64_check_parameter 'source' ||
     return $?
 
-  bl64_msg_show_lib_task "${_BL64_CNT_TXT_PULL} (${source})"
+  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_PULL} (${source})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_pull" "$source"
 }
 
@@ -299,7 +297,7 @@ function bl64_cnt_tag() {
     bl64_check_parameter 'target' ||
     return $?
 
-  bl64_msg_show_lib_task "${_BL64_CNT_TXT_TAG} (${source} -> ${target})"
+  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_TAG} (${source} ${BL64_MSG_COSMETIC_ARROW2} ${target})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_tag" "$source" "$target"
 }
 
@@ -436,7 +434,7 @@ function bl64_cnt_network_create() {
     return 0
   fi
 
-  bl64_msg_show_lib_task "${_BL64_CNT_TXT_CREATE_NETWORK} (${network})"
+  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_CREATE_NETWORK} (${network})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_network_create" "$network"
 }
 

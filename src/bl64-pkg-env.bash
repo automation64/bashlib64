@@ -1,8 +1,8 @@
 #######################################
 # BashLib64 / Module / Globals / Manage native OS packages
-#
-# Version: 1.11.0
 #######################################
+
+export BL64_PKG_VERSION='4.0.1'
 
 export BL64_PKG_MODULE="$BL64_VAR_OFF"
 

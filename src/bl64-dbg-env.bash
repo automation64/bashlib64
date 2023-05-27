@@ -1,8 +1,8 @@
 #######################################
 # BashLib64 / Module / Globals / Show shell debugging information
-#
-# Version: 1.10.0
 #######################################
+
+export BL64_DBG_VERSION='2.1.0'
 
 export BL64_DBG_MODULE="$BL64_VAR_OFF"
 

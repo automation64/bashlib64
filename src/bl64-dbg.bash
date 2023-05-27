@@ -1,7 +1,5 @@
 #######################################
 # BashLib64 / Module / Functions / Show shell debugging information
-#
-# Version: 2.1.0
 #######################################
 
 function _bl64_dbg_show() {

@@ -1,7 +1,5 @@
 #######################################
 # BashLib64 / Module / Functions / Manage archive files
-#
-# Version: 2.0.0
 #######################################
 
 #######################################
@@ -119,7 +117,7 @@ function bl64_arc_open_tar() {
     bl64_check_directory "$destination" ||
     return $?
 
-  bl64_msg_show_lib_task "$_BL64_ARC_TXT_OPEN_TAR ($source)"
+  bl64_msg_show_lib_subtask "$_BL64_ARC_TXT_OPEN_TAR ($source)"
 
   # shellcheck disable=SC2164
   cd "$destination"
@@ -211,7 +209,7 @@ function bl64_arc_open_zip() {
     bl64_check_directory "$destination" ||
     return $?
 
-  bl64_msg_show_lib_task "$_BL64_ARC_TXT_OPEN_ZIP ($source)"
+  bl64_msg_show_lib_subtask "$_BL64_ARC_TXT_OPEN_ZIP ($source)"
   bl64_arc_run_unzip \
     $BL64_ARC_SET_UNZIP_OVERWRITE \
     -d "$destination" \

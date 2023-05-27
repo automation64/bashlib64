@@ -1,8 +1,8 @@
 #######################################
 # BashLib64 / Module / Globals / Interact with HLM
-#
-# Version: 1.1.0
 #######################################
+
+export BL64_HLM_VERSION='1.2.1'
 
 # Optional module. Not enabled by default
 export BL64_HLM_MODULE="$BL64_VAR_OFF"

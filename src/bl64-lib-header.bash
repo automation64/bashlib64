@@ -4,7 +4,6 @@
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/serdigital64/bashlib64
-# Version: 12.2.1
 #
 # Copyright 2022 SerDigital64@gmail.com
 #

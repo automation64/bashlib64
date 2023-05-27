@@ -1,7 +1,5 @@
 #######################################
 # BashLib64 / Module / Functions / Manage local filesystem
-#
-# Version: 4.2.0
 #######################################
 
 #######################################
@@ -100,7 +98,7 @@ function bl64_fs_copy_files() {
     bl64_check_path_absolute "$path" &&
       target="${destination}/$(bl64_fmt_basename "$path")" || return $?
 
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_COPY_FILE_PATH} (${target})"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_COPY_FILE_PATH} (${path} ${BL64_MSG_COSMETIC_ARROW2} ${target})"
     bl64_fs_cp_file "$path" "$target" &&
       bl64_fs_set_permissions "$mode" "$user" "$group" "$target" ||
       return $?
@@ -208,6 +206,7 @@ function bl64_fs_merge_dir() {
     bl64_check_directory "$target" ||
     return $?
 
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_DIRS} (${source} ${BL64_MSG_COSMETIC_ARROW2} ${target})"
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_fs_cp_dir --no-target-directory "$source" "$target"
@@ -485,8 +484,15 @@ function bl64_fs_rm_full() {
 #######################################
 function bl64_fs_cleanup_tmps() {
   bl64_dbg_lib_show_function
-  bl64_fs_rm_full -- /tmp/[[:alnum:]]*
-  bl64_fs_rm_full -- /var/tmp/[[:alnum:]]*
+  local target=''
+
+  target='/tmp'
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CLEANUP_TEMP} (${target})"
+  bl64_fs_rm_full -- ${target}/[[:alnum:]]*
+
+  target='/var/tmp'
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CLEANUP_TEMP} (${target})"
+  bl64_fs_rm_full -- ${target}/[[:alnum:]]*
   return 0
 }
 
@@ -506,6 +512,7 @@ function bl64_fs_cleanup_logs() {
   local target='/var/log'
 
   if [[ -d "$target" ]]; then
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CLEANUP_LOGS} (${target})"
     bl64_fs_rm_full ${target}/[[:alnum:]]*
   fi
   return 0
@@ -527,6 +534,7 @@ function bl64_fs_cleanup_caches() {
   local target='/var/cache/man'
 
   if [[ -d "$target" ]]; then
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CLEANUP_CACHES} (${target})"
     bl64_fs_rm_full ${target}/[[:alnum:]]*
   fi
   return 0
@@ -658,7 +666,7 @@ function bl64_fs_safeguard() {
     return 0
   fi
 
-  bl64_msg_show_lib_task "${_BL64_FS_TXT_SAFEGUARD_OBJECT} ([${destination}]->[${backup}])"
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SAFEGUARD_OBJECT} ([${destination}]->[${backup}])"
   if ! bl64_fs_run_mv "$destination" "$backup"; then
     bl64_msg_show_error "$_BL64_FS_TXT_SAFEGUARD_FAILED ($destination)"
     return $BL64_LIB_ERROR_TASK_BACKUP
@@ -710,7 +718,7 @@ function bl64_fs_restore() {
     bl64_dbg_lib_show_info 'operation was NOT ok, remove invalid content'
     [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
 
-    bl64_msg_show_lib_task "${_BL64_FS_TXT_RESTORE_OBJECT} ([${backup}]->[${destination}])"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_RESTORE_OBJECT} ([${backup}]->[${destination}])"
     # shellcheck disable=SC2086
     bl64_fs_run_mv "$backup" "$destination" ||
       return $BL64_LIB_ERROR_TASK_RESTORE

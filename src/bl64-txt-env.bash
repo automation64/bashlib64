@@ -1,8 +1,8 @@
 #######################################
 # BashLib64 / Module / Globals / Manipulate text files content
-#
-# Version: 1.6.0
 #######################################
+
+export BL64_TXT_VERSION='1.9.0'
 
 export BL64_TXT_MODULE="$BL64_VAR_OFF"
 

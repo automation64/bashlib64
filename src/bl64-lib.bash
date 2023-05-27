@@ -1,7 +1,5 @@
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
-#
-# Version: 4.2.0
 #######################################
 
 #

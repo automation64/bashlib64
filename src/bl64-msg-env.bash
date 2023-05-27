@@ -1,8 +1,8 @@
 #######################################
 # BashLib64 / Module / Globals / Display messages
-#
-# Version: 2.9.0
 #######################################
+
+export BL64_MSG_VERSION='3.6.0'
 
 export BL64_MSG_MODULE="$BL64_VAR_OFF"
 

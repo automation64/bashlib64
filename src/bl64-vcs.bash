@@ -1,7 +1,5 @@
 #######################################
 # BashLib64 / Module / Functions / Manage Version Control System
-#
-# Version: 1.10.1
 #######################################
 
 #######################################
@@ -21,7 +19,8 @@ function bl64_vcs_run_git() {
   bl64_dbg_lib_show_function "$@"
   local debug="$BL64_VCS_SET_GIT_QUIET"
 
-  bl64_check_parameters_none "$#" &&
+  bl64_check_module 'BL64_VCS_MODULE' &&
+    bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_VCS_CMD_GIT" || return $?
 
   bl64_vcs_blank_git
@@ -103,7 +102,7 @@ function bl64_vcs_git_clone() {
 
   bl64_fs_create_dir "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" || return $?
 
-  bl64_msg_show_lib_task "$_BL64_VCS_TXT_CLONE_REPO ($source)"
+  bl64_msg_show_lib_subtask "$_BL64_VCS_TXT_CLONE_REPO ($source)"
 
   # shellcheck disable=SC2164
   cd "$destination"
@@ -153,7 +152,9 @@ function bl64_vcs_git_sparse() {
   # shellcheck disable=SC2164
   cd "$destination"
 
-  if bl64_os_match "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_UB}-20" "${BL64_OS_OL}-7" "${BL64_OS_CNT}-7"; then
+  bl64_dbg_lib_show_info 'detect if current git supports sparse-checkout option'
+  if bl64_os_match "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_UB}-18" "${BL64_OS_UB}-20" "${BL64_OS_OL}-7" "${BL64_OS_CNT}-7"; then
+    bl64_dbg_lib_show_info 'git sparse-checkout not supported. Using alternative method'
     # shellcheck disable=SC2086
     bl64_vcs_run_git init &&
       bl64_vcs_run_git remote add origin "$source" &&
@@ -165,6 +166,7 @@ function bl64_vcs_git_sparse() {
       } &&
       bl64_vcs_run_git pull --depth 1 origin "$branch"
   else
+    bl64_dbg_lib_show_info 'git sparse-checkout is supported'
     # shellcheck disable=SC2086
     bl64_vcs_run_git init &&
       bl64_vcs_run_git sparse-checkout set &&
@@ -178,4 +180,62 @@ function bl64_vcs_git_sparse() {
   status=$?
 
   return $status
+}
+
+#######################################
+# GitHub / Call API
+#
+# Arguments:
+#   $1: API URI and parameters
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_vcs_github_run_api() {
+  bl64_dbg_lib_show_function "$@"
+  local api_call="$1"
+
+  bl64_check_parameter 'api_call' ||
+    return $?
+
+  bl64_rxtx_run_curl \
+    "$BL64_RXTX_SET_CURL_SILENT" \
+    "${BL64_VCS_GITHUB_API_URL}/${api_call}"
+}
+
+#######################################
+# GitHub / Get release number from latest release
+#
+# * Uses GitHub API
+# * Assumes repo uses standard github release process which binds the latest release to a tag name representing the last version
+# * Looks for pattern in json output: "tag_name": "xxxxx"
+#
+# Arguments:
+#   $1: repo owner
+#   $2: repo name
+# Outputs:
+#   STDOUT: release tag
+#   STDERR: api error
+# Returns:
+#   0: api call success
+#   >0: api call error
+#######################################
+function bl64_vcs_github_release_get_latest() {
+  bl64_dbg_lib_show_function "$@"
+  local repo_owner="$1"
+  local repo_name="$2"
+  local repo_tag=''
+
+  bl64_check_parameter 'repo_owner' &&
+    bl64_check_parameter 'repo_name' ||
+    return $?
+
+  # shellcheck disable=SC2086
+  repo_tag="$(bl64_vcs_github_run_api \
+    "repos/${repo_owner}/${repo_name}/releases/latest" |
+    bl64_txt_run_awk -F: '/"tag_name": "/ {gsub(/[ ",]/,"", $2); print $2}')" &&
+    [[ -n "$repo_tag" ]] &&
+    echo "$repo_tag"
 }

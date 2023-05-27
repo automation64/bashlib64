@@ -1,7 +1,5 @@
 #######################################
 # BashLib64 / Module / Setup / Interact with Bash shell
-#
-# Version: 1.1.1
 #######################################
 
 #######################################
@@ -45,14 +43,14 @@ function _bl64_bsh_set_version() {
   bl64_dbg_lib_show_function
 
   case "${BASH_VERSINFO[0]}" in
-  4*) BL64_BSH_VERSION='4.0' ;;
-  5*) BL64_BSH_VERSION='5.0' ;;
+  4*) BL64_BSH_VERSION_BASH='4.0' ;;
+  5*) BL64_BSH_VERSION_BASH='5.0' ;;
   *)
     bl64_msg_show_error "${_BL64_BSH_TXT_UNSUPPORTED} (${BASH_VERSINFO[0]})" &&
       return $BL64_LIB_ERROR_OS_BASH_VERSION
     ;;
   esac
-  bl64_dbg_lib_show_vars 'BL64_BSH_VERSION'
+  bl64_dbg_lib_show_vars 'BL64_BSH_VERSION_BASH'
 
   return 0
 }

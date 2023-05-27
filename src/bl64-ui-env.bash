@@ -1,8 +1,8 @@
 #######################################
 # BashLib64 / Module / Globals / User Interface
-#
-# Version: 1.0.0
 #######################################
+
+export BL64_UI_VERSION='1.0.1'
 
 export BL64_UI_MODULE="$BL64_VAR_OFF"
 
