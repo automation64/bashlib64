@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage local filesystem
 #######################################
 
-export BL64_FS_VERSION='4.2.0'
+export BL64_FS_VERSION='4.2.2'
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
 
@@ -62,9 +62,13 @@ export BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
 
 export BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
 
-export _BL64_FS_TXT_COPY_FILE_PATH='copy source file'
+export _BL64_FS_TXT_COPY_FILE_PATH='copy file'
 export _BL64_FS_TXT_CREATE_DIR_PATH='create directory'
 export _BL64_FS_TXT_MERGE_ADD_SOURCE='merge content from source'
 export _BL64_FS_TXT_RESTORE_OBJECT='restore original file from backup'
 export _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
 export _BL64_FS_TXT_SAFEGUARD_OBJECT='backup original file'
+export _BL64_FS_TXT_CLEANUP_CACHES='clean up OS cache contents'
+export _BL64_FS_TXT_CLEANUP_LOGS='clean up OS logs'
+export _BL64_FS_TXT_CLEANUP_TEMP='clean up OS temporary files'
+export _BL64_FS_TXT_MERGE_DIRS='merge directories content'

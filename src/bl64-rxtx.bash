@@ -23,7 +23,7 @@ function bl64_rxtx_web_get_file() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
   local destination="$2"
-  local replace="${3:-${BL64_VAR_OFF}}"
+  local replace="${3:-${BL64_VAR_DEFAULT}}"
   local mode="${4:-${BL64_VAR_DEFAULT}}"
   local -i status=0
 
@@ -31,12 +31,13 @@ function bl64_rxtx_web_get_file() {
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' || return $?
 
+  [[ "$replace" == "$BL64_VAR_DEFAULT" ]] && replace="$BL64_VAR_OFF"
   [[ "$replace" == "$BL64_VAR_OFF" && -e "$destination" ]] &&
     bl64_dbg_lib_show_info "destination is already created (${destination}) and overwrite is disabled. No action taken" &&
     return 0
   bl64_fs_safeguard "$destination" >/dev/null || return $?
 
-  bl64_msg_show_lib_task "$_BL64_RXTX_TXT_DOWNLOAD_FILE ($source)"
+  bl64_msg_show_lib_subtask "$_BL64_RXTX_TXT_DOWNLOAD_FILE ($source)"
   # shellcheck disable=SC2086
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
     bl64_rxtx_run_curl \
@@ -91,7 +92,7 @@ function bl64_rxtx_git_get_dir() {
   local source_url="${1}"
   local source_path="${2}"
   local destination="${3}"
-  local replace="${4:-${BL64_VAR_OFF}}"
+  local replace="${4:-${BL64_VAR_DEFAULT}}"
   local branch="${5:-main}"
   local -i status=0
 
@@ -102,6 +103,7 @@ function bl64_rxtx_git_get_dir() {
     bl64_check_path_relative "$source_path" ||
     return $?
 
+  [[ "$replace" == "$BL64_VAR_DEFAULT" ]] && replace="$BL64_VAR_OFF"
   # shellcheck disable=SC2086
   bl64_check_overwrite "$destination" "$replace" "$_BL64_RXTX_TXT_EXISTING_DESTINATION" || return $BL64_VAR_OK
 
@@ -251,4 +253,45 @@ function _bl64_rxtx_git_get_dir_sub() {
 
   [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
   return $status
+}
+
+#######################################
+# Download asset from release in github repository
+#
+# Arguments:
+#   $1: repo owner
+#   $2: repo name
+#   $3: release tag
+#   $4: asset name
+#   $5: replace existing content Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
+#   $6: permissions. Regular chown format accepted. Default: umask defined
+# Outputs:
+#   STDOUT: none
+#   STDERR: task error
+# Returns:
+#   0: success
+#   >0: error
+#######################################
+function bl64_rxtx_github_get_asset() {
+  bl64_dbg_lib_show_function "$@"
+  local repo_owner="$1"
+  local repo_name="$2"
+  local release_tag="$3"
+  local asset_name="$4"
+  local destination="$5"
+  local replace="${6:-${BL64_VAR_OFF}}"
+  local mode="${7:-${BL64_VAR_DEFAULT}}"
+  local -i status=0
+
+  bl64_check_module 'BL64_RXTX_MODULE' &&
+    bl64_check_parameter 'repo_owner' &&
+    bl64_check_parameter 'repo_name' &&
+    bl64_check_parameter 'release_tag' &&
+    bl64_check_parameter 'asset_name' &&
+    bl64_check_parameter 'destination' ||
+  return $?
+
+  bl64_rxtx_web_get_file \
+    "https://github.com/${repo_owner}/${repo_name}/releases/download/${release_tag}/${asset_name}" \
+    "$destination" "$replace" "$mode"
 }

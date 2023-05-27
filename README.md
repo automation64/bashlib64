@@ -59,13 +59,13 @@ The library has been tested on the following operating systems:
 - Alpine: 3
 - CentOS: 7,8,9
 - Debian: 9,10,11
-- Fedora: 33,34,35,37
+- Fedora: 33,34,35,36,37
 - MacOS (*): 12,13
 - OracleLinux; 7,8,9
 - RedHatEnterpriseLinux: 8,9
 - RockyLinux: 8,9
 - SuSELinuxEnterpriseServer: 15
-- Ubuntu: 20,21,22,23,18
+- Ubuntu: 18,20,21,22,23
 
 (*) Requires Bash4 (e.g. homebrew install bash)
 
