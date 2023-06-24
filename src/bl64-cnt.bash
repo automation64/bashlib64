@@ -531,6 +531,7 @@ function bl64_cnt_run_docker() {
   bl64_dbg_runtime_show_paths
 
   bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
   "$BL64_CNT_CMD_DOCKER" \
     --log-level "$verbose" \
     $debug \

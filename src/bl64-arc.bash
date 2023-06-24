@@ -210,6 +210,7 @@ function bl64_arc_open_zip() {
     return $?
 
   bl64_msg_show_lib_subtask "$_BL64_ARC_TXT_OPEN_ZIP ($source)"
+  # shellcheck disable=SC2086
   bl64_arc_run_unzip \
     $BL64_ARC_SET_UNZIP_OVERWRITE \
     -d "$destination" \

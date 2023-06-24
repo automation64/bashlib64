@@ -59,7 +59,7 @@ The library has been tested on the following operating systems:
 - Alpine: 3
 - CentOS: 7,8,9
 - Debian: 9,10,11
-- Fedora: 33,34,35,36,37
+- Fedora: 33,34,35,36,37,38
 - MacOS (*): 12,13
 - OracleLinux; 7,8,9
 - RedHatEnterpriseLinux: 8,9
