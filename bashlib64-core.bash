@@ -612,7 +612,7 @@ export _BL64_MSG_TXT_WARNING='Warning'
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #######################################
 
-export BL64_OS_VERSION='3.2.0'
+export BL64_OS_VERSION='3.3.0'
 
 export BL64_OS_MODULE="$BL64_VAR_OFF"
 
@@ -4723,15 +4723,11 @@ function _bl64_os_get_distro_from_os_release() {
   ${BL64_OS_FD}-35*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-35" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-35.0" ;;
   ${BL64_OS_FD}-36*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-36" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-36.0" ;;
   ${BL64_OS_FD}-37*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-37" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-37.0" ;;
+  ${BL64_OS_FD}-38*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-38" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-38.0" ;;
   ${BL64_OS_OL}-7* | ${BL64_OS_OL}-8* | ${BL64_OS_OL}-9*) : ;;
   ${BL64_OS_RCK}-8* | ${BL64_OS_RCK}-9*) : ;;
   ${BL64_OS_RHEL}-8* | ${BL64_OS_RHEL}-9*) : ;;
-  ${BL64_OS_SLES}-15*)
-    # patern:
-    #  NAME="SLES"
-    #  VERSION_ID="15.4"
-    :
-    ;;
+  ${BL64_OS_SLES}-15*) : ;;
   ${BL64_OS_UB}-18.* | ${BL64_OS_UB}-20.* | ${BL64_OS_UB}-21.* | ${BL64_OS_UB}-22.* | ${BL64_OS_UB}-23.*) : ;;
   *) BL64_OS_DISTRO="$BL64_OS_UNK" ;;
   esac

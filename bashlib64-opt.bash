@@ -343,7 +343,7 @@ export _BL64_PKG_TXT_REPOSITORY_ADD='add remote package repository'
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #######################################
 
-export BL64_PY_VERSION='1.12.0'
+export BL64_PY_VERSION='1.13.0'
 
 # Optional module. Not enabled by default
 export BL64_PY_MODULE="$BL64_VAR_OFF"
@@ -740,6 +740,7 @@ function bl64_arc_open_zip() {
     return $?
 
   bl64_msg_show_lib_subtask "$_BL64_ARC_TXT_OPEN_ZIP ($source)"
+  # shellcheck disable=SC2086
   bl64_arc_run_unzip \
     $BL64_ARC_SET_UNZIP_OVERWRITE \
     -d "$destination" \
@@ -2325,6 +2326,7 @@ function bl64_cnt_run_docker() {
   bl64_dbg_runtime_show_paths
 
   bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
   "$BL64_CNT_CMD_DOCKER" \
     --log-level "$verbose" \
     $debug \
@@ -6027,7 +6029,7 @@ function _bl64_py_set_command() {
     ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_FD}-35.* | ${BL64_OS_FD}-36.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
-    ${BL64_OS_FD}-37.*) BL64_PY_CMD_PYTHON311='/usr/bin/python3.11' ;;
+    ${BL64_OS_FD}-37.* | ${BL64_OS_FD}-38.*) BL64_PY_CMD_PYTHON311='/usr/bin/python3.11' ;;
     ${BL64_OS_DEB}-9.*) BL64_PY_CMD_PYTHON35='/usr/bin/python3.5' ;;
     ${BL64_OS_DEB}-10.*) BL64_PY_CMD_PYTHON37='/usr/bin/python3.7' ;;
     ${BL64_OS_DEB}-11.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
