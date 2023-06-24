@@ -85,7 +85,7 @@ TERM="${TERM:-vt100}"
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='12.3.0'
+export BL64_VERSION='12.4.0'
 
 # Declare imported variables
 export LANG
