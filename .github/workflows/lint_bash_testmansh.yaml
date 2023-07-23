@@ -4,10 +4,9 @@ name: "Lint / Bash / TestManSH"
 
 on:
   push:
-    branches:
-      - "develop"
-      - "feature/*"
-      - "bugfix/*"
+    paths:
+      - "src/*"
+      - "test/*"
 
 jobs:
   lint-bash-testmansh:
