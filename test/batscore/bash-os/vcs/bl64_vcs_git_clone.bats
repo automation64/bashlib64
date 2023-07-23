@@ -27,7 +27,7 @@ teardown() {
 
 @test "bl64_vcs_git_clone: clone repo" {
 
-  run bl64_vcs_git_clone 'https://github.com/serdigital64/bashlib64.git' "$_bl64_vcs_git_clone_destination" 'main'
+  run bl64_vcs_git_clone "$DEVBL_TEST_VALUE_GIT_CLONE_URL" "$_bl64_vcs_git_clone_destination" 'main'
   assert_success
 
 }
