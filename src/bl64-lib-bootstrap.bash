@@ -1,8 +1,8 @@
 # Do not inherit aliases and commands
-unset -f unalias
-\unalias -a
-unset -f command
-hash -r
+builtin unset -f unalias
+builtin unalias -a
+builtin unset -f command
+builtin hash -r
 
 # Normalize shtop defaults
 shopt -qu \
