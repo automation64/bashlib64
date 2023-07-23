@@ -5,7 +5,7 @@ builtin unset -f command
 builtin hash -r
 
 # Normalize shtop defaults
-shopt -qu \
+builtin shopt -qu \
   'dotglob' \
   'extdebug' \
   'failglob' \
@@ -18,43 +18,43 @@ shopt -qu \
   'nocasematch' \
   'nullglob' \
   'xpg_echo'
-shopt -qs \
+builtin shopt -qs \
   'extquote'
 
 # Ensure pipeline exit status is failed when any cmd fails
-set -o 'pipefail'
+builtin set -o 'pipefail'
 
 # Enable error processing
-set -o 'errtrace'
-set -o 'functrace'
+builtin set -o 'errtrace'
+builtin set -o 'functrace'
 
 # Disable fast-fail. Developer must implement error handling (check for exit status)
-set +o 'errexit'
+builtin set +o 'errexit'
 
 # Reset bash set options to defaults
-set -o 'braceexpand'
-set -o 'hashall'
-set +o 'allexport'
-set +o 'histexpand'
-set +o 'history'
-set +o 'ignoreeof'
-set +o 'monitor'
-set +o 'noclobber'
-set +o 'noglob'
-set +o 'nolog'
-set +o 'notify'
-set +o 'onecmd'
-set +o 'posix'
+builtin set -o 'braceexpand'
+builtin set -o 'hashall'
+builtin set +o 'allexport'
+builtin set +o 'histexpand'
+builtin set +o 'history'
+builtin set +o 'ignoreeof'
+builtin set +o 'monitor'
+builtin set +o 'noclobber'
+builtin set +o 'noglob'
+builtin set +o 'nolog'
+builtin set +o 'notify'
+builtin set +o 'onecmd'
+builtin set +o 'posix'
 
 # Do not set/unset - Breaks bats-core
 # set -o 'keyword'
 # set -o 'noexec'
 
 # Do not inherit sensitive environment variables
-unset MAIL
-unset ENV
-unset IFS
-unset TMPDIR
+builtin unset MAIL
+builtin unset ENV
+builtin unset IFS
+builtin unset TMPDIR
 
 # Normalize terminal settings
 TERM="${TERM:-vt100}"
