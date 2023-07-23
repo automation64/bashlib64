@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [12.5.0]
 
-- core-bootstrap: make shell forget paths (hash)
+- core-bootstrap
+  - make shell forget paths (hash)
+  - protect builtins using builtin keyword
+- rxtx
+  - fix curl opts for debian11
 
 ## [12.4.0]
 

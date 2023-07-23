@@ -86,7 +86,7 @@ function _bl64_rxtx_set_options() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-20.* | ${BL64_OS_UB}-21.* | ${BL64_OS_UB}-22.* | ${BL64_OS_UB}-23.* | ${BL64_OS_DEB}-11.*)
+  ${BL64_OS_UB}-20.* | ${BL64_OS_UB}-21.* | ${BL64_OS_UB}-22.* | ${BL64_OS_UB}-23.*)
     BL64_RXTX_SET_CURL_VERBOSE='--verbose'
     BL64_RXTX_SET_CURL_SILENT='--silent --no-progress-meter'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
@@ -96,7 +96,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_OUTPUT='--output-document'
     BL64_RXTX_SET_WGET_SECURE='--no-config'
     ;;
-  ${BL64_OS_DEB}-9.* | ${BL64_OS_UB}-18.* | ${BL64_OS_DEB}-10.*)
+  ${BL64_OS_DEB}-9.* | ${BL64_OS_UB}-18.* | ${BL64_OS_DEB}-10.* | ${BL64_OS_DEB}-11.*)
     BL64_RXTX_SET_CURL_VERBOSE='--verbose'
     BL64_RXTX_SET_CURL_SILENT='--silent'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
