@@ -2,6 +2,7 @@
 unset -f unalias
 \unalias -a
 unset -f command
+hash -r
 
 # Normalize shtop defaults
 shopt -qu \

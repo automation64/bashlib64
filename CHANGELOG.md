@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [12.5.0]
+
+- core-bootstrap: make shell forget paths (hash)
+
 ## [12.4.0]
 
 - all
@@ -313,6 +317,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[12.5.0]: https://github.com/serdigital64/bashlib64/compare/12.4.0...12.5.0
+[12.4.0]: https://github.com/serdigital64/bashlib64/compare/12.3.0...12.4.0
 [12.3.0]: https://github.com/serdigital64/bashlib64/compare/12.2.1...12.3.0
 [12.2.1]: https://github.com/serdigital64/bashlib64/compare/12.1.0...12.2.1
 [12.1.0]: https://github.com/serdigital64/bashlib64/compare/12.0.0...12.1.0
