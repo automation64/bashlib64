@@ -5,7 +5,7 @@
 # * Use to lint shell source code
 # * Check is done using shellcheck
 # * TestManSH is used to manage linting environment
-# * Template Version: v1.0.0
+# * Template Version: v1.1.0
 #
 
 # shellcheck source=SCRIPTDIR/dev-set
