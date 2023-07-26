@@ -26,3 +26,4 @@ export DEVBL_TEST_BASHLIB64="${TESTMANSH_PROJECT_BUILD}/bashlib64.bash"
 export DEVBL_TEST_VALUE_GIT_OWNER='automation64'
 export DEVBL_TEST_VALUE_GIT_REPO='helm64'
 export DEVBL_TEST_VALUE_GIT_CLONE_URL="https://github.com/${DEVBL_TEST_VALUE_GIT_OWNER}/bashlib64.git"
+export DEVBL_TEST_VALUE_GIT_RAW_URL="https://raw.githubusercontent.com/${DEVBL_TEST_VALUE_GIT_OWNER}/bashlib64/main/bashlib64.bash"
