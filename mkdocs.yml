@@ -4,7 +4,7 @@ site_description: "BashLib64 is a **Bash** library that provides a simple abstra
 site_author: "SerDigital64"
 
 site_url: "https://serdigital64.github.io/bashlib64"
-repo_url: "https://github.com/serdigital64/bashlib64"
+repo_url: "https://github.com/automation64/bashlib64"
 
 copyright: "GPL-3.0-or-later"
 docs_dir: "docs"
