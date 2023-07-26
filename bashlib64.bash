@@ -3,7 +3,7 @@
 # BashLib64 / Bash automation librbary
 #
 # Author: serdigital64 (https://github.com/serdigital64)
-# Repository: https://github.com/serdigital64/bashlib64
+# Repository: https://github.com/automation64/bashlib64
 #
 # Copyright 2022 SerDigital64@gmail.com
 #
@@ -22,12 +22,13 @@
 #######################################
 
 # Do not inherit aliases and commands
-unset -f unalias
-\unalias -a
-unset -f command
+builtin unset -f unalias
+builtin unalias -a
+builtin unset -f command
+builtin hash -r
 
 # Normalize shtop defaults
-shopt -qu \
+builtin shopt -qu \
   'dotglob' \
   'extdebug' \
   'failglob' \
@@ -40,43 +41,43 @@ shopt -qu \
   'nocasematch' \
   'nullglob' \
   'xpg_echo'
-shopt -qs \
+builtin shopt -qs \
   'extquote'
 
 # Ensure pipeline exit status is failed when any cmd fails
-set -o 'pipefail'
+builtin set -o 'pipefail'
 
 # Enable error processing
-set -o 'errtrace'
-set -o 'functrace'
+builtin set -o 'errtrace'
+builtin set -o 'functrace'
 
 # Disable fast-fail. Developer must implement error handling (check for exit status)
-set +o 'errexit'
+builtin set +o 'errexit'
 
 # Reset bash set options to defaults
-set -o 'braceexpand'
-set -o 'hashall'
-set +o 'allexport'
-set +o 'histexpand'
-set +o 'history'
-set +o 'ignoreeof'
-set +o 'monitor'
-set +o 'noclobber'
-set +o 'noglob'
-set +o 'nolog'
-set +o 'notify'
-set +o 'onecmd'
-set +o 'posix'
+builtin set -o 'braceexpand'
+builtin set -o 'hashall'
+builtin set +o 'allexport'
+builtin set +o 'histexpand'
+builtin set +o 'history'
+builtin set +o 'ignoreeof'
+builtin set +o 'monitor'
+builtin set +o 'noclobber'
+builtin set +o 'noglob'
+builtin set +o 'nolog'
+builtin set +o 'notify'
+builtin set +o 'onecmd'
+builtin set +o 'posix'
 
 # Do not set/unset - Breaks bats-core
 # set -o 'keyword'
 # set -o 'noexec'
 
 # Do not inherit sensitive environment variables
-unset MAIL
-unset ENV
-unset IFS
-unset TMPDIR
+builtin unset MAIL
+builtin unset ENV
+builtin unset IFS
+builtin unset TMPDIR
 
 # Normalize terminal settings
 TERM="${TERM:-vt100}"
@@ -85,7 +86,7 @@ TERM="${TERM:-vt100}"
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='12.4.0'
+export BL64_VERSION='12.5.0'
 
 # Declare imported variables
 export LANG
@@ -719,7 +720,7 @@ export _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
 # BashLib64 / Module / Globals / Transfer and Receive data over the network
 #######################################
 
-export BL64_RXTX_VERSION='1.16.1'
+export BL64_RXTX_VERSION='1.16.2'
 
 export BL64_RXTX_MODULE="$BL64_VAR_OFF"
 
@@ -5800,7 +5801,7 @@ function _bl64_rxtx_set_options() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-20.* | ${BL64_OS_UB}-21.* | ${BL64_OS_UB}-22.* | ${BL64_OS_UB}-23.* | ${BL64_OS_DEB}-11.*)
+  ${BL64_OS_UB}-20.* | ${BL64_OS_UB}-21.* | ${BL64_OS_UB}-22.* | ${BL64_OS_UB}-23.*)
     BL64_RXTX_SET_CURL_VERBOSE='--verbose'
     BL64_RXTX_SET_CURL_SILENT='--silent --no-progress-meter'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
@@ -5810,7 +5811,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_OUTPUT='--output-document'
     BL64_RXTX_SET_WGET_SECURE='--no-config'
     ;;
-  ${BL64_OS_DEB}-9.* | ${BL64_OS_UB}-18.* | ${BL64_OS_DEB}-10.*)
+  ${BL64_OS_DEB}-9.* | ${BL64_OS_UB}-18.* | ${BL64_OS_DEB}-10.* | ${BL64_OS_DEB}-11.*)
     BL64_RXTX_SET_CURL_VERBOSE='--verbose'
     BL64_RXTX_SET_CURL_SILENT='--silent'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
