@@ -2,7 +2,7 @@ setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   _bl64_rxtx_git_get_dir_destination="$(temp_make)"
-  _bl64_rxtx_git_get_dir_source='https://github.com/serdigital64/bashlib64.git'
+  _bl64_rxtx_git_get_dir_source="$DEVBL_TEST_VALUE_GIT_CLONE_URL"
   export _bl64_rxtx_git_get_dir_destination
   export _bl64_rxtx_git_get_dir_source
   BATSLIB_TEMP_PRESERVE=0

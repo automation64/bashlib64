@@ -4,11 +4,10 @@
 
 - Prepare dev tools
   - Install GIT
-  - Install Git-Flow
 - Clone GIT repository
 
   ```shell
-  git clone https://github.com/serdigital64/bashlib64.git
+  git clone https://github.com/automation64/bashlib64.git
   ```
 
 - Adjust environment variables to match your configuration:
@@ -25,12 +24,6 @@
 
   ```shell
   ./bin/dev-lib
-  ```
-
-- Initialize git-flow. Leave defaults options
-
-  ```shell
-  git flow init
   ```
 
 ## Update source code
@@ -63,6 +56,6 @@
 
 ## Repositories
 
-- Project GIT repository: [https://github.com/serdigital64/bashlib64](https://github.com/serdigital64/bashlib64)
+- Project GIT repository: [https://github.com/automation64/bashlib64](https://github.com/automation64/bashlib64)
 - Project Documentation: [https://serdigital64.github.io/bashlib64/](https://serdigital64.github.io/bashlib64/)
 - Release history: [CHANGELOG](CHANGELOG.md)

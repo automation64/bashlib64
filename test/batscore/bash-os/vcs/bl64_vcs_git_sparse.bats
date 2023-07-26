@@ -33,6 +33,6 @@ teardown() {
 }
 
 @test "bl64_vcs_git_sparse: sparse checkout" {
-  run bl64_vcs_git_sparse 'https://github.com/serdigital64/bashlib64.git' "$_bl64_vcs_git_sparse_destination" 'main' 'bin/ build/'
+  run bl64_vcs_git_sparse "$DEVBL_TEST_VALUE_GIT_CLONE_URL" "$_bl64_vcs_git_sparse_destination" 'main' 'bin/ build/'
   assert_success
 }
