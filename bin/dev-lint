@@ -11,5 +11,5 @@
 # shellcheck source=SCRIPTDIR/dev-set
 source ./bin/dev-set || exit 1
 
-./bin/dev-build -t &&
-  ./lib/testmansh -t -o -c "${DEVBL_NAME_BUILD}/${DEVBL_BUILD_BASHLIB64_FULL}"
+"$DEVBL_CICD_BUILD" -t &&
+  "$DEVBL_CICD_TESTMANSH" -t -o -c "${DEVBL_NAME_BUILD}/${DEVBL_BUILD_NAME_SINGLE}"

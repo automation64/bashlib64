@@ -11,5 +11,5 @@
 # shellcheck source=SCRIPTDIR/dev-set
 source ./bin/dev-set || exit 1
 
-./bin/dev-build -t &&
-  ./lib/testmansh -b -o -e "$DEVBL_TEST_CONTAINER_NON_OS" -c "$DEVBL_TEST_CASE_NON_OS"
+"$DEVBL_CICD_BUILD" -t &&
+  "$DEVBL_CICD_TESTMANSH" -b -o -e "$DEVBL_TEST_CONTAINER_NON_OS" -c "$DEVBL_TEST_CASE_NON_OS"
