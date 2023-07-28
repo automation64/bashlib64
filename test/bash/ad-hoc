@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 . bin/dev-set
-. "${DEVBL_BUILD_BASHLIB64}/${DEVBL_BUILD_BASHLIB64_FULL}"
+. "${DEVBL_BUILD_FULL_PATH}/${DEVBL_BUILD_NAME_SINGLE}"
 
 #
 # Skeleton for ad-hoc testiong.
