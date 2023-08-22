@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
 
-export BL64_CHECK_VERSION='3.2.0'
+export BL64_CHECK_VERSION='3.3.0'
 
 export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 
@@ -13,6 +13,7 @@ export _BL64_CHECK_TXT_PARAMETER_DEFAULT='required parameter value must be other
 export _BL64_CHECK_TXT_COMMAND_NOT_FOUND='required command is not present'
 export _BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE='required command is present but has no execution permission'
 export _BL64_CHECK_TXT_COMMAND_NOT_INSTALLED='required command is not installed'
+export _BL64_CHECK_TXT_COMMAND_NOT_IN_PATH='required command is not found in any of the search paths'
 
 export _BL64_CHECK_TXT_FILE_NOT_FOUND='required file is not present'
 export _BL64_CHECK_TXT_FILE_NOT_FILE='path is present but is not a regular file'

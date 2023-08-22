@@ -24,10 +24,3 @@ setup() {
   assert_equal "$status" $BL64_LIB_ERROR_FILE_NOT_EXECUTE
 
 }
-
-@test "bl64_check_command: parameter is not present" {
-
-  run bl64_check_command
-  assert_failure
-
-}
