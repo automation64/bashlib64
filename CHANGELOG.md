@@ -5,25 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [12.6.0]
+## [13.0.0]
 
+### Added
+
+- core
+  - added global path for temporal files
 - check
   - added check command in search path
 
 ## [12.5.0]
 
-- core-bootstrap
+### Added
+
+- core
   - make shell forget paths (hash)
   - protect builtins using builtin keyword
+
+### Fixed
+
 - rxtx
   - fix curl opts for debian11
 
 ## [12.4.0]
 
+### Added
+
 - all
   - add fedora 38
 
 ## [12.3.0]
+
+### Added
 
 - all
   - added version info
@@ -326,7 +339,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
-[12.6.0]: https://github.com/automation64/bashlib64/compare/12.5.0...12.6.0
+[13.0.0]: https://github.com/automation64/bashlib64/compare/12.5.0...13.0.0
 [12.5.0]: https://github.com/automation64/bashlib64/compare/12.4.0...12.5.0
 [12.4.0]: https://github.com/automation64/bashlib64/compare/12.3.0...12.4.0
 [12.3.0]: https://github.com/automation64/bashlib64/compare/12.2.1...12.3.0
