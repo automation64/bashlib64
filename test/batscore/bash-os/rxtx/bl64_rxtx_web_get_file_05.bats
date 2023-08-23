@@ -2,7 +2,7 @@ setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   _bl64_rxtx_web_get_file_destination="$(mktemp -d)"
-  _bl64_rxtx_web_get_file_source='https://raw.githubusercontent.com="$DEVBL_TEST_VALUE_GIT_RAW_URL"bashlib64/main/bashlib64.bash'
+  _bl64_rxtx_web_get_file_source="$DEVBL_TEST_VALUE_GIT_RAW_URL"
   export _bl64_rxtx_web_get_file_destination
   export _bl64_rxtx_web_get_file_source
 }
