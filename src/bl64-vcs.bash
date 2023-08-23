@@ -201,7 +201,7 @@ function bl64_vcs_github_run_api() {
     return $?
 
   bl64_rxtx_run_curl \
-    "$BL64_RXTX_SET_CURL_SILENT" \
+    $BL64_RXTX_SET_CURL_SILENT \
     "${BL64_VCS_GITHUB_API_URL}/${api_call}"
 }
 
