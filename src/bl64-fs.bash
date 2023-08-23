@@ -258,6 +258,31 @@ function bl64_fs_run_chown() {
 #######################################
 # Command wrapper with verbose, debug and common options
 #
+# * Warning: mktemp with no arguments creates a temp file by default
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_fs_run_mktemp() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose="$BL64_FS_SET_MKTEMP_QUIET"
+
+  bl64_dbg_lib_command_enabled && verbose=''
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_FS_CMD_MKTEMP" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
 # Arguments:
 #   $@: arguments are passed as-is to the command
 # Outputs:
@@ -984,4 +1009,107 @@ function bl64_fs_set_ephemeral() {
   fi
 
   return 0
+}
+
+#######################################
+# Create temporal directory
+#
+# * Wrapper to the mktemp tool
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: full path to temp dir
+#   STDERR: error messages
+# Returns:
+#   0: temp created ok
+#  >0: failed to create temp
+#######################################
+function bl64_fs_create_tmpdir() {
+  bl64_dbg_lib_show_function
+  local template="${BL64_FS_TMP_PREFIX}-${BL64_SCRIPT_NAME}.XXXXXXXXXX"
+
+  bl64_fs_run_mktemp \
+    "$BL64_FS_SET_MKTEMP_DIRECTORY" \
+    "$BL64_FS_SET_MKTEMP_TMPDIR" "$BL64_FS_PATH_TMP" \
+    "$template"
+}
+
+#######################################
+# Create temporal file
+#
+# * Wrapper to the mktemp tool
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: full path to temp file
+#   STDERR: error messages
+# Returns:
+#   0: temp created ok
+#  >0: failed to create temp
+#######################################
+function bl64_fs_create_tmpfile() {
+  bl64_dbg_lib_show_function
+  local template="${BL64_FS_TMP_PREFIX}-${BL64_SCRIPT_NAME}.XXXXXXXXXX"
+
+  bl64_fs_run_mktemp \
+    "$BL64_FS_SET_MKTEMP_TMPDIR" "$BL64_FS_PATH_TMP" \
+    "$template"
+}
+
+#######################################
+# Remove temporal directory created by bl64_fs_create_tmpdir
+#
+# Arguments:
+#   $1: full path to the tmpdir
+# Outputs:
+#   STDOUT: None
+#   STDERR: error messages
+# Returns:
+#   0: temp removed ok
+#  >0: failed to remove temp
+#######################################
+function bl64_fs_rm_tmpdir() {
+  bl64_dbg_lib_show_function "$@"
+  local tmpdir="$1"
+
+  bl64_check_parameter 'tmpdir' &&
+    bl64_check_directory "$tmpdir" ||
+    return $?
+
+  if [[ "$tmpdir" != ${BL64_FS_PATH_TMP}/${BL64_FS_TMP_PREFIX}-*.* ]]; then
+    bl64_msg_show_error "${_BL64_FS_TXT_ERROR_NOT_TMPDIR} (${tmpdir})"
+    return $BL64_LIB_ERROR_TASK_FAILED
+  fi
+
+  bl64_fs_rm_full "$tmpdir"
+}
+
+#######################################
+# Remove temporal file create by bl64_fs_create_tmpfile
+#
+# Arguments:
+#   $1: full path to the tmpfile
+# Outputs:
+#   STDOUT: None
+#   STDERR: error messages
+# Returns:
+#   0: temp removed ok
+#  >0: failed to remove temp
+#######################################
+function bl64_fs_rm_tmpfile() {
+  bl64_dbg_lib_show_function "$@"
+  local tmpfile="$1"
+
+  bl64_check_parameter 'tmpfile' &&
+    bl64_check_file "$tmpfile" ||
+    return $?
+
+  if [[ "$tmpfile" != ${BL64_FS_PATH_TMP}/${BL64_FS_TMP_PREFIX}-*.* ]]; then
+    bl64_msg_show_error "${_BL64_FS_TXT_ERROR_NOT_TMPFILE} (${tmpfile})"
+    return $BL64_LIB_ERROR_TASK_FAILED
+  fi
+
+  bl64_fs_rm_file "$tmpfile"
 }
