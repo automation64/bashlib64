@@ -7,8 +7,11 @@
 # Skeleton for ad-hoc testiong.
 #
 
+#bl64_dbg_lib_enable
+
 #
 # Test Cases
 #
 # * Keep the source clean, do not commit test cases below this section
 #
+

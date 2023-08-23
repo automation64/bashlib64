@@ -118,6 +118,7 @@ function _bl64_fs_set_command() {
 # Create command sets for common options
 #
 # * Warning: bootstrap function
+# * BL64_FS_SET_MKTEMP_TMPDIR: not using long form (--) as it requires =
 #
 # Arguments:
 #   None
@@ -148,6 +149,9 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_LS_NOCOLOR='--color=never'
     BL64_FS_SET_MKDIR_PARENTS='--parents'
     BL64_FS_SET_MKDIR_VERBOSE='--verbose'
+    BL64_FS_SET_MKTEMP_DIRECTORY='--directory'
+    BL64_FS_SET_MKTEMP_QUIET='--quiet'
+    BL64_FS_SET_MKTEMP_TMPDIR='-p'
     BL64_FS_SET_MV_FORCE='--force'
     BL64_FS_SET_MV_VERBOSE='--verbose'
     BL64_FS_SET_RM_FORCE='--force'
@@ -172,6 +176,9 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_LS_NOCOLOR='--color=never'
     BL64_FS_SET_MKDIR_PARENTS='--parents'
     BL64_FS_SET_MKDIR_VERBOSE='--verbose'
+    BL64_FS_SET_MKTEMP_DIRECTORY='--directory'
+    BL64_FS_SET_MKTEMP_QUIET='--quiet'
+    BL64_FS_SET_MKTEMP_TMPDIR='-p'
     BL64_FS_SET_MV_FORCE='--force'
     BL64_FS_SET_MV_VERBOSE='--verbose'
     BL64_FS_SET_RM_FORCE='--force'
@@ -196,6 +203,9 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_LS_NOCOLOR='--color=never'
     BL64_FS_SET_MKDIR_PARENTS='--parents'
     BL64_FS_SET_MKDIR_VERBOSE='--verbose'
+    BL64_FS_SET_MKTEMP_DIRECTORY='--directory'
+    BL64_FS_SET_MKTEMP_QUIET='--quiet'
+    BL64_FS_SET_MKTEMP_TMPDIR='-p'
     BL64_FS_SET_MV_FORCE='--force'
     BL64_FS_SET_MV_VERBOSE='--verbose'
     BL64_FS_SET_RM_FORCE='--force'
@@ -220,6 +230,9 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_LS_NOCOLOR='--color=never'
     BL64_FS_SET_MKDIR_PARENTS='-p'
     BL64_FS_SET_MKDIR_VERBOSE=' '
+    BL64_FS_SET_MKTEMP_DIRECTORY='-d'
+    BL64_FS_SET_MKTEMP_QUIET='-q'
+    BL64_FS_SET_MKTEMP_TMPDIR='-p'
     BL64_FS_SET_MV_FORCE='-f'
     BL64_FS_SET_MV_VERBOSE=' '
     BL64_FS_SET_RM_FORCE='-f'
@@ -244,6 +257,9 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_LS_NOCOLOR='--color=never'
     BL64_FS_SET_MKDIR_PARENTS='-p'
     BL64_FS_SET_MKDIR_VERBOSE='-v'
+    BL64_FS_SET_MKTEMP_DIRECTORY='-d'
+    BL64_FS_SET_MKTEMP_QUIET='-q'
+    BL64_FS_SET_MKTEMP_TMPDIR='-p'
     BL64_FS_SET_MV_FORCE='-f'
     BL64_FS_SET_MV_VERBOSE='-v'
     BL64_FS_SET_RM_FORCE='-f'

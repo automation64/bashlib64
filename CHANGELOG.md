@@ -5,20 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [12.6.0]
+
+### Added
+
+- check
+  - added check command in search path
+- fs
+  - added global path for temporal files
+  - new function: bl64_fs_run_mktemp, bl64_fs_create_tmpdir, bl64_fs_create_tmpfile, bl64_fs_rm_tmpfile, bl64_fs_rm_tmpdir
+
+### Fixed
+
+- vcs
+  - bl64_vcs_github_run_api: fixed parameter quoting
+
 ## [12.5.0]
 
-- core-bootstrap
+### Added
+
+- core
   - make shell forget paths (hash)
   - protect builtins using builtin keyword
+
+### Fixed
+
 - rxtx
   - fix curl opts for debian11
 
 ## [12.4.0]
 
+### Added
+
 - all
   - add fedora 38
 
 ## [12.3.0]
+
+### Added
 
 - all
   - added version info
@@ -321,6 +345,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[12.6.0]: https://github.com/automation64/bashlib64/compare/12.5.0...12.6.0
 [12.5.0]: https://github.com/automation64/bashlib64/compare/12.4.0...12.5.0
 [12.4.0]: https://github.com/automation64/bashlib64/compare/12.3.0...12.4.0
 [12.3.0]: https://github.com/automation64/bashlib64/compare/12.2.1...12.3.0
@@ -332,10 +357,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [10.2.2]: https://github.com/automation64/bashlib64/compare/10.1.1...10.2.2
 [10.1.1]: https://github.com/automation64/bashlib64/compare/10.0.1...10.1.1
 [10.0.2]: https://github.com/automation64/bashlib64/compare/10.0.2...9.2.4
-[9.2.4]: https://github.com/automation64/bashlib64/compare/9.2.4...9.1.4
-[9.1.4]: https://github.com/automation64/bashlib64/compare/9.1.4...9.0.1
-[9.0.1]: https://github.com/automation64/bashlib64/compare/8.1.1...9.0.1
-[8.1.1]: https://github.com/automation64/bashlib64/compare/8.0.0...8.1.1
-[8.0.0]: https://github.com/automation64/bashlib64/compare/7.1.0...8.0.0
-[7.1.0]: https://github.com/automation64/bashlib64/compare/7.0.0...7.1.0
-[7.0.0]: https://github.com/automation64/bashlib64/compare/6.0.0...7.0.0

@@ -668,3 +668,39 @@ function bl64_check_home() {
   bl64_check_export 'HOME' &&
     bl64_check_directory "$HOME"
 }
+
+#######################################
+# Check and report if the command is available using the current search path
+#
+# * standar PATH variable is used for the search
+# * aliases and built-in commands will always return true
+# * if the command is in the search path, then bl64_check_command is used to ensure it can be used
+#
+# Arguments:
+#   $1: command file name
+#   $2: Not found error message. Default: _BL64_CHECK_TXT_COMMAND_NOT_IN_PATH
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: Command found
+#   BL64_LIB_ERROR_FILE_NOT_FOUND
+#######################################
+function bl64_check_command_search_path() {
+  bl64_dbg_lib_show_function "$@"
+  local file="${1:-}"
+  local message="${2:-${_BL64_CHECK_TXT_COMMAND_NOT_IN_PATH}}"
+  local full_path=''
+
+  bl64_check_parameter 'file' || return $?
+
+  full_path="$(type -p "${file}")"
+  # shellcheck disable=SC2181
+  if (( $? != 0)); then
+    bl64_msg_show_error "${message} (command: ${file} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+  fi
+
+  bl64_check_command "$full_path"
+}

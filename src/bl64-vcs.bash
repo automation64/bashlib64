@@ -200,8 +200,9 @@ function bl64_vcs_github_run_api() {
   bl64_check_parameter 'api_call' ||
     return $?
 
+  # shellcheck disable=SC2086
   bl64_rxtx_run_curl \
-    "$BL64_RXTX_SET_CURL_SILENT" \
+    $BL64_RXTX_SET_CURL_SILENT \
     "${BL64_VCS_GITHUB_API_URL}/${api_call}"
 }
 
