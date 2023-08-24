@@ -185,8 +185,11 @@ function bl64_vcs_git_sparse() {
 #######################################
 # GitHub / Call API
 #
+# * Call APIs using CURL wrapper
+#
 # Arguments:
 #   $1: API URI and parameters
+#   $@: additional arguments are passed as-is to the curl command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -200,10 +203,12 @@ function bl64_vcs_github_run_api() {
   bl64_check_parameter 'api_call' ||
     return $?
 
+  shift
   # shellcheck disable=SC2086
   bl64_rxtx_run_curl \
-    $BL64_RXTX_SET_CURL_SILENT \
-    "${BL64_VCS_GITHUB_API_URL}/${api_call}"
+    $BL64_RXTX_SET_CURL_REDIRECT \
+    "${BL64_VCS_GITHUB_API_URL}/${api_call}" \
+    "$@"
 }
 
 #######################################
@@ -236,7 +241,11 @@ function bl64_vcs_github_release_get_latest() {
   # shellcheck disable=SC2086
   repo_tag="$(bl64_vcs_github_run_api \
     "repos/${repo_owner}/${repo_name}/releases/latest" |
-    bl64_txt_run_awk -F: '/"tag_name": "/ {gsub(/[ ",]/,"", $2); print $2}')" &&
+    bl64_txt_run_awk \
+      -F: \
+      '/"tag_name": "/ {
+        gsub(/[ ",]/,"", $2); print $2
+      }')" &&
     [[ -n "$repo_tag" ]] &&
     echo "$repo_tag"
 }
