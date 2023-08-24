@@ -3,28 +3,6 @@
 #######################################
 
 #######################################
-# Removes comments from text input using the external tool Grep
-#
-# * Comment delimiter: #
-# * All text to the right of the delimiter is removed
-#
-# Arguments:
-#   $1: Full path to the text file. Default: STDIN
-# Outputs:
-#   STDOUT: Original text with comments removed
-#   STDERR: grep Error message
-# Returns:
-#   0: successfull execution
-#   >0: grep command exit status
-#######################################
-function bl64_fmt_strip_comments() {
-  bl64_dbg_lib_show_function "$@"
-  local source="${1:--}"
-
-  bl64_txt_run_egrep "$BL64_TXT_SET_GREP_INVERT" '^#.*$|^ *#.*$' "$source"
-}
-
-#######################################
 # Removes starting slash from path
 #
 # * If path is a single slash or relative path no change is done
