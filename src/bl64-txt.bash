@@ -3,6 +3,30 @@
 #######################################
 
 #######################################
+# Removes comments from text input using the external tool Grep
+#
+# * Comment delimiter: #
+# * All text to the right of the delimiter is removed
+#
+# Arguments:
+#   $1: Full path to the text file. Use $BL64_TXT_FLAG_STDIN for stdin. Default: STDIN
+# Outputs:
+#   STDOUT: Original text with comments removed
+#   STDERR: grep Error message
+# Returns:
+#   0: successfull execution
+#   >0: grep command exit status
+#######################################
+function bl64_txt_strip_comments() {
+  bl64_dbg_lib_show_function "$@"
+  local source="${1:-${BL64_TXT_FLAG_STDIN}}"
+
+  [[ "$source" == "$BL64_TXT_FLAG_STDIN" ]] && source="$BL64_TXT_SET_GREP_STDIN"
+
+  bl64_txt_run_egrep "$BL64_TXT_SET_GREP_INVERT" '^#.*$|^ *#.*$' "$source"
+}
+
+#######################################
 # Read a text file, replace shell variable names with its value and show the result on stdout
 #
 # * Uses envsubst
@@ -32,8 +56,8 @@ function bl64_txt_replace_env() {
 # Search for a whole line in a given text file or stdin
 #
 # Arguments:
-#   $1: source file path. Use - for stdin
-#   $2: text to look for
+#   $1: source file path. Use $BL64_TXT_FLAG_STDIN for stdin. Default: STDIN
+#   $2: text to look for. Default: empty line
 # Outputs:
 #   STDOUT: none
 #   STDERR: Error messages
@@ -43,9 +67,10 @@ function bl64_txt_replace_env() {
 #######################################
 function bl64_txt_search_line() {
   bl64_dbg_lib_show_function "$@"
-  local source="${1:--}"
+  local source="${1:-${BL64_TXT_FLAG_STDIN}}"
   local line="${2:-}"
 
+  [[ "$source" == "$BL64_TXT_FLAG_STDIN" ]] && source="$BL64_TXT_SET_GREP_STDIN"
   bl64_txt_run_egrep "$BL64_TXT_SET_GREP_QUIET" "^${line}$" "$source"
 }
 
