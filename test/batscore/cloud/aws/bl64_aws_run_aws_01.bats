@@ -4,7 +4,7 @@ setup() {
 }
 
 @test "bl64_aws_run_aws: CLI runs ok" {
-  run bl64_aws_run_aws --help
+  run bl64_aws_run_aws help
   assert_success
 }
 
