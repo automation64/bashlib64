@@ -7,7 +7,7 @@
 # Skeleton for ad-hoc testiong.
 #
 
-#bl64_dbg_lib_enable
+# bl64_dbg_lib_enable
 
 #
 # Test Cases
@@ -15,3 +15,9 @@
 # * Keep the source clean, do not commit test cases below this section
 #
 
+cat "${DEVBL_TEST}/samples/url/chars-ascii-url-reserved.txt" | \
+bl64_fmt_url_encode > "${DEVBL_TEST}/samples/url/chars-encoded-url-reserved.txt"
+
+# for i in {32..126}; do
+#     printf "%s\n" "$(printf "\x$(printf "%x" $i)")"
+# done
