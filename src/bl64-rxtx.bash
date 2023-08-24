@@ -132,7 +132,9 @@ function bl64_rxtx_git_get_dir() {
 }
 
 #######################################
-# CURL wrapper with verbose, debug and common options
+# Command wrapper with verbose, debug and common options
+#
+# * verbose is not implemented to avoid unintentional alteration of output when using for APIs
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -162,7 +164,7 @@ function bl64_rxtx_run_curl() {
 }
 
 #######################################
-# WGet wrapper with verbose, debug and common options
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
