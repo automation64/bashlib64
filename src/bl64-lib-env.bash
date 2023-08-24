@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='12.6.0'
+export BL64_VERSION='13.0.0'
 
 # Declare imported variables
 export LANG
@@ -27,7 +27,7 @@ export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-1}"
 export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
 
 #
-# Common values
+# Common constants
 #
 
 # Default value for parameters
