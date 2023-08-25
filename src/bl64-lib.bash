@@ -35,8 +35,9 @@ bl64_os_setup &&
   bl64_fs_setup &&
   bl64_iam_setup &&
   bl64_rbac_setup &&
-  bl64_vcs_setup &&
-  bl64_rxtx_setup ||
+  bl64_rxtx_setup &&
+  bl64_api_setup &&
+  bl64_vcs_setup ||
   return $?
 
 # Set signal handlers
