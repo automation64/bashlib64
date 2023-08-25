@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage local filesystem
 #######################################
 
-export BL64_FS_VERSION='4.3.0'
+export BL64_FS_VERSION='4.4.0'
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
 
@@ -39,6 +39,7 @@ export BL64_FS_SET_CHOWN_VERBOSE=''
 export BL64_FS_SET_CP_FORCE=''
 export BL64_FS_SET_CP_RECURSIVE=''
 export BL64_FS_SET_CP_VERBOSE=''
+export BL64_FS_SET_FIND_NAME=''
 export BL64_FS_SET_FIND_PRINT=''
 export BL64_FS_SET_FIND_RUN=''
 export BL64_FS_SET_FIND_STAY=''
