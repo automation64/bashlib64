@@ -185,29 +185,50 @@ function bl64_vcs_git_sparse() {
 #######################################
 # GitHub / Call API
 #
-# * Call APIs using CURL wrapper
+# * Call GitHub APIs
+# * API calls are executed using Curl wrapper
 #
 # Arguments:
-#   $1: API URI and parameters
-#   $@: additional arguments are passed as-is to the curl command
+#   $1: API path. Format: Full path (/X/Y/Z)
+#   $2: RESTful method. Format: $BL64_API_METHOD_*. Default: $BL64_API_METHOD_GET
+#   $3: API query to be appended to the API path. Format: url encoded string. Default: none
+#   $4: API Token. Default: none
+#   $5: API Version. Default: $BL64_VCS_GITHUB_API_VERSION
+#   $@: additional arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: API call executed. Warning: curl exit status only, not the HTTP status code
+#   >: unable to execute API call
 #######################################
 function bl64_vcs_github_run_api() {
   bl64_dbg_lib_show_function "$@"
-  local api_call="$1"
+  local api_path="$1"
+  local api_method="${2:-${BL64_API_METHOD_GET}}"
+  local api_query="${3:-${BL64_VAR_NULL}}"
+  local api_token="${4:-${BL64_VAR_NULL}}"
+  local api_version="${5:-${BL64_VCS_GITHUB_API_VERSION}}"
 
-  bl64_check_parameter 'api_call' ||
+  bl64_check_parameter 'api_path' ||
     return $?
 
+  [[ "$api_token" == "$BL64_VAR_NULL" ]] && api_token=''
   shift
+  shift
+  shift
+  shift
+  shift
+
   # shellcheck disable=SC2086
-  bl64_rxtx_run_curl \
-    $BL64_RXTX_SET_CURL_REDIRECT \
-    "${BL64_VCS_GITHUB_API_URL}/${api_call}" \
+  bl64_api_call \
+    "$BL64_VCS_GITHUB_API_URL" \
+    "$api_path" \
+    "$api_method" \
+    "$api_query" \
+    $BL64_RXTX_SET_CURL_HEADER 'Accept: application/vnd.github+json' \
+    $BL64_RXTX_SET_CURL_HEADER "X-GitHub-Api-Version: ${api_version}" \
+    ${api_token:+${BL64_RXTX_SET_CURL_HEADER} "Authorization: Bearer ${api_token}"} \
     "$@"
 }
 
@@ -238,14 +259,22 @@ function bl64_vcs_github_release_get_latest() {
     bl64_check_parameter 'repo_name' ||
     return $?
 
-  # shellcheck disable=SC2086
-  repo_tag="$(bl64_vcs_github_run_api \
-    "repos/${repo_owner}/${repo_name}/releases/latest" |
-    bl64_txt_run_awk \
-      -F: \
-      '/"tag_name": "/ {
-        gsub(/[ ",]/,"", $2); print $2
-      }')" &&
+  repo_tag="$(_bl64_vcs_github_release_get_latest "$repo_owner" "$repo_name")" &&
     [[ -n "$repo_tag" ]] &&
     echo "$repo_tag"
+}
+
+function _bl64_vcs_github_release_get_latest() {
+  bl64_dbg_lib_show_function "$@"
+  local repo_owner="$1"
+  local repo_name="$2"
+  local repo_api_query="/repos/${repo_owner}/${repo_name}/releases/latest"
+
+  # shellcheck disable=SC2086
+  bl64_vcs_github_run_api "$repo_api_query" |
+    bl64_txt_run_awk \
+      ${BL64_TXT_SET_AWS_FS} ':' \
+      '/"tag_name": "/ {
+        gsub(/[ ",]/,"", $2); print $2
+      }'
 }
