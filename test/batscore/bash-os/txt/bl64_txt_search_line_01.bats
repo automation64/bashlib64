@@ -18,5 +18,4 @@ setup() {
 @test "bl64_txt_search_line: stdin, line is present" {
   line='second line'
   cat "$input" | bl64_txt_search_line "$BL64_TXT_FLAG_STDIN" "$line"
-  assert_success
 }

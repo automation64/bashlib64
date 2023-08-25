@@ -12,6 +12,7 @@ setup() {
     assert_not_equal "$BL64_FS_SET_CP_FORCE" ''
     assert_not_equal "$BL64_FS_SET_CP_RECURSIVE" ''
     assert_not_equal "$BL64_FS_SET_CP_VERBOSE" ''
+    assert_not_equal "$BL64_FS_SET_FIND_NAME" ''
     assert_not_equal "$BL64_FS_SET_FIND_PRINT" ''
     assert_not_equal "$BL64_FS_SET_FIND_RUN" ''
     assert_not_equal "$BL64_FS_SET_FIND_STAY" ''
