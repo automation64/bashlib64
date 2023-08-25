@@ -86,7 +86,7 @@ TERM="${TERM:-vt100}"
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='12.6.0'
+export BL64_VERSION='13.0.0'
 
 # Declare imported variables
 export LANG
@@ -111,7 +111,7 @@ export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-1}"
 export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
 
 #
-# Common values
+# Common constants
 #
 
 # Default value for parameters
@@ -201,6 +201,23 @@ export BL64_LIB_SIGNAL_QUIT='-'
 export BL64_LIB_SIGNAL_DEBUG='-'
 export BL64_LIB_SIGNAL_ERR='-'
 export BL64_LIB_SIGNAL_EXIT='bl64_dbg_runtime_show'
+#######################################
+# BashLib64 / Module / Globals / Interact with RESTful APIs
+#######################################
+
+export BL64_API_VERSION='1.0.0'
+
+export BL64_API_MODULE="$BL64_VAR_OFF"
+
+#
+# Common constants
+#
+
+export BL64_API_METHOD_DELETE='DELETE'
+export BL64_API_METHOD_GET='GET'
+export BL64_API_METHOD_POST='POST'
+export BL64_API_METHOD_PUT='PUT'
+
 #######################################
 # BashLib64 / Module / Globals / Interact with Bash shell
 #######################################
@@ -348,7 +365,7 @@ export _BL64_DBG_TXT_DEBUG='Debug'
 # BashLib64 / Module / Globals / Manage local filesystem
 #######################################
 
-export BL64_FS_VERSION='4.3.0'
+export BL64_FS_VERSION='4.4.0'
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
 
@@ -385,6 +402,7 @@ export BL64_FS_SET_CHOWN_VERBOSE=''
 export BL64_FS_SET_CP_FORCE=''
 export BL64_FS_SET_CP_RECURSIVE=''
 export BL64_FS_SET_CP_VERBOSE=''
+export BL64_FS_SET_FIND_NAME=''
 export BL64_FS_SET_FIND_PRINT=''
 export BL64_FS_SET_FIND_RUN=''
 export BL64_FS_SET_FIND_STAY=''
@@ -432,7 +450,7 @@ export _BL64_FS_TXT_ERROR_NOT_TMPFILE='provided directory was not created by bl6
 # BashLib64 / Module / Globals / Format text data
 #######################################
 
-export BL64_FMT_VERSION='1.5.0'
+export BL64_FMT_VERSION='2.0.0'
 
 export BL64_FMT_MODULE="$BL64_VAR_OFF"
 
@@ -730,7 +748,7 @@ export _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
 # BashLib64 / Module / Globals / Transfer and Receive data over the network
 #######################################
 
-export BL64_RXTX_VERSION='1.16.2'
+export BL64_RXTX_VERSION='1.17.0'
 
 export BL64_RXTX_MODULE="$BL64_VAR_OFF"
 
@@ -740,19 +758,23 @@ export BL64_RXTX_CMD_WGET=''
 export BL64_RXTX_ALIAS_CURL=''
 export BL64_RXTX_ALIAS_WGET=''
 
-export BL64_RXTX_SET_CURL_VERBOSE=''
+export BL64_RXTX_SET_CURL_HEADER=''
+export BL64_RXTX_SET_CURL_INCLUDE=''
 export BL64_RXTX_SET_CURL_OUTPUT=''
-export BL64_RXTX_SET_CURL_SILENT=''
 export BL64_RXTX_SET_CURL_REDIRECT=''
+export BL64_RXTX_SET_CURL_REQUEST=''
 export BL64_RXTX_SET_CURL_SECURE=''
-export BL64_RXTX_SET_WGET_VERBOSE=''
+export BL64_RXTX_SET_CURL_SILENT=''
+export BL64_RXTX_SET_CURL_VERBOSE=''
 export BL64_RXTX_SET_WGET_OUTPUT=''
 export BL64_RXTX_SET_WGET_SECURE=''
+export BL64_RXTX_SET_WGET_VERBOSE=''
 
 export _BL64_RXTX_TXT_MISSING_COMMAND='no web transfer command was found on the system'
 export _BL64_RXTX_TXT_EXISTING_DESTINATION='destination path is not empty. No action taken.'
 export _BL64_RXTX_TXT_CREATION_PROBLEM='unable to create temporary git repo'
 export _BL64_RXTX_TXT_DOWNLOAD_FILE='download file'
+
 
 #######################################
 # BashLib64 / Module / Globals / Manage date-time data
@@ -766,7 +788,7 @@ export BL64_TM_MODULE="$BL64_VAR_OFF"
 # BashLib64 / Module / Globals / Manipulate text files content
 #######################################
 
-export BL64_TXT_VERSION='1.9.0'
+export BL64_TXT_VERSION='1.11.0'
 
 export BL64_TXT_MODULE="$BL64_VAR_OFF"
 
@@ -788,8 +810,12 @@ export BL64_TXT_SET_GREP_INVERT="$BL64_VAR_UNAVAILABLE"
 export BL64_TXT_SET_GREP_NO_CASE="$BL64_VAR_UNAVAILABLE"
 export BL64_TXT_SET_GREP_QUIET="$BL64_VAR_UNAVAILABLE"
 export BL64_TXT_SET_GREP_SHOW_FILE_ONLY="$BL64_VAR_UNAVAILABLE"
+export BL64_TXT_SET_GREP_STDIN="$BL64_VAR_UNAVAILABLE"
+export BL64_TXT_SET_SED_EXPRESSION="$BL64_VAR_UNAVAILABLE"
 
 export BL64_TXT_SET_AWS_FS="$BL64_VAR_UNAVAILABLE"
+
+export BL64_TXT_FLAG_STDIN='STDIN'
 
 #######################################
 # BashLib64 / Module / Globals / User Interface
@@ -809,7 +835,7 @@ export _BL64_UI_TXT_CONFIRMATION_ERROR='provided confirmation message is not wha
 # BashLib64 / Module / Globals / Manage Version Control System
 #######################################
 
-export BL64_VCS_VERSION='1.11.0'
+export BL64_VCS_VERSION='1.13.0'
 
 export BL64_VCS_MODULE="$BL64_VAR_OFF"
 
@@ -819,6 +845,7 @@ export BL64_VCS_SET_GIT_NO_PAGER=''
 export BL64_VCS_SET_GIT_QUIET=''
 
 export BL64_VCS_GITHUB_API_URL='https://api.github.com'
+export BL64_VCS_GITHUB_API_VERSION='2022-11-28'
 
 export _BL64_VCS_TXT_CLONE_REPO='clone single branch from GIT repository'
 export _BL64_VCS_TXT_GET_LATEST_RELEASE='get release tag from latest release'
@@ -931,7 +958,7 @@ export _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token fi
 # BashLib64 / Module / Globals / Interact with container engines
 #######################################
 
-export BL64_CNT_VERSION='1.9.2'
+export BL64_CNT_VERSION='1.9.3'
 
 # Optional module. Not enabled by default
 export BL64_CNT_MODULE="$BL64_VAR_OFF"
@@ -1245,6 +1272,148 @@ export BL64_TF_DEF_PATH_LOCK=''
 export BL64_TF_DEF_PATH_RUNTIME=''
 
 export _BL64_TF_TXT_ERROR_GET_VERSION='failed to get terraform CLI version'
+
+#######################################
+# BashLib64 / Module / Setup / Interact with RESTful APIs
+#######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_api_setup() {
+  bl64_dbg_lib_show_function
+
+  BL64_API_MODULE="$BL64_VAR_ON"
+
+  bl64_check_alert_module_setup 'api'
+}
+
+#######################################
+# BashLib64 / Module / Functions / Interact with RESTful APIs
+#######################################
+
+#######################################
+# Call RESTful API using Curl
+#
+# * API calls are executed using Curl
+# * Curl is used directly instead of the wrapper to minimize shell expansion unintented modifications
+# * The caller is responsible for properly url-encoding the query when needed
+#
+# Arguments:
+#   $1: API server FQDN. Format: PROTOCOL://FQDN
+#   $2: API path. Format: Full path (/X/Y/Z)
+#   $3: RESTful method. Format: $BL64_API_METHOD_*. Default: $BL64_API_METHOD_GET
+#   $4: API query to be appended to the API path. Format: url encoded string. Default: none
+#   $@: additional arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: API call executed. Warning: curl exit status only, not the HTTP status code
+#   >: unable to execute API call
+#######################################
+function bl64_api_call() {
+  bl64_dbg_lib_show_function "$@"
+  local api_url="$1"
+  local api_path="$2"
+  local api_method="${3:-${BL64_API_METHOD_GET}}"
+  local api_query="${4:-${BL64_VAR_NULL}}"
+  local debug="$BL64_RXTX_SET_CURL_SILENT"
+
+  bl64_check_module 'BL64_RXTX_MODULE' &&
+    bl64_check_command "$BL64_RXTX_CMD_CURL" &&
+    bl64_check_parameter 'api_url' &&
+    bl64_check_parameter 'api_path' || return $?
+
+  [[ "$api_query" == "${BL64_VAR_NULL}" ]] && api_query=''
+  shift
+  shift
+  shift
+  shift
+
+  bl64_dbg_lib_command_enabled && debug="${BL64_RXTX_SET_CURL_VERBOSE} ${BL64_RXTX_SET_CURL_INCLUDE}"
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_RXTX_CMD_CURL" \
+    $BL64_RXTX_SET_CURL_REDIRECT \
+    $BL64_RXTX_SET_CURL_SECURE \
+    $BL64_RXTX_SET_CURL_REQUEST ${api_method} \
+    $debug \
+    "${api_url}${api_path}${api_query}" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Converts ASCII-127 string to URL compatible format
+#
+# * Target is the QUERY segment of the URL:
+# *   PROTOCOL://FQDN/QUERY
+# * Conversion is done using sed
+# * Input is assumed to be encoded in ASCII-127
+# * Conversion is done as per RFC3986
+# *  unreserved: left as is
+# *  reserved: converted
+# *  remaining ascii-127 non-control chars: converted
+#
+# Arguments:
+#   $1: String to convert. Must be terminated by \n
+# Outputs:
+#   STDOUT: encoded string
+#   STDERR: execution errors
+# Returns:
+#   0: successfull execution
+#   >0: failed to convert
+#######################################
+function bl64_api_url_encode() {
+  bl64_dbg_lib_show_function "$@"
+  local raw_string="$1"
+
+  bl64_check_parameter 'raw_string' || return $?
+
+  echo "$raw_string" |
+    bl64_txt_run_sed \
+      -e 's/%/%25/g' \
+      -e 's/ /%20/g' \
+      -e 's/:/%3A/g' \
+      -e 's/\//%2F/g' \
+      -e 's/\?/%3F/g' \
+      -e 's/#/%23/g' \
+      -e 's/@/%40/g' \
+      -e 's/\[/%5B/g' \
+      -e 's/\]/%5D/g' \
+      -e 's/\!/%21/g' \
+      -e 's/\$/%24/g' \
+      -e 's/&/%26/g' \
+      -e "s/'/%27/g" \
+      -e 's/[(]/%28/g' \
+      -e 's/[)]/%29/g' \
+      -e 's/\*/%2A/g' \
+      -e 's/\+/%2B/g' \
+      -e 's/,/%2C/g' \
+      -e 's/;/%3B/g' \
+      -e 's/=/%3D/g' \
+      -e 's/"/%22/g' \
+      -e 's/</%3C/g' \
+      -e 's/>/%3E/g' \
+      -e 's/\^/%5E/g' \
+      -e 's/`/%60/g' \
+      -e 's/{/%7B/g' \
+      -e 's/}/%7D/g' \
+      -e 's/[|]/%7C/g' \
+      -e 's/[\]/%5C/g'
+}
 
 #######################################
 # BashLib64 / Module / Setup / Interact with Bash shell
@@ -2757,6 +2926,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_CP_FORCE='--force'
     BL64_FS_SET_CP_RECURSIVE='--recursive'
     BL64_FS_SET_CP_VERBOSE='--verbose'
+    BL64_FS_SET_FIND_NAME='-name'
     BL64_FS_SET_FIND_PRINT='-print'
     BL64_FS_SET_FIND_RUN='-exec'
     BL64_FS_SET_FIND_STAY='-xdev'
@@ -2784,6 +2954,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_CP_FORCE='--force'
     BL64_FS_SET_CP_RECURSIVE='--recursive'
     BL64_FS_SET_CP_VERBOSE='--verbose'
+    BL64_FS_SET_FIND_NAME='-name'
     BL64_FS_SET_FIND_PRINT='-print'
     BL64_FS_SET_FIND_RUN='-exec'
     BL64_FS_SET_FIND_STAY='-xdev'
@@ -2811,6 +2982,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_CP_FORCE='--force'
     BL64_FS_SET_CP_RECURSIVE='--recursive'
     BL64_FS_SET_CP_VERBOSE='--verbose'
+    BL64_FS_SET_FIND_NAME='-name'
     BL64_FS_SET_FIND_PRINT='-print'
     BL64_FS_SET_FIND_RUN='-exec'
     BL64_FS_SET_FIND_STAY='-xdev'
@@ -2838,6 +3010,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_CP_FORCE='-f'
     BL64_FS_SET_CP_RECURSIVE='-R'
     BL64_FS_SET_CP_VERBOSE='-v'
+    BL64_FS_SET_FIND_NAME='-name'
     BL64_FS_SET_FIND_PRINT='-print'
     BL64_FS_SET_FIND_RUN='-exec'
     BL64_FS_SET_FIND_STAY='-xdev'
@@ -2865,6 +3038,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_CP_FORCE='-f'
     BL64_FS_SET_CP_RECURSIVE='-R'
     BL64_FS_SET_CP_VERBOSE='-v'
+    BL64_FS_SET_FIND_NAME='-name'
     BL64_FS_SET_FIND_PRINT='-print'
     BL64_FS_SET_FIND_RUN='-exec'
     BL64_FS_SET_FIND_STAY='-xdev'
@@ -4068,28 +4242,6 @@ function bl64_fmt_setup() {
 #######################################
 # BashLib64 / Module / Functions / Format text data
 #######################################
-
-#######################################
-# Removes comments from text input using the external tool Grep
-#
-# * Comment delimiter: #
-# * All text to the right of the delimiter is removed
-#
-# Arguments:
-#   $1: Full path to the text file. Default: STDIN
-# Outputs:
-#   STDOUT: Original text with comments removed
-#   STDERR: grep Error message
-# Returns:
-#   0: successfull execution
-#   >0: grep command exit status
-#######################################
-function bl64_fmt_strip_comments() {
-  bl64_dbg_lib_show_function "$@"
-  local source="${1:--}"
-
-  bl64_txt_run_egrep "$BL64_TXT_SET_GREP_INVERT" '^#.*$|^ *#.*$' "$source"
-}
 
 #######################################
 # Removes starting slash from path
@@ -5992,74 +6144,102 @@ function _bl64_rxtx_set_options() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-20.* | ${BL64_OS_UB}-21.* | ${BL64_OS_UB}-22.* | ${BL64_OS_UB}-23.*)
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_CURL_SILENT='--silent --no-progress-meter'
+    BL64_RXTX_SET_CURL_HEADER='-H'
+    BL64_RXTX_SET_CURL_INCLUDE='--include'
+    BL64_RXTX_SET_CURL_NO_PROGRESS='--no-progress-meter'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
     BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+    BL64_RXTX_SET_CURL_REQUEST='-X'
+    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+    BL64_RXTX_SET_CURL_SILENT='--silent'
+    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
     BL64_RXTX_SET_WGET_OUTPUT='--output-document'
     BL64_RXTX_SET_WGET_SECURE='--no-config'
+    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_DEB}-9.* | ${BL64_OS_UB}-18.* | ${BL64_OS_DEB}-10.* | ${BL64_OS_DEB}-11.*)
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_CURL_SILENT='--silent'
+    BL64_RXTX_SET_CURL_HEADER='-H'
+    BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+    BL64_RXTX_SET_CURL_NO_PROGRESS=' '
     BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+    BL64_RXTX_SET_CURL_REQUEST='-X'
+    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+    BL64_RXTX_SET_CURL_SILENT='--silent'
+    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
     BL64_RXTX_SET_WGET_OUTPUT='--output-document'
     BL64_RXTX_SET_WGET_SECURE='--no-config'
+    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_FD}-*)
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_CURL_SILENT='--silent --no-progress-meter'
+    BL64_RXTX_SET_CURL_HEADER='-H'
+    BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+    BL64_RXTX_SET_CURL_NO_PROGRESS='--no-progress-meter'
     BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+    BL64_RXTX_SET_CURL_REQUEST='-X'
+    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+    BL64_RXTX_SET_CURL_SILENT='--silent'
+    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
     BL64_RXTX_SET_WGET_OUTPUT='--output-document'
     BL64_RXTX_SET_WGET_SECURE='--no-config'
+    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_CURL_SILENT='--silent'
+    BL64_RXTX_SET_CURL_HEADER='-H'
+    BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+    BL64_RXTX_SET_CURL_NO_PROGRESS=' '
     BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+    BL64_RXTX_SET_CURL_REQUEST='-X'
+    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+    BL64_RXTX_SET_CURL_SILENT='--silent'
+    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
     BL64_RXTX_SET_WGET_OUTPUT='--output-document'
     BL64_RXTX_SET_WGET_SECURE='--no-config'
+    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_SLES}-*)
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_CURL_SILENT='--silent'
+    BL64_RXTX_SET_CURL_HEADER='-H'
+    BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+    BL64_RXTX_SET_CURL_NO_PROGRESS=' '
     BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+    BL64_RXTX_SET_CURL_REQUEST='-X'
+    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+    BL64_RXTX_SET_CURL_SILENT='--silent'
+    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
     BL64_RXTX_SET_WGET_OUTPUT='--output-document'
     BL64_RXTX_SET_WGET_SECURE='--no-config'
+    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_ALP}-*)
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_CURL_SILENT='--silent'
+    BL64_RXTX_SET_CURL_HEADER='-H'
+    BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+    BL64_RXTX_SET_CURL_NO_PROGRESS=' '
     BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+    BL64_RXTX_SET_CURL_REQUEST='-X'
+    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+    BL64_RXTX_SET_CURL_SILENT='--silent'
+    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
     BL64_RXTX_SET_WGET_OUTPUT='-O'
     BL64_RXTX_SET_WGET_SECURE=' '
+    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_CURL_SILENT='--silent --no-progress-meter'
+    BL64_RXTX_SET_CURL_HEADER='-H'
+    BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+    BL64_RXTX_SET_CURL_NO_PROGRESS='--no-progress-meter'
     BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_WGET_VERBOSE=''
-    BL64_RXTX_SET_WGET_OUTPUT=''
-    BL64_RXTX_SET_WGET_SECURE=''
+    BL64_RXTX_SET_CURL_REQUEST='-X'
+    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+    BL64_RXTX_SET_CURL_SILENT='--silent'
+    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+    BL64_RXTX_SET_WGET_OUTPUT=' '
+    BL64_RXTX_SET_WGET_SECURE=' '
+    BL64_RXTX_SET_WGET_VERBOSE=' '
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -6241,7 +6421,9 @@ function bl64_rxtx_git_get_dir() {
 }
 
 #######################################
-# CURL wrapper with verbose, debug and common options
+# Command wrapper with verbose, debug and common options
+#
+# * verbose is not implemented to avoid unintentional alteration of output when using for APIs
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -6253,25 +6435,25 @@ function bl64_rxtx_git_get_dir() {
 #######################################
 function bl64_rxtx_run_curl() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
-  local verbose="$BL64_RXTX_SET_CURL_SILENT"
+  local debug="$BL64_RXTX_SET_CURL_SILENT"
 
+  bl64_check_parameters_none "$#" &&
   bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
+  bl64_dbg_lib_command_enabled && debug="$BL64_RXTX_SET_CURL_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_RXTX_CMD_CURL" \
     $BL64_RXTX_SET_CURL_SECURE \
-    $verbose \
+    $debug \
     "$@"
   bl64_dbg_lib_trace_stop
 }
 
 #######################################
-# WGet wrapper with verbose, debug and common options
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -6283,9 +6465,9 @@ function bl64_rxtx_run_curl() {
 #######################################
 function bl64_rxtx_run_wget() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local verbose=''
 
+  bl64_check_parameters_none "$#" &&
   bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_WGET" || return $?
 
@@ -6619,6 +6801,8 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='--quiet'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STDIN='-'
+    BL64_TXT_SET_SED_EXPRESSION='-e'
 
     if [[ -x '/usr/bin/gawk' ]]; then
       BL64_TXT_SET_AWK_POSIX='--posix'
@@ -6632,6 +6816,8 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='--quiet'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STDIN='-'
+    BL64_TXT_SET_SED_EXPRESSION='-e'
     ;;
   ${BL64_OS_SLES}-*)
     BL64_TXT_SET_AWK_POSIX='--posix'
@@ -6641,6 +6827,8 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='-q'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STDIN='-'
+    BL64_TXT_SET_SED_EXPRESSION='-e'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_TXT_SET_AWK_POSIX=''
@@ -6650,6 +6838,8 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='-q'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STDIN='-'
+    BL64_TXT_SET_SED_EXPRESSION='-e'
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_TXT_SET_AWK_POSIX=''
@@ -6659,6 +6849,8 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='-q'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STDIN='-'
+    BL64_TXT_SET_SED_EXPRESSION='-e'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -6668,6 +6860,30 @@ function _bl64_txt_set_options() {
 #######################################
 # BashLib64 / Module / Functions / Manipulate text files content
 #######################################
+
+#######################################
+# Removes comments from text input using the external tool Grep
+#
+# * Comment delimiter: #
+# * All text to the right of the delimiter is removed
+#
+# Arguments:
+#   $1: Full path to the text file. Use $BL64_TXT_FLAG_STDIN for stdin. Default: STDIN
+# Outputs:
+#   STDOUT: Original text with comments removed
+#   STDERR: grep Error message
+# Returns:
+#   0: successfull execution
+#   >0: grep command exit status
+#######################################
+function bl64_txt_strip_comments() {
+  bl64_dbg_lib_show_function "$@"
+  local source="${1:-${BL64_TXT_FLAG_STDIN}}"
+
+  [[ "$source" == "$BL64_TXT_FLAG_STDIN" ]] && source="$BL64_TXT_SET_GREP_STDIN"
+
+  bl64_txt_run_egrep "$BL64_TXT_SET_GREP_INVERT" '^#.*$|^ *#.*$' "$source"
+}
 
 #######################################
 # Read a text file, replace shell variable names with its value and show the result on stdout
@@ -6699,8 +6915,8 @@ function bl64_txt_replace_env() {
 # Search for a whole line in a given text file or stdin
 #
 # Arguments:
-#   $1: source file path. Use - for stdin
-#   $2: text to look for
+#   $1: source file path. Use $BL64_TXT_FLAG_STDIN for stdin. Default: STDIN
+#   $2: text to look for. Default: empty line
 # Outputs:
 #   STDOUT: none
 #   STDERR: Error messages
@@ -6710,9 +6926,10 @@ function bl64_txt_replace_env() {
 #######################################
 function bl64_txt_search_line() {
   bl64_dbg_lib_show_function "$@"
-  local source="${1:--}"
+  local source="${1:-${BL64_TXT_FLAG_STDIN}}"
   local line="${2:-}"
 
+  [[ "$source" == "$BL64_TXT_FLAG_STDIN" ]] && source="$BL64_TXT_SET_GREP_STDIN"
   bl64_txt_run_egrep "$BL64_TXT_SET_GREP_QUIET" "^${line}$" "$source"
 }
 
@@ -7304,25 +7521,51 @@ function bl64_vcs_git_sparse() {
 #######################################
 # GitHub / Call API
 #
+# * Call GitHub APIs
+# * API calls are executed using Curl wrapper
+#
 # Arguments:
-#   $1: API URI and parameters
+#   $1: API path. Format: Full path (/X/Y/Z)
+#   $2: RESTful method. Format: $BL64_API_METHOD_*. Default: $BL64_API_METHOD_GET
+#   $3: API query to be appended to the API path. Format: url encoded string. Default: none
+#   $4: API Token. Default: none
+#   $5: API Version. Default: $BL64_VCS_GITHUB_API_VERSION
+#   $@: additional arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: API call executed. Warning: curl exit status only, not the HTTP status code
+#   >: unable to execute API call
 #######################################
 function bl64_vcs_github_run_api() {
   bl64_dbg_lib_show_function "$@"
-  local api_call="$1"
+  local api_path="$1"
+  local api_method="${2:-${BL64_API_METHOD_GET}}"
+  local api_query="${3:-${BL64_VAR_NULL}}"
+  local api_token="${4:-${BL64_VAR_NULL}}"
+  local api_version="${5:-${BL64_VCS_GITHUB_API_VERSION}}"
 
-  bl64_check_parameter 'api_call' ||
+  bl64_check_parameter 'api_path' ||
     return $?
 
+  [[ "$api_token" == "$BL64_VAR_NULL" ]] && api_token=''
+  shift
+  shift
+  shift
+  shift
+  shift
+
   # shellcheck disable=SC2086
-  bl64_rxtx_run_curl \
-    $BL64_RXTX_SET_CURL_SILENT \
-    "${BL64_VCS_GITHUB_API_URL}/${api_call}"
+  bl64_api_call \
+    "$BL64_VCS_GITHUB_API_URL" \
+    "$api_path" \
+    "$api_method" \
+    "$api_query" \
+    $BL64_RXTX_SET_CURL_HEADER 'Accept: application/vnd.github+json' \
+    $BL64_RXTX_SET_CURL_HEADER "X-GitHub-Api-Version: ${api_version}" \
+    ${api_token:+${BL64_RXTX_SET_CURL_HEADER} "Authorization: Bearer ${api_token}"} \
+    "$@"
 }
 
 #######################################
@@ -7352,12 +7595,24 @@ function bl64_vcs_github_release_get_latest() {
     bl64_check_parameter 'repo_name' ||
     return $?
 
-  # shellcheck disable=SC2086
-  repo_tag="$(bl64_vcs_github_run_api \
-    "repos/${repo_owner}/${repo_name}/releases/latest" |
-    bl64_txt_run_awk -F: '/"tag_name": "/ {gsub(/[ ",]/,"", $2); print $2}')" &&
+  repo_tag="$(_bl64_vcs_github_release_get_latest "$repo_owner" "$repo_name")" &&
     [[ -n "$repo_tag" ]] &&
     echo "$repo_tag"
+}
+
+function _bl64_vcs_github_release_get_latest() {
+  bl64_dbg_lib_show_function "$@"
+  local repo_owner="$1"
+  local repo_name="$2"
+  local repo_api_query="/repos/${repo_owner}/${repo_name}/releases/latest"
+
+  # shellcheck disable=SC2086
+  bl64_vcs_github_run_api "$repo_api_query" |
+    bl64_txt_run_awk \
+      ${BL64_TXT_SET_AWS_FS} ':' \
+      '/"tag_name": "/ {
+        gsub(/[ ",]/,"", $2); print $2
+      }'
 }
 
 #######################################
@@ -9071,7 +9326,7 @@ function bl64_cnt_build() {
   # shellcheck disable=SC2164
   cd "${context}"
 
-  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_BUILD} (${file}:${tag})"
+  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_BUILD} (Dockerfile: ${file} ${BL64_MSG_COSMETIC_PIPE} Tag: ${tag})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_build" "$file" "$tag" "$@"
 }
 
@@ -13838,8 +14093,9 @@ bl64_os_setup &&
   bl64_fs_setup &&
   bl64_iam_setup &&
   bl64_rbac_setup &&
-  bl64_vcs_setup &&
-  bl64_rxtx_setup ||
+  bl64_rxtx_setup &&
+  bl64_api_setup &&
+  bl64_vcs_setup ||
   return $?
 
 # Set signal handlers

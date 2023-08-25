@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [13.0.0]
 
+### Added
+
+- api
+  - new module for interacting with RESTful APIs
+  - functions: bl64_api_url_encode, bl64_api_call
+
 ### Changed
 
 - fmt
@@ -14,12 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - txt
   - added bl64_txt_strip_comments (moved from fmt module)
 - vcs
-  - bl64_vcs_github_run_api: added $@ for extra params, redirect curl option
-
-### Added
-
-- fmt
-  - bl64_fmt_url_encode
+  - bl64_vcs_github_run_api: added $@ for extra params, redirect curl option. Refactored to use bl64_api_call
 
 ## [12.6.0]
 

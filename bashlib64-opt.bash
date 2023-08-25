@@ -104,7 +104,7 @@ export _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token fi
 # BashLib64 / Module / Globals / Interact with container engines
 #######################################
 
-export BL64_CNT_VERSION='1.9.2'
+export BL64_CNT_VERSION='1.9.3'
 
 # Optional module. Not enabled by default
 export BL64_CNT_MODULE="$BL64_VAR_OFF"
@@ -2001,7 +2001,7 @@ function bl64_cnt_build() {
   # shellcheck disable=SC2164
   cd "${context}"
 
-  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_BUILD} (${file}:${tag})"
+  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_BUILD} (Dockerfile: ${file} ${BL64_MSG_COSMETIC_PIPE} Tag: ${tag})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_build" "$file" "$tag" "$@"
 }
 
