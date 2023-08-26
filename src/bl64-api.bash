@@ -65,6 +65,7 @@ function bl64_api_call() {
 # *  unreserved: left as is
 # *  reserved: converted
 # *  remaining ascii-127 non-control chars: converted
+# * Warning: sed regexp is not consistent across versions and vendors. Using [] when \ is not possible to scape special chars
 #
 # Arguments:
 #   $1: String to convert. Must be terminated by \n
@@ -87,7 +88,7 @@ function bl64_api_url_encode() {
       -e 's/ /%20/g' \
       -e 's/:/%3A/g' \
       -e 's/\//%2F/g' \
-      -e 's/\?/%3F/g' \
+      -e 's/[?]/%3F/g' \
       -e 's/#/%23/g' \
       -e 's/@/%40/g' \
       -e 's/\[/%5B/g' \
@@ -99,7 +100,7 @@ function bl64_api_url_encode() {
       -e 's/[(]/%28/g' \
       -e 's/[)]/%29/g' \
       -e 's/\*/%2A/g' \
-      -e 's/\+/%2B/g' \
+      -e 's/[+]/%2B/g' \
       -e 's/,/%2C/g' \
       -e 's/;/%3B/g' \
       -e 's/=/%3D/g' \
