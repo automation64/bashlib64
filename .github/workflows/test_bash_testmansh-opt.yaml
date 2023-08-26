@@ -1,0 +1,35 @@
+---
+# Template: 2.2.0
+name: "Test / Bash / TestManSH / Opt"
+
+on:
+  pull_request:
+    branches:
+      - "main"
+  push:
+    branches:
+      - "feature/**"
+    paths:
+      - "src/*-arc"
+      - "src/*-log"
+      - "src/*-pkg"
+      - "src/*-py"
+      - "src/*-tm"
+      - "src/*-xsv"
+      - "test/batscore/bash-opt/**"
+
+jobs:
+  test-opt:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare build environment"
+        run: "./bin/dev-lib"
+
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "./bin/dev-test-opt"
+...

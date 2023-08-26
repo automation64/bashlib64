@@ -206,7 +206,7 @@ function bl64_cnt_build() {
   # shellcheck disable=SC2164
   cd "${context}"
 
-  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_BUILD} (${file}:${tag})"
+  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_BUILD} (Dockerfile: ${file} ${BL64_MSG_COSMETIC_PIPE} Tag: ${tag})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_build" "$file" "$tag" "$@"
 }
 
@@ -528,7 +528,6 @@ function bl64_cnt_run_docker() {
     verbose='debug'
     debug='--debug'
   fi
-  bl64_dbg_runtime_show_paths
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -839,7 +838,6 @@ function bl64_cnt_run_podman() {
     return $?
 
   bl64_dbg_lib_command_enabled && verbose='debug'
-  bl64_dbg_runtime_show_paths
 
   bl64_dbg_lib_trace_start
   "$BL64_CNT_CMD_PODMAN" \

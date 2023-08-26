@@ -12,7 +12,30 @@
 source ./bin/dev-set || exit 1
 
 declare target=''
+declare family="${1:-other}"
+
 ./bin/dev-build -t || exit $?
-for target in $DEVBL_TEST_CONTAINER_OS; do
-  "$DEVBL_CICD_TESTMANSH" -b -o -e "$target" -c "$DEVBL_TEST_CASE_OS" || exit $?
-done
+
+case "$family" in
+'fedora')
+  for target in $DEVBL_TEST_CONTAINER_OS_FEDORA; do
+    "$DEVBL_CICD_TESTMANSH" -b -o -e "$target" -c "$DEVBL_TEST_CASE_OS" || exit $?
+  done
+  ;;
+'redhat')
+  for target in $DEVBL_TEST_CONTAINER_OS_REDHAT; do
+    "$DEVBL_CICD_TESTMANSH" -b -o -e "$target" -c "$DEVBL_TEST_CASE_OS" || exit $?
+  done
+  ;;
+'debian')
+  for target in $DEVBL_TEST_CONTAINER_OS_DEBIAN; do
+    "$DEVBL_CICD_TESTMANSH" -b -o -e "$target" -c "$DEVBL_TEST_CASE_OS" || exit $?
+  done
+  ;;
+'other')
+  for target in $DEVBL_TEST_CONTAINER_OS_OTHER; do
+    "$DEVBL_CICD_TESTMANSH" -b -o -e "$target" -c "$DEVBL_TEST_CASE_OS" || exit $?
+  done
+  ;;
+*) echo "invalid option" ;;
+esac

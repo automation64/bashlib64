@@ -12,6 +12,7 @@ source './bin/dev-set' || {
 # shellcheck source=SCRIPTDIR/../lib/bashlib64.bash
 source "$DEVBL_CICD_BASHLIB64" || exit 1
 
+# shellcheck disable=SC2317
 function dev_add_modules() {
   local destination="$1"
   local modules="$2"
@@ -35,6 +36,7 @@ function dev_add_modules() {
   done
 }
 
+# shellcheck disable=SC2317
 function dev_build_test() {
   local file=''
   local build_full="${DEVBL_BUILD_FULL_PATH}/${DEVBL_BUILD_NAME_SINGLE}"
@@ -74,6 +76,7 @@ function dev_build_test() {
   bl64_fs_run_chmod '0755' "$build_full" "$build_core"
 }
 
+# shellcheck disable=SC2317
 function dev_build_docs() {
   local file=''
   local module_env=''
@@ -96,6 +99,7 @@ function dev_build_docs() {
   done
 }
 
+# shellcheck disable=SC2317
 function dev_build_md() {
   local module="$1"
   local module_env="$2"
@@ -124,6 +128,7 @@ function dev_build_md() {
 
 }
 
+# shellcheck disable=SC2317
 function dev_promote() {
   local build_full="${DEVBL_BUILD_FULL_PATH}/${DEVBL_BUILD_NAME_SINGLE}"
   local build_core="${DEVBL_BUILD_FULL_PATH}/${DEVBL_BUILD_NAME_CORE}"

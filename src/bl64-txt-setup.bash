@@ -148,6 +148,8 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='--quiet'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STDIN='-'
+    BL64_TXT_SET_SED_EXPRESSION='-e'
 
     if [[ -x '/usr/bin/gawk' ]]; then
       BL64_TXT_SET_AWK_POSIX='--posix'
@@ -161,6 +163,8 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='--quiet'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STDIN='-'
+    BL64_TXT_SET_SED_EXPRESSION='-e'
     ;;
   ${BL64_OS_SLES}-*)
     BL64_TXT_SET_AWK_POSIX='--posix'
@@ -170,6 +174,8 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='-q'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STDIN='-'
+    BL64_TXT_SET_SED_EXPRESSION='-e'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_TXT_SET_AWK_POSIX=''
@@ -179,6 +185,8 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='-q'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STDIN='-'
+    BL64_TXT_SET_SED_EXPRESSION='-e'
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_TXT_SET_AWK_POSIX=''
@@ -188,6 +196,8 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='-q'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STDIN='-'
+    BL64_TXT_SET_SED_EXPRESSION='-e'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac

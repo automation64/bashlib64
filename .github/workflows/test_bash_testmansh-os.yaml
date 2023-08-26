@@ -1,10 +1,16 @@
 ---
-# Template: 2.1.0
+# Template: 2.2.0
 name: "Test / Bash / TestManSH / OS"
 
 on:
+  pull_request:
+    branches:
+      - "main"
   push:
+    branches:
+      - "feature/**"
     paths:
+      - "src/*-api-*"
       - "src/*-fmt-*"
       - "src/*-fs-*"
       - "src/*-iam-*"
@@ -17,7 +23,7 @@ on:
       - "test/batscore/bash-os/**"
 
 jobs:
-  test-batscore-os:
+  test-os-fedora:
     runs-on: "ubuntu-latest"
     steps:
 
@@ -29,5 +35,47 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./bin/dev-test-os"
+        run: "./bin/dev-test-os fedora"
+
+  test-os-redhat:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare build environment"
+        run: "./bin/dev-lib"
+
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "./bin/dev-test-os redhat"
+
+  test-os-debian:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare build environment"
+        run: "./bin/dev-lib"
+
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "./bin/dev-test-os debian"
+
+  test-os-other:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare build environment"
+        run: "./bin/dev-lib"
+
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "./bin/dev-test-os other"
 ...

@@ -1,0 +1,31 @@
+---
+# Template: 2.2.0
+name: "Test / Bash / TestManSH / Cloud"
+
+on:
+  pull_request:
+    branches:
+      - "main"
+  push:
+    branches:
+      - "feature/**"
+    paths:
+      - "src/*-aws-*"
+      - "src/*-gcp-*"
+      - "test/batscore/cloud/**"
+
+jobs:
+  test-cloud:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare build environment"
+        run: "./bin/dev-lib"
+
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: "./bin/dev-test-cloud"
+...

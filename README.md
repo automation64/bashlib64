@@ -19,6 +19,7 @@ BashLib64 is a **Bash** library that provides a simple abstraction layer for dev
 
 | Module                                                             | Purpose                                            |
 | ------------------------------------------------------------------ | -------------------------------------------------- |
+| [bl64-api](https://automation64.github.io/bashlib64/bl64-api/)     | Interact with RESTful APIs                         |
 | [bl64-ans](https://automation64.github.io/bashlib64/bl64-ans/)     | Interact with Ansible                              |
 | [bl64-arc](https://automation64.github.io/bashlib64/bl64-arc/)     | Manage archive files                               |
 | [bl64-aws](https://automation64.github.io/bashlib64/bl64-aws/)     | Interact with Amazon AWS                           |

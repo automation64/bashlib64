@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [13.0.0]
+
+### Added
+
+- api
+  - new module for interacting with RESTful APIs
+  - functions: bl64_api_url_encode, bl64_api_call
+
+### Changed
+
+- fmt
+  - **Breaking change** moved bl64_fmt_strip_comments to bl64_txt_strip_comments
+- txt
+  - added bl64_txt_strip_comments (moved from fmt module)
+- vcs
+  - bl64_vcs_github_run_api: added $@ for extra params, redirect curl option. Refactored to use bl64_api_call
+
 ## [12.6.0]
 
 ### Added
@@ -345,6 +362,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[13.0.0]: https://github.com/automation64/bashlib64/compare/12.6.0...13.0.0
 [12.6.0]: https://github.com/automation64/bashlib64/compare/12.5.0...12.6.0
 [12.5.0]: https://github.com/automation64/bashlib64/compare/12.4.0...12.5.0
 [12.4.0]: https://github.com/automation64/bashlib64/compare/12.3.0...12.4.0
