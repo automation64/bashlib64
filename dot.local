@@ -8,7 +8,7 @@
 #
 
 # Project base location. Adjust to your local GIT repo
-DEVBL_ROOT="${HOME}/git/bashlib64"
+DEVBL_ROOT="$(pwd)"
 export DEVBL_ROOT
 
 #
