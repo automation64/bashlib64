@@ -1,6 +1,6 @@
 ---
-# Template: 2.1.0
-name: "Lint / Bash / TestManSH"
+# Template: 2.2.0
+name: "Lint / Bash / TestManSH / Release"
 
 on:
   pull_request:
@@ -13,7 +13,7 @@ on:
       - "src/**"
 
 jobs:
-  lint-bash-testmansh:
+  lint-bash:
     runs-on: "ubuntu-latest"
     steps:
 

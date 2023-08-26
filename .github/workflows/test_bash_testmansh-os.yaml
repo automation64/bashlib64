@@ -1,5 +1,5 @@
 ---
-# Template: 2.1.0
+# Template: 2.2.0
 name: "Test / Bash / TestManSH / OS"
 
 on:
@@ -22,7 +22,7 @@ on:
       - "test/batscore/bash-os/**"
 
 jobs:
-  test-batscore-os:
+  test-os:
     runs-on: "ubuntu-latest"
     steps:
 

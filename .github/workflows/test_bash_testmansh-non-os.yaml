@@ -1,5 +1,5 @@
 ---
-# Template: 2.1.0
+# Template: 2.2.0
 name: "Test / Bash / TestManSH / Non-OS"
 
 on:
@@ -19,7 +19,7 @@ on:
       - "test/batscore/bash-non-os/**"
 
 jobs:
-  test-batscore-os:
+  test-non-os:
     runs-on: "ubuntu-latest"
     steps:
 

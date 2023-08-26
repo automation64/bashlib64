@@ -1,5 +1,5 @@
 ---
-# Template: 2.1.0
+# Template: 2.2.0
 name: "Test / Bash / TestManSH / Cloud"
 
 on:
@@ -15,7 +15,7 @@ on:
       - "test/batscore/cloud/**"
 
 jobs:
-  test-batscore-os:
+  test-cloud:
     runs-on: "ubuntu-latest"
     steps:
 
