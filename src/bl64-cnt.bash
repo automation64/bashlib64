@@ -528,7 +528,6 @@ function bl64_cnt_run_docker() {
     verbose='debug'
     debug='--debug'
   fi
-  bl64_dbg_runtime_show_paths
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -839,7 +838,6 @@ function bl64_cnt_run_podman() {
     return $?
 
   bl64_dbg_lib_command_enabled && verbose='debug'
-  bl64_dbg_runtime_show_paths
 
   bl64_dbg_lib_trace_start
   "$BL64_CNT_CMD_PODMAN" \
