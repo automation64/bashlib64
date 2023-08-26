@@ -3,7 +3,12 @@
 name: "Test / Bash / TestManSH / Container"
 
 on:
+  pull_request:
+    branches:
+      - "main"
   push:
+    branches:
+      - "feature/**"
     paths:
       - "src/*-cnt-*"
       - "test/batscore/container/**"

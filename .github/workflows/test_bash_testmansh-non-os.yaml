@@ -3,7 +3,12 @@
 name: "Test / Bash / TestManSH / Non-OS"
 
 on:
+  pull_request:
+    branches:
+      - "main"
   push:
+    branches:
+      - "feature/**"
     paths:
       - "src/*-bsh"
       - "src/*-check"
