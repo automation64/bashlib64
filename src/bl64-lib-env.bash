@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='13.1.0'
+export BL64_VERSION='14.0.0'
 
 #
 # Imported shell standard variables
