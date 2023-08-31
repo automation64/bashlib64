@@ -4,6 +4,7 @@ setup() {
 
 @test "bl64_lib_env: global flags are set" {
   assert_not_equal "$BL64_LIB_CMD" ''
+  assert_not_equal "$BL64_LIB_COMPATIBILITY" ''
   assert_not_equal "$BL64_LIB_LANG" ''
   assert_not_equal "$BL64_LIB_STRICT" ''
   assert_not_equal "$BL64_LIB_TRAPS" ''
@@ -58,7 +59,7 @@ setup() {
   assert_equal $BL64_LIB_ERROR_PRIVILEGE_IS_ROOT 60
   assert_equal $BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT 61
   assert_equal $BL64_LIB_ERROR_USER_NOT_FOUND 62
-#  assert_equal $BL64_LIB_ERROR_GROUP_NOT_FOUND 63
+  #  assert_equal $BL64_LIB_ERROR_GROUP_NOT_FOUND 63
 
   assert_equal $BL64_LIB_ERROR_EXPORT_EMPTY 70
   assert_equal $BL64_LIB_ERROR_EXPORT_SET 71
