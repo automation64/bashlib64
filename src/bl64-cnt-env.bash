@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with container engines
 #######################################
 
-export BL64_CNT_VERSION='1.9.3'
+export BL64_CNT_VERSION='2.0.0'
 
 # Optional module. Not enabled by default
 export BL64_CNT_MODULE="$BL64_VAR_OFF"
@@ -16,12 +16,29 @@ export BL64_CNT_FLAG_STDIN='-'
 export BL64_CNT_CMD_PODMAN=''
 export BL64_CNT_CMD_DOCKER=''
 
+export BL64_CNT_SET_DEBUG=''
+export BL64_CNT_SET_ENTRYPOINT=''
+export BL64_CNT_SET_FILE=''
 export BL64_CNT_SET_FILTER=''
+export BL64_CNT_SET_INTERACTIVE=''
+export BL64_CNT_SET_LOG_LEVEL=''
+export BL64_CNT_SET_NO_CACHE=''
+export BL64_CNT_SET_PASSWORD_STDIN=''
+export BL64_CNT_SET_PASSWORD=''
 export BL64_CNT_SET_QUIET=''
+export BL64_CNT_SET_RM=''
+export BL64_CNT_SET_TAG=''
+export BL64_CNT_SET_TTY=''
+export BL64_CNT_SET_USERNAME=''
 export BL64_CNT_SET_VERSION=''
-export BL64_CNT_SET_STATUS_RUNNING=''
+
 export BL64_CNT_SET_FILTER_ID=''
 export BL64_CNT_SET_FILTER_NAME=''
+export BL64_CNT_SET_LOG_LEVEL_DEBUG=''
+export BL64_CNT_SET_LOG_LEVEL_ERROR=''
+export BL64_CNT_SET_LOG_LEVEL_INFO=''
+export BL64_CNT_SET_STATUS_RUNNING=''
+
 
 export BL64_CNT_PATH_DOCKER_SOCKET=''
 
