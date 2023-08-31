@@ -89,7 +89,7 @@ function _bl64_k8s_set_options() {
   bl64_dbg_lib_show_function
 
   case "$BL64_K8S_VERSION_KUBECTL" in
-  1.22 | 1.23 | 1.24 | 1.25 | 1.26 | 1.27)
+  1.22 | 1.23 | 1.24 | 1.25 | 1.26 | 1.27 | 1.28)
     BL64_K8S_SET_VERBOSE_NONE='--v=0'
     BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
     BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
@@ -103,7 +103,21 @@ function _bl64_k8s_set_options() {
     BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
     BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
     ;;
-  *) bl64_check_alert_unsupported "k8s-api: ${BL64_K8S_VERSION_KUBECTL}";;
+  *)
+    bl64_check_compatibility "k8s-api: ${BL64_K8S_VERSION_KUBECTL}" || return $?
+    BL64_K8S_SET_VERBOSE_NONE='--v=0'
+    BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
+    BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
+    BL64_K8S_SET_VERBOSE_TRACE='--v=6'
+
+    BL64_K8S_SET_OUTPUT_JSON='--output=json'
+    BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
+    BL64_K8S_SET_OUTPUT_TXT='--output=wide'
+    BL64_K8S_SET_OUTPUT_NAME='--output=name'
+
+    BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
+    BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
+    ;;
   esac
 }
 
@@ -146,7 +160,7 @@ function _bl64_k8s_get_version_1_22() {
   bl64_dbg_lib_show_info "try with kubectl v1.22 options"
   # shellcheck disable=SC2086
   "$BL64_K8S_CMD_KUBECTL" version --client --output=json |
-  bl64_txt_run_awk $BL64_TXT_SET_AWS_FS ':' '
+    bl64_txt_run_awk $BL64_TXT_SET_AWS_FS ':' '
     $1 ~ /^ +"major"$/ { gsub( /[" ,]/, "", $2 ); Major = $2 }
     $1 ~ /^ +"minor"$/ { gsub( /[" ,]/, "", $2 ); Minor = $2 }
     END { print Major "." Minor }

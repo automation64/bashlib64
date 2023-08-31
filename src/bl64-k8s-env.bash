@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with Kubernetes
 #######################################
 
-export BL64_K8S_VERSION='1.2.0'
+export BL64_K8S_VERSION='2.0.0'
 
 # Optional module. Not enabled by default
 export BL64_K8S_MODULE="$BL64_VAR_OFF"
