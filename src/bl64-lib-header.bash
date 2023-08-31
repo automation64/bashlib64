@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #######################################
-# BashLib64 / Bash automation librbary
+# BashLib64 / Bash automation library
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/automation64/bashlib64

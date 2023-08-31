@@ -4,15 +4,14 @@
 
 export BL64_VERSION='13.1.0'
 
-# Declare imported variables
+#
+# Imported shell standard variables
+#
+
 export LANG
 export LC_ALL
 export LANGUAGE
 export TERM
-
-#
-# Global flags
-#
 
 #
 # Common constants
