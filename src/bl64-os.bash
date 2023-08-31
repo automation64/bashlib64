@@ -75,6 +75,10 @@ function _bl64_os_get_distro_from_uname() {
 #
 # * Warning: bootstrap function
 # * Normalized data is stored in the global variable BL64_OS_DISTRO
+# * Version is normalized to the format: OS_ID-V.S
+#   * OS_ID: one of the OS standard tags
+#   * V: Major version, number
+#   * S: Minor version, number
 #
 # Arguments:
 #   None
