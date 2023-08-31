@@ -14,7 +14,8 @@ setup() {
 
 @test "bl64_lib_mode_compability_is_enabled: run function" {
   run bl64_lib_mode_compability_is_enabled
-  assert_success
+  # WARNING: this is disabled at the test lib
+  assert_failure
 }
 
 @test "bl64_lib_mode_strict_is_enabled: run function" {
@@ -24,6 +25,6 @@ setup() {
 
 @test "bl64_lib_trap_is_enabled: run function" {
   run bl64_lib_trap_is_enabled
-  # WARNING: this is disable by the test lib for batscore compatibility
+  # WARNING: this is disabled at the test lib
   assert_failure
 }
