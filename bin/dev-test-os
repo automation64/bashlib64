@@ -17,6 +17,11 @@ declare family="${1:-other}"
 ./bin/dev-build -t || exit $?
 
 case "$family" in
+'single')
+  for target in $DEVBL_TEST_CONTAINER_OS_SINGLE; do
+    "$DEVBL_CICD_TESTMANSH" -b -o -e "$target" -c "$DEVBL_TEST_CASE_OS" || exit $?
+  done
+  ;;
 'fedora')
   for target in $DEVBL_TEST_CONTAINER_OS_FEDORA; do
     "$DEVBL_CICD_TESTMANSH" -b -o -e "$target" -c "$DEVBL_TEST_CASE_OS" || exit $?
