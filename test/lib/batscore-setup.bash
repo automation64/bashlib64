@@ -11,6 +11,9 @@
 # Do not overwrite signals already set by bats-core
 export BL64_LIB_TRAPS='0'
 
+# Disable compatibility mode to allow strict version checking
+export BL64_LIB_COMPATIBILITY='0'
+
 # Load the bashlib64 build library for all test-cases
 . "${TESTMANSH_PROJECT_BUILD}/bashlib64.bash"
 
