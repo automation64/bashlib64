@@ -460,6 +460,33 @@ function bl64_check_alert_unsupported() {
 }
 
 #######################################
+# Check that the compatibility mode is enabled to support untested command
+#
+# * If enabled, show a warning and continue OK
+# * If not enabled, fail
+#
+# Arguments:
+#   $1: extra error message. Added to the error detail between (). Default: none
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: using compatibility mode
+#   >0: command is incompatible and compatibility mode is disabled
+#######################################
+function bl64_check_compatibility() {
+  bl64_dbg_lib_show_function "$@"
+  local extra="${1:-}"
+
+  if bl64_lib_mode_compability_is_enabled; then
+    bl64_msg_show_warning "${_BL64_CHECK_TXT_COMPATIBILITY_MODE} (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+  else
+    bl64_check_alert_unsupported "$extra"
+    return $?
+  fi
+}
+
+#######################################
 # Raise resource not detected error
 #
 # * Generic error used when a required external resource is not found on the system

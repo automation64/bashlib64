@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
 
-export BL64_CHECK_VERSION='3.3.0'
+export BL64_CHECK_VERSION='3.4.0'
 
 export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 
@@ -43,6 +43,8 @@ export _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one par
 export _BL64_CHECK_TXT_FAILED='task execution failed'
 
 export _BL64_CHECK_TXT_PARAMETER_INVALID='the requested operation was provided with an invalid parameter value'
+
+export _BL64_CHECK_TXT_COMPATIBILITY_MODE='using generic compatibility mode for untested command version'
 
 export _BL64_CHECK_TXT_FUNCTION='caller'
 export _BL64_CHECK_TXT_PARAMETER='parameter'
