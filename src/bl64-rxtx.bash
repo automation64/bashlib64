@@ -147,7 +147,7 @@ function bl64_rxtx_run_curl() {
   local debug="$BL64_RXTX_SET_CURL_SILENT"
 
   bl64_check_parameters_none "$#" &&
-  bl64_check_module 'BL64_RXTX_MODULE' &&
+    bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
 
   bl64_dbg_lib_command_enabled && debug="$BL64_RXTX_SET_CURL_VERBOSE"
@@ -177,7 +177,7 @@ function bl64_rxtx_run_wget() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-  bl64_check_module 'BL64_RXTX_MODULE' &&
+    bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_WGET" || return $?
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
@@ -256,12 +256,12 @@ function _bl64_rxtx_git_get_dir_sub() {
 }
 
 #######################################
-# Download asset from release in github repository
+# Download file asset from release in github repository
 #
 # Arguments:
 #   $1: repo owner
 #   $2: repo name
-#   $3: release tag
+#   $3: release tag. Use $BL64_VCS_GITHUB_LATEST (latest) to obtain latest version
 #   $4: asset name: file name available in the target release
 #   $5: destination
 #   $6: replace existing content Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
@@ -290,7 +290,12 @@ function bl64_rxtx_github_get_asset() {
     bl64_check_parameter 'release_tag' &&
     bl64_check_parameter 'asset_name' &&
     bl64_check_parameter 'destination' ||
-  return $?
+    return $?
+
+  if [[ "$release_tag" == "$BL64_VCS_GITHUB_LATEST" ]]; then
+    release_tag="$(bl64_vcs_github_release_get_latest "$repo_owner" "$repo_name")" ||
+      return $?
+  fi
 
   bl64_rxtx_web_get_file \
     "${BL64_RXTX_GITHUB_URL}/${repo_owner}/${repo_name}/releases/download/${release_tag}/${asset_name}" \
