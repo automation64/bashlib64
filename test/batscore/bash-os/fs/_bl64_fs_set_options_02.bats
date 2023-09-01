@@ -18,6 +18,7 @@ setup() {
     assert_not_equal "$BL64_FS_SET_FIND_STAY" ''
     assert_not_equal "$BL64_FS_SET_FIND_TYPE_DIR" ''
     assert_not_equal "$BL64_FS_SET_FIND_TYPE_FILE" ''
+    assert_not_equal "$BL64_FS_SET_LN_FORCE" ''
     assert_not_equal "$BL64_FS_SET_LN_SYMBOLIC" ''
     assert_not_equal "$BL64_FS_SET_LN_VERBOSE" ''
     assert_not_equal "$BL64_FS_SET_MKDIR_PARENTS" ''
