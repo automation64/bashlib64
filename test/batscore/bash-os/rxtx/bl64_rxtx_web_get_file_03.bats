@@ -8,9 +8,7 @@ setup() {
 }
 
 teardown() {
-
   [[ -d "$_bl64_rxtx_web_get_file_destination" ]] && rm -Rf "$_bl64_rxtx_web_get_file_destination"
-
 }
 
 @test "bl64_rxtx_web_get_file: download file + replace on + old content" {
