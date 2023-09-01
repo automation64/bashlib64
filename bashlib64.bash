@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #######################################
-# BashLib64 / Bash automation librbary
+# BashLib64 / Bash automation library
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/automation64/bashlib64
@@ -20,6 +20,10 @@
 # limitations under the License.
 #
 #######################################
+
+#
+# Library Bootstrap
+#
 
 # Do not inherit aliases and commands
 builtin unset -f unalias
@@ -86,29 +90,16 @@ TERM="${TERM:-vt100}"
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='13.0.0'
+export BL64_VERSION='14.0.0'
 
-# Declare imported variables
+#
+# Imported shell standard variables
+#
+
 export LANG
 export LC_ALL
 export LANGUAGE
 export TERM
-
-#
-# Global flags
-#
-
-# Set Command flag (On/Off)
-export BL64_LIB_CMD="${BL64_LIB_CMD:-0}"
-
-# Set Strict flag (On/Off)
-export BL64_LIB_STRICT="${BL64_LIB_STRICT:-1}"
-
-# Set Traps flag (On/Off)
-export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-1}"
-
-# Set Normalize locale flag
-export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
 
 #
 # Common constants
@@ -134,6 +125,28 @@ export BL64_VAR_OFF='0'
 export BL64_VAR_OK='0'
 export BL64_VAR_NONE='0'
 export BL64_VAR_ALL='1'
+
+#
+# Global settings
+#
+# * Allows the caller to customize bashlib64 behaviour
+# * Set the variable to the intented value before sourcing bashlib64
+#
+
+# Run lib as command? (On/Off)
+export BL64_LIB_CMD="${BL64_LIB_CMD:-$BL64_VAR_OFF}"
+
+# Enable generic compatibility mode? (On/Off)
+export BL64_LIB_COMPATIBILITY="${BL64_LIB_COMPATIBILITY:-$BL64_VAR_ON}"
+
+# Normalize locale? (On/Off)
+export BL64_LIB_LANG="${BL64_LIB_LANG:-$BL64_VAR_ON}"
+
+# Enable strict security? (On/Off)
+export BL64_LIB_STRICT="${BL64_LIB_STRICT:-$BL64_VAR_ON}"
+
+# Enable lib shell traps? (On/Off)
+export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
 
 #
 # Common error codes
@@ -188,19 +201,34 @@ declare -ig BL64_LIB_ERROR_EXPORT_EMPTY=70
 declare -ig BL64_LIB_ERROR_EXPORT_SET=71
 declare -ig BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED=72
 
+#
 # Script Identify
+#
+
 export BL64_SCRIPT_PATH=''
 export BL64_SCRIPT_NAME=''
 export BL64_SCRIPT_SID=''
 export BL64_SCRIPT_ID=''
 
+#
 # Set Signal traps
+#
 export BL64_LIB_SIGNAL_HUP='-'
 export BL64_LIB_SIGNAL_STOP='-'
 export BL64_LIB_SIGNAL_QUIT='-'
 export BL64_LIB_SIGNAL_DEBUG='-'
 export BL64_LIB_SIGNAL_ERR='-'
 export BL64_LIB_SIGNAL_EXIT='bl64_dbg_runtime_show'
+#######################################
+# BashLib64 / Module / Functions / Setup script run-time environment
+#######################################
+
+function bl64_lib_mode_command_is_enabled { [[ "$BL64_LIB_CMD" == "$BL64_VAR_ON" ]]; }
+function bl64_lib_mode_compability_is_enabled { [[ "$BL64_LIB_COMPATIBILITY" == "$BL64_VAR_ON" ]]; }
+function bl64_lib_mode_strict_is_enabled { [[ "$BL64_LIB_STRICT" == "$BL64_VAR_ON" ]]; }
+
+function bl64_lib_lang_is_enabled { [[ "$BL64_LIB_LANG" == "$BL64_VAR_ON" ]]; }
+function bl64_lib_trap_is_enabled { [[ "$BL64_LIB_TRAPS" == "$BL64_VAR_ON" ]]; }
 #######################################
 # BashLib64 / Module / Globals / Interact with RESTful APIs
 #######################################
@@ -234,7 +262,7 @@ export _BL64_BSH_TXT_UNSUPPORTED='BashLib64 is not supported in the current Bash
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
 
-export BL64_CHECK_VERSION='3.3.0'
+export BL64_CHECK_VERSION='3.4.0'
 
 export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 
@@ -267,7 +295,8 @@ export _BL64_CHECK_TXT_PATH_PRESENT='requested path is already present'
 export _BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT='the task requires root privilege. Please run the script as root or with SUDO'
 export _BL64_CHECK_TXT_PRIVILEGE_IS_ROOT='the task should not be run with root privilege. Please run the script as a regular user and not using SUDO'
 
-export _BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED='the object is already present and overwrite is not permitted'
+export _BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED='target is already present and overwrite is not permitted. Unable to continue'
+export _BL64_CHECK_TXT_OVERWRITE_SKIP_EXISTING='target is already present and overwrite is not requested. Target is left as is'
 
 export _BL64_CHECK_TXT_INCOMPATIBLE='the requested operation is not supported in the current platform'
 export _BL64_CHECK_TXT_UNDEFINED='requested command is not defined or implemented'
@@ -275,6 +304,8 @@ export _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one par
 export _BL64_CHECK_TXT_FAILED='task execution failed'
 
 export _BL64_CHECK_TXT_PARAMETER_INVALID='the requested operation was provided with an invalid parameter value'
+
+export _BL64_CHECK_TXT_COMPATIBILITY_MODE='using generic compatibility mode for untested command version'
 
 export _BL64_CHECK_TXT_FUNCTION='caller'
 export _BL64_CHECK_TXT_PARAMETER='parameter'
@@ -365,7 +396,7 @@ export _BL64_DBG_TXT_DEBUG='Debug'
 # BashLib64 / Module / Globals / Manage local filesystem
 #######################################
 
-export BL64_FS_VERSION='4.4.0'
+export BL64_FS_VERSION='4.5.0'
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
 
@@ -408,6 +439,7 @@ export BL64_FS_SET_FIND_RUN=''
 export BL64_FS_SET_FIND_STAY=''
 export BL64_FS_SET_FIND_TYPE_DIR=''
 export BL64_FS_SET_FIND_TYPE_FILE=''
+export BL64_FS_SET_LN_FORCE=''
 export BL64_FS_SET_LN_SYMBOLIC=''
 export BL64_FS_SET_LN_VERBOSE=''
 export BL64_FS_SET_LS_NOCOLOR=''
@@ -641,7 +673,7 @@ export _BL64_MSG_TXT_WARNING='Warning'
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #######################################
 
-export BL64_OS_VERSION='3.3.0'
+export BL64_OS_VERSION='3.4.0'
 
 export BL64_OS_MODULE="$BL64_VAR_OFF"
 
@@ -657,6 +689,21 @@ export BL64_OS_CMD_TRUE=''
 export BL64_OS_CMD_UNAME=''
 
 export BL64_OS_ALIAS_ID_USER=''
+
+export BL64_OS_SET_LOCALE_ALL=''
+
+export _BL64_OS_TXT_CHECK_OS_MATRIX='Please check that the OS is listed in the current BashLib64 OS compatibility matrix'
+export _BL64_OS_TXT_FAILED_TO_NORMALIZE_OS='Unable to normalize OS name and version from /etc/os-release'
+export _BL64_OS_TXT_INVALID_OS_PATTERN='invalid OS pattern'
+export _BL64_OS_TXT_OS_NOT_SUPPORTED='BashLib64 not supported on the current OS'
+export _BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED='task not supported on the current OS'
+export _BL64_OS_TXT_OS_MATRIX='Supported OS Versions'
+
+#
+# OS standard tags
+#
+# * Used to normalize OS names
+#
 
 # ALM -> AlmaLinux
 export BL64_OS_ALM='ALMALINUX'
@@ -684,15 +731,6 @@ export BL64_OS_SLES='SLES'
 export BL64_OS_UB='UBUNTU'
 # UNK -> Unknown OS
 export BL64_OS_UNK='UNKNOWN'
-
-export BL64_OS_SET_LOCALE_ALL=''
-
-export _BL64_OS_TXT_CHECK_OS_MATRIX='Please check that the OS is listed in the current BashLib64 OS compatibility matrix'
-export _BL64_OS_TXT_FAILED_TO_NORMALIZE_OS='Unable to normalize OS name and version from /etc/os-release'
-export _BL64_OS_TXT_INVALID_OS_PATTERN='invalid OS pattern'
-export _BL64_OS_TXT_OS_NOT_SUPPORTED='BashLib64 is not supported in the current OS'
-export _BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED='the current OS version is not compatible with the task'
-export _BL64_OS_TXT_OS_MATRIX='Supported OS Versions'
 
 #######################################
 # BashLib64 / Module / Globals / Manage role based access service
@@ -748,7 +786,7 @@ export _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
 # BashLib64 / Module / Globals / Transfer and Receive data over the network
 #######################################
 
-export BL64_RXTX_VERSION='1.17.0'
+export BL64_RXTX_VERSION='1.18.0'
 
 export BL64_RXTX_MODULE="$BL64_VAR_OFF"
 
@@ -769,6 +807,13 @@ export BL64_RXTX_SET_CURL_VERBOSE=''
 export BL64_RXTX_SET_WGET_OUTPUT=''
 export BL64_RXTX_SET_WGET_SECURE=''
 export BL64_RXTX_SET_WGET_VERBOSE=''
+
+#
+# GitHub specific parameters
+#
+
+# Public server
+export BL64_RXTX_GITHUB_URL='https://github.com'
 
 export _BL64_RXTX_TXT_MISSING_COMMAND='no web transfer command was found on the system'
 export _BL64_RXTX_TXT_EXISTING_DESTINATION='destination path is not empty. No action taken.'
@@ -835,7 +880,7 @@ export _BL64_UI_TXT_CONFIRMATION_ERROR='provided confirmation message is not wha
 # BashLib64 / Module / Globals / Manage Version Control System
 #######################################
 
-export BL64_VCS_VERSION='1.13.0'
+export BL64_VCS_VERSION='1.14.0'
 
 export BL64_VCS_MODULE="$BL64_VAR_OFF"
 
@@ -844,11 +889,20 @@ export BL64_VCS_CMD_GIT=''
 export BL64_VCS_SET_GIT_NO_PAGER=''
 export BL64_VCS_SET_GIT_QUIET=''
 
+#
+# GitHub related parameters
+#
+
+# GitHub API FQDN
 export BL64_VCS_GITHUB_API_URL='https://api.github.com'
+# Target GitHub public API version
 export BL64_VCS_GITHUB_API_VERSION='2022-11-28'
+# Special tag for latest release
+export BL64_VCS_GITHUB_LATEST='latest'
 
 export _BL64_VCS_TXT_CLONE_REPO='clone single branch from GIT repository'
 export _BL64_VCS_TXT_GET_LATEST_RELEASE='get release tag from latest release'
+export _BL64_VCS_TXT_GET_LATEST_RELEASE_FAILED='unable to determine latest release'
 
 #######################################
 # BashLib64 / Module / Globals / Manipulate CSV like text files
@@ -958,7 +1012,7 @@ export _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token fi
 # BashLib64 / Module / Globals / Interact with container engines
 #######################################
 
-export BL64_CNT_VERSION='1.9.3'
+export BL64_CNT_VERSION='2.0.0'
 
 # Optional module. Not enabled by default
 export BL64_CNT_MODULE="$BL64_VAR_OFF"
@@ -972,12 +1026,29 @@ export BL64_CNT_FLAG_STDIN='-'
 export BL64_CNT_CMD_PODMAN=''
 export BL64_CNT_CMD_DOCKER=''
 
+export BL64_CNT_SET_DEBUG=''
+export BL64_CNT_SET_ENTRYPOINT=''
+export BL64_CNT_SET_FILE=''
 export BL64_CNT_SET_FILTER=''
+export BL64_CNT_SET_INTERACTIVE=''
+export BL64_CNT_SET_LOG_LEVEL=''
+export BL64_CNT_SET_NO_CACHE=''
+export BL64_CNT_SET_PASSWORD_STDIN=''
+export BL64_CNT_SET_PASSWORD=''
 export BL64_CNT_SET_QUIET=''
+export BL64_CNT_SET_RM=''
+export BL64_CNT_SET_TAG=''
+export BL64_CNT_SET_TTY=''
+export BL64_CNT_SET_USERNAME=''
 export BL64_CNT_SET_VERSION=''
-export BL64_CNT_SET_STATUS_RUNNING=''
+
 export BL64_CNT_SET_FILTER_ID=''
 export BL64_CNT_SET_FILTER_NAME=''
+export BL64_CNT_SET_LOG_LEVEL_DEBUG=''
+export BL64_CNT_SET_LOG_LEVEL_ERROR=''
+export BL64_CNT_SET_LOG_LEVEL_INFO=''
+export BL64_CNT_SET_STATUS_RUNNING=''
+
 
 export BL64_CNT_PATH_DOCKER_SOCKET=''
 
@@ -1052,7 +1123,7 @@ export _BL64_IAM_TXT_ADD_USER='create user account'
 # BashLib64 / Module / Globals / Interact with Kubernetes
 #######################################
 
-export BL64_K8S_VERSION='1.2.0'
+export BL64_K8S_VERSION='2.0.0'
 
 # Optional module. Not enabled by default
 export BL64_K8S_MODULE="$BL64_VAR_OFF"
@@ -2013,7 +2084,9 @@ function bl64_check_privilege_not_root() {
 }
 
 #######################################
-# Check file/dir overwrite condition
+# Check file/dir overwrite condition and fail if not meet
+#
+# * Use for tasks that needs to ensure that previous content will not overwriten unless requested
 #
 # Arguments:
 #   $1: Full path to the object
@@ -2023,27 +2096,61 @@ function bl64_check_privilege_not_root() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: check ok
+#   0: no previous file/dir or overwrite is requested
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
 #######################################
 function bl64_check_overwrite() {
   bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
-  local overwrite="${2:-"$BL64_VAR_OFF"}"
-  local message="${3:-${_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}}"
+  local overwrite="${2:-$BL64_VAR_OFF}"
+  local message="${3:-$_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}"
 
   bl64_check_parameter 'path' || return $?
 
   if [[ "$overwrite" == "$BL64_VAR_OFF" || "$overwrite" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -e "$path" ]]; then
-      bl64_msg_show_error "${message} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
-      # shellcheck disable=SC2086
+      bl64_msg_show_error "${message:-$_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
       return $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
     fi
   fi
 
   return 0
+}
+
+#######################################
+# Check file/dir overwrite condition and warn if not meet
+#
+# * Use for tasks that will do nothing if the target is already present
+# * Warning: Caller is responsible for checking that path parameter is valid
+#
+# Arguments:
+#   $1: Full path to the object
+#   $2: Overwrite flag. Must be ON(1) or OFF(0). Default: OFF
+#   $3: Warning message
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: skip since previous file/dir is present
+#   1: no previous file/dir present or overwrite is requested
+#######################################
+function bl64_check_overwrite_skip() {
+  bl64_dbg_lib_show_function "$@"
+  local path="${1:-}"
+  local overwrite="${2:-$BL64_VAR_OFF}"
+  local message="${3:-}"
+
+  bl64_check_parameter 'path'
+
+  if [[ "$overwrite" == "$BL64_VAR_OFF" || "$overwrite" == "$BL64_VAR_DEFAULT" ]]; then
+    if [[ -e "$path" ]]; then
+      bl64_msg_show_warning "${message:-$_BL64_CHECK_TXT_OVERWRITE_SKIP_EXISTING} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+      return 0
+    fi
+  fi
+
+  return 1
 }
 
 #######################################
@@ -2090,6 +2197,33 @@ function bl64_check_alert_unsupported() {
 
   bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
   return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+}
+
+#######################################
+# Check that the compatibility mode is enabled to support untested command
+#
+# * If enabled, show a warning and continue OK
+# * If not enabled, fail
+#
+# Arguments:
+#   $1: extra error message. Added to the error detail between (). Default: none
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: using compatibility mode
+#   >0: command is incompatible and compatibility mode is disabled
+#######################################
+function bl64_check_compatibility() {
+  bl64_dbg_lib_show_function "$@"
+  local extra="${1:-}"
+
+  if bl64_lib_mode_compability_is_enabled; then
+    bl64_msg_show_warning "${_BL64_CHECK_TXT_COMPATIBILITY_MODE} (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+  else
+    bl64_check_alert_unsupported "$extra"
+    return $?
+  fi
 }
 
 #######################################
@@ -2933,6 +3067,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_FIND_STAY='-xdev'
     BL64_FS_SET_FIND_TYPE_DIR='-type d'
     BL64_FS_SET_FIND_TYPE_FILE='-type f'
+    BL64_FS_SET_LN_FORCE='--force'
     BL64_FS_SET_LN_SYMBOLIC='--symbolic'
     BL64_FS_SET_LN_VERBOSE='--verbose'
     BL64_FS_SET_LS_NOCOLOR='--color=never'
@@ -2961,6 +3096,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_FIND_STAY='-xdev'
     BL64_FS_SET_FIND_TYPE_DIR='-type d'
     BL64_FS_SET_FIND_TYPE_FILE='-type f'
+    BL64_FS_SET_LN_FORCE='--force'
     BL64_FS_SET_LN_SYMBOLIC='--symbolic'
     BL64_FS_SET_LN_VERBOSE='--verbose'
     BL64_FS_SET_LS_NOCOLOR='--color=never'
@@ -2989,6 +3125,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_FIND_STAY='-xdev'
     BL64_FS_SET_FIND_TYPE_DIR='-type d'
     BL64_FS_SET_FIND_TYPE_FILE='-type f'
+    BL64_FS_SET_LN_FORCE='--force'
     BL64_FS_SET_LN_SYMBOLIC='--symbolic'
     BL64_FS_SET_LN_VERBOSE='--verbose'
     BL64_FS_SET_LS_NOCOLOR='--color=never'
@@ -3017,6 +3154,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_FIND_STAY='-xdev'
     BL64_FS_SET_FIND_TYPE_DIR='-type d'
     BL64_FS_SET_FIND_TYPE_FILE='-type f'
+    BL64_FS_SET_LN_FORCE='-f'
     BL64_FS_SET_LN_SYMBOLIC='-s'
     BL64_FS_SET_LN_VERBOSE='-v'
     BL64_FS_SET_LS_NOCOLOR='--color=never'
@@ -3045,6 +3183,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_FIND_STAY='-xdev'
     BL64_FS_SET_FIND_TYPE_DIR='-type d'
     BL64_FS_SET_FIND_TYPE_FILE='-type f'
+    BL64_FS_SET_LN_FORCE='-f'
     BL64_FS_SET_LN_SYMBOLIC='-s'
     BL64_FS_SET_LN_VERBOSE='-v'
     BL64_FS_SET_LS_NOCOLOR='--color=never'
@@ -3087,6 +3226,7 @@ function _bl64_fs_set_alias() {
   BL64_FS_ALIAS_CP_DIR="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE} ${BL64_FS_SET_CP_RECURSIVE}"
   BL64_FS_ALIAS_CP_FIFIND="/usr/bin/find"
   BL64_FS_ALIAS_CP_FILE="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE}"
+  BL64_FS_ALIAS_LN_FORCE="--force"
   BL64_FS_ALIAS_LN_SYMBOLIC="${BL64_FS_CMD_LN} ${BL64_FS_SET_LN_SYMBOLIC} ${BL64_FS_SET_LN_VERBOSE}"
   BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} ${BL64_FS_SET_LS_NOCOLOR}"
   BL64_FS_ALIAS_MKDIR_FULL="${BL64_FS_CMD_MKDIR} ${BL64_FS_SET_MKDIR_VERBOSE} ${BL64_FS_SET_MKDIR_PARENTS}"
@@ -5293,7 +5433,7 @@ function _bl64_os_set_runtime() {
   bl64_dbg_lib_show_function
 
   # Reset language to modern specification of C locale
-  if [[ "$BL64_LIB_LANG" == '1' ]]; then
+  if bl64_lib_lang_is_enabled; then
     # shellcheck disable=SC2034
     case "$BL64_OS_DISTRO" in
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -5362,23 +5502,46 @@ function bl64_os_set_lang() {
 function _bl64_os_match() {
   bl64_dbg_lib_show_function "$@"
   local target="$1"
-  local os=''
-  local os_version=''
+  local target_os=''
+  local target_major=''
+  local target_minor=''
+  local current_os=''
+  local current_major=''
+  local current_minor=''
 
   if [[ "$target" == +([[:alpha:]])-+([[:digit:]]).+([[:digit:]]) ]]; then
-    os="${target%%-*}"
-    os_version="${target##*-}"
-    bl64_dbg_lib_show_info "Pattern: OOO-V.V [${BL64_OS_DISTRO}] == [${os}-${os_version}]"
-    [[ "$BL64_OS_DISTRO" == "${os}-${os_version}" ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+    target_os="${target%%-*}"
+    target_major="${target##*-}"
+    target_minor="${target_major##*\.}"
+    target_major="${target_major%%\.*}"
+    current_major="${BL64_OS_DISTRO##*-}"
+    current_minor="${current_major##*\.}"
+    current_major="${current_major%%\.*}"
+
+    bl64_dbg_lib_show_info "Pattern: match OS, Major and Minor [${BL64_OS_DISTRO}] == [${target_os}-${target_major}.${target_minor}]"
+    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
+      (( current_major == target_major && current_minor == target_minor )) ||
+      return $BL64_LIB_ERROR_OS_NOT_MATCH
+
   elif [[ "$target" == +([[:alpha:]])-+([[:digit:]]) ]]; then
-    os="${target%%-*}"
-    os_version="${target##*-}"
-    bl64_dbg_lib_show_info "Pattern: OOO-V [${BL64_OS_DISTRO}] == [${os}-${os_version}.+([[:digit:]])]"
-    [[ "$BL64_OS_DISTRO" == ${os}-${os_version}.+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+    target_os="${target%%-*}"
+    target_major="${target##*-}"
+    target_major="${target_major%%\.*}"
+    current_os="${BL64_OS_DISTRO%%-*}"
+    current_major="${BL64_OS_DISTRO##*-}"
+    current_major="${current_major%%\.*}"
+
+    bl64_dbg_lib_show_info "Pattern: match OS and Major [${current_os}-${current_major}] == [${target_os}-${target_major}]"
+    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
+      (( current_major == target_major )) ||
+      return $BL64_LIB_ERROR_OS_NOT_MATCH
+
   elif [[ "$target" == +([[:alpha:]]) ]]; then
-    os="$target"
-    bl64_dbg_lib_show_info "Pattern: OOO [${BL64_OS_DISTRO}] == [${os}]"
-    [[ "$BL64_OS_DISTRO" == ${os}-+([[:digit:]]).+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+    target_os="$target"
+
+    bl64_dbg_lib_show_info "Pattern: match OS ID only [${BL64_OS_DISTRO}] == [${target_os}]"
+    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+
   else
     bl64_msg_show_error "${_BL64_OS_TXT_INVALID_OS_PATTERN} (${target})"
     return $BL64_LIB_ERROR_OS_TAG_INVALID
@@ -5432,6 +5595,10 @@ function _bl64_os_get_distro_from_uname() {
 #
 # * Warning: bootstrap function
 # * Normalized data is stored in the global variable BL64_OS_DISTRO
+# * Version is normalized to the format: OS_ID-V.S
+#   * OS_ID: one of the OS standard tags
+#   * V: Major version, number
+#   * S: Minor version, number
 #
 # Arguments:
 #   None
@@ -6321,10 +6488,8 @@ function bl64_rxtx_web_get_file() {
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' || return $?
 
-  [[ "$replace" == "$BL64_VAR_DEFAULT" ]] && replace="$BL64_VAR_OFF"
-  [[ "$replace" == "$BL64_VAR_OFF" && -e "$destination" ]] &&
-    bl64_dbg_lib_show_info "destination is already created (${destination}) and overwrite is disabled. No action taken" &&
-    return 0
+  bl64_check_overwrite_skip "$destination" "$replace" && return
+
   bl64_fs_safeguard "$destination" >/dev/null || return $?
 
   bl64_msg_show_lib_subtask "$_BL64_RXTX_TXT_DOWNLOAD_FILE ($source)"
@@ -6374,6 +6539,7 @@ function bl64_rxtx_web_get_file() {
 #   STDOUT: command stdout
 #   STDERR: command error
 # Returns:
+#   0: operation OK
 #   BL64_LIB_ERROR_TASK_TEMP
 #   command error status
 #######################################
@@ -6393,9 +6559,8 @@ function bl64_rxtx_git_get_dir() {
     bl64_check_path_relative "$source_path" ||
     return $?
 
-  [[ "$replace" == "$BL64_VAR_DEFAULT" ]] && replace="$BL64_VAR_OFF"
   # shellcheck disable=SC2086
-  bl64_check_overwrite "$destination" "$replace" "$_BL64_RXTX_TXT_EXISTING_DESTINATION" || return $BL64_VAR_OK
+  bl64_check_overwrite_skip "$destination" "$replace" && return $?
 
   # Asked to replace, backup first
   bl64_fs_safeguard "$destination" || return $?
@@ -6439,7 +6604,7 @@ function bl64_rxtx_run_curl() {
   local debug="$BL64_RXTX_SET_CURL_SILENT"
 
   bl64_check_parameters_none "$#" &&
-  bl64_check_module 'BL64_RXTX_MODULE' &&
+    bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
 
   bl64_dbg_lib_command_enabled && debug="$BL64_RXTX_SET_CURL_VERBOSE"
@@ -6469,7 +6634,7 @@ function bl64_rxtx_run_wget() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-  bl64_check_module 'BL64_RXTX_MODULE' &&
+    bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_WGET" || return $?
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
@@ -6548,15 +6713,16 @@ function _bl64_rxtx_git_get_dir_sub() {
 }
 
 #######################################
-# Download asset from release in github repository
+# Download file asset from release in github repository
 #
 # Arguments:
 #   $1: repo owner
 #   $2: repo name
-#   $3: release tag
-#   $4: asset name
-#   $5: replace existing content Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
-#   $6: permissions. Regular chown format accepted. Default: umask defined
+#   $3: release tag. Use $BL64_VCS_GITHUB_LATEST (latest) to obtain latest version
+#   $4: asset name: file name available in the target release
+#   $5: destination
+#   $6: replace existing content Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
+#   $7: permissions. Regular chown format accepted. Default: umask defined
 # Outputs:
 #   STDOUT: none
 #   STDERR: task error
@@ -6581,10 +6747,15 @@ function bl64_rxtx_github_get_asset() {
     bl64_check_parameter 'release_tag' &&
     bl64_check_parameter 'asset_name' &&
     bl64_check_parameter 'destination' ||
-  return $?
+    return $?
+
+  if [[ "$release_tag" == "$BL64_VCS_GITHUB_LATEST" ]]; then
+    release_tag="$(bl64_vcs_github_release_get_latest "$repo_owner" "$repo_name")" ||
+      return $?
+  fi
 
   bl64_rxtx_web_get_file \
-    "https://github.com/${repo_owner}/${repo_name}/releases/download/${release_tag}/${asset_name}" \
+    "${BL64_RXTX_GITHUB_URL}/${repo_owner}/${repo_name}/releases/download/${release_tag}/${asset_name}" \
     "$destination" "$replace" "$mode"
 }
 
@@ -7593,13 +7764,20 @@ function bl64_vcs_github_release_get_latest() {
   local repo_name="$2"
   local repo_tag=''
 
-  bl64_check_parameter 'repo_owner' &&
+  bl64_check_module 'BL64_VCS_MODULE' &&
+    bl64_check_parameter 'repo_owner' &&
     bl64_check_parameter 'repo_name' ||
     return $?
 
-  repo_tag="$(_bl64_vcs_github_release_get_latest "$repo_owner" "$repo_name")" &&
-    [[ -n "$repo_tag" ]] &&
+  repo_tag="$(_bl64_vcs_github_release_get_latest "$repo_owner" "$repo_name")" ||
+    return $?
+
+  if [[ -n "$repo_tag" ]]; then
     echo "$repo_tag"
+  else
+    bl64_msg_show_error "$_BL64_VCS_TXT_GET_LATEST_RELEASE_FAILED"
+    return $BL64_LIB_ERROR_TASK_FAILED
+  fi
 }
 
 function _bl64_vcs_github_release_get_latest() {
@@ -9064,16 +9242,41 @@ function _bl64_cnt_set_command() {
 function _bl64_cnt_set_options() {
   bl64_dbg_lib_show_function
 
-  BL64_CNT_SET_VERSION='version'
-  BL64_CNT_SET_QUIET='--quiet'
+  #
+  # Standard CLI flags
+  #
+  # * Common to both podman and docker
+  #
+
+  BL64_CNT_SET_DEBUG='--debug'
+  BL64_CNT_SET_ENTRYPOINT='--entrypoint'
+  BL64_CNT_SET_FILE='--file'
   BL64_CNT_SET_FILTER='--filter'
+  BL64_CNT_SET_INTERACTIVE='--interactive'
+  BL64_CNT_SET_LOG_LEVEL='--log-level'
+  BL64_CNT_SET_NO_CACHE='--no-cache'
+  BL64_CNT_SET_PASSWORD_STDIN='--password-stdin'
+  BL64_CNT_SET_PASSWORD='--password'
+  BL64_CNT_SET_QUIET='--quiet'
+  BL64_CNT_SET_RM='--rm'
+  BL64_CNT_SET_TAG='--tag'
+  BL64_CNT_SET_TTY='--tty'
+  BL64_CNT_SET_USERNAME='--username'
+  BL64_CNT_SET_VERSION='version'
 
-  # Container status
-  BL64_CNT_SET_STATUS_RUNNING='running'
+  #
+  # Common parameter values
+  #
+  # * Common to both podman and docker
+  #
 
-  # Format field names
   BL64_CNT_SET_FILTER_ID='{{.ID}}'
   BL64_CNT_SET_FILTER_NAME='{{.Names}}'
+  BL64_CNT_SET_LOG_LEVEL_DEBUG='debug'
+  BL64_CNT_SET_LOG_LEVEL_ERROR='error'
+  BL64_CNT_SET_LOG_LEVEL_INFO='info'
+  BL64_CNT_SET_STATUS_RUNNING='running'
+
   return 0
 }
 
@@ -9267,8 +9470,8 @@ function bl64_cnt_run_sh() {
   local container="$1"
 
   bl64_check_parameter 'container' || return $?
-
-  bl64_cnt_run_interactive --entrypoint 'sh' "$container"
+  # shellcheck disable=SC2086
+  bl64_cnt_run_interactive $BL64_CNT_SET_ENTRYPOINT 'sh' "$container"
 }
 
 #######################################
@@ -9578,7 +9781,6 @@ function bl64_cnt_network_create() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_docker_login() {
   bl64_dbg_lib_show_function "$@"
   local user="$1"
@@ -9586,11 +9788,12 @@ function _bl64_cnt_docker_login() {
   local file="$3"
   local registry="$4"
 
+  # shellcheck disable=SC2086
   _bl64_cnt_login_put_password "$password" "$file" |
     bl64_cnt_run_docker \
       login \
-      --username "$user" \
-      --password-stdin \
+      $BL64_CNT_SET_USERNAME "$user" \
+      $BL64_CNT_SET_PASSWORD_STDIN \
       "$registry"
 }
 
@@ -9607,17 +9810,17 @@ function _bl64_cnt_docker_login() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_docker_run_interactive() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" || return $?
 
+  # shellcheck disable=SC2086
   bl64_cnt_run_docker \
     run \
-    --rm \
-    --interactive \
-    --tty \
+    $BL64_CNT_SET_RM \
+    $BL64_CNT_SET_INTERACTIVE \
+    $BL64_CNT_SET_TTY \
     "$@"
 
 }
@@ -9635,7 +9838,6 @@ function _bl64_cnt_docker_run_interactive() {
 # Returns:
 #   command exit status
 #######################################
-
 function bl64_cnt_run_docker() {
   bl64_dbg_lib_show_function "$@"
   local verbose='error'
@@ -9647,14 +9849,14 @@ function bl64_cnt_run_docker() {
     return $?
 
   if bl64_dbg_lib_command_enabled; then
-    verbose='debug'
-    debug='--debug'
+    verbose="$BL64_CNT_SET_LOG_LEVEL_DEBUG"
+    debug="$BL64_CNT_SET_DEBUG"
   fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_CNT_CMD_DOCKER" \
-    --log-level "$verbose" \
+    $BL64_CNT_SET_LOG_LEVEL "$verbose" \
     $debug \
     "$@"
   bl64_dbg_lib_trace_stop
@@ -9673,7 +9875,6 @@ function bl64_cnt_run_docker() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_docker_build() {
   bl64_dbg_lib_show_function "$@"
   local file="$1"
@@ -9683,12 +9884,12 @@ function _bl64_cnt_docker_build() {
   shift
   shift
 
+  # shellcheck disable=SC2086
   bl64_cnt_run_docker \
     build \
-    --no-cache \
-    --rm \
-    --tag "$tag" \
-    --file "$file" \
+    --progress plain \
+    $BL64_CNT_SET_TAG "$tag" \
+    $BL64_CNT_SET_FILE "$file" \
     "$@" .
 }
 
@@ -9704,7 +9905,6 @@ function _bl64_cnt_docker_build() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_docker_push() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
@@ -9731,7 +9931,6 @@ function _bl64_cnt_docker_push() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_docker_pull() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
@@ -9753,7 +9952,6 @@ function _bl64_cnt_docker_pull() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_docker_tag() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
@@ -9778,13 +9976,12 @@ function _bl64_cnt_docker_tag() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_docker_run() {
   bl64_dbg_lib_show_function "$@"
 
+  # shellcheck disable=SC2086
   bl64_cnt_run_docker \
     run \
-    --rm \
     "$@"
 
 }
@@ -9861,13 +10058,13 @@ function _bl64_cnt_docker_ps_filter() {
   local filter=''
 
   if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
-    filter="--filter name=${name}"
+    filter="$BL64_CNT_SET_FILTER name=${name}"
     format="$BL64_CNT_SET_FILTER_NAME"
   elif [[ "$id" != "$BL64_VAR_DEFAULT" ]]; then
-    filter="--filter id=${id}"
+    filter="$BL64_CNT_SET_FILTER id=${id}"
     format="$BL64_CNT_SET_FILTER_ID"
   fi
-  [[ "$status" != "$BL64_VAR_DEFAULT" ]] && filter_status="--filter status=${status}"
+  [[ "$status" != "$BL64_VAR_DEFAULT" ]] && filter_status="$BL64_CNT_SET_FILTER status=${status}"
 
   # shellcheck disable=SC2086
   bl64_cnt_run_docker \
@@ -9893,7 +10090,6 @@ function _bl64_cnt_docker_ps_filter() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_podman_login() {
   bl64_dbg_lib_show_function "$@"
   local user="$1"
@@ -9901,11 +10097,12 @@ function _bl64_cnt_podman_login() {
   local file="$3"
   local registry="$4"
 
+  # shellcheck disable=SC2086
   _bl64_cnt_login_put_password "$password" "$file" |
     bl64_cnt_run_podman \
       login \
-      --username "$user" \
-      --password-stdin \
+      $BL64_CNT_SET_USERNAME "$user" \
+      $BL64_CNT_SET_PASSWORD_STDIN \
       "$registry"
 }
 
@@ -9922,17 +10119,17 @@ function _bl64_cnt_podman_login() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_podman_run_interactive() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" || return $?
 
+  # shellcheck disable=SC2086
   bl64_cnt_run_podman \
     run \
-    --rm \
-    --interactive \
-    --tty \
+    $BL64_CNT_SET_RM \
+    $BL64_CNT_SET_INTERACTIVE \
+    $BL64_CNT_SET_TTY \
     "$@"
 }
 
@@ -9949,7 +10146,6 @@ function _bl64_cnt_podman_run_interactive() {
 # Returns:
 #   command exit status
 #######################################
-
 function bl64_cnt_run_podman() {
   bl64_dbg_lib_show_function "$@"
   local verbose='error'
@@ -9959,11 +10155,12 @@ function bl64_cnt_run_podman() {
     bl64_check_command "$BL64_CNT_CMD_PODMAN" ||
     return $?
 
-  bl64_dbg_lib_command_enabled && verbose='debug'
+  bl64_dbg_lib_command_enabled && verbose="$BL64_CNT_SET_LOG_LEVEL_DEBUG"
 
   bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
   "$BL64_CNT_CMD_PODMAN" \
-    --log-level "$verbose" \
+    $BL64_CNT_SET_LOG_LEVEL "$verbose" \
     "$@"
   bl64_dbg_lib_trace_stop
 }
@@ -9981,7 +10178,6 @@ function bl64_cnt_run_podman() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_podman_build() {
   bl64_dbg_lib_show_function "$@"
   local file="$1"
@@ -9991,12 +10187,11 @@ function _bl64_cnt_podman_build() {
   shift
   shift
 
+  # shellcheck disable=SC2086
   bl64_cnt_run_podman \
     build \
-    --no-cache \
-    --rm \
-    --tag "$tag" \
-    --file "$file" \
+    $BL64_CNT_SET_TAG "$tag" \
+    $BL64_CNT_SET_FILE "$file" \
     "$@" .
 }
 
@@ -10012,7 +10207,6 @@ function _bl64_cnt_podman_build() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_podman_push() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
@@ -10035,7 +10229,6 @@ function _bl64_cnt_podman_push() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_podman_pull() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
@@ -10057,7 +10250,6 @@ function _bl64_cnt_podman_pull() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_podman_tag() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
@@ -10082,13 +10274,11 @@ function _bl64_cnt_podman_tag() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_podman_run() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_cnt_run_podman \
     run \
-    --rm \
     "$@"
 }
 
@@ -10164,13 +10354,13 @@ function _bl64_cnt_podman_ps_filter() {
   local filter=''
 
   if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
-    filter="--filter name=${name}"
+    filter="$BL64_CNT_SET_FILTER name=${name}"
     format='{{.NAME}}'
   elif [[ "$id" != "$BL64_VAR_DEFAULT" ]]; then
-    filter="--filter id=${id}"
-    format='{{.ID}}'
+    filter="$BL64_CNT_SET_FILTER id=${id}"
+    format="$BL64_CNT_SET_FILTER_ID"
   fi
-  [[ "$status" != "$BL64_VAR_DEFAULT" ]] && filter_status="--filter status=${status}"
+  [[ "$status" != "$BL64_VAR_DEFAULT" ]] && filter_status="$BL64_CNT_SET_FILTER status=${status}"
 
   # shellcheck disable=SC2086
   bl64_cnt_run_podman \
@@ -11182,7 +11372,7 @@ function _bl64_k8s_set_options() {
   bl64_dbg_lib_show_function
 
   case "$BL64_K8S_VERSION_KUBECTL" in
-  1.22 | 1.23 | 1.24 | 1.25 | 1.26 | 1.27)
+  1.22 | 1.23 | 1.24 | 1.25 | 1.26 | 1.27 | 1.28)
     BL64_K8S_SET_VERBOSE_NONE='--v=0'
     BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
     BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
@@ -11196,7 +11386,21 @@ function _bl64_k8s_set_options() {
     BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
     BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
     ;;
-  *) bl64_check_alert_unsupported "k8s-api: ${BL64_K8S_VERSION_KUBECTL}";;
+  *)
+    bl64_check_compatibility "k8s-api: ${BL64_K8S_VERSION_KUBECTL}" || return $?
+    BL64_K8S_SET_VERBOSE_NONE='--v=0'
+    BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
+    BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
+    BL64_K8S_SET_VERBOSE_TRACE='--v=6'
+
+    BL64_K8S_SET_OUTPUT_JSON='--output=json'
+    BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
+    BL64_K8S_SET_OUTPUT_TXT='--output=wide'
+    BL64_K8S_SET_OUTPUT_NAME='--output=name'
+
+    BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
+    BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
+    ;;
   esac
 }
 
@@ -11239,7 +11443,7 @@ function _bl64_k8s_get_version_1_22() {
   bl64_dbg_lib_show_info "try with kubectl v1.22 options"
   # shellcheck disable=SC2086
   "$BL64_K8S_CMD_KUBECTL" version --client --output=json |
-  bl64_txt_run_awk $BL64_TXT_SET_AWS_FS ':' '
+    bl64_txt_run_awk $BL64_TXT_SET_AWS_FS ':' '
     $1 ~ /^ +"major"$/ { gsub( /[" ,]/, "", $2 ); Major = $2 }
     $1 ~ /^ +"minor"$/ { gsub( /[" ,]/, "", $2 ); Minor = $2 }
     END { print Major "." Minor }
@@ -14056,23 +14260,19 @@ function bl64_tf_blank_terraform() {
   return 0
 }
 
-#######################################
-# BashLib64 / Module / Functions / Setup script run-time environment
-#######################################
-
 #
-# Library Bootstrap
+# Main
 #
 
 # Normalize locales to C until a better locale is found in bl64_os_setup
-if [[ "$BL64_LIB_LANG" == '1' ]]; then
+if bl64_lib_lang_is_enabled; then
   LANG='C'
   LC_ALL='C'
   LANGUAGE='C'
 fi
 
 # Set strict mode for enhanced security
-if [[ "$BL64_LIB_STRICT" == '1' ]]; then
+if bl64_lib_mode_strict_is_enabled; then
   set -o 'nounset'
   set -o 'privileged'
 fi
@@ -14100,7 +14300,7 @@ bl64_os_setup &&
 
 # Set signal handlers
 # shellcheck disable=SC2064
-if [[ "$BL64_LIB_TRAPS" == "$BL64_VAR_ON" ]]; then
+if bl64_lib_trap_is_enabled; then
   bl64_dbg_lib_show_info 'enable traps'
   trap "$BL64_LIB_SIGNAL_HUP" 'SIGHUP'
   trap "$BL64_LIB_SIGNAL_STOP" 'SIGINT'
@@ -14118,7 +14318,7 @@ bl64_fs_set_umask
 bl64_bsh_script_set_identity
 
 # Enable command mode: the library can be used as a stand-alone script to run embeded functions
-if [[ "$BL64_LIB_CMD" == "$BL64_VAR_ON" ]]; then
+if bl64_lib_mode_command_is_enabled; then
   bl64_dbg_lib_show_info 'run bashlib64 in command mode'
   "$@"
 else

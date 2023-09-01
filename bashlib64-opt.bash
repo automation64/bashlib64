@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #######################################
-# BashLib64 / Bash automation librbary
+# BashLib64 / Bash automation library
 #
 # Author: serdigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/automation64/bashlib64
@@ -104,7 +104,7 @@ export _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token fi
 # BashLib64 / Module / Globals / Interact with container engines
 #######################################
 
-export BL64_CNT_VERSION='1.9.3'
+export BL64_CNT_VERSION='2.0.0'
 
 # Optional module. Not enabled by default
 export BL64_CNT_MODULE="$BL64_VAR_OFF"
@@ -118,12 +118,29 @@ export BL64_CNT_FLAG_STDIN='-'
 export BL64_CNT_CMD_PODMAN=''
 export BL64_CNT_CMD_DOCKER=''
 
+export BL64_CNT_SET_DEBUG=''
+export BL64_CNT_SET_ENTRYPOINT=''
+export BL64_CNT_SET_FILE=''
 export BL64_CNT_SET_FILTER=''
+export BL64_CNT_SET_INTERACTIVE=''
+export BL64_CNT_SET_LOG_LEVEL=''
+export BL64_CNT_SET_NO_CACHE=''
+export BL64_CNT_SET_PASSWORD_STDIN=''
+export BL64_CNT_SET_PASSWORD=''
 export BL64_CNT_SET_QUIET=''
+export BL64_CNT_SET_RM=''
+export BL64_CNT_SET_TAG=''
+export BL64_CNT_SET_TTY=''
+export BL64_CNT_SET_USERNAME=''
 export BL64_CNT_SET_VERSION=''
-export BL64_CNT_SET_STATUS_RUNNING=''
+
 export BL64_CNT_SET_FILTER_ID=''
 export BL64_CNT_SET_FILTER_NAME=''
+export BL64_CNT_SET_LOG_LEVEL_DEBUG=''
+export BL64_CNT_SET_LOG_LEVEL_ERROR=''
+export BL64_CNT_SET_LOG_LEVEL_INFO=''
+export BL64_CNT_SET_STATUS_RUNNING=''
+
 
 export BL64_CNT_PATH_DOCKER_SOCKET=''
 
@@ -198,7 +215,7 @@ export _BL64_IAM_TXT_ADD_USER='create user account'
 # BashLib64 / Module / Globals / Interact with Kubernetes
 #######################################
 
-export BL64_K8S_VERSION='1.2.0'
+export BL64_K8S_VERSION='2.0.0'
 
 # Optional module. Not enabled by default
 export BL64_K8S_MODULE="$BL64_VAR_OFF"
@@ -1737,16 +1754,41 @@ function _bl64_cnt_set_command() {
 function _bl64_cnt_set_options() {
   bl64_dbg_lib_show_function
 
-  BL64_CNT_SET_VERSION='version'
-  BL64_CNT_SET_QUIET='--quiet'
+  #
+  # Standard CLI flags
+  #
+  # * Common to both podman and docker
+  #
+
+  BL64_CNT_SET_DEBUG='--debug'
+  BL64_CNT_SET_ENTRYPOINT='--entrypoint'
+  BL64_CNT_SET_FILE='--file'
   BL64_CNT_SET_FILTER='--filter'
+  BL64_CNT_SET_INTERACTIVE='--interactive'
+  BL64_CNT_SET_LOG_LEVEL='--log-level'
+  BL64_CNT_SET_NO_CACHE='--no-cache'
+  BL64_CNT_SET_PASSWORD_STDIN='--password-stdin'
+  BL64_CNT_SET_PASSWORD='--password'
+  BL64_CNT_SET_QUIET='--quiet'
+  BL64_CNT_SET_RM='--rm'
+  BL64_CNT_SET_TAG='--tag'
+  BL64_CNT_SET_TTY='--tty'
+  BL64_CNT_SET_USERNAME='--username'
+  BL64_CNT_SET_VERSION='version'
 
-  # Container status
-  BL64_CNT_SET_STATUS_RUNNING='running'
+  #
+  # Common parameter values
+  #
+  # * Common to both podman and docker
+  #
 
-  # Format field names
   BL64_CNT_SET_FILTER_ID='{{.ID}}'
   BL64_CNT_SET_FILTER_NAME='{{.Names}}'
+  BL64_CNT_SET_LOG_LEVEL_DEBUG='debug'
+  BL64_CNT_SET_LOG_LEVEL_ERROR='error'
+  BL64_CNT_SET_LOG_LEVEL_INFO='info'
+  BL64_CNT_SET_STATUS_RUNNING='running'
+
   return 0
 }
 
@@ -1940,8 +1982,8 @@ function bl64_cnt_run_sh() {
   local container="$1"
 
   bl64_check_parameter 'container' || return $?
-
-  bl64_cnt_run_interactive --entrypoint 'sh' "$container"
+  # shellcheck disable=SC2086
+  bl64_cnt_run_interactive $BL64_CNT_SET_ENTRYPOINT 'sh' "$container"
 }
 
 #######################################
@@ -2251,7 +2293,6 @@ function bl64_cnt_network_create() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_docker_login() {
   bl64_dbg_lib_show_function "$@"
   local user="$1"
@@ -2259,11 +2300,12 @@ function _bl64_cnt_docker_login() {
   local file="$3"
   local registry="$4"
 
+  # shellcheck disable=SC2086
   _bl64_cnt_login_put_password "$password" "$file" |
     bl64_cnt_run_docker \
       login \
-      --username "$user" \
-      --password-stdin \
+      $BL64_CNT_SET_USERNAME "$user" \
+      $BL64_CNT_SET_PASSWORD_STDIN \
       "$registry"
 }
 
@@ -2280,17 +2322,17 @@ function _bl64_cnt_docker_login() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_docker_run_interactive() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" || return $?
 
+  # shellcheck disable=SC2086
   bl64_cnt_run_docker \
     run \
-    --rm \
-    --interactive \
-    --tty \
+    $BL64_CNT_SET_RM \
+    $BL64_CNT_SET_INTERACTIVE \
+    $BL64_CNT_SET_TTY \
     "$@"
 
 }
@@ -2308,7 +2350,6 @@ function _bl64_cnt_docker_run_interactive() {
 # Returns:
 #   command exit status
 #######################################
-
 function bl64_cnt_run_docker() {
   bl64_dbg_lib_show_function "$@"
   local verbose='error'
@@ -2320,14 +2361,14 @@ function bl64_cnt_run_docker() {
     return $?
 
   if bl64_dbg_lib_command_enabled; then
-    verbose='debug'
-    debug='--debug'
+    verbose="$BL64_CNT_SET_LOG_LEVEL_DEBUG"
+    debug="$BL64_CNT_SET_DEBUG"
   fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_CNT_CMD_DOCKER" \
-    --log-level "$verbose" \
+    $BL64_CNT_SET_LOG_LEVEL "$verbose" \
     $debug \
     "$@"
   bl64_dbg_lib_trace_stop
@@ -2346,7 +2387,6 @@ function bl64_cnt_run_docker() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_docker_build() {
   bl64_dbg_lib_show_function "$@"
   local file="$1"
@@ -2356,12 +2396,12 @@ function _bl64_cnt_docker_build() {
   shift
   shift
 
+  # shellcheck disable=SC2086
   bl64_cnt_run_docker \
     build \
-    --no-cache \
-    --rm \
-    --tag "$tag" \
-    --file "$file" \
+    --progress plain \
+    $BL64_CNT_SET_TAG "$tag" \
+    $BL64_CNT_SET_FILE "$file" \
     "$@" .
 }
 
@@ -2377,7 +2417,6 @@ function _bl64_cnt_docker_build() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_docker_push() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
@@ -2404,7 +2443,6 @@ function _bl64_cnt_docker_push() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_docker_pull() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
@@ -2426,7 +2464,6 @@ function _bl64_cnt_docker_pull() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_docker_tag() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
@@ -2451,13 +2488,12 @@ function _bl64_cnt_docker_tag() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_docker_run() {
   bl64_dbg_lib_show_function "$@"
 
+  # shellcheck disable=SC2086
   bl64_cnt_run_docker \
     run \
-    --rm \
     "$@"
 
 }
@@ -2534,13 +2570,13 @@ function _bl64_cnt_docker_ps_filter() {
   local filter=''
 
   if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
-    filter="--filter name=${name}"
+    filter="$BL64_CNT_SET_FILTER name=${name}"
     format="$BL64_CNT_SET_FILTER_NAME"
   elif [[ "$id" != "$BL64_VAR_DEFAULT" ]]; then
-    filter="--filter id=${id}"
+    filter="$BL64_CNT_SET_FILTER id=${id}"
     format="$BL64_CNT_SET_FILTER_ID"
   fi
-  [[ "$status" != "$BL64_VAR_DEFAULT" ]] && filter_status="--filter status=${status}"
+  [[ "$status" != "$BL64_VAR_DEFAULT" ]] && filter_status="$BL64_CNT_SET_FILTER status=${status}"
 
   # shellcheck disable=SC2086
   bl64_cnt_run_docker \
@@ -2566,7 +2602,6 @@ function _bl64_cnt_docker_ps_filter() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_podman_login() {
   bl64_dbg_lib_show_function "$@"
   local user="$1"
@@ -2574,11 +2609,12 @@ function _bl64_cnt_podman_login() {
   local file="$3"
   local registry="$4"
 
+  # shellcheck disable=SC2086
   _bl64_cnt_login_put_password "$password" "$file" |
     bl64_cnt_run_podman \
       login \
-      --username "$user" \
-      --password-stdin \
+      $BL64_CNT_SET_USERNAME "$user" \
+      $BL64_CNT_SET_PASSWORD_STDIN \
       "$registry"
 }
 
@@ -2595,17 +2631,17 @@ function _bl64_cnt_podman_login() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_podman_run_interactive() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" || return $?
 
+  # shellcheck disable=SC2086
   bl64_cnt_run_podman \
     run \
-    --rm \
-    --interactive \
-    --tty \
+    $BL64_CNT_SET_RM \
+    $BL64_CNT_SET_INTERACTIVE \
+    $BL64_CNT_SET_TTY \
     "$@"
 }
 
@@ -2622,7 +2658,6 @@ function _bl64_cnt_podman_run_interactive() {
 # Returns:
 #   command exit status
 #######################################
-
 function bl64_cnt_run_podman() {
   bl64_dbg_lib_show_function "$@"
   local verbose='error'
@@ -2632,11 +2667,12 @@ function bl64_cnt_run_podman() {
     bl64_check_command "$BL64_CNT_CMD_PODMAN" ||
     return $?
 
-  bl64_dbg_lib_command_enabled && verbose='debug'
+  bl64_dbg_lib_command_enabled && verbose="$BL64_CNT_SET_LOG_LEVEL_DEBUG"
 
   bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
   "$BL64_CNT_CMD_PODMAN" \
-    --log-level "$verbose" \
+    $BL64_CNT_SET_LOG_LEVEL "$verbose" \
     "$@"
   bl64_dbg_lib_trace_stop
 }
@@ -2654,7 +2690,6 @@ function bl64_cnt_run_podman() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_podman_build() {
   bl64_dbg_lib_show_function "$@"
   local file="$1"
@@ -2664,12 +2699,11 @@ function _bl64_cnt_podman_build() {
   shift
   shift
 
+  # shellcheck disable=SC2086
   bl64_cnt_run_podman \
     build \
-    --no-cache \
-    --rm \
-    --tag "$tag" \
-    --file "$file" \
+    $BL64_CNT_SET_TAG "$tag" \
+    $BL64_CNT_SET_FILE "$file" \
     "$@" .
 }
 
@@ -2685,7 +2719,6 @@ function _bl64_cnt_podman_build() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_podman_push() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
@@ -2708,7 +2741,6 @@ function _bl64_cnt_podman_push() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_podman_pull() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
@@ -2730,7 +2762,6 @@ function _bl64_cnt_podman_pull() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_podman_tag() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
@@ -2755,13 +2786,11 @@ function _bl64_cnt_podman_tag() {
 # Returns:
 #   command exit status
 #######################################
-
 function _bl64_cnt_podman_run() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_cnt_run_podman \
     run \
-    --rm \
     "$@"
 }
 
@@ -2837,13 +2866,13 @@ function _bl64_cnt_podman_ps_filter() {
   local filter=''
 
   if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
-    filter="--filter name=${name}"
+    filter="$BL64_CNT_SET_FILTER name=${name}"
     format='{{.NAME}}'
   elif [[ "$id" != "$BL64_VAR_DEFAULT" ]]; then
-    filter="--filter id=${id}"
-    format='{{.ID}}'
+    filter="$BL64_CNT_SET_FILTER id=${id}"
+    format="$BL64_CNT_SET_FILTER_ID"
   fi
-  [[ "$status" != "$BL64_VAR_DEFAULT" ]] && filter_status="--filter status=${status}"
+  [[ "$status" != "$BL64_VAR_DEFAULT" ]] && filter_status="$BL64_CNT_SET_FILTER status=${status}"
 
   # shellcheck disable=SC2086
   bl64_cnt_run_podman \
@@ -3855,7 +3884,7 @@ function _bl64_k8s_set_options() {
   bl64_dbg_lib_show_function
 
   case "$BL64_K8S_VERSION_KUBECTL" in
-  1.22 | 1.23 | 1.24 | 1.25 | 1.26 | 1.27)
+  1.22 | 1.23 | 1.24 | 1.25 | 1.26 | 1.27 | 1.28)
     BL64_K8S_SET_VERBOSE_NONE='--v=0'
     BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
     BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
@@ -3869,7 +3898,21 @@ function _bl64_k8s_set_options() {
     BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
     BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
     ;;
-  *) bl64_check_alert_unsupported "k8s-api: ${BL64_K8S_VERSION_KUBECTL}";;
+  *)
+    bl64_check_compatibility "k8s-api: ${BL64_K8S_VERSION_KUBECTL}" || return $?
+    BL64_K8S_SET_VERBOSE_NONE='--v=0'
+    BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
+    BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
+    BL64_K8S_SET_VERBOSE_TRACE='--v=6'
+
+    BL64_K8S_SET_OUTPUT_JSON='--output=json'
+    BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
+    BL64_K8S_SET_OUTPUT_TXT='--output=wide'
+    BL64_K8S_SET_OUTPUT_NAME='--output=name'
+
+    BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
+    BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
+    ;;
   esac
 }
 
@@ -3912,7 +3955,7 @@ function _bl64_k8s_get_version_1_22() {
   bl64_dbg_lib_show_info "try with kubectl v1.22 options"
   # shellcheck disable=SC2086
   "$BL64_K8S_CMD_KUBECTL" version --client --output=json |
-  bl64_txt_run_awk $BL64_TXT_SET_AWS_FS ':' '
+    bl64_txt_run_awk $BL64_TXT_SET_AWS_FS ':' '
     $1 ~ /^ +"major"$/ { gsub( /[" ,]/, "", $2 ); Major = $2 }
     $1 ~ /^ +"minor"$/ { gsub( /[" ,]/, "", $2 ); Minor = $2 }
     END { print Major "." Minor }

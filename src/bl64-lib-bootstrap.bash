@@ -1,3 +1,7 @@
+#
+# Library Bootstrap
+#
+
 # Do not inherit aliases and commands
 builtin unset -f unalias
 builtin unalias -a

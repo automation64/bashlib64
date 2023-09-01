@@ -137,7 +137,7 @@ function _bl64_os_set_runtime() {
   bl64_dbg_lib_show_function
 
   # Reset language to modern specification of C locale
-  if [[ "$BL64_LIB_LANG" == '1' ]]; then
+  if bl64_lib_lang_is_enabled; then
     # shellcheck disable=SC2034
     case "$BL64_OS_DISTRO" in
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)

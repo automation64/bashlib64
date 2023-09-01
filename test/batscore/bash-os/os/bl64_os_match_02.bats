@@ -35,3 +35,27 @@ setup() {
   assert_equal $status $BL64_LIB_ERROR_OS_NOT_MATCH
 
 }
+
+@test "bl64_os_match: os = UB-20" {
+
+  export BL64_OS_DISTRO="${BL64_OS_UB}-20.04"
+  run bl64_os_match "${BL64_OS_UB}-20"
+  assert_success
+
+}
+
+@test "bl64_os_match: os = UB-20.04" {
+
+  export BL64_OS_DISTRO="${BL64_OS_UB}-20.04"
+  run bl64_os_match "${BL64_OS_UB}-20.04"
+  assert_success
+
+}
+
+@test "bl64_os_match: os = UB-20.4" {
+
+  export BL64_OS_DISTRO="${BL64_OS_UB}-20.04"
+  run bl64_os_match "${BL64_OS_UB}-20.4"
+  assert_success
+
+}

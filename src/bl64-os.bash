@@ -5,23 +5,46 @@
 function _bl64_os_match() {
   bl64_dbg_lib_show_function "$@"
   local target="$1"
-  local os=''
-  local os_version=''
+  local target_os=''
+  local target_major=''
+  local target_minor=''
+  local current_os=''
+  local current_major=''
+  local current_minor=''
 
   if [[ "$target" == +([[:alpha:]])-+([[:digit:]]).+([[:digit:]]) ]]; then
-    os="${target%%-*}"
-    os_version="${target##*-}"
-    bl64_dbg_lib_show_info "Pattern: OOO-V.V [${BL64_OS_DISTRO}] == [${os}-${os_version}]"
-    [[ "$BL64_OS_DISTRO" == "${os}-${os_version}" ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+    target_os="${target%%-*}"
+    target_major="${target##*-}"
+    target_minor="${target_major##*\.}"
+    target_major="${target_major%%\.*}"
+    current_major="${BL64_OS_DISTRO##*-}"
+    current_minor="${current_major##*\.}"
+    current_major="${current_major%%\.*}"
+
+    bl64_dbg_lib_show_info "Pattern: match OS, Major and Minor [${BL64_OS_DISTRO}] == [${target_os}-${target_major}.${target_minor}]"
+    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
+      (( current_major == target_major && current_minor == target_minor )) ||
+      return $BL64_LIB_ERROR_OS_NOT_MATCH
+
   elif [[ "$target" == +([[:alpha:]])-+([[:digit:]]) ]]; then
-    os="${target%%-*}"
-    os_version="${target##*-}"
-    bl64_dbg_lib_show_info "Pattern: OOO-V [${BL64_OS_DISTRO}] == [${os}-${os_version}.+([[:digit:]])]"
-    [[ "$BL64_OS_DISTRO" == ${os}-${os_version}.+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+    target_os="${target%%-*}"
+    target_major="${target##*-}"
+    target_major="${target_major%%\.*}"
+    current_os="${BL64_OS_DISTRO%%-*}"
+    current_major="${BL64_OS_DISTRO##*-}"
+    current_major="${current_major%%\.*}"
+
+    bl64_dbg_lib_show_info "Pattern: match OS and Major [${current_os}-${current_major}] == [${target_os}-${target_major}]"
+    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
+      (( current_major == target_major )) ||
+      return $BL64_LIB_ERROR_OS_NOT_MATCH
+
   elif [[ "$target" == +([[:alpha:]]) ]]; then
-    os="$target"
-    bl64_dbg_lib_show_info "Pattern: OOO [${BL64_OS_DISTRO}] == [${os}]"
-    [[ "$BL64_OS_DISTRO" == ${os}-+([[:digit:]]).+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+    target_os="$target"
+
+    bl64_dbg_lib_show_info "Pattern: match OS ID only [${BL64_OS_DISTRO}] == [${target_os}]"
+    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+
   else
     bl64_msg_show_error "${_BL64_OS_TXT_INVALID_OS_PATTERN} (${target})"
     return $BL64_LIB_ERROR_OS_TAG_INVALID
@@ -75,6 +98,10 @@ function _bl64_os_get_distro_from_uname() {
 #
 # * Warning: bootstrap function
 # * Normalized data is stored in the global variable BL64_OS_DISTRO
+# * Version is normalized to the format: OS_ID-V.S
+#   * OS_ID: one of the OS standard tags
+#   * V: Major version, number
+#   * S: Minor version, number
 #
 # Arguments:
 #   None

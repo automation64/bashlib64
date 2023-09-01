@@ -145,6 +145,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_FIND_STAY='-xdev'
     BL64_FS_SET_FIND_TYPE_DIR='-type d'
     BL64_FS_SET_FIND_TYPE_FILE='-type f'
+    BL64_FS_SET_LN_FORCE='--force'
     BL64_FS_SET_LN_SYMBOLIC='--symbolic'
     BL64_FS_SET_LN_VERBOSE='--verbose'
     BL64_FS_SET_LS_NOCOLOR='--color=never'
@@ -173,6 +174,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_FIND_STAY='-xdev'
     BL64_FS_SET_FIND_TYPE_DIR='-type d'
     BL64_FS_SET_FIND_TYPE_FILE='-type f'
+    BL64_FS_SET_LN_FORCE='--force'
     BL64_FS_SET_LN_SYMBOLIC='--symbolic'
     BL64_FS_SET_LN_VERBOSE='--verbose'
     BL64_FS_SET_LS_NOCOLOR='--color=never'
@@ -201,6 +203,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_FIND_STAY='-xdev'
     BL64_FS_SET_FIND_TYPE_DIR='-type d'
     BL64_FS_SET_FIND_TYPE_FILE='-type f'
+    BL64_FS_SET_LN_FORCE='--force'
     BL64_FS_SET_LN_SYMBOLIC='--symbolic'
     BL64_FS_SET_LN_VERBOSE='--verbose'
     BL64_FS_SET_LS_NOCOLOR='--color=never'
@@ -229,6 +232,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_FIND_STAY='-xdev'
     BL64_FS_SET_FIND_TYPE_DIR='-type d'
     BL64_FS_SET_FIND_TYPE_FILE='-type f'
+    BL64_FS_SET_LN_FORCE='-f'
     BL64_FS_SET_LN_SYMBOLIC='-s'
     BL64_FS_SET_LN_VERBOSE='-v'
     BL64_FS_SET_LS_NOCOLOR='--color=never'
@@ -257,6 +261,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_FIND_STAY='-xdev'
     BL64_FS_SET_FIND_TYPE_DIR='-type d'
     BL64_FS_SET_FIND_TYPE_FILE='-type f'
+    BL64_FS_SET_LN_FORCE='-f'
     BL64_FS_SET_LN_SYMBOLIC='-s'
     BL64_FS_SET_LN_VERBOSE='-v'
     BL64_FS_SET_LS_NOCOLOR='--color=never'
@@ -299,6 +304,7 @@ function _bl64_fs_set_alias() {
   BL64_FS_ALIAS_CP_DIR="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE} ${BL64_FS_SET_CP_RECURSIVE}"
   BL64_FS_ALIAS_CP_FIFIND="/usr/bin/find"
   BL64_FS_ALIAS_CP_FILE="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE}"
+  BL64_FS_ALIAS_LN_FORCE="--force"
   BL64_FS_ALIAS_LN_SYMBOLIC="${BL64_FS_CMD_LN} ${BL64_FS_SET_LN_SYMBOLIC} ${BL64_FS_SET_LN_VERBOSE}"
   BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} ${BL64_FS_SET_LS_NOCOLOR}"
   BL64_FS_ALIAS_MKDIR_FULL="${BL64_FS_CMD_MKDIR} ${BL64_FS_SET_MKDIR_VERBOSE} ${BL64_FS_SET_MKDIR_PARENTS}"

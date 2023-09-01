@@ -380,7 +380,9 @@ function bl64_check_privilege_not_root() {
 }
 
 #######################################
-# Check file/dir overwrite condition
+# Check file/dir overwrite condition and fail if not meet
+#
+# * Use for tasks that needs to ensure that previous content will not overwriten unless requested
 #
 # Arguments:
 #   $1: Full path to the object
@@ -390,27 +392,61 @@ function bl64_check_privilege_not_root() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: check ok
+#   0: no previous file/dir or overwrite is requested
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
 #######################################
 function bl64_check_overwrite() {
   bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
-  local overwrite="${2:-"$BL64_VAR_OFF"}"
-  local message="${3:-${_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}}"
+  local overwrite="${2:-$BL64_VAR_OFF}"
+  local message="${3:-$_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}"
 
   bl64_check_parameter 'path' || return $?
 
   if [[ "$overwrite" == "$BL64_VAR_OFF" || "$overwrite" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -e "$path" ]]; then
-      bl64_msg_show_error "${message} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
-      # shellcheck disable=SC2086
+      bl64_msg_show_error "${message:-$_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
       return $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
     fi
   fi
 
   return 0
+}
+
+#######################################
+# Check file/dir overwrite condition and warn if not meet
+#
+# * Use for tasks that will do nothing if the target is already present
+# * Warning: Caller is responsible for checking that path parameter is valid
+#
+# Arguments:
+#   $1: Full path to the object
+#   $2: Overwrite flag. Must be ON(1) or OFF(0). Default: OFF
+#   $3: Warning message
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: skip since previous file/dir is present
+#   1: no previous file/dir present or overwrite is requested
+#######################################
+function bl64_check_overwrite_skip() {
+  bl64_dbg_lib_show_function "$@"
+  local path="${1:-}"
+  local overwrite="${2:-$BL64_VAR_OFF}"
+  local message="${3:-}"
+
+  bl64_check_parameter 'path'
+
+  if [[ "$overwrite" == "$BL64_VAR_OFF" || "$overwrite" == "$BL64_VAR_DEFAULT" ]]; then
+    if [[ -e "$path" ]]; then
+      bl64_msg_show_warning "${message:-$_BL64_CHECK_TXT_OVERWRITE_SKIP_EXISTING} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+      return 0
+    fi
+  fi
+
+  return 1
 }
 
 #######################################
@@ -457,6 +493,33 @@ function bl64_check_alert_unsupported() {
 
   bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
   return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+}
+
+#######################################
+# Check that the compatibility mode is enabled to support untested command
+#
+# * If enabled, show a warning and continue OK
+# * If not enabled, fail
+#
+# Arguments:
+#   $1: extra error message. Added to the error detail between (). Default: none
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: using compatibility mode
+#   >0: command is incompatible and compatibility mode is disabled
+#######################################
+function bl64_check_compatibility() {
+  bl64_dbg_lib_show_function "$@"
+  local extra="${1:-}"
+
+  if bl64_lib_mode_compability_is_enabled; then
+    bl64_msg_show_warning "${_BL64_CHECK_TXT_COMPATIBILITY_MODE} (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+  else
+    bl64_check_alert_unsupported "$extra"
+    return $?
+  fi
 }
 
 #######################################

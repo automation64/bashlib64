@@ -106,16 +106,41 @@ function _bl64_cnt_set_command() {
 function _bl64_cnt_set_options() {
   bl64_dbg_lib_show_function
 
-  BL64_CNT_SET_VERSION='version'
-  BL64_CNT_SET_QUIET='--quiet'
+  #
+  # Standard CLI flags
+  #
+  # * Common to both podman and docker
+  #
+
+  BL64_CNT_SET_DEBUG='--debug'
+  BL64_CNT_SET_ENTRYPOINT='--entrypoint'
+  BL64_CNT_SET_FILE='--file'
   BL64_CNT_SET_FILTER='--filter'
+  BL64_CNT_SET_INTERACTIVE='--interactive'
+  BL64_CNT_SET_LOG_LEVEL='--log-level'
+  BL64_CNT_SET_NO_CACHE='--no-cache'
+  BL64_CNT_SET_PASSWORD_STDIN='--password-stdin'
+  BL64_CNT_SET_PASSWORD='--password'
+  BL64_CNT_SET_QUIET='--quiet'
+  BL64_CNT_SET_RM='--rm'
+  BL64_CNT_SET_TAG='--tag'
+  BL64_CNT_SET_TTY='--tty'
+  BL64_CNT_SET_USERNAME='--username'
+  BL64_CNT_SET_VERSION='version'
 
-  # Container status
-  BL64_CNT_SET_STATUS_RUNNING='running'
+  #
+  # Common parameter values
+  #
+  # * Common to both podman and docker
+  #
 
-  # Format field names
   BL64_CNT_SET_FILTER_ID='{{.ID}}'
   BL64_CNT_SET_FILTER_NAME='{{.Names}}'
+  BL64_CNT_SET_LOG_LEVEL_DEBUG='debug'
+  BL64_CNT_SET_LOG_LEVEL_ERROR='error'
+  BL64_CNT_SET_LOG_LEVEL_INFO='info'
+  BL64_CNT_SET_STATUS_RUNNING='running'
+
   return 0
 }
 

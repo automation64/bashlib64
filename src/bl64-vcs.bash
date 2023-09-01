@@ -255,13 +255,20 @@ function bl64_vcs_github_release_get_latest() {
   local repo_name="$2"
   local repo_tag=''
 
-  bl64_check_parameter 'repo_owner' &&
+  bl64_check_module 'BL64_VCS_MODULE' &&
+    bl64_check_parameter 'repo_owner' &&
     bl64_check_parameter 'repo_name' ||
     return $?
 
-  repo_tag="$(_bl64_vcs_github_release_get_latest "$repo_owner" "$repo_name")" &&
-    [[ -n "$repo_tag" ]] &&
+  repo_tag="$(_bl64_vcs_github_release_get_latest "$repo_owner" "$repo_name")" ||
+    return $?
+
+  if [[ -n "$repo_tag" ]]; then
     echo "$repo_tag"
+  else
+    bl64_msg_show_error "$_BL64_VCS_TXT_GET_LATEST_RELEASE_FAILED"
+    return $BL64_LIB_ERROR_TASK_FAILED
+  fi
 }
 
 function _bl64_vcs_github_release_get_latest() {

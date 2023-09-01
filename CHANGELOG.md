@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [14.0.0]
+
+### Added
+
+- core
+  - generic compatibility mode flag to allow using untested versions
+  - flag query functions
+- k8s
+  - support for k8s api 1.28
+  - generic compatibility mode for supporting untested versions
+- check
+  - bl64_check_compatibility: helper for checking compatibility mode
+  - bl64_check_overwrite_skip: helper for checking overwrite condition
+- rxtx
+  - bl64_rxtx_github_get_asset: use special tag latest to obtain latest version
+
+### Changed
+
+- cnt
+  - **Breaking change** docker_build: removed --rm and --no-cache flags to let caller choose. Set docker progress to plain
+  - **Breaking change** docker_run: removed --rm flag to let caller choose
+
+### Fixed
+
+- os
+  - bl64_os_match: refactored to evaluate major and minor as numbers instead of strings to avoid left-zero issue (20.04 != 20.4)
+
 ## [13.0.0]
 
 ### Added
@@ -362,6 +389,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[14.0.0]: https://github.com/automation64/bashlib64/compare/13.0.0...14.0.0
 [13.0.0]: https://github.com/automation64/bashlib64/compare/12.6.0...13.0.0
 [12.6.0]: https://github.com/automation64/bashlib64/compare/12.5.0...12.6.0
 [12.5.0]: https://github.com/automation64/bashlib64/compare/12.4.0...12.5.0

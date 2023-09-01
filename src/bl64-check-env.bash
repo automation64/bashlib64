@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
 
-export BL64_CHECK_VERSION='3.3.0'
+export BL64_CHECK_VERSION='3.4.0'
 
 export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 
@@ -35,7 +35,8 @@ export _BL64_CHECK_TXT_PATH_PRESENT='requested path is already present'
 export _BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT='the task requires root privilege. Please run the script as root or with SUDO'
 export _BL64_CHECK_TXT_PRIVILEGE_IS_ROOT='the task should not be run with root privilege. Please run the script as a regular user and not using SUDO'
 
-export _BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED='the object is already present and overwrite is not permitted'
+export _BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED='target is already present and overwrite is not permitted. Unable to continue'
+export _BL64_CHECK_TXT_OVERWRITE_SKIP_EXISTING='target is already present and overwrite is not requested. Target is left as is'
 
 export _BL64_CHECK_TXT_INCOMPATIBLE='the requested operation is not supported in the current platform'
 export _BL64_CHECK_TXT_UNDEFINED='requested command is not defined or implemented'
@@ -43,6 +44,8 @@ export _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one par
 export _BL64_CHECK_TXT_FAILED='task execution failed'
 
 export _BL64_CHECK_TXT_PARAMETER_INVALID='the requested operation was provided with an invalid parameter value'
+
+export _BL64_CHECK_TXT_COMPATIBILITY_MODE='using generic compatibility mode for untested command version'
 
 export _BL64_CHECK_TXT_FUNCTION='caller'
 export _BL64_CHECK_TXT_PARAMETER='parameter'

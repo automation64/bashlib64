@@ -53,6 +53,7 @@ function dev_build_test() {
     "$BL64_OS_CMD_CAT" "bl64-lib-header.bash" && bl64_fmt_separator_line
     "$BL64_OS_CMD_CAT" "bl64-lib-bootstrap.bash" && bl64_fmt_separator_line
     "$BL64_OS_CMD_CAT" "bl64-lib-env.bash"
+    "$BL64_OS_CMD_CAT" "bl64-lib.bash"
   } >"$build_full" || return 1
 
   bl64_msg_show_task "creating library header (${build_core})"
@@ -70,9 +71,9 @@ function dev_build_test() {
 
   bl64_msg_show_task 'adding core'
   # shellcheck disable=SC2119
-  { "$BL64_OS_CMD_CAT" "bl64-lib.bash" && bl64_fmt_separator_line; } >>"$build_full"
+  { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_full"
   # shellcheck disable=SC2119
-  { "$BL64_OS_CMD_CAT" "bl64-lib.bash" && bl64_fmt_separator_line; } >>"$build_core"
+  { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_core"
   bl64_fs_run_chmod '0755' "$build_full" "$build_core"
 }
 

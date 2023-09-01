@@ -2,29 +2,16 @@
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='13.0.0'
+export BL64_VERSION='14.0.0'
 
-# Declare imported variables
+#
+# Imported shell standard variables
+#
+
 export LANG
 export LC_ALL
 export LANGUAGE
 export TERM
-
-#
-# Global flags
-#
-
-# Set Command flag (On/Off)
-export BL64_LIB_CMD="${BL64_LIB_CMD:-0}"
-
-# Set Strict flag (On/Off)
-export BL64_LIB_STRICT="${BL64_LIB_STRICT:-1}"
-
-# Set Traps flag (On/Off)
-export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-1}"
-
-# Set Normalize locale flag
-export BL64_LIB_LANG="${BL64_LIB_LANG:-1}"
 
 #
 # Common constants
@@ -50,6 +37,28 @@ export BL64_VAR_OFF='0'
 export BL64_VAR_OK='0'
 export BL64_VAR_NONE='0'
 export BL64_VAR_ALL='1'
+
+#
+# Global settings
+#
+# * Allows the caller to customize bashlib64 behaviour
+# * Set the variable to the intented value before sourcing bashlib64
+#
+
+# Run lib as command? (On/Off)
+export BL64_LIB_CMD="${BL64_LIB_CMD:-$BL64_VAR_OFF}"
+
+# Enable generic compatibility mode? (On/Off)
+export BL64_LIB_COMPATIBILITY="${BL64_LIB_COMPATIBILITY:-$BL64_VAR_ON}"
+
+# Normalize locale? (On/Off)
+export BL64_LIB_LANG="${BL64_LIB_LANG:-$BL64_VAR_ON}"
+
+# Enable strict security? (On/Off)
+export BL64_LIB_STRICT="${BL64_LIB_STRICT:-$BL64_VAR_ON}"
+
+# Enable lib shell traps? (On/Off)
+export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
 
 #
 # Common error codes
@@ -104,13 +113,18 @@ declare -ig BL64_LIB_ERROR_EXPORT_EMPTY=70
 declare -ig BL64_LIB_ERROR_EXPORT_SET=71
 declare -ig BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED=72
 
+#
 # Script Identify
+#
+
 export BL64_SCRIPT_PATH=''
 export BL64_SCRIPT_NAME=''
 export BL64_SCRIPT_SID=''
 export BL64_SCRIPT_ID=''
 
+#
 # Set Signal traps
+#
 export BL64_LIB_SIGNAL_HUP='-'
 export BL64_LIB_SIGNAL_STOP='-'
 export BL64_LIB_SIGNAL_QUIT='-'

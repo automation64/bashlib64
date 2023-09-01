@@ -31,10 +31,8 @@ function bl64_rxtx_web_get_file() {
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' || return $?
 
-  [[ "$replace" == "$BL64_VAR_DEFAULT" ]] && replace="$BL64_VAR_OFF"
-  [[ "$replace" == "$BL64_VAR_OFF" && -e "$destination" ]] &&
-    bl64_dbg_lib_show_info "destination is already created (${destination}) and overwrite is disabled. No action taken" &&
-    return 0
+  bl64_check_overwrite_skip "$destination" "$replace" && return
+
   bl64_fs_safeguard "$destination" >/dev/null || return $?
 
   bl64_msg_show_lib_subtask "$_BL64_RXTX_TXT_DOWNLOAD_FILE ($source)"
@@ -84,6 +82,7 @@ function bl64_rxtx_web_get_file() {
 #   STDOUT: command stdout
 #   STDERR: command error
 # Returns:
+#   0: operation OK
 #   BL64_LIB_ERROR_TASK_TEMP
 #   command error status
 #######################################
@@ -103,9 +102,8 @@ function bl64_rxtx_git_get_dir() {
     bl64_check_path_relative "$source_path" ||
     return $?
 
-  [[ "$replace" == "$BL64_VAR_DEFAULT" ]] && replace="$BL64_VAR_OFF"
   # shellcheck disable=SC2086
-  bl64_check_overwrite "$destination" "$replace" "$_BL64_RXTX_TXT_EXISTING_DESTINATION" || return $BL64_VAR_OK
+  bl64_check_overwrite_skip "$destination" "$replace" && return $?
 
   # Asked to replace, backup first
   bl64_fs_safeguard "$destination" || return $?
@@ -149,7 +147,7 @@ function bl64_rxtx_run_curl() {
   local debug="$BL64_RXTX_SET_CURL_SILENT"
 
   bl64_check_parameters_none "$#" &&
-  bl64_check_module 'BL64_RXTX_MODULE' &&
+    bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
 
   bl64_dbg_lib_command_enabled && debug="$BL64_RXTX_SET_CURL_VERBOSE"
@@ -179,7 +177,7 @@ function bl64_rxtx_run_wget() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-  bl64_check_module 'BL64_RXTX_MODULE' &&
+    bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_WGET" || return $?
 
   bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
@@ -258,15 +256,16 @@ function _bl64_rxtx_git_get_dir_sub() {
 }
 
 #######################################
-# Download asset from release in github repository
+# Download file asset from release in github repository
 #
 # Arguments:
 #   $1: repo owner
 #   $2: repo name
-#   $3: release tag
-#   $4: asset name
-#   $5: replace existing content Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
-#   $6: permissions. Regular chown format accepted. Default: umask defined
+#   $3: release tag. Use $BL64_VCS_GITHUB_LATEST (latest) to obtain latest version
+#   $4: asset name: file name available in the target release
+#   $5: destination
+#   $6: replace existing content Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
+#   $7: permissions. Regular chown format accepted. Default: umask defined
 # Outputs:
 #   STDOUT: none
 #   STDERR: task error
@@ -291,9 +290,14 @@ function bl64_rxtx_github_get_asset() {
     bl64_check_parameter 'release_tag' &&
     bl64_check_parameter 'asset_name' &&
     bl64_check_parameter 'destination' ||
-  return $?
+    return $?
+
+  if [[ "$release_tag" == "$BL64_VCS_GITHUB_LATEST" ]]; then
+    release_tag="$(bl64_vcs_github_release_get_latest "$repo_owner" "$repo_name")" ||
+      return $?
+  fi
 
   bl64_rxtx_web_get_file \
-    "https://github.com/${repo_owner}/${repo_name}/releases/download/${release_tag}/${asset_name}" \
+    "${BL64_RXTX_GITHUB_URL}/${repo_owner}/${repo_name}/releases/download/${release_tag}/${asset_name}" \
     "$destination" "$replace" "$mode"
 }
