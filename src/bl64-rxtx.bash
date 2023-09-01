@@ -264,9 +264,10 @@ function _bl64_rxtx_git_get_dir_sub() {
 #   $1: repo owner
 #   $2: repo name
 #   $3: release tag
-#   $4: asset name
-#   $5: replace existing content Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
-#   $6: permissions. Regular chown format accepted. Default: umask defined
+#   $4: asset name: file name available in the target release
+#   $5: destination
+#   $6: replace existing content Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
+#   $7: permissions. Regular chown format accepted. Default: umask defined
 # Outputs:
 #   STDOUT: none
 #   STDERR: task error
@@ -294,6 +295,6 @@ function bl64_rxtx_github_get_asset() {
   return $?
 
   bl64_rxtx_web_get_file \
-    "https://github.com/${repo_owner}/${repo_name}/releases/download/${release_tag}/${asset_name}" \
+    "${BL64_RXTX_GITHUB_URL}/${repo_owner}/${repo_name}/releases/download/${release_tag}/${asset_name}" \
     "$destination" "$replace" "$mode"
 }

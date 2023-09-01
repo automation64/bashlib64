@@ -24,6 +24,8 @@ export BL64_RXTX_SET_WGET_OUTPUT=''
 export BL64_RXTX_SET_WGET_SECURE=''
 export BL64_RXTX_SET_WGET_VERBOSE=''
 
+export BL64_RXTX_GITHUB_URL='https://github.com'
+
 export _BL64_RXTX_TXT_MISSING_COMMAND='no web transfer command was found on the system'
 export _BL64_RXTX_TXT_EXISTING_DESTINATION='destination path is not empty. No action taken.'
 export _BL64_RXTX_TXT_CREATION_PROBLEM='unable to create temporary git repo'
