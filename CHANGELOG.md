@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - generic compatibility mode for supporting untested versions
 - check
   - bl64_check_compatibility: helper for checking compatibility mode
+  - bl64_check_overwrite_skip: helper for checking overwrite condition
+- rxtx
+  - bl64_rxtx_github_get_asset: use special tag latest to obtain latest version
 
 ### Changed
 
