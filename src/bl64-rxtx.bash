@@ -31,10 +31,8 @@ function bl64_rxtx_web_get_file() {
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' || return $?
 
-  [[ "$replace" == "$BL64_VAR_DEFAULT" ]] && replace="$BL64_VAR_OFF"
-  [[ "$replace" == "$BL64_VAR_OFF" && -e "$destination" ]] &&
-    bl64_dbg_lib_show_info "destination is already created (${destination}) and overwrite is disabled. No action taken" &&
-    return 0
+  bl64_check_overwrite_skip "$destination" "$replace" && return
+
   bl64_fs_safeguard "$destination" >/dev/null || return $?
 
   bl64_msg_show_lib_subtask "$_BL64_RXTX_TXT_DOWNLOAD_FILE ($source)"
@@ -84,6 +82,7 @@ function bl64_rxtx_web_get_file() {
 #   STDOUT: command stdout
 #   STDERR: command error
 # Returns:
+#   0: operation OK
 #   BL64_LIB_ERROR_TASK_TEMP
 #   command error status
 #######################################
@@ -103,9 +102,8 @@ function bl64_rxtx_git_get_dir() {
     bl64_check_path_relative "$source_path" ||
     return $?
 
-  [[ "$replace" == "$BL64_VAR_DEFAULT" ]] && replace="$BL64_VAR_OFF"
   # shellcheck disable=SC2086
-  bl64_check_overwrite "$destination" "$replace" "$_BL64_RXTX_TXT_EXISTING_DESTINATION" || return $BL64_VAR_OK
+  bl64_check_overwrite_skip "$destination" "$replace" && return $?
 
   # Asked to replace, backup first
   bl64_fs_safeguard "$destination" || return $?
