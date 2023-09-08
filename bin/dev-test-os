@@ -42,5 +42,10 @@ case "$family" in
     "$DEVBL_CICD_TESTMANSH" -b -o -e "$target" -c "$DEVBL_TEST_CASE_OS" || exit $?
   done
   ;;
+'reduced')
+  for target in $DEVBL_TEST_CONTAINER_OS_REDUCED; do
+    "$DEVBL_CICD_TESTMANSH" -b -o -e "$target" -c "$DEVBL_TEST_CASE_OS" || exit $?
+  done
+  ;;
 *) echo "invalid option" ;;
 esac
