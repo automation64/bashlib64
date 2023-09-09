@@ -190,37 +190,26 @@ function bl64_msg_set_output() {
 
 function bl64_msg_app_verbose_enabled {
   bl64_dbg_lib_show_function
-  local -i enabled=0
   [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
-  enabled=$?
-  bl64_dbg_lib_show_info "app verbose enabled: ${enabled}"
-  return $enabled
 }
 function bl64_msg_lib_verbose_enabled {
   bl64_dbg_lib_show_function
   [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
-  enabled=$?
-  bl64_dbg_lib_show_info "lib verbose enabled: ${enabled}"
-  return $enabled
 }
 
 function bl64_msg_all_disable_verbose {
   bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_NONE"
-  bl64_dbg_lib_show_vars 'BL64_MSG_VERBOSE'
 }
 function bl64_msg_all_enable_verbose {
   bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_ALL"
-  bl64_dbg_lib_show_vars 'BL64_MSG_VERBOSE'
 }
 function bl64_msg_lib_enable_verbose {
   bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_LIB"
-  bl64_dbg_lib_show_vars 'BL64_MSG_VERBOSE'
 }
 function bl64_msg_app_enable_verbose {
   bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_APP"
-  bl64_dbg_lib_show_vars 'BL64_MSG_VERBOSE'
 }

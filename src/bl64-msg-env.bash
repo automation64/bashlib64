@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Display messages
 #######################################
 
-export BL64_MSG_VERSION='3.7.0'
+export BL64_MSG_VERSION='3.7.1'
 
 export BL64_MSG_MODULE="$BL64_VAR_OFF"
 
