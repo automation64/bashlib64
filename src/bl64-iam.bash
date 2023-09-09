@@ -3,13 +3,23 @@
 #######################################
 
 #######################################
-# Create OS user
+# Create local OS user
 #
+# * Wrapper to native user creation command
+# * Objective is to cover common options that are available on all suported platforms
+#   * set primary group
+#   * set shell
+#   * set home path
+#   * set user description
+#   * create home
 # * If the user is already created nothing is done, no error
 #
 # Arguments:
 #   $1: login name
-#   $2: home. Default: os native
+#   $2: home path. Format: full path. Default: os native
+#   $3: primary group ID. Format: group name. Default: os native
+#   $4: shell. Format: full path. Default: os native
+#   $5: description. Default: none
 # Outputs:
 #   STDOUT: native user add command output
 #   STDERR: native user add command error messages
@@ -19,14 +29,23 @@
 function bl64_iam_user_add() {
   bl64_dbg_lib_show_function "$@"
   local login="${1:-}"
-  local home="${2:-}"
+  local home="${2:-$BL64_VAR_DEFAULT}"
+  local group="${3:-$BL64_VAR_DEFAULT}"
+  local shell="${4:-$BL64_VAR_DEFAULT}"
+  local gecos="${5:-$BL64_VAR_DEFAULT}"
+  local password=''
 
   bl64_check_privilege_root &&
     bl64_check_parameter 'login' ||
     return $?
 
+  [[ "$home" == "$BL64_VAR_DEFAULT" ]] && home=''
+  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && group=''
+  [[ "$shell" == "$BL64_VAR_DEFAULT" ]] && shell=''
+  [[ "$gecos" == "$BL64_VAR_DEFAULT" ]] && gecos=''
+
   if bl64_iam_user_is_created "$login"; then
-    bl64_dbg_lib_show_info "user already created, nothing to do ($login)"
+    bl64_msg_show_warning "${_BL64_IAM_TXT_EXISTING_USER} ($login)"
     return 0
   fi
 
@@ -35,34 +54,52 @@ function bl64_iam_user_add() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     "$BL64_IAM_CMD_USERADD" \
-      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
       "$login"
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     "$BL64_IAM_CMD_USERADD" \
-      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
       "$login"
     ;;
   ${BL64_OS_SLES}-*)
     "$BL64_IAM_CMD_USERADD" \
-      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
       "$login"
     ;;
   ${BL64_OS_ALP}-*)
+    # Disable automatic password generation
     "$BL64_IAM_CMD_USERADD" \
-      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
       -D \
       "$login"
     ;;
   ${BL64_OS_MCOS}-*)
+    password="$(bl64_rnd_get_numeric)" || return $?
     "$BL64_IAM_CMD_USERADD" \
+      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
       $BL64_IAM_SET_USERADD_CREATE_HOME \
-      -q . \
-      -create "/Users/${login}"
+      -addUser "$login" \
+      -password "$password"
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -87,7 +124,7 @@ function bl64_iam_user_is_created() {
     return $?
 
   # Use the ID command to detect if the user is created
-  bl64_iam_user_get_id "$user" > /dev/null 2>&1
+  bl64_iam_user_get_id "$user" >/dev/null 2>&1
 
 }
 
