@@ -27,7 +27,7 @@ export BL64_VAR_INCOMPATIBLE='_INC_'
 export BL64_VAR_UNAVAILABLE='_UNV_'
 
 # Pseudo null value
-export BL64_VAR_NULL='__'
+export BL64_VAR_NULL='_NULL_'
 
 # Logical values
 export BL64_VAR_TRUE='0'
