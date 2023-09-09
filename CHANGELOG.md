@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - iam
-  - bl64_iam_user_add: added shell, primary group options
+  - bl64_iam_user_add: added shell, primary group,geco options
 - msg
   - bl64_msg_show_separator
 - core
