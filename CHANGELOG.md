@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [15.0.0]
+
+### Added
+
+- iam
+  - bl64_iam_user_add: added shell, primary group,geco options
+- msg
+  - bl64_msg_show_separator
+- core
+  - bl64_lib_flag_is_enabled: query external flag type variables. Flag value can be string (YES|ON|NO|OFF) or var BL64_VAR_ON|BL64_VAR_OFF
+
+### Changed
+
+- iam
+  - MacOS: replaced dscl for sysadminctl
+
 ## [14.0.0]
 
 ### Added
@@ -389,6 +405,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[15.0.0]: https://github.com/automation64/bashlib64/compare/14.0.0...15.0.0
 [14.0.0]: https://github.com/automation64/bashlib64/compare/13.0.0...14.0.0
 [13.0.0]: https://github.com/automation64/bashlib64/compare/12.6.0...13.0.0
 [12.6.0]: https://github.com/automation64/bashlib64/compare/12.5.0...12.6.0

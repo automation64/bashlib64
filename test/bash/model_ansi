@@ -13,6 +13,7 @@ bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
 bl64_msg_show_phase 'bl64_msg_show_phase'
 bl64_msg_show_task 'bl64_msg_show_task'
 bl64_msg_show_subtask 'bl64_msg_show_subtask'
+bl64_msg_show_separator
 bl64_msg_show_lib_task 'bl64_msg_show_lib_task'
 bl64_msg_show_lib_subtask 'bl64_msg_show_lib_subtask'
 bl64_msg_show_lib_info 'bl64_msg_show_lib_info'
@@ -28,6 +29,7 @@ bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
 bl64_msg_show_phase 'bl64_msg_show_phase'
 bl64_msg_show_task 'bl64_msg_show_task'
 bl64_msg_show_subtask 'bl64_msg_show_subtask'
+bl64_msg_show_separator
 bl64_msg_show_lib_task 'bl64_msg_show_lib_task'
 bl64_msg_show_lib_subtask 'bl64_msg_show_lib_subtask'
 bl64_msg_show_lib_info 'bl64_msg_show_lib_info'
@@ -43,6 +45,7 @@ bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
 bl64_msg_show_phase 'bl64_msg_show_phase'
 bl64_msg_show_task 'bl64_msg_show_task'
 bl64_msg_show_subtask 'bl64_msg_show_subtask'
+bl64_msg_show_separator
 bl64_msg_show_lib_task 'bl64_msg_show_lib_task'
 bl64_msg_show_lib_subtask 'bl64_msg_show_lib_subtask'
 bl64_msg_show_lib_info 'bl64_msg_show_lib_info'
@@ -58,6 +61,7 @@ bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
 bl64_msg_show_phase 'bl64_msg_show_phase'
 bl64_msg_show_task 'bl64_msg_show_task'
 bl64_msg_show_subtask 'bl64_msg_show_subtask'
+bl64_msg_show_separator
 bl64_msg_show_lib_task 'bl64_msg_show_lib_task'
 bl64_msg_show_lib_subtask 'bl64_msg_show_lib_subtask'
 bl64_msg_show_lib_info 'bl64_msg_show_lib_info'
@@ -73,6 +77,7 @@ bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
 bl64_msg_show_phase 'bl64_msg_show_phase'
 bl64_msg_show_task 'bl64_msg_show_task'
 bl64_msg_show_subtask 'bl64_msg_show_subtask'
+bl64_msg_show_separator
 bl64_msg_show_lib_task 'bl64_msg_show_lib_task'
 bl64_msg_show_lib_subtask 'bl64_msg_show_lib_subtask'
 bl64_msg_show_lib_info 'bl64_msg_show_lib_info'

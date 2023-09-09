@@ -307,6 +307,8 @@ function bl64_fs_run_chmod() {
 #######################################
 # Change directory ownership recursively
 #
+# * Simple command wrapper
+#
 # Arguments:
 #   $@: arguments are passed as-is to the command
 # Outputs:
@@ -324,6 +326,8 @@ function bl64_fs_chown_dir() {
 
 #######################################
 # Change directory permissions recursively
+#
+# * Simple command wrapper
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -343,6 +347,8 @@ function bl64_fs_chmod_dir() {
 #######################################
 # Copy files with force flag
 #
+# * Simple command wrapper
+#
 # Arguments:
 #   $@: arguments are passed as-is to the command
 # Outputs:
@@ -361,6 +367,8 @@ function bl64_fs_cp_file() {
 #######################################
 # Copy directory with recursive and force flags
 #
+# * Simple command wrapper
+#
 # Arguments:
 #   $@: arguments are passed as-is to the command
 # Outputs:
@@ -378,6 +386,8 @@ function bl64_fs_cp_dir() {
 
 #######################################
 # Create a symbolic link
+#
+# * Simple command wrapper
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command

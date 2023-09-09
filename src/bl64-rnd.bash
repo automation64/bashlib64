@@ -49,9 +49,10 @@ function bl64_rnd_get_range() {
 #   BL64_LIB_ERROR_PARAMETER_RANGE
 #   BL64_LIB_ERROR_PARAMETER_RANGE
 #######################################
+# shellcheck disable=SC2120
 function bl64_rnd_get_numeric() {
   bl64_dbg_lib_show_function "$@"
-  local length="${1:-${BL64_RND_LENGTH_1}}"
+  local -i length=${1:-${BL64_RND_LENGTH_1}}
   local seed=''
 
   # shellcheck disable=SC2086
@@ -82,7 +83,7 @@ function bl64_rnd_get_numeric() {
 #######################################
 function bl64_rnd_get_alphanumeric() {
   bl64_dbg_lib_show_function "$@"
-  local length="${1:-${BL64_RND_LENGTH_1}}"
+  local -i length=${1:-${BL64_RND_LENGTH_1}}
   local output=''
   local item=''
   local index=0
