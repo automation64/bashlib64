@@ -12,10 +12,10 @@
 source ./bin/dev-set || exit 1
 
 echo 'Download bash library: BashLib64'
-cd "$DEVBL_LIB" &&
-  curl -O "$DEVBL_CICD_BASHLIB64_REPO" || exit 1
+cd "$DEV_LIB" &&
+  curl -O "$DEV_CICD_BASHLIB64_REPO" || exit 1
 
 echo 'Download tools: TestManSH'
-cd "$DEVBL_LIB" &&
-  curl -O "$DEVBL_CICD_TESTMANSH_REPO" && chmod 755 testmansh ||
+cd "$DEV_LIB" &&
+  curl -O "$DEV_CICD_TESTMANSH_REPO" && chmod 755 testmansh ||
   exit $?

@@ -13,6 +13,6 @@ source ./bin/dev-set || exit 1
 
 declare target=''
 ./bin/dev-build -t || exit $?
-for target in $DEVBL_TEST_CONTAINER_CONTAINER; do
-  "$DEVBL_CICD_TESTMANSH" -b -o -e "$target" -c "$DEVBL_TEST_CASE_CONTAINER" || exit $?
+for target in $DEV_TEST_CONTAINER_CONTAINER; do
+  "$DEV_CICD_TESTMANSH" -b -o -e "$target" -c "$DEV_TEST_CASE_CONTAINER" || exit $?
 done
