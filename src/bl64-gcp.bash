@@ -166,17 +166,17 @@ function bl64_gcp_blank_gcloud() {
 function bl64_gcp_secret_get() {
   bl64_dbg_lib_show_function "$@"
   local name="$1"
-  local version="$2"
+  local secret_version="$2"
 
   bl64_check_parameter 'name' &&
-    bl64_check_parameter 'version' &&
+    bl64_check_parameter 'secret_version' &&
     bl64_check_file "$name" || return $?
 
   bl64_gcp_run_gcloud \
     'secrets' \
     'versions' \
     'access' \
-    "$version" \
+    "$secret_version" \
     --secret="$name"
 
 }
