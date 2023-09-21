@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [16.0.0]
+
+### Added
+
+- pkg
+  - bl64_pkg_repository_add: debian support
+
+### Changed
+
+- pkg
+  - bl64_pkg_repository_add: make gpgkey optional
+  - **Breaking change** bl64_pkg_install: add flag to not install recommended packages on debian
+- msg
+  - **Breaking change** bl64_msg_show_batch_finish: return provided exit status instead of always true. This is to enable using the function as last command in the script
+- core
+  - **Breaking change** normalize VAR values:
+    - BL64_VAR_NONE='_NONE_'
+    - BL64_VAR_ALL='_ALL_'
+  - added support to allow for individual module sourcing in addition to all-in-one bashlib64 file
+
 ## [15.0.0]
 
 ### Added
@@ -405,6 +425,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[16.0.0]: https://github.com/automation64/bashlib64/compare/15.0.0...16.0.0
 [15.0.0]: https://github.com/automation64/bashlib64/compare/14.0.0...15.0.0
 [14.0.0]: https://github.com/automation64/bashlib64/compare/13.0.0...14.0.0
 [13.0.0]: https://github.com/automation64/bashlib64/compare/12.6.0...13.0.0
