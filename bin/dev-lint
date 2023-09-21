@@ -12,4 +12,4 @@
 source ./bin/dev-set || exit 1
 
 "$DEV_CICD_BUILD" -t &&
-  "$DEV_CICD_TESTMANSH" -t -o -c "${DEV_NAME_BUILD}/${DEV_BUILD_NAME_SINGLE}"
+  "$DEV_CICD_TESTMANSH" -t -o -c "${DEV_BASE_BUILD}/${DEV_BASE_BUILD_TEST}/${DEV_BUILD_NAME_SINGLE}"

@@ -61,7 +61,7 @@ function dev_build_release() {
   cd "$DEV_SRC" || return 1
 
   bl64_fs_rm_full "$DEV_BUILD_FULL_PATH_RELEASE"
-  bl64_fs_create_dir "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_BUILD_FULL_PATH_RELEASE" ||
+  bl64_fs_create_dir '0777' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_BUILD_FULL_PATH_RELEASE" ||
     return $?
 
   # Create header
@@ -93,12 +93,10 @@ function dev_build_release() {
     bl64_fs_rm_file "${build_module}.tmp"
   done
 
-  bl64_msg_show_task 'adding core'
+  bl64_msg_show_task 'adding main'
   # shellcheck disable=SC2119
-  { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_full"
-  # shellcheck disable=SC2119
-  { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_core"
-  bl64_fs_run_chmod '0755' "$build_full" "$build_core"
+  { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_full" &&
+    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_core"
 }
 
 # shellcheck disable=SC2317
@@ -111,18 +109,14 @@ function dev_build_test() {
   cd "$DEV_SRC" || return 1
 
   bl64_fs_rm_full "$DEV_BUILD_FULL_PATH_TEST"
-  bl64_fs_create_dir "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_BUILD_FULL_PATH_TEST" ||
+  bl64_fs_create_dir '0777' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_BUILD_FULL_PATH_TEST" ||
     return $?
 
-  # Create header
-  bl64_msg_show_task "creating library header (${build_full})"
+  bl64_msg_show_task "creating stand-alone file for testing (${build_full})"
   dev_build_create_header >"$build_full" &&
-    dev_add_modules "$build_full" "${DEV_MODULES_CORE} ${DEV_MODULES_OPT}" ||
+    dev_add_modules "$build_full" "${DEV_MODULES_CORE} ${DEV_MODULES_OPT}" &&
+    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_full" ||
     return $?
-
-  bl64_msg_show_task 'adding core'
-  # shellcheck disable=SC2119
-  { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_full"
   bl64_fs_run_chmod '0755' "$build_full"
 }
 
