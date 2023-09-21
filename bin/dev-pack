@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+#
+# Pack application for delivery
+#
+# * Use to create a distributable package of the application
+# * Template Version: v1.1.0
+#
+
+#
+# Imports
+#
+
+# shellcheck source=SCRIPTDIR/dev-set
+source ./bin/dev-set || exit 1
+# shellcheck source=SCRIPTDIR/../lib/bashlib64.bash
+source "$DEV_CICD_BASHLIB64" || exit 1
+
+#
+# Functions
+#
+
+function dev_pack() {
+
+  bl64_fs_rm_full "$DEV_PACK_FULL_PATH"
+  bl64_fs_create_dir "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_PACK_FULL_PATH" ||
+    return $?
+
+  cd "$DEV_BUILD_FULL_PATH_RELEASE"
+  bl64_msg_show_task "create stand-alone distributable package (${DEV_PACK_NAME_SA})"
+  bl64_arc_run_tar zcf "${DEV_PACK_FULL_PATH}/${DEV_PACK_NAME_SA}" "$DEV_BUILD_NAME_SINGLE" ||
+    return $?
+
+  bl64_msg_show_task "create core+opt alternative distributable package (${DEV_PACK_NAME_SPLIT})"
+  bl64_arc_run_tar zcf "${DEV_PACK_FULL_PATH}/${DEV_PACK_NAME_SPLIT}" "$DEV_BUILD_NAME_CORE" "$DEV_BUILD_NAME_OPT" ||
+    return $?
+
+  bl64_msg_show_task "create modular alternative distributable package (${DEV_PACK_NAME_MODULAR})"
+  bl64_arc_run_tar zcf "${DEV_PACK_FULL_PATH}/${DEV_PACK_NAME_MODULAR}" ${DEV_BUILD_NAME_MODULE}-*.bash
+}
+
+#
+# Main
+#
+
+declare -i status=0
+
+bl64_arc_setup &&
+  bl64_check_export 'DEV_BUILD_FULL_PATH_RELEASE' &&
+  bl64_check_export 'DEV_BUILD_NAME_CORE' &&
+  bl64_check_export 'DEV_BUILD_NAME_MODULE' &&
+  bl64_check_export 'DEV_BUILD_NAME_OPT' &&
+  bl64_check_export 'DEV_BUILD_NAME_SINGLE' &&
+  bl64_check_export 'DEV_PACK_FULL_PATH' &&
+  bl64_check_export 'DEV_PACK_NAME_MODULAR' &&
+  bl64_check_export 'DEV_PACK_NAME_SA' &&
+  bl64_check_export 'DEV_PACK_NAME_SPLIT' ||
+  exit $?
+
+bl64_msg_show_batch_start 'pack-app'
+bl64_msg_show_task "create distributable package (${DEV_PACK_FULL_PATH})"
+dev_pack
+status=$?
+bl64_msg_show_batch_finish $status 'pack-app'
+exit $status
