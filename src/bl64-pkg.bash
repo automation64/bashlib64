@@ -11,9 +11,9 @@
 # Requirements:
 #   * root privilege (sudo)
 # Arguments:
-#   $1: repository name
+#   $1: repository name. Format: alphanumeric, _-
 #   $2: repository source. Format: URL
-#   $3: GPGKey source (YUM only). Format: URL
+#   $3: GPGKey source. Format: URL
 # Outputs:
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
@@ -22,22 +22,22 @@
 #######################################
 function bl64_pkg_repository_add() {
   bl64_dbg_lib_show_function "$@"
-  local repository="$1"
+  local name="$1"
   local source="$2"
-  local gpgkey="${3:-${BL64_VAR_NULL}}"
+  local gpgkey="$3"
 
   bl64_check_privilege_root &&
-    bl64_check_parameter 'repository' &&
+    bl64_check_parameter 'name' ||
     bl64_check_parameter 'source' ||
     return $?
 
-  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_REPOSITORY_ADD (${repository})"
+  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_REPOSITORY_ADD (${name})"
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_check_alert_unsupported
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    _bl64_pkg_repository_add_yum "$repository" "$source" "$gpgkey"
+    _bl64_pkg_repository_add_yum "$name" "$source" "$gpgkey"
     ;;
   ${BL64_OS_SLES}-*)
     bl64_check_alert_unsupported
@@ -55,27 +55,40 @@ function bl64_pkg_repository_add() {
 
 function _bl64_pkg_repository_add_yum() {
   bl64_dbg_lib_show_function "$@"
-  local repository="$1"
+  local name="$1"
   local source="$2"
-  local gpgkey="${3:-${BL64_VAR_NULL}}"
+  local gpgkey="$3"
   local definition=''
 
-  bl64_check_parameter 'gpgkey' || return $?
-  definition="${BL64_PKG_PATH_YUM_REPOS_D}/${repository}.${BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY}"
-  [[ -f "$definition" ]] && bl64_dbg_lib_show_info "repository already created (${definition}). No action taken" && return 0
+  definition="${BL64_PKG_PATH_YUM_REPOS_D}/${name}.${BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY}"
+  [[ -f "$definition" ]] &&
+    bl64_msg_show_warning "${_BL64_PKG_TXT_REPOSITORY_EXISTING} (${definition})" &&
+    return 0
 
   bl64_dbg_lib_show_info "create repository definition (${definition})"
-  printf '[%s]
+  if [[ -n "$gpgkey" ]]; then
+    printf '[%s]\n
 name=%s
 baseurl=%s
 gpgcheck=1
 enabled=1
 gpgkey=%s\n' \
-    "$repository" \
-    "$repository" \
-    "$source" \
-    "$gpgkey" \
-    >"$definition"
+      "$name" \
+      "$name" \
+      "$source" \
+      "$gpgkey" \
+      >"$definition"
+  else
+    printf '[%s]\n
+name=%s
+baseurl=%s
+gpgcheck=0
+enabled=1\n' \
+      "$name" \
+      "$name" \
+      "$source" \
+      >"$definition"
+  fi
 }
 
 #######################################

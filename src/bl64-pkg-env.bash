@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage native OS packages
 #######################################
 
-export BL64_PKG_VERSION='4.0.1'
+export BL64_PKG_VERSION='4.1.0'
 
 export BL64_PKG_MODULE="$BL64_VAR_OFF"
 
@@ -46,3 +46,4 @@ export _BL64_PKG_TXT_UPGRADE='upgrade packages'
 export _BL64_PKG_TXT_PREPARE='initialize package manager'
 export _BL64_PKG_TXT_REPOSITORY_REFRESH='refresh package repository content'
 export _BL64_PKG_TXT_REPOSITORY_ADD='add remote package repository'
+export _BL64_PKG_TXT_REPOSITORY_EXISTING='requested repository is already present. Continue using existing one.'
