@@ -82,7 +82,7 @@ function bl64_k8s_annotation_set() {
   shift
 
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
-  [[ "$namespace" == "$BL64_VAR_DEFAULT" ]] && namespace='' || namespace="--namespace ${namespace}"
+  [[ "$namespace" == "$BL64_VAR_NONE" ]] && namespace='' || namespace="--namespace ${namespace}"
 
   bl64_msg_show_lib_task "${_BL64_K8S_TXT_SET_ANNOTATION} (${resource}/${name})"
   # shellcheck disable=SC2086

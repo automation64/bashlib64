@@ -22,7 +22,7 @@ function bl64_fmt_strip_starting_slash() {
 
   # shellcheck disable=SC2086
   if [[ -z "$path" ]]; then
-    return $BL64_VAR_OK
+    return 0
   elif [[ "$path" == '/' ]]; then
     printf '%s' "${path}"
   elif [[ "$path" == /* ]]; then
@@ -52,7 +52,7 @@ function bl64_fmt_strip_ending_slash() {
 
   # shellcheck disable=SC2086
   if [[ -z "$path" ]]; then
-    return $BL64_VAR_OK
+    return 0
   elif [[ "$path" == '/' ]]; then
     printf '%s' "${path}"
   elif [[ "$path" == */ ]]; then
@@ -138,7 +138,7 @@ function bl64_fmt_dirname() {
 
   # shellcheck disable=SC2086
   if [[ -z "$path" ]]; then
-    return $BL64_VAR_OK
+    return 0
   elif [[ "$path" == '/' ]]; then
     printf '%s' "${path}"
   elif [[ "$path" != */* ]]; then
