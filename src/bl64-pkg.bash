@@ -5,15 +5,21 @@
 #######################################
 # Add package repository
 #
-# * Add remote package repository
+# * Covers simple uses cases that can be applied to most OS versions:
+#   * YUM: repo package definition created
+#   * APT: repo package definition created, GPGkey downloaded and installed
 # * Package cache is not refreshed
+# * No replacement done if already present
 #
 # Requirements:
 #   * root privilege (sudo)
 # Arguments:
 #   $1: repository name. Format: alphanumeric, _-
 #   $2: repository source. Format: URL
-#   $3: GPGKey source. Format: URL
+#   $3: GPGKey source. Format: URL. Default: $BL64_VAR_NONE
+#   $4: extra package specific parameter. For APT: suite. Default: empty
+#   $5: extra package specific parameter. For APT: component. Default: empty
+#
 # Outputs:
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
@@ -24,7 +30,9 @@ function bl64_pkg_repository_add() {
   bl64_dbg_lib_show_function "$@"
   local name="$1"
   local source="$2"
-  local gpgkey="$3"
+  local gpgkey="${3:-${BL64_VAR_NONE}}"
+  local extra1="$4"
+  local extra2="$5"
 
   bl64_check_privilege_root &&
     bl64_check_parameter 'name' ||
@@ -34,7 +42,7 @@ function bl64_pkg_repository_add() {
   bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_REPOSITORY_ADD (${name})"
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_check_alert_unsupported
+    _bl64_pkg_repository_add_apt "$name" "$source" "$gpgkey" "$extra1" "$extra2"
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     _bl64_pkg_repository_add_yum "$name" "$source" "$gpgkey"
@@ -60,13 +68,16 @@ function _bl64_pkg_repository_add_yum() {
   local gpgkey="$3"
   local definition=''
 
-  definition="${BL64_PKG_PATH_YUM_REPOS_D}/${name}.${BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY}"
+  bl64_check_directory "$BL64_PKG_PATH_YUM_REPOS_D" ||
+    return $?
+
+  definition="${BL64_PKG_PATH_YUM_REPOS_D}/${name}.${BL64_PKG_DEF_SUFIX_YUM_REPOSITORY}"
   [[ -f "$definition" ]] &&
     bl64_msg_show_warning "${_BL64_PKG_TXT_REPOSITORY_EXISTING} (${definition})" &&
     return 0
 
-  bl64_dbg_lib_show_info "create repository definition (${definition})"
-  if [[ -n "$gpgkey" ]]; then
+  bl64_dbg_lib_show_info "create YUM repository definition (${definition})"
+  if [[ "$gpgkey" != "$BL64_VAR_NONE" ]]; then
     printf '[%s]\n
 name=%s
 baseurl=%s
@@ -87,6 +98,47 @@ enabled=1\n' \
       "$name" \
       "$name" \
       "$source" \
+      >"$definition"
+  fi
+}
+
+function _bl64_pkg_repository_add_apt() {
+  bl64_dbg_lib_show_function "$@"
+  local name="$1"
+  local source="$2"
+  local gpgkey="$3"
+  local extra1="$4"
+  local extra2="$5"
+  local definition=''
+  local gpgkey_file=''
+  local file_mode='0644'
+
+  bl64_check_directory "$BL64_PKG_PATH_APT_SOURCES_LIST_D" &&
+    bl64_check_directory "$BL64_PKG_PATH_GPG_KEYRINGS" ||
+    return $?
+
+  definition="${BL64_PKG_PATH_APT_SOURCES_LIST_D}/${name}.${BL64_PKG_DEF_SUFIX_APT_REPOSITORY}"
+  [[ -f "$definition" ]] &&
+    bl64_msg_show_warning "${_BL64_PKG_TXT_REPOSITORY_EXISTING} (${definition})" &&
+    return 0
+
+  bl64_dbg_lib_show_info "create APT repository definition (${definition})"
+  if [[ "$gpgkey" != "$BL64_VAR_NONE" ]]; then
+    gpgkey_file="${BL64_PKG_PATH_GPG_KEYRINGS}/${name}.${BL64_PKG_DEF_SUFIX_GPG_FILE}"
+    printf 'deb [signed-by=%s] %s %s %s\n' \
+      "$gpgkey_file" \
+      "$source" \
+      "$extra1" \
+      "$extra2" \
+      >"$definition" ||
+      return $?
+    bl64_dbg_lib_show_info "install GPG key (${gpgkey})"
+    bl64_rxtx_web_get_file "$gpgkey" "$gpgkey_file" "$BL64_VAR_ON" "$file_mode"
+  else
+    printf 'deb %s %s %s\n' \
+      "$source" \
+      "$extra1" \
+      "$extra2" \
       >"$definition"
   fi
 }

@@ -242,19 +242,14 @@ function bl64_pkg_set_paths() {
 
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-*)
-    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
+    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d'
     ;;
-  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
-    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
-    ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
-    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
+  ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d'
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    :
+    BL64_PKG_PATH_APT_SOURCES_LIST_D='/etc/apt/sources.list.d'
+    BL64_PKG_PATH_GPG_KEYRINGS='/usr/share/keyrings'
     ;;
   ${BL64_OS_SLES}-*)
     :

@@ -34,11 +34,17 @@ export BL64_PKG_SET_QUIET=''
 export BL64_PKG_SET_SLIM=''
 export BL64_PKG_SET_VERBOSE=''
 
-export BL64_PKG_SET_VERBOSE=''
+#
+# Common paths
+#
 
-export BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY='repo'
-
+export BL64_PKG_PATH_APT_SOURCES_LIST_D=''
+export BL64_PKG_PATH_GPG_KEYRINGS=''
 export BL64_PKG_PATH_YUM_REPOS_D=''
+
+export BL64_PKG_DEF_SUFIX_APT_REPOSITORY='list'
+export BL64_PKG_DEF_SUFIX_GPG_FILE='gpg'
+export BL64_PKG_DEF_SUFIX_YUM_REPOSITORY='repo'
 
 export _BL64_PKG_TXT_CLEAN='clean up package manager run-time environment'
 export _BL64_PKG_TXT_INSTALL='install packages'
