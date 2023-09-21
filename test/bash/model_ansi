@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 . bin/dev-set
-. "${DEVBL_BUILD_FULL_PATH}/${DEVBL_BUILD_NAME_SINGLE}"
+. "${DEVBL_BUILD_FULL_PATH_TEST}/${DEVBL_BUILD_NAME_SINGLE}"
 bl64_msg_all_enable_verbose
 bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI"
 
