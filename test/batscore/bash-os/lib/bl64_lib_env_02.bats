@@ -21,6 +21,6 @@ setup() {
   assert_equal "$BL64_VAR_ON" '1'
   assert_equal "$BL64_VAR_OFF" '0'
   assert_equal "$BL64_VAR_OK" '0'
-  assert_equal "$BL64_VAR_NONE" '0'
-  assert_equal "$BL64_VAR_ALL" '1'
+  assert_equal "$BL64_VAR_NONE" '_NONE_'
+  assert_equal "$BL64_VAR_ALL" '_ALL_'
 }
