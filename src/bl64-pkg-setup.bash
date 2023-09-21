@@ -77,6 +77,7 @@ function _bl64_pkg_set_command() {
 # Create command sets for common options
 #
 # * Warning: bootstrap function
+# * BL64_PKG_SET_SLIM: used as meta flag to capture options for reducing install disk space
 #
 # Arguments:
 #   None
@@ -92,7 +93,7 @@ function _bl64_pkg_set_options() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_PKG_SET_ASSUME_YES='--assume-yes'
-    BL64_PKG_SET_SLIM=' '
+    BL64_PKG_SET_SLIM='--no-install-recommends'
     BL64_PKG_SET_QUIET='--quiet --quiet'
     BL64_PKG_SET_VERBOSE='--show-progress'
     ;;

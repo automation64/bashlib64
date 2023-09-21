@@ -260,7 +260,7 @@ function bl64_pkg_install() {
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
+    bl64_pkg_run_apt 'install' $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES -- "$@"
     ;;
   ${BL64_OS_FD}-*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
