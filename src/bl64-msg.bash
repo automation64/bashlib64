@@ -449,6 +449,7 @@ function bl64_msg_show_batch_finish() {
   else
     _bl64_msg_print "$BL64_MSG_TYPE_BATCHERR" "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: exit-status-${status}"
   fi
+  # shellcheck disable=SC2086
   return $status
 }
 
