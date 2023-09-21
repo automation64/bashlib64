@@ -3,6 +3,7 @@
 name: "Test / Bash / TestManSH / Kubernetes"
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - "main"
