@@ -17,6 +17,9 @@
 #   >0: setup failed
 #######################################
 function bl64_fmt_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: BashLib64 core module not loaded (bashlib64-module-core.bash). Ensure it is sourced before any other one.' &&
+    return 21
   bl64_dbg_lib_show_function
 
   BL64_FMT_MODULE="$BL64_VAR_ON"

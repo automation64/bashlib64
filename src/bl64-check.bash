@@ -622,7 +622,7 @@ function bl64_check_parameters_none() {
 }
 
 #######################################
-# Check that the optional module is loaded
+# Check that the module is loaded
 #
 # Arguments:
 #   $1: module name (eg: BL64_XXXX_MODULE)

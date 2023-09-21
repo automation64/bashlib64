@@ -18,6 +18,9 @@
 #   >0: setup failed
 #######################################
 function bl64_cnt_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: BashLib64 core module not loaded (bashlib64-module-core.bash). Ensure it is sourced before any other one.' &&
+    return 21
   bl64_dbg_lib_show_function
   local -i status=0
 
