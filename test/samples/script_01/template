@@ -4,7 +4,7 @@
 #
 #######################################
 
-source "$_DEVBL_LIB_BASHLIB64_BUILD" || { echo "Error: unable to load bashlib64" && exit 1; }
+source "$_DEV_LIB_BASHLIB64_BUILD" || { echo "Error: unable to load bashlib64" && exit 1; }
 
 #
 # Globals

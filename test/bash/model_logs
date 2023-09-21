@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 . bin/dev-set
-. "${DEVBL_BUILD_FULL_PATH_TEST}/${DEVBL_BUILD_NAME_SINGLE}"
+. "${DEV_BUILD_FULL_PATH_TEST}/${DEV_BUILD_NAME_SINGLE}"
 
 #
 # Model logging
 #
 
-bl64_log_setup "$DEVBL_TMP/test_model_logs" || exit 1
+bl64_log_setup "$DEV_TMP/test_model_logs" || exit 1
 
 bl64_log_set_level "$BL64_LOG_CATEGORY_INFO"
 
