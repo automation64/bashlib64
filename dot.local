@@ -8,8 +8,8 @@
 #
 
 # Project base location. Adjust to your local GIT repo
-DEVBL_ROOT="$(pwd)"
-export DEVBL_ROOT
+DEV_ROOT="$(pwd)"
+export DEV_ROOT
 
 #
 # Tools
