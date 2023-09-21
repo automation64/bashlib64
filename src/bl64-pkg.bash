@@ -28,11 +28,11 @@
 #######################################
 function bl64_pkg_repository_add() {
   bl64_dbg_lib_show_function "$@"
-  local name="$1"
-  local source="$2"
+  local name="${1:-}"
+  local source="${2:-}"
   local gpgkey="${3:-${BL64_VAR_NONE}}"
-  local extra1="$4"
-  local extra2="$5"
+  local extra1="${4:-}"
+  local extra2="${5:-}"
 
   bl64_check_privilege_root &&
     bl64_check_parameter 'name' ||
