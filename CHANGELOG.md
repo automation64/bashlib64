@@ -11,19 +11,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - pkg
   - bl64_pkg_repository_add: debian support
+- dbg
+  - bl64_dbg_app_show_comments,bl64_dbg_lib_show_comments: show developer comments during debugging sessions
+- core
+  - added support to allow for individual module sourcing in addition to all-in-one bashlib64 file
+- iam
+  - bl64_iam_check_user: migrated from bl64_check_user
+- check
+  - bl64_check_module_imported: check that the bl64 module is imported (sourced)
 
 ### Changed
 
 - pkg
   - bl64_pkg_repository_add: make gpgkey optional
-  - **Breaking change** bl64_pkg_install: add flag to not install recommended packages on debian
 - msg
   - **Breaking change** bl64_msg_show_batch_finish: return provided exit status instead of always true. This is to enable using the function as last command in the script
+- check
+  - **Breaking change** migrated bl64_check_user to bl64_iam_check_user
+  - **Breaking change** renamed: bl64_check_compatibility -> bl64_check_compatibility_mode
+
+### Fixed
+
+- iam
+  - bl64_iam_user_add: force creation of primary group in SLES distros
 - core
   - **Breaking change** normalize VAR values:
     - BL64_VAR_NONE='_NONE_'
     - BL64_VAR_ALL='_ALL_'
-  - added support to allow for individual module sourcing in addition to all-in-one bashlib64 file
+- pkg
+  - **Breaking change** bl64_pkg_install: add flag to not install recommended packages on debian
 
 ## [15.0.0]
 
@@ -52,7 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - support for k8s api 1.28
   - generic compatibility mode for supporting untested versions
 - check
-  - bl64_check_compatibility: helper for checking compatibility mode
+  - bl64_check_compatibility_mode: helper for checking compatibility mode
   - bl64_check_overwrite_skip: helper for checking overwrite condition
 - rxtx
   - bl64_rxtx_github_get_asset: use special tag latest to obtain latest version
