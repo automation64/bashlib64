@@ -729,7 +729,7 @@ function bl64_fs_safeguard() {
 function bl64_fs_restore() {
   bl64_dbg_lib_show_function "$@"
   local destination="${1:-}"
-  local result="${2:-}"
+  local -i result=$2
   local backup="${destination}${BL64_FS_SAFEGUARD_POSTFIX}"
 
   bl64_check_parameter 'destination' &&
@@ -743,12 +743,12 @@ function bl64_fs_restore() {
   fi
 
   # Check if restore is needed based on the operation result
-  if [[ "$result" == "$BL64_VAR_OK" ]]; then
+  if (( result == 0 )); then
     bl64_dbg_lib_show_info 'operation was ok, backup no longer needed, remove it'
     [[ -e "$backup" ]] && bl64_fs_rm_full "$backup"
 
     # shellcheck disable=SC2086
-    return $BL64_VAR_OK
+    return 0
   else
     bl64_dbg_lib_show_info 'operation was NOT ok, remove invalid content'
     [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"

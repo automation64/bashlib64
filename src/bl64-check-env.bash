@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
 
-export BL64_CHECK_VERSION='3.4.0'
+export BL64_CHECK_VERSION='4.0.0'
 
 export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 
@@ -55,8 +55,8 @@ export _BL64_CHECK_TXT_USER_NOT_FOUND='required user is not present in the opera
 
 export _BL64_CHECK_TXT_STATUS_ERROR='task execution failed'
 
-export _BL64_CHECK_TXT_MODULE_SET='required bashlib64 module was not imported. Please source the module before using it'
-export _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested bashlib64 module'
-export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required bashlib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module'
+export _BL64_CHECK_TXT_MODULE_SET='required BashLib64 module not found. Please source the module before using it'
+export _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested BashLib64 module'
+export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module'
 
 export _BL64_CHECK_TXT_RESOURCE_NOT_FOUND='required resource was not found on the system'

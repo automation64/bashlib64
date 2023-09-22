@@ -17,9 +17,14 @@
 #   >0: setup failed
 #######################################
 function bl64_txt_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
-  _bl64_txt_set_command &&
+  bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    _bl64_txt_set_command &&
     _bl64_txt_set_options &&
     BL64_TXT_MODULE="$BL64_VAR_ON"
 

@@ -9,7 +9,7 @@ function _bl64_lib_cmd() {
 
   export BL64_LIB_TRAPS='0'
   export BL64_LIB_CMD='1'
-  "${TESTMANSH_PROJECT_BUILD}/bashlib64.bash" 'env' | grep -E '^BL64_SCRIPT_PATH|^BL64_SCRIPT_NAME|^BL64_SCRIPT_ID|^BL64_SCRIPT_SID'
+  "${TESTMANSH_PROJECT_BUILD}/test/bashlib64.bash" 'env' | grep -E '^BL64_SCRIPT_PATH|^BL64_SCRIPT_NAME|^BL64_SCRIPT_ID|^BL64_SCRIPT_SID'
   result=$?
   set -o 'errexit'
   set +o 'nounset'

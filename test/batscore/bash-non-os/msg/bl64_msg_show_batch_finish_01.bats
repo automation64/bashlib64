@@ -19,5 +19,5 @@ setup() {
 
   run bl64_msg_show_batch_finish $finish "$value"
 
-  assert_success
+  assert_failure
 }

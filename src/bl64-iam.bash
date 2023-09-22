@@ -12,6 +12,7 @@
 #   * set home path
 #   * set user description
 #   * create home
+#   * create primary group
 # * If the user is already created nothing is done, no error
 #
 # Arguments:
@@ -71,7 +72,9 @@ function bl64_iam_user_add() {
       "$login"
     ;;
   ${BL64_OS_SLES}-*)
+    bl64_dbg_lib_show_comments 'force primary group creation'
     "$BL64_IAM_CMD_USERADD" \
+      --user-group \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
@@ -80,7 +83,7 @@ function bl64_iam_user_add() {
       "$login"
     ;;
   ${BL64_OS_ALP}-*)
-    # Disable automatic password generation
+    bl64_dbg_lib_show_comments 'disable automatic password generation'
     "$BL64_IAM_CMD_USERADD" \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
@@ -179,4 +182,31 @@ function bl64_iam_user_get_id() {
 function bl64_iam_user_get_current() {
   bl64_dbg_lib_show_function
   "${BL64_IAM_CMD_ID}" -u -n
+}
+
+#######################################
+# Check that the user is created
+#
+# Arguments:
+#   $1: user name
+#   $2: error message
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_USER_NOT_FOUND
+#######################################
+function bl64_iam_check_user() {
+  bl64_dbg_lib_show_function "$@"
+  local user="${1:-}"
+  local message="${2:-${_BL64_CHECK_TXT_USER_NOT_FOUND}}"
+
+  bl64_check_parameter 'user' || return $?
+
+  if ! bl64_iam_user_is_created "$user"; then
+    bl64_msg_show_error "${message} (user: ${user} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    return $BL64_LIB_ERROR_USER_NOT_FOUND
+  else
+    return 0
+  fi
 }

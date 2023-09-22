@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [16.0.0]
+
+### Added
+
+- pkg
+  - bl64_pkg_repository_add: debian support
+- dbg
+  - bl64_dbg_app_show_comments,bl64_dbg_lib_show_comments: show developer comments during debugging sessions
+- core
+  - added support to allow for individual module sourcing in addition to all-in-one bashlib64 file
+- iam
+  - bl64_iam_check_user: migrated from bl64_check_user
+- check
+  - bl64_check_module_imported: check that the bl64 module is imported (sourced)
+
+### Changed
+
+- pkg
+  - bl64_pkg_repository_add: make gpgkey optional
+- msg
+  - **Breaking change** bl64_msg_show_batch_finish: return provided exit status instead of always true. This is to enable using the function as last command in the script
+- check
+  - **Breaking change** migrated bl64_check_user to bl64_iam_check_user
+  - **Breaking change** renamed: bl64_check_compatibility -> bl64_check_compatibility_mode
+
+### Fixed
+
+- iam
+  - bl64_iam_user_add: force creation of primary group in SLES distros
+- core
+  - **Breaking change** normalize VAR values:
+    - BL64_VAR_NONE='_NONE_'
+    - BL64_VAR_ALL='_ALL_'
+- pkg
+  - **Breaking change** bl64_pkg_install: add flag to not install recommended packages on debian
+
 ## [15.0.0]
 
 ### Added
@@ -32,7 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - support for k8s api 1.28
   - generic compatibility mode for supporting untested versions
 - check
-  - bl64_check_compatibility: helper for checking compatibility mode
+  - bl64_check_compatibility_mode: helper for checking compatibility mode
   - bl64_check_overwrite_skip: helper for checking overwrite condition
 - rxtx
   - bl64_rxtx_github_get_asset: use special tag latest to obtain latest version
@@ -405,6 +441,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[16.0.0]: https://github.com/automation64/bashlib64/compare/15.0.0...16.0.0
 [15.0.0]: https://github.com/automation64/bashlib64/compare/14.0.0...15.0.0
 [14.0.0]: https://github.com/automation64/bashlib64/compare/13.0.0...14.0.0
 [13.0.0]: https://github.com/automation64/bashlib64/compare/12.6.0...13.0.0

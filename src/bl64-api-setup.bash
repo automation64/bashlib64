@@ -17,6 +17,9 @@
 #   >0: setup failed
 #######################################
 function bl64_api_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
   BL64_API_MODULE="$BL64_VAR_ON"

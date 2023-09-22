@@ -16,6 +16,9 @@
 #######################################
 # shellcheck disable=SC2120
 function bl64_gcp_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function "$@"
   local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 

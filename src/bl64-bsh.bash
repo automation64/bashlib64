@@ -48,7 +48,6 @@ function bl64_bsh_script_get_name() {
   ((main > 0)) && main=$((main - 1))
 
   bl64_fmt_basename "${BASH_SOURCE[${main}]}"
-
 }
 
 #######################################
@@ -73,7 +72,6 @@ function bl64_bsh_script_set_id() {
   bl64_check_parameter 'script_id' || return $?
 
   BL64_SCRIPT_ID="$script_id"
-
 }
 
 #######################################
@@ -100,7 +98,6 @@ function bl64_bsh_script_set_identity() {
     BL64_SCRIPT_PATH="$(bl64_bsh_script_get_path)" &&
     BL64_SCRIPT_NAME="$(bl64_bsh_script_get_name)" &&
     bl64_bsh_script_set_id "$BL64_SCRIPT_NAME"
-
 }
 
 #######################################
@@ -127,5 +124,4 @@ function bl64_bsh_env_export_variable() {
     return $?
 
   printf "export %s='%s'\n" "$variable" "$value"
-
 }

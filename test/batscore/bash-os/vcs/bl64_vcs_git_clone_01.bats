@@ -27,7 +27,7 @@ teardown() {
 
 @test "bl64_vcs_git_clone: clone repo" {
 
-  run bl64_vcs_git_clone "$DEVBL_TEST_VALUE_GIT_CLONE_URL" "$_bl64_vcs_git_clone_destination" 'main'
+  run bl64_vcs_git_clone "$DEV_TEST_VALUE_GIT_CLONE_URL" "$_bl64_vcs_git_clone_destination" 'main'
   assert_success
 
 }

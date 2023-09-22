@@ -399,8 +399,10 @@ function bl64_msg_show_text() {
 #######################################
 # Display batch process start message
 #
+# * Use in the main section of task oriented scripts to show start/end of batch process
+#
 # Arguments:
-#   $1: message
+#   $2: batch short description
 # Outputs:
 #   STDOUT: message
 #   STDERR: None
@@ -421,9 +423,12 @@ function bl64_msg_show_batch_start() {
 #######################################
 # Display batch process complete message
 #
+# * Use in the main section of task oriented scripts to show start/end of batch process
+# * Can be used as last command in shell script to both show status and return exit status
+#
 # Arguments:
 #   $1: process exit status
-#   $2: message
+#   $2: batch short description
 # Outputs:
 #   STDOUT: message
 #   STDERR: None
@@ -433,8 +438,8 @@ function bl64_msg_show_batch_start() {
 #######################################
 function bl64_msg_show_batch_finish() {
   bl64_dbg_lib_show_function "$@"
-  local status="$1"
-  local message="${2-${BL64_VAR_DEFAULT}}"
+  local -i status=$1
+  local message="${2-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${status}:${message}" &&
     bl64_msg_app_verbose_enabled || return 0
@@ -444,6 +449,8 @@ function bl64_msg_show_batch_finish() {
   else
     _bl64_msg_print "$BL64_MSG_TYPE_BATCHERR" "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: exit-status-${status}"
   fi
+  # shellcheck disable=SC2086
+  return $status
 }
 
 #######################################

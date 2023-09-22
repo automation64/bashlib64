@@ -33,7 +33,7 @@ function dev_set_load_local() {
       dev_set_error "unable to source file (${dot_local})"
       return 1
     }
-  dot_secrets="${DEVBL_ROOT}/${dot_secrets}"
+  dot_secrets="${DEV_ROOT}/${dot_secrets}"
   if [[ -f "$dot_secrets" ]]; then
     dev_set_message "Load local secrets (${dot_secrets})"
     # shellcheck source=SCRIPTDIR/../.secrets
@@ -48,27 +48,27 @@ function dev_set_load_local() {
 function dev_set_load_github() {
   dev_set_message "GitHub detected, setting project root (${GITHUB_WORKSPACE})"
   # shellcheck disable=SC2155
-  export DEVBL_ROOT="$GITHUB_WORKSPACE"
+  export DEV_ROOT="$GITHUB_WORKSPACE"
 }
 
 function dev_set_load_testmansh() {
   dev_set_message "Testmansh container detected, setting project root (${TESTMANSH_PROJECT_ROOT})"
-  export DEVBL_ROOT="$TESTMANSH_PROJECT_ROOT"
+  export DEV_ROOT="$TESTMANSH_PROJECT_ROOT"
 }
 
 function dev_set_load_exported() {
-  dev_set_message 'Read DEVBL_ROOT variable from exported shell environment'
+  dev_set_message 'Read DEV_ROOT variable from exported shell environment'
 }
 
 function dev_set_check_root() {
-  if [[ -z "$DEVBL_ROOT" ]]; then
-    dev_set_error 'unable to identify current repository location. Check that the variable DEVBL_ROOT is correctly set' &&
+  if [[ -z "$DEV_ROOT" ]]; then
+    dev_set_error 'unable to identify current repository location. Check that the variable DEV_ROOT is correctly set' &&
       return 1
   fi
 }
 
 function dev_set_load_env() {
-  local dot_env="${DEVBL_ROOT}/.env"
+  local dot_env="${DEV_ROOT}/.env"
   dev_set_message "Load project environment variables (${dot_env})"
   # shellcheck source=SCRIPTDIR/../.env
   source "$dot_env" ||

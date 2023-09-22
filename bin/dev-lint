@@ -11,5 +11,5 @@
 # shellcheck source=SCRIPTDIR/dev-set
 source ./bin/dev-set || exit 1
 
-"$DEVBL_CICD_BUILD" -t &&
-  "$DEVBL_CICD_TESTMANSH" -t -o -c "${DEVBL_NAME_BUILD}/${DEVBL_BUILD_NAME_SINGLE}"
+"$DEV_CICD_BUILD" -t &&
+  "$DEV_CICD_TESTMANSH" -t -o -c "${DEV_BASE_BUILD}/${DEV_BASE_BUILD_TEST}/${DEV_BUILD_NAME_SINGLE}"

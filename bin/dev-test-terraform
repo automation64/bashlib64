@@ -11,5 +11,5 @@
 # shellcheck source=SCRIPTDIR/dev-set
 source ./bin/dev-set || exit 1
 
-"$DEVBL_CICD_BUILD" -t &&
-  "$DEVBL_CICD_TESTMANSH" -b -o -e "$DEVBL_TEST_CONTAINER_TERRAFORM" -c "$DEVBL_TEST_CASE_TERRAFORM"
+"$DEV_CICD_BUILD" -t &&
+  "$DEV_CICD_TESTMANSH" -b -o -e "$DEV_TEST_CONTAINER_TERRAFORM" -c "$DEV_TEST_CASE_TERRAFORM"

@@ -15,10 +15,18 @@
 #   >0: setup failed
 #######################################
 function bl64_pkg_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2249
-  _bl64_pkg_set_command &&
+  bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+    bl64_check_module_imported 'BL64_FS_MODULE' &&
+    bl64_check_module_imported 'BL64_RXTX_MODULE' &&
+    _bl64_pkg_set_command &&
     _bl64_pkg_set_runtime &&
     _bl64_pkg_set_options &&
     _bl64_pkg_set_alias &&
@@ -77,6 +85,7 @@ function _bl64_pkg_set_command() {
 # Create command sets for common options
 #
 # * Warning: bootstrap function
+# * BL64_PKG_SET_SLIM: used as meta flag to capture options for reducing install disk space
 #
 # Arguments:
 #   None
@@ -92,7 +101,7 @@ function _bl64_pkg_set_options() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_PKG_SET_ASSUME_YES='--assume-yes'
-    BL64_PKG_SET_SLIM=' '
+    BL64_PKG_SET_SLIM='--no-install-recommends'
     BL64_PKG_SET_QUIET='--quiet --quiet'
     BL64_PKG_SET_VERBOSE='--show-progress'
     ;;
@@ -242,19 +251,14 @@ function bl64_pkg_set_paths() {
 
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_FD}-*)
-    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
+    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d'
     ;;
-  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
-    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
-    ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
-    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
+  ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d'
     ;;
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    :
+    BL64_PKG_PATH_APT_SOURCES_LIST_D='/etc/apt/sources.list.d'
+    BL64_PKG_PATH_GPG_KEYRINGS='/usr/share/keyrings'
     ;;
   ${BL64_OS_SLES}-*)
     :

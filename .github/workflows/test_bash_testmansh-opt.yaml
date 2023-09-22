@@ -3,6 +3,7 @@
 name: "Test / Bash / TestManSH / Opt"
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - "main"

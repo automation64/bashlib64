@@ -3,6 +3,7 @@
 name: "Test / Bash / TestManSH / Container"
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - "main"

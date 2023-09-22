@@ -510,7 +510,7 @@ function bl64_check_alert_unsupported() {
 #   0: using compatibility mode
 #   >0: command is incompatible and compatibility mode is disabled
 #######################################
-function bl64_check_compatibility() {
+function bl64_check_compatibility_mode() {
   bl64_dbg_lib_show_function "$@"
   local extra="${1:-}"
 
@@ -622,27 +622,24 @@ function bl64_check_parameters_none() {
 }
 
 #######################################
-# Check that the optional module is loaded
+# Check that the module is loaded and has been setup
 #
 # Arguments:
-#   $1: module name (eg: BL64_XXXX_MODULE)
+#   $1: module id (eg: BL64_XXXX_MODULE)
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
-#   BL64_LIB_ERROR_TASK_UNDEFINED
+#   BL64_LIB_ERROR_MODULE_SETUP_MISSING
 #######################################
 function bl64_check_module() {
   bl64_dbg_lib_show_function "$@"
   local module="${1:-}"
   local setup_status=''
 
-  bl64_check_parameter 'module' || return $?
-
-  if [[ ! -v "$module" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_SET} (${_BL64_CHECK_TXT_MODULE}: ${module} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
-    return $BL64_LIB_ERROR_EXPORT_SET
-  fi
+  bl64_check_parameter 'module' &&
+    bl64_check_module_imported "$module" ||
+    return $?
 
   eval setup_status="\$$module"
   if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
@@ -654,30 +651,26 @@ function bl64_check_module() {
 }
 
 #######################################
-# Check that the user is created
+# Check that the module is imported
 #
 # Arguments:
-#   $1: user name
-#   $2: error message
+#   $1: module id (eg: BL64_XXXX_MODULE)
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
-#   BL64_LIB_ERROR_USER_NOT_FOUND
+#   BL64_LIB_ERROR_MODULE_NOT_IMPORTED
 #######################################
-function bl64_check_user() {
+function bl64_check_module_imported() {
   bl64_dbg_lib_show_function "$@"
-  local user="${1:-}"
-  local message="${2:-${_BL64_CHECK_TXT_USER_NOT_FOUND}}"
+  local module="${1:-}"
+  bl64_check_parameter 'module' || return $?
 
-  bl64_check_parameter 'user' || return $?
-
-  if ! bl64_iam_user_is_created "$user"; then
-    bl64_msg_show_error "${message} (user: ${user} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
-    return $BL64_LIB_ERROR_USER_NOT_FOUND
-  else
-    return 0
+  if [[ ! -v "$module" ]]; then
+    bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_SET} (${_BL64_CHECK_TXT_MODULE}: ${module} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    return $BL64_LIB_ERROR_MODULE_NOT_IMPORTED
   fi
+  return 0
 }
 
 #######################################
@@ -759,7 +752,7 @@ function bl64_check_command_search_path() {
 
   full_path="$(type -p "${file}")"
   # shellcheck disable=SC2181
-  if (( $? != 0)); then
+  if (($? != 0)); then
     bl64_msg_show_error "${message} (command: ${file} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_FOUND

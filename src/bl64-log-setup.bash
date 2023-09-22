@@ -19,6 +19,9 @@
 #   BL64_LIB_ERROR_MODULE_SETUP_INVALID
 #######################################
 function bl64_log_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function "$@"
   local repository="${1:-}"
   local target="${2:-${BL64_SCRIPT_ID}}"

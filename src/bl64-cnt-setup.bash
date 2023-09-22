@@ -18,6 +18,9 @@
 #   >0: setup failed
 #######################################
 function bl64_cnt_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
   local -i status=0
 
