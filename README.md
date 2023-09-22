@@ -88,9 +88,10 @@ The library has been tested on the following operating systems:
   source "<PROJECT_DIR>/bashlib64.bash"
   ```
 
-- The library is also available in two smaller files:
-  - [bashlib64-core](https://raw.githubusercontent.com/automation64/bashlib64/main/bashlib64-core.bash): core modules
-  - [bashlib64-opt](https://raw.githubusercontent.com/automation64/bashlib64/main/bashlib64-opt.bash): optional modules
+- The library is also available as release assets:
+  - `bashlib64-stand-alone.tgz`: single library file (`bashlib64.bash`) with all modules.
+  - `bashlib64-split.tgz`: two library files: `bashlib64-core.bash` for main modules and `bashlib64-opt.bash` for remaining ones.
+  - `bashlib64-modular.tgz`: one file per module (`bashlib64-module-*.bash`)
 
 ## Contributing
 

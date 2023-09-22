@@ -32,10 +32,10 @@
 
 ## Build library
 
-- Build production library and refresh docs:
+- Build testing library and refresh docs:
 
 ```shell
- ./bin/dev-build -p
+ ./bin/dev-build -t
  ./bin/dev-build -d
 ```
 

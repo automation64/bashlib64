@@ -90,7 +90,7 @@ TERM="${TERM:-vt100}"
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='15.0.0'
+export BL64_VERSION='16.0.0'
 
 #
 # Imported shell standard variables
@@ -123,8 +123,8 @@ export BL64_VAR_FALSE='1'
 export BL64_VAR_ON='1'
 export BL64_VAR_OFF='0'
 export BL64_VAR_OK='0'
-export BL64_VAR_NONE='0'
-export BL64_VAR_ALL='1'
+export BL64_VAR_NONE='_NONE_'
+export BL64_VAR_ALL='_ALL_'
 
 #
 # Global settings
@@ -168,6 +168,7 @@ declare -ig BL64_LIB_ERROR_TASK_UNDEFINED=14
 # Module operation
 declare -ig BL64_LIB_ERROR_MODULE_SETUP_INVALID=20
 declare -ig BL64_LIB_ERROR_MODULE_SETUP_MISSING=21
+declare -ig BL64_LIB_ERROR_MODULE_NOT_IMPORTED=22
 
 # OS
 declare -ig BL64_LIB_ERROR_OS_NOT_MATCH=30
@@ -213,12 +214,47 @@ export BL64_SCRIPT_ID=''
 #
 # Set Signal traps
 #
+
 export BL64_LIB_SIGNAL_HUP='-'
 export BL64_LIB_SIGNAL_STOP='-'
 export BL64_LIB_SIGNAL_QUIT='-'
 export BL64_LIB_SIGNAL_DEBUG='-'
 export BL64_LIB_SIGNAL_ERR='-'
 export BL64_LIB_SIGNAL_EXIT='bl64_dbg_runtime_show'
+
+#
+# Module IDs
+#
+
+export BL64_ANS_MODULE=''
+export BL64_API_MODULE=''
+export BL64_ARC_MODULE=''
+export BL64_AWS_MODULE=''
+export BL64_BSH_MODULE=''
+export BL64_CHECK_MODULE=''
+export BL64_CNT_MODULE=''
+export BL64_DBG_MODULE=''
+export BL64_FMT_MODULE=''
+export BL64_FS_MODULE=''
+export BL64_GCP_MODULE=''
+export BL64_HLM_MODULE=''
+export BL64_IAM_MODULE=''
+export BL64_K8S_MODULE=''
+export BL64_LOG_MODULE=''
+export BL64_MDB_MODULE=''
+export BL64_MSG_MODULE=''
+export BL64_OS_MODULE=''
+export BL64_PKG_MODULE=''
+export BL64_PY_MODULE=''
+export BL64_RBAC_MODULE=''
+export BL64_RND_MODULE=''
+export BL64_RXTX_MODULE=''
+export BL64_TF_MODULE=''
+export BL64_TM_MODULE=''
+export BL64_TXT_MODULE=''
+export BL64_UI_MODULE=''
+export BL64_VCS_MODULE=''
+export BL64_XSV_MODULE=''
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #######################################
@@ -281,7 +317,7 @@ export BL64_API_METHOD_PUT='PUT'
 # BashLib64 / Module / Globals / Interact with Bash shell
 #######################################
 
-export BL64_BSH_VERSION='1.1.2'
+export BL64_BSH_VERSION='1.2.0'
 
 export BL64_BSH_MODULE="$BL64_VAR_OFF"
 
@@ -293,7 +329,7 @@ export _BL64_BSH_TXT_UNSUPPORTED='BashLib64 is not supported in the current Bash
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
 
-export BL64_CHECK_VERSION='3.4.0'
+export BL64_CHECK_VERSION='4.0.0'
 
 export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 
@@ -346,9 +382,9 @@ export _BL64_CHECK_TXT_USER_NOT_FOUND='required user is not present in the opera
 
 export _BL64_CHECK_TXT_STATUS_ERROR='task execution failed'
 
-export _BL64_CHECK_TXT_MODULE_SET='required bashlib64 module was not imported. Please source the module before using it'
-export _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested bashlib64 module'
-export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required bashlib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module'
+export _BL64_CHECK_TXT_MODULE_SET='required BashLib64 module not found. Please source the module before using it'
+export _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested BashLib64 module'
+export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module'
 
 export _BL64_CHECK_TXT_RESOURCE_NOT_FOUND='required resource was not found on the system'
 
@@ -356,7 +392,7 @@ export _BL64_CHECK_TXT_RESOURCE_NOT_FOUND='required resource was not found on th
 # BashLib64 / Module / Globals / Show shell debugging information
 #######################################
 
-export BL64_DBG_VERSION='2.1.0'
+export BL64_DBG_VERSION='2.2.0'
 
 export BL64_DBG_MODULE="$BL64_VAR_OFF"
 
@@ -395,6 +431,7 @@ export BL64_DBG_TARGET_ALL='ALL'
 export _BL64_DBG_TXT_FUNCTION_START='function tracing started'
 export _BL64_DBG_TXT_FUNCTION_STOP='function tracing stopped'
 export _BL64_DBG_TXT_SHELL_VAR='shell variable'
+export _BL64_DBG_TXT_COMMENTS='dev-comments'
 
 export _BL64_DBG_TXT_BASH='Bash / Interpreter path'
 export _BL64_DBG_TXT_BASHOPTS='Bash / ShOpt Options'
@@ -423,11 +460,13 @@ export _BL64_DBG_TXT_TMPDIR='Temporary path (TMPDIR)'
 export _BL64_DBG_TXT_PWD='Current working directory (pwd command)'
 export _BL64_DBG_TXT_DEBUG='Debug'
 
+export _BL64_DBG_TXT_WRONG_LEVEL='invalid debugging level. Must be one of: '
+
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
 #######################################
 
-export BL64_FS_VERSION='4.5.0'
+export BL64_FS_VERSION='4.5.1'
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
 
@@ -513,7 +552,7 @@ export _BL64_FS_TXT_ERROR_NOT_TMPFILE='provided directory was not created by bl6
 # BashLib64 / Module / Globals / Format text data
 #######################################
 
-export BL64_FMT_VERSION='2.0.0'
+export BL64_FMT_VERSION='2.1.0'
 
 export BL64_FMT_MODULE="$BL64_VAR_OFF"
 
@@ -521,7 +560,7 @@ export BL64_FMT_MODULE="$BL64_VAR_OFF"
 # BashLib64 / Module / Globals / Display messages
 #######################################
 
-export BL64_MSG_VERSION='3.7.1'
+export BL64_MSG_VERSION='4.1.0'
 
 export BL64_MSG_MODULE="$BL64_VAR_OFF"
 
@@ -868,7 +907,7 @@ export BL64_TM_MODULE="$BL64_VAR_OFF"
 # BashLib64 / Module / Globals / Manipulate text files content
 #######################################
 
-export BL64_TXT_VERSION='1.11.0'
+export BL64_TXT_VERSION='1.12.0'
 
 export BL64_TXT_MODULE="$BL64_VAR_OFF"
 
@@ -963,6 +1002,164 @@ export BL64_XSV_FS_DOLLAR='$'
 export BL64_XSV_FS_SLASH='/'
 
 export _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
+
+#######################################
+# BashLib64 / Module / Globals / Write messages to logs
+#######################################
+
+export BL64_LOG_VERSION='2.0.0'
+
+# Optional module. Not enabled by default
+export BL64_LOG_MODULE="$BL64_VAR_OFF"
+
+# Log file types
+export BL64_LOG_FORMAT_CSV='C'
+
+# Logging categories
+export BL64_LOG_CATEGORY_NONE='NONE'
+export BL64_LOG_CATEGORY_INFO='INFO'
+export BL64_LOG_CATEGORY_DEBUG='DEBUG'
+export BL64_LOG_CATEGORY_WARNING='WARNING'
+export BL64_LOG_CATEGORY_ERROR='ERROR'
+
+# Parameters
+export BL64_LOG_REPOSITORY_MODE='0755'
+export BL64_LOG_TARGET_MODE='0644'
+
+# Module variables
+export BL64_LOG_FS=''
+export BL64_LOG_FORMAT=''
+export BL64_LOG_LEVEL=''
+export BL64_LOG_REPOSITORY=''
+export BL64_LOG_DESTINATION=''
+export BL64_LOG_RUNTIME=''
+
+export _BL64_LOG_TXT_INVALID_TYPE='invalid log type. Please use any of BL64_LOG_TYPE_*'
+export _BL64_LOG_TXT_SET_TARGET_FAILED='failed to set log target'
+export _BL64_LOG_TXT_CREATE_REPOSITORY='create log repository'
+#######################################
+# BashLib64 / Module / Globals / Manage OS identity and access service
+#######################################
+
+export BL64_IAM_VERSION='3.0.0'
+
+export BL64_IAM_MODULE="$BL64_VAR_OFF"
+
+export BL64_IAM_CMD_USERADD=''
+export BL64_IAM_CMD_ID=''
+
+export BL64_IAM_SET_USERADD_CREATE_HOME=''
+export BL64_IAM_SET_USERADD_GROUP=''
+export BL64_IAM_SET_USERADD_HOME_PATH=''
+export BL64_IAM_SET_USERADD_SHELL=''
+
+export BL64_IAM_ALIAS_USERADD=''
+
+export _BL64_IAM_TXT_ADD_USER='create user account'
+export _BL64_IAM_TXT_EXISTING_USER='user already created, re-using existing one'
+
+#######################################
+# BashLib64 / Module / Globals / Manage native OS packages
+#######################################
+
+export BL64_PKG_VERSION='4.1.0'
+
+export BL64_PKG_MODULE="$BL64_VAR_OFF"
+
+export BL64_PKG_CMD_APK=''
+export BL64_PKG_CMD_APT=''
+export BL64_PKG_CMD_BRW=''
+export BL64_PKG_CMD_DNF=''
+export BL64_PKG_CMD_YUM=''
+export BL64_PKG_CMD_ZYPPER=''
+
+export BL64_PKG_ALIAS_APK_CLEAN=''
+export BL64_PKG_ALIAS_APK_INSTALL=''
+export BL64_PKG_ALIAS_APK_CACHE=''
+export BL64_PKG_ALIAS_APT_CLEAN=''
+export BL64_PKG_ALIAS_APT_INSTALL=''
+export BL64_PKG_ALIAS_APT_CACHE=''
+export BL64_PKG_ALIAS_BRW_CLEAN=''
+export BL64_PKG_ALIAS_BRW_INSTALL=''
+export BL64_PKG_ALIAS_BRW_CACHE=''
+export BL64_PKG_ALIAS_DNF_CACHE=''
+export BL64_PKG_ALIAS_DNF_CLEAN=''
+export BL64_PKG_ALIAS_DNF_INSTALL=''
+export BL64_PKG_ALIAS_YUM_CACHE=''
+export BL64_PKG_ALIAS_YUM_CLEAN=''
+export BL64_PKG_ALIAS_YUM_INSTALL=''
+
+export BL64_PKG_SET_ASSUME_YES=''
+export BL64_PKG_SET_QUIET=''
+export BL64_PKG_SET_SLIM=''
+export BL64_PKG_SET_VERBOSE=''
+
+#
+# Common paths
+#
+
+export BL64_PKG_PATH_APT_SOURCES_LIST_D=''
+export BL64_PKG_PATH_GPG_KEYRINGS=''
+export BL64_PKG_PATH_YUM_REPOS_D=''
+
+export BL64_PKG_DEF_SUFIX_APT_REPOSITORY='list'
+export BL64_PKG_DEF_SUFIX_GPG_FILE='gpg'
+export BL64_PKG_DEF_SUFIX_YUM_REPOSITORY='repo'
+
+export _BL64_PKG_TXT_CLEAN='clean up package manager run-time environment'
+export _BL64_PKG_TXT_INSTALL='install packages'
+export _BL64_PKG_TXT_UPGRADE='upgrade packages'
+export _BL64_PKG_TXT_PREPARE='initialize package manager'
+export _BL64_PKG_TXT_REPOSITORY_REFRESH='refresh package repository content'
+export _BL64_PKG_TXT_REPOSITORY_ADD='add remote package repository'
+export _BL64_PKG_TXT_REPOSITORY_EXISTING='requested repository is already present. Continue using existing one.'
+
+#######################################
+# BashLib64 / Module / Globals / Interact with system-wide Python
+#######################################
+
+export BL64_PY_VERSION='1.13.0'
+
+# Optional module. Not enabled by default
+export BL64_PY_MODULE="$BL64_VAR_OFF"
+
+# Define placeholders for optional distro native python versions
+export BL64_PY_CMD_PYTHON3="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON35="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON36="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON37="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON38="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON39="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON310="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON311="$BL64_VAR_UNAVAILABLE"
+
+# Full path to the python venv activated by bl64_py_setup
+export BL64_PY_VENV_PATH=''
+
+# Version info
+export BL64_PY_VERSION_PYTHON3=''
+export BL64_PY_VERSION_PIP3=''
+
+export BL64_PY_SET_PIP_VERBOSE=''
+export BL64_PY_SET_PIP_VERSION=''
+export BL64_PY_SET_PIP_UPGRADE=''
+export BL64_PY_SET_PIP_USER=''
+export BL64_PY_SET_PIP_DEBUG=''
+export BL64_PY_SET_PIP_QUIET=''
+export BL64_PY_SET_PIP_SITE=''
+export BL64_PY_SET_PIP_NO_WARN_SCRIPT=''
+
+export BL64_PY_DEF_VENV_CFG=''
+export BL64_PY_DEF_MODULE_VENV=''
+export BL64_PY_DEF_MODULE_PIP=''
+
+export _BL64_PY_TXT_PIP_PREPARE_PIP='upgrade pip module'
+export _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
+export _BL64_PY_TXT_PIP_CLEANUP_PIP='cleanup pip cache'
+export _BL64_PY_TXT_PIP_INSTALL='install modules'
+export _BL64_PY_TXT_VENV_MISSING='requested python virtual environment is missing'
+export _BL64_PY_TXT_VENV_INVALID='requested python virtual environment is invalid (no pyvenv.cfg found)'
+export _BL64_PY_TXT_VENV_CREATE='create python virtual environment'
 
 #######################################
 # BashLib64 / Module / Globals / Manage archive files
@@ -1101,7 +1298,7 @@ export _BL64_CNT_TXT_MISSING_FILTER='no filter was selected. Task requires one o
 # BashLib64 / Module / Globals / Interact with GCP
 #######################################
 
-export BL64_GCP_VERSION='1.5.0'
+export BL64_GCP_VERSION='1.5.1'
 
 # Optional module. Not enabled by default
 export BL64_GCP_MODULE="$BL64_VAR_OFF"
@@ -1137,31 +1334,10 @@ export BL64_HLM_SET_OUTPUT_YAML=''
 export BL64_HLM_RUN_TIMEOUT=''
 
 #######################################
-# BashLib64 / Module / Globals / Manage OS identity and access service
-#######################################
-
-export BL64_IAM_VERSION='3.0.0'
-
-export BL64_IAM_MODULE="$BL64_VAR_OFF"
-
-export BL64_IAM_CMD_USERADD=''
-export BL64_IAM_CMD_ID=''
-
-export BL64_IAM_SET_USERADD_CREATE_HOME=''
-export BL64_IAM_SET_USERADD_GROUP=''
-export BL64_IAM_SET_USERADD_HOME_PATH=''
-export BL64_IAM_SET_USERADD_SHELL=''
-
-export BL64_IAM_ALIAS_USERADD=''
-
-export _BL64_IAM_TXT_ADD_USER='create user account'
-export _BL64_IAM_TXT_EXISTING_USER='user already created, re-using existing one'
-
-#######################################
 # BashLib64 / Module / Globals / Interact with Kubernetes
 #######################################
 
-export BL64_K8S_VERSION='2.0.0'
+export BL64_K8S_VERSION='2.0.2'
 
 # Optional module. Not enabled by default
 export BL64_K8S_MODULE="$BL64_VAR_OFF"
@@ -1200,40 +1376,6 @@ export _BL64_K8S_TXT_RESOURCE_EXISTING='the resource is already created. No furt
 export _BL64_K8S_TXT_ERROR_KUBECTL_VERSION='unable to determine kubectl version'
 
 #######################################
-# BashLib64 / Module / Globals / Write messages to logs
-#######################################
-
-export BL64_LOG_VERSION='2.0.0'
-
-# Optional module. Not enabled by default
-export BL64_LOG_MODULE="$BL64_VAR_OFF"
-
-# Log file types
-export BL64_LOG_FORMAT_CSV='C'
-
-# Logging categories
-export BL64_LOG_CATEGORY_NONE='NONE'
-export BL64_LOG_CATEGORY_INFO='INFO'
-export BL64_LOG_CATEGORY_DEBUG='DEBUG'
-export BL64_LOG_CATEGORY_WARNING='WARNING'
-export BL64_LOG_CATEGORY_ERROR='ERROR'
-
-# Parameters
-export BL64_LOG_REPOSITORY_MODE='0755'
-export BL64_LOG_TARGET_MODE='0644'
-
-# Module variables
-export BL64_LOG_FS=''
-export BL64_LOG_FORMAT=''
-export BL64_LOG_LEVEL=''
-export BL64_LOG_REPOSITORY=''
-export BL64_LOG_DESTINATION=''
-export BL64_LOG_RUNTIME=''
-
-export _BL64_LOG_TXT_INVALID_TYPE='invalid log type. Please use any of BL64_LOG_TYPE_*'
-export _BL64_LOG_TXT_SET_TARGET_FAILED='failed to set log target'
-export _BL64_LOG_TXT_CREATE_REPOSITORY='create log repository'
-#######################################
 # BashLib64 / Module / Setup / Interact with MongoDB
 #######################################
 
@@ -1252,102 +1394,6 @@ export BL64_MDB_SET_NORC=''
 
 export BL64_MDB_REPLICA_WRITE=''
 export BL64_MDB_REPLICA_TIMEOUT=''
-
-#######################################
-# BashLib64 / Module / Globals / Manage native OS packages
-#######################################
-
-export BL64_PKG_VERSION='4.0.1'
-
-export BL64_PKG_MODULE="$BL64_VAR_OFF"
-
-export BL64_PKG_CMD_APK=''
-export BL64_PKG_CMD_APT=''
-export BL64_PKG_CMD_BRW=''
-export BL64_PKG_CMD_DNF=''
-export BL64_PKG_CMD_YUM=''
-export BL64_PKG_CMD_ZYPPER=''
-
-export BL64_PKG_ALIAS_APK_CLEAN=''
-export BL64_PKG_ALIAS_APK_INSTALL=''
-export BL64_PKG_ALIAS_APK_CACHE=''
-export BL64_PKG_ALIAS_APT_CLEAN=''
-export BL64_PKG_ALIAS_APT_INSTALL=''
-export BL64_PKG_ALIAS_APT_CACHE=''
-export BL64_PKG_ALIAS_BRW_CLEAN=''
-export BL64_PKG_ALIAS_BRW_INSTALL=''
-export BL64_PKG_ALIAS_BRW_CACHE=''
-export BL64_PKG_ALIAS_DNF_CACHE=''
-export BL64_PKG_ALIAS_DNF_CLEAN=''
-export BL64_PKG_ALIAS_DNF_INSTALL=''
-export BL64_PKG_ALIAS_YUM_CACHE=''
-export BL64_PKG_ALIAS_YUM_CLEAN=''
-export BL64_PKG_ALIAS_YUM_INSTALL=''
-
-export BL64_PKG_SET_ASSUME_YES=''
-export BL64_PKG_SET_QUIET=''
-export BL64_PKG_SET_SLIM=''
-export BL64_PKG_SET_VERBOSE=''
-
-export BL64_PKG_SET_VERBOSE=''
-
-export BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY='repo'
-
-export BL64_PKG_PATH_YUM_REPOS_D=''
-
-export _BL64_PKG_TXT_CLEAN='clean up package manager run-time environment'
-export _BL64_PKG_TXT_INSTALL='install packages'
-export _BL64_PKG_TXT_UPGRADE='upgrade packages'
-export _BL64_PKG_TXT_PREPARE='initialize package manager'
-export _BL64_PKG_TXT_REPOSITORY_REFRESH='refresh package repository content'
-export _BL64_PKG_TXT_REPOSITORY_ADD='add remote package repository'
-
-#######################################
-# BashLib64 / Module / Globals / Interact with system-wide Python
-#######################################
-
-export BL64_PY_VERSION='1.13.0'
-
-# Optional module. Not enabled by default
-export BL64_PY_MODULE="$BL64_VAR_OFF"
-
-# Define placeholders for optional distro native python versions
-export BL64_PY_CMD_PYTHON3="$BL64_VAR_UNAVAILABLE"
-export BL64_PY_CMD_PYTHON35="$BL64_VAR_UNAVAILABLE"
-export BL64_PY_CMD_PYTHON36="$BL64_VAR_UNAVAILABLE"
-export BL64_PY_CMD_PYTHON37="$BL64_VAR_UNAVAILABLE"
-export BL64_PY_CMD_PYTHON38="$BL64_VAR_UNAVAILABLE"
-export BL64_PY_CMD_PYTHON39="$BL64_VAR_UNAVAILABLE"
-export BL64_PY_CMD_PYTHON310="$BL64_VAR_UNAVAILABLE"
-export BL64_PY_CMD_PYTHON311="$BL64_VAR_UNAVAILABLE"
-
-# Full path to the python venv activated by bl64_py_setup
-export BL64_PY_VENV_PATH=''
-
-# Version info
-export BL64_PY_VERSION_PYTHON3=''
-export BL64_PY_VERSION_PIP3=''
-
-export BL64_PY_SET_PIP_VERBOSE=''
-export BL64_PY_SET_PIP_VERSION=''
-export BL64_PY_SET_PIP_UPGRADE=''
-export BL64_PY_SET_PIP_USER=''
-export BL64_PY_SET_PIP_DEBUG=''
-export BL64_PY_SET_PIP_QUIET=''
-export BL64_PY_SET_PIP_SITE=''
-export BL64_PY_SET_PIP_NO_WARN_SCRIPT=''
-
-export BL64_PY_DEF_VENV_CFG=''
-export BL64_PY_DEF_MODULE_VENV=''
-export BL64_PY_DEF_MODULE_PIP=''
-
-export _BL64_PY_TXT_PIP_PREPARE_PIP='upgrade pip module'
-export _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
-export _BL64_PY_TXT_PIP_CLEANUP_PIP='cleanup pip cache'
-export _BL64_PY_TXT_PIP_INSTALL='install modules'
-export _BL64_PY_TXT_VENV_MISSING='requested python virtual environment is missing'
-export _BL64_PY_TXT_VENV_INVALID='requested python virtual environment is invalid (no pyvenv.cfg found)'
-export _BL64_PY_TXT_VENV_CREATE='create python virtual environment'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with Terraform
@@ -1401,6 +1447,9 @@ export _BL64_TF_TXT_ERROR_GET_VERSION='failed to get terraform CLI version'
 #   >0: setup failed
 #######################################
 function bl64_api_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
   BL64_API_MODULE="$BL64_VAR_ON"
@@ -1544,9 +1593,15 @@ function bl64_api_url_encode() {
 #   >0: setup failed
 #######################################
 function bl64_bsh_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
-  _bl64_bsh_set_version &&
+  bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_check_module_imported 'BL64_FMT_MODULE' &&
+    _bl64_bsh_set_version &&
     BL64_BSH_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'bsh'
@@ -1564,7 +1619,7 @@ function bl64_bsh_setup() {
 #   STDERR: command errors
 # Returns:
 #   0: version set ok
-#   >0: command error
+#   $BL64_LIB_ERROR_OS_BASH_VERSION
 #######################################
 function _bl64_bsh_set_version() {
   bl64_dbg_lib_show_function
@@ -1573,8 +1628,8 @@ function _bl64_bsh_set_version() {
   4*) BL64_BSH_VERSION_BASH='4.0' ;;
   5*) BL64_BSH_VERSION_BASH='5.0' ;;
   *)
-    bl64_msg_show_error "${_BL64_BSH_TXT_UNSUPPORTED} (${BASH_VERSINFO[0]})" &&
-      return $BL64_LIB_ERROR_OS_BASH_VERSION
+    bl64_check_alert_unsupported "Bash: ${BASH_VERSINFO[0]}"
+    return $BL64_LIB_ERROR_OS_BASH_VERSION
     ;;
   esac
   bl64_dbg_lib_show_vars 'BL64_BSH_VERSION_BASH'
@@ -1632,7 +1687,6 @@ function bl64_bsh_script_get_name() {
   ((main > 0)) && main=$((main - 1))
 
   bl64_fmt_basename "${BASH_SOURCE[${main}]}"
-
 }
 
 #######################################
@@ -1657,7 +1711,6 @@ function bl64_bsh_script_set_id() {
   bl64_check_parameter 'script_id' || return $?
 
   BL64_SCRIPT_ID="$script_id"
-
 }
 
 #######################################
@@ -1684,7 +1737,6 @@ function bl64_bsh_script_set_identity() {
     BL64_SCRIPT_PATH="$(bl64_bsh_script_get_path)" &&
     BL64_SCRIPT_NAME="$(bl64_bsh_script_get_name)" &&
     bl64_bsh_script_set_id "$BL64_SCRIPT_NAME"
-
 }
 
 #######################################
@@ -1711,7 +1763,6 @@ function bl64_bsh_env_export_variable() {
     return $?
 
   printf "export %s='%s'\n" "$variable" "$value"
-
 }
 
 #######################################
@@ -1733,9 +1784,14 @@ function bl64_bsh_env_export_variable() {
 #   >0: setup failed
 #######################################
 function bl64_check_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
-  BL64_CHECK_MODULE="$BL64_VAR_ON"
+  bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+    BL64_CHECK_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'check'
 }
@@ -2252,7 +2308,7 @@ function bl64_check_alert_unsupported() {
 #   0: using compatibility mode
 #   >0: command is incompatible and compatibility mode is disabled
 #######################################
-function bl64_check_compatibility() {
+function bl64_check_compatibility_mode() {
   bl64_dbg_lib_show_function "$@"
   local extra="${1:-}"
 
@@ -2364,27 +2420,24 @@ function bl64_check_parameters_none() {
 }
 
 #######################################
-# Check that the optional module is loaded
+# Check that the module is loaded and has been setup
 #
 # Arguments:
-#   $1: module name (eg: BL64_XXXX_MODULE)
+#   $1: module id (eg: BL64_XXXX_MODULE)
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
-#   BL64_LIB_ERROR_TASK_UNDEFINED
+#   BL64_LIB_ERROR_MODULE_SETUP_MISSING
 #######################################
 function bl64_check_module() {
   bl64_dbg_lib_show_function "$@"
   local module="${1:-}"
   local setup_status=''
 
-  bl64_check_parameter 'module' || return $?
-
-  if [[ ! -v "$module" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_SET} (${_BL64_CHECK_TXT_MODULE}: ${module} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
-    return $BL64_LIB_ERROR_EXPORT_SET
-  fi
+  bl64_check_parameter 'module' &&
+    bl64_check_module_imported "$module" ||
+    return $?
 
   eval setup_status="\$$module"
   if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
@@ -2396,30 +2449,26 @@ function bl64_check_module() {
 }
 
 #######################################
-# Check that the user is created
+# Check that the module is imported
 #
 # Arguments:
-#   $1: user name
-#   $2: error message
+#   $1: module id (eg: BL64_XXXX_MODULE)
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
-#   BL64_LIB_ERROR_USER_NOT_FOUND
+#   BL64_LIB_ERROR_MODULE_NOT_IMPORTED
 #######################################
-function bl64_check_user() {
+function bl64_check_module_imported() {
   bl64_dbg_lib_show_function "$@"
-  local user="${1:-}"
-  local message="${2:-${_BL64_CHECK_TXT_USER_NOT_FOUND}}"
+  local module="${1:-}"
+  bl64_check_parameter 'module' || return $?
 
-  bl64_check_parameter 'user' || return $?
-
-  if ! bl64_iam_user_is_created "$user"; then
-    bl64_msg_show_error "${message} (user: ${user} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
-    return $BL64_LIB_ERROR_USER_NOT_FOUND
-  else
-    return 0
+  if [[ ! -v "$module" ]]; then
+    bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_SET} (${_BL64_CHECK_TXT_MODULE}: ${module} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    return $BL64_LIB_ERROR_MODULE_NOT_IMPORTED
   fi
+  return 0
 }
 
 #######################################
@@ -2501,7 +2550,7 @@ function bl64_check_command_search_path() {
 
   full_path="$(type -p "${file}")"
   # shellcheck disable=SC2181
-  if (( $? != 0)); then
+  if (($? != 0)); then
     bl64_msg_show_error "${message} (command: ${file} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_FOUND
@@ -2548,6 +2597,8 @@ function bl64_dbg_app_custom_3_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_APP_CU
 # Setup the bashlib64 module
 #
 # * Warning: bootstrap function
+# * Warning: keep this module independant (do not depend on other bl64 modules)
+# * Debugging messages are disabled by default
 #
 # Arguments:
 #   None
@@ -2559,13 +2610,13 @@ function bl64_dbg_app_custom_3_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_APP_CU
 #   >0: setup failed
 #######################################
 function bl64_dbg_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
-  # Set default debug level
   bl64_dbg_all_disable &&
     BL64_DBG_MODULE="$BL64_VAR_ON"
-
-  # bl64_check_alert_module_setup # Disabled as check is loaded after dbg
 }
 
 #######################################
@@ -2578,13 +2629,10 @@ function bl64_dbg_setup() {
 #   STDERR: check error
 # Returns:
 #   0: set ok
-#   >0: unable to set
+#   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
 function bl64_dbg_set_level() {
   local level="$1"
-
-  bl64_check_parameter 'level' || return $?
-
   case "$level" in
   "$BL64_DBG_TARGET_NONE") bl64_dbg_all_disable ;;
   "$BL64_DBG_TARGET_APP_TRACE") bl64_dbg_app_trace_enable ;;
@@ -2599,7 +2647,10 @@ function bl64_dbg_set_level() {
   "$BL64_DBG_TARGET_LIB_CMD") bl64_dbg_lib_command_enable ;;
   "$BL64_DBG_TARGET_LIB_ALL") bl64_dbg_lib_enable ;;
   "$BL64_DBG_TARGET_ALL") bl64_dbg_all_enable ;;
-  *) bl64_check_alert_parameter_invalid ;;
+  *)
+    _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_WRONG_LEVEL} ${BL64_DBG_TARGET_ALL}|${BL64_DBG_TARGET_APP_ALL}|${BL64_DBG_TARGET_LIB_ALL}"
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
+    ;;
   esac
 }
 
@@ -2609,7 +2660,6 @@ function bl64_dbg_set_level() {
 
 function _bl64_dbg_show() {
   local message="$1"
-
   printf '%s: %s\n' "$_BL64_DBG_TXT_DEBUG" "$message" >&2
 }
 
@@ -2715,7 +2765,6 @@ function bl64_dbg_runtime_show_paths() {
 #######################################
 function bl64_dbg_app_trace_stop() {
   local -i state=$?
-
   bl64_dbg_app_trace_enabled || return $state
 
   set +x
@@ -2759,7 +2808,6 @@ function bl64_dbg_app_trace_start() {
 #######################################
 function bl64_dbg_lib_trace_stop() {
   local -i state=$?
-
   bl64_dbg_lib_trace_enabled || return $state
 
   set +x
@@ -2800,10 +2848,8 @@ function bl64_dbg_lib_trace_start() {
 #   0: always ok
 #######################################
 function bl64_dbg_lib_show_info() {
-  [[ "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_ALL" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_LIB_TASK" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_LIB_ALL" || "$#" == '0' ]] &&
-    return 0
+  bl64_dbg_lib_task_enabled || return 0
   _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${*}"
-
   return 0
 }
 
@@ -2819,10 +2865,8 @@ function bl64_dbg_lib_show_info() {
 #   0: always ok
 #######################################
 function bl64_dbg_app_show_info() {
-  [[ "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_ALL" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_APP_TASK" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_APP_ALL" || "$#" == '0' ]] &&
-    return 0
+  bl64_dbg_app_task_enabled || return 0
   _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${*}"
-
   return 0
 }
 
@@ -2839,9 +2883,7 @@ function bl64_dbg_app_show_info() {
 #######################################
 function bl64_dbg_lib_show_vars() {
   local variable=''
-
-  [[ "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_ALL" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_LIB_TASK" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_LIB_ALL" || "$#" == '0' ]] &&
-    return 0
+  bl64_dbg_lib_task_enabled || return 0
 
   for variable in "$@"; do
     eval "_bl64_dbg_show \"[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=\$${variable}]\""
@@ -2863,9 +2905,7 @@ function bl64_dbg_lib_show_vars() {
 #######################################
 function bl64_dbg_app_show_vars() {
   local variable=''
-
-  [[ "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_ALL" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_APP_TASK" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_APP_ALL" || "$#" == '0' ]] &&
-    return 0
+  bl64_dbg_app_task_enabled || return 0
 
   for variable in "$@"; do
     eval "_bl64_dbg_show \"[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=\$${variable}]\""
@@ -2888,7 +2928,6 @@ function bl64_dbg_app_show_vars() {
 # shellcheck disable=SC2120
 function bl64_dbg_lib_show_function() {
   bl64_dbg_lib_task_enabled || return 0
-
   _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_LIB_RUN}: [${*}]"
   return 0
 }
@@ -2907,7 +2946,6 @@ function bl64_dbg_lib_show_function() {
 # shellcheck disable=SC2120
 function bl64_dbg_app_show_function() {
   bl64_dbg_app_task_enabled || return 0
-
   _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_APP_RUN}: [${*}]"
   return 0
 }
@@ -2927,7 +2965,6 @@ function bl64_dbg_app_show_function() {
 #######################################
 function bl64_dbg_lib_command_trace_stop() {
   local -i state=$?
-
   bl64_dbg_lib_task_enabled || return $state
 
   set +x
@@ -2959,6 +2996,40 @@ function bl64_dbg_lib_command_trace_start() {
 }
 
 #######################################
+# Show developer comments in bashlib64 functions
+#
+# Arguments:
+#   $1: comments
+# Outputs:
+#   STDOUT: None
+#   STDERR: Debug message
+# Returns:
+#   0: always ok
+#######################################
+function bl64_dbg_lib_show_comments() {
+  bl64_dbg_lib_task_enabled || return 0
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_COMMENTS}: ${*}"
+  return 0
+}
+
+#######################################
+# Show developer comments in app functions
+#
+# Arguments:
+#   $@: comments
+# Outputs:
+#   STDOUT: None
+#   STDERR: Debug message
+# Returns:
+#   0: always ok
+#######################################
+function bl64_dbg_app_show_comments() {
+  bl64_dbg_app_task_enabled || return 0
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_COMMENTS}: ${*}"
+  return 0
+}
+
+#######################################
 # BashLib64 / Module / Setup / Manage local filesystem
 #######################################
 
@@ -2977,6 +3048,9 @@ function bl64_dbg_lib_command_trace_start() {
 #   >0: setup failed
 #######################################
 function bl64_fs_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
   _bl64_fs_set_command &&
@@ -4007,7 +4081,7 @@ function bl64_fs_safeguard() {
 function bl64_fs_restore() {
   bl64_dbg_lib_show_function "$@"
   local destination="${1:-}"
-  local result="${2:-}"
+  local -i result=$2
   local backup="${destination}${BL64_FS_SAFEGUARD_POSTFIX}"
 
   bl64_check_parameter 'destination' &&
@@ -4021,12 +4095,12 @@ function bl64_fs_restore() {
   fi
 
   # Check if restore is needed based on the operation result
-  if [[ "$result" == "$BL64_VAR_OK" ]]; then
+  if (( result == 0 )); then
     bl64_dbg_lib_show_info 'operation was ok, backup no longer needed, remove it'
     [[ -e "$backup" ]] && bl64_fs_rm_full "$backup"
 
     # shellcheck disable=SC2086
-    return $BL64_VAR_OK
+    return 0
   else
     bl64_dbg_lib_show_info 'operation was NOT ok, remove invalid content'
     [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
@@ -4421,9 +4495,14 @@ function bl64_fs_rm_tmpfile() {
 #   >0: setup failed
 #######################################
 function bl64_fmt_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
-  BL64_FMT_MODULE="$BL64_VAR_ON"
+  bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_TXT_MODULE' &&
+    BL64_FMT_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'fmt'
 }
@@ -4452,7 +4531,7 @@ function bl64_fmt_strip_starting_slash() {
 
   # shellcheck disable=SC2086
   if [[ -z "$path" ]]; then
-    return $BL64_VAR_OK
+    return 0
   elif [[ "$path" == '/' ]]; then
     printf '%s' "${path}"
   elif [[ "$path" == /* ]]; then
@@ -4482,7 +4561,7 @@ function bl64_fmt_strip_ending_slash() {
 
   # shellcheck disable=SC2086
   if [[ -z "$path" ]]; then
-    return $BL64_VAR_OK
+    return 0
   elif [[ "$path" == '/' ]]; then
     printf '%s' "${path}"
   elif [[ "$path" == */ ]]; then
@@ -4568,7 +4647,7 @@ function bl64_fmt_dirname() {
 
   # shellcheck disable=SC2086
   if [[ -z "$path" ]]; then
-    return $BL64_VAR_OK
+    return 0
   elif [[ "$path" == '/' ]]; then
     printf '%s' "${path}"
   elif [[ "$path" != */* ]]; then
@@ -4665,9 +4744,14 @@ function bl64_fmt_separator_line() {
 #   >0: setup failed
 #######################################
 function bl64_msg_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
-  bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI" &&
+  bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI" &&
     bl64_msg_app_enable_verbose &&
     BL64_MSG_MODULE="$BL64_VAR_ON"
 
@@ -5263,8 +5347,10 @@ function bl64_msg_show_text() {
 #######################################
 # Display batch process start message
 #
+# * Use in the main section of task oriented scripts to show start/end of batch process
+#
 # Arguments:
-#   $1: message
+#   $2: batch short description
 # Outputs:
 #   STDOUT: message
 #   STDERR: None
@@ -5285,9 +5371,12 @@ function bl64_msg_show_batch_start() {
 #######################################
 # Display batch process complete message
 #
+# * Use in the main section of task oriented scripts to show start/end of batch process
+# * Can be used as last command in shell script to both show status and return exit status
+#
 # Arguments:
 #   $1: process exit status
-#   $2: message
+#   $2: batch short description
 # Outputs:
 #   STDOUT: message
 #   STDERR: None
@@ -5297,8 +5386,8 @@ function bl64_msg_show_batch_start() {
 #######################################
 function bl64_msg_show_batch_finish() {
   bl64_dbg_lib_show_function "$@"
-  local status="$1"
-  local message="${2-${BL64_VAR_DEFAULT}}"
+  local -i status=$1
+  local message="${2-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${status}:${message}" &&
     bl64_msg_app_verbose_enabled || return 0
@@ -5308,6 +5397,8 @@ function bl64_msg_show_batch_finish() {
   else
     _bl64_msg_print "$BL64_MSG_TYPE_BATCHERR" "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_ERROR}: exit-status-${status}"
   fi
+  # shellcheck disable=SC2086
+  return $status
 }
 
 #######################################
@@ -5387,6 +5478,9 @@ function bl64_msg_show_separator() {
 #   >0: setup failed
 #######################################
 function bl64_os_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
   [[ "${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5' ]] &&
@@ -5860,6 +5954,9 @@ function bl64_os_check_version() {
 #   >0: setup failed
 #######################################
 function bl64_rbac_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
   _bl64_rbac_set_command &&
@@ -6185,6 +6282,9 @@ function bl64_rbac_run_bash_function() {
 #   >0: setup failed
 #######################################
 function bl64_rnd_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
   BL64_RND_MODULE="$BL64_VAR_ON"
@@ -6317,6 +6417,9 @@ function bl64_rnd_get_alphanumeric() {
 #   >0: setup failed
 #######################################
 function bl64_rxtx_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
   _bl64_rxtx_set_command &&
@@ -6853,6 +6956,9 @@ function bl64_rxtx_github_get_asset() {
 #   >0: setup failed
 #######################################
 function bl64_tm_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
   BL64_TM_MODULE="$BL64_VAR_ON"
@@ -6917,9 +7023,14 @@ function bl64_tm_create_timestamp_file() {
 #   >0: setup failed
 #######################################
 function bl64_txt_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
-  _bl64_txt_set_command &&
+  bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    _bl64_txt_set_command &&
     _bl64_txt_set_options &&
     BL64_TXT_MODULE="$BL64_VAR_ON"
 
@@ -7454,6 +7565,9 @@ function bl64_txt_run_sort() {
 #   >0: setup failed
 #######################################
 function bl64_ui_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
   BL64_UI_MODULE="$BL64_VAR_ON"
@@ -7516,6 +7630,9 @@ function bl64_ui_ask_confirmation() {
 #   >0: setup failed
 #######################################
 function bl64_vcs_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
   _bl64_vcs_set_command &&
@@ -7889,6 +8006,9 @@ function _bl64_vcs_github_release_get_latest() {
 #   >0: setup failed
 #######################################
 function bl64_xsv_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
   BL64_XSV_MODULE="$BL64_VAR_ON"
@@ -8000,6 +8120,2138 @@ function bl64_xsv_search_records() {
 }
 
 #######################################
+# BashLib64 / Module / Setup / Write messages to logs
+#######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# Arguments:
+#   $1: log repository. Full path
+#   $2: log target. Default: BL64_SCRIPT_ID
+#   $2: level. One of BL64_LOG_CATEGORY_*
+#   $3: format. One of BL64_LOG_FORMAT_*
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   BL64_LIB_ERROR_MODULE_SETUP_INVALID
+#   BL64_LIB_ERROR_MODULE_SETUP_INVALID
+#######################################
+function bl64_log_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
+  bl64_dbg_lib_show_function "$@"
+  local repository="${1:-}"
+  local target="${2:-${BL64_SCRIPT_ID}}"
+  local level="${3:-${BL64_LOG_CATEGORY_NONE}}"
+  local format="${4:-${BL64_LOG_FORMAT_CSV}}"
+
+  [[ -z "$repository" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+
+  bl64_log_set_repository "$repository" &&
+    bl64_log_set_target "$target" &&
+    bl64_log_set_level "$level" &&
+    bl64_log_set_format "$format" &&
+    BL64_LOG_MODULE="$BL64_VAR_ON"
+
+  bl64_check_alert_module_setup 'log'
+}
+
+#######################################
+# Set log repository
+#
+# * Create the repository directory
+#
+# Arguments:
+#   $1: repository path
+# Outputs:
+#   STDOUT: None
+#   STDERR: command stderr
+# Returns:
+#   0: set ok
+#   >0: unable to set
+#######################################
+function bl64_log_set_repository() {
+  bl64_dbg_lib_show_function "$@"
+  local repository="$1"
+
+  if [[ ! -d "$repository" ]]; then
+    "$BL64_FS_CMD_MKDIR" "$repository" &&
+      "$BL64_FS_CMD_CHMOD" "$BL64_LOG_REPOSITORY_MODE" "$repository" ||
+      return $BL64_LIB_ERROR_TASK_FAILED
+  else
+    [[ -w "$repository" ]] || return $BL64_LIB_ERROR_TASK_FAILED
+  fi
+
+  BL64_LOG_REPOSITORY="$repository"
+  return 0
+}
+
+#######################################
+# Set logging level
+#
+# Arguments:
+#   $1: target level. One of BL64_LOG_CATEGORY_*
+# Outputs:
+#   STDOUT: None
+#   STDERR: check error
+# Returns:
+#   0: set ok
+#   >0: unable to set
+#######################################
+function bl64_log_set_level() {
+  bl64_dbg_lib_show_function "$@"
+  local level="$1"
+
+  case "$level" in
+  "$BL64_LOG_CATEGORY_NONE") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_NONE" ;;
+  "$BL64_LOG_CATEGORY_INFO") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_INFO" ;;
+  "$BL64_LOG_CATEGORY_DEBUG") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_DEBUG" ;;
+  "$BL64_LOG_CATEGORY_WARNING") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_WARNING" ;;
+  "$BL64_LOG_CATEGORY_ERROR") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_ERROR" ;;
+  *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
+  esac
+}
+
+#######################################
+# Set log format
+#
+# Arguments:
+#   $1: log format. One of BL64_LOG_FORMAT_*
+# Outputs:
+#   STDOUT: None
+#   STDERR: commands stderr
+# Returns:
+#   0: set ok
+#   >0: unable to set
+#######################################
+function bl64_log_set_format() {
+  bl64_dbg_lib_show_function "$@"
+  local format="$1"
+
+  case "$format" in
+  "$BL64_LOG_FORMAT_CSV")
+    BL64_LOG_FORMAT="$BL64_LOG_FORMAT_CSV"
+    BL64_LOG_FS=':'
+    ;;
+  *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
+  esac
+}
+
+#######################################
+# Set log target
+#
+# * Log target is the file where logs will be written to
+# * File is created or appended in the log repository
+#
+# Arguments:
+#   $1: log target. Format: file name
+# Outputs:
+#   STDOUT: None
+#   STDERR: commands stderr
+# Returns:
+#   0: set ok
+#   >0: unable to set
+#######################################
+function bl64_log_set_target() {
+  bl64_dbg_lib_show_function "$@"
+  local target="$1"
+  local destination="${BL64_LOG_REPOSITORY}/${target}"
+
+  # Check if there is a new target to set
+  [[ "$BL64_LOG_DESTINATION" == "$destination" ]] && return 0
+
+  if [[ ! -w "$destination" ]]; then
+    "$BL64_FS_CMD_TOUCH" "$destination" &&
+      "$BL64_FS_CMD_CHMOD" "$BL64_LOG_TARGET_MODE" "$destination" ||
+      return $BL64_LIB_ERROR_TASK_FAILED
+  fi
+
+  BL64_LOG_DESTINATION="$destination"
+  return 0
+}
+
+#######################################
+# Set runtime log target
+#
+# * Use to save output from commands using one file per execution
+# * The target name is used as the directory for each execution
+# * The target directory is created in the log repository
+# * The calling script is responsible for redirecting the command's output to the target path BL64_LOG_RUNTIME
+#
+# Arguments:
+#   $1: runtime log target. Format: directory name
+# Outputs:
+#   STDOUT: None
+#   STDERR: commands stderr
+# Returns:
+#   0: set ok
+#   >0: unable to set
+#######################################
+function bl64_log_set_runtime() {
+  bl64_dbg_lib_show_function "$@"
+  local target="$1"
+  local destination="${BL64_LOG_REPOSITORY}/${target}"
+  local log=''
+
+  # Check if there is a new target to set
+  [[ "$BL64_LOG_RUNTIME" == "$destination" ]] && return 0
+
+  if [[ ! -d "$destination" ]]; then
+    "$BL64_FS_CMD_MKDIR" "$destination" &&
+      "$BL64_FS_CMD_CHMOD" "$BL64_LOG_REPOSITORY_MODE" "$destination" ||
+      return $BL64_LIB_ERROR_TASK_FAILED
+  fi
+
+  [[ ! -w "$destination" ]] && return $BL64_LIB_ERROR_TASK_FAILED
+
+  log="$(printf '%(%FT%TZ%z)T' '-1')" &&
+    BL64_LOG_RUNTIME="${destination}/${log}.log" ||
+    return 0
+
+  return 0
+}
+
+#######################################
+# BashLib64 / Module / Functions / Write messages to logs
+#######################################
+
+#######################################
+# Save a log record to the logs repository
+#
+# Arguments:
+#   $1: name of the source that is generating the message
+#   $2: log message category. Use any of $BL64_LOG_CATEGORY_*
+#   $3: message
+# Outputs:
+#   STDOUT: None
+#   STDERR: execution errors
+# Returns:
+#   0: log record successfully saved
+#   >0: failed to save the log record
+#   BL64_LIB_ERROR_MODULE_SETUP_MISSING
+#   BL64_LIB_ERROR_MODULE_SETUP_INVALID
+#######################################
+function _bl64_log_register() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local category="$2"
+  local payload="$3"
+
+  [[ "$BL64_LOG_MODULE" == "$BL64_VAR_OFF" ]] && return 0
+  [[ -z "$source" || -z "$category" || -z "$payload" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+
+  case "$BL64_LOG_FORMAT" in
+  "$BL64_LOG_FORMAT_CSV")
+    printf '%(%FT%TZ%z)T%s%s%s%s%s%s%s%s%s%s%s%s\n' \
+      '-1' \
+      "$BL64_LOG_FS" \
+      "$BL64_SCRIPT_SID" \
+      "$BL64_LOG_FS" \
+      "$HOSTNAME" \
+      "$BL64_LOG_FS" \
+      "$BL64_SCRIPT_ID" \
+      "$BL64_LOG_FS" \
+      "${source}" \
+      "$BL64_LOG_FS" \
+      "$category" \
+      "$BL64_LOG_FS" \
+      "$payload" >>"$BL64_LOG_DESTINATION"
+    ;;
+  *) return $BL64_LIB_ERROR_MODULE_SETUP_INVALID ;;
+  esac
+}
+
+#######################################
+# Save a single log record of type 'info' to the logs repository.
+#
+# Arguments:
+#   $1: name of the source that is generating the message
+#   $2: message to be recorded
+# Outputs:
+#   STDOUT: message (when BL64_LOG_VERBOSE='1')
+#   STDERR: execution errors
+# Returns:
+#   0: log record successfully saved
+#   >0: failed to save the log record
+#######################################
+function bl64_log_info() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local payload="$2"
+
+  [[ "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_NONE" ||
+    "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_ERROR" ||
+    "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_WARNING" ]] &&
+    return 0
+
+  _bl64_log_register \
+    "$source" \
+    "$BL64_LOG_CATEGORY_INFO" \
+    "$payload"
+}
+
+#######################################
+# Save a single log record of type 'error' to the logs repository.
+#
+# Arguments:
+#   $1: name of the source that is generating the message
+#   $2: message to be recorded
+# Outputs:
+#   STDOUT: None
+#   STDERR: execution errors, message (when BL64_LOG_VERBOSE='1')
+# Returns:
+#   0: log record successfully saved
+#   >0: failed to save the log record
+#######################################
+function bl64_log_error() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local payload="$2"
+
+  [[ "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_NONE" ]] && return 0
+
+  _bl64_log_register \
+    "$source" \
+    "$BL64_LOG_CATEGORY_ERROR" \
+    "$payload"
+}
+
+#######################################
+# Save a single log record of type 'warning' to the logs repository.
+#
+# Arguments:
+#   $1: name of the source that is generating the message
+#   $2: message to be recorded
+# Outputs:
+#   STDOUT: None
+#   STDERR: execution errors, message (when BL64_LOG_VERBOSE='1')
+# Returns:
+#   0: log record successfully saved
+#   >0: failed to save the log record
+#######################################
+function bl64_log_warning() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local payload="$2"
+
+  [[ "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_NONE" ||
+    "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_ERROR" ]] &&
+    return 0
+
+  _bl64_log_register \
+    "$source" \
+    "$BL64_LOG_CATEGORY_WARNING" \
+    "$payload"
+}
+
+#######################################
+# BashLib64 / Module / Setup / Manage OS identity and access service
+#######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_iam_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
+  bl64_dbg_lib_show_function
+
+  _bl64_iam_set_command &&
+    _bl64_iam_set_alias &&
+    _bl64_iam_set_options &&
+    BL64_IAM_MODULE="$BL64_VAR_ON"
+
+  bl64_check_alert_module_setup 'iam'
+}
+
+#######################################
+# Identify and normalize commands
+#
+# * Commands are exported as variables with full path
+# * The caller function is responsible for checking that the target command is present (installed)
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_iam_set_command() {
+  bl64_dbg_lib_show_function
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
+    BL64_IAM_CMD_ID='/usr/bin/id'
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
+    BL64_IAM_CMD_ID='/usr/bin/id'
+    ;;
+  ${BL64_OS_SLES}-*)
+    BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
+    BL64_IAM_CMD_ID='/usr/bin/id'
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_IAM_CMD_USERADD='/usr/sbin/adduser'
+    BL64_IAM_CMD_ID='/usr/bin/id'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_IAM_CMD_USERADD='/usr/sbin/sysadminctl'
+    BL64_IAM_CMD_ID='/usr/bin/id'
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+}
+
+#######################################
+# Create command aliases for common use cases
+#
+# * Aliases are presented as regular shell variables for easy inclusion in complex commands
+# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_iam_set_alias() {
+  bl64_dbg_lib_show_function
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
+    ;;
+  ${BL64_OS_SLES}-*)
+    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD "
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+}
+
+#######################################
+# Create command sets for common options
+#
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_iam_set_options() {
+  bl64_dbg_lib_show_function
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
+    BL64_IAM_SET_USERADD_GECO='--comment'
+    BL64_IAM_SET_USERADD_GROUP='--gid'
+    BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
+    BL64_IAM_SET_USERADD_SHELL='--shell'
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
+    BL64_IAM_SET_USERADD_GECO='--comment'
+    BL64_IAM_SET_USERADD_GROUP='--gid'
+    BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
+    BL64_IAM_SET_USERADD_SHELL='--shell'
+    ;;
+  ${BL64_OS_SLES}-*)
+    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
+    BL64_IAM_SET_USERADD_GECO='--comment'
+    BL64_IAM_SET_USERADD_GROUP='--gid'
+    BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
+    BL64_IAM_SET_USERADD_SHELL='--shell'
+    ;;
+  ${BL64_OS_ALP}-*)
+    # Home is created by default
+    BL64_IAM_SET_USERADD_CREATE_HOME=' '
+    BL64_IAM_SET_USERADD_GECO='-g'
+    BL64_IAM_SET_USERADD_GROUP='-G'
+    BL64_IAM_SET_USERADD_HOME_PATH='-h'
+    BL64_IAM_SET_USERADD_SHELL='-s'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    # Home is created by default
+    BL64_IAM_SET_USERADD_CREATE_HOME=' '
+    BL64_IAM_SET_USERADD_GECO='-fullName'
+    BL64_IAM_SET_USERADD_GROUP='-gid'
+    BL64_IAM_SET_USERADD_HOME_PATH='-home'
+    BL64_IAM_SET_USERADD_SHELL='-shell'
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+}
+
+#######################################
+# BashLib64 / Module / Functions / Manage OS identity and access service
+#######################################
+
+#######################################
+# Create local OS user
+#
+# * Wrapper to native user creation command
+# * Objective is to cover common options that are available on all suported platforms
+#   * set primary group
+#   * set shell
+#   * set home path
+#   * set user description
+#   * create home
+#   * create primary group
+# * If the user is already created nothing is done, no error
+#
+# Arguments:
+#   $1: login name
+#   $2: home path. Format: full path. Default: os native
+#   $3: primary group ID. Format: group name. Default: os native
+#   $4: shell. Format: full path. Default: os native
+#   $5: description. Default: none
+# Outputs:
+#   STDOUT: native user add command output
+#   STDERR: native user add command error messages
+# Returns:
+#   native user add command error status
+#######################################
+function bl64_iam_user_add() {
+  bl64_dbg_lib_show_function "$@"
+  local login="${1:-}"
+  local home="${2:-$BL64_VAR_DEFAULT}"
+  local group="${3:-$BL64_VAR_DEFAULT}"
+  local shell="${4:-$BL64_VAR_DEFAULT}"
+  local gecos="${5:-$BL64_VAR_DEFAULT}"
+  local password=''
+
+  bl64_check_privilege_root &&
+    bl64_check_parameter 'login' ||
+    return $?
+
+  [[ "$home" == "$BL64_VAR_DEFAULT" ]] && home=''
+  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && group=''
+  [[ "$shell" == "$BL64_VAR_DEFAULT" ]] && shell=''
+  [[ "$gecos" == "$BL64_VAR_DEFAULT" ]] && gecos=''
+
+  if bl64_iam_user_is_created "$login"; then
+    bl64_msg_show_warning "${_BL64_IAM_TXT_EXISTING_USER} ($login)"
+    return 0
+  fi
+
+  bl64_msg_show_lib_subtask "$_BL64_IAM_TXT_ADD_USER ($login)"
+  # shellcheck disable=SC2086
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    "$BL64_IAM_CMD_USERADD" \
+      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      "$login"
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    "$BL64_IAM_CMD_USERADD" \
+      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      "$login"
+    ;;
+  ${BL64_OS_SLES}-*)
+    bl64_dbg_lib_show_comments 'force primary group creation'
+    "$BL64_IAM_CMD_USERADD" \
+      --user-group \
+      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      "$login"
+    ;;
+  ${BL64_OS_ALP}-*)
+    bl64_dbg_lib_show_comments 'disable automatic password generation'
+    "$BL64_IAM_CMD_USERADD" \
+      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      -D \
+      "$login"
+    ;;
+  ${BL64_OS_MCOS}-*)
+    password="$(bl64_rnd_get_numeric)" || return $?
+    "$BL64_IAM_CMD_USERADD" \
+      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+      $BL64_IAM_SET_USERADD_CREATE_HOME \
+      -addUser "$login" \
+      -password "$password"
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+}
+
+#######################################
+# Determine if the user is created
+#
+# Arguments:
+#   $1: login name
+# Outputs:
+#   STDOUT: native user add command output
+#   STDERR: native user add command error messages
+# Returns:
+#   native user add command error status
+#######################################
+function bl64_iam_user_is_created() {
+  bl64_dbg_lib_show_function "$@"
+  local user="$1"
+
+  bl64_check_parameter 'user' ||
+    return $?
+
+  # Use the ID command to detect if the user is created
+  bl64_iam_user_get_id "$user" >/dev/null 2>&1
+
+}
+
+#######################################
+# Get user's UID
+#
+# Arguments:
+#   $1: user login name. Default: current user
+# Outputs:
+#   STDOUT: user ID
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_iam_user_get_id() {
+  bl64_dbg_lib_show_function "$@"
+  local user="$1"
+
+  # shellcheck disable=SC2086
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    "${BL64_IAM_CMD_ID}" -u $user
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    "${BL64_IAM_CMD_ID}" -u $user
+    ;;
+  ${BL64_OS_SLES}-*)
+    "${BL64_IAM_CMD_ID}" -u $user
+    ;;
+  ${BL64_OS_ALP}-*)
+    "${BL64_IAM_CMD_ID}" -u $user
+    ;;
+  ${BL64_OS_MCOS}-*)
+    "${BL64_IAM_CMD_ID}" -u $user
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+
+}
+
+#######################################
+# Get current user name
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: user name
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_iam_user_get_current() {
+  bl64_dbg_lib_show_function
+  "${BL64_IAM_CMD_ID}" -u -n
+}
+
+#######################################
+# Check that the user is created
+#
+# Arguments:
+#   $1: user name
+#   $2: error message
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_USER_NOT_FOUND
+#######################################
+function bl64_iam_check_user() {
+  bl64_dbg_lib_show_function "$@"
+  local user="${1:-}"
+  local message="${2:-${_BL64_CHECK_TXT_USER_NOT_FOUND}}"
+
+  bl64_check_parameter 'user' || return $?
+
+  if ! bl64_iam_user_is_created "$user"; then
+    bl64_msg_show_error "${message} (user: ${user} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    return $BL64_LIB_ERROR_USER_NOT_FOUND
+  else
+    return 0
+  fi
+}
+
+#######################################
+# BashLib64 / Module / Setup / Manage native OS packages
+#######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+function bl64_pkg_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
+  bl64_dbg_lib_show_function
+
+  # shellcheck disable=SC2249
+  _bl64_pkg_set_command &&
+    _bl64_pkg_set_runtime &&
+    _bl64_pkg_set_options &&
+    _bl64_pkg_set_alias &&
+    BL64_PKG_MODULE="$BL64_VAR_ON"
+
+  bl64_check_alert_module_setup 'pkg'
+}
+
+#######################################
+# Identify and normalize commands
+#
+# * Commands are exported as variables with full path
+# * The caller function is responsible for checking that the target command is present (installed)
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_pkg_set_command() {
+  bl64_dbg_lib_show_function
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_PKG_CMD_APT='/usr/bin/apt-get'
+    ;;
+  ${BL64_OS_FD}-*)
+    BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
+    BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    ;;
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+    BL64_PKG_CMD_YUM='/usr/bin/yum'
+    ;;
+  ${BL64_OS_SLES}-*)
+    BL64_PKG_CMD_ZYPPER='/usr/bin/zypper'
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_PKG_CMD_APK='/sbin/apk'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_PKG_CMD_BRW='/opt/homebrew/bin/brew'
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+}
+
+#######################################
+# Create command sets for common options
+#
+# * Warning: bootstrap function
+# * BL64_PKG_SET_SLIM: used as meta flag to capture options for reducing install disk space
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_pkg_set_options() {
+  bl64_dbg_lib_show_function
+  # shellcheck disable=SC2034
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_PKG_SET_ASSUME_YES='--assume-yes'
+    BL64_PKG_SET_SLIM='--no-install-recommends'
+    BL64_PKG_SET_QUIET='--quiet --quiet'
+    BL64_PKG_SET_VERBOSE='--show-progress'
+    ;;
+  ${BL64_OS_FD}-*)
+    BL64_PKG_SET_ASSUME_YES='--assumeyes'
+    BL64_PKG_SET_SLIM='--nodocs'
+    BL64_PKG_SET_QUIET='--quiet'
+    BL64_PKG_SET_VERBOSE='--color=never --verbose'
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    BL64_PKG_SET_ASSUME_YES='--assumeyes'
+    BL64_PKG_SET_SLIM='--nodocs'
+    BL64_PKG_SET_QUIET='--quiet'
+    BL64_PKG_SET_VERBOSE='--color=never --verbose'
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
+    BL64_PKG_SET_ASSUME_YES='--assumeyes'
+    BL64_PKG_SET_SLIM='--nodocs'
+    BL64_PKG_SET_QUIET='--quiet'
+    BL64_PKG_SET_VERBOSE='--color=never --verbose'
+    ;;
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+    BL64_PKG_SET_ASSUME_YES='--assumeyes'
+    BL64_PKG_SET_SLIM=' '
+    BL64_PKG_SET_QUIET='--quiet'
+    BL64_PKG_SET_VERBOSE='--color=never --verbose'
+    ;;
+  ${BL64_OS_SLES}-15.*)
+    BL64_PKG_SET_ASSUME_YES='--no-confirm'
+    BL64_PKG_SET_SLIM=' '
+    BL64_PKG_SET_QUIET='--quiet'
+    BL64_PKG_SET_VERBOSE='--verbose'
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_PKG_SET_ASSUME_YES=' '
+    BL64_PKG_SET_SLIM=' '
+    BL64_PKG_SET_QUIET='--quiet'
+    BL64_PKG_SET_VERBOSE='--verbose'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_PKG_SET_ASSUME_YES=' '
+    BL64_PKG_SET_SLIM=' '
+    BL64_PKG_SET_QUIET='--quiet'
+    BL64_PKG_SET_VERBOSE='--verbose'
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+}
+
+#######################################
+# Create command aliases for common use cases
+#
+# * Aliases are presented as regular shell variables for easy inclusion in complex commands
+# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
+# * Warning: bootstrap function
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_pkg_set_alias() {
+  bl64_dbg_lib_show_function
+  # shellcheck disable=SC2034
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-*)
+    BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
+    BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
+    BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
+    BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
+    BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
+    BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
+    BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
+    BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
+    ;;
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+    BL64_PKG_ALIAS_YUM_CACHE="$BL64_PKG_CMD_YUM ${BL64_PKG_SET_VERBOSE} makecache"
+    BL64_PKG_ALIAS_YUM_INSTALL="$BL64_PKG_CMD_YUM ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_ASSUME_YES} install"
+    BL64_PKG_ALIAS_YUM_CLEAN="$BL64_PKG_CMD_YUM clean all"
+    ;;
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_PKG_ALIAS_APT_CACHE="$BL64_PKG_CMD_APT update"
+    BL64_PKG_ALIAS_APT_INSTALL="$BL64_PKG_CMD_APT install ${BL64_PKG_SET_ASSUME_YES} ${BL64_PKG_SET_VERBOSE}"
+    BL64_PKG_ALIAS_APT_CLEAN="$BL64_PKG_CMD_APT clean"
+    ;;
+  ${BL64_OS_SLES}-*)
+    :
+    ;;
+  ${BL64_OS_ALP}-*)
+    BL64_PKG_ALIAS_APK_CACHE="$BL64_PKG_CMD_APK update ${BL64_PKG_SET_VERBOSE}"
+    BL64_PKG_ALIAS_APK_INSTALL="$BL64_PKG_CMD_APK add ${BL64_PKG_SET_VERBOSE}"
+    BL64_PKG_ALIAS_APK_CLEAN="$BL64_PKG_CMD_APK cache clean ${BL64_PKG_SET_VERBOSE}"
+    ;;
+  ${BL64_OS_MCOS}-*)
+    BL64_PKG_ALIAS_BRW_CACHE="$BL64_PKG_CMD_BRW update ${BL64_PKG_SET_VERBOSE}"
+    BL64_PKG_ALIAS_BRW_INSTALL="$BL64_PKG_CMD_BRW install ${BL64_PKG_SET_VERBOSE}"
+    BL64_PKG_ALIAS_BRW_CLEAN="$BL64_PKG_CMD_BRW cleanup ${BL64_PKG_SET_VERBOSE} --prune=all -s"
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+}
+
+#######################################
+# Set runtime defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: setting errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function _bl64_pkg_set_runtime() {
+  bl64_dbg_lib_show_function
+
+  bl64_pkg_set_paths
+}
+
+#######################################
+# Set and prepare module paths
+#
+# * Global paths only
+# * If preparation fails the whole module fails
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: paths prepared ok
+#   >0: failed to prepare paths
+#######################################
+# shellcheck disable=SC2120
+function bl64_pkg_set_paths() {
+  bl64_dbg_lib_show_function
+
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_FD}-*)
+    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d'
+    ;;
+  ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d'
+    ;;
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    BL64_PKG_PATH_APT_SOURCES_LIST_D='/etc/apt/sources.list.d'
+    BL64_PKG_PATH_GPG_KEYRINGS='/usr/share/keyrings'
+    ;;
+  ${BL64_OS_SLES}-*)
+    :
+    ;;
+  ${BL64_OS_ALP}-*)
+    :
+    ;;
+  ${BL64_OS_MCOS}-*)
+    :
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+
+  return 0
+}
+
+#######################################
+# BashLib64 / Module / Functions / Manage native OS packages
+#######################################
+
+#######################################
+# Add package repository
+#
+# * Covers simple uses cases that can be applied to most OS versions:
+#   * YUM: repo package definition created
+#   * APT: repo package definition created, GPGkey downloaded and installed
+# * Package cache is not refreshed
+# * No replacement done if already present
+#
+# Requirements:
+#   * root privilege (sudo)
+# Arguments:
+#   $1: repository name. Format: alphanumeric, _-
+#   $2: repository source. Format: URL
+#   $3: GPGKey source. Format: URL. Default: $BL64_VAR_NONE
+#   $4: extra package specific parameter. For APT: suite. Default: empty
+#   $5: extra package specific parameter. For APT: component. Default: empty
+#
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   package manager exit status
+#######################################
+function bl64_pkg_repository_add() {
+  bl64_dbg_lib_show_function "$@"
+  local name="${1:-}"
+  local source="${2:-}"
+  local gpgkey="${3:-${BL64_VAR_NONE}}"
+  local extra1="${4:-}"
+  local extra2="${5:-}"
+
+  bl64_check_privilege_root &&
+    bl64_check_parameter 'name' ||
+    bl64_check_parameter 'source' ||
+    return $?
+
+  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_REPOSITORY_ADD (${name})"
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    _bl64_pkg_repository_add_apt "$name" "$source" "$gpgkey" "$extra1" "$extra2"
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    _bl64_pkg_repository_add_yum "$name" "$source" "$gpgkey"
+    ;;
+  ${BL64_OS_SLES}-*)
+    bl64_check_alert_unsupported
+    ;;
+  ${BL64_OS_ALP}-*)
+    bl64_check_alert_unsupported
+    ;;
+  ${BL64_OS_MCOS}-*)
+    bl64_check_alert_unsupported
+    ;;
+  *) bl64_check_alert_unsupported ;;
+
+  esac
+}
+
+function _bl64_pkg_repository_add_yum() {
+  bl64_dbg_lib_show_function "$@"
+  local name="$1"
+  local source="$2"
+  local gpgkey="$3"
+  local definition=''
+
+  bl64_check_directory "$BL64_PKG_PATH_YUM_REPOS_D" ||
+    return $?
+
+  definition="${BL64_PKG_PATH_YUM_REPOS_D}/${name}.${BL64_PKG_DEF_SUFIX_YUM_REPOSITORY}"
+  [[ -f "$definition" ]] &&
+    bl64_msg_show_warning "${_BL64_PKG_TXT_REPOSITORY_EXISTING} (${definition})" &&
+    return 0
+
+  bl64_dbg_lib_show_info "create YUM repository definition (${definition})"
+  if [[ "$gpgkey" != "$BL64_VAR_NONE" ]]; then
+    printf '[%s]\n
+name=%s
+baseurl=%s
+gpgcheck=1
+enabled=1
+gpgkey=%s\n' \
+      "$name" \
+      "$name" \
+      "$source" \
+      "$gpgkey" \
+      >"$definition"
+  else
+    printf '[%s]\n
+name=%s
+baseurl=%s
+gpgcheck=0
+enabled=1\n' \
+      "$name" \
+      "$name" \
+      "$source" \
+      >"$definition"
+  fi
+}
+
+function _bl64_pkg_repository_add_apt() {
+  bl64_dbg_lib_show_function "$@"
+  local name="$1"
+  local source="$2"
+  local gpgkey="$3"
+  local extra1="$4"
+  local extra2="$5"
+  local definition=''
+  local gpgkey_file=''
+  local file_mode='0644'
+
+  bl64_check_directory "$BL64_PKG_PATH_APT_SOURCES_LIST_D" &&
+    bl64_check_directory "$BL64_PKG_PATH_GPG_KEYRINGS" ||
+    return $?
+
+  definition="${BL64_PKG_PATH_APT_SOURCES_LIST_D}/${name}.${BL64_PKG_DEF_SUFIX_APT_REPOSITORY}"
+  [[ -f "$definition" ]] &&
+    bl64_msg_show_warning "${_BL64_PKG_TXT_REPOSITORY_EXISTING} (${definition})" &&
+    return 0
+
+  bl64_dbg_lib_show_info "create APT repository definition (${definition})"
+  if [[ "$gpgkey" != "$BL64_VAR_NONE" ]]; then
+    gpgkey_file="${BL64_PKG_PATH_GPG_KEYRINGS}/${name}.${BL64_PKG_DEF_SUFIX_GPG_FILE}"
+    printf 'deb [signed-by=%s] %s %s %s\n' \
+      "$gpgkey_file" \
+      "$source" \
+      "$extra1" \
+      "$extra2" \
+      >"$definition" ||
+      return $?
+    bl64_dbg_lib_show_info "install GPG key (${gpgkey})"
+    bl64_rxtx_web_get_file "$gpgkey" "$gpgkey_file" "$BL64_VAR_ON" "$file_mode"
+  else
+    printf 'deb %s %s %s\n' \
+      "$source" \
+      "$extra1" \
+      "$extra2" \
+      >"$definition"
+  fi
+}
+
+#######################################
+# Refresh package repository
+#
+# Requirements:
+#   * root privilege (sudo)
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   n: package manager exit status
+#######################################
+function bl64_pkg_repository_refresh() {
+  bl64_dbg_lib_show_function
+
+  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_REPOSITORY_REFRESH"
+  # shellcheck disable=SC2086
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'update'
+    ;;
+  ${BL64_OS_FD}-*)
+    bl64_pkg_run_dnf 'makecache'
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    bl64_pkg_run_dnf 'makecache'
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
+    bl64_pkg_run_dnf 'makecache'
+    ;;
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+    bl64_pkg_run_yum 'makecache'
+    ;;
+  ${BL64_OS_SLES}-*)
+    bl64_pkg_run_zypper 'refresh'
+    ;;
+  ${BL64_OS_ALP}-*)
+    bl64_pkg_run_apk 'update'
+    ;;
+  ${BL64_OS_MCOS}-*)
+    bl64_pkg_run_brew 'update'
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+}
+
+#######################################
+# Deploy packages
+#
+# * Before installation: prepares the package manager environment and cache
+# * After installation: removes cache and temporary files
+#
+# Arguments:
+#   package list, separated by spaces (expanded with $@)
+# Outputs:
+#   STDOUT: process output
+#   STDERR: process stderr
+# Returns:
+#   n: process exist status
+#######################################
+function bl64_pkg_deploy() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none $# || return $?
+
+  bl64_pkg_prepare &&
+    bl64_pkg_install "$@" &&
+    bl64_pkg_upgrade &&
+    bl64_pkg_cleanup
+}
+
+#######################################
+# Initialize the package manager for installations
+#
+# Requirements:
+#   * root privilege (sudo)
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   n: package manager exit status
+#######################################
+function bl64_pkg_prepare() {
+  bl64_dbg_lib_show_function
+
+  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_PREPARE"
+  bl64_pkg_repository_refresh
+}
+
+#######################################
+# Install packages
+#
+# * Assume yes
+# * Avoid installing docs (man) when possible
+#
+# Requirements:
+#   * root privilege (sudo)
+# Arguments:
+#   package list, separated by spaces (expanded with $@)
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   n: package manager exit status
+#######################################
+function bl64_pkg_install() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none $# || return $?
+
+  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_INSTALL (${*})"
+  # shellcheck disable=SC2086
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'install' $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES -- "$@"
+    ;;
+  ${BL64_OS_FD}-*)
+    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
+    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
+    ;;
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+    bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
+    ;;
+  ${BL64_OS_SLES}-*)
+    bl64_pkg_run_zypper 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
+    ;;
+  ${BL64_OS_ALP}-*)
+    bl64_pkg_run_apk 'add' -- "$@"
+    ;;
+  ${BL64_OS_MCOS}-*)
+    "$BL64_PKG_CMD_BRW" 'install' "$@"
+    ;;
+  *) bl64_check_alert_unsupported ;;
+
+  esac
+}
+
+#######################################
+# Upgrade packages
+#
+# * Assume yes
+#
+# Requirements:
+#   * root privilege (sudo)
+# Arguments:
+#   package list, separated by spaces (expanded with $@)
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   n: package manager exit status
+#######################################
+# shellcheck disable=SC2120
+function bl64_pkg_upgrade() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_UPGRADE"
+  # shellcheck disable=SC2086
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES -- "$@"
+    ;;
+  ${BL64_OS_FD}-*)
+    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
+    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
+    ;;
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+    bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
+    ;;
+  ${BL64_OS_SLES}-*)
+    bl64_pkg_run_zypper 'update' $BL64_PKG_SET_ASSUME_YES -- "$@"
+    ;;
+  ${BL64_OS_ALP}-*)
+    bl64_pkg_run_apk 'upgrade' -- "$@"
+    ;;
+  ${BL64_OS_MCOS}-*)
+    "$BL64_PKG_CMD_BRW" 'upgrade' "$@"
+    ;;
+  *) bl64_check_alert_unsupported ;;
+
+  esac
+}
+
+#######################################
+# Clean up the package manager run-time environment
+#
+# * Warning: removes cache contents
+#
+# Requirements:
+#   * root privilege (sudo)
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   n: package manager exit status
+#######################################
+function bl64_pkg_cleanup() {
+  bl64_dbg_lib_show_function
+  local target=''
+
+  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_CLEAN"
+  # shellcheck disable=SC2086
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_pkg_run_apt 'clean'
+    ;;
+  ${BL64_OS_FD}-*)
+    bl64_pkg_run_dnf 'clean' 'all'
+    ;;
+  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+    BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    ;;
+  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
+    BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    ;;
+  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+    bl64_pkg_run_yum 'clean' 'all'
+    ;;
+  ${BL64_OS_SLES}-*)
+    bl64_pkg_run_zypper 'clean' '--all'
+    ;;
+  ${BL64_OS_ALP}-*)
+    bl64_pkg_run_apk 'cache' 'clean'
+    target='/var/cache/apk'
+    if [[ -d "$target" ]]; then
+      bl64_fs_rm_full ${target}/[[:alpha:]]*
+    fi
+    ;;
+  ${BL64_OS_MCOS}-*)
+    bl64_pkg_run_brew 'cleanup' --prune=all -s
+    ;;
+  *) bl64_check_alert_unsupported ;;
+
+  esac
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_pkg_run_dnf() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
+    return $?
+
+  if bl64_dbg_lib_command_enabled; then
+    verbose="$BL64_PKG_SET_VERBOSE"
+  else
+    verbose="$BL64_PKG_SET_QUIET"
+  fi
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_PKG_CMD_DNF" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_pkg_run_yum() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
+    return $?
+
+  if bl64_dbg_lib_command_enabled; then
+    verbose="$BL64_PKG_SET_VERBOSE"
+  else
+    verbose="$BL64_PKG_SET_QUIET"
+  fi
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_PKG_CMD_YUM" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_pkg_run_apt() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
+    return $?
+
+  bl64_pkg_blank_apt
+
+  # Verbose is only available for a subset of commands
+  if bl64_dbg_lib_command_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
+    verbose="$BL64_PKG_SET_VERBOSE"
+  else
+    export DEBCONF_NOWARNINGS='yes'
+    export DEBCONF_TERSE='yes'
+    verbose="$BL64_PKG_SET_QUIET"
+  fi
+
+  # Avoid interactive questions
+  export DEBIAN_FRONTEND="noninteractive"
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_PKG_CMD_APT" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_pkg_blank_apt() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited DEB* shell variables'
+  bl64_dbg_lib_trace_start
+  unset DEBIAN_FRONTEND
+  unset DEBCONF_TERSE
+  unset DEBCONF_NOWARNINGS
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_pkg_run_apk() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
+    return $?
+
+  if bl64_dbg_lib_command_enabled; then
+    verbose="$BL64_PKG_SET_VERBOSE"
+  else
+    verbose="$BL64_PKG_SET_QUIET"
+  fi
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_PKG_CMD_APK" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_pkg_run_brew() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
+    return $?
+
+  if bl64_dbg_lib_command_enabled; then
+    verbose="$BL64_PKG_SET_VERBOSE"
+  else
+    verbose="$BL64_PKG_SET_QUIET"
+  fi
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_PKG_CMD_BRW" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_pkg_run_zypper() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root &&
+    bl64_check_module 'BL64_PKG_MODULE' ||
+    return $?
+
+  if bl64_dbg_lib_command_enabled; then
+    verbose="$BL64_PKG_SET_VERBOSE"
+  else
+    verbose="$BL64_PKG_SET_QUIET"
+  fi
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_PKG_CMD_ZYPPER" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# BashLib64 / Module / Setup / Interact with system-wide Python
+#######################################
+
+#######################################
+# Setup the bashlib64 module
+#
+# * (Optional) Use virtual environment
+#
+# Arguments:
+#   $1: full path to the virtual environment
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: setup ok
+#   >0: setup failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_py_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
+  bl64_dbg_lib_show_function "$@"
+  local venv_path="${1:-${BL64_VAR_DEFAULT}}"
+
+  if [[ "$venv_path" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_info "venv requested (${venv_path})"
+    if [[ -d "$venv_path" ]]; then
+      bl64_dbg_lib_show_info 'use already existing venv'
+      _bl64_py_setup "$venv_path"
+    else
+      bl64_dbg_lib_show_info 'no previous venv, create one'
+      _bl64_py_setup "$BL64_VAR_DEFAULT" &&
+        bl64_py_venv_create "$venv_path" &&
+        _bl64_py_setup "$venv_path"
+    fi
+  else
+    bl64_dbg_lib_show_info "no venv requested"
+    _bl64_py_setup "$BL64_VAR_DEFAULT"
+  fi
+
+  bl64_check_alert_module_setup 'py'
+}
+
+function _bl64_py_setup() {
+  bl64_dbg_lib_show_function "$@"
+  local venv_path="$1"
+
+  if [[ "$venv_path" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_py_venv_check "$venv_path" ||
+      return $?
+  fi
+
+  _bl64_py_set_command "$venv_path" &&
+    bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
+    _bl64_py_set_options &&
+    _bl64_py_set_resources &&
+    BL64_PY_MODULE="$BL64_VAR_ON"
+}
+
+#######################################
+# Identify and normalize commands
+#
+# * Commands are exported as variables with full path
+# * The caller function is responsible for checking that the target command is present (installed)
+# * (Optional) Enable requested virtual environment
+# * If virtual environment is requested, instead of running bin/activate manually set the same variables that it would
+# * Python versions are detected up to the subversion, minor is ignored. Example: use python3.6 instead of python3.6.1
+#
+# Arguments:
+#   $1: full path to the virtual environment
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_py_set_command() {
+  bl64_dbg_lib_show_function "$@"
+  local venv_path="$1"
+
+  if [[ "$venv_path" == "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_info 'identify OS native python3 path'
+    # shellcheck disable=SC2034
+    case "$BL64_OS_DISTRO" in
+    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*) BL64_PY_CMD_PYTHON36='/usr/bin/python3' ;;
+    ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
+      BL64_PY_CMD_PYTHON36='/usr/bin/python3'
+      BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
+      ;;
+    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_FD}-35.* | ${BL64_OS_FD}-36.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
+    ${BL64_OS_FD}-37.* | ${BL64_OS_FD}-38.*) BL64_PY_CMD_PYTHON311='/usr/bin/python3.11' ;;
+    ${BL64_OS_DEB}-9.*) BL64_PY_CMD_PYTHON35='/usr/bin/python3.5' ;;
+    ${BL64_OS_DEB}-10.*) BL64_PY_CMD_PYTHON37='/usr/bin/python3.7' ;;
+    ${BL64_OS_DEB}-11.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_UB}-18.*) BL64_PY_CMD_PYTHON36='/usr/bin/python3.6' ;;
+    ${BL64_OS_UB}-20.*) BL64_PY_CMD_PYTHON38='/usr/bin/python3.8' ;;
+    ${BL64_OS_UB}-21.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    ${BL64_OS_UB}-22.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
+    ${BL64_OS_UB}-23.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.11' ;;
+    ${BL64_OS_SLES}-15.*)
+      # Default
+      BL64_PY_CMD_PYTHON36='/usr/bin/python3.6'
+      # SP3
+      BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
+      # SP4
+      BL64_PY_CMD_PYTHON310='/usr/bin/python3.10'
+      ;;
+    "${BL64_OS_ALP}-3.14" | "${BL64_OS_ALP}-3.15") BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    "${BL64_OS_ALP}-3.16" | "${BL64_OS_ALP}-3.17") BL64_PY_CMD_PYTHON39='/usr/bin/python3.10' ;;
+    ${BL64_OS_MCOS}-12.* | ${BL64_OS_MCOS}-13.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
+    *) bl64_check_alert_unsupported ;;
+    esac
+
+    # Select best match for default python3
+    if [[ -x "$BL64_PY_CMD_PYTHON311" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON311"
+      BL64_PY_VERSION_PYTHON3='3.11'
+    elif [[ -x "$BL64_PY_CMD_PYTHON310" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON310"
+      BL64_PY_VERSION_PYTHON3='3.10'
+    elif [[ -x "$BL64_PY_CMD_PYTHON39" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON39"
+      BL64_PY_VERSION_PYTHON3='3.9'
+    elif [[ -x "$BL64_PY_CMD_PYTHON38" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON38"
+      BL64_PY_VERSION_PYTHON3='3.8'
+    elif [[ -x "$BL64_PY_CMD_PYTHON37" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON37"
+      BL64_PY_VERSION_PYTHON3='3.7'
+    elif [[ -x "$BL64_PY_CMD_PYTHON36" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON36"
+      BL64_PY_VERSION_PYTHON3='3.6'
+    elif [[ -x "$BL64_PY_CMD_PYTHON35" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON35"
+      BL64_PY_VERSION_PYTHON3='3.5'
+    fi
+
+    # Ignore VENV. Use detected python
+    export VIRTUAL_ENV=''
+
+  else
+    bl64_dbg_lib_show_info 'use python3 from virtual environment'
+    BL64_PY_CMD_PYTHON3="${venv_path}/bin/python3"
+
+    # Emulate bin/activate
+    export VIRTUAL_ENV="$venv_path"
+    export PATH="${VIRTUAL_ENV}:${PATH}"
+    unset PYTHONHOME
+
+    # Let other basthlib64 functions know about this venv
+    BL64_PY_VENV_PATH="$venv_path"
+  fi
+
+  bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3' 'BL64_PY_VENV_PATH' 'VIRTUAL_ENV' 'PATH'
+}
+
+#######################################
+# Create command sets for common options
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_py_set_options() {
+  bl64_dbg_lib_show_function
+  # Common sets - unversioned
+  BL64_PY_SET_PIP_VERBOSE='--verbose'
+  BL64_PY_SET_PIP_DEBUG='-vvv'
+  BL64_PY_SET_PIP_VERSION='--version'
+  BL64_PY_SET_PIP_UPGRADE='--upgrade'
+  BL64_PY_SET_PIP_USER='--user'
+  BL64_PY_SET_PIP_QUIET='--quiet'
+  BL64_PY_SET_PIP_SITE='--system-site-packages'
+  BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
+
+}
+
+#######################################
+# Declare version specific definitions
+#
+# * Use to capture default file names, values, attributes, etc
+# * Do not use to capture CLI flags. Use *_set_options instead
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_py_set_resources() {
+  bl64_dbg_lib_show_function
+
+  BL64_PY_DEF_VENV_CFG='pyvenv.cfg'
+  BL64_PY_DEF_MODULE_VENV='venv'
+  BL64_PY_DEF_MODULE_PIP='pip'
+
+  return 0
+}
+
+#######################################
+# BashLib64 / Module / Functions / Interact with system-wide Python
+#######################################
+
+#######################################
+# Create virtual environment
+#
+# Arguments:
+#   $1: full path to the virtual environment
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_py_venv_create() {
+  bl64_dbg_lib_show_function "$@"
+  local venv_path="${1:-}"
+
+  bl64_check_parameter 'venv_path' &&
+    bl64_check_path_absolute "$venv_path" &&
+    bl64_check_path_not_present "$venv_path" ||
+    return $?
+
+  bl64_msg_show_lib_task "${_BL64_PY_TXT_VENV_CREATE} (${venv_path})"
+  bl64_py_run_python -m "$BL64_PY_DEF_MODULE_VENV" "$venv_path"
+
+}
+
+#######################################
+# Check that the requested virtual environment is created
+#
+# Arguments:
+#   $1: full path to the virtual environment
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_py_venv_check() {
+  bl64_dbg_lib_show_function "$@"
+  local venv_path="${1:-}"
+
+  bl64_check_parameter 'venv_path' ||
+    return $?
+
+  if [[ ! -d "$venv_path" ]]; then
+    bl64_msg_show_error "${message} (command: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_PY_TXT_VENV_MISSING}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
+  fi
+
+  if [[ ! -r "${venv_path}/${BL64_PY_DEF_VENV_CFG}" ]]; then
+    bl64_msg_show_error "${message} (command: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_PY_TXT_VENV_INVALID}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
+  fi
+
+  return 0
+}
+
+#######################################
+# Get Python PIP version
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: PIP version
+#   STDERR: PIP error
+# Returns:
+#   0: ok
+#   $BL64_LIB_ERROR_APP_INCOMPATIBLE
+#######################################
+function bl64_py_pip_get_version() {
+  bl64_dbg_lib_show_function
+  local -a version
+
+  read -r -a version < <(bl64_py_run_pip "$BL64_PY_SET_PIP_VERSION")
+  if [[ "${version[1]}" == [0-9.]* ]]; then
+    printf '%s' "${version[1]}"
+  else
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+  fi
+
+  return 0
+}
+
+#######################################
+# Initialize package manager for local-user
+#
+# * Upgrade pip
+# * Install/upgrade setuptools
+# * Upgrade is done using the OS provided PIP module. Do not use bl64_py_pip_usr_install as it relays on the latest version of PIP
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   n: package manager exit status
+#######################################
+function bl64_py_pip_usr_prepare() {
+  bl64_dbg_lib_show_function
+  local modules_pip="$BL64_PY_DEF_MODULE_PIP"
+  local modules_setup='setuptools wheel stevedore'
+  local flag_user="$BL64_PY_SET_PIP_USER"
+
+  [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
+
+  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_PIP"
+  # shellcheck disable=SC2086
+  bl64_py_run_pip \
+    'install' \
+    $BL64_PY_SET_PIP_UPGRADE \
+    $flag_user \
+    $modules_pip ||
+    return $?
+
+  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP"
+  # shellcheck disable=SC2086
+  bl64_py_run_pip \
+    'install' \
+    $BL64_PY_SET_PIP_UPGRADE \
+    $flag_user \
+    $modules_setup ||
+    return $?
+
+  return 0
+}
+
+#######################################
+# Install packages for local-user
+#
+# * Assume yes
+# * Assumes that bl64_py_pip_usr_prepare was runned before
+# * Uses the latest version of PIP (previously upgraded by bl64_py_pip_usr_prepare)
+#
+# Arguments:
+#   package list, separated by spaces (expanded with $@)
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   n: package manager exit status
+#######################################
+function bl64_py_pip_usr_install() {
+  bl64_dbg_lib_show_function "$@"
+  local flag_user="$BL64_PY_SET_PIP_USER"
+
+  bl64_check_parameters_none $# || return $?
+
+  # If venv is in use no need to flag usr install
+  [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
+
+  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_INSTALL ($*)"
+  # shellcheck disable=SC2086
+  bl64_py_run_pip \
+    'install' \
+    $BL64_PY_SET_PIP_UPGRADE \
+    $BL64_PY_SET_PIP_NO_WARN_SCRIPT \
+    $flag_user \
+    "$@"
+}
+
+#######################################
+# Deploy PIP packages
+#
+# * Before installation: prepares the package manager environment and cache
+# * After installation: removes cache and temporary files
+#
+# Arguments:
+#   package list, separated by spaces (expanded with $@)
+# Outputs:
+#   STDOUT: process output
+#   STDERR: process stderr
+# Returns:
+#   n: process exist status
+#######################################
+function bl64_py_pip_usr_deploy() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none $# || return $?
+
+  bl64_py_pip_usr_prepare &&
+    bl64_py_pip_usr_install "$@" ||
+    return $?
+
+  bl64_py_pip_usr_cleanup
+  return 0
+}
+
+#######################################
+# Clean up pip install environment
+#
+# * Empty cache
+# * Ignore errors and warnings
+# * Best effort
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   0: always ok
+#######################################
+function bl64_py_pip_usr_cleanup() {
+  bl64_dbg_lib_show_function
+
+  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_CLEANUP_PIP"
+  bl64_py_run_pip \
+    'cache' \
+    'purge'
+
+  return 0
+}
+
+#######################################
+# Python wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   command exit status
+#######################################
+function bl64_py_run_python() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_PY_MODULE' ||
+    return $?
+
+  bl64_py_blank_python
+
+  bl64_dbg_lib_trace_start
+  "$BL64_PY_CMD_PYTHON3" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_py_blank_python() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited PYTHON* shell variables'
+  bl64_dbg_lib_trace_start
+  unset PYTHONHOME
+  unset PYTHONPATH
+  unset PYTHONSTARTUP
+  unset PYTHONDEBUG
+  unset PYTHONUSERBASE
+  unset PYTHONEXECUTABLE
+  unset PYTHONWARNINGS
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#######################################
+# Python PIP wrapper
+#
+# * Uses global ephemeral settings when configured for temporal and cache
+#
+# Arguments:
+#   $@: arguments are passes as-is
+# Outputs:
+#   STDOUT: PIP output
+#   STDERR: PIP error
+# Returns:
+#   PIP exit status
+#######################################
+function bl64_py_run_pip() {
+  bl64_dbg_lib_show_function "$@"
+  local debug="$BL64_PY_SET_PIP_QUIET"
+  local temporal=' '
+  local cache=' '
+
+  bl64_msg_lib_verbose_enabled && debug=' '
+  bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
+
+  [[ -n "$BL64_FS_PATH_TEMPORAL" ]] && temporal="TMPDIR=${BL64_FS_PATH_TEMPORAL}"
+  [[ -n "$BL64_FS_PATH_CACHE" ]] && cache="--cache-dir=${BL64_FS_PATH_CACHE}"
+
+  # shellcheck disable=SC2086
+  eval $temporal bl64_py_run_python \
+    -m "$BL64_PY_DEF_MODULE_PIP" \
+    $debug \
+    $cache \
+    "$*"
+}
+
+#######################################
 # BashLib64 / Module / Setup / Manage archive files
 #######################################
 
@@ -8018,6 +10270,9 @@ function bl64_xsv_search_records() {
 #   >0: setup failed
 #######################################
 function bl64_arc_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
 
   _bl64_arc_set_command &&
@@ -8355,6 +10610,9 @@ function bl64_arc_open_zip() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_ans_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function "$@"
   local ansible_bin="${1:-${BL64_VAR_DEFAULT}}"
   local ansible_config="${2:-${BL64_VAR_DEFAULT}}"
@@ -8756,6 +11014,9 @@ function bl64_aws_get_cli_credentials() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_aws_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -9229,6 +11490,9 @@ function bl64_aws_blank_aws() {
 #   >0: setup failed
 #######################################
 function bl64_cnt_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function
   local -i status=0
 
@@ -10461,6 +12725,9 @@ function _bl64_cnt_podman_ps_filter() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_gcp_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function "$@"
   local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -10750,17 +13017,17 @@ function bl64_gcp_blank_gcloud() {
 function bl64_gcp_secret_get() {
   bl64_dbg_lib_show_function "$@"
   local name="$1"
-  local version="$2"
+  local secret_version="$2"
 
   bl64_check_parameter 'name' &&
-    bl64_check_parameter 'version' &&
+    bl64_check_parameter 'secret_version' &&
     bl64_check_file "$name" || return $?
 
   bl64_gcp_run_gcloud \
     'secrets' \
     'versions' \
     'access' \
-    "$version" \
+    "$secret_version" \
     --secret="$name"
 
 }
@@ -10783,6 +13050,9 @@ function bl64_gcp_secret_get() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_hlm_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function "$@"
   local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -11058,357 +13328,6 @@ function bl64_hlm_blank_helm() {
 }
 
 #######################################
-# BashLib64 / Module / Setup / Manage OS identity and access service
-#######################################
-
-#######################################
-# Setup the bashlib64 module
-#
-# * Warning: bootstrap function
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: setup ok
-#   >0: setup failed
-#######################################
-function bl64_iam_setup() {
-  bl64_dbg_lib_show_function
-
-  _bl64_iam_set_command &&
-    _bl64_iam_set_alias &&
-    _bl64_iam_set_options &&
-    BL64_IAM_MODULE="$BL64_VAR_ON"
-
-  bl64_check_alert_module_setup 'iam'
-}
-
-#######################################
-# Identify and normalize commands
-#
-# * Commands are exported as variables with full path
-# * The caller function is responsible for checking that the target command is present (installed)
-# * Warning: bootstrap function
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_iam_set_command() {
-  bl64_dbg_lib_show_function
-
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
-    BL64_IAM_CMD_ID='/usr/bin/id'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
-    BL64_IAM_CMD_ID='/usr/bin/id'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
-    BL64_IAM_CMD_ID='/usr/bin/id'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_IAM_CMD_USERADD='/usr/sbin/adduser'
-    BL64_IAM_CMD_ID='/usr/bin/id'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_IAM_CMD_USERADD='/usr/sbin/sysadminctl'
-    BL64_IAM_CMD_ID='/usr/bin/id'
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-}
-
-#######################################
-# Create command aliases for common use cases
-#
-# * Aliases are presented as regular shell variables for easy inclusion in complex commands
-# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
-# * Warning: bootstrap function
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_iam_set_alias() {
-  bl64_dbg_lib_show_function
-
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD "
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-}
-
-#######################################
-# Create command sets for common options
-#
-# * Warning: bootstrap function
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_iam_set_options() {
-  bl64_dbg_lib_show_function
-
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
-    BL64_IAM_SET_USERADD_GECO='--comment'
-    BL64_IAM_SET_USERADD_GROUP='--gid'
-    BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
-    BL64_IAM_SET_USERADD_SHELL='--shell'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
-    BL64_IAM_SET_USERADD_GECO='--comment'
-    BL64_IAM_SET_USERADD_GROUP='--gid'
-    BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
-    BL64_IAM_SET_USERADD_SHELL='--shell'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
-    BL64_IAM_SET_USERADD_GECO='--comment'
-    BL64_IAM_SET_USERADD_GROUP='--gid'
-    BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
-    BL64_IAM_SET_USERADD_SHELL='--shell'
-    ;;
-  ${BL64_OS_ALP}-*)
-    # Home is created by default
-    BL64_IAM_SET_USERADD_CREATE_HOME=' '
-    BL64_IAM_SET_USERADD_GECO='-g'
-    BL64_IAM_SET_USERADD_GROUP='-G'
-    BL64_IAM_SET_USERADD_HOME_PATH='-h'
-    BL64_IAM_SET_USERADD_SHELL='-s'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    # Home is created by default
-    BL64_IAM_SET_USERADD_CREATE_HOME=' '
-    BL64_IAM_SET_USERADD_GECO='-fullName'
-    BL64_IAM_SET_USERADD_GROUP='-gid'
-    BL64_IAM_SET_USERADD_HOME_PATH='-home'
-    BL64_IAM_SET_USERADD_SHELL='-shell'
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-}
-
-#######################################
-# BashLib64 / Module / Functions / Manage OS identity and access service
-#######################################
-
-#######################################
-# Create local OS user
-#
-# * Wrapper to native user creation command
-# * Objective is to cover common options that are available on all suported platforms
-#   * set primary group
-#   * set shell
-#   * set home path
-#   * set user description
-#   * create home
-# * If the user is already created nothing is done, no error
-#
-# Arguments:
-#   $1: login name
-#   $2: home path. Format: full path. Default: os native
-#   $3: primary group ID. Format: group name. Default: os native
-#   $4: shell. Format: full path. Default: os native
-#   $5: description. Default: none
-# Outputs:
-#   STDOUT: native user add command output
-#   STDERR: native user add command error messages
-# Returns:
-#   native user add command error status
-#######################################
-function bl64_iam_user_add() {
-  bl64_dbg_lib_show_function "$@"
-  local login="${1:-}"
-  local home="${2:-$BL64_VAR_DEFAULT}"
-  local group="${3:-$BL64_VAR_DEFAULT}"
-  local shell="${4:-$BL64_VAR_DEFAULT}"
-  local gecos="${5:-$BL64_VAR_DEFAULT}"
-  local password=''
-
-  bl64_check_privilege_root &&
-    bl64_check_parameter 'login' ||
-    return $?
-
-  [[ "$home" == "$BL64_VAR_DEFAULT" ]] && home=''
-  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && group=''
-  [[ "$shell" == "$BL64_VAR_DEFAULT" ]] && shell=''
-  [[ "$gecos" == "$BL64_VAR_DEFAULT" ]] && gecos=''
-
-  if bl64_iam_user_is_created "$login"; then
-    bl64_msg_show_warning "${_BL64_IAM_TXT_EXISTING_USER} ($login)"
-    return 0
-  fi
-
-  bl64_msg_show_lib_subtask "$_BL64_IAM_TXT_ADD_USER ($login)"
-  # shellcheck disable=SC2086
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    "$BL64_IAM_CMD_USERADD" \
-      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
-      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
-      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
-      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
-      $BL64_IAM_SET_USERADD_CREATE_HOME \
-      "$login"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    "$BL64_IAM_CMD_USERADD" \
-      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
-      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
-      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
-      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
-      $BL64_IAM_SET_USERADD_CREATE_HOME \
-      "$login"
-    ;;
-  ${BL64_OS_SLES}-*)
-    "$BL64_IAM_CMD_USERADD" \
-      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
-      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
-      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
-      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
-      $BL64_IAM_SET_USERADD_CREATE_HOME \
-      "$login"
-    ;;
-  ${BL64_OS_ALP}-*)
-    # Disable automatic password generation
-    "$BL64_IAM_CMD_USERADD" \
-      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
-      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
-      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
-      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
-      $BL64_IAM_SET_USERADD_CREATE_HOME \
-      -D \
-      "$login"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    password="$(bl64_rnd_get_numeric)" || return $?
-    "$BL64_IAM_CMD_USERADD" \
-      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
-      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
-      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
-      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
-      $BL64_IAM_SET_USERADD_CREATE_HOME \
-      -addUser "$login" \
-      -password "$password"
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-}
-
-#######################################
-# Determine if the user is created
-#
-# Arguments:
-#   $1: login name
-# Outputs:
-#   STDOUT: native user add command output
-#   STDERR: native user add command error messages
-# Returns:
-#   native user add command error status
-#######################################
-function bl64_iam_user_is_created() {
-  bl64_dbg_lib_show_function "$@"
-  local user="$1"
-
-  bl64_check_parameter 'user' ||
-    return $?
-
-  # Use the ID command to detect if the user is created
-  bl64_iam_user_get_id "$user" >/dev/null 2>&1
-
-}
-
-#######################################
-# Get user's UID
-#
-# Arguments:
-#   $1: user login name. Default: current user
-# Outputs:
-#   STDOUT: user ID
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_iam_user_get_id() {
-  bl64_dbg_lib_show_function "$@"
-  local user="$1"
-
-  # shellcheck disable=SC2086
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    "${BL64_IAM_CMD_ID}" -u $user
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    "${BL64_IAM_CMD_ID}" -u $user
-    ;;
-  ${BL64_OS_SLES}-*)
-    "${BL64_IAM_CMD_ID}" -u $user
-    ;;
-  ${BL64_OS_ALP}-*)
-    "${BL64_IAM_CMD_ID}" -u $user
-    ;;
-  ${BL64_OS_MCOS}-*)
-    "${BL64_IAM_CMD_ID}" -u $user
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-
-}
-
-#######################################
-# Get current user name
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: user name
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_iam_user_get_current() {
-  bl64_dbg_lib_show_function
-  "${BL64_IAM_CMD_ID}" -u -n
-}
-
-#######################################
 # BashLib64 / Module / Setup / Interact with Kubernetes
 #######################################
 
@@ -11426,6 +13345,9 @@ function bl64_iam_user_get_current() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_k8s_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function "$@"
   local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -11514,7 +13436,7 @@ function _bl64_k8s_set_options() {
     BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
     ;;
   *)
-    bl64_check_compatibility "k8s-api: ${BL64_K8S_VERSION_KUBECTL}" || return $?
+    bl64_check_compatibility_mode "k8s-api: ${BL64_K8S_VERSION_KUBECTL}" || return $?
     BL64_K8S_SET_VERBOSE_NONE='--v=0'
     BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
     BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
@@ -11706,7 +13628,7 @@ function bl64_k8s_annotation_set() {
   shift
 
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
-  [[ "$namespace" == "$BL64_VAR_DEFAULT" ]] && namespace='' || namespace="--namespace ${namespace}"
+  [[ "$namespace" == "$BL64_VAR_NONE" ]] && namespace='' || namespace="--namespace ${namespace}"
 
   bl64_msg_show_lib_task "${_BL64_K8S_TXT_SET_ANNOTATION} (${resource}/${name})"
   # shellcheck disable=SC2086
@@ -12083,332 +14005,6 @@ function bl64_k8s_resource_is_created() {
 }
 
 #######################################
-# BashLib64 / Module / Setup / Write messages to logs
-#######################################
-
-#######################################
-# Setup the bashlib64 module
-#
-# Arguments:
-#   $1: log repository. Full path
-#   $2: log target. Default: BL64_SCRIPT_ID
-#   $2: level. One of BL64_LOG_CATEGORY_*
-#   $3: format. One of BL64_LOG_FORMAT_*
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: setup ok
-#   BL64_LIB_ERROR_MODULE_SETUP_INVALID
-#   BL64_LIB_ERROR_MODULE_SETUP_INVALID
-#######################################
-function bl64_log_setup() {
-  bl64_dbg_lib_show_function "$@"
-  local repository="${1:-}"
-  local target="${2:-${BL64_SCRIPT_ID}}"
-  local level="${3:-${BL64_LOG_CATEGORY_NONE}}"
-  local format="${4:-${BL64_LOG_FORMAT_CSV}}"
-
-  [[ -z "$repository" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
-
-  bl64_log_set_repository "$repository" &&
-    bl64_log_set_target "$target" &&
-    bl64_log_set_level "$level" &&
-    bl64_log_set_format "$format" &&
-    BL64_LOG_MODULE="$BL64_VAR_ON"
-
-  bl64_check_alert_module_setup 'log'
-}
-
-#######################################
-# Set log repository
-#
-# * Create the repository directory
-#
-# Arguments:
-#   $1: repository path
-# Outputs:
-#   STDOUT: None
-#   STDERR: command stderr
-# Returns:
-#   0: set ok
-#   >0: unable to set
-#######################################
-function bl64_log_set_repository() {
-  bl64_dbg_lib_show_function "$@"
-  local repository="$1"
-
-  if [[ ! -d "$repository" ]]; then
-    "$BL64_FS_CMD_MKDIR" "$repository" &&
-      "$BL64_FS_CMD_CHMOD" "$BL64_LOG_REPOSITORY_MODE" "$repository" ||
-      return $BL64_LIB_ERROR_TASK_FAILED
-  else
-    [[ -w "$repository" ]] || return $BL64_LIB_ERROR_TASK_FAILED
-  fi
-
-  BL64_LOG_REPOSITORY="$repository"
-  return 0
-}
-
-#######################################
-# Set logging level
-#
-# Arguments:
-#   $1: target level. One of BL64_LOG_CATEGORY_*
-# Outputs:
-#   STDOUT: None
-#   STDERR: check error
-# Returns:
-#   0: set ok
-#   >0: unable to set
-#######################################
-function bl64_log_set_level() {
-  bl64_dbg_lib_show_function "$@"
-  local level="$1"
-
-  case "$level" in
-  "$BL64_LOG_CATEGORY_NONE") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_NONE" ;;
-  "$BL64_LOG_CATEGORY_INFO") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_INFO" ;;
-  "$BL64_LOG_CATEGORY_DEBUG") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_DEBUG" ;;
-  "$BL64_LOG_CATEGORY_WARNING") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_WARNING" ;;
-  "$BL64_LOG_CATEGORY_ERROR") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_ERROR" ;;
-  *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
-  esac
-}
-
-#######################################
-# Set log format
-#
-# Arguments:
-#   $1: log format. One of BL64_LOG_FORMAT_*
-# Outputs:
-#   STDOUT: None
-#   STDERR: commands stderr
-# Returns:
-#   0: set ok
-#   >0: unable to set
-#######################################
-function bl64_log_set_format() {
-  bl64_dbg_lib_show_function "$@"
-  local format="$1"
-
-  case "$format" in
-  "$BL64_LOG_FORMAT_CSV")
-    BL64_LOG_FORMAT="$BL64_LOG_FORMAT_CSV"
-    BL64_LOG_FS=':'
-    ;;
-  *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
-  esac
-}
-
-#######################################
-# Set log target
-#
-# * Log target is the file where logs will be written to
-# * File is created or appended in the log repository
-#
-# Arguments:
-#   $1: log target. Format: file name
-# Outputs:
-#   STDOUT: None
-#   STDERR: commands stderr
-# Returns:
-#   0: set ok
-#   >0: unable to set
-#######################################
-function bl64_log_set_target() {
-  bl64_dbg_lib_show_function "$@"
-  local target="$1"
-  local destination="${BL64_LOG_REPOSITORY}/${target}"
-
-  # Check if there is a new target to set
-  [[ "$BL64_LOG_DESTINATION" == "$destination" ]] && return 0
-
-  if [[ ! -w "$destination" ]]; then
-    "$BL64_FS_CMD_TOUCH" "$destination" &&
-      "$BL64_FS_CMD_CHMOD" "$BL64_LOG_TARGET_MODE" "$destination" ||
-      return $BL64_LIB_ERROR_TASK_FAILED
-  fi
-
-  BL64_LOG_DESTINATION="$destination"
-  return 0
-}
-
-#######################################
-# Set runtime log target
-#
-# * Use to save output from commands using one file per execution
-# * The target name is used as the directory for each execution
-# * The target directory is created in the log repository
-# * The calling script is responsible for redirecting the command's output to the target path BL64_LOG_RUNTIME
-#
-# Arguments:
-#   $1: runtime log target. Format: directory name
-# Outputs:
-#   STDOUT: None
-#   STDERR: commands stderr
-# Returns:
-#   0: set ok
-#   >0: unable to set
-#######################################
-function bl64_log_set_runtime() {
-  bl64_dbg_lib_show_function "$@"
-  local target="$1"
-  local destination="${BL64_LOG_REPOSITORY}/${target}"
-  local log=''
-
-  # Check if there is a new target to set
-  [[ "$BL64_LOG_RUNTIME" == "$destination" ]] && return 0
-
-  if [[ ! -d "$destination" ]]; then
-    "$BL64_FS_CMD_MKDIR" "$destination" &&
-      "$BL64_FS_CMD_CHMOD" "$BL64_LOG_REPOSITORY_MODE" "$destination" ||
-      return $BL64_LIB_ERROR_TASK_FAILED
-  fi
-
-  [[ ! -w "$destination" ]] && return $BL64_LIB_ERROR_TASK_FAILED
-
-  log="$(printf '%(%FT%TZ%z)T' '-1')" &&
-    BL64_LOG_RUNTIME="${destination}/${log}.log" ||
-    return 0
-
-  return 0
-}
-
-#######################################
-# BashLib64 / Module / Functions / Write messages to logs
-#######################################
-
-#######################################
-# Save a log record to the logs repository
-#
-# Arguments:
-#   $1: name of the source that is generating the message
-#   $2: log message category. Use any of $BL64_LOG_CATEGORY_*
-#   $3: message
-# Outputs:
-#   STDOUT: None
-#   STDERR: execution errors
-# Returns:
-#   0: log record successfully saved
-#   >0: failed to save the log record
-#   BL64_LIB_ERROR_MODULE_SETUP_MISSING
-#   BL64_LIB_ERROR_MODULE_SETUP_INVALID
-#######################################
-function _bl64_log_register() {
-  bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local category="$2"
-  local payload="$3"
-
-  [[ "$BL64_LOG_MODULE" == "$BL64_VAR_OFF" ]] && return 0
-  [[ -z "$source" || -z "$category" || -z "$payload" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
-
-  case "$BL64_LOG_FORMAT" in
-  "$BL64_LOG_FORMAT_CSV")
-    printf '%(%FT%TZ%z)T%s%s%s%s%s%s%s%s%s%s%s%s\n' \
-      '-1' \
-      "$BL64_LOG_FS" \
-      "$BL64_SCRIPT_SID" \
-      "$BL64_LOG_FS" \
-      "$HOSTNAME" \
-      "$BL64_LOG_FS" \
-      "$BL64_SCRIPT_ID" \
-      "$BL64_LOG_FS" \
-      "${source}" \
-      "$BL64_LOG_FS" \
-      "$category" \
-      "$BL64_LOG_FS" \
-      "$payload" >>"$BL64_LOG_DESTINATION"
-    ;;
-  *) return $BL64_LIB_ERROR_MODULE_SETUP_INVALID ;;
-  esac
-}
-
-#######################################
-# Save a single log record of type 'info' to the logs repository.
-#
-# Arguments:
-#   $1: name of the source that is generating the message
-#   $2: message to be recorded
-# Outputs:
-#   STDOUT: message (when BL64_LOG_VERBOSE='1')
-#   STDERR: execution errors
-# Returns:
-#   0: log record successfully saved
-#   >0: failed to save the log record
-#######################################
-function bl64_log_info() {
-  bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local payload="$2"
-
-  [[ "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_NONE" ||
-    "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_ERROR" ||
-    "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_WARNING" ]] &&
-    return 0
-
-  _bl64_log_register \
-    "$source" \
-    "$BL64_LOG_CATEGORY_INFO" \
-    "$payload"
-}
-
-#######################################
-# Save a single log record of type 'error' to the logs repository.
-#
-# Arguments:
-#   $1: name of the source that is generating the message
-#   $2: message to be recorded
-# Outputs:
-#   STDOUT: None
-#   STDERR: execution errors, message (when BL64_LOG_VERBOSE='1')
-# Returns:
-#   0: log record successfully saved
-#   >0: failed to save the log record
-#######################################
-function bl64_log_error() {
-  bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local payload="$2"
-
-  [[ "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_NONE" ]] && return 0
-
-  _bl64_log_register \
-    "$source" \
-    "$BL64_LOG_CATEGORY_ERROR" \
-    "$payload"
-}
-
-#######################################
-# Save a single log record of type 'warning' to the logs repository.
-#
-# Arguments:
-#   $1: name of the source that is generating the message
-#   $2: message to be recorded
-# Outputs:
-#   STDOUT: None
-#   STDERR: execution errors, message (when BL64_LOG_VERBOSE='1')
-# Returns:
-#   0: log record successfully saved
-#   >0: failed to save the log record
-#######################################
-function bl64_log_warning() {
-  bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local payload="$2"
-
-  [[ "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_NONE" ||
-    "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_ERROR" ]] &&
-    return 0
-
-  _bl64_log_register \
-    "$source" \
-    "$BL64_LOG_CATEGORY_WARNING" \
-    "$payload"
-}
-
-#######################################
 # BashLib64 / Module / Setup / Interact with MongoDB
 #######################################
 
@@ -12426,6 +14022,9 @@ function bl64_log_warning() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_mdb_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function "$@"
   local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -12755,1358 +14354,6 @@ function bl64_mdb_run_mongoexport() {
 }
 
 #######################################
-# BashLib64 / Module / Setup / Manage native OS packages
-#######################################
-
-#######################################
-# Setup the bashlib64 module
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: setup ok
-#   >0: setup failed
-#######################################
-function bl64_pkg_setup() {
-  bl64_dbg_lib_show_function
-
-  # shellcheck disable=SC2249
-  _bl64_pkg_set_command &&
-    _bl64_pkg_set_runtime &&
-    _bl64_pkg_set_options &&
-    _bl64_pkg_set_alias &&
-    BL64_PKG_MODULE="$BL64_VAR_ON"
-
-  bl64_check_alert_module_setup 'pkg'
-}
-
-#######################################
-# Identify and normalize commands
-#
-# * Commands are exported as variables with full path
-# * The caller function is responsible for checking that the target command is present (installed)
-# * Warning: bootstrap function
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_pkg_set_command() {
-  bl64_dbg_lib_show_function
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_PKG_CMD_APT='/usr/bin/apt-get'
-    ;;
-  ${BL64_OS_FD}-*)
-    BL64_PKG_CMD_DNF='/usr/bin/dnf'
-    ;;
-  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
-    BL64_PKG_CMD_DNF='/usr/bin/dnf'
-    ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
-    BL64_PKG_CMD_DNF='/usr/bin/dnf'
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    BL64_PKG_CMD_YUM='/usr/bin/yum'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_PKG_CMD_ZYPPER='/usr/bin/zypper'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_PKG_CMD_APK='/sbin/apk'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_PKG_CMD_BRW='/opt/homebrew/bin/brew'
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-}
-
-#######################################
-# Create command sets for common options
-#
-# * Warning: bootstrap function
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_pkg_set_options() {
-  bl64_dbg_lib_show_function
-  # shellcheck disable=SC2034
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_PKG_SET_ASSUME_YES='--assume-yes'
-    BL64_PKG_SET_SLIM=' '
-    BL64_PKG_SET_QUIET='--quiet --quiet'
-    BL64_PKG_SET_VERBOSE='--show-progress'
-    ;;
-  ${BL64_OS_FD}-*)
-    BL64_PKG_SET_ASSUME_YES='--assumeyes'
-    BL64_PKG_SET_SLIM='--nodocs'
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--color=never --verbose'
-    ;;
-  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
-    BL64_PKG_SET_ASSUME_YES='--assumeyes'
-    BL64_PKG_SET_SLIM='--nodocs'
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--color=never --verbose'
-    ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
-    BL64_PKG_SET_ASSUME_YES='--assumeyes'
-    BL64_PKG_SET_SLIM='--nodocs'
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--color=never --verbose'
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    BL64_PKG_SET_ASSUME_YES='--assumeyes'
-    BL64_PKG_SET_SLIM=' '
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--color=never --verbose'
-    ;;
-  ${BL64_OS_SLES}-15.*)
-    BL64_PKG_SET_ASSUME_YES='--no-confirm'
-    BL64_PKG_SET_SLIM=' '
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--verbose'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_PKG_SET_ASSUME_YES=' '
-    BL64_PKG_SET_SLIM=' '
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--verbose'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_PKG_SET_ASSUME_YES=' '
-    BL64_PKG_SET_SLIM=' '
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--verbose'
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-}
-
-#######################################
-# Create command aliases for common use cases
-#
-# * Aliases are presented as regular shell variables for easy inclusion in complex commands
-# * Use the alias without quotes, otherwise the shell will interprete spaces as part of the command
-# * Warning: bootstrap function
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_pkg_set_alias() {
-  bl64_dbg_lib_show_function
-  # shellcheck disable=SC2034
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-*)
-    BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
-    BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
-    BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
-    ;;
-  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
-    BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
-    BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
-    BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
-    ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
-    BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
-    BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
-    BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    BL64_PKG_ALIAS_YUM_CACHE="$BL64_PKG_CMD_YUM ${BL64_PKG_SET_VERBOSE} makecache"
-    BL64_PKG_ALIAS_YUM_INSTALL="$BL64_PKG_CMD_YUM ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_ASSUME_YES} install"
-    BL64_PKG_ALIAS_YUM_CLEAN="$BL64_PKG_CMD_YUM clean all"
-    ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_PKG_ALIAS_APT_CACHE="$BL64_PKG_CMD_APT update"
-    BL64_PKG_ALIAS_APT_INSTALL="$BL64_PKG_CMD_APT install ${BL64_PKG_SET_ASSUME_YES} ${BL64_PKG_SET_VERBOSE}"
-    BL64_PKG_ALIAS_APT_CLEAN="$BL64_PKG_CMD_APT clean"
-    ;;
-  ${BL64_OS_SLES}-*)
-    :
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_PKG_ALIAS_APK_CACHE="$BL64_PKG_CMD_APK update ${BL64_PKG_SET_VERBOSE}"
-    BL64_PKG_ALIAS_APK_INSTALL="$BL64_PKG_CMD_APK add ${BL64_PKG_SET_VERBOSE}"
-    BL64_PKG_ALIAS_APK_CLEAN="$BL64_PKG_CMD_APK cache clean ${BL64_PKG_SET_VERBOSE}"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_PKG_ALIAS_BRW_CACHE="$BL64_PKG_CMD_BRW update ${BL64_PKG_SET_VERBOSE}"
-    BL64_PKG_ALIAS_BRW_INSTALL="$BL64_PKG_CMD_BRW install ${BL64_PKG_SET_VERBOSE}"
-    BL64_PKG_ALIAS_BRW_CLEAN="$BL64_PKG_CMD_BRW cleanup ${BL64_PKG_SET_VERBOSE} --prune=all -s"
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-}
-
-#######################################
-# Set runtime defaults
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: setting errors
-# Returns:
-#   0: set ok
-#   >0: failed to set
-#######################################
-function _bl64_pkg_set_runtime() {
-  bl64_dbg_lib_show_function
-
-  bl64_pkg_set_paths
-}
-
-#######################################
-# Set and prepare module paths
-#
-# * Global paths only
-# * If preparation fails the whole module fails
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: check errors
-# Returns:
-#   0: paths prepared ok
-#   >0: failed to prepare paths
-#######################################
-# shellcheck disable=SC2120
-function bl64_pkg_set_paths() {
-  bl64_dbg_lib_show_function
-
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-*)
-    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
-    ;;
-  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
-    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
-    ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
-    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d/'
-    ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    :
-    ;;
-  ${BL64_OS_SLES}-*)
-    :
-    ;;
-  ${BL64_OS_ALP}-*)
-    :
-    ;;
-  ${BL64_OS_MCOS}-*)
-    :
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-
-  return 0
-}
-
-#######################################
-# BashLib64 / Module / Functions / Manage native OS packages
-#######################################
-
-#######################################
-# Add package repository
-#
-# * Add remote package repository
-# * Package cache is not refreshed
-#
-# Requirements:
-#   * root privilege (sudo)
-# Arguments:
-#   $1: repository name
-#   $2: repository source. Format: URL
-#   $3: GPGKey source (YUM only). Format: URL
-# Outputs:
-#   STDOUT: package manager stderr
-#   STDERR: package manager stderr
-# Returns:
-#   package manager exit status
-#######################################
-function bl64_pkg_repository_add() {
-  bl64_dbg_lib_show_function "$@"
-  local repository="$1"
-  local source="$2"
-  local gpgkey="${3:-${BL64_VAR_NULL}}"
-
-  bl64_check_privilege_root &&
-    bl64_check_parameter 'repository' &&
-    bl64_check_parameter 'source' ||
-    return $?
-
-  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_REPOSITORY_ADD (${repository})"
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_check_alert_unsupported
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    _bl64_pkg_repository_add_yum "$repository" "$source" "$gpgkey"
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_check_alert_unsupported
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_check_alert_unsupported
-    ;;
-  ${BL64_OS_MCOS}-*)
-    bl64_check_alert_unsupported
-    ;;
-  *) bl64_check_alert_unsupported ;;
-
-  esac
-}
-
-function _bl64_pkg_repository_add_yum() {
-  bl64_dbg_lib_show_function "$@"
-  local repository="$1"
-  local source="$2"
-  local gpgkey="${3:-${BL64_VAR_NULL}}"
-  local definition=''
-
-  bl64_check_parameter 'gpgkey' || return $?
-  definition="${BL64_PKG_PATH_YUM_REPOS_D}/${repository}.${BL64_PKG_DEF_SUFFIX_YUM_REPOSITORY}"
-  [[ -f "$definition" ]] && bl64_dbg_lib_show_info "repository already created (${definition}). No action taken" && return 0
-
-  bl64_dbg_lib_show_info "create repository definition (${definition})"
-  printf '[%s]
-name=%s
-baseurl=%s
-gpgcheck=1
-enabled=1
-gpgkey=%s\n' \
-    "$repository" \
-    "$repository" \
-    "$source" \
-    "$gpgkey" \
-    >"$definition"
-}
-
-#######################################
-# Refresh package repository
-#
-# Requirements:
-#   * root privilege (sudo)
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: package manager stderr
-#   STDERR: package manager stderr
-# Returns:
-#   n: package manager exit status
-#######################################
-function bl64_pkg_repository_refresh() {
-  bl64_dbg_lib_show_function
-
-  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_REPOSITORY_REFRESH"
-  # shellcheck disable=SC2086
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'update'
-    ;;
-  ${BL64_OS_FD}-*)
-    bl64_pkg_run_dnf 'makecache'
-    ;;
-  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
-    bl64_pkg_run_dnf 'makecache'
-    ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
-    bl64_pkg_run_dnf 'makecache'
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_pkg_run_yum 'makecache'
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_pkg_run_zypper 'refresh'
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_pkg_run_apk 'update'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    bl64_pkg_run_brew 'update'
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-}
-
-#######################################
-# Deploy packages
-#
-# * Before installation: prepares the package manager environment and cache
-# * After installation: removes cache and temporary files
-#
-# Arguments:
-#   package list, separated by spaces (expanded with $@)
-# Outputs:
-#   STDOUT: process output
-#   STDERR: process stderr
-# Returns:
-#   n: process exist status
-#######################################
-function bl64_pkg_deploy() {
-  bl64_dbg_lib_show_function "$@"
-
-  bl64_check_parameters_none $# || return $?
-
-  bl64_pkg_prepare &&
-    bl64_pkg_install "$@" &&
-    bl64_pkg_upgrade &&
-    bl64_pkg_cleanup
-}
-
-#######################################
-# Initialize the package manager for installations
-#
-# Requirements:
-#   * root privilege (sudo)
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: package manager stderr
-#   STDERR: package manager stderr
-# Returns:
-#   n: package manager exit status
-#######################################
-function bl64_pkg_prepare() {
-  bl64_dbg_lib_show_function
-
-  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_PREPARE"
-  bl64_pkg_repository_refresh
-}
-
-#######################################
-# Install packages
-#
-# * Assume yes
-# * Avoid installing docs (man) when possible
-#
-# Requirements:
-#   * root privilege (sudo)
-# Arguments:
-#   package list, separated by spaces (expanded with $@)
-# Outputs:
-#   STDOUT: package manager stderr
-#   STDERR: package manager stderr
-# Returns:
-#   n: package manager exit status
-#######################################
-function bl64_pkg_install() {
-  bl64_dbg_lib_show_function "$@"
-
-  bl64_check_parameters_none $# || return $?
-
-  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_INSTALL (${*})"
-  # shellcheck disable=SC2086
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
-    ;;
-  ${BL64_OS_FD}-*)
-    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
-    ;;
-  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
-    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
-    ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
-    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_pkg_run_zypper 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_pkg_run_apk 'add' -- "$@"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    "$BL64_PKG_CMD_BRW" 'install' "$@"
-    ;;
-  *) bl64_check_alert_unsupported ;;
-
-  esac
-}
-
-#######################################
-# Upgrade packages
-#
-# * Assume yes
-#
-# Requirements:
-#   * root privilege (sudo)
-# Arguments:
-#   package list, separated by spaces (expanded with $@)
-# Outputs:
-#   STDOUT: package manager stderr
-#   STDERR: package manager stderr
-# Returns:
-#   n: package manager exit status
-#######################################
-# shellcheck disable=SC2120
-function bl64_pkg_upgrade() {
-  bl64_dbg_lib_show_function "$@"
-
-  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_UPGRADE"
-  # shellcheck disable=SC2086
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES -- "$@"
-    ;;
-  ${BL64_OS_FD}-*)
-    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
-    ;;
-  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
-    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
-    ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
-    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_pkg_run_zypper 'update' $BL64_PKG_SET_ASSUME_YES -- "$@"
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_pkg_run_apk 'upgrade' -- "$@"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    "$BL64_PKG_CMD_BRW" 'upgrade' "$@"
-    ;;
-  *) bl64_check_alert_unsupported ;;
-
-  esac
-}
-
-#######################################
-# Clean up the package manager run-time environment
-#
-# * Warning: removes cache contents
-#
-# Requirements:
-#   * root privilege (sudo)
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: package manager stderr
-#   STDERR: package manager stderr
-# Returns:
-#   n: package manager exit status
-#######################################
-function bl64_pkg_cleanup() {
-  bl64_dbg_lib_show_function
-  local target=''
-
-  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_CLEAN"
-  # shellcheck disable=SC2086
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'clean'
-    ;;
-  ${BL64_OS_FD}-*)
-    bl64_pkg_run_dnf 'clean' 'all'
-    ;;
-  ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
-    BL64_PKG_CMD_DNF='/usr/bin/dnf'
-    ;;
-  ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*)
-    BL64_PKG_CMD_DNF='/usr/bin/dnf'
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_pkg_run_yum 'clean' 'all'
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_pkg_run_zypper 'clean' '--all'
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_pkg_run_apk 'cache' 'clean'
-    target='/var/cache/apk'
-    if [[ -d "$target" ]]; then
-      bl64_fs_rm_full ${target}/[[:alpha:]]*
-    fi
-    ;;
-  ${BL64_OS_MCOS}-*)
-    bl64_pkg_run_brew 'cleanup' --prune=all -s
-    ;;
-  *) bl64_check_alert_unsupported ;;
-
-  esac
-}
-
-#######################################
-# Command wrapper with verbose, debug and common options
-#
-# * Trust no one. Ignore inherited config and use explicit config
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_pkg_run_dnf() {
-  bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
-    return $?
-
-  if bl64_dbg_lib_command_enabled; then
-    verbose="$BL64_PKG_SET_VERBOSE"
-  else
-    verbose="$BL64_PKG_SET_QUIET"
-  fi
-
-  bl64_dbg_lib_trace_start
-  # shellcheck disable=SC2086
-  "$BL64_PKG_CMD_DNF" $verbose "$@"
-  bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Command wrapper with verbose, debug and common options
-#
-# * Trust no one. Ignore inherited config and use explicit config
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_pkg_run_yum() {
-  bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
-    return $?
-
-  if bl64_dbg_lib_command_enabled; then
-    verbose="$BL64_PKG_SET_VERBOSE"
-  else
-    verbose="$BL64_PKG_SET_QUIET"
-  fi
-
-  bl64_dbg_lib_trace_start
-  # shellcheck disable=SC2086
-  "$BL64_PKG_CMD_YUM" $verbose "$@"
-  bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Command wrapper with verbose, debug and common options
-#
-# * Trust no one. Ignore inherited config and use explicit config
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_pkg_run_apt() {
-  bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
-    return $?
-
-  bl64_pkg_blank_apt
-
-  # Verbose is only available for a subset of commands
-  if bl64_dbg_lib_command_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
-    verbose="$BL64_PKG_SET_VERBOSE"
-  else
-    export DEBCONF_NOWARNINGS='yes'
-    export DEBCONF_TERSE='yes'
-    verbose="$BL64_PKG_SET_QUIET"
-  fi
-
-  # Avoid interactive questions
-  export DEBIAN_FRONTEND="noninteractive"
-
-  bl64_dbg_lib_trace_start
-  # shellcheck disable=SC2086
-  "$BL64_PKG_CMD_APT" $verbose "$@"
-  bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function bl64_pkg_blank_apt() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited DEB* shell variables'
-  bl64_dbg_lib_trace_start
-  unset DEBIAN_FRONTEND
-  unset DEBCONF_TERSE
-  unset DEBCONF_NOWARNINGS
-  bl64_dbg_lib_trace_stop
-
-  return 0
-}
-
-#######################################
-# Command wrapper with verbose, debug and common options
-#
-# * Trust no one. Ignore inherited config and use explicit config
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_pkg_run_apk() {
-  bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
-    return $?
-
-  if bl64_dbg_lib_command_enabled; then
-    verbose="$BL64_PKG_SET_VERBOSE"
-  else
-    verbose="$BL64_PKG_SET_QUIET"
-  fi
-
-  bl64_dbg_lib_trace_start
-  # shellcheck disable=SC2086
-  "$BL64_PKG_CMD_APK" $verbose "$@"
-  bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Command wrapper with verbose, debug and common options
-#
-# * Trust no one. Ignore inherited config and use explicit config
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_pkg_run_brew() {
-  bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
-    return $?
-
-  if bl64_dbg_lib_command_enabled; then
-    verbose="$BL64_PKG_SET_VERBOSE"
-  else
-    verbose="$BL64_PKG_SET_QUIET"
-  fi
-
-  bl64_dbg_lib_trace_start
-  # shellcheck disable=SC2086
-  "$BL64_PKG_CMD_BRW" $verbose "$@"
-  bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Command wrapper with verbose, debug and common options
-#
-# * Trust no one. Ignore inherited config and use explicit config
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_pkg_run_zypper() {
-  bl64_dbg_lib_show_function "$@"
-  local verbose=''
-
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
-    return $?
-
-  if bl64_dbg_lib_command_enabled; then
-    verbose="$BL64_PKG_SET_VERBOSE"
-  else
-    verbose="$BL64_PKG_SET_QUIET"
-  fi
-
-  bl64_dbg_lib_trace_start
-  # shellcheck disable=SC2086
-  "$BL64_PKG_CMD_ZYPPER" $verbose "$@"
-  bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# BashLib64 / Module / Setup / Interact with system-wide Python
-#######################################
-
-#######################################
-# Setup the bashlib64 module
-#
-# * (Optional) Use virtual environment
-#
-# Arguments:
-#   $1: full path to the virtual environment
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: setup ok
-#   >0: setup failed
-#######################################
-# shellcheck disable=SC2120
-function bl64_py_setup() {
-  bl64_dbg_lib_show_function "$@"
-  local venv_path="${1:-${BL64_VAR_DEFAULT}}"
-
-  if [[ "$venv_path" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_info "venv requested (${venv_path})"
-    if [[ -d "$venv_path" ]]; then
-      bl64_dbg_lib_show_info 'use already existing venv'
-      _bl64_py_setup "$venv_path"
-    else
-      bl64_dbg_lib_show_info 'no previous venv, create one'
-      _bl64_py_setup "$BL64_VAR_DEFAULT" &&
-        bl64_py_venv_create "$venv_path" &&
-        _bl64_py_setup "$venv_path"
-    fi
-  else
-    bl64_dbg_lib_show_info "no venv requested"
-    _bl64_py_setup "$BL64_VAR_DEFAULT"
-  fi
-
-  bl64_check_alert_module_setup 'py'
-}
-
-function _bl64_py_setup() {
-  bl64_dbg_lib_show_function "$@"
-  local venv_path="$1"
-
-  if [[ "$venv_path" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_py_venv_check "$venv_path" ||
-      return $?
-  fi
-
-  _bl64_py_set_command "$venv_path" &&
-    bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
-    _bl64_py_set_options &&
-    _bl64_py_set_resources &&
-    BL64_PY_MODULE="$BL64_VAR_ON"
-}
-
-#######################################
-# Identify and normalize commands
-#
-# * Commands are exported as variables with full path
-# * The caller function is responsible for checking that the target command is present (installed)
-# * (Optional) Enable requested virtual environment
-# * If virtual environment is requested, instead of running bin/activate manually set the same variables that it would
-# * Python versions are detected up to the subversion, minor is ignored. Example: use python3.6 instead of python3.6.1
-#
-# Arguments:
-#   $1: full path to the virtual environment
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_py_set_command() {
-  bl64_dbg_lib_show_function "$@"
-  local venv_path="$1"
-
-  if [[ "$venv_path" == "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_info 'identify OS native python3 path'
-    # shellcheck disable=SC2034
-    case "$BL64_OS_DISTRO" in
-    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*) BL64_PY_CMD_PYTHON36='/usr/bin/python3' ;;
-    ${BL64_OS_CNT}-8.* | ${BL64_OS_OL}-8.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_ALM}-8.* | ${BL64_OS_RCK}-8.*)
-      BL64_PY_CMD_PYTHON36='/usr/bin/python3'
-      BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
-      ;;
-    ${BL64_OS_CNT}-9.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-9.* | ${BL64_OS_RCK}-9.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-    ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-    ${BL64_OS_FD}-35.* | ${BL64_OS_FD}-36.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
-    ${BL64_OS_FD}-37.* | ${BL64_OS_FD}-38.*) BL64_PY_CMD_PYTHON311='/usr/bin/python3.11' ;;
-    ${BL64_OS_DEB}-9.*) BL64_PY_CMD_PYTHON35='/usr/bin/python3.5' ;;
-    ${BL64_OS_DEB}-10.*) BL64_PY_CMD_PYTHON37='/usr/bin/python3.7' ;;
-    ${BL64_OS_DEB}-11.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-    ${BL64_OS_UB}-18.*) BL64_PY_CMD_PYTHON36='/usr/bin/python3.6' ;;
-    ${BL64_OS_UB}-20.*) BL64_PY_CMD_PYTHON38='/usr/bin/python3.8' ;;
-    ${BL64_OS_UB}-21.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-    ${BL64_OS_UB}-22.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
-    ${BL64_OS_UB}-23.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.11' ;;
-    ${BL64_OS_SLES}-15.*)
-      # Default
-      BL64_PY_CMD_PYTHON36='/usr/bin/python3.6'
-      # SP3
-      BL64_PY_CMD_PYTHON39='/usr/bin/python3.9'
-      # SP4
-      BL64_PY_CMD_PYTHON310='/usr/bin/python3.10'
-      ;;
-    "${BL64_OS_ALP}-3.14" | "${BL64_OS_ALP}-3.15") BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-    "${BL64_OS_ALP}-3.16" | "${BL64_OS_ALP}-3.17") BL64_PY_CMD_PYTHON39='/usr/bin/python3.10' ;;
-    ${BL64_OS_MCOS}-12.* | ${BL64_OS_MCOS}-13.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-    *) bl64_check_alert_unsupported ;;
-    esac
-
-    # Select best match for default python3
-    if [[ -x "$BL64_PY_CMD_PYTHON311" ]]; then
-      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON311"
-      BL64_PY_VERSION_PYTHON3='3.11'
-    elif [[ -x "$BL64_PY_CMD_PYTHON310" ]]; then
-      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON310"
-      BL64_PY_VERSION_PYTHON3='3.10'
-    elif [[ -x "$BL64_PY_CMD_PYTHON39" ]]; then
-      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON39"
-      BL64_PY_VERSION_PYTHON3='3.9'
-    elif [[ -x "$BL64_PY_CMD_PYTHON38" ]]; then
-      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON38"
-      BL64_PY_VERSION_PYTHON3='3.8'
-    elif [[ -x "$BL64_PY_CMD_PYTHON37" ]]; then
-      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON37"
-      BL64_PY_VERSION_PYTHON3='3.7'
-    elif [[ -x "$BL64_PY_CMD_PYTHON36" ]]; then
-      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON36"
-      BL64_PY_VERSION_PYTHON3='3.6'
-    elif [[ -x "$BL64_PY_CMD_PYTHON35" ]]; then
-      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON35"
-      BL64_PY_VERSION_PYTHON3='3.5'
-    fi
-
-    # Ignore VENV. Use detected python
-    export VIRTUAL_ENV=''
-
-  else
-    bl64_dbg_lib_show_info 'use python3 from virtual environment'
-    BL64_PY_CMD_PYTHON3="${venv_path}/bin/python3"
-
-    # Emulate bin/activate
-    export VIRTUAL_ENV="$venv_path"
-    export PATH="${VIRTUAL_ENV}:${PATH}"
-    unset PYTHONHOME
-
-    # Let other basthlib64 functions know about this venv
-    BL64_PY_VENV_PATH="$venv_path"
-  fi
-
-  bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3' 'BL64_PY_VENV_PATH' 'VIRTUAL_ENV' 'PATH'
-}
-
-#######################################
-# Create command sets for common options
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_py_set_options() {
-  bl64_dbg_lib_show_function
-  # Common sets - unversioned
-  BL64_PY_SET_PIP_VERBOSE='--verbose'
-  BL64_PY_SET_PIP_DEBUG='-vvv'
-  BL64_PY_SET_PIP_VERSION='--version'
-  BL64_PY_SET_PIP_UPGRADE='--upgrade'
-  BL64_PY_SET_PIP_USER='--user'
-  BL64_PY_SET_PIP_QUIET='--quiet'
-  BL64_PY_SET_PIP_SITE='--system-site-packages'
-  BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
-
-}
-
-#######################################
-# Declare version specific definitions
-#
-# * Use to capture default file names, values, attributes, etc
-# * Do not use to capture CLI flags. Use *_set_options instead
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_py_set_resources() {
-  bl64_dbg_lib_show_function
-
-  BL64_PY_DEF_VENV_CFG='pyvenv.cfg'
-  BL64_PY_DEF_MODULE_VENV='venv'
-  BL64_PY_DEF_MODULE_PIP='pip'
-
-  return 0
-}
-
-#######################################
-# BashLib64 / Module / Functions / Interact with system-wide Python
-#######################################
-
-#######################################
-# Create virtual environment
-#
-# Arguments:
-#   $1: full path to the virtual environment
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_py_venv_create() {
-  bl64_dbg_lib_show_function "$@"
-  local venv_path="${1:-}"
-
-  bl64_check_parameter 'venv_path' &&
-    bl64_check_path_absolute "$venv_path" &&
-    bl64_check_path_not_present "$venv_path" ||
-    return $?
-
-  bl64_msg_show_lib_task "${_BL64_PY_TXT_VENV_CREATE} (${venv_path})"
-  bl64_py_run_python -m "$BL64_PY_DEF_MODULE_VENV" "$venv_path"
-
-}
-
-#######################################
-# Check that the requested virtual environment is created
-#
-# Arguments:
-#   $1: full path to the virtual environment
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_py_venv_check() {
-  bl64_dbg_lib_show_function "$@"
-  local venv_path="${1:-}"
-
-  bl64_check_parameter 'venv_path' ||
-    return $?
-
-  if [[ ! -d "$venv_path" ]]; then
-    bl64_msg_show_error "${message} (command: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_PY_TXT_VENV_MISSING}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
-    return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
-  fi
-
-  if [[ ! -r "${venv_path}/${BL64_PY_DEF_VENV_CFG}" ]]; then
-    bl64_msg_show_error "${message} (command: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_PY_TXT_VENV_INVALID}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
-    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
-  fi
-
-  return 0
-}
-
-#######################################
-# Get Python PIP version
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: PIP version
-#   STDERR: PIP error
-# Returns:
-#   0: ok
-#   $BL64_LIB_ERROR_APP_INCOMPATIBLE
-#######################################
-function bl64_py_pip_get_version() {
-  bl64_dbg_lib_show_function
-  local -a version
-
-  read -r -a version < <(bl64_py_run_pip "$BL64_PY_SET_PIP_VERSION")
-  if [[ "${version[1]}" == [0-9.]* ]]; then
-    printf '%s' "${version[1]}"
-  else
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
-  fi
-
-  return 0
-}
-
-#######################################
-# Initialize package manager for local-user
-#
-# * Upgrade pip
-# * Install/upgrade setuptools
-# * Upgrade is done using the OS provided PIP module. Do not use bl64_py_pip_usr_install as it relays on the latest version of PIP
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: package manager stderr
-#   STDERR: package manager stderr
-# Returns:
-#   n: package manager exit status
-#######################################
-function bl64_py_pip_usr_prepare() {
-  bl64_dbg_lib_show_function
-  local modules_pip="$BL64_PY_DEF_MODULE_PIP"
-  local modules_setup='setuptools wheel stevedore'
-  local flag_user="$BL64_PY_SET_PIP_USER"
-
-  [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
-
-  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_PIP"
-  # shellcheck disable=SC2086
-  bl64_py_run_pip \
-    'install' \
-    $BL64_PY_SET_PIP_UPGRADE \
-    $flag_user \
-    $modules_pip ||
-    return $?
-
-  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP"
-  # shellcheck disable=SC2086
-  bl64_py_run_pip \
-    'install' \
-    $BL64_PY_SET_PIP_UPGRADE \
-    $flag_user \
-    $modules_setup ||
-    return $?
-
-  return 0
-}
-
-#######################################
-# Install packages for local-user
-#
-# * Assume yes
-# * Assumes that bl64_py_pip_usr_prepare was runned before
-# * Uses the latest version of PIP (previously upgraded by bl64_py_pip_usr_prepare)
-#
-# Arguments:
-#   package list, separated by spaces (expanded with $@)
-# Outputs:
-#   STDOUT: package manager stderr
-#   STDERR: package manager stderr
-# Returns:
-#   n: package manager exit status
-#######################################
-function bl64_py_pip_usr_install() {
-  bl64_dbg_lib_show_function "$@"
-  local flag_user="$BL64_PY_SET_PIP_USER"
-
-  bl64_check_parameters_none $# || return $?
-
-  # If venv is in use no need to flag usr install
-  [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
-
-  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_INSTALL ($*)"
-  # shellcheck disable=SC2086
-  bl64_py_run_pip \
-    'install' \
-    $BL64_PY_SET_PIP_UPGRADE \
-    $BL64_PY_SET_PIP_NO_WARN_SCRIPT \
-    $flag_user \
-    "$@"
-}
-
-#######################################
-# Deploy PIP packages
-#
-# * Before installation: prepares the package manager environment and cache
-# * After installation: removes cache and temporary files
-#
-# Arguments:
-#   package list, separated by spaces (expanded with $@)
-# Outputs:
-#   STDOUT: process output
-#   STDERR: process stderr
-# Returns:
-#   n: process exist status
-#######################################
-function bl64_py_pip_usr_deploy() {
-  bl64_dbg_lib_show_function "$@"
-
-  bl64_check_parameters_none $# || return $?
-
-  bl64_py_pip_usr_prepare &&
-    bl64_py_pip_usr_install "$@" ||
-    return $?
-
-  bl64_py_pip_usr_cleanup
-  return 0
-}
-
-#######################################
-# Clean up pip install environment
-#
-# * Empty cache
-# * Ignore errors and warnings
-# * Best effort
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: package manager stderr
-#   STDERR: package manager stderr
-# Returns:
-#   0: always ok
-#######################################
-function bl64_py_pip_usr_cleanup() {
-  bl64_dbg_lib_show_function
-
-  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_CLEANUP_PIP"
-  bl64_py_run_pip \
-    'cache' \
-    'purge'
-
-  return 0
-}
-
-#######################################
-# Python wrapper with verbose, debug and common options
-#
-# * Trust no one. Ignore inherited config and use explicit
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   command exit status
-#######################################
-function bl64_py_run_python() {
-  bl64_dbg_lib_show_function "$@"
-
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_PY_MODULE' ||
-    return $?
-
-  bl64_py_blank_python
-
-  bl64_dbg_lib_trace_start
-  "$BL64_PY_CMD_PYTHON3" "$@"
-  bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function bl64_py_blank_python() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited PYTHON* shell variables'
-  bl64_dbg_lib_trace_start
-  unset PYTHONHOME
-  unset PYTHONPATH
-  unset PYTHONSTARTUP
-  unset PYTHONDEBUG
-  unset PYTHONUSERBASE
-  unset PYTHONEXECUTABLE
-  unset PYTHONWARNINGS
-  bl64_dbg_lib_trace_stop
-
-  return 0
-}
-
-#######################################
-# Python PIP wrapper
-#
-# * Uses global ephemeral settings when configured for temporal and cache
-#
-# Arguments:
-#   $@: arguments are passes as-is
-# Outputs:
-#   STDOUT: PIP output
-#   STDERR: PIP error
-# Returns:
-#   PIP exit status
-#######################################
-function bl64_py_run_pip() {
-  bl64_dbg_lib_show_function "$@"
-  local debug="$BL64_PY_SET_PIP_QUIET"
-  local temporal=' '
-  local cache=' '
-
-  bl64_msg_lib_verbose_enabled && debug=' '
-  bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
-
-  [[ -n "$BL64_FS_PATH_TEMPORAL" ]] && temporal="TMPDIR=${BL64_FS_PATH_TEMPORAL}"
-  [[ -n "$BL64_FS_PATH_CACHE" ]] && cache="--cache-dir=${BL64_FS_PATH_CACHE}"
-
-  # shellcheck disable=SC2086
-  eval $temporal bl64_py_run_python \
-    -m "$BL64_PY_DEF_MODULE_PIP" \
-    $debug \
-    $cache \
-    "$*"
-}
-
-#######################################
 # BashLib64 / Module / Setup / Interact with Terraform
 #######################################
 
@@ -14124,6 +14371,9 @@ function bl64_py_run_pip() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_tf_setup() {
+  [[ -z "$BL64_VERSION" ]] &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    return 21
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -14404,26 +14654,22 @@ if bl64_lib_mode_strict_is_enabled; then
   set -o 'privileged'
 fi
 
-# Initialize OS independant modules
-bl64_dbg_setup &&
-  bl64_check_setup &&
-  bl64_msg_setup &&
-  bl64_bsh_setup &&
-  bl64_rnd_setup &&
-  bl64_ui_setup ||
-  return $?
-
-# Initialize OS dependant modules
-bl64_os_setup &&
-  bl64_txt_setup &&
-  bl64_fmt_setup &&
-  bl64_fs_setup &&
-  bl64_iam_setup &&
-  bl64_rbac_setup &&
-  bl64_rxtx_setup &&
-  bl64_api_setup &&
-  bl64_vcs_setup ||
-  return $?
+# Initialize modules
+[[ -n "$BL64_DBG_MODULE" ]] && { bl64_dbg_setup || exit $?; }
+[[ -n "$BL64_CHECK_MODULE" ]] && { bl64_check_setup || exit $?; }
+[[ -n "$BL64_MSG_MODULE" ]] && { bl64_msg_setup || exit $?; }
+[[ -n "$BL64_BSH_MODULE" ]] && { bl64_bsh_setup || exit $?; }
+[[ -n "$BL64_RND_MODULE" ]] && { bl64_rnd_setup || exit $?; }
+[[ -n "$BL64_UI_MODULE" ]] && { bl64_ui_setup || exit $?; }
+[[ -n "$BL64_OS_MODULE" ]] && { bl64_os_setup || exit $?; }
+[[ -n "$BL64_TXT_MODULE" ]] && { bl64_txt_setup || exit $?; }
+[[ -n "$BL64_FMT_MODULE" ]] && { bl64_fmt_setup || exit $?; }
+[[ -n "$BL64_FS_MODULE" ]] && { bl64_fs_setup || exit $?; }
+[[ -n "$BL64_IAM_MODULE" ]] && { bl64_iam_setup || exit $?; }
+[[ -n "$BL64_RBAC_MODULE" ]] && { bl64_rbac_setup || exit $?; }
+[[ -n "$BL64_RXTX_MODULE" ]] && { bl64_rxtx_setup || exit $?; }
+[[ -n "$BL64_API_MODULE" ]] && { bl64_api_setup || exit $?; }
+[[ -n "$BL64_VCS_MODULE" ]] && { bl64_vcs_setup || exit $?; }
 
 # Set signal handlers
 # shellcheck disable=SC2064
@@ -14439,7 +14685,7 @@ if bl64_lib_trap_is_enabled; then
 fi
 
 # Set default umask
-bl64_fs_set_umask
+umask -S 'u=rwx,g=,o=' > /dev/null
 
 # Set script identity
 bl64_bsh_script_set_identity
