@@ -4,7 +4,6 @@
 
 function _bl64_dbg_show() {
   local message="$1"
-
   printf '%s: %s\n' "$_BL64_DBG_TXT_DEBUG" "$message" >&2
 }
 
@@ -110,7 +109,6 @@ function bl64_dbg_runtime_show_paths() {
 #######################################
 function bl64_dbg_app_trace_stop() {
   local -i state=$?
-
   bl64_dbg_app_trace_enabled || return $state
 
   set +x
@@ -154,7 +152,6 @@ function bl64_dbg_app_trace_start() {
 #######################################
 function bl64_dbg_lib_trace_stop() {
   local -i state=$?
-
   bl64_dbg_lib_trace_enabled || return $state
 
   set +x
@@ -195,10 +192,8 @@ function bl64_dbg_lib_trace_start() {
 #   0: always ok
 #######################################
 function bl64_dbg_lib_show_info() {
-  [[ "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_ALL" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_LIB_TASK" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_LIB_ALL" || "$#" == '0' ]] &&
-    return 0
+  bl64_dbg_lib_task_enabled || return 0
   _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${*}"
-
   return 0
 }
 
@@ -214,10 +209,8 @@ function bl64_dbg_lib_show_info() {
 #   0: always ok
 #######################################
 function bl64_dbg_app_show_info() {
-  [[ "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_ALL" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_APP_TASK" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_APP_ALL" || "$#" == '0' ]] &&
-    return 0
+  bl64_dbg_app_task_enabled || return 0
   _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${*}"
-
   return 0
 }
 
@@ -234,9 +227,7 @@ function bl64_dbg_app_show_info() {
 #######################################
 function bl64_dbg_lib_show_vars() {
   local variable=''
-
-  [[ "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_ALL" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_LIB_TASK" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_LIB_ALL" || "$#" == '0' ]] &&
-    return 0
+  bl64_dbg_lib_task_enabled || return 0
 
   for variable in "$@"; do
     eval "_bl64_dbg_show \"[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=\$${variable}]\""
@@ -258,9 +249,7 @@ function bl64_dbg_lib_show_vars() {
 #######################################
 function bl64_dbg_app_show_vars() {
   local variable=''
-
-  [[ "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_ALL" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_APP_TASK" && "$BL64_DBG_TARGET" != "$BL64_DBG_TARGET_APP_ALL" || "$#" == '0' ]] &&
-    return 0
+  bl64_dbg_app_task_enabled || return 0
 
   for variable in "$@"; do
     eval "_bl64_dbg_show \"[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=\$${variable}]\""
@@ -283,7 +272,6 @@ function bl64_dbg_app_show_vars() {
 # shellcheck disable=SC2120
 function bl64_dbg_lib_show_function() {
   bl64_dbg_lib_task_enabled || return 0
-
   _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_LIB_RUN}: [${*}]"
   return 0
 }
@@ -302,7 +290,6 @@ function bl64_dbg_lib_show_function() {
 # shellcheck disable=SC2120
 function bl64_dbg_app_show_function() {
   bl64_dbg_app_task_enabled || return 0
-
   _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_APP_RUN}: [${*}]"
   return 0
 }
@@ -322,7 +309,6 @@ function bl64_dbg_app_show_function() {
 #######################################
 function bl64_dbg_lib_command_trace_stop() {
   local -i state=$?
-
   bl64_dbg_lib_task_enabled || return $state
 
   set +x
@@ -350,5 +336,39 @@ function bl64_dbg_lib_command_trace_start() {
   _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_START}"
   set -x
 
+  return 0
+}
+
+#######################################
+# Show developer comments in bashlib64 functions
+#
+# Arguments:
+#   $1: comments
+# Outputs:
+#   STDOUT: None
+#   STDERR: Debug message
+# Returns:
+#   0: always ok
+#######################################
+function bl64_dbg_lib_show_comments() {
+  bl64_dbg_lib_task_enabled || return 0
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_COMMENTS}: ${*}"
+  return 0
+}
+
+#######################################
+# Show developer comments in app functions
+#
+# Arguments:
+#   $@: comments
+# Outputs:
+#   STDOUT: None
+#   STDERR: Debug message
+# Returns:
+#   0: always ok
+#######################################
+function bl64_dbg_app_show_comments() {
+  bl64_dbg_app_task_enabled || return 0
+  _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_COMMENTS}: ${*}"
   return 0
 }
