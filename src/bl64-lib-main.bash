@@ -46,7 +46,7 @@ if bl64_lib_trap_is_enabled; then
 fi
 
 # Set default umask
-bl64_fs_set_umask
+umask -S 'u=rwx,g=,o='
 
 # Set script identity
 bl64_bsh_script_set_identity

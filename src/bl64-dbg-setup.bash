@@ -36,7 +36,7 @@ function bl64_dbg_app_custom_3_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_APP_CU
 # Setup the bashlib64 module
 #
 # * Warning: bootstrap function
-# * Warning: stand-alone module. Do not add dependency to other bl64 modules
+# * Debugging messages are disabled by default
 #
 # Arguments:
 #   None
@@ -53,7 +53,6 @@ function bl64_dbg_setup() {
     return 21
   bl64_dbg_lib_show_function
 
-  # Set default debug level
   bl64_dbg_all_disable &&
     BL64_DBG_MODULE="$BL64_VAR_ON"
 }
@@ -72,9 +71,6 @@ function bl64_dbg_setup() {
 #######################################
 function bl64_dbg_set_level() {
   local level="$1"
-
-  bl64_check_parameter 'level' || return $?
-
   case "$level" in
   "$BL64_DBG_TARGET_NONE") bl64_dbg_all_disable ;;
   "$BL64_DBG_TARGET_APP_TRACE") bl64_dbg_app_trace_enable ;;
@@ -89,6 +85,6 @@ function bl64_dbg_set_level() {
   "$BL64_DBG_TARGET_LIB_CMD") bl64_dbg_lib_command_enable ;;
   "$BL64_DBG_TARGET_LIB_ALL") bl64_dbg_lib_enable ;;
   "$BL64_DBG_TARGET_ALL") bl64_dbg_all_enable ;;
-  *) bl64_check_alert_parameter_invalid ;;
+  *) bl64_check_alert_parameter_invalid "${_BL64_DBG_TXT_WRONG_LEVEL} ${BL64_DBG_TARGET_ALL}|${BL64_DBG_TARGET_APP_ALL}|${BL64_DBG_TARGET_LIB_ALL}" ;;
   esac
 }

@@ -69,3 +69,5 @@ export _BL64_DBG_TXT_SCRIPT_PATH='Initial script path (BL64_SCRIPT_PATH)'
 export _BL64_DBG_TXT_TMPDIR='Temporary path (TMPDIR)'
 export _BL64_DBG_TXT_PWD='Current working directory (pwd command)'
 export _BL64_DBG_TXT_DEBUG='Debug'
+
+export _BL64_DBG_TXT_WRONG_LEVEL='invalid debugging level. Must be one of: '
