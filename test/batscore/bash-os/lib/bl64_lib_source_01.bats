@@ -5,12 +5,12 @@ setup() {
 }
 
 @test "bl64_lib_source: load library with defaults" {
-  run . "${TESTMANSH_PROJECT_BUILD}/bashlib64.bash"
+  run . "${TESTMANSH_PROJECT_BUILD}/test/bashlib64.bash"
   assert_success
 }
 
 @test "bl64_lib_source: load library with BL64_LIB_STRICT=1" {
   export BL64_LIB_STRICT='1'
-  run . "${TESTMANSH_PROJECT_BUILD}/bashlib64.bash"
+  run . "${TESTMANSH_PROJECT_BUILD}/test/bashlib64.bash"
   assert_success
 }

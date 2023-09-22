@@ -7,7 +7,7 @@ function _test_bl64_dbg_lib_show_vars() {
   bl64_dbg_lib_show_vars 'TEST_VAR'
 }
 
-@test "bl64_dbg_lib_show_vars: start dbg" {
+@test "bl64_dbg_lib_show_vars: show vars" {
 
   run _test_bl64_dbg_lib_show_vars
 

@@ -6,7 +6,7 @@ setup() {
 
 @test "bl64_lib_source: script vars are set" {
 
-  export _DEV_LIB_BASHLIB64_BUILD="${TESTMANSH_PROJECT_BUILD}/bashlib64.bash"
+  export _DEV_LIB_BASHLIB64_BUILD="${TESTMANSH_PROJECT_BUILD}/test/bashlib64.bash"
   run "${TESTMANSH_TEST_SAMPLES}/script_01/template" -t
   assert_success
   assert_output 'sample_script_test'

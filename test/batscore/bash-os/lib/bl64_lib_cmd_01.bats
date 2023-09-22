@@ -9,7 +9,7 @@ function _bl64_lib_cmd() {
 
   export BL64_LIB_TRAPS='0'
   export BL64_LIB_CMD='1'
-  "${TESTMANSH_PROJECT_BUILD}/bashlib64.bash" "$1"
+  "${TESTMANSH_PROJECT_BUILD}/test/bashlib64.bash" "$1"
   result=$?
   set -o 'errexit'
   set +o 'nounset'
