@@ -183,3 +183,30 @@ function bl64_iam_user_get_current() {
   bl64_dbg_lib_show_function
   "${BL64_IAM_CMD_ID}" -u -n
 }
+
+#######################################
+# Check that the user is created
+#
+# Arguments:
+#   $1: user name
+#   $2: error message
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_USER_NOT_FOUND
+#######################################
+function bl64_iam_check_user() {
+  bl64_dbg_lib_show_function "$@"
+  local user="${1:-}"
+  local message="${2:-${_BL64_CHECK_TXT_USER_NOT_FOUND}}"
+
+  bl64_check_parameter 'user' || return $?
+
+  if ! bl64_iam_user_is_created "$user"; then
+    bl64_msg_show_error "${message} (user: ${user} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    return $BL64_LIB_ERROR_USER_NOT_FOUND
+  else
+    return 0
+  fi
+}

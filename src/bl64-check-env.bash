@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
 
-export BL64_CHECK_VERSION='3.4.0'
+export BL64_CHECK_VERSION='4.0.0'
 
 export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 
