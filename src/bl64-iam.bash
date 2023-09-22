@@ -12,6 +12,7 @@
 #   * set home path
 #   * set user description
 #   * create home
+#   * create primary group
 # * If the user is already created nothing is done, no error
 #
 # Arguments:
@@ -71,7 +72,9 @@ function bl64_iam_user_add() {
       "$login"
     ;;
   ${BL64_OS_SLES}-*)
+    bl64_dbg_lib_show_comments 'force primary group creation'
     "$BL64_IAM_CMD_USERADD" \
+      --user-group \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
@@ -80,7 +83,7 @@ function bl64_iam_user_add() {
       "$login"
     ;;
   ${BL64_OS_ALP}-*)
-    # Disable automatic password generation
+    bl64_dbg_lib_show_comments 'disable automatic password generation'
     "$BL64_IAM_CMD_USERADD" \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
