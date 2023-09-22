@@ -22,7 +22,10 @@ function bl64_bsh_setup() {
     return 21
   bl64_dbg_lib_show_function
 
-  _bl64_bsh_set_version &&
+  bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_check_module_imported 'BL64_FMT_MODULE' &&
+    _bl64_bsh_set_version &&
     BL64_BSH_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'bsh'
@@ -40,7 +43,7 @@ function bl64_bsh_setup() {
 #   STDERR: command errors
 # Returns:
 #   0: version set ok
-#   >0: command error
+#   $BL64_LIB_ERROR_OS_BASH_VERSION
 #######################################
 function _bl64_bsh_set_version() {
   bl64_dbg_lib_show_function
@@ -49,8 +52,8 @@ function _bl64_bsh_set_version() {
   4*) BL64_BSH_VERSION_BASH='4.0' ;;
   5*) BL64_BSH_VERSION_BASH='5.0' ;;
   *)
-    bl64_msg_show_error "${_BL64_BSH_TXT_UNSUPPORTED} (${BASH_VERSINFO[0]})" &&
-      return $BL64_LIB_ERROR_OS_BASH_VERSION
+    bl64_check_alert_unsupported "Bash: ${BASH_VERSINFO[0]}"
+    return $BL64_LIB_ERROR_OS_BASH_VERSION
     ;;
   esac
   bl64_dbg_lib_show_vars 'BL64_BSH_VERSION_BASH'

@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with Bash shell
 #######################################
 
-export BL64_BSH_VERSION='1.1.2'
+export BL64_BSH_VERSION='1.2.0'
 
 export BL64_BSH_MODULE="$BL64_VAR_OFF"
 

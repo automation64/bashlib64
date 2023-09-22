@@ -22,7 +22,9 @@ function bl64_fmt_setup() {
     return 21
   bl64_dbg_lib_show_function
 
-  BL64_FMT_MODULE="$BL64_VAR_ON"
+  bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_TXT_MODULE' &&
+    BL64_FMT_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'fmt'
 }

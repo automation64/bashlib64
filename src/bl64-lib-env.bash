@@ -80,6 +80,7 @@ declare -ig BL64_LIB_ERROR_TASK_UNDEFINED=14
 # Module operation
 declare -ig BL64_LIB_ERROR_MODULE_SETUP_INVALID=20
 declare -ig BL64_LIB_ERROR_MODULE_SETUP_MISSING=21
+declare -ig BL64_LIB_ERROR_MODULE_NOT_IMPORTED=22
 
 # OS
 declare -ig BL64_LIB_ERROR_OS_NOT_MATCH=30
@@ -134,7 +135,7 @@ export BL64_LIB_SIGNAL_ERR='-'
 export BL64_LIB_SIGNAL_EXIT='bl64_dbg_runtime_show'
 
 #
-# Module inventory
+# Module IDs
 #
 
 export BL64_ANS_MODULE=''

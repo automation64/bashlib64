@@ -22,7 +22,9 @@ function bl64_msg_setup() {
     return 21
   bl64_dbg_lib_show_function
 
-  bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI" &&
+  bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI" &&
     bl64_msg_app_enable_verbose &&
     BL64_MSG_MODULE="$BL64_VAR_ON"
 

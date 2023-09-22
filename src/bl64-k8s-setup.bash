@@ -107,7 +107,7 @@ function _bl64_k8s_set_options() {
     BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
     ;;
   *)
-    bl64_check_compatibility "k8s-api: ${BL64_K8S_VERSION_KUBECTL}" || return $?
+    bl64_check_compatibility_mode "k8s-api: ${BL64_K8S_VERSION_KUBECTL}" || return $?
     BL64_K8S_SET_VERBOSE_NONE='--v=0'
     BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
     BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
