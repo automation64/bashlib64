@@ -67,6 +67,7 @@ function _bl64_pkg_repository_add_yum() {
   local source="$2"
   local gpgkey="$3"
   local definition=''
+  local file_mode='0644'
 
   bl64_check_directory "$BL64_PKG_PATH_YUM_REPOS_D" ||
     return $?
@@ -100,6 +101,7 @@ enabled=1\n' \
       "$source" \
       >"$definition"
   fi
+  [[ -f "$definition" ]] && bl64_fs_run_chmod "$file_mode" "$definition"
 }
 
 function _bl64_pkg_repository_add_apt() {
@@ -107,13 +109,14 @@ function _bl64_pkg_repository_add_apt() {
   local name="$1"
   local source="$2"
   local gpgkey="$3"
-  local extra1="$4"
-  local extra2="$5"
+  local suite="$4"
+  local component="$5"
   local definition=''
   local gpgkey_file=''
   local file_mode='0644'
 
-  bl64_check_directory "$BL64_PKG_PATH_APT_SOURCES_LIST_D" &&
+  bl64_check_parameter 'suite' &&
+    bl64_check_directory "$BL64_PKG_PATH_APT_SOURCES_LIST_D" &&
     bl64_check_directory "$BL64_PKG_PATH_GPG_KEYRINGS" ||
     return $?
 
@@ -128,8 +131,8 @@ function _bl64_pkg_repository_add_apt() {
     printf 'deb [signed-by=%s] %s %s %s\n' \
       "$gpgkey_file" \
       "$source" \
-      "$extra1" \
-      "$extra2" \
+      "$suite" \
+      "$component" \
       >"$definition" ||
       return $?
     bl64_dbg_lib_show_info "install GPG key (${gpgkey})"
@@ -137,10 +140,11 @@ function _bl64_pkg_repository_add_apt() {
   else
     printf 'deb %s %s %s\n' \
       "$source" \
-      "$extra1" \
-      "$extra2" \
+      "$suite" \
+      "$component" \
       >"$definition"
   fi
+  [[ -f "$definition" ]] && bl64_fs_run_chmod "$file_mode" "$definition"
 }
 
 #######################################
