@@ -36,6 +36,7 @@ function bl64_dbg_app_custom_3_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_APP_CU
 # Setup the bashlib64 module
 #
 # * Warning: bootstrap function
+# * Warning: stand-alone module. Do not add dependency to other bl64 modules
 #
 # Arguments:
 #   None
@@ -48,15 +49,13 @@ function bl64_dbg_app_custom_3_enable { BL64_DBG_TARGET="$BL64_DBG_TARGET_APP_CU
 #######################################
 function bl64_dbg_setup() {
   [[ -z "$BL64_VERSION" ]] &&
-    echo 'Error: BashLib64 core module not loaded (bashlib64-module-core.bash). Ensure it is sourced before any other one.' &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
   bl64_dbg_lib_show_function
 
   # Set default debug level
   bl64_dbg_all_disable &&
     BL64_DBG_MODULE="$BL64_VAR_ON"
-
-  # bl64_check_alert_module_setup # Disabled as check is loaded after dbg
 }
 
 #######################################

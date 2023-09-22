@@ -17,7 +17,7 @@
 # shellcheck disable=SC2120
 function bl64_mdb_setup() {
   [[ -z "$BL64_VERSION" ]] &&
-    echo 'Error: BashLib64 core module not loaded (bashlib64-module-core.bash). Ensure it is sourced before any other one.' &&
+    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
   bl64_dbg_lib_show_function "$@"
   local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
