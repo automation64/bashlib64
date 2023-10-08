@@ -424,6 +424,7 @@ function bl64_check_overwrite() {
 #
 # * Use for tasks that will do nothing if the target is already present
 # * Warning: Caller is responsible for checking that path parameter is valid
+# * Target path can be of any type
 #
 # Arguments:
 #   $1: Full path to the object
