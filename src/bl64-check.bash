@@ -165,8 +165,8 @@ function bl64_check_path() {
 # * Check that:
 #   * variable is defined
 #   * parameter is not empty
-#   * parameter is not using default value
 #   * parameter is not using null value
+#   * parameter is not using default value: this is to allow the calling function to have several mandatory parameters before optionals
 #
 # Arguments:
 #   $1: parameter name
