@@ -83,7 +83,6 @@ function bl64_fs_copy_files() {
   bl64_check_directory "$destination" || return $?
 
   # Remove consumed parameters
-  bl64_dbg_lib_show_info "source files:[${*}]"
   shift
   shift
   shift
@@ -93,7 +92,6 @@ function bl64_fs_copy_files() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "paths:[${*}]"
   for path in "$@"; do
-
     target=''
     bl64_check_path_absolute "$path" &&
       target="${destination}/$(bl64_fmt_basename "$path")" || return $?
@@ -153,7 +151,7 @@ function bl64_fs_merge_files() {
   bl64_dbg_lib_show_info "source files:[${*}]"
 
   for path in "$@"; do
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_ADD_SOURCE} (${path})"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_ADD_SOURCE} (${path} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
     if ((first == 1)); then
       first=0
       bl64_check_path_absolute "$path" &&
@@ -168,11 +166,11 @@ function bl64_fs_merge_files() {
   done
 
   if ((status == 0)); then
-    bl64_dbg_lib_show_info "merge commplete, update permissions if needed (${destination})"
+    bl64_dbg_lib_show_comments "merge commplete, update permissions if needed (${destination})"
     bl64_fs_set_permissions "$mode" "$user" "$group" "$destination"
     status=$?
   else
-    bl64_dbg_lib_show_info "merge failed, removing incomplete file (${destination})"
+    bl64_dbg_lib_show_comments "merge failed, removing incomplete file (${destination})"
     [[ -f "$destination" ]] && bl64_fs_rm_file "$destination"
   fi
 
@@ -509,6 +507,8 @@ function bl64_fs_rm_full() {
 #######################################
 # Remove content from OS temporary repositories
 #
+# * Warning: intented for container build only, not to run on regular OS
+#
 # Arguments:
 #   None
 # Outputs:
@@ -534,6 +534,8 @@ function bl64_fs_cleanup_tmps() {
 #######################################
 # Remove or reset logs from standard locations
 #
+# * Warning: intented for container build only, not to run on regular OS
+#
 # Arguments:
 #   None
 # Outputs:
@@ -555,6 +557,8 @@ function bl64_fs_cleanup_logs() {
 
 #######################################
 # Remove or reset OS caches from standard locations
+#
+# * Warning: intented for container build only, not to run on regular OS
 #
 # Arguments:
 #   None
@@ -578,6 +582,7 @@ function bl64_fs_cleanup_caches() {
 #######################################
 # Performs a complete cleanup of OS ephemeral content
 #
+# * Warning: intented for container build only, not to run on regular OS
 # * Removes temporary files
 # * Cleans caches
 # * Removes logs
@@ -697,7 +702,7 @@ function bl64_fs_safeguard() {
 
   # Return if not present
   if [[ ! -e "$destination" ]]; then
-    bl64_dbg_lib_show_info "path is not yet created, nothing to do (${destination})"
+    bl64_dbg_lib_show_comments "path is not yet created, nothing to do (${destination})"
     return 0
   fi
 
@@ -738,19 +743,19 @@ function bl64_fs_restore() {
 
   # Return if not present
   if [[ ! -e "$backup" ]]; then
-    bl64_dbg_lib_show_info "backup was not created, nothing to do (${backup})"
+    bl64_dbg_lib_show_comments "backup was not created, nothing to do (${backup})"
     return 0
   fi
 
   # Check if restore is needed based on the operation result
   if (( result == 0 )); then
-    bl64_dbg_lib_show_info 'operation was ok, backup no longer needed, remove it'
+    bl64_dbg_lib_show_comments 'operation was ok, backup no longer needed, remove it'
     [[ -e "$backup" ]] && bl64_fs_rm_full "$backup"
 
     # shellcheck disable=SC2086
     return 0
   else
-    bl64_dbg_lib_show_info 'operation was NOT ok, remove invalid content'
+    bl64_dbg_lib_show_comments 'operation was NOT ok, remove invalid content'
     [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
 
     bl64_msg_show_lib_subtask "${_BL64_FS_TXT_RESTORE_OBJECT} ([${backup}]->[${destination}])"
@@ -793,18 +798,18 @@ function bl64_fs_set_permissions() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "path list:[${*}]"
 
-  # Determine if mode needs to be set
   if [[ "$mode" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_comments "set new permissions (${mode})"
     bl64_fs_run_chmod "$mode" "$@" || return $?
   fi
 
-  # Determine if owner needs to be set
   if [[ "$user" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_comments "set new user (${user})"
     bl64_fs_run_chown "${user}" "$@" || return $?
   fi
 
-  # Determine if group needs to be set
   if [[ "$group" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_comments "set new group (${group})"
     bl64_fs_run_chown ":${group}" "$@" || return $?
   fi
 
@@ -841,7 +846,7 @@ function bl64_fs_fix_permissions() {
   bl64_dbg_lib_show_info "path list:[${*}]"
 
   if [[ "$file_mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_info "fix file permissions (${file_mode})"
+    bl64_dbg_lib_show_comments "fix file permissions (${file_mode})"
     # shellcheck disable=SC2086
     bl64_fs_run_find \
       "$@" \
@@ -852,7 +857,7 @@ function bl64_fs_fix_permissions() {
   fi
 
   if [[ "$dir_mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_info "fix directory permissions (${dir_mode})"
+    bl64_dbg_lib_show_comments "fix directory permissions (${dir_mode})"
     # shellcheck disable=SC2086
     bl64_fs_run_find \
       "$@" \
