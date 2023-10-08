@@ -199,7 +199,7 @@ function bl64_iam_user_get_current() {
 function bl64_iam_check_user() {
   bl64_dbg_lib_show_function "$@"
   local user="${1:-}"
-  local message="${2:-${_BL64_CHECK_TXT_USER_NOT_FOUND}}"
+  local message="${2:-${_BL64_IAM_TXT_USER_NOT_FOUND}}"
 
   bl64_check_parameter 'user' || return $?
 

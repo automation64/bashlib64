@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage OS identity and access service
 #######################################
 
-export BL64_IAM_VERSION='3.0.0'
+export BL64_IAM_VERSION='3.0.1'
 
 export BL64_IAM_MODULE="$BL64_VAR_OFF"
 
@@ -18,3 +18,4 @@ export BL64_IAM_ALIAS_USERADD=''
 
 export _BL64_IAM_TXT_ADD_USER='create user account'
 export _BL64_IAM_TXT_EXISTING_USER='user already created, re-using existing one'
+export _BL64_IAM_TXT_USER_NOT_FOUND='required user is not present in the operating system'
