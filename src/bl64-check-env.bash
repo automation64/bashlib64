@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
 
-export BL64_CHECK_VERSION='4.0.0'
+export BL64_CHECK_VERSION='4.0.1'
 
 export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 
@@ -60,3 +60,6 @@ export _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested BashLi
 export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module'
 
 export _BL64_CHECK_TXT_RESOURCE_NOT_FOUND='required resource was not found on the system'
+
+export _BL64_CHECK_TXT_HOME_MISSING='standard shell variable HOME is not defined'
+export _BL64_CHECK_TXT_HOME_DIR_MISSING="unable to find user's HOME directory"

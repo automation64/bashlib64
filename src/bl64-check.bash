@@ -721,8 +721,8 @@ function bl64_check_status() {
 function bl64_check_home() {
   bl64_dbg_lib_show_function
 
-  bl64_check_export 'HOME' &&
-    bl64_check_directory "$HOME"
+  bl64_check_export 'HOME' "$_BL64_CHECK_TXT_HOME_MISSING" &&
+    bl64_check_directory "$HOME" "$_BL64_CHECK_TXT_HOME_DIR_MISSING"
 }
 
 #######################################
