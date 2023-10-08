@@ -109,8 +109,8 @@ function bl64_fs_copy_files() {
 # Merge 2 or more files into a new one, then set owner and permissions
 #
 # * If the destination is already present no update is done unless requested
-# * If asked to replace destination, no backup is done. User must take one if needed
-# * If merge fails the incomplete file will be removed
+# * If asked to replace destination, no backup is done. Caller must take one if needed
+# * If merge fails, the incomplete file will be removed
 #
 # Arguments:
 #   $1: permissions. Format: chown format. Default: use current umask
@@ -139,7 +139,12 @@ function bl64_fs_merge_files() {
   local -i first=1
 
   bl64_check_parameter 'destination' || return $?
-  bl64_check_overwrite "$destination" "$replace" || return $?
+  if [[ -d "$destination" ]]; then
+    bl64_msg_show_error "${_BL64_FS_TXT_ERROR_INVALID_MERGE_TARGET} (${destination})"
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
+  fi
+  bl64_check_overwrite "$destination" "$replace" ||
+    return $?
 
   # Remove consumed parameters
   shift
@@ -748,7 +753,7 @@ function bl64_fs_restore() {
   fi
 
   # Check if restore is needed based on the operation result
-  if (( result == 0 )); then
+  if ((result == 0)); then
     bl64_dbg_lib_show_comments 'operation was ok, backup no longer needed, remove it'
     [[ -e "$backup" ]] && bl64_fs_rm_full "$backup"
 

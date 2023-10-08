@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage local filesystem
 #######################################
 
-export BL64_FS_VERSION='4.5.1'
+export BL64_FS_VERSION='4.5.2'
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
 
@@ -83,3 +83,4 @@ export _BL64_FS_TXT_SAFEGUARD_OBJECT='backup original file'
 
 export _BL64_FS_TXT_ERROR_NOT_TMPDIR='provided directory was not created by bl64_fs_create_tmpdir'
 export _BL64_FS_TXT_ERROR_NOT_TMPFILE='provided directory was not created by bl64_fs_create_tmpfile'
+export _BL64_FS_TXT_ERROR_INVALID_MERGE_TARGET='invalid destination. Provided path exists and is a directory'
