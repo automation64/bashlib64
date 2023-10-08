@@ -63,7 +63,7 @@ function bl64_check_command() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_FILE_NOT_FOUND
 #   $BL64_LIB_ERROR_FILE_NOT_READ
@@ -102,7 +102,7 @@ function bl64_check_file() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_DIRECTORY_NOT_FOUND
 #   $BL64_LIB_ERROR_DIRECTORY_NOT_READ
@@ -132,16 +132,18 @@ function bl64_check_directory() {
 }
 
 #######################################
-# Check and report if the path is present
+# Check that the path is present
+#
+# * The target must can be of any type
 #
 # Arguments:
-#   $1: Full path to the directory
+#   $1: Full path
 #   $2: Not found error message. Default: _BL64_CHECK_TXT_PATH_NOT_FOUND
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_PATH_NOT_FOUND
 #######################################
@@ -257,7 +259,7 @@ function bl64_check_export() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_PATH_NOT_RELATIVE
 #######################################
@@ -278,6 +280,8 @@ function bl64_check_path_relative() {
 #######################################
 # Check that the given path is not present
 #
+# * The target must can be of any type
+#
 # Arguments:
 #   $1: Full path
 #   $2: Failed check error message. Default: _BL64_CHECK_TXT_PATH_PRESENT
@@ -285,7 +289,7 @@ function bl64_check_path_relative() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_PATH_PRESENT
 #######################################
@@ -316,7 +320,7 @@ function bl64_check_path_not_present() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
 #######################################
