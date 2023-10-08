@@ -763,3 +763,37 @@ function bl64_check_command_search_path() {
 
   bl64_check_command "$full_path"
 }
+
+#######################################
+# Check that the parameter value is part of the valid parameter list
+#
+# Arguments:
+#   $1: parameter name
+#   $@: list of one or more values
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_PARAMETER_INVALID
+#######################################
+function bl64_check_parameter_value_list() {
+  bl64_dbg_lib_show_function "$@"
+  local parameter_name="${1:-}"
+  local valid_value=''
+  local -i is_valid=$BL64_LIB_ERROR_PARAMETER_INVALID
+
+  shift
+  bl64_check_parameter 'parameter_name' &&
+    bl64_check_parameters_none $# "$_BL64_CHECK_TXT_PARAMETER_VALUES_EMPTY" ||
+    return $?
+
+  for valid_value in "$@"; do
+    [[ "${!parameter_name}" == "$valid_value" ]] &&
+      is_valid=0 &&
+      break
+  done
+  ((is_valid != 0)) && bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_VALUES_WRONG}: ${*}"
+
+  return $is_valid
+}
