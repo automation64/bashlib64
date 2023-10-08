@@ -54,7 +54,7 @@ function bl64_check_command() {
 }
 
 #######################################
-# Check and report if the file is present and has read permissions for the current user.
+# Check that the file is present and has read permissions for the current user.
 #
 # Arguments:
 #   $1: Full path to the file
@@ -93,7 +93,7 @@ function bl64_check_file() {
 }
 
 #######################################
-# Check and report if the directory is present and has read and execute permissions for the current user.
+# Check that the directory is present and has read and execute permissions for the current user.
 #
 # Arguments:
 #   $1: Full path to the directory
