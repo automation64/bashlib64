@@ -29,7 +29,9 @@ function bl64_rxtx_web_get_file() {
 
   bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_parameter 'source' &&
-    bl64_check_parameter 'destination' || return $?
+    bl64_check_parameter 'destination' &&
+    bl64_fs_check_new_file "$destination" ||
+    return $?
 
   bl64_check_overwrite_skip "$destination" "$replace" && return
 
@@ -99,7 +101,8 @@ function bl64_rxtx_git_get_dir() {
     bl64_check_parameter 'source_url' &&
     bl64_check_parameter 'source_path' &&
     bl64_check_parameter 'destination' &&
-    bl64_check_path_relative "$source_path" ||
+    bl64_check_path_relative "$source_path" &&
+    bl64_fs_check_new_dir "$destination" ||
     return $?
 
   # shellcheck disable=SC2086
