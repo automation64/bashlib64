@@ -138,12 +138,9 @@ function bl64_fs_merge_files() {
   local -i status=0
   local -i first=1
 
-  bl64_check_parameter 'destination' || return $?
-  if [[ -d "$destination" ]]; then
-    bl64_msg_show_error "${_BL64_FS_TXT_ERROR_INVALID_MERGE_TARGET} (${destination})"
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
-  fi
-  bl64_check_overwrite "$destination" "$replace" ||
+  bl64_check_parameter 'destination' &&
+    bl64_fs_check_new_file "$destination" &&
+    bl64_check_overwrite "$destination" "$replace" ||
     return $?
 
   # Remove consumed parameters
@@ -1132,4 +1129,64 @@ function bl64_fs_rm_tmpfile() {
   fi
 
   bl64_fs_rm_file "$tmpfile"
+}
+
+#######################################
+# Check that the new file path is valid
+#
+# * If path exists, check that is not a directory
+# * Check is ok when path does not exist or exists but it's a file
+#
+# Arguments:
+#   $1: new file path
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_PARAMETER_INVALID
+#######################################
+function bl64_fs_check_new_file() {
+  bl64_dbg_lib_show_function "$@"
+  local file="${1:-}"
+
+  bl64_check_parameter 'file' ||
+    return $?
+
+  if [[ -d "$file" ]]; then
+    bl64_msg_show_error "${_BL64_FS_TXT_ERROR_INVALID_FILE_TARGET} (${file})"
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
+  fi
+
+  return 0
+}
+
+#######################################
+# Check that the new directory path is valid
+#
+# * If path exists, check that is not a file
+# * Check is ok when path does not exist or exists but it's a directory
+#
+# Arguments:
+#   $1: new directory path
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_PARAMETER_INVALID
+#######################################
+function bl64_fs_check_new_dir() {
+  bl64_dbg_lib_show_function "$@"
+  local directory="${1:-}"
+
+  bl64_check_parameter 'directory' ||
+    return $?
+
+  if [[ -f "$directory" ]]; then
+    bl64_msg_show_error "${_BL64_FS_TXT_ERROR_INVALID_DIR_TARGET} (${directory})"
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
+  fi
+
+  return 0
 }
