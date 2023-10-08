@@ -387,6 +387,7 @@ function bl64_check_privilege_not_root() {
 # Check file/dir overwrite condition and fail if not meet
 #
 # * Use for tasks that needs to ensure that previous content will not overwriten unless requested
+# * Target path can be of any type
 #
 # Arguments:
 #   $1: Full path to the object
