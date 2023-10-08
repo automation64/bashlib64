@@ -170,7 +170,7 @@ function bl64_check_path() {
 #
 # Arguments:
 #   $1: parameter name
-#   $2: parameter description. Shown on error messages
+#   $2: (optional) parameter description. Shown on error messages
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
@@ -605,6 +605,7 @@ function bl64_check_alert_module_setup() {
 #   STDOUT: none
 #   STDERR: message
 # Returns:
+#   0: check ok
 #   BL64_LIB_ERROR_TASK_UNDEFINED
 #######################################
 function bl64_check_parameters_none() {
@@ -630,6 +631,7 @@ function bl64_check_parameters_none() {
 #   STDOUT: none
 #   STDERR: message
 # Returns:
+#   0: check ok
 #   BL64_LIB_ERROR_MODULE_SETUP_MISSING
 #######################################
 function bl64_check_module() {
@@ -659,6 +661,7 @@ function bl64_check_module() {
 #   STDOUT: none
 #   STDERR: message
 # Returns:
+#   0: check ok
 #   BL64_LIB_ERROR_MODULE_NOT_IMPORTED
 #######################################
 function bl64_check_module_imported() {
