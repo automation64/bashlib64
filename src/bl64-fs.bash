@@ -193,7 +193,8 @@ function bl64_fs_merge_files() {
 # Returns:
 #   bl64_check_parameter
 #   bl64_check_directory
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_merge_dir() {
   bl64_dbg_lib_show_function "$@"
@@ -240,7 +241,8 @@ function bl64_fs_merge_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_chown() {
   bl64_dbg_lib_show_function "$@"
@@ -266,7 +268,8 @@ function bl64_fs_run_chown() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_mktemp() {
   bl64_dbg_lib_show_function "$@"
@@ -289,7 +292,8 @@ function bl64_fs_run_mktemp() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_chmod() {
   bl64_dbg_lib_show_function "$@"
@@ -315,7 +319,8 @@ function bl64_fs_run_chmod() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_chown_dir() {
   bl64_dbg_lib_show_function "$@"
@@ -335,7 +340,8 @@ function bl64_fs_chown_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_chmod_dir() {
   bl64_dbg_lib_show_function "$@"
@@ -355,7 +361,8 @@ function bl64_fs_chmod_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_cp_file() {
   bl64_dbg_lib_show_function "$@"
@@ -375,7 +382,8 @@ function bl64_fs_cp_file() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_cp_dir() {
   bl64_dbg_lib_show_function "$@"
@@ -395,7 +403,8 @@ function bl64_fs_cp_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_ln_symbolic() {
   bl64_dbg_lib_show_function "$@"
@@ -412,7 +421,8 @@ function bl64_fs_ln_symbolic() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_mkdir() {
   bl64_dbg_lib_show_function "$@"
@@ -436,7 +446,8 @@ function bl64_fs_run_mkdir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_mkdir_full() {
   bl64_dbg_lib_show_function "$@"
@@ -453,7 +464,8 @@ function bl64_fs_mkdir_full() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_mv() {
   bl64_dbg_lib_show_function "$@"
@@ -477,7 +489,8 @@ function bl64_fs_run_mv() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_rm_file() {
   bl64_dbg_lib_show_function "$@"
@@ -496,7 +509,8 @@ function bl64_fs_rm_file() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_rm_full() {
   bl64_dbg_lib_show_function "$@"
@@ -616,7 +630,8 @@ function bl64_fs_cleanup_full() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_find() {
   bl64_dbg_lib_show_function "$@"
@@ -642,7 +657,8 @@ function bl64_fs_run_find() {
 #   STDOUT: file list. One path per line
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_find_files() {
   bl64_dbg_lib_show_function "$@"
@@ -783,7 +799,8 @@ function bl64_fs_restore() {
 #   STDOUT: command stdin
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
@@ -832,7 +849,8 @@ function bl64_fs_set_permissions() {
 #   STDOUT: command stdin
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_fix_permissions() {
   bl64_dbg_lib_show_function "$@"
@@ -881,7 +899,8 @@ function bl64_fs_fix_permissions() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_cp() {
   bl64_dbg_lib_show_function "$@"
@@ -905,7 +924,8 @@ function bl64_fs_run_cp() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_rm() {
   bl64_dbg_lib_show_function "$@"
@@ -929,7 +949,8 @@ function bl64_fs_run_rm() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_ls() {
   bl64_dbg_lib_show_function "$@"
@@ -950,7 +971,8 @@ function bl64_fs_run_ls() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_ln() {
   bl64_dbg_lib_show_function "$@"
@@ -977,7 +999,8 @@ function bl64_fs_run_ln() {
 #   STDOUT: None
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 # shellcheck disable=SC2120
 function bl64_fs_set_umask() {
@@ -1003,7 +1026,8 @@ function bl64_fs_set_umask() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_set_ephemeral() {
   bl64_dbg_lib_show_function "$@"
@@ -1189,4 +1213,45 @@ function bl64_fs_check_new_dir() {
   fi
 
   return 0
+}
+
+#######################################
+# Create symbolic link
+#
+# * Wrapper to the ln -s command
+# * Provide extra checks and verbosity
+#
+# Arguments:
+#   $1: source path
+#   $2: destination path
+#   $3: overwrite if already present?
+# Outputs:
+#   STDOUT: command dependant
+#   STDERR: command dependant
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_fs_create_symlink() {
+  bl64_dbg_lib_show_function "$@"
+  local source="${1:-}"
+  local destination="${2:-}"
+  local overwrite="${3:$BL64_VAR_OFF}"
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'destination' &&
+    bl64_check_path "$source" ||
+    return $?
+
+  if [[ -e "$destination" ]]; then
+    if [[ "$overwrite" == "${3:$BL64_VAR_ON}" ]]; then
+      bl64_fs_rm_file "$destination" ||
+        return $?
+    else
+      bl64_msg_show_warning "(${_BL64_FS_TXT_SYMLINK_EXISTING})"
+      return 0
+    fi
+  fi
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SYMLINK_CREATE} (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
+  bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination"
 }
