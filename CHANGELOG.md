@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_fs_merge_files: check that the target is valid
 - rxtx
   - bl64_rxtx_git_get_dir,bl64_rxtx_web_get_file: check that the target is valid, fail when API call fails
+  - bl64_rxtx_github_get_asset: fail when API call fails
 - api
   - bl64_api_call: fail when API call fails
 
