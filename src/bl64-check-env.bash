@@ -10,8 +10,6 @@ export _BL64_CHECK_TXT_PARAMETER_MISSING='required parameter is missing'
 export _BL64_CHECK_TXT_PARAMETER_NOT_SET='required shell variable is not set'
 export _BL64_CHECK_TXT_PARAMETER_DEFAULT='required parameter value must be other than default'
 export _BL64_CHECK_TXT_PARAMETER_INVALID='the requested operation was provided with an invalid parameter value'
-export _BL64_CHECK_TXT_PARAMETER_VALUES_EMPTY='please provide at least one parameter value to check against'
-export _BL64_CHECK_TXT_PARAMETER_VALUES_WRONG='invalid parameter value. Must be one of'
 
 export _BL64_CHECK_TXT_COMMAND_NOT_FOUND='required command is not present'
 export _BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE='required command is present but has no execution permission'
