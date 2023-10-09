@@ -4,6 +4,7 @@ setup() {
 }
 
 @test "_bl64_rxtx_set_options: options are set" {
+  assert_not_equal "$BL64_RXTX_SET_CURL_FAIL" ''
   assert_not_equal "$BL64_RXTX_SET_CURL_HEADER" ''
   assert_not_equal "$BL64_RXTX_SET_CURL_INCLUDE" ''
   assert_not_equal "$BL64_RXTX_SET_CURL_NO_PROGRESS" ''
