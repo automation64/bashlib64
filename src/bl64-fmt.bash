@@ -215,3 +215,42 @@ function bl64_fmt_separator_line() {
 
   printf '%s\n' "$payload"
 }
+
+#######################################
+# Check that the value is part of a list
+#
+# Arguments:
+#   $1: (optional) error message
+#   $2: value that will be verified
+#   $@: list of one or more values to check against
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_CHECK_FAILED
+#######################################
+function bl64_fmt_check_value_in_list() {
+  bl64_dbg_lib_show_function "$@"
+  local error_message="${1:-$BL64_VAR_DEFAULT}"
+  local target_value="${2:-}"
+  local valid_value=''
+  local -i is_valid=$BL64_LIB_ERROR_CHECK_FAILED
+
+  shift
+  shift
+  bl64_check_parameter 'target_value' &&
+    bl64_check_parameters_none $# "$_BL64_FMT_TXT_ERROR_VALUE_LIST_EMPTY" ||
+    return $?
+  [[ "$error_message" == "$BL64_VAR_DEFAULT" ]] && error_message="$_BL64_FMT_TXT_ERROR_VALUE_LIST_WRONG"
+
+  for valid_value in "$@"; do
+    [[ "$target_value" == "$valid_value" ]] &&
+      is_valid=0 &&
+      break
+  done
+  ((is_valid != 0)) &&
+    bl64_msg_show_error "${error_message} (${_BL64_FMT_TXT_LIST}: [${*}] ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+
+  return $is_valid
+}

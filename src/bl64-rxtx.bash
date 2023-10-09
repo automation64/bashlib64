@@ -29,7 +29,9 @@ function bl64_rxtx_web_get_file() {
 
   bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_parameter 'source' &&
-    bl64_check_parameter 'destination' || return $?
+    bl64_check_parameter 'destination' &&
+    bl64_fs_check_new_file "$destination" ||
+    return $?
 
   bl64_check_overwrite_skip "$destination" "$replace" && return
 
@@ -39,6 +41,7 @@ function bl64_rxtx_web_get_file() {
   # shellcheck disable=SC2086
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
     bl64_rxtx_run_curl \
+      $BL64_RXTX_SET_CURL_FAIL \
       $BL64_RXTX_SET_CURL_REDIRECT \
       $BL64_RXTX_SET_CURL_OUTPUT "$destination" \
       "$source"
@@ -99,7 +102,8 @@ function bl64_rxtx_git_get_dir() {
     bl64_check_parameter 'source_url' &&
     bl64_check_parameter 'source_path' &&
     bl64_check_parameter 'destination' &&
-    bl64_check_path_relative "$source_path" ||
+    bl64_check_path_relative "$source_path" &&
+    bl64_fs_check_new_dir "$destination" ||
     return $?
 
   # shellcheck disable=SC2086
@@ -140,7 +144,8 @@ function bl64_rxtx_git_get_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_rxtx_run_curl() {
   bl64_dbg_lib_show_function "$@"
@@ -170,7 +175,8 @@ function bl64_rxtx_run_curl() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_rxtx_run_wget() {
   bl64_dbg_lib_show_function "$@"

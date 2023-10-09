@@ -87,7 +87,8 @@ function bl64_txt_search_line() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_awk() {
   bl64_dbg_lib_show_function "$@"
@@ -115,7 +116,8 @@ function bl64_txt_run_awk() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 # shellcheck disable=SC2120
 function bl64_txt_run_envsubst() {
@@ -141,7 +143,8 @@ function bl64_txt_run_envsubst() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_grep() {
   bl64_dbg_lib_show_function "$@"
@@ -165,7 +168,8 @@ function bl64_txt_run_grep() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_egrep() {
   bl64_dbg_lib_show_function "$@"
@@ -185,7 +189,8 @@ function bl64_txt_run_egrep() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_sed() {
   bl64_dbg_lib_show_function "$@"
@@ -211,7 +216,8 @@ function bl64_txt_run_sed() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_base64() {
   bl64_dbg_lib_show_function "$@"
@@ -236,7 +242,8 @@ function bl64_txt_run_base64() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_tr() {
   bl64_dbg_lib_show_function "$@"
@@ -262,7 +269,8 @@ function bl64_txt_run_tr() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_cut() {
   bl64_dbg_lib_show_function "$@"
@@ -288,7 +296,8 @@ function bl64_txt_run_cut() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_uniq() {
   bl64_dbg_lib_show_function "$@"
@@ -314,7 +323,8 @@ function bl64_txt_run_uniq() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_sort() {
   bl64_dbg_lib_show_function "$@"

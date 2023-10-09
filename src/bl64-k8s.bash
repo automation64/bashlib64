@@ -17,7 +17,8 @@
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_label_set() {
   bl64_dbg_lib_show_function "$@"
@@ -62,7 +63,8 @@ function bl64_k8s_label_set() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_annotation_set() {
   bl64_dbg_lib_show_function "$@"
@@ -107,7 +109,8 @@ function bl64_k8s_annotation_set() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_namespace_create() {
   bl64_dbg_lib_show_function "$@"
@@ -144,7 +147,8 @@ function bl64_k8s_namespace_create() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_sa_create() {
   bl64_dbg_lib_show_function "$@"
@@ -186,7 +190,8 @@ function bl64_k8s_sa_create() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_secret_create() {
   bl64_dbg_lib_show_function "$@"
@@ -233,7 +238,8 @@ function bl64_k8s_secret_create() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_secret_copy() {
   bl64_dbg_lib_show_function "$@"
@@ -289,7 +295,8 @@ function bl64_k8s_secret_copy() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_resource_update() {
   bl64_dbg_lib_show_function "$@"
@@ -334,7 +341,8 @@ function bl64_k8s_resource_update() {
 #   STDOUT: resource definition
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_resource_get() {
   bl64_dbg_lib_show_function "$@"
@@ -368,7 +376,8 @@ function bl64_k8s_resource_get() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_run_kubectl() {
   bl64_dbg_lib_show_function "$@"

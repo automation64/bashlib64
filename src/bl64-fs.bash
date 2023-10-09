@@ -83,7 +83,6 @@ function bl64_fs_copy_files() {
   bl64_check_directory "$destination" || return $?
 
   # Remove consumed parameters
-  bl64_dbg_lib_show_info "source files:[${*}]"
   shift
   shift
   shift
@@ -93,7 +92,6 @@ function bl64_fs_copy_files() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "paths:[${*}]"
   for path in "$@"; do
-
     target=''
     bl64_check_path_absolute "$path" &&
       target="${destination}/$(bl64_fmt_basename "$path")" || return $?
@@ -111,8 +109,8 @@ function bl64_fs_copy_files() {
 # Merge 2 or more files into a new one, then set owner and permissions
 #
 # * If the destination is already present no update is done unless requested
-# * If asked to replace destination, no backup is done. User must take one if needed
-# * If merge fails the incomplete file will be removed
+# * If asked to replace destination, no backup is done. Caller must take one if needed
+# * If merge fails, the incomplete file will be removed
 #
 # Arguments:
 #   $1: permissions. Format: chown format. Default: use current umask
@@ -140,8 +138,10 @@ function bl64_fs_merge_files() {
   local -i status=0
   local -i first=1
 
-  bl64_check_parameter 'destination' || return $?
-  bl64_check_overwrite "$destination" "$replace" || return $?
+  bl64_check_parameter 'destination' &&
+    bl64_fs_check_new_file "$destination" &&
+    bl64_check_overwrite "$destination" "$replace" ||
+    return $?
 
   # Remove consumed parameters
   shift
@@ -153,7 +153,7 @@ function bl64_fs_merge_files() {
   bl64_dbg_lib_show_info "source files:[${*}]"
 
   for path in "$@"; do
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_ADD_SOURCE} (${path})"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_ADD_SOURCE} (${path} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
     if ((first == 1)); then
       first=0
       bl64_check_path_absolute "$path" &&
@@ -168,11 +168,11 @@ function bl64_fs_merge_files() {
   done
 
   if ((status == 0)); then
-    bl64_dbg_lib_show_info "merge commplete, update permissions if needed (${destination})"
+    bl64_dbg_lib_show_comments "merge commplete, update permissions if needed (${destination})"
     bl64_fs_set_permissions "$mode" "$user" "$group" "$destination"
     status=$?
   else
-    bl64_dbg_lib_show_info "merge failed, removing incomplete file (${destination})"
+    bl64_dbg_lib_show_comments "merge failed, removing incomplete file (${destination})"
     [[ -f "$destination" ]] && bl64_fs_rm_file "$destination"
   fi
 
@@ -193,7 +193,8 @@ function bl64_fs_merge_files() {
 # Returns:
 #   bl64_check_parameter
 #   bl64_check_directory
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_merge_dir() {
   bl64_dbg_lib_show_function "$@"
@@ -240,7 +241,8 @@ function bl64_fs_merge_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_chown() {
   bl64_dbg_lib_show_function "$@"
@@ -266,7 +268,8 @@ function bl64_fs_run_chown() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_mktemp() {
   bl64_dbg_lib_show_function "$@"
@@ -289,7 +292,8 @@ function bl64_fs_run_mktemp() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_chmod() {
   bl64_dbg_lib_show_function "$@"
@@ -315,7 +319,8 @@ function bl64_fs_run_chmod() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_chown_dir() {
   bl64_dbg_lib_show_function "$@"
@@ -335,7 +340,8 @@ function bl64_fs_chown_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_chmod_dir() {
   bl64_dbg_lib_show_function "$@"
@@ -355,7 +361,8 @@ function bl64_fs_chmod_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_cp_file() {
   bl64_dbg_lib_show_function "$@"
@@ -375,7 +382,8 @@ function bl64_fs_cp_file() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_cp_dir() {
   bl64_dbg_lib_show_function "$@"
@@ -395,7 +403,8 @@ function bl64_fs_cp_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_ln_symbolic() {
   bl64_dbg_lib_show_function "$@"
@@ -412,7 +421,8 @@ function bl64_fs_ln_symbolic() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_mkdir() {
   bl64_dbg_lib_show_function "$@"
@@ -436,7 +446,8 @@ function bl64_fs_run_mkdir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_mkdir_full() {
   bl64_dbg_lib_show_function "$@"
@@ -453,7 +464,8 @@ function bl64_fs_mkdir_full() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_mv() {
   bl64_dbg_lib_show_function "$@"
@@ -477,7 +489,8 @@ function bl64_fs_run_mv() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_rm_file() {
   bl64_dbg_lib_show_function "$@"
@@ -496,7 +509,8 @@ function bl64_fs_rm_file() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_rm_full() {
   bl64_dbg_lib_show_function "$@"
@@ -508,6 +522,8 @@ function bl64_fs_rm_full() {
 
 #######################################
 # Remove content from OS temporary repositories
+#
+# * Warning: intented for container build only, not to run on regular OS
 #
 # Arguments:
 #   None
@@ -534,6 +550,8 @@ function bl64_fs_cleanup_tmps() {
 #######################################
 # Remove or reset logs from standard locations
 #
+# * Warning: intented for container build only, not to run on regular OS
+#
 # Arguments:
 #   None
 # Outputs:
@@ -555,6 +573,8 @@ function bl64_fs_cleanup_logs() {
 
 #######################################
 # Remove or reset OS caches from standard locations
+#
+# * Warning: intented for container build only, not to run on regular OS
 #
 # Arguments:
 #   None
@@ -578,6 +598,7 @@ function bl64_fs_cleanup_caches() {
 #######################################
 # Performs a complete cleanup of OS ephemeral content
 #
+# * Warning: intented for container build only, not to run on regular OS
 # * Removes temporary files
 # * Cleans caches
 # * Removes logs
@@ -609,7 +630,8 @@ function bl64_fs_cleanup_full() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_find() {
   bl64_dbg_lib_show_function "$@"
@@ -635,7 +657,8 @@ function bl64_fs_run_find() {
 #   STDOUT: file list. One path per line
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_find_files() {
   bl64_dbg_lib_show_function "$@"
@@ -697,7 +720,7 @@ function bl64_fs_safeguard() {
 
   # Return if not present
   if [[ ! -e "$destination" ]]; then
-    bl64_dbg_lib_show_info "path is not yet created, nothing to do (${destination})"
+    bl64_dbg_lib_show_comments "path is not yet created, nothing to do (${destination})"
     return 0
   fi
 
@@ -738,19 +761,19 @@ function bl64_fs_restore() {
 
   # Return if not present
   if [[ ! -e "$backup" ]]; then
-    bl64_dbg_lib_show_info "backup was not created, nothing to do (${backup})"
+    bl64_dbg_lib_show_comments "backup was not created, nothing to do (${backup})"
     return 0
   fi
 
   # Check if restore is needed based on the operation result
-  if (( result == 0 )); then
-    bl64_dbg_lib_show_info 'operation was ok, backup no longer needed, remove it'
+  if ((result == 0)); then
+    bl64_dbg_lib_show_comments 'operation was ok, backup no longer needed, remove it'
     [[ -e "$backup" ]] && bl64_fs_rm_full "$backup"
 
     # shellcheck disable=SC2086
     return 0
   else
-    bl64_dbg_lib_show_info 'operation was NOT ok, remove invalid content'
+    bl64_dbg_lib_show_comments 'operation was NOT ok, remove invalid content'
     [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
 
     bl64_msg_show_lib_subtask "${_BL64_FS_TXT_RESTORE_OBJECT} ([${backup}]->[${destination}])"
@@ -776,7 +799,8 @@ function bl64_fs_restore() {
 #   STDOUT: command stdin
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
@@ -793,18 +817,18 @@ function bl64_fs_set_permissions() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "path list:[${*}]"
 
-  # Determine if mode needs to be set
   if [[ "$mode" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_comments "set new permissions (${mode})"
     bl64_fs_run_chmod "$mode" "$@" || return $?
   fi
 
-  # Determine if owner needs to be set
   if [[ "$user" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_comments "set new user (${user})"
     bl64_fs_run_chown "${user}" "$@" || return $?
   fi
 
-  # Determine if group needs to be set
   if [[ "$group" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_comments "set new group (${group})"
     bl64_fs_run_chown ":${group}" "$@" || return $?
   fi
 
@@ -825,7 +849,8 @@ function bl64_fs_set_permissions() {
 #   STDOUT: command stdin
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_fix_permissions() {
   bl64_dbg_lib_show_function "$@"
@@ -841,7 +866,7 @@ function bl64_fs_fix_permissions() {
   bl64_dbg_lib_show_info "path list:[${*}]"
 
   if [[ "$file_mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_info "fix file permissions (${file_mode})"
+    bl64_dbg_lib_show_comments "fix file permissions (${file_mode})"
     # shellcheck disable=SC2086
     bl64_fs_run_find \
       "$@" \
@@ -852,7 +877,7 @@ function bl64_fs_fix_permissions() {
   fi
 
   if [[ "$dir_mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_info "fix directory permissions (${dir_mode})"
+    bl64_dbg_lib_show_comments "fix directory permissions (${dir_mode})"
     # shellcheck disable=SC2086
     bl64_fs_run_find \
       "$@" \
@@ -874,7 +899,8 @@ function bl64_fs_fix_permissions() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_cp() {
   bl64_dbg_lib_show_function "$@"
@@ -898,7 +924,8 @@ function bl64_fs_run_cp() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_rm() {
   bl64_dbg_lib_show_function "$@"
@@ -922,7 +949,8 @@ function bl64_fs_run_rm() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_ls() {
   bl64_dbg_lib_show_function "$@"
@@ -943,7 +971,8 @@ function bl64_fs_run_ls() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_ln() {
   bl64_dbg_lib_show_function "$@"
@@ -970,7 +999,8 @@ function bl64_fs_run_ln() {
 #   STDOUT: None
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 # shellcheck disable=SC2120
 function bl64_fs_set_umask() {
@@ -996,7 +1026,8 @@ function bl64_fs_set_umask() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_set_ephemeral() {
   bl64_dbg_lib_show_function "$@"
@@ -1122,4 +1153,105 @@ function bl64_fs_rm_tmpfile() {
   fi
 
   bl64_fs_rm_file "$tmpfile"
+}
+
+#######################################
+# Check that the new file path is valid
+#
+# * If path exists, check that is not a directory
+# * Check is ok when path does not exist or exists but it's a file
+#
+# Arguments:
+#   $1: new file path
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_PARAMETER_INVALID
+#######################################
+function bl64_fs_check_new_file() {
+  bl64_dbg_lib_show_function "$@"
+  local file="${1:-}"
+
+  bl64_check_parameter 'file' ||
+    return $?
+
+  if [[ -d "$file" ]]; then
+    bl64_msg_show_error "${_BL64_FS_TXT_ERROR_INVALID_FILE_TARGET} (${file})"
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
+  fi
+
+  return 0
+}
+
+#######################################
+# Check that the new directory path is valid
+#
+# * If path exists, check that is not a file
+# * Check is ok when path does not exist or exists but it's a directory
+#
+# Arguments:
+#   $1: new directory path
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_PARAMETER_INVALID
+#######################################
+function bl64_fs_check_new_dir() {
+  bl64_dbg_lib_show_function "$@"
+  local directory="${1:-}"
+
+  bl64_check_parameter 'directory' ||
+    return $?
+
+  if [[ -f "$directory" ]]; then
+    bl64_msg_show_error "${_BL64_FS_TXT_ERROR_INVALID_DIR_TARGET} (${directory})"
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
+  fi
+
+  return 0
+}
+
+#######################################
+# Create symbolic link
+#
+# * Wrapper to the ln -s command
+# * Provide extra checks and verbosity
+#
+# Arguments:
+#   $1: source path
+#   $2: destination path
+#   $3: overwrite if already present?
+# Outputs:
+#   STDOUT: command dependant
+#   STDERR: command dependant
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_fs_create_symlink() {
+  bl64_dbg_lib_show_function "$@"
+  local source="${1:-}"
+  local destination="${2:-}"
+  local overwrite="${3:$BL64_VAR_OFF}"
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'destination' &&
+    bl64_check_path "$source" ||
+    return $?
+
+  if [[ -e "$destination" ]]; then
+    if [[ "$overwrite" == "${3:$BL64_VAR_ON}" ]]; then
+      bl64_fs_rm_file "$destination" ||
+        return $?
+    else
+      bl64_msg_show_warning "(${_BL64_FS_TXT_SYMLINK_EXISTING})"
+      return 0
+    fi
+  fi
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SYMLINK_CREATE} (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
+  bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination"
 }

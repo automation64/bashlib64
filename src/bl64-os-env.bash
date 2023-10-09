@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #######################################
 
-export BL64_OS_VERSION='3.4.0'
+export BL64_OS_VERSION='3.5.0'
 
 export BL64_OS_MODULE="$BL64_VAR_OFF"
 
@@ -14,6 +14,7 @@ export BL64_OS_CMD_DATE=''
 export BL64_OS_CMD_FALSE=''
 export BL64_OS_CMD_HOSTNAME=''
 export BL64_OS_CMD_LOCALE=''
+export BL64_OS_CMD_TEE=''
 export BL64_OS_CMD_TRUE=''
 export BL64_OS_CMD_UNAME=''
 
@@ -29,9 +30,10 @@ export _BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED='task not supported on the current 
 export _BL64_OS_TXT_OS_MATRIX='Supported OS Versions'
 
 #
-# OS standard tags
+# OS standard name tags
 #
 # * Used to normalize OS names
+# * Format: BL64_OS_TAG
 #
 
 # ALM -> AlmaLinux

@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [16.1.0]
+
+### Added
+
+- os
+  - tee command definition
+- fmt
+  - bl64_fmt_check_value_in_list: check parameter value is part of list
+- fs
+  - bl64_fs_check_new_file,bl64_fs_check_new_dir: check new file or dir path is valid
+  - bl64_fs_create_symlink: ln -s wrapper
+
+### Fixed
+
+- fs
+  - bl64_fs_merge_files: check that the target is valid
+- rxtx
+  - bl64_rxtx_git_get_dir,bl64_rxtx_web_get_file: check that the target is valid, fail when API call fails
+  - bl64_rxtx_github_get_asset: fail when API call fails
+- api
+  - bl64_api_call: fail when API call fails
+
 ## [16.0.0]
 
 ### Added
@@ -441,6 +463,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[16.1.0]: https://github.com/automation64/bashlib64/compare/16.0.0...16.1.0
 [16.0.0]: https://github.com/automation64/bashlib64/compare/15.0.0...16.0.0
 [15.0.0]: https://github.com/automation64/bashlib64/compare/14.0.0...15.0.0
 [14.0.0]: https://github.com/automation64/bashlib64/compare/13.0.0...14.0.0

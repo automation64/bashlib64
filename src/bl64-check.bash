@@ -54,7 +54,7 @@ function bl64_check_command() {
 }
 
 #######################################
-# Check and report if the file is present and has read permissions for the current user.
+# Check that the file is present and has read permissions for the current user.
 #
 # Arguments:
 #   $1: Full path to the file
@@ -63,7 +63,7 @@ function bl64_check_command() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_FILE_NOT_FOUND
 #   $BL64_LIB_ERROR_FILE_NOT_READ
@@ -93,7 +93,7 @@ function bl64_check_file() {
 }
 
 #######################################
-# Check and report if the directory is present and has read and execute permissions for the current user.
+# Check that the directory is present and has read and execute permissions for the current user.
 #
 # Arguments:
 #   $1: Full path to the directory
@@ -102,7 +102,7 @@ function bl64_check_file() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_DIRECTORY_NOT_FOUND
 #   $BL64_LIB_ERROR_DIRECTORY_NOT_READ
@@ -132,16 +132,18 @@ function bl64_check_directory() {
 }
 
 #######################################
-# Check and report if the path is present
+# Check that the path is present
+#
+# * The target must can be of any type
 #
 # Arguments:
-#   $1: Full path to the directory
+#   $1: Full path
 #   $2: Not found error message. Default: _BL64_CHECK_TXT_PATH_NOT_FOUND
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_PATH_NOT_FOUND
 #######################################
@@ -165,12 +167,12 @@ function bl64_check_path() {
 # * Check that:
 #   * variable is defined
 #   * parameter is not empty
-#   * parameter is not using default value
 #   * parameter is not using null value
+#   * parameter is not using default value: this is to allow the calling function to have several mandatory parameters before optionals
 #
 # Arguments:
 #   $1: parameter name
-#   $2: parameter description. Shown on error messages
+#   $2: (optional) parameter description. Shown on error messages
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
@@ -257,7 +259,7 @@ function bl64_check_export() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_PATH_NOT_RELATIVE
 #######################################
@@ -278,6 +280,8 @@ function bl64_check_path_relative() {
 #######################################
 # Check that the given path is not present
 #
+# * The target must can be of any type
+#
 # Arguments:
 #   $1: Full path
 #   $2: Failed check error message. Default: _BL64_CHECK_TXT_PATH_PRESENT
@@ -285,7 +289,7 @@ function bl64_check_path_relative() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_PATH_PRESENT
 #######################################
@@ -316,7 +320,7 @@ function bl64_check_path_not_present() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
 #######################################
@@ -383,6 +387,7 @@ function bl64_check_privilege_not_root() {
 # Check file/dir overwrite condition and fail if not meet
 #
 # * Use for tasks that needs to ensure that previous content will not overwriten unless requested
+# * Target path can be of any type
 #
 # Arguments:
 #   $1: Full path to the object
@@ -419,6 +424,7 @@ function bl64_check_overwrite() {
 #
 # * Use for tasks that will do nothing if the target is already present
 # * Warning: Caller is responsible for checking that path parameter is valid
+# * Target path can be of any type
 #
 # Arguments:
 #   $1: Full path to the object
@@ -605,6 +611,7 @@ function bl64_check_alert_module_setup() {
 #   STDOUT: none
 #   STDERR: message
 # Returns:
+#   0: check ok
 #   BL64_LIB_ERROR_TASK_UNDEFINED
 #######################################
 function bl64_check_parameters_none() {
@@ -630,6 +637,7 @@ function bl64_check_parameters_none() {
 #   STDOUT: none
 #   STDERR: message
 # Returns:
+#   0: check ok
 #   BL64_LIB_ERROR_MODULE_SETUP_MISSING
 #######################################
 function bl64_check_module() {
@@ -659,6 +667,7 @@ function bl64_check_module() {
 #   STDOUT: none
 #   STDERR: message
 # Returns:
+#   0: check ok
 #   BL64_LIB_ERROR_MODULE_NOT_IMPORTED
 #######################################
 function bl64_check_module_imported() {
@@ -721,8 +730,8 @@ function bl64_check_status() {
 function bl64_check_home() {
   bl64_dbg_lib_show_function
 
-  bl64_check_export 'HOME' &&
-    bl64_check_directory "$HOME"
+  bl64_check_export 'HOME' "$_BL64_CHECK_TXT_HOME_MISSING" &&
+    bl64_check_directory "$HOME" "$_BL64_CHECK_TXT_HOME_DIR_MISSING"
 }
 
 #######################################

@@ -11,7 +11,8 @@
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_gcp_run_gcloud() {
   bl64_dbg_lib_show_function "$@"
@@ -59,7 +60,8 @@ function bl64_gcp_run_gcloud() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_gcp_login_sa() {
   bl64_dbg_lib_show_function "$@"
@@ -161,7 +163,8 @@ function bl64_gcp_blank_gcloud() {
 #   STDOUT: secret value
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_gcp_secret_get() {
   bl64_dbg_lib_show_function "$@"

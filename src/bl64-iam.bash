@@ -140,7 +140,8 @@ function bl64_iam_user_is_created() {
 #   STDOUT: user ID
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_iam_user_get_id() {
   bl64_dbg_lib_show_function "$@"
@@ -177,7 +178,8 @@ function bl64_iam_user_get_id() {
 #   STDOUT: user name
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_iam_user_get_current() {
   bl64_dbg_lib_show_function
@@ -199,7 +201,7 @@ function bl64_iam_user_get_current() {
 function bl64_iam_check_user() {
   bl64_dbg_lib_show_function "$@"
   local user="${1:-}"
-  local message="${2:-${_BL64_CHECK_TXT_USER_NOT_FOUND}}"
+  local message="${2:-${_BL64_IAM_TXT_USER_NOT_FOUND}}"
 
   bl64_check_parameter 'user' || return $?
 

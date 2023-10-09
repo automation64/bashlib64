@@ -22,7 +22,12 @@ function bl64_rxtx_setup() {
     return 21
   bl64_dbg_lib_show_function
 
-  _bl64_rxtx_set_command &&
+  bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_check_module_imported 'BL64_FS_MODULE' &&
+    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+    bl64_check_module_imported 'BL64_VCS_MODULE' &&
+    _bl64_rxtx_set_command &&
     _bl64_rxtx_set_options &&
     _bl64_rxtx_set_alias &&
     BL64_RXTX_MODULE="$BL64_VAR_ON"
@@ -90,10 +95,11 @@ function _bl64_rxtx_set_options() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-20.* | ${BL64_OS_UB}-21.* | ${BL64_OS_UB}-22.* | ${BL64_OS_UB}-23.*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
-    BL64_RXTX_SET_CURL_NO_PROGRESS='--no-progress-meter'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
+    BL64_RXTX_SET_CURL_NO_PROGRESS='--no-progress-meter'
     BL64_RXTX_SET_CURL_REDIRECT='--location'
     BL64_RXTX_SET_CURL_REQUEST='-X'
     BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
@@ -104,6 +110,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_DEB}-9.* | ${BL64_OS_UB}-18.* | ${BL64_OS_DEB}-10.* | ${BL64_OS_DEB}-11.*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
@@ -118,6 +125,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_FD}-*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
@@ -132,6 +140,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
@@ -146,6 +155,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_SLES}-*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
@@ -160,6 +170,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_ALP}-*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
@@ -174,6 +185,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_MCOS}-*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'

@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage local filesystem
 #######################################
 
-export BL64_FS_VERSION='4.5.1'
+export BL64_FS_VERSION='4.6.0'
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
 
@@ -80,6 +80,10 @@ export _BL64_FS_TXT_MERGE_DIRS='merge directories content'
 export _BL64_FS_TXT_RESTORE_OBJECT='restore original file from backup'
 export _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
 export _BL64_FS_TXT_SAFEGUARD_OBJECT='backup original file'
+export _BL64_FS_TXT_SYMLINK_CREATE='create symbolick link'
+export _BL64_FS_TXT_SYMLINK_EXISTING='target symbolick link is already present. No further action taken'
 
 export _BL64_FS_TXT_ERROR_NOT_TMPDIR='provided directory was not created by bl64_fs_create_tmpdir'
 export _BL64_FS_TXT_ERROR_NOT_TMPFILE='provided directory was not created by bl64_fs_create_tmpfile'
+export _BL64_FS_TXT_ERROR_INVALID_FILE_TARGET='invalid file destination. Provided path exists and is a directory'
+export _BL64_FS_TXT_ERROR_INVALID_DIR_TARGET='invalid directory destination. Provided path exists and is a file'

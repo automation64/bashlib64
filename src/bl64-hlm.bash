@@ -12,7 +12,8 @@
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_hlm_repo_add() {
   bl64_dbg_lib_show_function "$@"
@@ -49,7 +50,8 @@ function bl64_hlm_repo_add() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_hlm_chart_upgrade() {
   bl64_dbg_lib_show_function "$@"
@@ -95,7 +97,8 @@ function bl64_hlm_chart_upgrade() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_hlm_run_helm() {
   bl64_dbg_lib_show_function "$@"

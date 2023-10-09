@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='16.0.0'
+export BL64_VERSION='16.1.0'
 
 #
 # Imported shell standard variables
@@ -61,8 +61,18 @@ export BL64_LIB_STRICT="${BL64_LIB_STRICT:-$BL64_VAR_ON}"
 export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
 
 #
-# Common error codes
+# Shared error codes
 #
+# * Warning: bashlib64 error codes must be declared in this section only to avoid module level duplicates
+# * Error code 1 and 2 are reserved for the caller script
+# * Codes must be between 3 and 127
+#
+
+# Application reserved. Not used by bashlib64
+# shellcheck disable=SC2034
+declare -ig BL64_LIB_ERROR_APP_1=1
+# shellcheck disable=SC2034
+declare -ig BL64_LIB_ERROR_APP_2=2
 
 # Parameters
 declare -ig BL64_LIB_ERROR_PARAMETER_INVALID=3
@@ -113,6 +123,7 @@ declare -ig BL64_LIB_ERROR_USER_NOT_FOUND=62
 declare -ig BL64_LIB_ERROR_EXPORT_EMPTY=70
 declare -ig BL64_LIB_ERROR_EXPORT_SET=71
 declare -ig BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED=72
+declare -ig BL64_LIB_ERROR_CHECK_FAILED=80
 
 #
 # Script Identify

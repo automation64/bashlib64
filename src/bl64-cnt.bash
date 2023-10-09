@@ -52,7 +52,8 @@ function _bl64_cnt_find_variable_marker() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_login_stdin() {
   bl64_dbg_lib_show_function "$@"
@@ -79,7 +80,8 @@ function bl64_cnt_login_stdin() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_login_file() {
   bl64_dbg_lib_show_function "$@"
@@ -109,7 +111,8 @@ function bl64_cnt_login_file() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_login() {
   bl64_dbg_lib_show_function "$@"
@@ -138,7 +141,8 @@ function bl64_cnt_login() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_run_sh() {
   bl64_dbg_lib_show_function "$@"
@@ -161,7 +165,8 @@ function bl64_cnt_run_sh() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_run_interactive() {
   bl64_dbg_lib_show_function "$@"
@@ -184,7 +189,8 @@ function bl64_cnt_run_interactive() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_build() {
   bl64_dbg_lib_show_function "$@"
@@ -222,7 +228,8 @@ function bl64_cnt_build() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_push() {
   bl64_dbg_lib_show_function "$@"
@@ -247,7 +254,8 @@ function bl64_cnt_push() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_pull() {
   bl64_dbg_lib_show_function "$@"
@@ -285,7 +293,8 @@ function _bl64_cnt_login_put_password() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_tag() {
   bl64_dbg_lib_show_function "$@"
@@ -310,7 +319,8 @@ function bl64_cnt_tag() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_run() {
   bl64_dbg_lib_show_function "$@"
@@ -333,7 +343,8 @@ function bl64_cnt_run() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_cli() {
   bl64_dbg_lib_show_function "$@"
@@ -454,7 +465,8 @@ function bl64_cnt_network_create() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_login() {
   bl64_dbg_lib_show_function "$@"
@@ -483,7 +495,8 @@ function _bl64_cnt_docker_login() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_run_interactive() {
   bl64_dbg_lib_show_function "$@"
@@ -511,7 +524,8 @@ function _bl64_cnt_docker_run_interactive() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_run_docker() {
   bl64_dbg_lib_show_function "$@"
@@ -548,7 +562,8 @@ function bl64_cnt_run_docker() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_build() {
   bl64_dbg_lib_show_function "$@"
@@ -578,7 +593,8 @@ function _bl64_cnt_docker_build() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_push() {
   bl64_dbg_lib_show_function "$@"
@@ -604,7 +620,8 @@ function _bl64_cnt_docker_push() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_pull() {
   bl64_dbg_lib_show_function "$@"
@@ -625,7 +642,8 @@ function _bl64_cnt_docker_pull() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_tag() {
   bl64_dbg_lib_show_function "$@"
@@ -649,7 +667,8 @@ function _bl64_cnt_docker_tag() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_run() {
   bl64_dbg_lib_show_function "$@"
@@ -763,7 +782,8 @@ function _bl64_cnt_docker_ps_filter() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_podman_login() {
   bl64_dbg_lib_show_function "$@"
@@ -792,7 +812,8 @@ function _bl64_cnt_podman_login() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_podman_run_interactive() {
   bl64_dbg_lib_show_function "$@"
@@ -819,7 +840,8 @@ function _bl64_cnt_podman_run_interactive() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_run_podman() {
   bl64_dbg_lib_show_function "$@"
@@ -851,7 +873,8 @@ function bl64_cnt_run_podman() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_podman_build() {
   bl64_dbg_lib_show_function "$@"
@@ -880,7 +903,8 @@ function _bl64_cnt_podman_build() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_podman_push() {
   bl64_dbg_lib_show_function "$@"
@@ -902,7 +926,8 @@ function _bl64_cnt_podman_push() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_podman_pull() {
   bl64_dbg_lib_show_function "$@"
@@ -923,7 +948,8 @@ function _bl64_cnt_podman_pull() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_podman_tag() {
   bl64_dbg_lib_show_function "$@"
@@ -947,7 +973,8 @@ function _bl64_cnt_podman_tag() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_podman_run() {
   bl64_dbg_lib_show_function "$@"

@@ -3,7 +3,7 @@
 # Pack application for delivery
 #
 # * Use to create a distributable package of the application
-# * Template Version: v1.1.0
+# * Version: v1.2.0
 #
 
 #
@@ -42,8 +42,6 @@ function dev_pack() {
 # Main
 #
 
-declare -i status=0
-
 bl64_arc_setup &&
   bl64_check_export 'DEV_BUILD_FULL_PATH_RELEASE' &&
   bl64_check_export 'DEV_BUILD_NAME_CORE' &&
@@ -59,6 +57,4 @@ bl64_arc_setup &&
 bl64_msg_show_batch_start 'pack-app'
 bl64_msg_show_task "create distributable package (${DEV_PACK_FULL_PATH})"
 dev_pack
-status=$?
-bl64_msg_show_batch_finish $status 'pack-app'
-exit $status
+bl64_msg_show_batch_finish $? 'pack-app'

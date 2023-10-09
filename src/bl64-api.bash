@@ -8,6 +8,7 @@
 # * API calls are executed using Curl
 # * Curl is used directly instead of the wrapper to minimize shell expansion unintented modifications
 # * The caller is responsible for properly url-encoding the query when needed
+# * Using curl --fail option to capture HTTP errors
 #
 # Arguments:
 #   $1: API server FQDN. Format: PROTOCOL://FQDN
@@ -20,7 +21,7 @@
 #   STDERR: command stderr
 # Returns:
 #   0: API call executed. Warning: curl exit status only, not the HTTP status code
-#   >: unable to execute API call
+#   >: API call failed or unable to call API
 #######################################
 function bl64_api_call() {
   bl64_dbg_lib_show_function "$@"
@@ -45,6 +46,7 @@ function bl64_api_call() {
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_RXTX_CMD_CURL" \
+    $BL64_RXTX_SET_CURL_FAIL \
     $BL64_RXTX_SET_CURL_REDIRECT \
     $BL64_RXTX_SET_CURL_SECURE \
     $BL64_RXTX_SET_CURL_REQUEST ${api_method} \
