@@ -41,6 +41,7 @@ function bl64_rxtx_web_get_file() {
   # shellcheck disable=SC2086
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
     bl64_rxtx_run_curl \
+      $BL64_RXTX_SET_CURL_FAIL \
       $BL64_RXTX_SET_CURL_REDIRECT \
       $BL64_RXTX_SET_CURL_OUTPUT "$destination" \
       "$source"
