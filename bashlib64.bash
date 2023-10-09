@@ -90,7 +90,7 @@ TERM="${TERM:-vt100}"
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='16.0.0'
+export BL64_VERSION='16.1.0'
 
 #
 # Imported shell standard variables
@@ -149,8 +149,18 @@ export BL64_LIB_STRICT="${BL64_LIB_STRICT:-$BL64_VAR_ON}"
 export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
 
 #
-# Common error codes
+# Shared error codes
 #
+# * Warning: bashlib64 error codes must be declared in this section only to avoid module level duplicates
+# * Error code 1 and 2 are reserved for the caller script
+# * Codes must be between 3 and 127
+#
+
+# Application reserved. Not used by bashlib64
+# shellcheck disable=SC2034
+declare -ig BL64_LIB_ERROR_APP_1=1
+# shellcheck disable=SC2034
+declare -ig BL64_LIB_ERROR_APP_2=2
 
 # Parameters
 declare -ig BL64_LIB_ERROR_PARAMETER_INVALID=3
@@ -201,6 +211,7 @@ declare -ig BL64_LIB_ERROR_USER_NOT_FOUND=62
 declare -ig BL64_LIB_ERROR_EXPORT_EMPTY=70
 declare -ig BL64_LIB_ERROR_EXPORT_SET=71
 declare -ig BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED=72
+declare -ig BL64_LIB_ERROR_CHECK_FAILED=80
 
 #
 # Script Identify
@@ -300,7 +311,7 @@ function bl64_lib_flag_is_enabled {
 # BashLib64 / Module / Globals / Interact with RESTful APIs
 #######################################
 
-export BL64_API_VERSION='1.0.0'
+export BL64_API_VERSION='1.0.1'
 
 export BL64_API_MODULE="$BL64_VAR_OFF"
 
@@ -329,13 +340,14 @@ export _BL64_BSH_TXT_UNSUPPORTED='BashLib64 is not supported in the current Bash
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
 
-export BL64_CHECK_VERSION='4.0.0'
+export BL64_CHECK_VERSION='4.1.0'
 
 export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 
 export _BL64_CHECK_TXT_PARAMETER_MISSING='required parameter is missing'
 export _BL64_CHECK_TXT_PARAMETER_NOT_SET='required shell variable is not set'
 export _BL64_CHECK_TXT_PARAMETER_DEFAULT='required parameter value must be other than default'
+export _BL64_CHECK_TXT_PARAMETER_INVALID='the requested operation was provided with an invalid parameter value'
 
 export _BL64_CHECK_TXT_COMMAND_NOT_FOUND='required command is not present'
 export _BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE='required command is present but has no execution permission'
@@ -350,11 +362,10 @@ export _BL64_CHECK_TXT_DIRECTORY_NOT_FOUND='required directory is not present'
 export _BL64_CHECK_TXT_DIRECTORY_NOT_DIR='path is present but is not a directory'
 export _BL64_CHECK_TXT_DIRECTORY_NOT_READABLE='required directory is present but has no read permission'
 
-export _BL64_CHECK_TXT_PATH_NOT_FOUND='required path is not present'
-
 export _BL64_CHECK_TXT_EXPORT_EMPTY='required shell exported variable is empty'
 export _BL64_CHECK_TXT_EXPORT_SET='required shell exported variable is not set'
 
+export _BL64_CHECK_TXT_PATH_NOT_FOUND='required path is not present'
 export _BL64_CHECK_TXT_PATH_NOT_RELATIVE='required path must be relative'
 export _BL64_CHECK_TXT_PATH_NOT_ABSOLUTE='required path must be absolute'
 export _BL64_CHECK_TXT_PATH_PRESENT='requested path is already present'
@@ -370,23 +381,19 @@ export _BL64_CHECK_TXT_UNDEFINED='requested command is not defined or implemente
 export _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one parameter and none was provided'
 export _BL64_CHECK_TXT_FAILED='task execution failed'
 
-export _BL64_CHECK_TXT_PARAMETER_INVALID='the requested operation was provided with an invalid parameter value'
-
-export _BL64_CHECK_TXT_COMPATIBILITY_MODE='using generic compatibility mode for untested command version'
-
-export _BL64_CHECK_TXT_FUNCTION='caller'
-export _BL64_CHECK_TXT_PARAMETER='parameter'
-export _BL64_CHECK_TXT_MODULE='module'
-
-export _BL64_CHECK_TXT_USER_NOT_FOUND='required user is not present in the operating system'
-
-export _BL64_CHECK_TXT_STATUS_ERROR='task execution failed'
-
 export _BL64_CHECK_TXT_MODULE_SET='required BashLib64 module not found. Please source the module before using it'
 export _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested BashLib64 module'
 export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module'
 
+export _BL64_CHECK_TXT_HOME_MISSING='standard shell variable HOME is not defined'
+export _BL64_CHECK_TXT_HOME_DIR_MISSING="unable to find user's HOME directory"
+
+export _BL64_CHECK_TXT_FUNCTION='caller'
+export _BL64_CHECK_TXT_PARAMETER='parameter'
+export _BL64_CHECK_TXT_MODULE='module'
 export _BL64_CHECK_TXT_RESOURCE_NOT_FOUND='required resource was not found on the system'
+export _BL64_CHECK_TXT_STATUS_ERROR='task execution failed'
+export _BL64_CHECK_TXT_COMPATIBILITY_MODE='using generic compatibility mode for untested command version'
 
 #######################################
 # BashLib64 / Module / Globals / Show shell debugging information
@@ -466,7 +473,7 @@ export _BL64_DBG_TXT_WRONG_LEVEL='invalid debugging level. Must be one of: '
 # BashLib64 / Module / Globals / Manage local filesystem
 #######################################
 
-export BL64_FS_VERSION='4.5.1'
+export BL64_FS_VERSION='4.6.0'
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
 
@@ -544,17 +551,25 @@ export _BL64_FS_TXT_MERGE_DIRS='merge directories content'
 export _BL64_FS_TXT_RESTORE_OBJECT='restore original file from backup'
 export _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
 export _BL64_FS_TXT_SAFEGUARD_OBJECT='backup original file'
+export _BL64_FS_TXT_SYMLINK_CREATE='create symbolick link'
+export _BL64_FS_TXT_SYMLINK_EXISTING='target symbolick link is already present. No further action taken'
 
 export _BL64_FS_TXT_ERROR_NOT_TMPDIR='provided directory was not created by bl64_fs_create_tmpdir'
 export _BL64_FS_TXT_ERROR_NOT_TMPFILE='provided directory was not created by bl64_fs_create_tmpfile'
+export _BL64_FS_TXT_ERROR_INVALID_FILE_TARGET='invalid file destination. Provided path exists and is a directory'
+export _BL64_FS_TXT_ERROR_INVALID_DIR_TARGET='invalid directory destination. Provided path exists and is a file'
 
 #######################################
 # BashLib64 / Module / Globals / Format text data
 #######################################
 
-export BL64_FMT_VERSION='2.1.0'
+export BL64_FMT_VERSION='2.2.0'
 
 export BL64_FMT_MODULE="$BL64_VAR_OFF"
+
+export _BL64_FMT_TXT_LIST='list'
+export _BL64_FMT_TXT_ERROR_VALUE_LIST_EMPTY='please provide at least one value to check against'
+export _BL64_FMT_TXT_ERROR_VALUE_LIST_WRONG='invalid value. Please use any of the values in the list'
 
 #######################################
 # BashLib64 / Module / Globals / Display messages
@@ -747,7 +762,7 @@ export _BL64_MSG_TXT_WARNING='Warning'
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #######################################
 
-export BL64_OS_VERSION='3.4.0'
+export BL64_OS_VERSION='3.5.0'
 
 export BL64_OS_MODULE="$BL64_VAR_OFF"
 
@@ -759,6 +774,7 @@ export BL64_OS_CMD_DATE=''
 export BL64_OS_CMD_FALSE=''
 export BL64_OS_CMD_HOSTNAME=''
 export BL64_OS_CMD_LOCALE=''
+export BL64_OS_CMD_TEE=''
 export BL64_OS_CMD_TRUE=''
 export BL64_OS_CMD_UNAME=''
 
@@ -774,9 +790,10 @@ export _BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED='task not supported on the current 
 export _BL64_OS_TXT_OS_MATRIX='Supported OS Versions'
 
 #
-# OS standard tags
+# OS standard name tags
 #
 # * Used to normalize OS names
+# * Format: BL64_OS_TAG
 #
 
 # ALM -> AlmaLinux
@@ -860,7 +877,7 @@ export _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
 # BashLib64 / Module / Globals / Transfer and Receive data over the network
 #######################################
 
-export BL64_RXTX_VERSION='1.18.0'
+export BL64_RXTX_VERSION='1.18.1'
 
 export BL64_RXTX_MODULE="$BL64_VAR_OFF"
 
@@ -870,6 +887,7 @@ export BL64_RXTX_CMD_WGET=''
 export BL64_RXTX_ALIAS_CURL=''
 export BL64_RXTX_ALIAS_WGET=''
 
+export BL64_RXTX_SET_CURL_FAIL=''
 export BL64_RXTX_SET_CURL_HEADER=''
 export BL64_RXTX_SET_CURL_INCLUDE=''
 export BL64_RXTX_SET_CURL_OUTPUT=''
@@ -1041,7 +1059,7 @@ export _BL64_LOG_TXT_CREATE_REPOSITORY='create log repository'
 # BashLib64 / Module / Globals / Manage OS identity and access service
 #######################################
 
-export BL64_IAM_VERSION='3.0.0'
+export BL64_IAM_VERSION='3.0.1'
 
 export BL64_IAM_MODULE="$BL64_VAR_OFF"
 
@@ -1057,6 +1075,7 @@ export BL64_IAM_ALIAS_USERADD=''
 
 export _BL64_IAM_TXT_ADD_USER='create user account'
 export _BL64_IAM_TXT_EXISTING_USER='user already created, re-using existing one'
+export _BL64_IAM_TXT_USER_NOT_FOUND='required user is not present in the operating system'
 
 #######################################
 # BashLib64 / Module / Globals / Manage native OS packages
@@ -1467,6 +1486,7 @@ function bl64_api_setup() {
 # * API calls are executed using Curl
 # * Curl is used directly instead of the wrapper to minimize shell expansion unintented modifications
 # * The caller is responsible for properly url-encoding the query when needed
+# * Using curl --fail option to capture HTTP errors
 #
 # Arguments:
 #   $1: API server FQDN. Format: PROTOCOL://FQDN
@@ -1479,7 +1499,7 @@ function bl64_api_setup() {
 #   STDERR: command stderr
 # Returns:
 #   0: API call executed. Warning: curl exit status only, not the HTTP status code
-#   >: unable to execute API call
+#   >: API call failed or unable to call API
 #######################################
 function bl64_api_call() {
   bl64_dbg_lib_show_function "$@"
@@ -1504,6 +1524,7 @@ function bl64_api_call() {
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_RXTX_CMD_CURL" \
+    $BL64_RXTX_SET_CURL_FAIL \
     $BL64_RXTX_SET_CURL_REDIRECT \
     $BL64_RXTX_SET_CURL_SECURE \
     $BL64_RXTX_SET_CURL_REQUEST ${api_method} \
@@ -1852,7 +1873,7 @@ function bl64_check_command() {
 }
 
 #######################################
-# Check and report if the file is present and has read permissions for the current user.
+# Check that the file is present and has read permissions for the current user.
 #
 # Arguments:
 #   $1: Full path to the file
@@ -1861,7 +1882,7 @@ function bl64_check_command() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_FILE_NOT_FOUND
 #   $BL64_LIB_ERROR_FILE_NOT_READ
@@ -1891,7 +1912,7 @@ function bl64_check_file() {
 }
 
 #######################################
-# Check and report if the directory is present and has read and execute permissions for the current user.
+# Check that the directory is present and has read and execute permissions for the current user.
 #
 # Arguments:
 #   $1: Full path to the directory
@@ -1900,7 +1921,7 @@ function bl64_check_file() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_DIRECTORY_NOT_FOUND
 #   $BL64_LIB_ERROR_DIRECTORY_NOT_READ
@@ -1930,16 +1951,18 @@ function bl64_check_directory() {
 }
 
 #######################################
-# Check and report if the path is present
+# Check that the path is present
+#
+# * The target must can be of any type
 #
 # Arguments:
-#   $1: Full path to the directory
+#   $1: Full path
 #   $2: Not found error message. Default: _BL64_CHECK_TXT_PATH_NOT_FOUND
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_PATH_NOT_FOUND
 #######################################
@@ -1963,12 +1986,12 @@ function bl64_check_path() {
 # * Check that:
 #   * variable is defined
 #   * parameter is not empty
-#   * parameter is not using default value
 #   * parameter is not using null value
+#   * parameter is not using default value: this is to allow the calling function to have several mandatory parameters before optionals
 #
 # Arguments:
 #   $1: parameter name
-#   $2: parameter description. Shown on error messages
+#   $2: (optional) parameter description. Shown on error messages
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
@@ -2055,7 +2078,7 @@ function bl64_check_export() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_PATH_NOT_RELATIVE
 #######################################
@@ -2076,6 +2099,8 @@ function bl64_check_path_relative() {
 #######################################
 # Check that the given path is not present
 #
+# * The target must can be of any type
+#
 # Arguments:
 #   $1: Full path
 #   $2: Failed check error message. Default: _BL64_CHECK_TXT_PATH_PRESENT
@@ -2083,7 +2108,7 @@ function bl64_check_path_relative() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_PATH_PRESENT
 #######################################
@@ -2114,7 +2139,7 @@ function bl64_check_path_not_present() {
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
-#   0: File found
+#   0: Check ok
 #   $BL64_LIB_ERROR_PARAMETER_MISSING
 #   $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
 #######################################
@@ -2181,6 +2206,7 @@ function bl64_check_privilege_not_root() {
 # Check file/dir overwrite condition and fail if not meet
 #
 # * Use for tasks that needs to ensure that previous content will not overwriten unless requested
+# * Target path can be of any type
 #
 # Arguments:
 #   $1: Full path to the object
@@ -2217,6 +2243,7 @@ function bl64_check_overwrite() {
 #
 # * Use for tasks that will do nothing if the target is already present
 # * Warning: Caller is responsible for checking that path parameter is valid
+# * Target path can be of any type
 #
 # Arguments:
 #   $1: Full path to the object
@@ -2403,6 +2430,7 @@ function bl64_check_alert_module_setup() {
 #   STDOUT: none
 #   STDERR: message
 # Returns:
+#   0: check ok
 #   BL64_LIB_ERROR_TASK_UNDEFINED
 #######################################
 function bl64_check_parameters_none() {
@@ -2428,6 +2456,7 @@ function bl64_check_parameters_none() {
 #   STDOUT: none
 #   STDERR: message
 # Returns:
+#   0: check ok
 #   BL64_LIB_ERROR_MODULE_SETUP_MISSING
 #######################################
 function bl64_check_module() {
@@ -2457,6 +2486,7 @@ function bl64_check_module() {
 #   STDOUT: none
 #   STDERR: message
 # Returns:
+#   0: check ok
 #   BL64_LIB_ERROR_MODULE_NOT_IMPORTED
 #######################################
 function bl64_check_module_imported() {
@@ -2519,8 +2549,8 @@ function bl64_check_status() {
 function bl64_check_home() {
   bl64_dbg_lib_show_function
 
-  bl64_check_export 'HOME' &&
-    bl64_check_directory "$HOME"
+  bl64_check_export 'HOME' "$_BL64_CHECK_TXT_HOME_MISSING" &&
+    bl64_check_directory "$HOME" "$_BL64_CHECK_TXT_HOME_DIR_MISSING"
 }
 
 #######################################
@@ -3435,7 +3465,6 @@ function bl64_fs_copy_files() {
   bl64_check_directory "$destination" || return $?
 
   # Remove consumed parameters
-  bl64_dbg_lib_show_info "source files:[${*}]"
   shift
   shift
   shift
@@ -3445,7 +3474,6 @@ function bl64_fs_copy_files() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "paths:[${*}]"
   for path in "$@"; do
-
     target=''
     bl64_check_path_absolute "$path" &&
       target="${destination}/$(bl64_fmt_basename "$path")" || return $?
@@ -3463,8 +3491,8 @@ function bl64_fs_copy_files() {
 # Merge 2 or more files into a new one, then set owner and permissions
 #
 # * If the destination is already present no update is done unless requested
-# * If asked to replace destination, no backup is done. User must take one if needed
-# * If merge fails the incomplete file will be removed
+# * If asked to replace destination, no backup is done. Caller must take one if needed
+# * If merge fails, the incomplete file will be removed
 #
 # Arguments:
 #   $1: permissions. Format: chown format. Default: use current umask
@@ -3492,8 +3520,10 @@ function bl64_fs_merge_files() {
   local -i status=0
   local -i first=1
 
-  bl64_check_parameter 'destination' || return $?
-  bl64_check_overwrite "$destination" "$replace" || return $?
+  bl64_check_parameter 'destination' &&
+    bl64_fs_check_new_file "$destination" &&
+    bl64_check_overwrite "$destination" "$replace" ||
+    return $?
 
   # Remove consumed parameters
   shift
@@ -3505,7 +3535,7 @@ function bl64_fs_merge_files() {
   bl64_dbg_lib_show_info "source files:[${*}]"
 
   for path in "$@"; do
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_ADD_SOURCE} (${path})"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_ADD_SOURCE} (${path} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
     if ((first == 1)); then
       first=0
       bl64_check_path_absolute "$path" &&
@@ -3520,11 +3550,11 @@ function bl64_fs_merge_files() {
   done
 
   if ((status == 0)); then
-    bl64_dbg_lib_show_info "merge commplete, update permissions if needed (${destination})"
+    bl64_dbg_lib_show_comments "merge commplete, update permissions if needed (${destination})"
     bl64_fs_set_permissions "$mode" "$user" "$group" "$destination"
     status=$?
   else
-    bl64_dbg_lib_show_info "merge failed, removing incomplete file (${destination})"
+    bl64_dbg_lib_show_comments "merge failed, removing incomplete file (${destination})"
     [[ -f "$destination" ]] && bl64_fs_rm_file "$destination"
   fi
 
@@ -3545,7 +3575,8 @@ function bl64_fs_merge_files() {
 # Returns:
 #   bl64_check_parameter
 #   bl64_check_directory
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_merge_dir() {
   bl64_dbg_lib_show_function "$@"
@@ -3592,7 +3623,8 @@ function bl64_fs_merge_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_chown() {
   bl64_dbg_lib_show_function "$@"
@@ -3618,7 +3650,8 @@ function bl64_fs_run_chown() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_mktemp() {
   bl64_dbg_lib_show_function "$@"
@@ -3641,7 +3674,8 @@ function bl64_fs_run_mktemp() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_chmod() {
   bl64_dbg_lib_show_function "$@"
@@ -3667,7 +3701,8 @@ function bl64_fs_run_chmod() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_chown_dir() {
   bl64_dbg_lib_show_function "$@"
@@ -3687,7 +3722,8 @@ function bl64_fs_chown_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_chmod_dir() {
   bl64_dbg_lib_show_function "$@"
@@ -3707,7 +3743,8 @@ function bl64_fs_chmod_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_cp_file() {
   bl64_dbg_lib_show_function "$@"
@@ -3727,7 +3764,8 @@ function bl64_fs_cp_file() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_cp_dir() {
   bl64_dbg_lib_show_function "$@"
@@ -3747,7 +3785,8 @@ function bl64_fs_cp_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_ln_symbolic() {
   bl64_dbg_lib_show_function "$@"
@@ -3764,7 +3803,8 @@ function bl64_fs_ln_symbolic() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_mkdir() {
   bl64_dbg_lib_show_function "$@"
@@ -3788,7 +3828,8 @@ function bl64_fs_run_mkdir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_mkdir_full() {
   bl64_dbg_lib_show_function "$@"
@@ -3805,7 +3846,8 @@ function bl64_fs_mkdir_full() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_mv() {
   bl64_dbg_lib_show_function "$@"
@@ -3829,7 +3871,8 @@ function bl64_fs_run_mv() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_rm_file() {
   bl64_dbg_lib_show_function "$@"
@@ -3848,7 +3891,8 @@ function bl64_fs_rm_file() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_rm_full() {
   bl64_dbg_lib_show_function "$@"
@@ -3860,6 +3904,8 @@ function bl64_fs_rm_full() {
 
 #######################################
 # Remove content from OS temporary repositories
+#
+# * Warning: intented for container build only, not to run on regular OS
 #
 # Arguments:
 #   None
@@ -3886,6 +3932,8 @@ function bl64_fs_cleanup_tmps() {
 #######################################
 # Remove or reset logs from standard locations
 #
+# * Warning: intented for container build only, not to run on regular OS
+#
 # Arguments:
 #   None
 # Outputs:
@@ -3907,6 +3955,8 @@ function bl64_fs_cleanup_logs() {
 
 #######################################
 # Remove or reset OS caches from standard locations
+#
+# * Warning: intented for container build only, not to run on regular OS
 #
 # Arguments:
 #   None
@@ -3930,6 +3980,7 @@ function bl64_fs_cleanup_caches() {
 #######################################
 # Performs a complete cleanup of OS ephemeral content
 #
+# * Warning: intented for container build only, not to run on regular OS
 # * Removes temporary files
 # * Cleans caches
 # * Removes logs
@@ -3961,7 +4012,8 @@ function bl64_fs_cleanup_full() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_find() {
   bl64_dbg_lib_show_function "$@"
@@ -3987,7 +4039,8 @@ function bl64_fs_run_find() {
 #   STDOUT: file list. One path per line
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_find_files() {
   bl64_dbg_lib_show_function "$@"
@@ -4049,7 +4102,7 @@ function bl64_fs_safeguard() {
 
   # Return if not present
   if [[ ! -e "$destination" ]]; then
-    bl64_dbg_lib_show_info "path is not yet created, nothing to do (${destination})"
+    bl64_dbg_lib_show_comments "path is not yet created, nothing to do (${destination})"
     return 0
   fi
 
@@ -4090,19 +4143,19 @@ function bl64_fs_restore() {
 
   # Return if not present
   if [[ ! -e "$backup" ]]; then
-    bl64_dbg_lib_show_info "backup was not created, nothing to do (${backup})"
+    bl64_dbg_lib_show_comments "backup was not created, nothing to do (${backup})"
     return 0
   fi
 
   # Check if restore is needed based on the operation result
-  if (( result == 0 )); then
-    bl64_dbg_lib_show_info 'operation was ok, backup no longer needed, remove it'
+  if ((result == 0)); then
+    bl64_dbg_lib_show_comments 'operation was ok, backup no longer needed, remove it'
     [[ -e "$backup" ]] && bl64_fs_rm_full "$backup"
 
     # shellcheck disable=SC2086
     return 0
   else
-    bl64_dbg_lib_show_info 'operation was NOT ok, remove invalid content'
+    bl64_dbg_lib_show_comments 'operation was NOT ok, remove invalid content'
     [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
 
     bl64_msg_show_lib_subtask "${_BL64_FS_TXT_RESTORE_OBJECT} ([${backup}]->[${destination}])"
@@ -4128,7 +4181,8 @@ function bl64_fs_restore() {
 #   STDOUT: command stdin
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
@@ -4145,18 +4199,18 @@ function bl64_fs_set_permissions() {
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "path list:[${*}]"
 
-  # Determine if mode needs to be set
   if [[ "$mode" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_comments "set new permissions (${mode})"
     bl64_fs_run_chmod "$mode" "$@" || return $?
   fi
 
-  # Determine if owner needs to be set
   if [[ "$user" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_comments "set new user (${user})"
     bl64_fs_run_chown "${user}" "$@" || return $?
   fi
 
-  # Determine if group needs to be set
   if [[ "$group" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_dbg_lib_show_comments "set new group (${group})"
     bl64_fs_run_chown ":${group}" "$@" || return $?
   fi
 
@@ -4177,7 +4231,8 @@ function bl64_fs_set_permissions() {
 #   STDOUT: command stdin
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_fix_permissions() {
   bl64_dbg_lib_show_function "$@"
@@ -4193,7 +4248,7 @@ function bl64_fs_fix_permissions() {
   bl64_dbg_lib_show_info "path list:[${*}]"
 
   if [[ "$file_mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_info "fix file permissions (${file_mode})"
+    bl64_dbg_lib_show_comments "fix file permissions (${file_mode})"
     # shellcheck disable=SC2086
     bl64_fs_run_find \
       "$@" \
@@ -4204,7 +4259,7 @@ function bl64_fs_fix_permissions() {
   fi
 
   if [[ "$dir_mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_info "fix directory permissions (${dir_mode})"
+    bl64_dbg_lib_show_comments "fix directory permissions (${dir_mode})"
     # shellcheck disable=SC2086
     bl64_fs_run_find \
       "$@" \
@@ -4226,7 +4281,8 @@ function bl64_fs_fix_permissions() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_cp() {
   bl64_dbg_lib_show_function "$@"
@@ -4250,7 +4306,8 @@ function bl64_fs_run_cp() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_rm() {
   bl64_dbg_lib_show_function "$@"
@@ -4274,7 +4331,8 @@ function bl64_fs_run_rm() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_ls() {
   bl64_dbg_lib_show_function "$@"
@@ -4295,7 +4353,8 @@ function bl64_fs_run_ls() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_run_ln() {
   bl64_dbg_lib_show_function "$@"
@@ -4322,7 +4381,8 @@ function bl64_fs_run_ln() {
 #   STDOUT: None
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 # shellcheck disable=SC2120
 function bl64_fs_set_umask() {
@@ -4348,7 +4408,8 @@ function bl64_fs_set_umask() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_fs_set_ephemeral() {
   bl64_dbg_lib_show_function "$@"
@@ -4477,6 +4538,107 @@ function bl64_fs_rm_tmpfile() {
 }
 
 #######################################
+# Check that the new file path is valid
+#
+# * If path exists, check that is not a directory
+# * Check is ok when path does not exist or exists but it's a file
+#
+# Arguments:
+#   $1: new file path
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_PARAMETER_INVALID
+#######################################
+function bl64_fs_check_new_file() {
+  bl64_dbg_lib_show_function "$@"
+  local file="${1:-}"
+
+  bl64_check_parameter 'file' ||
+    return $?
+
+  if [[ -d "$file" ]]; then
+    bl64_msg_show_error "${_BL64_FS_TXT_ERROR_INVALID_FILE_TARGET} (${file})"
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
+  fi
+
+  return 0
+}
+
+#######################################
+# Check that the new directory path is valid
+#
+# * If path exists, check that is not a file
+# * Check is ok when path does not exist or exists but it's a directory
+#
+# Arguments:
+#   $1: new directory path
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_PARAMETER_INVALID
+#######################################
+function bl64_fs_check_new_dir() {
+  bl64_dbg_lib_show_function "$@"
+  local directory="${1:-}"
+
+  bl64_check_parameter 'directory' ||
+    return $?
+
+  if [[ -f "$directory" ]]; then
+    bl64_msg_show_error "${_BL64_FS_TXT_ERROR_INVALID_DIR_TARGET} (${directory})"
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
+  fi
+
+  return 0
+}
+
+#######################################
+# Create symbolic link
+#
+# * Wrapper to the ln -s command
+# * Provide extra checks and verbosity
+#
+# Arguments:
+#   $1: source path
+#   $2: destination path
+#   $3: overwrite if already present?
+# Outputs:
+#   STDOUT: command dependant
+#   STDERR: command dependant
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_fs_create_symlink() {
+  bl64_dbg_lib_show_function "$@"
+  local source="${1:-}"
+  local destination="${2:-}"
+  local overwrite="${3:$BL64_VAR_OFF}"
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'destination' &&
+    bl64_check_path "$source" ||
+    return $?
+
+  if [[ -e "$destination" ]]; then
+    if [[ "$overwrite" == "${3:$BL64_VAR_ON}" ]]; then
+      bl64_fs_rm_file "$destination" ||
+        return $?
+    else
+      bl64_msg_show_warning "(${_BL64_FS_TXT_SYMLINK_EXISTING})"
+      return 0
+    fi
+  fi
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SYMLINK_CREATE} (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
+  bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination"
+}
+
+#######################################
 # BashLib64 / Module / Setup / Format text data
 #######################################
 
@@ -4500,7 +4662,9 @@ function bl64_fmt_setup() {
     return 21
   bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_DBG_MODULE' &&
+  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_MSG_MODULE' &&
     bl64_check_module_imported 'BL64_TXT_MODULE' &&
     BL64_FMT_MODULE="$BL64_VAR_ON"
 
@@ -4723,6 +4887,45 @@ function bl64_fmt_separator_line() {
   local payload="${1:-}"
 
   printf '%s\n' "$payload"
+}
+
+#######################################
+# Check that the value is part of a list
+#
+# Arguments:
+#   $1: (optional) error message
+#   $2: value that will be verified
+#   $@: list of one or more values to check against
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_CHECK_FAILED
+#######################################
+function bl64_fmt_check_value_in_list() {
+  bl64_dbg_lib_show_function "$@"
+  local error_message="${1:-$BL64_VAR_DEFAULT}"
+  local target_value="${2:-}"
+  local valid_value=''
+  local -i is_valid=$BL64_LIB_ERROR_CHECK_FAILED
+
+  shift
+  shift
+  bl64_check_parameter 'target_value' &&
+    bl64_check_parameters_none $# "$_BL64_FMT_TXT_ERROR_VALUE_LIST_EMPTY" ||
+    return $?
+  [[ "$error_message" == "$BL64_VAR_DEFAULT" ]] && error_message="$_BL64_FMT_TXT_ERROR_VALUE_LIST_WRONG"
+
+  for valid_value in "$@"; do
+    [[ "$target_value" == "$valid_value" ]] &&
+      is_valid=0 &&
+      break
+  done
+  ((is_valid != 0)) &&
+    bl64_msg_show_error "${error_message} (${_BL64_FMT_TXT_LIST}: [${*}] ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+
+  return $is_valid
 }
 
 #######################################
@@ -5521,6 +5724,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_FALSE='/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
+    BL64_OS_CMD_TEE='/usr/bin/tee'
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
@@ -5531,6 +5735,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
+    BL64_OS_CMD_TEE='/usr/bin/tee'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
@@ -5541,6 +5746,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
+    BL64_OS_CMD_TEE='/usr/bin/tee'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/usr/bin/uname'
     ;;
@@ -5551,6 +5757,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_FALSE='/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
+    BL64_OS_CMD_TEE='/usr/bin/tee'
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
@@ -5562,6 +5769,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
+    BL64_OS_CMD_TEE='/usr/bin/tee'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/usr/bin/uname'
     ;;
@@ -6422,7 +6630,12 @@ function bl64_rxtx_setup() {
     return 21
   bl64_dbg_lib_show_function
 
-  _bl64_rxtx_set_command &&
+  bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_check_module_imported 'BL64_FS_MODULE' &&
+    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+    bl64_check_module_imported 'BL64_VCS_MODULE' &&
+    _bl64_rxtx_set_command &&
     _bl64_rxtx_set_options &&
     _bl64_rxtx_set_alias &&
     BL64_RXTX_MODULE="$BL64_VAR_ON"
@@ -6490,10 +6703,11 @@ function _bl64_rxtx_set_options() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-20.* | ${BL64_OS_UB}-21.* | ${BL64_OS_UB}-22.* | ${BL64_OS_UB}-23.*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
-    BL64_RXTX_SET_CURL_NO_PROGRESS='--no-progress-meter'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
+    BL64_RXTX_SET_CURL_NO_PROGRESS='--no-progress-meter'
     BL64_RXTX_SET_CURL_REDIRECT='--location'
     BL64_RXTX_SET_CURL_REQUEST='-X'
     BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
@@ -6504,6 +6718,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_DEB}-9.* | ${BL64_OS_UB}-18.* | ${BL64_OS_DEB}-10.* | ${BL64_OS_DEB}-11.*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
@@ -6518,6 +6733,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_FD}-*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
@@ -6532,6 +6748,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
@@ -6546,6 +6763,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_SLES}-*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
@@ -6560,6 +6778,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_ALP}-*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
@@ -6574,6 +6793,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_MCOS}-*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
     BL64_RXTX_SET_CURL_OUTPUT='--output'
@@ -6664,7 +6884,9 @@ function bl64_rxtx_web_get_file() {
 
   bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_parameter 'source' &&
-    bl64_check_parameter 'destination' || return $?
+    bl64_check_parameter 'destination' &&
+    bl64_fs_check_new_file "$destination" ||
+    return $?
 
   bl64_check_overwrite_skip "$destination" "$replace" && return
 
@@ -6674,6 +6896,7 @@ function bl64_rxtx_web_get_file() {
   # shellcheck disable=SC2086
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
     bl64_rxtx_run_curl \
+      $BL64_RXTX_SET_CURL_FAIL \
       $BL64_RXTX_SET_CURL_REDIRECT \
       $BL64_RXTX_SET_CURL_OUTPUT "$destination" \
       "$source"
@@ -6734,7 +6957,8 @@ function bl64_rxtx_git_get_dir() {
     bl64_check_parameter 'source_url' &&
     bl64_check_parameter 'source_path' &&
     bl64_check_parameter 'destination' &&
-    bl64_check_path_relative "$source_path" ||
+    bl64_check_path_relative "$source_path" &&
+    bl64_fs_check_new_dir "$destination" ||
     return $?
 
   # shellcheck disable=SC2086
@@ -6775,7 +6999,8 @@ function bl64_rxtx_git_get_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_rxtx_run_curl() {
   bl64_dbg_lib_show_function "$@"
@@ -6805,7 +7030,8 @@ function bl64_rxtx_run_curl() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_rxtx_run_wget() {
   bl64_dbg_lib_show_function "$@"
@@ -7304,7 +7530,8 @@ function bl64_txt_search_line() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_awk() {
   bl64_dbg_lib_show_function "$@"
@@ -7332,7 +7559,8 @@ function bl64_txt_run_awk() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 # shellcheck disable=SC2120
 function bl64_txt_run_envsubst() {
@@ -7358,7 +7586,8 @@ function bl64_txt_run_envsubst() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_grep() {
   bl64_dbg_lib_show_function "$@"
@@ -7382,7 +7611,8 @@ function bl64_txt_run_grep() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_egrep() {
   bl64_dbg_lib_show_function "$@"
@@ -7402,7 +7632,8 @@ function bl64_txt_run_egrep() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_sed() {
   bl64_dbg_lib_show_function "$@"
@@ -7428,7 +7659,8 @@ function bl64_txt_run_sed() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_base64() {
   bl64_dbg_lib_show_function "$@"
@@ -7453,7 +7685,8 @@ function bl64_txt_run_base64() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_tr() {
   bl64_dbg_lib_show_function "$@"
@@ -7479,7 +7712,8 @@ function bl64_txt_run_tr() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_cut() {
   bl64_dbg_lib_show_function "$@"
@@ -7505,7 +7739,8 @@ function bl64_txt_run_cut() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_uniq() {
   bl64_dbg_lib_show_function "$@"
@@ -7531,7 +7766,8 @@ function bl64_txt_run_uniq() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_txt_run_sort() {
   bl64_dbg_lib_show_function "$@"
@@ -7714,7 +7950,8 @@ function _bl64_vcs_set_options() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_vcs_run_git() {
   bl64_dbg_lib_show_function "$@"
@@ -8761,7 +8998,8 @@ function bl64_iam_user_is_created() {
 #   STDOUT: user ID
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_iam_user_get_id() {
   bl64_dbg_lib_show_function "$@"
@@ -8798,7 +9036,8 @@ function bl64_iam_user_get_id() {
 #   STDOUT: user name
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_iam_user_get_current() {
   bl64_dbg_lib_show_function
@@ -8820,7 +9059,7 @@ function bl64_iam_user_get_current() {
 function bl64_iam_check_user() {
   bl64_dbg_lib_show_function "$@"
   local user="${1:-}"
-  local message="${2:-${_BL64_CHECK_TXT_USER_NOT_FOUND}}"
+  local message="${2:-${_BL64_IAM_TXT_USER_NOT_FOUND}}"
 
   bl64_check_parameter 'user' || return $?
 
@@ -9520,7 +9759,8 @@ function bl64_pkg_cleanup() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_pkg_run_dnf() {
   bl64_dbg_lib_show_function "$@"
@@ -9554,7 +9794,8 @@ function bl64_pkg_run_dnf() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_pkg_run_yum() {
   bl64_dbg_lib_show_function "$@"
@@ -9588,7 +9829,8 @@ function bl64_pkg_run_yum() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_pkg_run_apt() {
   bl64_dbg_lib_show_function "$@"
@@ -9654,7 +9896,8 @@ function bl64_pkg_blank_apt() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_pkg_run_apk() {
   bl64_dbg_lib_show_function "$@"
@@ -9688,7 +9931,8 @@ function bl64_pkg_run_apk() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_pkg_run_brew() {
   bl64_dbg_lib_show_function "$@"
@@ -9722,7 +9966,8 @@ function bl64_pkg_run_brew() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_pkg_run_zypper() {
   bl64_dbg_lib_show_function "$@"
@@ -9967,7 +10212,8 @@ function _bl64_py_set_resources() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_py_venv_create() {
   bl64_dbg_lib_show_function "$@"
@@ -9992,7 +10238,8 @@ function bl64_py_venv_create() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_py_venv_check() {
   bl64_dbg_lib_show_function "$@"
@@ -10183,7 +10430,8 @@ function bl64_py_pip_usr_cleanup() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_py_run_python() {
   bl64_dbg_lib_show_function "$@"
@@ -10387,7 +10635,8 @@ function _bl64_arc_set_options() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_arc_run_unzip() {
   bl64_dbg_lib_show_function "$@"
@@ -10441,7 +10690,8 @@ function bl64_arc_blank_unzip() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_arc_run_tar() {
   bl64_dbg_lib_show_function "$@"
@@ -10821,7 +11071,8 @@ function _bl64_ans_set_version() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_ans_collections_install() {
   bl64_dbg_lib_show_function "$@"
@@ -10850,7 +11101,8 @@ function bl64_ans_collections_install() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_ans_run_ansible() {
   bl64_dbg_lib_show_function "$@"
@@ -10886,7 +11138,8 @@ function bl64_ans_run_ansible() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_ans_run_ansible_galaxy() {
   bl64_dbg_lib_show_function "$@"
@@ -10926,7 +11179,8 @@ function bl64_ans_run_ansible_galaxy() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_ans_run_ansible_playbook() {
   bl64_dbg_lib_show_function "$@"
@@ -11234,7 +11488,8 @@ function bl64_aws_set_region() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 
 function bl64_aws_cli_create_sso() {
@@ -11370,7 +11625,8 @@ function bl64_aws_sso_get_token() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_aws_run_aws_profile() {
   bl64_dbg_lib_show_function "$@"
@@ -11398,7 +11654,8 @@ function bl64_aws_run_aws_profile() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_aws_run_aws() {
   bl64_dbg_lib_show_function "$@"
@@ -11725,7 +11982,8 @@ function _bl64_cnt_find_variable_marker() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_login_stdin() {
   bl64_dbg_lib_show_function "$@"
@@ -11752,7 +12010,8 @@ function bl64_cnt_login_stdin() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_login_file() {
   bl64_dbg_lib_show_function "$@"
@@ -11782,7 +12041,8 @@ function bl64_cnt_login_file() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_login() {
   bl64_dbg_lib_show_function "$@"
@@ -11811,7 +12071,8 @@ function bl64_cnt_login() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_run_sh() {
   bl64_dbg_lib_show_function "$@"
@@ -11834,7 +12095,8 @@ function bl64_cnt_run_sh() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_run_interactive() {
   bl64_dbg_lib_show_function "$@"
@@ -11857,7 +12119,8 @@ function bl64_cnt_run_interactive() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_build() {
   bl64_dbg_lib_show_function "$@"
@@ -11895,7 +12158,8 @@ function bl64_cnt_build() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_push() {
   bl64_dbg_lib_show_function "$@"
@@ -11920,7 +12184,8 @@ function bl64_cnt_push() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_pull() {
   bl64_dbg_lib_show_function "$@"
@@ -11958,7 +12223,8 @@ function _bl64_cnt_login_put_password() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_tag() {
   bl64_dbg_lib_show_function "$@"
@@ -11983,7 +12249,8 @@ function bl64_cnt_tag() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_run() {
   bl64_dbg_lib_show_function "$@"
@@ -12006,7 +12273,8 @@ function bl64_cnt_run() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_cli() {
   bl64_dbg_lib_show_function "$@"
@@ -12127,7 +12395,8 @@ function bl64_cnt_network_create() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_login() {
   bl64_dbg_lib_show_function "$@"
@@ -12156,7 +12425,8 @@ function _bl64_cnt_docker_login() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_run_interactive() {
   bl64_dbg_lib_show_function "$@"
@@ -12184,7 +12454,8 @@ function _bl64_cnt_docker_run_interactive() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_run_docker() {
   bl64_dbg_lib_show_function "$@"
@@ -12221,7 +12492,8 @@ function bl64_cnt_run_docker() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_build() {
   bl64_dbg_lib_show_function "$@"
@@ -12251,7 +12523,8 @@ function _bl64_cnt_docker_build() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_push() {
   bl64_dbg_lib_show_function "$@"
@@ -12277,7 +12550,8 @@ function _bl64_cnt_docker_push() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_pull() {
   bl64_dbg_lib_show_function "$@"
@@ -12298,7 +12572,8 @@ function _bl64_cnt_docker_pull() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_tag() {
   bl64_dbg_lib_show_function "$@"
@@ -12322,7 +12597,8 @@ function _bl64_cnt_docker_tag() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_run() {
   bl64_dbg_lib_show_function "$@"
@@ -12436,7 +12712,8 @@ function _bl64_cnt_docker_ps_filter() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_podman_login() {
   bl64_dbg_lib_show_function "$@"
@@ -12465,7 +12742,8 @@ function _bl64_cnt_podman_login() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_podman_run_interactive() {
   bl64_dbg_lib_show_function "$@"
@@ -12492,7 +12770,8 @@ function _bl64_cnt_podman_run_interactive() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_run_podman() {
   bl64_dbg_lib_show_function "$@"
@@ -12524,7 +12803,8 @@ function bl64_cnt_run_podman() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_podman_build() {
   bl64_dbg_lib_show_function "$@"
@@ -12553,7 +12833,8 @@ function _bl64_cnt_podman_build() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_podman_push() {
   bl64_dbg_lib_show_function "$@"
@@ -12575,7 +12856,8 @@ function _bl64_cnt_podman_push() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_podman_pull() {
   bl64_dbg_lib_show_function "$@"
@@ -12596,7 +12878,8 @@ function _bl64_cnt_podman_pull() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_podman_tag() {
   bl64_dbg_lib_show_function "$@"
@@ -12620,7 +12903,8 @@ function _bl64_cnt_podman_tag() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_podman_run() {
   bl64_dbg_lib_show_function "$@"
@@ -12871,7 +13155,8 @@ function bl64_gcp_set_impersonate_sa() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_gcp_run_gcloud() {
   bl64_dbg_lib_show_function "$@"
@@ -12919,7 +13204,8 @@ function bl64_gcp_run_gcloud() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_gcp_login_sa() {
   bl64_dbg_lib_show_function "$@"
@@ -13021,7 +13307,8 @@ function bl64_gcp_blank_gcloud() {
 #   STDOUT: secret value
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_gcp_secret_get() {
   bl64_dbg_lib_show_function "$@"
@@ -13192,7 +13479,8 @@ function bl64_hlm_set_timeout() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_hlm_repo_add() {
   bl64_dbg_lib_show_function "$@"
@@ -13229,7 +13517,8 @@ function bl64_hlm_repo_add() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_hlm_chart_upgrade() {
   bl64_dbg_lib_show_function "$@"
@@ -13275,7 +13564,8 @@ function bl64_hlm_chart_upgrade() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_hlm_run_helm() {
   bl64_dbg_lib_show_function "$@"
@@ -13572,7 +13862,8 @@ function bl64_k8s_set_kubectl_output() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_label_set() {
   bl64_dbg_lib_show_function "$@"
@@ -13617,7 +13908,8 @@ function bl64_k8s_label_set() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_annotation_set() {
   bl64_dbg_lib_show_function "$@"
@@ -13662,7 +13954,8 @@ function bl64_k8s_annotation_set() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_namespace_create() {
   bl64_dbg_lib_show_function "$@"
@@ -13699,7 +13992,8 @@ function bl64_k8s_namespace_create() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_sa_create() {
   bl64_dbg_lib_show_function "$@"
@@ -13741,7 +14035,8 @@ function bl64_k8s_sa_create() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_secret_create() {
   bl64_dbg_lib_show_function "$@"
@@ -13788,7 +14083,8 @@ function bl64_k8s_secret_create() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_secret_copy() {
   bl64_dbg_lib_show_function "$@"
@@ -13844,7 +14140,8 @@ function bl64_k8s_secret_copy() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_resource_update() {
   bl64_dbg_lib_show_function "$@"
@@ -13889,7 +14186,8 @@ function bl64_k8s_resource_update() {
 #   STDOUT: resource definition
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_resource_get() {
   bl64_dbg_lib_show_function "$@"
@@ -13923,7 +14221,8 @@ function bl64_k8s_resource_get() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_k8s_run_kubectl() {
   bl64_dbg_lib_show_function "$@"
@@ -14150,7 +14449,8 @@ function _bl64_mdb_set_runtime() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_mdb_dump_restore() {
   bl64_dbg_lib_show_function "$@"
@@ -14203,7 +14503,8 @@ function bl64_mdb_dump_restore() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_mdb_role_grant() {
   bl64_dbg_lib_show_function "$@"
@@ -14238,7 +14539,8 @@ function bl64_mdb_role_grant() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_mdb_run_mongosh_eval() {
   bl64_dbg_lib_show_function "$@"
@@ -14276,7 +14578,8 @@ function bl64_mdb_run_mongosh_eval() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_mdb_run_mongosh() {
   bl64_dbg_lib_show_function "$@"
@@ -14311,7 +14614,8 @@ function bl64_mdb_run_mongosh() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_mdb_run_mongorestore() {
   bl64_dbg_lib_show_function "$@"
@@ -14342,7 +14646,8 @@ function bl64_mdb_run_mongorestore() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_mdb_run_mongoexport() {
   bl64_dbg_lib_show_function "$@"
@@ -14555,7 +14860,8 @@ function _bl64_tf_set_version() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_tf_output_export() {
   bl64_dbg_lib_show_function "$@"
@@ -14588,7 +14894,8 @@ function bl64_tf_output_export() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_tf_run_terraform() {
   bl64_dbg_lib_show_function "$@"
