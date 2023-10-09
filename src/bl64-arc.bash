@@ -13,7 +13,8 @@
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_arc_run_unzip() {
   bl64_dbg_lib_show_function "$@"
@@ -67,7 +68,8 @@ function bl64_arc_blank_unzip() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_arc_run_tar() {
   bl64_dbg_lib_show_function "$@"

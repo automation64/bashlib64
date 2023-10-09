@@ -12,7 +12,8 @@
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_tf_output_export() {
   bl64_dbg_lib_show_function "$@"
@@ -45,7 +46,8 @@ function bl64_tf_output_export() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_tf_run_terraform() {
   bl64_dbg_lib_show_function "$@"

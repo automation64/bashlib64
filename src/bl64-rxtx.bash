@@ -143,7 +143,8 @@ function bl64_rxtx_git_get_dir() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_rxtx_run_curl() {
   bl64_dbg_lib_show_function "$@"
@@ -173,7 +174,8 @@ function bl64_rxtx_run_curl() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_rxtx_run_wget() {
   bl64_dbg_lib_show_function "$@"

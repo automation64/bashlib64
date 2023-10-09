@@ -13,7 +13,8 @@
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_vcs_run_git() {
   bl64_dbg_lib_show_function "$@"

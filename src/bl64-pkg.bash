@@ -409,7 +409,8 @@ function bl64_pkg_cleanup() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_pkg_run_dnf() {
   bl64_dbg_lib_show_function "$@"
@@ -443,7 +444,8 @@ function bl64_pkg_run_dnf() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_pkg_run_yum() {
   bl64_dbg_lib_show_function "$@"
@@ -477,7 +479,8 @@ function bl64_pkg_run_yum() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_pkg_run_apt() {
   bl64_dbg_lib_show_function "$@"
@@ -543,7 +546,8 @@ function bl64_pkg_blank_apt() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_pkg_run_apk() {
   bl64_dbg_lib_show_function "$@"
@@ -577,7 +581,8 @@ function bl64_pkg_run_apk() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_pkg_run_brew() {
   bl64_dbg_lib_show_function "$@"
@@ -611,7 +616,8 @@ function bl64_pkg_run_brew() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_pkg_run_zypper() {
   bl64_dbg_lib_show_function "$@"

@@ -17,7 +17,8 @@
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 
 function bl64_aws_cli_create_sso() {
@@ -153,7 +154,8 @@ function bl64_aws_sso_get_token() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_aws_run_aws_profile() {
   bl64_dbg_lib_show_function "$@"
@@ -181,7 +183,8 @@ function bl64_aws_run_aws_profile() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_aws_run_aws() {
   bl64_dbg_lib_show_function "$@"

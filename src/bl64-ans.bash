@@ -11,7 +11,8 @@
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_ans_collections_install() {
   bl64_dbg_lib_show_function "$@"
@@ -40,7 +41,8 @@ function bl64_ans_collections_install() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_ans_run_ansible() {
   bl64_dbg_lib_show_function "$@"
@@ -76,7 +78,8 @@ function bl64_ans_run_ansible() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_ans_run_ansible_galaxy() {
   bl64_dbg_lib_show_function "$@"
@@ -116,7 +119,8 @@ function bl64_ans_run_ansible_galaxy() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_ans_run_ansible_playbook() {
   bl64_dbg_lib_show_function "$@"

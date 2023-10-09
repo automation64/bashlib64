@@ -11,7 +11,8 @@
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_py_venv_create() {
   bl64_dbg_lib_show_function "$@"
@@ -36,7 +37,8 @@ function bl64_py_venv_create() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_py_venv_check() {
   bl64_dbg_lib_show_function "$@"
@@ -227,7 +229,8 @@ function bl64_py_pip_usr_cleanup() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_py_run_python() {
   bl64_dbg_lib_show_function "$@"

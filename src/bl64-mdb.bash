@@ -19,7 +19,8 @@
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_mdb_dump_restore() {
   bl64_dbg_lib_show_function "$@"
@@ -72,7 +73,8 @@ function bl64_mdb_dump_restore() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_mdb_role_grant() {
   bl64_dbg_lib_show_function "$@"
@@ -107,7 +109,8 @@ function bl64_mdb_role_grant() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_mdb_run_mongosh_eval() {
   bl64_dbg_lib_show_function "$@"
@@ -145,7 +148,8 @@ function bl64_mdb_run_mongosh_eval() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_mdb_run_mongosh() {
   bl64_dbg_lib_show_function "$@"
@@ -180,7 +184,8 @@ function bl64_mdb_run_mongosh() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_mdb_run_mongorestore() {
   bl64_dbg_lib_show_function "$@"
@@ -211,7 +216,8 @@ function bl64_mdb_run_mongorestore() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   command exit status
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_mdb_run_mongoexport() {
   bl64_dbg_lib_show_function "$@"
