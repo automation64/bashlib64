@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage Version Control System
 #######################################
 
-export BL64_VCS_VERSION='1.14.0'
+export BL64_VCS_VERSION='1.14.1'
 
 export BL64_VCS_MODULE="$BL64_VAR_OFF"
 
