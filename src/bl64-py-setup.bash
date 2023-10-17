@@ -112,7 +112,14 @@ function _bl64_py_set_command() {
     "${BL64_OS_ALP}-3.14" | "${BL64_OS_ALP}-3.15") BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     "${BL64_OS_ALP}-3.16" | "${BL64_OS_ALP}-3.17") BL64_PY_CMD_PYTHON39='/usr/bin/python3.10' ;;
     ${BL64_OS_MCOS}-12.* | ${BL64_OS_MCOS}-13.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
-    *) bl64_check_alert_unsupported ;;
+    *)
+      if bl64_lib_mode_compability_is_enabled; then
+        BL64_PY_CMD_PYTHON3='/usr/bin/python3'
+      else
+        bl64_check_alert_unsupported
+        return $?
+      fi
+      ;;
     esac
 
     # Select best match for default python3
@@ -143,7 +150,7 @@ function _bl64_py_set_command() {
     export VIRTUAL_ENV=''
 
   else
-    bl64_dbg_lib_show_info 'use python3 from virtual environment'
+    bl64_dbg_lib_show_comments 'use python3 from virtual environment'
     BL64_PY_CMD_PYTHON3="${venv_path}/bin/python3"
 
     # Emulate bin/activate
@@ -156,6 +163,7 @@ function _bl64_py_set_command() {
   fi
 
   bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3' 'BL64_PY_VENV_PATH' 'VIRTUAL_ENV' 'PATH'
+  return 0
 }
 
 #######################################
@@ -181,6 +189,7 @@ function _bl64_py_set_options() {
   BL64_PY_SET_PIP_SITE='--system-site-packages'
   BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
 
+  return 0
 }
 
 #######################################

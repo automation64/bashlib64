@@ -116,6 +116,7 @@ function bl64_arc_open_tar() {
   bl64_check_module 'BL64_ARC_MODULE' &&
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
+    bl64_check_file "$source" &&
     bl64_check_directory "$destination" ||
     return $?
 
@@ -208,6 +209,7 @@ function bl64_arc_open_zip() {
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
+    bl64_check_file "$source" &&
     bl64_check_directory "$destination" ||
     return $?
 

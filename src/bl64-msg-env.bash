@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Display messages
 #######################################
 
-export BL64_MSG_VERSION='4.1.0'
+export BL64_MSG_VERSION='4.2.0'
 
 export BL64_MSG_MODULE="$BL64_VAR_OFF"
 
@@ -159,6 +159,8 @@ export BL64_MSG_ANSI_CHAR_REVERSE='7'
 
 export BL64_MSG_COSMETIC_ARROW='-->'
 export BL64_MSG_COSMETIC_ARROW2='==>'
+export BL64_MSG_COSMETIC_LEFT_ARROW='<--'
+export BL64_MSG_COSMETIC_LEFT_ARROW2='<=='
 export BL64_MSG_COSMETIC_PHASE_PREFIX='===['
 export BL64_MSG_COSMETIC_PHASE_SUFIX=']==='
 export BL64_MSG_COSMETIC_PIPE='|'

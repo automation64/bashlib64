@@ -17,28 +17,30 @@
 #######################################
 function bl64_hlm_repo_add() {
   bl64_dbg_lib_show_function "$@"
-  local repository="${1:-${BL64_VAR_DEFAULT}}"
-  local source="${2:-${BL64_VAR_DEFAULT}}"
+  local repository="${1:-}"
+  local source="${2:-}"
 
   bl64_check_parameter 'repository' &&
     bl64_check_parameter 'source' ||
     return $?
 
-  bl64_dbg_lib_show_info "add helm repository (${repository})"
+  bl64_msg_show_lib_subtask "${BL64_HLM_TXT_ADD_REPO} (${repository} ${BL64_MSG_COSMETIC_LEFT_ARROW2} ${source})"
   bl64_hlm_run_helm \
     repo add \
     "$repository" \
     "$source" ||
     return $?
 
-  bl64_dbg_lib_show_info "try to update repository from source (${source})"
+  bl64_msg_show_lib_subtask "${BL64_HLM_TXT_UPDATE_REPO} (${repository})"
   bl64_hlm_run_helm repo update "$repository"
 
   return 0
 }
 
 #######################################
-# Upgrade or install and existing chart
+# Upgrade or install helm existing chart
+#
+# * Using atomic and cleanup to ensure deployment integrity
 #
 # Arguments:
 #   $1: full path to the kube/config file with cluster credentials
@@ -55,30 +57,33 @@ function bl64_hlm_repo_add() {
 #######################################
 function bl64_hlm_chart_upgrade() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-${BL64_VAR_DEFAULT}}"
-  local namespace="${2:-${BL64_VAR_DEFAULT}}"
-  local chart="${3:-${BL64_VAR_DEFAULT}}"
-  local source="${4:-${BL64_VAR_DEFAULT}}"
+  local kubeconfig="${1:-}"
+  local namespace="${2:-}"
+  local chart="${3:-}"
+  local source="${4:-}"
 
-  bl64_check_parameter 'kubeconfig' &&
     bl64_check_parameter 'namespace' &&
     bl64_check_parameter 'chart' &&
     bl64_check_parameter 'source' &&
     bl64_check_file "$kubeconfig" ||
     return $?
 
+  [[ "$kubeconfig" == "$BL64_VAR_DEFAULT" ]] && kubeconfig=''
+
   shift
   shift
   shift
   shift
 
+  bl64_msg_show_lib_subtask "${BL64_HLM_TXT_DEPLOY_CHART} (${namespace}/${chart})"
   bl64_hlm_run_helm \
     upgrade \
     "$chart" \
     "$source" \
-    --kubeconfig="$kubeconfig" \
+    ${kubeconfig:+--kubeconfig="$kubeconfig"} \
     --namespace "$namespace" \
     --timeout "$BL64_HLM_RUN_TIMEOUT" \
+    --create-namespace \
     --atomic \
     --cleanup-on-fail \
     --install \

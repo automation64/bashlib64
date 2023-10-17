@@ -250,7 +250,7 @@ function bl64_fmt_check_value_in_list() {
       break
   done
   ((is_valid != 0)) &&
-    bl64_msg_show_error "${error_message} (${_BL64_FMT_TXT_LIST}: [${*}] ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    bl64_msg_show_error "${error_message}. ${_BL64_FMT_TXT_VALUE_LIST_VALID}: [${*}] (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
 
   return $is_valid
 }

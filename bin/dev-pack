@@ -3,7 +3,7 @@
 # Pack application for delivery
 #
 # * Use to create a distributable package of the application
-# * Version: v1.2.0
+# * Template: 1.3.0
 #
 
 #
@@ -54,6 +54,7 @@ bl64_arc_setup &&
   bl64_check_export 'DEV_PACK_NAME_SPLIT' ||
   exit $?
 
+bl64_msg_all_enable_verbose
 bl64_msg_show_batch_start 'pack-app'
 bl64_msg_show_task "create distributable package (${DEV_PACK_FULL_PATH})"
 dev_pack

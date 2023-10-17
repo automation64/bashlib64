@@ -30,6 +30,7 @@ function bl64_api_call() {
   local api_method="${3:-${BL64_API_METHOD_GET}}"
   local api_query="${4:-${BL64_VAR_NULL}}"
   local debug="$BL64_RXTX_SET_CURL_SILENT"
+  local -i status=0
 
   bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" &&
@@ -54,6 +55,9 @@ function bl64_api_call() {
     "${api_url}${api_path}${api_query}" \
     "$@"
   bl64_dbg_lib_trace_stop
+  status=$?
+  (( status != 0 )) && bl64_msg_show_error "${_BL64_API_TXT_ERROR_API_FAILED} (${api_url}${api_path})"
+  return $status
 }
 
 #######################################

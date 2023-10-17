@@ -5,17 +5,16 @@
 # * Use to download or install external tools, libraries, etc
 # * Tools and libs should go to lib/
 # * Do not include operations that requires privileged access (i.e. sudo)
-# * Version: v1.1.0
+# * Template: 1.2.0
 #
 
 # shellcheck source=SCRIPTDIR/dev-set
 source ./bin/dev-set || exit 1
 
+[[ -z "$DEV_CICD_BASHLIB64_REPO" ]] &&
+  echo 'error: required variable not defined (DEV_CICD_BASHLIB64_REPO)' &&
+  exit 1
+
 echo 'Download bash library: BashLib64'
 cd "$DEV_LIB" &&
-  curl -O "$DEV_CICD_BASHLIB64_REPO" || exit 1
-
-echo 'Download tools: TestManSH'
-cd "$DEV_LIB" &&
-  curl -O "$DEV_CICD_TESTMANSH_REPO" && chmod 755 testmansh ||
-  exit $?
+  curl -O "$DEV_CICD_BASHLIB64_REPO"

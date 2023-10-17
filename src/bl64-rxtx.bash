@@ -56,7 +56,7 @@ function bl64_rxtx_web_get_file() {
       return $BL64_LIB_ERROR_APP_MISSING
   fi
 
-  # Determine if mode needs to be set
+  bl64_dbg_lib_show_comments 'Determine if asked to set mode'
   if [[ "$status" == '0' && "$mode" != "$BL64_VAR_DEFAULT" ]]; then
     bl64_fs_run_chmod "$mode" "$destination"
     status=$?
@@ -109,10 +109,10 @@ function bl64_rxtx_git_get_dir() {
   # shellcheck disable=SC2086
   bl64_check_overwrite_skip "$destination" "$replace" && return $?
 
-  # Asked to replace, backup first
+  bl64_dbg_lib_show_comments 'Asked to replace, backup first'
   bl64_fs_safeguard "$destination" || return $?
 
-  # Detect what type of path is requested
+  bl64_dbg_lib_show_comments 'Detect what type of path is requested'
   if [[ "$source_path" == '.' || "$source_path" == './' ]]; then
     _bl64_rxtx_git_get_dir_root "$source_url" "$destination" "$branch"
   else
@@ -120,7 +120,7 @@ function bl64_rxtx_git_get_dir() {
   fi
   status=$?
 
-  # Remove GIT repo metadata
+  bl64_dbg_lib_show_comments 'Remove GIT repo metadata'
   if [[ -d "${destination}/.git" ]]; then
     bl64_dbg_lib_show_info "remove git metadata (${destination}/.git)"
     # shellcheck disable=SC2164
@@ -128,7 +128,7 @@ function bl64_rxtx_git_get_dir() {
     bl64_fs_rm_full '.git' >/dev/null
   fi
 
-  # Check if restore is needed
+  bl64_dbg_lib_show_comments 'Check if restore is needed'
   bl64_fs_restore "$destination" "$status" || return $?
   return $status
 }
@@ -216,7 +216,7 @@ function _bl64_rxtx_git_get_dir_root() {
   transition="${repo}/${git_name}"
   bl64_dbg_lib_show_vars 'git_name' 'transition'
 
-  # Clone the repo
+  bl64_dbg_lib_show_comments 'Clone the repo'
   bl64_vcs_git_clone "$source_url" "$repo" "$branch" &&
     bl64_dbg_lib_show_info 'promote to destination' &&
     bl64_fs_run_mv "$transition" "$destination"
@@ -244,7 +244,7 @@ function _bl64_rxtx_git_get_dir_sub() {
   # shellcheck disable=SC2086
   bl64_check_directory "$repo" "$_BL64_RXTX_TXT_CREATION_PROBLEM" || return $BL64_LIB_ERROR_TASK_TEMP
 
-  # Use transition path to get to the final target path
+  bl64_dbg_lib_show_comments 'Use transition path to get to the final target path'
   source="${repo}/${source_path}"
   target="$(bl64_fmt_basename "$destination")"
   transition="${repo}/transition/${target}"

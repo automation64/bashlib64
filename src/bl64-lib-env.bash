@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='16.1.0'
+export BL64_VERSION='17.0.0'
 
 #
 # Imported shell standard variables
@@ -69,10 +69,8 @@ export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
 #
 
 # Application reserved. Not used by bashlib64
-# shellcheck disable=SC2034
-declare -ig BL64_LIB_ERROR_APP_1=1
-# shellcheck disable=SC2034
-declare -ig BL64_LIB_ERROR_APP_2=2
+# declare -ig BL64_LIB_ERROR_APP_1=1
+# declare -ig BL64_LIB_ERROR_APP_2=2
 
 # Parameters
 declare -ig BL64_LIB_ERROR_PARAMETER_INVALID=3
