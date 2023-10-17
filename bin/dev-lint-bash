@@ -23,7 +23,7 @@ source "$DEV_CICD_BASHLIB64" || exit 1
 
 bl64_check_export 'DEV_CICD_TESTMANSH' &&
   bl64_check_export 'DEV_BASE_BUILD' &&
-  bl64_check_export 'DEV_BUILD_NAME' &&
+  bl64_check_export 'DEV_BUILD_NAME_SINGLE' &&
   bl64_check_export 'DEV_BASE_BUILD_TEST' ||
   exit $?
 
