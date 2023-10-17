@@ -154,20 +154,20 @@ function _bl64_os_set_runtime() {
     ${BL64_OS_FD}-*)
       bl64_os_set_lang 'C.UTF-8'
       ;;
-    ${BL64_OS_CNT}-8.* | ${BL64_OS_CNT}-9.* | ${BL64_OS_RHEL}-8.* | ${BL64_OS_RHEL}-9.* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-8.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RCK}-*)
-      bl64_os_set_lang 'C.UTF-8'
-      ;;
     ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-      # Not installed by default, skipping
+      bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
+      ;;
+    ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-8.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RCK}-*)
+      bl64_os_set_lang 'C.UTF-8'
       ;;
     ${BL64_OS_SLES}-*)
       bl64_os_set_lang 'C.UTF-8'
       ;;
     ${BL64_OS_ALP}-*)
-      # Not installed by default, skipping
+      bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
       ;;
     ${BL64_OS_MCOS}-*)
-      # Not installed by default, skipping
+      bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
       ;;
     *)
       bl64_check_alert_unsupported
