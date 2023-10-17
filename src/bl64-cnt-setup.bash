@@ -22,32 +22,15 @@ function bl64_cnt_setup() {
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
   bl64_dbg_lib_show_function
-  local -i status=0
 
-  _bl64_cnt_set_command
-  status=$?
-  if ((status == 0)); then
-    if [[ ! -x "$BL64_CNT_CMD_DOCKER" && ! -x "$BL64_CNT_CMD_PODMAN" ]]; then
-      bl64_msg_show_error "unable to find a container manager (${BL64_CNT_CMD_DOCKER}, ${BL64_CNT_CMD_PODMAN})"
-      status=$BL64_LIB_ERROR_APP_MISSING
-    else
-      bl64_dbg_lib_show_info 'detect and set current container driver'
-      if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
-        BL64_CNT_DRIVER="$BL64_CNT_DRIVER_DOCKER"
-      elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
-        BL64_CNT_DRIVER="$BL64_CNT_DRIVER_PODMAN"
-      fi
-      bl64_dbg_lib_show_vars 'BL64_CNT_DRIVER'
-      BL64_CNT_MODULE="$BL64_VAR_ON"
-    fi
-
-    # Engine specific sets
+  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+    _bl64_cnt_set_command &&
     bl64_cnt_set_paths &&
-      _bl64_cnt_set_options
-    status=$?
-  fi
+    _bl64_cnt_set_options &&
+    BL64_CNT_MODULE="$BL64_VAR_ON"
 
-  ((status == 0))
   bl64_check_alert_module_setup 'cnt'
 }
 
@@ -91,8 +74,24 @@ function _bl64_cnt_set_command() {
     # Docker is available using docker-desktop
     BL64_CNT_CMD_DOCKER='/usr/local/bin/docker'
     ;;
-  *) bl64_check_alert_unsupported ;;
+  *)
+    bl64_check_alert_unsupported
+    return $?
+    ;;
   esac
+
+  bl64_dbg_lib_show_comments 'detect and set current container driver'
+  if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
+    BL64_CNT_DRIVER="$BL64_CNT_DRIVER_DOCKER"
+  elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
+    BL64_CNT_DRIVER="$BL64_CNT_DRIVER_PODMAN"
+  else
+    bl64_msg_show_error "unable to find a container manager (${BL64_CNT_CMD_DOCKER}, ${BL64_CNT_CMD_PODMAN})"
+    return $BL64_LIB_ERROR_APP_MISSING
+  fi
+  bl64_dbg_lib_show_vars 'BL64_CNT_DRIVER'
+
+  return 0
 }
 
 #######################################
