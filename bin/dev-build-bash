@@ -206,7 +206,6 @@ function dev_build_help() {
 # Main
 #
 
-declare -i dev_build_status=1
 declare dev_build_command=''
 declare dev_build_option=''
 
@@ -222,12 +221,10 @@ while getopts ':trdh' dev_build_option; do
 done
 dev_build_check_requirements || exit 1
 
+bl64_msg_all_enable_verbose
 bl64_msg_show_batch_start "$dev_build_command"
 case "$dev_build_command" in
 'dev_build_docs' | 'dev_build_test' | 'dev_build_release') "$dev_build_command" ;;
 *) bl64_check_alert_undefined "$dev_build_command" ;;
 esac
-dev_build_status=$?
-
-bl64_msg_show_batch_finish $dev_build_status "$dev_build_command"
-exit $dev_build_status
+bl64_msg_show_batch_finish $? "$dev_build_command"
