@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
 
-export BL64_CHECK_VERSION='4.1.0'
+export BL64_CHECK_VERSION='4.1.1'
 
 export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 
@@ -38,7 +38,7 @@ export _BL64_CHECK_TXT_PRIVILEGE_IS_ROOT='the task should not be run with root p
 export _BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED='target is already present and overwrite is not permitted. Unable to continue'
 export _BL64_CHECK_TXT_OVERWRITE_SKIP_EXISTING='target is already present and overwrite is not requested. Target is left as is'
 
-export _BL64_CHECK_TXT_INCOMPATIBLE='the requested operation is not supported in the current platform'
+export _BL64_CHECK_TXT_INCOMPATIBLE='the requested operation is not supported on the current OS'
 export _BL64_CHECK_TXT_UNDEFINED='requested command is not defined or implemented'
 export _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one parameter and none was provided'
 export _BL64_CHECK_TXT_FAILED='task execution failed'
@@ -50,9 +50,13 @@ export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required BashLib64 module is not setup.
 export _BL64_CHECK_TXT_HOME_MISSING='standard shell variable HOME is not defined'
 export _BL64_CHECK_TXT_HOME_DIR_MISSING="unable to find user's HOME directory"
 
-export _BL64_CHECK_TXT_FUNCTION='caller'
-export _BL64_CHECK_TXT_PARAMETER='parameter'
-export _BL64_CHECK_TXT_MODULE='module'
 export _BL64_CHECK_TXT_RESOURCE_NOT_FOUND='required resource was not found on the system'
 export _BL64_CHECK_TXT_STATUS_ERROR='task execution failed'
 export _BL64_CHECK_TXT_COMPATIBILITY_MODE='using generic compatibility mode for untested command version'
+
+export _BL64_CHECK_TXT_COMMAND='command'
+export _BL64_CHECK_TXT_COMMAND='file'
+export _BL64_CHECK_TXT_COMMAND='path'
+export _BL64_CHECK_TXT_FUNCTION='caller'
+export _BL64_CHECK_TXT_MODULE='module'
+export _BL64_CHECK_TXT_PARAMETER='parameter'
