@@ -90,7 +90,7 @@ TERM="${TERM:-vt100}"
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='17.0.0'
+export BL64_VERSION='17.1.0'
 
 #
 # Imported shell standard variables
@@ -340,7 +340,7 @@ export _BL64_BSH_TXT_UNSUPPORTED='BashLib64 is not supported in the current Bash
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
 
-export BL64_CHECK_VERSION='4.1.1'
+export BL64_CHECK_VERSION='4.2.0'
 
 export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 
@@ -403,7 +403,7 @@ export _BL64_CHECK_TXT_PARAMETER='parameter'
 # BashLib64 / Module / Globals / Show shell debugging information
 #######################################
 
-export BL64_DBG_VERSION='2.2.0'
+export BL64_DBG_VERSION='2.3.0'
 
 export BL64_DBG_MODULE="$BL64_VAR_OFF"
 
@@ -443,6 +443,9 @@ export _BL64_DBG_TXT_FUNCTION_START='function tracing started'
 export _BL64_DBG_TXT_FUNCTION_STOP='function tracing stopped'
 export _BL64_DBG_TXT_SHELL_VAR='shell variable'
 export _BL64_DBG_TXT_COMMENTS='dev-comments'
+
+export _BL64_DBG_TXT_LABEL_BASH_RUNTIME='[bash-runtime]'
+export _BL64_DBG_TXT_LABEL_BASH_VARIABLE='[bash-variable]'
 
 export _BL64_DBG_TXT_BASH='Bash / Interpreter path'
 export _BL64_DBG_TXT_BASHOPTS='Bash / ShOpt Options'
@@ -768,7 +771,7 @@ export _BL64_MSG_TXT_WARNING='Warning'
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #######################################
 
-export BL64_OS_VERSION='4.0.0'
+export BL64_OS_VERSION='4.1.0'
 
 export BL64_OS_MODULE="$BL64_VAR_OFF"
 
@@ -1089,7 +1092,7 @@ export _BL64_IAM_TXT_USER_NOT_FOUND='required user is not present in the operati
 # BashLib64 / Module / Globals / Manage native OS packages
 #######################################
 
-export BL64_PKG_VERSION='4.2.0'
+export BL64_PKG_VERSION='4.3.0'
 
 export BL64_PKG_MODULE="$BL64_VAR_OFF"
 
@@ -1140,12 +1143,15 @@ export _BL64_PKG_TXT_PREPARE='initialize package manager'
 export _BL64_PKG_TXT_REPOSITORY_REFRESH='refresh package repository content'
 export _BL64_PKG_TXT_REPOSITORY_ADD='add remote package repository'
 export _BL64_PKG_TXT_REPOSITORY_EXISTING='requested repository is already present. Continue using existing one.'
+export _BL64_PKG_TXT_REPOSITORY_ADD_YUM='create YUM repository definition'
+export _BL64_PKG_TXT_REPOSITORY_ADD_APT='create APT repository definition'
+export _BL64_PKG_TXT_REPOSITORY_ADD_KEY='install GPG key'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #######################################
 
-export BL64_PY_VERSION='1.14.0'
+export BL64_PY_VERSION='1.15.0'
 
 # Optional module. Not enabled by default
 export BL64_PY_MODULE="$BL64_VAR_OFF"
@@ -1159,6 +1165,7 @@ export BL64_PY_CMD_PYTHON38="$BL64_VAR_UNAVAILABLE"
 export BL64_PY_CMD_PYTHON39="$BL64_VAR_UNAVAILABLE"
 export BL64_PY_CMD_PYTHON310="$BL64_VAR_UNAVAILABLE"
 export BL64_PY_CMD_PYTHON311="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON312="$BL64_VAR_UNAVAILABLE"
 
 # Full path to the python venv activated by bl64_py_setup
 export BL64_PY_VENV_PATH=''
@@ -1368,7 +1375,7 @@ export BL64_HLM_TXT_DEPLOY_CHART='deploy helm chart'
 # BashLib64 / Module / Globals / Interact with Kubernetes
 #######################################
 
-export BL64_K8S_VERSION='2.0.3'
+export BL64_K8S_VERSION='2.1.0'
 
 # Optional module. Not enabled by default
 export BL64_K8S_MODULE="$BL64_VAR_OFF"
@@ -1405,6 +1412,8 @@ export _BL64_K8S_TXT_CREATE_SECRET='copy secret to destination'
 export _BL64_K8S_TXT_RESOURCE_UPDATE='create or update resource definition'
 export _BL64_K8S_TXT_RESOURCE_EXISTING='the resource is already created. No further actions are needed'
 export _BL64_K8S_TXT_ERROR_KUBECTL_VERSION='unable to determine kubectl version'
+export _BL64_K8S_TXT_ERROR_INVALID_KUBECONF='kubectl config file not found'
+export _BL64_K8S_TXT_ERROR_MISSING_COMMAND='kubectl command not provided'
 
 #######################################
 # BashLib64 / Module / Setup / Interact with MongoDB
@@ -2442,6 +2451,7 @@ function bl64_check_alert_module_setup() {
 #
 # Arguments:
 #   $1: must be $# to capture number of parameters from the calling function
+#   $2: error message
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
@@ -2452,11 +2462,12 @@ function bl64_check_alert_module_setup() {
 function bl64_check_parameters_none() {
   bl64_dbg_lib_show_function "$@"
   local count="$1"
+  local message="${2:-${_BL64_CHECK_TXT_NOARGS}}"
 
   bl64_check_parameter 'count' || return $?
 
   if [[ "$count" == '0' ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_NOARGS} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_MISSING
   else
     return 0
@@ -2712,6 +2723,8 @@ function _bl64_dbg_show() {
 #######################################
 # Show runtime info
 #
+# * Saves the last exit status so the function will not disrupt the error flow
+#
 # Arguments:
 #   None
 # Outputs:
@@ -2722,33 +2735,32 @@ function _bl64_dbg_show() {
 #######################################
 function bl64_dbg_runtime_show() {
   local -i last_status=$?
+  bl64_dbg_app_command_enabled || return $last_status
 
-  if [[ "$BL64_DBG_TARGET" == "$BL64_DBG_TARGET_APP_CMD" ]]; then
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_BASH}: [${BASH}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_BASHOPTS}: [${BASHOPTS:-NONE}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_SHELLOPTS}: [${SHELLOPTS:-NONE}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_BASH_VERSION}: [${BASH_VERSION}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_OSTYPE}: [${OSTYPE:-NONE}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_LC_ALL}: [${LC_ALL:-NONE}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_HOSTNAME}: [${HOSTNAME:-EMPTY}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_EUID}: [${EUID}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_UID}: [${UID}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_BASH_ARGV}: [${BASH_ARGV[*]:-NONE}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_COMMAND}: [${BASH_COMMAND:-NONE}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_STATUS}: [${last_status}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_BASH}: [${BASH}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_BASHOPTS}: [${BASHOPTS:-NONE}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_SHELLOPTS}: [${SHELLOPTS:-NONE}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_BASH_VERSION}: [${BASH_VERSION}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_OSTYPE}: [${OSTYPE:-NONE}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_LC_ALL}: [${LC_ALL:-NONE}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_HOSTNAME}: [${HOSTNAME:-EMPTY}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_EUID}: [${EUID}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_UID}: [${UID}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_BASH_ARGV}: [${BASH_ARGV[*]:-NONE}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_COMMAND}: [${BASH_COMMAND:-NONE}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_STATUS}: [${last_status}]"
 
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_SCRIPT_PATH}: [${BL64_SCRIPT_PATH:-EMPTY}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_SCRIPT_PATH}: [${BL64_SCRIPT_PATH:-EMPTY}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
 
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_CALLSTACK}(1): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[1]:-NONE}:${BASH_LINENO[1]:-0}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_CALLSTACK}(2): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
-    _bl64_dbg_show "[bash] ${_BL64_DBG_TXT_CALLSTACK}(3): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
-  fi
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_CALLSTACK}(1): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[1]:-NONE}:${BASH_LINENO[1]:-0}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_CALLSTACK}(2): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_RUNTIME} ${_BL64_DBG_TXT_CALLSTACK}(3): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
 
   # shellcheck disable=SC2248
   return $last_status
@@ -3072,6 +3084,54 @@ function bl64_dbg_lib_show_comments() {
 function bl64_dbg_app_show_comments() {
   bl64_dbg_app_task_enabled || return 0
   _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_COMMENTS}: ${*}"
+  return 0
+}
+
+#######################################
+# Show non BL64 variables and attributes
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: declare -p output
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_dbg_app_show_variables() {
+  bl64_dbg_app_task_enabled || return 0
+  local filter='^declare .*BL64_.*=.*'
+
+  IFS=$'\n'
+  for variable in $(declare -p); do
+    unset IFS
+    [[ "$variable" =~ $filter || "$variable" =~ "declare -- filter=" ]] && continue
+    _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_VARIABLE} ${variable}"
+  done
+  return 0
+}
+
+#######################################
+# Show BL64 variables and attributes
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: declare -p output
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_dbg_lib_show_variables() {
+  bl64_dbg_lib_task_enabled || return 0
+  local filter='^declare .*BL64_.*=.*'
+
+  IFS=$'\n'
+  for variable in $(declare -p); do
+    unset IFS
+    [[ ! "$variable" =~ $filter || "$variable" =~ "declare -- filter=" ]] && continue
+    _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_VARIABLE} ${variable}"
+  done
   return 0
 }
 
@@ -6027,6 +6087,7 @@ function _bl64_os_get_distro_from_os_release() {
   "${BL64_OS_FD}-36" | ${BL64_OS_FD}-36.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-36" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-36.0" ;;
   "${BL64_OS_FD}-37" | ${BL64_OS_FD}-37.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-37" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-37.0" ;;
   "${BL64_OS_FD}-38" | ${BL64_OS_FD}-38.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-38" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-38.0" ;;
+  "${BL64_OS_FD}-39" | ${BL64_OS_FD}-39.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-39" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-39.0" ;;
   ${BL64_OS_OL}-7.* | ${BL64_OS_OL}-8.* | ${BL64_OS_OL}-9.*) : ;;
   ${BL64_OS_RCK}-8.* | ${BL64_OS_RCK}-9.*) : ;;
   ${BL64_OS_RHEL}-8.* | ${BL64_OS_RHEL}-9.*) : ;;
@@ -9435,7 +9496,7 @@ function _bl64_pkg_repository_add_yum() {
     bl64_msg_show_warning "${_BL64_PKG_TXT_REPOSITORY_EXISTING} (${definition})" &&
     return 0
 
-  bl64_dbg_lib_show_info "create YUM repository definition (${definition})"
+  bl64_msg_show_lib_subtask "${_BL64_PKG_TXT_REPOSITORY_ADD_YUM} (${definition})"
   if [[ "$gpgkey" != "$BL64_VAR_NONE" ]]; then
     printf '[%s]\n
 name=%s
@@ -9483,7 +9544,7 @@ function _bl64_pkg_repository_add_apt() {
     bl64_msg_show_warning "${_BL64_PKG_TXT_REPOSITORY_EXISTING} (${definition})" &&
     return 0
 
-  bl64_dbg_lib_show_info "create APT repository definition (${definition})"
+  bl64_msg_show_lib_subtask "${_BL64_PKG_TXT_REPOSITORY_ADD_APT} (${definition})"
   if [[ "$gpgkey" != "$BL64_VAR_NONE" ]]; then
     gpgkey_file="${BL64_PKG_PATH_GPG_KEYRINGS}/${name}.${BL64_PKG_DEF_SUFIX_GPG_FILE}"
     printf 'deb [signed-by=%s] %s %s %s\n' \
@@ -9493,7 +9554,7 @@ function _bl64_pkg_repository_add_apt() {
       "$component" \
       >"$definition" ||
       return $?
-    bl64_dbg_lib_show_info "install GPG key (${gpgkey})"
+    bl64_msg_show_lib_subtask "${_BL64_PKG_TXT_REPOSITORY_ADD_KEY} (${gpgkey})"
     bl64_rxtx_web_get_file "$gpgkey" "$gpgkey_file" "$BL64_VAR_ON" "$file_mode"
   else
     printf 'deb %s %s %s\n' \
@@ -10081,6 +10142,7 @@ function _bl64_py_set_command() {
     ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_FD}-35.* | ${BL64_OS_FD}-36.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
     ${BL64_OS_FD}-37.* | ${BL64_OS_FD}-38.*) BL64_PY_CMD_PYTHON311='/usr/bin/python3.11' ;;
+    ${BL64_OS_FD}-39.* ) BL64_PY_CMD_PYTHON312='/usr/bin/python3.12' ;;
     ${BL64_OS_DEB}-9.*) BL64_PY_CMD_PYTHON35='/usr/bin/python3.5' ;;
     ${BL64_OS_DEB}-10.*) BL64_PY_CMD_PYTHON37='/usr/bin/python3.7' ;;
     ${BL64_OS_DEB}-11.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
@@ -10111,7 +10173,10 @@ function _bl64_py_set_command() {
     esac
 
     # Select best match for default python3
-    if [[ -x "$BL64_PY_CMD_PYTHON311" ]]; then
+    if [[ -x "$BL64_PY_CMD_PYTHON312" ]]; then
+      BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON312"
+      BL64_PY_VERSION_PYTHON3='3.12'
+    elif [[ -x "$BL64_PY_CMD_PYTHON311" ]]; then
       BL64_PY_CMD_PYTHON3="$BL64_PY_CMD_PYTHON311"
       BL64_PY_VERSION_PYTHON3='3.11'
     elif [[ -x "$BL64_PY_CMD_PYTHON310" ]]; then
@@ -14233,7 +14298,7 @@ function bl64_k8s_resource_get() {
 # * Trust no one. Ignore inherited config and use explicit
 #
 # Arguments:
-#   $1: full path to the kube/config file for the target cluster
+#   $1: full path to the kube/config file for the target cluster. Use BL64_VAR_DEFAULT to leave default
 #   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
@@ -14248,22 +14313,71 @@ function bl64_k8s_run_kubectl() {
   local verbosity="$BL64_K8S_SET_VERBOSE_NONE"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_parameter 'kubeconfig' &&
-    bl64_check_file "$kubeconfig" &&
     bl64_check_module 'BL64_K8S_MODULE' ||
     return $?
+  shift
+  bl64_check_parameters_none "$#" "$_BL64_K8S_TXT_ERROR_MISSING_COMMAND" ||
+    return $?
+
+  if [[ "$kubeconfig" == "$BL64_VAR_DEFAULT" ]]; then
+    kubeconfig=''
+  else
+    bl64_check_file "$kubeconfig" "$_BL64_K8S_TXT_ERROR_INVALID_KUBECONF" ||
+      return $?
+    kubeconfig="--kubeconfig=${kubeconfig}"
+  fi
 
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_VERBOSE_NORMAL"
   bl64_dbg_lib_command_enabled && verbosity="$BL64_K8S_SET_VERBOSE_TRACE"
 
   bl64_k8s_blank_kubectl
+  bl64_dbg_lib_command_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_K8S_CMD_KUBECTL" \
+    $kubeconfig \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_command_trace_stop
+}
+
+#######################################
+# Command wrapper with trace option for calling kubectl plugins
+#
+# * Tracing is the only possible option to cover plugins as they have their own set of parameters
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $1: full path to the kube/config file for the target cluster. Use BL64_VAR_DEFAULT to leave default
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_k8s_run_kubectl_plugin() {
+  bl64_dbg_lib_show_function "$@"
+  local kubeconfig="${1:-}"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_K8S_MODULE' ||
+    return $?
   shift
+  bl64_check_parameters_none "$#" "$_BL64_K8S_TXT_ERROR_MISSING_COMMAND" ||
+    return $?
+
+  bl64_k8s_blank_kubectl
+  if [[ "$kubeconfig" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_check_file "$kubeconfig" "$_BL64_K8S_TXT_ERROR_INVALID_KUBECONF" ||
+      return $?
+    export KUBECONFIG="$kubeconfig"
+  fi
 
   bl64_dbg_lib_command_trace_start
   # shellcheck disable=SC2086
   "$BL64_K8S_CMD_KUBECTL" \
-    --kubeconfig="$kubeconfig" \
-    $verbosity "$@"
+    "$@"
   bl64_dbg_lib_command_trace_stop
 }
 
