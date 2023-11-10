@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_k8s_run_kubectl_plugin: wrapper for calling kubectl plugins
 - dbg
   - bl64_dbg_lib_show_variables,bl64_dbg_app_show_variables: show shell variable and attributes
+- all
+  - add fedora 39 support
 
 ### Changed
 
