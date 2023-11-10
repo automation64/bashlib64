@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Show shell debugging information
 #######################################
 
-export BL64_DBG_VERSION='2.2.0'
+export BL64_DBG_VERSION='2.3.0'
 
 export BL64_DBG_MODULE="$BL64_VAR_OFF"
 
@@ -42,6 +42,9 @@ export _BL64_DBG_TXT_FUNCTION_START='function tracing started'
 export _BL64_DBG_TXT_FUNCTION_STOP='function tracing stopped'
 export _BL64_DBG_TXT_SHELL_VAR='shell variable'
 export _BL64_DBG_TXT_COMMENTS='dev-comments'
+
+export _BL64_DBG_TXT_LABEL_BASH_RUNTIME='[bash-runtime]'
+export _BL64_DBG_TXT_LABEL_BASH_VARIABLE='[bash-variable]'
 
 export _BL64_DBG_TXT_BASH='Bash / Interpreter path'
 export _BL64_DBG_TXT_BASHOPTS='Bash / ShOpt Options'
