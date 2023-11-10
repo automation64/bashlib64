@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_dbg_lib_show_variables,bl64_dbg_app_show_variables: show shell variable and attributes
 - all
   - add fedora 39 support
+  - add ubuntu 23.10 support
 
 ### Changed
 
