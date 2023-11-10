@@ -77,7 +77,7 @@ function _bl64_pkg_repository_add_yum() {
     bl64_msg_show_warning "${_BL64_PKG_TXT_REPOSITORY_EXISTING} (${definition})" &&
     return 0
 
-  bl64_dbg_lib_show_info "create YUM repository definition (${definition})"
+  bl64_msg_show_lib_subtask "${_BL64_PKG_TXT_REPOSITORY_ADD_YUM} (${definition})"
   if [[ "$gpgkey" != "$BL64_VAR_NONE" ]]; then
     printf '[%s]\n
 name=%s
@@ -125,7 +125,7 @@ function _bl64_pkg_repository_add_apt() {
     bl64_msg_show_warning "${_BL64_PKG_TXT_REPOSITORY_EXISTING} (${definition})" &&
     return 0
 
-  bl64_dbg_lib_show_info "create APT repository definition (${definition})"
+  bl64_msg_show_lib_subtask "${_BL64_PKG_TXT_REPOSITORY_ADD_APT} (${definition})"
   if [[ "$gpgkey" != "$BL64_VAR_NONE" ]]; then
     gpgkey_file="${BL64_PKG_PATH_GPG_KEYRINGS}/${name}.${BL64_PKG_DEF_SUFIX_GPG_FILE}"
     printf 'deb [signed-by=%s] %s %s %s\n' \
@@ -135,7 +135,7 @@ function _bl64_pkg_repository_add_apt() {
       "$component" \
       >"$definition" ||
       return $?
-    bl64_dbg_lib_show_info "install GPG key (${gpgkey})"
+    bl64_msg_show_lib_subtask "${_BL64_PKG_TXT_REPOSITORY_ADD_KEY} (${gpgkey})"
     bl64_rxtx_web_get_file "$gpgkey" "$gpgkey_file" "$BL64_VAR_ON" "$file_mode"
   else
     printf 'deb %s %s %s\n' \
