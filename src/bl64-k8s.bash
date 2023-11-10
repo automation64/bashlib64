@@ -370,7 +370,7 @@ function bl64_k8s_resource_get() {
 # * Trust no one. Ignore inherited config and use explicit
 #
 # Arguments:
-#   $1: full path to the kube/config file for the target cluster
+#   $1: full path to the kube/config file for the target cluster. Use BL64_VAR_DEFAULT to leave default
 #   $@: arguments are passed as-is to the command
 # Outputs:
 #   STDOUT: command output
@@ -385,22 +385,71 @@ function bl64_k8s_run_kubectl() {
   local verbosity="$BL64_K8S_SET_VERBOSE_NONE"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_parameter 'kubeconfig' &&
-    bl64_check_file "$kubeconfig" &&
     bl64_check_module 'BL64_K8S_MODULE' ||
     return $?
+  shift
+  bl64_check_parameters_none "$#" "$_BL64_K8S_TXT_ERROR_MISSING_COMMAND" ||
+    return $?
+
+  if [[ "$kubeconfig" == "$BL64_VAR_DEFAULT" ]]; then
+    kubeconfig=''
+  else
+    bl64_check_file "$kubeconfig" "$_BL64_K8S_TXT_ERROR_INVALID_KUBECONF" ||
+      return $?
+    kubeconfig="--kubeconfig=${kubeconfig}"
+  fi
 
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_VERBOSE_NORMAL"
   bl64_dbg_lib_command_enabled && verbosity="$BL64_K8S_SET_VERBOSE_TRACE"
 
   bl64_k8s_blank_kubectl
+  bl64_dbg_lib_command_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_K8S_CMD_KUBECTL" \
+    $kubeconfig \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_command_trace_stop
+}
+
+#######################################
+# Command wrapper with trace option for calling kubectl plugins
+#
+# * Tracing is the only possible option to cover plugins as they have their own set of parameters
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $1: full path to the kube/config file for the target cluster. Use BL64_VAR_DEFAULT to leave default
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_k8s_run_kubectl_plugin() {
+  bl64_dbg_lib_show_function "$@"
+  local kubeconfig="${1:-}"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_K8S_MODULE' ||
+    return $?
   shift
+  bl64_check_parameters_none "$#" "$_BL64_K8S_TXT_ERROR_MISSING_COMMAND" ||
+    return $?
+
+  bl64_k8s_blank_kubectl
+  if [[ "$kubeconfig" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_check_file "$kubeconfig" "$_BL64_K8S_TXT_ERROR_INVALID_KUBECONF" ||
+      return $?
+    export KUBECONFIG="$kubeconfig"
+  fi
 
   bl64_dbg_lib_command_trace_start
   # shellcheck disable=SC2086
   "$BL64_K8S_CMD_KUBECTL" \
-    --kubeconfig="$kubeconfig" \
-    $verbosity "$@"
+    "$@"
   bl64_dbg_lib_command_trace_stop
 }
 
