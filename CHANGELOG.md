@@ -5,7 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [17.1.1]
+## [17.2.0]
+
+### Changed
+
+- arc
+  - bl64_arc_run_tar,bl64_arc_run_zip: increased verbosity
+- rxtx
+  - bl64_rxtx_run_curl,bl64_rxtx_web_get_file,bl64_rxtx_git_get_dir: increased verbosity
+
+### Fixed
+
+- fs
+  - bl64_fs_create_symlink: typo in override variable
+
+## [17.1.0]
 
 ### Added
 
@@ -23,11 +37,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_k8s_run_kubectl: allow using default kubeconf
 - check
   - bl64_check_parameters_none: allow using optional error message
-
-### Fixed
-
-- fs
-  - bl64_fs_create_symlink: typo in override variable
 
 ## [17.0.0]
 
@@ -503,7 +512,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
-[17.1.1]: https://github.com/automation64/bashlib64/compare/17.0.0...17.1.1
+[17.2.0]: https://github.com/automation64/bashlib64/compare/17.1.0...17.2.0
+[17.1.0]: https://github.com/automation64/bashlib64/compare/17.0.0...17.1.0
 [17.0.0]: https://github.com/automation64/bashlib64/compare/16.1.0...17.0.0
 [16.1.0]: https://github.com/automation64/bashlib64/compare/16.0.0...16.1.0
 [16.0.0]: https://github.com/automation64/bashlib64/compare/15.0.0...16.0.0
