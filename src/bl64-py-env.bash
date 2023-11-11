@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #######################################
 
-export BL64_PY_VERSION='1.14.0'
+export BL64_PY_VERSION='1.15.0'
 
 # Optional module. Not enabled by default
 export BL64_PY_MODULE="$BL64_VAR_OFF"
@@ -16,6 +16,7 @@ export BL64_PY_CMD_PYTHON38="$BL64_VAR_UNAVAILABLE"
 export BL64_PY_CMD_PYTHON39="$BL64_VAR_UNAVAILABLE"
 export BL64_PY_CMD_PYTHON310="$BL64_VAR_UNAVAILABLE"
 export BL64_PY_CMD_PYTHON311="$BL64_VAR_UNAVAILABLE"
+export BL64_PY_CMD_PYTHON312="$BL64_VAR_UNAVAILABLE"
 
 # Full path to the python venv activated by bl64_py_setup
 export BL64_PY_VENV_PATH=''

@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [17.1.0]
+
+### Added
+
+- k8s
+  - bl64_k8s_run_kubectl_plugin: wrapper for calling kubectl plugins
+- dbg
+  - bl64_dbg_lib_show_variables,bl64_dbg_app_show_variables: show shell variable and attributes
+- all
+  - add fedora 39 support
+  - add ubuntu 23.10 support
+
+### Changed
+
+- k8s
+  - bl64_k8s_run_kubectl: allow using default kubeconf
+- check
+  - bl64_check_parameters_none: allow using optional error message
+
 ## [17.0.0]
 
 ### Added
@@ -479,6 +498,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[17.1.0]: https://github.com/automation64/bashlib64/compare/17.0.0...17.1.0
 [17.0.0]: https://github.com/automation64/bashlib64/compare/16.1.0...17.0.0
 [16.1.0]: https://github.com/automation64/bashlib64/compare/16.0.0...16.1.0
 [16.0.0]: https://github.com/automation64/bashlib64/compare/15.0.0...16.0.0

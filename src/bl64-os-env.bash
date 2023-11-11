@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #######################################
 
-export BL64_OS_VERSION='4.0.0'
+export BL64_OS_VERSION='4.1.0'
 
 export BL64_OS_MODULE="$BL64_VAR_OFF"
 

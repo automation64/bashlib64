@@ -607,6 +607,7 @@ function bl64_check_alert_module_setup() {
 #
 # Arguments:
 #   $1: must be $# to capture number of parameters from the calling function
+#   $2: error message
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
@@ -617,11 +618,12 @@ function bl64_check_alert_module_setup() {
 function bl64_check_parameters_none() {
   bl64_dbg_lib_show_function "$@"
   local count="$1"
+  local message="${2:-${_BL64_CHECK_TXT_NOARGS}}"
 
   bl64_check_parameter 'count' || return $?
 
   if [[ "$count" == '0' ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_NOARGS} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
+    bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_MISSING
   else
     return 0

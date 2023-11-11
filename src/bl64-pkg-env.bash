@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage native OS packages
 #######################################
 
-export BL64_PKG_VERSION='4.2.0'
+export BL64_PKG_VERSION='4.3.0'
 
 export BL64_PKG_MODULE="$BL64_VAR_OFF"
 
@@ -53,3 +53,6 @@ export _BL64_PKG_TXT_PREPARE='initialize package manager'
 export _BL64_PKG_TXT_REPOSITORY_REFRESH='refresh package repository content'
 export _BL64_PKG_TXT_REPOSITORY_ADD='add remote package repository'
 export _BL64_PKG_TXT_REPOSITORY_EXISTING='requested repository is already present. Continue using existing one.'
+export _BL64_PKG_TXT_REPOSITORY_ADD_YUM='create YUM repository definition'
+export _BL64_PKG_TXT_REPOSITORY_ADD_APT='create APT repository definition'
+export _BL64_PKG_TXT_REPOSITORY_ADD_KEY='install GPG key'

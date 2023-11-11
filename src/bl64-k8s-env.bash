@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with Kubernetes
 #######################################
 
-export BL64_K8S_VERSION='2.0.3'
+export BL64_K8S_VERSION='2.1.0'
 
 # Optional module. Not enabled by default
 export BL64_K8S_MODULE="$BL64_VAR_OFF"
@@ -39,3 +39,5 @@ export _BL64_K8S_TXT_CREATE_SECRET='copy secret to destination'
 export _BL64_K8S_TXT_RESOURCE_UPDATE='create or update resource definition'
 export _BL64_K8S_TXT_RESOURCE_EXISTING='the resource is already created. No further actions are needed'
 export _BL64_K8S_TXT_ERROR_KUBECTL_VERSION='unable to determine kubectl version'
+export _BL64_K8S_TXT_ERROR_INVALID_KUBECONF='kubectl config file not found'
+export _BL64_K8S_TXT_ERROR_MISSING_COMMAND='kubectl command not provided'
