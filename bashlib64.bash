@@ -90,7 +90,7 @@ TERM="${TERM:-vt100}"
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='17.1.0'
+export BL64_VERSION='17.1.1'
 
 #
 # Imported shell standard variables
@@ -480,7 +480,7 @@ export _BL64_DBG_TXT_WRONG_LEVEL='invalid debugging level. Must be one of: '
 # BashLib64 / Module / Globals / Manage local filesystem
 #######################################
 
-export BL64_FS_VERSION='4.6.0'
+export BL64_FS_VERSION='4.6.1'
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
 
@@ -4694,7 +4694,7 @@ function bl64_fs_create_symlink() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-}"
   local destination="${2:-}"
-  local overwrite="${3:$BL64_VAR_OFF}"
+  local overwrite="${3:-$BL64_VAR_OFF}"
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
@@ -4702,11 +4702,11 @@ function bl64_fs_create_symlink() {
     return $?
 
   if [[ -e "$destination" ]]; then
-    if [[ "$overwrite" == "${3:$BL64_VAR_ON}" ]]; then
+    if [[ "$overwrite" == "$BL64_VAR_ON" ]]; then
       bl64_fs_rm_file "$destination" ||
         return $?
     else
-      bl64_msg_show_warning "(${_BL64_FS_TXT_SYMLINK_EXISTING})"
+      bl64_msg_show_warning "${_BL64_FS_TXT_SYMLINK_EXISTING} (${destination})"
       return 0
     fi
   fi
