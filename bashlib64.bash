@@ -90,7 +90,7 @@ TERM="${TERM:-vt100}"
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='17.1.0'
+export BL64_VERSION='17.2.0'
 
 #
 # Imported shell standard variables
@@ -480,7 +480,7 @@ export _BL64_DBG_TXT_WRONG_LEVEL='invalid debugging level. Must be one of: '
 # BashLib64 / Module / Globals / Manage local filesystem
 #######################################
 
-export BL64_FS_VERSION='4.6.0'
+export BL64_FS_VERSION='4.6.1'
 
 export BL64_FS_MODULE="$BL64_VAR_OFF"
 
@@ -888,7 +888,7 @@ export _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
 # BashLib64 / Module / Globals / Transfer and Receive data over the network
 #######################################
 
-export BL64_RXTX_VERSION='1.19.0'
+export BL64_RXTX_VERSION='1.20.0'
 
 export BL64_RXTX_MODULE="$BL64_VAR_OFF"
 
@@ -922,7 +922,8 @@ export _BL64_RXTX_TXT_MISSING_COMMAND='no web transfer command was found on the 
 export _BL64_RXTX_TXT_EXISTING_DESTINATION='destination path is not empty. No action taken.'
 export _BL64_RXTX_TXT_CREATION_PROBLEM='unable to create temporary git repo'
 export _BL64_RXTX_TXT_DOWNLOAD_FILE='download file'
-
+export _BL64_RXTX_TXT_ERROR_DOWNLOAD_FILE='file download failed'
+export _BL64_RXTX_TXT_ERROR_DOWNLOAD_DIR='directory download failed'
 
 #######################################
 # BashLib64 / Module / Globals / Manage date-time data
@@ -1199,7 +1200,7 @@ export _BL64_PY_TXT_VENV_CREATE='create python virtual environment'
 # BashLib64 / Module / Globals / Manage archive files
 #######################################
 
-export BL64_ARC_VERSION='2.0.2'
+export BL64_ARC_VERSION='2.1.0'
 
 export BL64_ARC_MODULE="$BL64_VAR_OFF"
 
@@ -4694,7 +4695,7 @@ function bl64_fs_create_symlink() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-}"
   local destination="${2:-}"
-  local overwrite="${3:$BL64_VAR_OFF}"
+  local overwrite="${3:-$BL64_VAR_OFF}"
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
@@ -4702,11 +4703,11 @@ function bl64_fs_create_symlink() {
     return $?
 
   if [[ -e "$destination" ]]; then
-    if [[ "$overwrite" == "${3:$BL64_VAR_ON}" ]]; then
+    if [[ "$overwrite" == "$BL64_VAR_ON" ]]; then
       bl64_fs_rm_file "$destination" ||
         return $?
     else
-      bl64_msg_show_warning "(${_BL64_FS_TXT_SYMLINK_EXISTING})"
+      bl64_msg_show_warning "${_BL64_FS_TXT_SYMLINK_EXISTING} (${destination})"
       return 0
     fi
   fi
@@ -6994,6 +6995,7 @@ function bl64_rxtx_web_get_file() {
     bl64_msg_show_error "$_BL64_RXTX_TXT_MISSING_COMMAND (wget or curl)" &&
       return $BL64_LIB_ERROR_APP_MISSING
   fi
+  (( status != 0 )) && bl64_msg_show_error "$_BL64_RXTX_TXT_ERROR_DOWNLOAD_FILE"
 
   bl64_dbg_lib_show_comments 'Determine if asked to set mode'
   if [[ "$status" == '0' && "$mode" != "$BL64_VAR_DEFAULT" ]]; then
@@ -7047,27 +7049,23 @@ function bl64_rxtx_git_get_dir() {
 
   # shellcheck disable=SC2086
   bl64_check_overwrite_skip "$destination" "$replace" && return $?
-
-  bl64_dbg_lib_show_comments 'Asked to replace, backup first'
   bl64_fs_safeguard "$destination" || return $?
 
-  bl64_dbg_lib_show_comments 'Detect what type of path is requested'
   if [[ "$source_path" == '.' || "$source_path" == './' ]]; then
     _bl64_rxtx_git_get_dir_root "$source_url" "$destination" "$branch"
   else
     _bl64_rxtx_git_get_dir_sub "$source_url" "$source_path" "$destination" "$branch"
   fi
   status=$?
+  (( status != 0 )) && bl64_msg_show_error "$_BL64_RXTX_TXT_ERROR_DOWNLOAD_DIR"
 
-  bl64_dbg_lib_show_comments 'Remove GIT repo metadata'
-  if [[ -d "${destination}/.git" ]]; then
+  if [[ "$status" == '0' && -d "${destination}/.git" ]]; then
     bl64_dbg_lib_show_info "remove git metadata (${destination}/.git)"
     # shellcheck disable=SC2164
     cd "$destination"
     bl64_fs_rm_full '.git' >/dev/null
   fi
 
-  bl64_dbg_lib_show_comments 'Check if restore is needed'
   bl64_fs_restore "$destination" "$status" || return $?
   return $status
 }
@@ -7094,6 +7092,7 @@ function bl64_rxtx_run_curl() {
     bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
 
+  bl64_msg_lib_verbose_enabled && debug=''
   bl64_dbg_lib_command_enabled && debug="$BL64_RXTX_SET_CURL_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -7227,7 +7226,6 @@ function bl64_rxtx_github_get_asset() {
   local destination="$5"
   local replace="${6:-${BL64_VAR_OFF}}"
   local mode="${7:-${BL64_VAR_DEFAULT}}"
-  local -i status=0
 
   bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_parameter 'repo_owner' &&
@@ -10716,8 +10714,7 @@ function bl64_arc_run_unzip() {
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
-  bl64_msg_lib_verbose_enabled && verbosity='-q'
-  bl64_dbg_lib_command_enabled && verbosity=' '
+  bl64_msg_lib_verbose_enabled && verbosity=' '
 
   bl64_arc_blank_unzip
 
@@ -10772,13 +10769,13 @@ function bl64_arc_run_tar() {
     bl64_check_command "$BL64_ARC_CMD_TAR" ||
     return $?
 
-  bl64_dbg_lib_command_enabled && debug="$BL64_ARC_SET_TAR_VERBOSE"
+  bl64_msg_lib_verbose_enabled && debug="$BL64_ARC_SET_TAR_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ARC_CMD_TAR" \
-    $debug \
-    "$@"
+    "$@" \
+    $debug
   bl64_dbg_lib_trace_stop
 }
 

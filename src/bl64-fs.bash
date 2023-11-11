@@ -1236,7 +1236,7 @@ function bl64_fs_create_symlink() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-}"
   local destination="${2:-}"
-  local overwrite="${3:$BL64_VAR_OFF}"
+  local overwrite="${3:-$BL64_VAR_OFF}"
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
@@ -1244,11 +1244,11 @@ function bl64_fs_create_symlink() {
     return $?
 
   if [[ -e "$destination" ]]; then
-    if [[ "$overwrite" == "${3:$BL64_VAR_ON}" ]]; then
+    if [[ "$overwrite" == "$BL64_VAR_ON" ]]; then
       bl64_fs_rm_file "$destination" ||
         return $?
     else
-      bl64_msg_show_warning "(${_BL64_FS_TXT_SYMLINK_EXISTING})"
+      bl64_msg_show_warning "${_BL64_FS_TXT_SYMLINK_EXISTING} (${destination})"
       return 0
     fi
   fi
