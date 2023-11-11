@@ -73,7 +73,7 @@ function bl64_arc_blank_unzip() {
 function bl64_arc_run_tar() {
   bl64_dbg_lib_show_function "$@"
   bl64_check_parameters_none "$#" || return $?
-  local debug=' '
+  local debug=''
 
   bl64_check_module 'BL64_ARC_MODULE' &&
     bl64_check_command "$BL64_ARC_CMD_TAR" ||
@@ -84,8 +84,8 @@ function bl64_arc_run_tar() {
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ARC_CMD_TAR" \
-    $debug \
-    "$@"
+    "$@" \
+    $debug
   bl64_dbg_lib_trace_stop
 }
 
