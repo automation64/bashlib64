@@ -33,5 +33,4 @@ export DEV_TEST_VALUE_GIT_RELEASE_OWNER='cli'
 export DEV_TEST_VALUE_GIT_ASSET_FILE='bashlib64-modular.tgz'
 export DEV_TEST_VALUE_GIT_CLONE_URL="https://github.com/${DEV_TEST_VALUE_GIT_OWNER}/bashlib64.git"
 export DEV_TEST_VALUE_GIT_RAW_URL="https://raw.githubusercontent.com/${DEV_TEST_VALUE_GIT_OWNER}/bashlib64/main/bashlib64.bash"
-export DEV_TEST_VALUE_API_PUBLIC_URL='https://postman-echo.com'
-
+export DEV_TEST_VALUE_API_PUBLIC_URL='https://httpbin.org'
