@@ -55,6 +55,7 @@ function bl64_rxtx_web_get_file() {
     bl64_msg_show_error "$_BL64_RXTX_TXT_MISSING_COMMAND (wget or curl)" &&
       return $BL64_LIB_ERROR_APP_MISSING
   fi
+  (( status != 0 )) && bl64_msg_show_error "$_BL64_RXTX_TXT_ERROR_DOWNLOAD_FILE"
 
   bl64_dbg_lib_show_comments 'Determine if asked to set mode'
   if [[ "$status" == '0' && "$mode" != "$BL64_VAR_DEFAULT" ]]; then
@@ -108,27 +109,23 @@ function bl64_rxtx_git_get_dir() {
 
   # shellcheck disable=SC2086
   bl64_check_overwrite_skip "$destination" "$replace" && return $?
-
-  bl64_dbg_lib_show_comments 'Asked to replace, backup first'
   bl64_fs_safeguard "$destination" || return $?
 
-  bl64_dbg_lib_show_comments 'Detect what type of path is requested'
   if [[ "$source_path" == '.' || "$source_path" == './' ]]; then
     _bl64_rxtx_git_get_dir_root "$source_url" "$destination" "$branch"
   else
     _bl64_rxtx_git_get_dir_sub "$source_url" "$source_path" "$destination" "$branch"
   fi
   status=$?
+  (( status != 0 )) && bl64_msg_show_error "$_BL64_RXTX_TXT_ERROR_DOWNLOAD_DIR"
 
-  bl64_dbg_lib_show_comments 'Remove GIT repo metadata'
-  if [[ -d "${destination}/.git" ]]; then
+  if [[ "$status" == '0' && -d "${destination}/.git" ]]; then
     bl64_dbg_lib_show_info "remove git metadata (${destination}/.git)"
     # shellcheck disable=SC2164
     cd "$destination"
     bl64_fs_rm_full '.git' >/dev/null
   fi
 
-  bl64_dbg_lib_show_comments 'Check if restore is needed'
   bl64_fs_restore "$destination" "$status" || return $?
   return $status
 }
@@ -155,6 +152,7 @@ function bl64_rxtx_run_curl() {
     bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
 
+  bl64_msg_lib_verbose_enabled && debug=''
   bl64_dbg_lib_command_enabled && debug="$BL64_RXTX_SET_CURL_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -288,7 +286,6 @@ function bl64_rxtx_github_get_asset() {
   local destination="$5"
   local replace="${6:-${BL64_VAR_OFF}}"
   local mode="${7:-${BL64_VAR_DEFAULT}}"
-  local -i status=0
 
   bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_parameter 'repo_owner' &&
