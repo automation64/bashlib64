@@ -633,6 +633,8 @@ function bl64_check_parameters_none() {
 #######################################
 # Check that the module is loaded and has been setup
 #
+# * Use in functions that depends on module resources being present before execution
+#
 # Arguments:
 #   $1: module id (eg: BL64_XXXX_MODULE)
 # Outputs:
@@ -662,6 +664,10 @@ function bl64_check_module() {
 
 #######################################
 # Check that the module is imported
+#
+# * Used for the modular version of bashlib64 to ensure dependant modules are loaded (sourced)
+# * A module is considered imported if the associated shell environment variable BL64_XXX_MODULE is defined
+# * This check will not verify if the module was also initialized. Use the function 'bl64_check_module' instead
 #
 # Arguments:
 #   $1: module id (eg: BL64_XXXX_MODULE)
