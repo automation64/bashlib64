@@ -77,9 +77,7 @@ function bl64_txt_search_line() {
 #######################################
 # OS command wrapper: awk
 #
-# * Detects OS provided awk and selects the best match
-# * The selected awk app is configured for POSIX compatibility and traditional regexp
-# * If gawk is required use the BL64_TXT_CMD_GAWK variable instead of this function
+# * Run AWS with POSIX compatibility and traditional regexp
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -93,10 +91,9 @@ function bl64_txt_search_line() {
 function bl64_txt_run_awk() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" ||
-    return $?
-
-  bl64_check_command "$BL64_TXT_CMD_AWK_POSIX" ||
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_command "$BL64_TXT_CMD_AWK_POSIX" ||
     return $?
 
   bl64_dbg_lib_trace_start

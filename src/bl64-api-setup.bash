@@ -25,6 +25,7 @@ function bl64_api_setup() {
   bl64_check_module_imported 'BL64_CHECK_MODULE' &&
     bl64_check_module_imported 'BL64_DBG_MODULE' &&
     bl64_check_module_imported 'BL64_TXT_MODULE' &&
+    bl64_check_module_imported 'BL64_RXTX_MODULE' &&
     BL64_API_MODULE="$BL64_VAR_ON"
 
   bl64_check_alert_module_setup 'api'

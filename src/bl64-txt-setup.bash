@@ -73,7 +73,6 @@ function _bl64_txt_set_command() {
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_TXT_CMD_AWK='/usr/bin/awk'
-    BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
     BL64_TXT_CMD_BASE64='/usr/bin/base64'
     BL64_TXT_CMD_CUT='/usr/bin/cut'
     BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
@@ -83,10 +82,11 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_SORT='/usr/bin/sort'
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
+
+    BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
     ;;
   ${BL64_OS_SLES}-*)
     BL64_TXT_CMD_AWK='/usr/bin/gawk'
-    BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
     BL64_TXT_CMD_BASE64='/usr/bin/base64'
     BL64_TXT_CMD_CUT='/usr/bin/cut'
     BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
@@ -96,6 +96,8 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_SORT='/usr/bin/sort'
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
+
+    BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_TXT_CMD_AWK='/usr/bin/awk'
@@ -111,20 +113,23 @@ function _bl64_txt_set_command() {
 
     if [[ -x '/usr/bin/gawk' ]]; then
       BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
+    else
+      bl64_dbg_show_comment 'no GAWK present. AWK bundled with busybox is not posix compliant'
     fi
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_TXT_CMD_AWK='/usr/bin/awk'
-    BL64_TXT_CMD_AWK_POSIX='/usr/bin/awk'
     BL64_TXT_CMD_BASE64='/usr/bin/base64'
     BL64_TXT_CMD_CUT='/usr/bin/cut'
     BL64_TXT_CMD_ENVSUBST='/opt/homebrew/bin/envsubst'
-    BL64_TXT_CMD_GAWK="$BL64_VAR_INCOMPATIBLE"
+    BL64_TXT_CMD_GAWK="$BL64_VAR_UNAVAILABLE"
     BL64_TXT_CMD_GREP='/usr/bin/grep'
     BL64_TXT_CMD_SED='/usr/bin/sed'
     BL64_TXT_CMD_SORT='/usr/bin/sort'
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
+
+    BL64_TXT_CMD_AWK_POSIX='/usr/bin/awk'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
