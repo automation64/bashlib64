@@ -4,7 +4,7 @@
 # Version: 1.5.0
 #######################################
 
-export BL64_XSV_VERSION='1.5.0'
+export BL64_XSV_VERSION='1.6.0'
 
 export BL64_XSV_MODULE="$BL64_VAR_OFF"
 

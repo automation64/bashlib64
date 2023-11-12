@@ -22,7 +22,14 @@ function bl64_vcs_setup() {
     return 21
   bl64_dbg_lib_show_function
 
-  _bl64_vcs_set_command &&
+  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+    bl64_check_module_imported 'BL64_API_MODULE' &&
+    bl64_check_module_imported 'BL64_FS_MODULE' &&
+    bl64_check_module_imported 'BL64_TXT_MODULE' &&
+    bl64_check_module_imported 'BL64_OS_MODULE' &&
+    _bl64_vcs_set_command &&
     _bl64_vcs_set_options &&
     BL64_VCS_MODULE="$BL64_VAR_ON"
 

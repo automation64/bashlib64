@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage OS identity and access service
 #######################################
 
-export BL64_IAM_VERSION='3.0.1'
+export BL64_IAM_VERSION='3.1.0'
 
 export BL64_IAM_MODULE="$BL64_VAR_OFF"
 
