@@ -20,7 +20,7 @@ function bl64_check_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function
 
   bl64_check_module_imported 'BL64_DBG_MODULE' &&
     bl64_check_module_imported 'BL64_MSG_MODULE' &&

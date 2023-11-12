@@ -20,7 +20,7 @@
 #   $BL64_LIB_ERROR_FILE_NOT_EXECUTE
 #######################################
 function bl64_check_command() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_COMMAND_NOT_FOUND}}"
 
@@ -69,7 +69,7 @@ function bl64_check_command() {
 #   $BL64_LIB_ERROR_FILE_NOT_READ
 #######################################
 function bl64_check_file() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_FILE_NOT_FOUND}}"
 
@@ -108,7 +108,7 @@ function bl64_check_file() {
 #   $BL64_LIB_ERROR_DIRECTORY_NOT_READ
 #######################################
 function bl64_check_directory() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_DIRECTORY_NOT_FOUND}}"
 
@@ -148,7 +148,7 @@ function bl64_check_directory() {
 #   $BL64_LIB_ERROR_PATH_NOT_FOUND
 #######################################
 function bl64_check_path() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_PATH_NOT_FOUND}}"
 
@@ -182,7 +182,7 @@ function bl64_check_path() {
 #   $BL64_LIB_ERROR_PARAMETER_EMPTY
 #######################################
 function bl64_check_parameter() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local parameter_name="${1:-}"
   local description="${2:-parameter: ${parameter_name}}"
 
@@ -226,7 +226,7 @@ function bl64_check_parameter() {
 #   $BL64_LIB_ERROR_EXPORT_SET
 #######################################
 function bl64_check_export() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local export_name="${1:-}"
   local description="${2:-export: $export_name}"
 
@@ -264,7 +264,7 @@ function bl64_check_export() {
 #   $BL64_LIB_ERROR_PATH_NOT_RELATIVE
 #######################################
 function bl64_check_path_relative() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_PATH_NOT_RELATIVE}}"
 
@@ -294,7 +294,7 @@ function bl64_check_path_relative() {
 #   $BL64_LIB_ERROR_PATH_PRESENT
 #######################################
 function bl64_check_path_not_present() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_PATH_PRESENT}}"
 
@@ -325,7 +325,7 @@ function bl64_check_path_not_present() {
 #   $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
 #######################################
 function bl64_check_path_absolute() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_PATH_NOT_ABSOLUTE}}"
 
@@ -351,7 +351,7 @@ function bl64_check_path_absolute() {
 #   $BL64_LIB_ERROR_PRIVILEGE_IS_ROOT
 #######################################
 function bl64_check_privilege_root() {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function
   if [[ "$EUID" != '0' ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT} (current id: $EUID ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
     # shellcheck disable=SC2086
@@ -373,7 +373,7 @@ function bl64_check_privilege_root() {
 #   $BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT
 #######################################
 function bl64_check_privilege_not_root() {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function
 
   if [[ "$EUID" == '0' ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PRIVILEGE_IS_ROOT} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
@@ -402,7 +402,7 @@ function bl64_check_privilege_not_root() {
 #   $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
 #######################################
 function bl64_check_overwrite() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local overwrite="${2:-$BL64_VAR_OFF}"
   local message="${3:-$_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED}"
@@ -438,7 +438,7 @@ function bl64_check_overwrite() {
 #   1: no previous file/dir present or overwrite is requested
 #######################################
 function bl64_check_overwrite_skip() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local overwrite="${2:-$BL64_VAR_OFF}"
   local message="${3:-}"
@@ -473,7 +473,7 @@ function bl64_check_overwrite_skip() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_check_alert_parameter_invalid() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local parameter="${1:-${BL64_VAR_DEFAULT}}"
   local message="${2:-${_BL64_CHECK_TXT_PARAMETER_INVALID}}"
 
@@ -494,7 +494,7 @@ function bl64_check_alert_parameter_invalid() {
 #   BL64_LIB_ERROR_OS_INCOMPATIBLE
 #######################################
 function bl64_check_alert_unsupported() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local extra="${1:-}"
 
   bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }OS: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
@@ -517,7 +517,7 @@ function bl64_check_alert_unsupported() {
 #   >0: command is incompatible and compatibility mode is disabled
 #######################################
 function bl64_check_compatibility_mode() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local extra="${1:-}"
 
   if bl64_lib_mode_compability_is_enabled; then
@@ -543,7 +543,7 @@ function bl64_check_compatibility_mode() {
 #   BL64_LIB_ERROR_APP_MISSING
 #######################################
 function bl64_check_alert_resource_not_found() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local resource="${1:-}"
 
   bl64_msg_show_error "${_BL64_CHECK_TXT_RESOURCE_NOT_FOUND} (${resource:+resource: ${resource} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE})"
@@ -565,7 +565,7 @@ function bl64_check_alert_resource_not_found() {
 #######################################
 # shellcheck disable=SC2119,SC2120
 function bl64_check_alert_undefined() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local target="${1:-}"
 
   bl64_msg_show_error "${_BL64_CHECK_TXT_UNDEFINED} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}${target:+ ${BL64_MSG_COSMETIC_PIPE} command: ${target}})"
@@ -589,7 +589,7 @@ function bl64_check_alert_undefined() {
 #######################################
 function bl64_check_alert_module_setup() {
   local -i last_status=$? # must be first line to catch $?
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local module="${1:-}"
 
   bl64_check_parameter 'module' || return $?
@@ -616,7 +616,7 @@ function bl64_check_alert_module_setup() {
 #   BL64_LIB_ERROR_TASK_UNDEFINED
 #######################################
 function bl64_check_parameters_none() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local count="$1"
   local message="${2:-${_BL64_CHECK_TXT_NOARGS}}"
 
@@ -643,7 +643,7 @@ function bl64_check_parameters_none() {
 #   BL64_LIB_ERROR_MODULE_SETUP_MISSING
 #######################################
 function bl64_check_module() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local module="${1:-}"
   local setup_status=''
 
@@ -673,7 +673,7 @@ function bl64_check_module() {
 #   BL64_LIB_ERROR_MODULE_NOT_IMPORTED
 #######################################
 function bl64_check_module_imported() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local module="${1:-}"
   bl64_check_parameter 'module' || return $?
 
@@ -700,7 +700,7 @@ function bl64_check_module_imported() {
 #   $status
 #######################################
 function bl64_check_status() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local status="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_STATUS_ERROR}}"
 
@@ -730,7 +730,7 @@ function bl64_check_status() {
 #   >0: home is not valid
 #######################################
 function bl64_check_home() {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function
 
   bl64_check_export 'HOME' "$_BL64_CHECK_TXT_HOME_MISSING" &&
     bl64_check_directory "$HOME" "$_BL64_CHECK_TXT_HOME_DIR_MISSING"
@@ -754,7 +754,7 @@ function bl64_check_home() {
 #   BL64_LIB_ERROR_FILE_NOT_FOUND
 #######################################
 function bl64_check_command_search_path() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local file="${1:-}"
   local message="${2:-${_BL64_CHECK_TXT_COMMAND_NOT_IN_PATH}}"
   local full_path=''

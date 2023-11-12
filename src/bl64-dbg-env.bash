@@ -38,6 +38,18 @@ export BL64_DBG_TARGET_LIB_CMD='LIB_CMD'
 export BL64_DBG_TARGET_LIB_ALL='LIB'
 export BL64_DBG_TARGET_ALL='ALL'
 
+#
+# Debugging exclussions
+#
+# * Used to excluded non-esential debugging information from general output
+# * Each variable represents a module
+# * Default is to exclude declared modules
+#
+
+export BL64_DBG_EXCLUDE_CHECK="$BL64_VAR_ON"
+export BL64_DBG_EXCLUDE_MSG="$BL64_VAR_ON"
+export BL64_DBG_EXCLUDE_LOG="$BL64_VAR_ON"
+
 export _BL64_DBG_TXT_FUNCTION_START='function tracing started'
 export _BL64_DBG_TXT_FUNCTION_STOP='function tracing stopped'
 export _BL64_DBG_TXT_SHELL_VAR='shell variable'
