@@ -35,7 +35,6 @@ fi
 # Set signal handlers
 # shellcheck disable=SC2064
 if bl64_lib_trap_is_enabled; then
-  bl64_dbg_lib_show_info 'enable traps'
   trap "$BL64_LIB_SIGNAL_HUP" 'SIGHUP'
   trap "$BL64_LIB_SIGNAL_STOP" 'SIGINT'
   trap "$BL64_LIB_SIGNAL_QUIT" 'SIGQUIT'
