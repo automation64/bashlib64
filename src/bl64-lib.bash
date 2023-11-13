@@ -39,3 +39,83 @@ function bl64_lib_flag_is_enabled {
     "$flag" == 'ON' ||
     "$flag" == 'YES' ]]
 }
+
+#######################################
+# Set script ID
+#
+# * Use to change the default BL64_SCRIPT_ID which is BL64_SCRIPT_NAME
+#
+# Arguments:
+#   $1: id value
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0: id changed ok
+#   >0: command error
+#######################################
+# shellcheck disable=SC2120
+function bl64_lib_script_set_id() {
+  local script_id="${1:-}"
+
+  bl64_check_parameter 'script_id' || return $?
+
+  BL64_SCRIPT_ID="$script_id"
+}
+
+#######################################
+# Define current script identity
+#
+# * BL64_SCRIPT_SID: session ID for the running script. Changes on each run
+# * BL64_SCRIPT_PATH: full path to the base directory script
+# * BL64_SCRIPT_NAME: file name of the current script
+# * BL64_SCRIPT_ID: script id (tag)
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0: identity set
+#   >0: failed to set
+#######################################
+function bl64_lib_script_set_identity() {
+  BL64_SCRIPT_SID="${BASHPID}${RANDOM}" &&
+    BL64_SCRIPT_PATH="$(_bl64_lib_script_get_path)" &&
+    BL64_SCRIPT_NAME="$(_bl64_lib_script_get_name)" &&
+    bl64_lib_script_set_id "$BL64_SCRIPT_NAME"
+}
+
+function _bl64_lib_script_get_path() {
+  local -i main=${#BASH_SOURCE[*]}
+  local caller=''
+
+  ((main > 0)) && main=$((main - 1))
+  caller="${BASH_SOURCE[${main}]}"
+
+  unset CDPATH &&
+    [[ -n "$caller" ]] &&
+    cd -- "${caller%/*}" >/dev/null &&
+    pwd -P ||
+    return $?
+}
+
+function _bl64_lib_script_get_name() {
+  local -i main=0
+  local path=''
+  local base=''
+
+  main=${#BASH_SOURCE[*]}
+  ((main > 0)) && main=$((main - 1))
+  path="${BASH_SOURCE[${main}]}"
+
+  if [[ -n "$path" && "$path" != '/' ]]; then
+    base="${path##*/}"
+  fi
+  if [[ -z "$base" || "$base" == */* ]]; then
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
+  else
+    printf '%s' "$base"
+  fi
+}

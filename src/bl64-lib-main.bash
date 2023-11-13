@@ -47,7 +47,7 @@ fi
 # Set default umask
 umask -S 'u=rwx,g=,o=' > /dev/null
 
-bl64_bsh_script_set_identity
+bl64_lib_script_set_identity
 
 # Run as script or sourced library?
 if bl64_lib_mode_command_is_enabled; then
