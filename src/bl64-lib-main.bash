@@ -32,7 +32,7 @@ fi
 [[ -n "$BL64_API_MODULE" ]] && { bl64_api_setup || exit $?; }
 [[ -n "$BL64_VCS_MODULE" ]] && { bl64_vcs_setup || exit $?; }
 
-bl64_dbg_lib_show_comments 'Set signal handlers'
+# Set signal handlers
 # shellcheck disable=SC2064
 if bl64_lib_trap_is_enabled; then
   bl64_dbg_lib_show_info 'enable traps'
@@ -45,16 +45,14 @@ if bl64_lib_trap_is_enabled; then
   trap "$BL64_LIB_SIGNAL_ERR" 'ERR'
 fi
 
-bl64_dbg_lib_show_comments 'Set default umask'
+# Set default umask
 umask -S 'u=rwx,g=,o=' > /dev/null
 
 bl64_bsh_script_set_identity
 
-bl64_dbg_lib_show_comments 'Enable command mode: the library can be used as a stand-alone script to run embeded functions'
+# Run as script or sourced library?
 if bl64_lib_mode_command_is_enabled; then
-  bl64_dbg_lib_show_info 'run bashlib64 in command mode'
   "$@"
 else
-  bl64_dbg_lib_show_info 'run bashlib64 in source mode'
   :
 fi
