@@ -1,5 +1,5 @@
 {
-	"name": "alpine-3",
+	"name": "bash-test-alpine-3",
 	"image": "ghcr.io/automation64/bash-test/alpine-3-bash-test:latest",
 	"features": {},
 	"forwardPorts": [],

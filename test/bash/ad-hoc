@@ -7,11 +7,11 @@
 # Skeleton for ad-hoc testiong.
 #
 
-# bl64_dbg_lib_enable
+# bl64_dbg_all_enable
+bl64_msg_all_enable_verbose
 
 #
 # Test Cases
 #
 # * Keep the source clean, do not commit test cases below this section
 #
-

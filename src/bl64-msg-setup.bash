@@ -20,10 +20,11 @@ function bl64_msg_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function
 
   bl64_check_module_imported 'BL64_DBG_MODULE' &&
     bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_check_module_imported 'BL64_LOG_MODULE' &&
     bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI" &&
     bl64_msg_app_enable_verbose &&
     BL64_MSG_MODULE="$BL64_VAR_ON"
@@ -44,7 +45,7 @@ function bl64_msg_setup() {
 #   >0: unable to set
 #######################################
 function bl64_msg_set_level() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function "$@"
   local level="$1"
 
   bl64_check_parameter 'level' || return $?
@@ -83,7 +84,7 @@ function bl64_msg_set_level() {
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
 function bl64_msg_set_format() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function "$@"
   local format="$1"
 
   bl64_check_parameter 'format' || return $?
@@ -110,7 +111,8 @@ function bl64_msg_set_format() {
     return $?
     ;;
   esac
-  bl64_dbg_lib_show_vars 'BL64_MSG_FORMAT'
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_vars 'BL64_MSG_FORMAT'
+  return 0
 }
 
 #######################################
@@ -126,7 +128,7 @@ function bl64_msg_set_format() {
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
 function bl64_msg_set_theme() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function "$@"
   local theme="$1"
 
   bl64_check_parameter 'theme' || return $?
@@ -144,7 +146,8 @@ function bl64_msg_set_theme() {
     return $?
     ;;
   esac
-  bl64_dbg_lib_show_vars 'BL64_MSG_THEME'
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_vars 'BL64_MSG_THEME'
+  return 0
 }
 
 #######################################
@@ -164,7 +167,7 @@ function bl64_msg_set_theme() {
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
 function bl64_msg_set_output() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function "$@"
   local output="${1:-}"
   local theme="${2:-${BL64_VAR_DEFAULT}}"
 
@@ -185,7 +188,7 @@ function bl64_msg_set_output() {
     return $?
     ;;
   esac
-  bl64_dbg_lib_show_vars 'BL64_MSG_OUTPUT'
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_vars 'BL64_MSG_OUTPUT'
   bl64_msg_set_theme "$theme"
 }
 
@@ -194,27 +197,27 @@ function bl64_msg_set_output() {
 #
 
 function bl64_msg_app_verbose_enabled {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function
   [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
 }
 function bl64_msg_lib_verbose_enabled {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function
   [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
 }
 
 function bl64_msg_all_disable_verbose {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_NONE"
 }
 function bl64_msg_all_enable_verbose {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_ALL"
 }
 function bl64_msg_lib_enable_verbose {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_LIB"
 }
 function bl64_msg_app_enable_verbose {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_APP"
 }

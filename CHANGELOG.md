@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [17.3.0]
+
+### Added
+
+- xsv
+  - bl64_xsv_run_yq, bl64_xsv_run_jq: runners for YQ and JQ
+
+### Changed
+
+- all
+  - updated module dependency check
+  - improved debugging and error messages format
+  - trivial modules (msg,log,check) excluded from debugging messages
+- core
+  - removed dbg and bsh module dependencies from main section
+- bsh
+  - migrated bl64 specific functions to core module. Functions will map to the new ones until removed in next major release
+    - bl64_bsh_script_set_id() -> bl64_lib_script_set_id
+    - bl64_bsh_script_set_identity -> bl64_lib_script_set_identity
+
 ## [17.2.0]
 
 ### Changed
@@ -512,6 +532,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[17.3.0]: https://github.com/automation64/bashlib64/compare/17.2.0...17.3.0
 [17.2.0]: https://github.com/automation64/bashlib64/compare/17.1.0...17.2.0
 [17.1.0]: https://github.com/automation64/bashlib64/compare/17.0.0...17.1.0
 [17.0.0]: https://github.com/automation64/bashlib64/compare/16.1.0...17.0.0

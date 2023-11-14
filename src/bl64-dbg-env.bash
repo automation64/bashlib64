@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Show shell debugging information
 #######################################
 
-export BL64_DBG_VERSION='2.3.0'
+export BL64_DBG_VERSION='2.4.0'
 
 export BL64_DBG_MODULE="$BL64_VAR_OFF"
 
@@ -38,13 +38,29 @@ export BL64_DBG_TARGET_LIB_CMD='LIB_CMD'
 export BL64_DBG_TARGET_LIB_ALL='LIB'
 export BL64_DBG_TARGET_ALL='ALL'
 
+#
+# Debugging exclussions
+#
+# * Used to excluded non-esential debugging information from general output
+# * Each variable represents a module
+# * Default is to exclude declared modules
+#
+
+export BL64_DBG_EXCLUDE_CHECK="$BL64_VAR_ON"
+export BL64_DBG_EXCLUDE_MSG="$BL64_VAR_ON"
+export BL64_DBG_EXCLUDE_LOG="$BL64_VAR_ON"
+
 export _BL64_DBG_TXT_FUNCTION_START='function tracing started'
 export _BL64_DBG_TXT_FUNCTION_STOP='function tracing stopped'
 export _BL64_DBG_TXT_SHELL_VAR='shell variable'
 export _BL64_DBG_TXT_COMMENTS='dev-comments'
 
 export _BL64_DBG_TXT_LABEL_BASH_RUNTIME='[bash-runtime]'
+export _BL64_DBG_TXT_LABEL_BL64_RUNTIME='[bl64-runtime]'
 export _BL64_DBG_TXT_LABEL_BASH_VARIABLE='[bash-variable]'
+export _BL64_DBG_TXT_LABEL_FUNCTION='>>>'
+export _BL64_DBG_TXT_LABEL_INFO='==='
+export _BL64_DBG_TXT_LABEL_TRACE='***'
 
 export _BL64_DBG_TXT_BASH='Bash / Interpreter path'
 export _BL64_DBG_TXT_BASHOPTS='Bash / ShOpt Options'

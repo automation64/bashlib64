@@ -26,7 +26,10 @@ function bl64_os_setup() {
     bl64_msg_show_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
     return $BL64_LIB_ERROR_OS_BASH_VERSION
 
-  _bl64_os_set_distro &&
+  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+    _bl64_os_set_distro &&
     _bl64_os_set_runtime &&
     _bl64_os_set_command &&
     _bl64_os_set_options &&

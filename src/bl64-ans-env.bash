@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with Ansible CLI
 #######################################
 
-export BL64_ANS_VERSION='1.6.0'
+export BL64_ANS_VERSION='1.7.0'
 
 # Optional module. Not enabled by default
 export BL64_ANS_MODULE="$BL64_VAR_OFF"

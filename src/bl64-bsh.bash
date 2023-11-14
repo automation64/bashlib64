@@ -2,6 +2,11 @@
 # BashLib64 / Module / Functions / Interact with Bash shell
 #######################################
 
+# DEPRECATED: to be removed in future releases
+function bl64_bsh_script_set_id() { bl64_lib_script_set_id "$@"; }
+# DEPRECATED: to be removed in future releases
+function bl64_bsh_script_set_identity() { bl64_lib_script_set_identity "$@"; }
+
 #######################################
 # Get current script location
 #
@@ -48,56 +53,6 @@ function bl64_bsh_script_get_name() {
   ((main > 0)) && main=$((main - 1))
 
   bl64_fmt_basename "${BASH_SOURCE[${main}]}"
-}
-
-#######################################
-# Set script ID
-#
-# * Use to change the default BL64_SCRIPT_ID which is BL64_SCRIPT_NAME
-#
-# Arguments:
-#   $1: id value
-# Outputs:
-#   STDOUT: script name
-#   STDERR: Error messages
-# Returns:
-#   0: id
-#   >0: command error
-#######################################
-# shellcheck disable=SC2120
-function bl64_bsh_script_set_id() {
-  bl64_dbg_lib_show_function "$@"
-  local script_id="${1:-}"
-
-  bl64_check_parameter 'script_id' || return $?
-
-  BL64_SCRIPT_ID="$script_id"
-}
-
-#######################################
-# Define current script identity
-#
-# * BL64_SCRIPT_SID: session ID for the running script. Changes on each run
-# * BL64_SCRIPT_PATH: full path to the base directory script
-# * BL64_SCRIPT_NAME: file name of the current script
-# * BL64_SCRIPT_ID: script id (tag)
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: Error messages
-# Returns:
-#   0: identity set
-#   >0: failed to set
-#######################################
-function bl64_bsh_script_set_identity() {
-  bl64_dbg_lib_show_function
-
-  BL64_SCRIPT_SID="${BASHPID}${RANDOM}" &&
-    BL64_SCRIPT_PATH="$(bl64_bsh_script_get_path)" &&
-    BL64_SCRIPT_NAME="$(bl64_bsh_script_get_name)" &&
-    bl64_bsh_script_set_id "$BL64_SCRIPT_NAME"
 }
 
 #######################################
