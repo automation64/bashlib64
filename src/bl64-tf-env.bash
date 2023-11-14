@@ -29,4 +29,4 @@ export BL64_TF_SET_LOG_OFF=''
 export BL64_TF_DEF_PATH_LOCK=''
 export BL64_TF_DEF_PATH_RUNTIME=''
 
-export _BL64_TF_TXT_ERROR_GET_VERSION='failed to get terraform CLI version'
+declare _BL64_TF_TXT_ERROR_GET_VERSION='failed to get terraform CLI version'

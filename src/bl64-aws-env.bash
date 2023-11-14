@@ -30,4 +30,4 @@ export BL64_AWS_SET_FORMAT_STREAM=''
 export BL64_AWS_SET_DEBUG=''
 export BL64_AWS_SET_OUPUT_NO_PAGER=''
 
-export _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token file'
+declare _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token file'

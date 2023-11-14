@@ -22,14 +22,14 @@ export BL64_OS_ALIAS_ID_USER=''
 
 export BL64_OS_SET_LOCALE_ALL=''
 
-export _BL64_OS_TXT_CHECK_OS_MATRIX='Please check the OS compatibility matrix for BashLib64'
-export _BL64_OS_TXT_ERROR_OS_RELEASE='failed to load OS information from /etc/os-release file'
-export _BL64_OS_TXT_INVALID_OS_PATTERN='invalid OS pattern'
-export _BL64_OS_TXT_OS_MATRIX='Compatible-versions'
-export _BL64_OS_TXT_OS_NOT_KNOWN='current OS is not supported'
-export _BL64_OS_TXT_OS_NOT_SUPPORTED='BashLib64 not supported on the current OS'
-export _BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED='current OS version is not supported'
-export _BL64_OS_TXT_TASK_NOT_SUPPORTED='task not supported on the current OS version'
+declare _BL64_OS_TXT_CHECK_OS_MATRIX='Please check the OS compatibility matrix for BashLib64'
+declare _BL64_OS_TXT_ERROR_OS_RELEASE='failed to load OS information from /etc/os-release file'
+declare _BL64_OS_TXT_INVALID_OS_PATTERN='invalid OS pattern'
+declare _BL64_OS_TXT_OS_MATRIX='Compatible-versions'
+declare _BL64_OS_TXT_OS_NOT_KNOWN='current OS is not supported'
+declare _BL64_OS_TXT_OS_NOT_SUPPORTED='BashLib64 not supported on the current OS'
+declare _BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED='current OS version is not supported'
+declare _BL64_OS_TXT_TASK_NOT_SUPPORTED='task not supported on the current OS version'
 
 #
 # OS standard name tags

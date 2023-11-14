@@ -98,7 +98,6 @@ function bl64_xsv_search_records() {
       END {}
     ' \
     "$source"
-
 }
 
 #######################################
