@@ -15,4 +15,4 @@ export BL64_API_METHOD_GET='GET'
 export BL64_API_METHOD_POST='POST'
 export BL64_API_METHOD_PUT='PUT'
 
-declare _BL64_API_TXT_ERROR_API_FAILED='API call failed'
+export _BL64_API_TXT_ERROR_API_FAILED='API call failed'

@@ -8,4 +8,4 @@ export BL64_BSH_MODULE="$BL64_VAR_OFF"
 
 export BL64_BSH_VERSION_BASH=''
 
-declare _BL64_BSH_TXT_UNSUPPORTED='BashLib64 is not supported in the current Bash version'
+export _BL64_BSH_TXT_UNSUPPORTED='BashLib64 is not supported in the current Bash version'

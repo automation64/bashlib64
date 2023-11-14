@@ -25,4 +25,4 @@ export BL64_XSV_FS_SLASH='/'
 # Common search paths for commands
 declare -a _BL64_XSV_SEARCH_PATHS=('/home/linuxbrew/.linuxbrew/bin' '/opt/homebrew/bin' '/usr/local/bin' '/usr/bin')
 
-declare _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
+export _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'

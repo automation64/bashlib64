@@ -23,4 +23,4 @@ export BL64_ANS_SET_VERBOSE=''
 export BL64_ANS_SET_DIFF=''
 export BL64_ANS_SET_DEBUG=''
 
-declare _BL64_ANS_TXT_ERROR_GET_VERSION='failed to get CLI version'
+export _BL64_ANS_TXT_ERROR_GET_VERSION='failed to get CLI version'
