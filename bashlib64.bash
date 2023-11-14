@@ -393,60 +393,60 @@ export BL64_CHECK_VERSION='4.3.0'
 
 export BL64_CHECK_MODULE="$BL64_VAR_OFF"
 
-declare _BL64_CHECK_TXT_PARAMETER_MISSING='required parameter is missing'
-declare _BL64_CHECK_TXT_PARAMETER_NOT_SET='required shell variable is not set'
-declare _BL64_CHECK_TXT_PARAMETER_DEFAULT='required parameter value must be other than default'
-declare _BL64_CHECK_TXT_PARAMETER_INVALID='the requested operation was provided with an invalid parameter value'
+export _BL64_CHECK_TXT_PARAMETER_MISSING='required parameter is missing'
+export _BL64_CHECK_TXT_PARAMETER_NOT_SET='required shell variable is not set'
+export _BL64_CHECK_TXT_PARAMETER_DEFAULT='required parameter value must be other than default'
+export _BL64_CHECK_TXT_PARAMETER_INVALID='the requested operation was provided with an invalid parameter value'
 
-declare _BL64_CHECK_TXT_COMMAND_NOT_FOUND='required command is not present'
-declare _BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE='required command is present but has no execution permission'
-declare _BL64_CHECK_TXT_COMMAND_NOT_INSTALLED='required command is not installed'
-declare _BL64_CHECK_TXT_COMMAND_NOT_IN_PATH='required command is not found in any of the search paths'
+export _BL64_CHECK_TXT_COMMAND_NOT_FOUND='required command is not present'
+export _BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE='required command is present but has no execution permission'
+export _BL64_CHECK_TXT_COMMAND_NOT_INSTALLED='required command is not installed'
+export _BL64_CHECK_TXT_COMMAND_NOT_IN_PATH='required command is not found in any of the search paths'
 
-declare _BL64_CHECK_TXT_FILE_NOT_FOUND='required file is not present'
-declare _BL64_CHECK_TXT_FILE_NOT_FILE='path is present but is not a regular file'
-declare _BL64_CHECK_TXT_FILE_NOT_READABLE='required file is present but has no read permission'
+export _BL64_CHECK_TXT_FILE_NOT_FOUND='required file is not present'
+export _BL64_CHECK_TXT_FILE_NOT_FILE='path is present but is not a regular file'
+export _BL64_CHECK_TXT_FILE_NOT_READABLE='required file is present but has no read permission'
 
-declare _BL64_CHECK_TXT_DIRECTORY_NOT_FOUND='required directory is not present'
-declare _BL64_CHECK_TXT_DIRECTORY_NOT_DIR='path is present but is not a directory'
-declare _BL64_CHECK_TXT_DIRECTORY_NOT_READABLE='required directory is present but has no read permission'
+export _BL64_CHECK_TXT_DIRECTORY_NOT_FOUND='required directory is not present'
+export _BL64_CHECK_TXT_DIRECTORY_NOT_DIR='path is present but is not a directory'
+export _BL64_CHECK_TXT_DIRECTORY_NOT_READABLE='required directory is present but has no read permission'
 
-declare _BL64_CHECK_TXT_EXPORT_EMPTY='required shell exported variable is empty'
-declare _BL64_CHECK_TXT_EXPORT_SET='required shell exported variable is not set'
+export _BL64_CHECK_TXT_EXPORT_EMPTY='required shell exported variable is empty'
+export _BL64_CHECK_TXT_EXPORT_SET='required shell exported variable is not set'
 
-declare _BL64_CHECK_TXT_PATH_NOT_FOUND='required path is not present'
-declare _BL64_CHECK_TXT_PATH_NOT_RELATIVE='required path must be relative'
-declare _BL64_CHECK_TXT_PATH_NOT_ABSOLUTE='required path must be absolute'
-declare _BL64_CHECK_TXT_PATH_PRESENT='requested path is already present'
+export _BL64_CHECK_TXT_PATH_NOT_FOUND='required path is not present'
+export _BL64_CHECK_TXT_PATH_NOT_RELATIVE='required path must be relative'
+export _BL64_CHECK_TXT_PATH_NOT_ABSOLUTE='required path must be absolute'
+export _BL64_CHECK_TXT_PATH_PRESENT='requested path is already present'
 
-declare _BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT='the task requires root privilege. Please run the script as root or with SUDO'
-declare _BL64_CHECK_TXT_PRIVILEGE_IS_ROOT='the task should not be run with root privilege. Please run the script as a regular user and not using SUDO'
+export _BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT='the task requires root privilege. Please run the script as root or with SUDO'
+export _BL64_CHECK_TXT_PRIVILEGE_IS_ROOT='the task should not be run with root privilege. Please run the script as a regular user and not using SUDO'
 
-declare _BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED='target is already present and overwrite is not permitted. Unable to continue'
-declare _BL64_CHECK_TXT_OVERWRITE_SKIP_EXISTING='target is already present and overwrite is not requested. Target is left as is'
+export _BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED='target is already present and overwrite is not permitted. Unable to continue'
+export _BL64_CHECK_TXT_OVERWRITE_SKIP_EXISTING='target is already present and overwrite is not requested. Target is left as is'
 
-declare _BL64_CHECK_TXT_INCOMPATIBLE='the requested operation is not supported on the current OS'
-declare _BL64_CHECK_TXT_UNDEFINED='requested command is not defined or implemented'
-declare _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one parameter and none was provided'
-declare _BL64_CHECK_TXT_FAILED='task execution failed'
+export _BL64_CHECK_TXT_INCOMPATIBLE='the requested operation is not supported on the current OS'
+export _BL64_CHECK_TXT_UNDEFINED='requested command is not defined or implemented'
+export _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one parameter and none was provided'
+export _BL64_CHECK_TXT_FAILED='task execution failed'
 
-declare _BL64_CHECK_TXT_MODULE_SET='required BashLib64 module not found. Please source the module before using it'
-declare _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested BashLib64 module'
-declare _BL64_CHECK_TXT_MODULE_NOT_SETUP='required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module'
+export _BL64_CHECK_TXT_MODULE_SET='required BashLib64 module not found. Please source the module before using it'
+export _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested BashLib64 module'
+export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module'
 
-declare _BL64_CHECK_TXT_HOME_MISSING='standard shell variable HOME is not defined'
-declare _BL64_CHECK_TXT_HOME_DIR_MISSING="unable to find user's HOME directory"
+export _BL64_CHECK_TXT_HOME_MISSING='standard shell variable HOME is not defined'
+export _BL64_CHECK_TXT_HOME_DIR_MISSING="unable to find user's HOME directory"
 
-declare _BL64_CHECK_TXT_RESOURCE_NOT_FOUND='required resource was not found on the system'
-declare _BL64_CHECK_TXT_STATUS_ERROR='task execution failed'
-declare _BL64_CHECK_TXT_COMPATIBILITY_MODE='using generic compatibility mode for untested command version'
+export _BL64_CHECK_TXT_RESOURCE_NOT_FOUND='required resource was not found on the system'
+export _BL64_CHECK_TXT_STATUS_ERROR='task execution failed'
+export _BL64_CHECK_TXT_COMPATIBILITY_MODE='using generic compatibility mode for untested command version'
 
-declare _BL64_CHECK_TXT_COMMAND='command'
-declare _BL64_CHECK_TXT_FILE='file'
-declare _BL64_CHECK_TXT_PATH='path'
-declare _BL64_CHECK_TXT_FUNCTION='caller'
-declare _BL64_CHECK_TXT_MODULE='module'
-declare _BL64_CHECK_TXT_PARAMETER='parameter'
+export _BL64_CHECK_TXT_COMMAND='command'
+export _BL64_CHECK_TXT_FILE='file'
+export _BL64_CHECK_TXT_PATH='path'
+export _BL64_CHECK_TXT_FUNCTION='caller'
+export _BL64_CHECK_TXT_MODULE='module'
+export _BL64_CHECK_TXT_PARAMETER='parameter'
 
 #######################################
 # BashLib64 / Module / Globals / Show shell debugging information
@@ -500,45 +500,46 @@ export BL64_DBG_EXCLUDE_CHECK="$BL64_VAR_ON"
 export BL64_DBG_EXCLUDE_MSG="$BL64_VAR_ON"
 export BL64_DBG_EXCLUDE_LOG="$BL64_VAR_ON"
 
-declare _BL64_DBG_TXT_FUNCTION_START='function tracing started'
-declare _BL64_DBG_TXT_FUNCTION_STOP='function tracing stopped'
-declare _BL64_DBG_TXT_SHELL_VAR='shell variable'
-declare _BL64_DBG_TXT_COMMENTS='dev-comments'
+export _BL64_DBG_TXT_FUNCTION_START='function tracing started'
+export _BL64_DBG_TXT_FUNCTION_STOP='function tracing stopped'
+export _BL64_DBG_TXT_SHELL_VAR='shell variable'
+export _BL64_DBG_TXT_COMMENTS='dev-comments'
 
-declare _BL64_DBG_TXT_LABEL_BASH_RUNTIME='[bash-runtime]'
-declare _BL64_DBG_TXT_LABEL_BASH_VARIABLE='[bash-variable]'
-declare _BL64_DBG_TXT_LABEL_FUNCTION='>>>'
-declare _BL64_DBG_TXT_LABEL_INFO='==='
-declare _BL64_DBG_TXT_LABEL_TRACE='***'
+export _BL64_DBG_TXT_LABEL_BASH_RUNTIME='[bash-runtime]'
+export _BL64_DBG_TXT_LABEL_BL64_RUNTIME='[bl64-runtime]'
+export _BL64_DBG_TXT_LABEL_BASH_VARIABLE='[bash-variable]'
+export _BL64_DBG_TXT_LABEL_FUNCTION='>>>'
+export _BL64_DBG_TXT_LABEL_INFO='==='
+export _BL64_DBG_TXT_LABEL_TRACE='***'
 
-declare _BL64_DBG_TXT_BASH='Bash / Interpreter path'
-declare _BL64_DBG_TXT_BASHOPTS='Bash / ShOpt Options'
-declare _BL64_DBG_TXT_SHELLOPTS='Bash / Set -o Options'
-declare _BL64_DBG_TXT_BASH_VERSION='Bash / Version'
-declare _BL64_DBG_TXT_OSTYPE='Bash / Detected OS'
-declare _BL64_DBG_TXT_LC_ALL='Shell / Locale setting'
-declare _BL64_DBG_TXT_HOSTNAME='Shell / Hostname'
-declare _BL64_DBG_TXT_EUID='Script / User ID'
-declare _BL64_DBG_TXT_UID='Script / Effective User ID'
-declare _BL64_DBG_TXT_BASH_ARGV='Script / Arguments'
-declare _BL64_DBG_TXT_COMMAND='Script / Last executed command'
-declare _BL64_DBG_TXT_STATUS='Script / Last exit status'
+export _BL64_DBG_TXT_BASH='Bash / Interpreter path'
+export _BL64_DBG_TXT_BASHOPTS='Bash / ShOpt Options'
+export _BL64_DBG_TXT_SHELLOPTS='Bash / Set -o Options'
+export _BL64_DBG_TXT_BASH_VERSION='Bash / Version'
+export _BL64_DBG_TXT_OSTYPE='Bash / Detected OS'
+export _BL64_DBG_TXT_LC_ALL='Shell / Locale setting'
+export _BL64_DBG_TXT_HOSTNAME='Shell / Hostname'
+export _BL64_DBG_TXT_EUID='Script / User ID'
+export _BL64_DBG_TXT_UID='Script / Effective User ID'
+export _BL64_DBG_TXT_BASH_ARGV='Script / Arguments'
+export _BL64_DBG_TXT_COMMAND='Script / Last executed command'
+export _BL64_DBG_TXT_STATUS='Script / Last exit status'
 
-declare _BL64_DBG_TXT_FUNCTION_APP_RUN='run app function with parameters'
-declare _BL64_DBG_TXT_FUNCTION_LIB_RUN='run bashlib64 function with parameters'
+export _BL64_DBG_TXT_FUNCTION_APP_RUN='run app function with parameters'
+export _BL64_DBG_TXT_FUNCTION_LIB_RUN='run bashlib64 function with parameters'
 
-declare _BL64_DBG_TXT_CALLSTACK='Last executed function'
+export _BL64_DBG_TXT_CALLSTACK='Last executed function'
 
-declare _BL64_DBG_TXT_HOME='Home directory (HOME)'
-declare _BL64_DBG_TXT_PATH='Search path (PATH)'
-declare _BL64_DBG_TXT_CD_PWD='Current cd working directory (PWD)'
-declare _BL64_DBG_TXT_CD_OLDPWD='Previous cd working directory (OLDPWD)'
-declare _BL64_DBG_TXT_SCRIPT_PATH='Initial script path (BL64_SCRIPT_PATH)'
-declare _BL64_DBG_TXT_TMPDIR='Temporary path (TMPDIR)'
-declare _BL64_DBG_TXT_PWD='Current working directory (pwd command)'
-declare _BL64_DBG_TXT_DEBUG='Debug'
+export _BL64_DBG_TXT_HOME='Home directory (HOME)'
+export _BL64_DBG_TXT_PATH='Search path (PATH)'
+export _BL64_DBG_TXT_CD_PWD='Current cd working directory (PWD)'
+export _BL64_DBG_TXT_CD_OLDPWD='Previous cd working directory (OLDPWD)'
+export _BL64_DBG_TXT_SCRIPT_PATH='Initial script path (BL64_SCRIPT_PATH)'
+export _BL64_DBG_TXT_TMPDIR='Temporary path (TMPDIR)'
+export _BL64_DBG_TXT_PWD='Current working directory (pwd command)'
+export _BL64_DBG_TXT_DEBUG='Debug'
 
-declare _BL64_DBG_TXT_WRONG_LEVEL='invalid debugging level. Must be one of: '
+export _BL64_DBG_TXT_WRONG_LEVEL='invalid debugging level. Must be one of: '
 
 #######################################
 # BashLib64 / Module / Globals / Write messages to logs
@@ -571,9 +572,9 @@ export BL64_LOG_REPOSITORY=''
 export BL64_LOG_DESTINATION=''
 export BL64_LOG_RUNTIME=''
 
-declare _BL64_LOG_TXT_INVALID_TYPE='invalid log type. Please use any of BL64_LOG_TYPE_*'
-declare _BL64_LOG_TXT_SET_TARGET_FAILED='failed to set log target'
-declare _BL64_LOG_TXT_CREATE_REPOSITORY='create log repository'
+export _BL64_LOG_TXT_INVALID_TYPE='invalid log type. Please use any of BL64_LOG_TYPE_*'
+export _BL64_LOG_TXT_SET_TARGET_FAILED='failed to set log target'
+export _BL64_LOG_TXT_CREATE_REPOSITORY='create log repository'
 #######################################
 # BashLib64 / Module / Globals / Display messages
 #######################################
@@ -745,23 +746,23 @@ export BL64_MSG_COSMETIC_PIPE='|'
 # Display messages
 #
 
-declare _BL64_MSG_TXT_BATCH_FINISH_ERROR='finished with errors'
-declare _BL64_MSG_TXT_BATCH_FINISH_OK='finished successfully'
-declare _BL64_MSG_TXT_BATCH_START='started'
-declare _BL64_MSG_TXT_BATCH='Process'
-declare _BL64_MSG_TXT_COMMANDS='Commands'
-declare _BL64_MSG_TXT_ERROR='Error'
-declare _BL64_MSG_TXT_FLAGS='Flags'
-declare _BL64_MSG_TXT_INFO='Info'
-declare _BL64_MSG_TXT_INPUT='Input'
-declare _BL64_MSG_TXT_INVALID_VALUE='invalid value. Not one of'
-declare _BL64_MSG_TXT_PARAMETERS='Parameters'
-declare _BL64_MSG_TXT_PHASE='Phase'
-declare _BL64_MSG_TXT_SEPARATOR='>>>>>'
-declare _BL64_MSG_TXT_SUBTASK='Subtask'
-declare _BL64_MSG_TXT_TASK='Task'
-declare _BL64_MSG_TXT_USAGE='Usage'
-declare _BL64_MSG_TXT_WARNING='Warning'
+export _BL64_MSG_TXT_BATCH_FINISH_ERROR='finished with errors'
+export _BL64_MSG_TXT_BATCH_FINISH_OK='finished successfully'
+export _BL64_MSG_TXT_BATCH_START='started'
+export _BL64_MSG_TXT_BATCH='Process'
+export _BL64_MSG_TXT_COMMANDS='Commands'
+export _BL64_MSG_TXT_ERROR='Error'
+export _BL64_MSG_TXT_FLAGS='Flags'
+export _BL64_MSG_TXT_INFO='Info'
+export _BL64_MSG_TXT_INPUT='Input'
+export _BL64_MSG_TXT_INVALID_VALUE='invalid value. Not one of'
+export _BL64_MSG_TXT_PARAMETERS='Parameters'
+export _BL64_MSG_TXT_PHASE='Phase'
+export _BL64_MSG_TXT_SEPARATOR='>>>>>'
+export _BL64_MSG_TXT_SUBTASK='Subtask'
+export _BL64_MSG_TXT_TASK='Task'
+export _BL64_MSG_TXT_USAGE='Usage'
+export _BL64_MSG_TXT_WARNING='Warning'
 
 #######################################
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
@@ -787,14 +788,14 @@ export BL64_OS_ALIAS_ID_USER=''
 
 export BL64_OS_SET_LOCALE_ALL=''
 
-declare _BL64_OS_TXT_CHECK_OS_MATRIX='Please check the OS compatibility matrix for BashLib64'
-declare _BL64_OS_TXT_ERROR_OS_RELEASE='failed to load OS information from /etc/os-release file'
-declare _BL64_OS_TXT_INVALID_OS_PATTERN='invalid OS pattern'
-declare _BL64_OS_TXT_OS_MATRIX='Compatible-versions'
-declare _BL64_OS_TXT_OS_NOT_KNOWN='current OS is not supported'
-declare _BL64_OS_TXT_OS_NOT_SUPPORTED='BashLib64 not supported on the current OS'
-declare _BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED='current OS version is not supported'
-declare _BL64_OS_TXT_TASK_NOT_SUPPORTED='task not supported on the current OS version'
+export _BL64_OS_TXT_CHECK_OS_MATRIX='Please check the OS compatibility matrix for BashLib64'
+export _BL64_OS_TXT_ERROR_OS_RELEASE='failed to load OS information from /etc/os-release file'
+export _BL64_OS_TXT_INVALID_OS_PATTERN='invalid OS pattern'
+export _BL64_OS_TXT_OS_MATRIX='Compatible-versions'
+export _BL64_OS_TXT_OS_NOT_KNOWN='current OS is not supported'
+export _BL64_OS_TXT_OS_NOT_SUPPORTED='BashLib64 not supported on the current OS'
+export _BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED='current OS version is not supported'
+export _BL64_OS_TXT_TASK_NOT_SUPPORTED='task not supported on the current OS version'
 
 #
 # OS standard name tags
@@ -855,7 +856,7 @@ export BL64_ANS_SET_VERBOSE=''
 export BL64_ANS_SET_DIFF=''
 export BL64_ANS_SET_DEBUG=''
 
-declare _BL64_ANS_TXT_ERROR_GET_VERSION='failed to get CLI version'
+export _BL64_ANS_TXT_ERROR_GET_VERSION='failed to get CLI version'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with RESTful APIs
@@ -874,7 +875,7 @@ export BL64_API_METHOD_GET='GET'
 export BL64_API_METHOD_POST='POST'
 export BL64_API_METHOD_PUT='PUT'
 
-declare _BL64_API_TXT_ERROR_API_FAILED='API call failed'
+export _BL64_API_TXT_ERROR_API_FAILED='API call failed'
 
 #######################################
 # BashLib64 / Module / Globals / Manage archive files
@@ -891,8 +892,8 @@ export BL64_ARC_SET_TAR_VERBOSE=''
 
 export BL64_ARC_SET_UNZIP_OVERWRITE=''
 
-declare _BL64_ARC_TXT_OPEN_ZIP='open zip archive'
-declare _BL64_ARC_TXT_OPEN_TAR='open tar archive'
+export _BL64_ARC_TXT_OPEN_ZIP='open zip archive'
+export _BL64_ARC_TXT_OPEN_TAR='open tar archive'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with AWS
@@ -926,7 +927,7 @@ export BL64_AWS_SET_FORMAT_STREAM=''
 export BL64_AWS_SET_DEBUG=''
 export BL64_AWS_SET_OUPUT_NO_PAGER=''
 
-declare _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token file'
+export _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token file'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with Bash shell
@@ -938,7 +939,7 @@ export BL64_BSH_MODULE="$BL64_VAR_OFF"
 
 export BL64_BSH_VERSION_BASH=''
 
-declare _BL64_BSH_TXT_UNSUPPORTED='BashLib64 is not supported in the current Bash version'
+export _BL64_BSH_TXT_UNSUPPORTED='BashLib64 is not supported in the current Bash version'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with container engines
@@ -984,15 +985,15 @@ export BL64_CNT_SET_STATUS_RUNNING=''
 
 export BL64_CNT_PATH_DOCKER_SOCKET=''
 
-declare _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
-declare _BL64_CNT_TXT_EXISTING_NETWORK='container network already created. No further action needed'
-declare _BL64_CNT_TXT_CREATE_NETWORK='creating container network'
-declare _BL64_CNT_TXT_LOGIN_REGISTRY='loging to container registry'
-declare _BL64_CNT_TXT_BUILD='build container image'
-declare _BL64_CNT_TXT_PUSH='push container image to registry'
-declare _BL64_CNT_TXT_PULL='pull container image from registry'
-declare _BL64_CNT_TXT_TAG='add tag to container image'
-declare _BL64_CNT_TXT_MISSING_FILTER='no filter was selected. Task requires one of them'
+export _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
+export _BL64_CNT_TXT_EXISTING_NETWORK='container network already created. No further action needed'
+export _BL64_CNT_TXT_CREATE_NETWORK='creating container network'
+export _BL64_CNT_TXT_LOGIN_REGISTRY='loging to container registry'
+export _BL64_CNT_TXT_BUILD='build container image'
+export _BL64_CNT_TXT_PUSH='push container image to registry'
+export _BL64_CNT_TXT_PULL='pull container image from registry'
+export _BL64_CNT_TXT_TAG='add tag to container image'
+export _BL64_CNT_TXT_MISSING_FILTER='no filter was selected. Task requires one of them'
 
 #######################################
 # BashLib64 / Module / Globals / Format text data
@@ -1002,9 +1003,9 @@ export BL64_FMT_VERSION='2.2.1'
 
 export BL64_FMT_MODULE="$BL64_VAR_OFF"
 
-declare _BL64_FMT_TXT_ERROR_VALUE_LIST_EMPTY='please provide at least one value to check against'
-declare _BL64_FMT_TXT_ERROR_VALUE_LIST_WRONG='invalid value'
-declare _BL64_FMT_TXT_VALUE_LIST_VALID='Value must be one of'
+export _BL64_FMT_TXT_ERROR_VALUE_LIST_EMPTY='please provide at least one value to check against'
+export _BL64_FMT_TXT_ERROR_VALUE_LIST_WRONG='invalid value'
+export _BL64_FMT_TXT_VALUE_LIST_VALID='Value must be one of'
 
 #######################################
 # BashLib64 / Module / Globals / Manage local filesystem
@@ -1078,23 +1079,23 @@ export BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
 
 export BL64_FS_TMP_PREFIX='bl64tmp'
 
-declare _BL64_FS_TXT_CLEANUP_CACHES='clean up OS cache contents'
-declare _BL64_FS_TXT_CLEANUP_LOGS='clean up OS logs'
-declare _BL64_FS_TXT_CLEANUP_TEMP='clean up OS temporary files'
-declare _BL64_FS_TXT_COPY_FILE_PATH='copy file'
-declare _BL64_FS_TXT_CREATE_DIR_PATH='create directory'
-declare _BL64_FS_TXT_MERGE_ADD_SOURCE='merge content from source'
-declare _BL64_FS_TXT_MERGE_DIRS='merge directories content'
-declare _BL64_FS_TXT_RESTORE_OBJECT='restore original file from backup'
-declare _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
-declare _BL64_FS_TXT_SAFEGUARD_OBJECT='backup original file'
-declare _BL64_FS_TXT_SYMLINK_CREATE='create symbolick link'
-declare _BL64_FS_TXT_SYMLINK_EXISTING='target symbolick link is already present. No further action taken'
+export _BL64_FS_TXT_CLEANUP_CACHES='clean up OS cache contents'
+export _BL64_FS_TXT_CLEANUP_LOGS='clean up OS logs'
+export _BL64_FS_TXT_CLEANUP_TEMP='clean up OS temporary files'
+export _BL64_FS_TXT_COPY_FILE_PATH='copy file'
+export _BL64_FS_TXT_CREATE_DIR_PATH='create directory'
+export _BL64_FS_TXT_MERGE_ADD_SOURCE='merge content from source'
+export _BL64_FS_TXT_MERGE_DIRS='merge directories content'
+export _BL64_FS_TXT_RESTORE_OBJECT='restore original file from backup'
+export _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
+export _BL64_FS_TXT_SAFEGUARD_OBJECT='backup original file'
+export _BL64_FS_TXT_SYMLINK_CREATE='create symbolick link'
+export _BL64_FS_TXT_SYMLINK_EXISTING='target symbolick link is already present. No further action taken'
 
-declare _BL64_FS_TXT_ERROR_NOT_TMPDIR='provided directory was not created by bl64_fs_create_tmpdir'
-declare _BL64_FS_TXT_ERROR_NOT_TMPFILE='provided directory was not created by bl64_fs_create_tmpfile'
-declare _BL64_FS_TXT_ERROR_INVALID_FILE_TARGET='invalid file destination. Provided path exists and is a directory'
-declare _BL64_FS_TXT_ERROR_INVALID_DIR_TARGET='invalid directory destination. Provided path exists and is a file'
+export _BL64_FS_TXT_ERROR_NOT_TMPDIR='provided directory was not created by bl64_fs_create_tmpdir'
+export _BL64_FS_TXT_ERROR_NOT_TMPFILE='provided directory was not created by bl64_fs_create_tmpfile'
+export _BL64_FS_TXT_ERROR_INVALID_FILE_TARGET='invalid file destination. Provided path exists and is a directory'
+export _BL64_FS_TXT_ERROR_INVALID_DIR_TARGET='invalid directory destination. Provided path exists and is a file'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with GCP
@@ -1117,9 +1118,9 @@ export BL64_GCP_SET_FORMAT_JSON=''
 export BL64_GCP_CLI_PROJECT=''
 export BL64_GCP_CLI_IMPERSONATE_SA=''
 
-declare _BL64_TXT_REMOVE_CREDENTIALS='remove previous GCP credentials'
-declare _BL64_TXT_LOGIN_SA='activate service account'
-declare _BL64_TXT_CREATE_CFG='create private GCP configuration'
+export _BL64_TXT_REMOVE_CREDENTIALS='remove previous GCP credentials'
+export _BL64_TXT_LOGIN_SA='activate service account'
+export _BL64_TXT_CREATE_CFG='create private GCP configuration'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with HLM
@@ -1161,9 +1162,9 @@ export BL64_IAM_SET_USERADD_SHELL=''
 
 export BL64_IAM_ALIAS_USERADD=''
 
-declare _BL64_IAM_TXT_ADD_USER='create user account'
-declare _BL64_IAM_TXT_EXISTING_USER='user already created, re-using existing one'
-declare _BL64_IAM_TXT_USER_NOT_FOUND='required user is not present in the operating system'
+export _BL64_IAM_TXT_ADD_USER='create user account'
+export _BL64_IAM_TXT_EXISTING_USER='user already created, re-using existing one'
+export _BL64_IAM_TXT_USER_NOT_FOUND='required user is not present in the operating system'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with Kubernetes
@@ -1196,18 +1197,18 @@ export BL64_K8S_RESOURCE_NS='namespace'
 export BL64_K8S_RESOURCE_SA='serviceaccount'
 export BL64_K8S_RESOURCE_SECRET='secret'
 
-declare _BL64_K8S_TXT_CREATE_NS='create namespace'
-declare _BL64_K8S_TXT_CREATE_SA='create service account'
-declare _BL64_K8S_TXT_CREATE_SECRET='create generic secret'
-declare _BL64_K8S_TXT_SET_LABEL='set or update label'
-declare _BL64_K8S_TXT_SET_ANNOTATION='set or update annotation'
-declare _BL64_K8S_TXT_GET_SECRET='get secret definition from source'
-declare _BL64_K8S_TXT_CREATE_SECRET='copy secret to destination'
-declare _BL64_K8S_TXT_RESOURCE_UPDATE='create or update resource definition'
-declare _BL64_K8S_TXT_RESOURCE_EXISTING='the resource is already created. No further actions are needed'
-declare _BL64_K8S_TXT_ERROR_KUBECTL_VERSION='unable to determine kubectl version'
-declare _BL64_K8S_TXT_ERROR_INVALID_KUBECONF='kubectl config file not found'
-declare _BL64_K8S_TXT_ERROR_MISSING_COMMAND='kubectl command not provided'
+export _BL64_K8S_TXT_CREATE_NS='create namespace'
+export _BL64_K8S_TXT_CREATE_SA='create service account'
+export _BL64_K8S_TXT_CREATE_SECRET='create generic secret'
+export _BL64_K8S_TXT_SET_LABEL='set or update label'
+export _BL64_K8S_TXT_SET_ANNOTATION='set or update annotation'
+export _BL64_K8S_TXT_GET_SECRET='get secret definition from source'
+export _BL64_K8S_TXT_CREATE_SECRET='copy secret to destination'
+export _BL64_K8S_TXT_RESOURCE_UPDATE='create or update resource definition'
+export _BL64_K8S_TXT_RESOURCE_EXISTING='the resource is already created. No further actions are needed'
+export _BL64_K8S_TXT_ERROR_KUBECTL_VERSION='unable to determine kubectl version'
+export _BL64_K8S_TXT_ERROR_INVALID_KUBECONF='kubectl config file not found'
+export _BL64_K8S_TXT_ERROR_MISSING_COMMAND='kubectl command not provided'
 
 #######################################
 # BashLib64 / Module / Setup / Interact with MongoDB
@@ -1277,16 +1278,16 @@ export BL64_PKG_DEF_SUFIX_APT_REPOSITORY='list'
 export BL64_PKG_DEF_SUFIX_GPG_FILE='gpg'
 export BL64_PKG_DEF_SUFIX_YUM_REPOSITORY='repo'
 
-declare _BL64_PKG_TXT_CLEAN='clean up package manager run-time environment'
-declare _BL64_PKG_TXT_INSTALL='install packages'
-declare _BL64_PKG_TXT_UPGRADE='upgrade packages'
-declare _BL64_PKG_TXT_PREPARE='initialize package manager'
-declare _BL64_PKG_TXT_REPOSITORY_REFRESH='refresh package repository content'
-declare _BL64_PKG_TXT_REPOSITORY_ADD='add remote package repository'
-declare _BL64_PKG_TXT_REPOSITORY_EXISTING='requested repository is already present. Continue using existing one.'
-declare _BL64_PKG_TXT_REPOSITORY_ADD_YUM='create YUM repository definition'
-declare _BL64_PKG_TXT_REPOSITORY_ADD_APT='create APT repository definition'
-declare _BL64_PKG_TXT_REPOSITORY_ADD_KEY='install GPG key'
+export _BL64_PKG_TXT_CLEAN='clean up package manager run-time environment'
+export _BL64_PKG_TXT_INSTALL='install packages'
+export _BL64_PKG_TXT_UPGRADE='upgrade packages'
+export _BL64_PKG_TXT_PREPARE='initialize package manager'
+export _BL64_PKG_TXT_REPOSITORY_REFRESH='refresh package repository content'
+export _BL64_PKG_TXT_REPOSITORY_ADD='add remote package repository'
+export _BL64_PKG_TXT_REPOSITORY_EXISTING='requested repository is already present. Continue using existing one.'
+export _BL64_PKG_TXT_REPOSITORY_ADD_YUM='create YUM repository definition'
+export _BL64_PKG_TXT_REPOSITORY_ADD_APT='create APT repository definition'
+export _BL64_PKG_TXT_REPOSITORY_ADD_KEY='install GPG key'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with system-wide Python
@@ -1328,13 +1329,13 @@ export BL64_PY_DEF_VENV_CFG=''
 export BL64_PY_DEF_MODULE_VENV=''
 export BL64_PY_DEF_MODULE_PIP=''
 
-declare _BL64_PY_TXT_PIP_PREPARE_PIP='upgrade pip module'
-declare _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
-declare _BL64_PY_TXT_PIP_CLEANUP_PIP='cleanup pip cache'
-declare _BL64_PY_TXT_PIP_INSTALL='install modules'
-declare _BL64_PY_TXT_VENV_MISSING='requested python virtual environment is missing'
-declare _BL64_PY_TXT_VENV_INVALID='requested python virtual environment is invalid (no pyvenv.cfg found)'
-declare _BL64_PY_TXT_VENV_CREATE='create python virtual environment'
+export _BL64_PY_TXT_PIP_PREPARE_PIP='upgrade pip module'
+export _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
+export _BL64_PY_TXT_PIP_CLEANUP_PIP='cleanup pip cache'
+export _BL64_PY_TXT_PIP_INSTALL='install modules'
+export _BL64_PY_TXT_VENV_MISSING='requested python virtual environment is missing'
+export _BL64_PY_TXT_VENV_INVALID='requested python virtual environment is invalid (no pyvenv.cfg found)'
+export _BL64_PY_TXT_VENV_CREATE='create python virtual environment'
 
 #######################################
 # BashLib64 / Module / Globals / Manage role based access service
@@ -1354,8 +1355,8 @@ export BL64_RBAC_SET_SUDO_CHECK=''
 export BL64_RBAC_SET_SUDO_FILE=''
 export BL64_RBAC_SET_SUDO_QUIET=''
 
-declare _BL64_RBAC_TXT_INVALID_SUDOERS='the sudoers file is corrupt or invalid'
-declare _BL64_RBAC_TXT_ADD_ROOT='add password-less root privilege to user'
+export _BL64_RBAC_TXT_INVALID_SUDOERS='the sudoers file is corrupt or invalid'
+export _BL64_RBAC_TXT_ADD_ROOT='add password-less root privilege to user'
 
 #######################################
 # BashLib64 / Module / Globals / Generate random data
@@ -1383,8 +1384,8 @@ export BL64_RND_POOL_DIGITS_MAX_IDX="$(( ${#BL64_RND_POOL_DIGITS} - 1 ))"
 export BL64_RND_POOL_ALPHANUMERIC="${BL64_RND_POOL_UPPERCASE}${BL64_RND_POOL_LOWERCASE}${BL64_RND_POOL_DIGITS}"
 export BL64_RND_POOL_ALPHANUMERIC_MAX_IDX="$(( ${#BL64_RND_POOL_ALPHANUMERIC} - 1 ))"
 
-declare _BL64_RND_TXT_LENGHT_MIN='length can not be less than'
-declare _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
+export _BL64_RND_TXT_LENGHT_MIN='length can not be less than'
+export _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
 
 #######################################
 # BashLib64 / Module / Globals / Transfer and Receive data over the network
@@ -1420,12 +1421,12 @@ export BL64_RXTX_SET_WGET_VERBOSE=''
 # Public server
 export BL64_RXTX_GITHUB_URL='https://github.com'
 
-declare _BL64_RXTX_TXT_MISSING_COMMAND='no web transfer command was found on the system'
-declare _BL64_RXTX_TXT_EXISTING_DESTINATION='destination path is not empty. No action taken.'
-declare _BL64_RXTX_TXT_CREATION_PROBLEM='unable to create temporary git repo'
-declare _BL64_RXTX_TXT_DOWNLOAD_FILE='download file'
-declare _BL64_RXTX_TXT_ERROR_DOWNLOAD_FILE='file download failed'
-declare _BL64_RXTX_TXT_ERROR_DOWNLOAD_DIR='directory download failed'
+export _BL64_RXTX_TXT_MISSING_COMMAND='no web transfer command was found on the system'
+export _BL64_RXTX_TXT_EXISTING_DESTINATION='destination path is not empty. No action taken.'
+export _BL64_RXTX_TXT_CREATION_PROBLEM='unable to create temporary git repo'
+export _BL64_RXTX_TXT_DOWNLOAD_FILE='download file'
+export _BL64_RXTX_TXT_ERROR_DOWNLOAD_FILE='file download failed'
+export _BL64_RXTX_TXT_ERROR_DOWNLOAD_DIR='directory download failed'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with Terraform
@@ -1458,7 +1459,7 @@ export BL64_TF_SET_LOG_OFF=''
 export BL64_TF_DEF_PATH_LOCK=''
 export BL64_TF_DEF_PATH_RUNTIME=''
 
-declare _BL64_TF_TXT_ERROR_GET_VERSION='failed to get terraform CLI version'
+export _BL64_TF_TXT_ERROR_GET_VERSION='failed to get terraform CLI version'
 
 #######################################
 # BashLib64 / Module / Globals / Manage date-time data
@@ -1511,9 +1512,9 @@ export BL64_UI_MODULE="$BL64_VAR_OFF"
 
 export BL64_UI_READ_TIMEOUT='60'
 
-declare _BL64_UI_TXT_CONFIRMATION_QUESTION='Please confirm the operation by writting the message'
-declare _BL64_UI_TXT_CONFIRMATION_MESSAGE='confirm-operation'
-declare _BL64_UI_TXT_CONFIRMATION_ERROR='provided confirmation message is not what is expected'
+export _BL64_UI_TXT_CONFIRMATION_QUESTION='Please confirm the operation by writting the message'
+export _BL64_UI_TXT_CONFIRMATION_MESSAGE='confirm-operation'
+export _BL64_UI_TXT_CONFIRMATION_ERROR='provided confirmation message is not what is expected'
 
 #######################################
 # BashLib64 / Module / Globals / Manage Version Control System
@@ -1539,9 +1540,9 @@ export BL64_VCS_GITHUB_API_VERSION='2022-11-28'
 # Special tag for latest release
 export BL64_VCS_GITHUB_LATEST='latest'
 
-declare _BL64_VCS_TXT_CLONE_REPO='clone single branch from GIT repository'
-declare _BL64_VCS_TXT_GET_LATEST_RELEASE='get release tag from latest release'
-declare _BL64_VCS_TXT_GET_LATEST_RELEASE_FAILED='unable to determine latest release'
+export _BL64_VCS_TXT_CLONE_REPO='clone single branch from GIT repository'
+export _BL64_VCS_TXT_GET_LATEST_RELEASE='get release tag from latest release'
+export _BL64_VCS_TXT_GET_LATEST_RELEASE_FAILED='unable to determine latest release'
 
 #######################################
 # BashLib64 / Module / Globals / Manipulate CSV like text files
@@ -1570,7 +1571,7 @@ export BL64_XSV_FS_SLASH='/'
 # Common search paths for commands
 declare -a _BL64_XSV_SEARCH_PATHS=('/home/linuxbrew/.linuxbrew/bin' '/opt/homebrew/bin' '/usr/local/bin' '/usr/bin')
 
-declare _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
+export _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
 
 #######################################
 # BashLib64 / Module / Setup / Check for conditions and report status
@@ -2525,20 +2526,31 @@ function bl64_dbg_runtime_show() {
   _bl64_dbg_show "${label} ${_BL64_DBG_TXT_COMMAND}: [${BASH_COMMAND:-NONE}]"
   _bl64_dbg_show "${label} ${_BL64_DBG_TXT_STATUS}: [${last_status}]"
 
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_SCRIPT_PATH}: [${BL64_SCRIPT_PATH:-EMPTY}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
-
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_CALLSTACK}(1): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[1]:-NONE}:${BASH_LINENO[1]:-0}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_CALLSTACK}(2): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_CALLSTACK}(3): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
+  bl64_dbg_runtime_show_paths
+  bl64_dbg_runtime_show_callstack
+  bl64_dbg_runtime_show_bashlib64
 
   # shellcheck disable=SC2248
   return $last_status
+}
+
+#######################################
+# Show BashLib64 runtime information
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: bl64 runtime info
+# Returns:
+#   latest exit status (before function call)
+#######################################
+function bl64_dbg_runtime_show_bashlib64() {
+  local label="${_BL64_DBG_TXT_LABEL_BL64_RUNTIME}"
+  bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
+  _bl64_dbg_show "${label} BL64_SCRIPT_NAME: [${BL64_SCRIPT_NAME:-NOTSET}]"
+  _bl64_dbg_show "${label} BL64_SCRIPT_SID: [${BL64_SCRIPT_SID:-NOTSET}]"
+  _bl64_dbg_show "${label} BL64_SCRIPT_ID: [${BL64_SCRIPT_ID:-NOTSET}]"
 }
 
 #######################################
@@ -2555,11 +2567,12 @@ function bl64_dbg_runtime_show() {
 #   latest exit status (before function call)
 #######################################
 function bl64_dbg_runtime_show_callstack() {
-  local label="${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}]"
+  local label="${_BL64_DBG_TXT_LABEL_BASH_RUNTIME}"
   bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
   _bl64_dbg_show "${label} ${_BL64_DBG_TXT_CALLSTACK}(2): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
   _bl64_dbg_show "${label} ${_BL64_DBG_TXT_CALLSTACK}(3): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
   _bl64_dbg_show "${label} ${_BL64_DBG_TXT_CALLSTACK}(4): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[4]:-NONE}:${BASH_LINENO[4]:-0}]"
+  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_CALLSTACK}(5): [${BASH_SOURCE[4]:-NONE}:${FUNCNAME[5]:-NONE}:${BASH_LINENO[5]:-0}]"
 }
 
 #######################################
@@ -2574,7 +2587,7 @@ function bl64_dbg_runtime_show_callstack() {
 #   latest exit status (before function call)
 #######################################
 function bl64_dbg_runtime_show_paths() {
-  local label="${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}]"
+  local label="${_BL64_DBG_TXT_LABEL_BASH_RUNTIME}"
   bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
   _bl64_dbg_show "${label} ${_BL64_DBG_TXT_SCRIPT_PATH}: [${BL64_SCRIPT_PATH:-EMPTY}]"
   _bl64_dbg_show "${label} ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"

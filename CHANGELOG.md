@@ -18,7 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - updated module dependency check
   - improved debugging and error messages format
   - trivial modules (msg,log,check) excluded from debugging messages
-  - unexported internal variables (`_BL64_*`)
 - core
   - removed dbg and bsh module dependencies from main section
 - bsh
