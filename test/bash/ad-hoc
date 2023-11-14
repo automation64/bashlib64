@@ -15,4 +15,4 @@
 # * Keep the source clean, do not commit test cases below this section
 #
 
-bl64_dbg_lib_enable
+bl64_dbg_all_enable
