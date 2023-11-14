@@ -100,3 +100,57 @@ function bl64_xsv_search_records() {
     "$source"
 
 }
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_xsv_run_jq() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_XSV_MODULE' &&
+    bl64_check_command "$BL64_XSV_CMD_JQ" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_XSV_CMD_JQ" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_xsv_run_yq() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_XSV_MODULE' &&
+    bl64_check_command "$BL64_XSV_CMD_YQ" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_XSV_CMD_YQ" "$@"
+  bl64_dbg_lib_trace_stop
+}
