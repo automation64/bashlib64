@@ -2,7 +2,7 @@
 # BashLib64 / Module / Setup / Interact with MongoDB
 #######################################
 
-export BL64_MDB_VERSION='1.1.0'
+export BL64_MDB_VERSION='1.2.0'
 
 # Optional module. Not enabled by default
 export BL64_MDB_MODULE="$BL64_VAR_OFF"

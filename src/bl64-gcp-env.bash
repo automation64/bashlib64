@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with GCP
 #######################################
 
-export BL64_GCP_VERSION='1.5.1'
+export BL64_GCP_VERSION='1.6.0'
 
 # Optional module. Not enabled by default
 export BL64_GCP_MODULE="$BL64_VAR_OFF"
@@ -18,3 +18,7 @@ export BL64_GCP_SET_FORMAT_JSON=''
 
 export BL64_GCP_CLI_PROJECT=''
 export BL64_GCP_CLI_IMPERSONATE_SA=''
+
+declare _BL64_TXT_REMOVE_CREDENTIALS='remove previous GCP credentials'
+declare _BL64_TXT_LOGIN_SA='activate service account'
+declare _BL64_TXT_CREATE_CFG='create private GCP configuration'

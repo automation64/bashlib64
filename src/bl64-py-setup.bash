@@ -52,7 +52,10 @@ function _bl64_py_setup() {
       return $?
   fi
 
-  _bl64_py_set_command "$venv_path" &&
+  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_check_module_imported 'BL64_DBG_MODULE' &&
+    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+    _bl64_py_set_command "$venv_path" &&
     bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
     _bl64_py_set_options &&
     _bl64_py_set_resources &&
@@ -93,7 +96,7 @@ function _bl64_py_set_command() {
     ${BL64_OS_FD}-33.* | ${BL64_OS_FD}-34.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     ${BL64_OS_FD}-35.* | ${BL64_OS_FD}-36.*) BL64_PY_CMD_PYTHON310='/usr/bin/python3.10' ;;
     ${BL64_OS_FD}-37.* | ${BL64_OS_FD}-38.*) BL64_PY_CMD_PYTHON311='/usr/bin/python3.11' ;;
-    ${BL64_OS_FD}-39.* ) BL64_PY_CMD_PYTHON312='/usr/bin/python3.12' ;;
+    ${BL64_OS_FD}-39.*) BL64_PY_CMD_PYTHON312='/usr/bin/python3.12' ;;
     ${BL64_OS_DEB}-9.*) BL64_PY_CMD_PYTHON35='/usr/bin/python3.5' ;;
     ${BL64_OS_DEB}-10.*) BL64_PY_CMD_PYTHON37='/usr/bin/python3.7' ;;
     ${BL64_OS_DEB}-11.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;

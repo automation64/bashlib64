@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #######################################
 
-export BL64_PY_VERSION='1.15.1'
+export BL64_PY_VERSION='1.16.0'
 
 # Optional module. Not enabled by default
 export BL64_PY_MODULE="$BL64_VAR_OFF"

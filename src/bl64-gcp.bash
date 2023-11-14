@@ -16,13 +16,13 @@
 #######################################
 function bl64_gcp_run_gcloud() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_parameters_none "$#" || return $?
   local debug=' '
   local config=' '
   local project=' '
   local impersonate_sa=' '
 
-  bl64_check_module 'BL64_GCP_MODULE' ||
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_GCP_MODULE' ||
     return $?
 
   if bl64_dbg_lib_command_enabled; then
@@ -74,13 +74,13 @@ function bl64_gcp_login_sa() {
 
   _bl64_gcp_configure
 
-  bl64_dbg_lib_show_info 'remove previous credentials'
+  bl64_msg_show_lib_subtask "$_BL64_TXT_REMOVE_CREDENTIALS"
   bl64_gcp_run_gcloud \
     auth \
     revoke \
     --all
 
-  bl64_dbg_lib_show_info 'login to gcp'
+  bl64_msg_show_lib_subtask "$_BL64_TXT_LOGIN_SA"
   bl64_gcp_run_gcloud \
     auth \
     activate-service-account \
@@ -90,18 +90,13 @@ function bl64_gcp_login_sa() {
 
 function _bl64_gcp_configure() {
   bl64_dbg_lib_show_function
-
   if [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_VAR_FALSE" ]]; then
-
-    bl64_dbg_lib_show_info 'create BL64_GCP_CONFIGURATION'
+    bl64_msg_show_lib_subtask "${_BL64_TXT_CREATE_CFG} (${BL64_GCP_CONFIGURATION_NAME})"
     bl64_gcp_run_gcloud \
       config \
       configurations \
       create "$BL64_GCP_CONFIGURATION_NAME" &&
       BL64_GCP_CONFIGURATION_CREATED="$BL64_VAR_TRUE"
-
-  else
-    :
   fi
 }
 
