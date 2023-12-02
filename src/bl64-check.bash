@@ -2,12 +2,16 @@
 # BashLib64 / Module / Functions / Check for conditions and report status
 #######################################
 
+# DEPRECATED: to be removed in future releases
+function bl64_check_module_imported() { bl64_lib_module_imported "$@"; }
+
 #######################################
 # Check and report if the command is present and has execute permissions for the current user.
 #
 # Arguments:
 #   $1: Full path to the command to check
-#   $2: Not found error message. Default: _BL64_CHECK_TXT_COMMAND_NOT_FOUND
+#   $2: (optional) Not found error message. Default: _BL64_CHECK_TXT_COMMAND_NOT_FOUND
+#   $3: (optional) Command name. Displayed in the error message when not found
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
@@ -22,9 +26,11 @@
 function bl64_check_command() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
-  local message="${2:-${_BL64_CHECK_TXT_COMMAND_NOT_FOUND}}"
+  local message="${2:-$BL64_VAR_DEFAULT}"
+  local command_name="${3:-}"
 
   bl64_check_parameter 'path' || return $?
+  [[ "$message" == "$BL64_VAR_DEFAULT" ]] && message="$_BL64_CHECK_TXT_COMMAND_NOT_FOUND"
 
   if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (OS: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
@@ -33,7 +39,7 @@ function bl64_check_command() {
   fi
 
   if [[ "$path" == "$BL64_VAR_UNAVAILABLE" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_INSTALLED} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_INSTALLED} (${command_name:+${_BL64_CHECK_TXT_COMMAND}: ${command_name} ${BL64_MSG_COSMETIC_PIPE} }${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
