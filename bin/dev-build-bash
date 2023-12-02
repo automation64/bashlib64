@@ -110,7 +110,9 @@ function dev_build_library() {
       "$BL64_OS_CMD_CAT" 'bl64-lib-header.bash' &&
         bl64_fmt_separator_line &&
         "$BL64_OS_CMD_CAT" "${build_module}.tmp"
-    } >"$build_module" || return 1
+    } >"$build_module" &&
+      bl64_fs_run_chmod '0755' "$build_module" ||
+      return $?
     bl64_fs_rm_file "${build_module}.tmp"
   done
 
@@ -118,14 +120,14 @@ function dev_build_library() {
   # shellcheck disable=SC2119
   { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_full" &&
     { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_core" &&
-    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_module_core" ||
+    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_module_core" &&
+    bl64_fs_run_chmod '0755' \
+      "$build_full" \
+      "$build_module_core" \
+      "$build_core" \
+      "$build_opt" ||
     return $?
 
-  bl64_msg_show_task 'making libraries executable'
-  bl64_fs_run_chmod '0755' \
-    "$build_full" \
-    "$build_core" \
-    "$build_module_core"
 }
 
 # shellcheck disable=SC2317
