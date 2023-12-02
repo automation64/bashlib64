@@ -27,7 +27,7 @@ function dev_pack() {
 
   cd "$DEV_BUILD_FULL_PATH_RELEASE"
   bl64_msg_show_task "create stand-alone distributable package (${DEV_PACK_NAME_SA})"
-  bl64_arc_run_tar zcf "${DEV_PACK_FULL_PATH}/${DEV_PACK_NAME_SA}" "$DEV_BUILD_NAME_SINGLE" ||
+  bl64_arc_run_tar zcf "${DEV_PACK_FULL_PATH}/${DEV_PACK_NAME_SA}" "$DEV_BUILD_NAME_SA" ||
     return $?
 
   bl64_msg_show_task "create core+opt alternative distributable package (${DEV_PACK_NAME_SPLIT})"
@@ -49,7 +49,7 @@ bl64_arc_setup &&
   bl64_check_export 'DEV_BUILD_NAME_CORE' &&
   bl64_check_export 'DEV_BUILD_NAME_MODULE' &&
   bl64_check_export 'DEV_BUILD_NAME_OPT' &&
-  bl64_check_export 'DEV_BUILD_NAME_SINGLE' &&
+  bl64_check_export 'DEV_BUILD_NAME_SA' &&
   bl64_check_export 'DEV_PACK_FULL_PATH' &&
   bl64_check_export 'DEV_PACK_NAME_MODULAR' &&
   bl64_check_export 'DEV_PACK_NAME_SA' &&

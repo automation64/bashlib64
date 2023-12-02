@@ -70,7 +70,7 @@ function dev_build_library() {
   bl64_dbg_lib_show_function "$@"
   local destination="$1"
   local file=''
-  local build_full="${destination}/${DEV_BUILD_NAME_SINGLE}"
+  local build_sa="${destination}/${DEV_BUILD_NAME_SA}"
   local build_core="${destination}/${DEV_BUILD_NAME_CORE}"
   local build_opt="${destination}/${DEV_BUILD_NAME_OPT}"
   local build_module_core="${destination}/${DEV_BUILD_NAME_MODULE_CORE}"
@@ -88,9 +88,9 @@ function dev_build_library() {
   # Create header
   bl64_msg_show_task 'creating library header'
   # shellcheck disable=SC2119
-  dev_build_create_header >"$build_full" &&
-    bl64_fs_cp_file "$build_full" "$build_core" &&
-    bl64_fs_cp_file "$build_full" "$build_module_core" ||
+  dev_build_create_header >"$build_sa" &&
+    bl64_fs_cp_file "$build_sa" "$build_core" &&
+    bl64_fs_cp_file "$build_sa" "$build_module_core" ||
     return $?
   # shellcheck disable=SC2119
   {
@@ -98,7 +98,7 @@ function dev_build_library() {
   } >"$build_opt" || return 1
 
   bl64_msg_show_task 'adding modules'
-  dev_add_modules "$build_full" "${DEV_MODULES_CORE} ${DEV_MODULES_OPT}" &&
+  dev_add_modules "$build_sa" "${DEV_MODULES_CORE} ${DEV_MODULES_OPT}" &&
     dev_add_modules "$build_core" "$DEV_MODULES_CORE" &&
     dev_add_modules "$build_opt" "$DEV_MODULES_OPT" ||
     return $?
@@ -118,11 +118,11 @@ function dev_build_library() {
 
   bl64_msg_show_task 'adding main'
   # shellcheck disable=SC2119
-  { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_full" &&
+  { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_sa" &&
     { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_core" &&
     { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_module_core" &&
     bl64_fs_run_chmod '0755' \
-      "$build_full" \
+      "$build_sa" \
       "$build_module_core" \
       "$build_core" \
       "$build_opt" ||
@@ -192,7 +192,7 @@ function dev_build_check_requirements() {
     bl64_check_export 'DEV_BUILD_NAME_MODULE_CORE' &&
     bl64_check_export 'DEV_BUILD_NAME_MODULE' &&
     bl64_check_export 'DEV_BUILD_NAME_OPT' &&
-    bl64_check_export 'DEV_BUILD_NAME_SINGLE' &&
+    bl64_check_export 'DEV_BUILD_NAME_SA' &&
     bl64_check_export 'DEV_MODULES_CORE' &&
     bl64_check_export 'DEV_MODULES_OPT' &&
     bl64_check_export 'DEV_BUILD_FULL_PATH_RELEASE' &&
