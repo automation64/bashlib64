@@ -184,7 +184,17 @@ function dev_build_md() {
 
 function dev_build_check_requirements() {
   [[ -z "$dev_build_command" ]] && dev_build_help return 1
-  bl64_check_directory "$DEV_SRC" || return 1
+  bl64_check_directory "$DEV_SRC"
+  bl64_check_export 'DEV_BUILD_FULL_PATH_TEST' &&
+    bl64_check_export 'DEV_BUILD_NAME_CORE' &&
+    bl64_check_export 'DEV_BUILD_NAME_MODULE_CORE' &&
+    bl64_check_export 'DEV_BUILD_NAME_MODULE' &&
+    bl64_check_export 'DEV_BUILD_NAME_OPT' &&
+    bl64_check_export 'DEV_BUILD_NAME_SINGLE' &&
+    bl64_check_export 'DEV_MODULES_CORE' &&
+    bl64_check_export 'DEV_MODULES_OPT' &&
+    bl64_check_export 'DEV_BUILD_FULL_PATH_RELEASE' &&
+    bl64_check_directory "$DEV_DOCS"
 }
 
 function dev_build_help() {
