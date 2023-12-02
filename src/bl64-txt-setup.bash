@@ -27,7 +27,6 @@ function bl64_txt_setup() {
     _bl64_txt_set_command &&
     _bl64_txt_set_options &&
     BL64_TXT_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'txt'
 }
 

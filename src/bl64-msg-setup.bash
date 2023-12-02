@@ -29,7 +29,6 @@ function bl64_msg_setup() {
     bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI" &&
     bl64_msg_app_enable_verbose &&
     BL64_MSG_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'msg'
 }
 

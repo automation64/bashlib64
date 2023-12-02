@@ -41,9 +41,8 @@ function bl64_ans_setup() {
     _bl64_ans_set_runtime "$ansible_config" &&
     _bl64_ans_set_options &&
     _bl64_ans_set_version &&
-    BL64_ANS_MODULE="$BL64_VAR_ON" &&
-    BL64_ANS_ENV_IGNORE="$env_ignore"
-
+    BL64_ANS_ENV_IGNORE="$env_ignore" &&
+    BL64_ANS_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'ans'
 }
 

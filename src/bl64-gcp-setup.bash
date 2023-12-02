@@ -30,7 +30,6 @@ function bl64_gcp_setup() {
     _bl64_gcp_set_options &&
     bl64_check_command "$BL64_GCP_CMD_GCLOUD" &&
     BL64_GCP_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'gcp'
 }
 

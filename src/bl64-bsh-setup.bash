@@ -30,7 +30,6 @@ function bl64_bsh_setup() {
     bl64_lib_module_imported 'BL64_FS_MODULE' &&
     _bl64_bsh_set_version &&
     BL64_BSH_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'bsh'
 }
 

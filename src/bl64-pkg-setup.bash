@@ -31,7 +31,6 @@ function bl64_pkg_setup() {
     _bl64_pkg_set_options &&
     _bl64_pkg_set_alias &&
     BL64_PKG_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'pkg'
 }
 

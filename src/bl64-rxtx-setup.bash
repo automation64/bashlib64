@@ -31,7 +31,6 @@ function bl64_rxtx_setup() {
     _bl64_rxtx_set_options &&
     _bl64_rxtx_set_alias &&
     BL64_RXTX_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'rxtx'
 }
 

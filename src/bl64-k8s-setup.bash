@@ -38,7 +38,6 @@ function bl64_k8s_setup() {
     _bl64_k8s_set_options &&
     _bl64_k8s_set_runtime &&
     BL64_K8S_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'k8s'
 }
 

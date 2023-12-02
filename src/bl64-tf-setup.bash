@@ -33,7 +33,6 @@ function bl64_tf_setup() {
     _bl64_tf_set_options &&
     _bl64_tf_set_resources &&
     BL64_TF_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'tf'
 }
 

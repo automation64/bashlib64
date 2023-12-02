@@ -30,7 +30,6 @@ function bl64_cnt_setup() {
     bl64_cnt_set_paths &&
     _bl64_cnt_set_options &&
     BL64_CNT_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'cnt'
 }
 

@@ -30,7 +30,6 @@ function bl64_iam_setup() {
     _bl64_iam_set_alias &&
     _bl64_iam_set_options &&
     BL64_IAM_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'iam'
 }
 

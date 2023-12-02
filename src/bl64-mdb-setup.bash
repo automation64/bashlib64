@@ -33,7 +33,6 @@ function bl64_mdb_setup() {
     _bl64_mdb_set_options &&
     _bl64_mdb_set_runtime &&
     BL64_MDB_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'mdb'
 }
 

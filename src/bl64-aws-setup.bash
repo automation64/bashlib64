@@ -49,7 +49,6 @@ function bl64_aws_setup() {
     bl64_check_command "$BL64_AWS_CMD_AWS" &&
     bl64_aws_set_paths &&
     BL64_AWS_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'aws'
 }
 

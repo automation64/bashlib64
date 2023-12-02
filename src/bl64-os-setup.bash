@@ -34,7 +34,6 @@ function bl64_os_setup() {
     _bl64_os_set_command &&
     _bl64_os_set_options &&
     BL64_OS_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'os'
 }
 

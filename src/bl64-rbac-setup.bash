@@ -32,7 +32,6 @@ function bl64_rbac_setup() {
     _bl64_rbac_set_options &&
     _bl64_rbac_set_alias &&
     BL64_RBAC_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'rbac'
 }
 
