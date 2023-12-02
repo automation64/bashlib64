@@ -1,7 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  bl64_pkg_setup
-
+  bl64_xsv_setup
 }
 
 @test "bl64_xsv_run_yq: parameters are not present" {
