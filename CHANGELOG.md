@@ -17,12 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - check
-  - bl64_lib_module_imported: **Breaking change**: migrated to core module: bl64_lib_module_imported
+  - bl64_check_module_imported: **Breaking change**: migrated to core module: bl64_lib_module_imported
 
 ### Added
 
 - core
   - bl64_lib_module_imported: migrated from check (bl64_lib_module_imported)
+- bsh
+  - bl64_bsh_env_import_yaml: import and load shell environment variables from YAML file
+- check
+  - bl64_check_command: 3rd parameter to show command name when not available
 
 ### Refact
 

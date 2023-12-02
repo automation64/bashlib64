@@ -80,3 +80,52 @@ function bl64_bsh_env_export_variable() {
 
   printf "export %s='%s'\n" "$variable" "$value"
 }
+
+#######################################
+# Import shell environment variables from YAML file
+#
+# * Conversion is done using YQ and Awk
+# * YAML nested variables are flatten and converted to single shell variables:
+#   * first.second: value -> FIRST_SECOND="value"
+#   * first.second[2]: value -> FIRST_SECOND_2="value"
+# * Shell variable names are created using uppercase and exported
+# * Resulting variables are saved to a temporary file which is then sourced into the current script
+#
+# Arguments:
+#   $1: path to the YAML file
+# Outputs:
+#   STDOUT: none
+#   STDERR: conversion errors
+# Returns:
+#   0: converted and lodaded ok
+#   >0: failed to convert
+#######################################
+function bl64_bsh_env_import_yaml() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local dynamic_env=''
+
+  bl64_check_parameter 'source' &&
+    bl64_check_file "$source" ||
+    return $?
+
+  # shellcheck disable=SC1090
+  bl64_msg_show_subtask "${_BL64_BSH_TXT_IMPORT_YAML} (${source})"
+  # shellcheck disable=SC1090
+  dynamic_env="$(bl64_fs_create_tmpfile)" &&
+    bl64_xsv_run_yq \
+      -o p \
+      '.' \
+      "$source" |
+    bl64_txt_run_awk \
+      -F ' = ' '
+  {
+      gsub( "[.]", "_", $1 )
+      print "export " toupper( $1 ) "='"'"'" $2 "'"'"'"
+  }' >"$dynamic_env" &&
+    source "$dynamic_env" ||
+    return $?
+
+  bl64_fs_rm_tmpfile "$dynamic_env"
+  return 0
+}
