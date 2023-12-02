@@ -657,7 +657,7 @@ function bl64_check_parameters_none() {
 function bl64_check_module() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local module="${1:-}"
-  local -setup_status=''
+  local setup_status=''
 
   bl64_check_parameter 'module' &&
     bl64_lib_module_imported "$module" ||
