@@ -15,7 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - check
-  - bl64_check_module_imported: **Breaking change**: migrated to core module
+  - bl64_lib_module_imported: **Breaking change**: migrated to core module: bl64_lib_module_imported
+
+### Added
+
+- core
+  - bl64_lib_module_imported: migrated from check (bl64_lib_module_imported)
 
 ## [17.3.0]
 
@@ -121,7 +126,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - bl64_iam_check_user: migrated from bl64_check_user
 - check
-  - bl64_check_module_imported: check that the bl64 module is imported (sourced)
+  - bl64_lib_module_imported: check that the bl64 module is imported (sourced)
 
 ### Changed
 

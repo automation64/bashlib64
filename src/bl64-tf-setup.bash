@@ -22,10 +22,10 @@ function bl64_tf_setup() {
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_TXT_MODULE' &&
+  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
     _bl64_tf_set_command "$terraform_bin" &&
     bl64_check_command "$BL64_TF_CMD_TERRAFORM" &&
     _bl64_tf_set_version &&

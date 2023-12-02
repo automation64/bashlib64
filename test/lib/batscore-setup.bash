@@ -14,8 +14,17 @@ export BL64_LIB_TRAPS='0'
 # Disable compatibility mode to allow strict version checking
 export BL64_LIB_COMPATIBILITY='0'
 
-# Load the bashlib64 build library for all test-cases
-. "${TESTMANSH_PROJECT_BUILD}/test/bashlib64.bash"
+# Load the bashlib64 library for all test-cases
+export DEV_TEST_VALUE_LIBRARY_MODE="${DEV_TEST_VALUE_LIBRARY_MODE:-SA}"
+case "$DEV_TEST_VALUE_LIBRARY_MODE" in
+'SA') . "${TESTMANSH_PROJECT_BUILD}/test/bashlib64.bash" ;;
+'SPLIT') . "${TESTMANSH_PROJECT_BUILD}/test/bashlib64-core.bash" ;;
+'MODULAR') . "${TESTMANSH_PROJECT_BUILD}/test/bashlib64-module-core.bash" ;;
+*)
+  echo 'Error: invalid library option'
+  exit 1
+  ;;
+esac
 
 # Sets used by bats-core. Do not overwrite
 set -o 'errexit'
