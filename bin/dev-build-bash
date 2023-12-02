@@ -56,19 +56,33 @@ function dev_build_create_header() {
 # shellcheck disable=SC2317
 function dev_build_release() {
   bl64_dbg_lib_show_function
+  dev_build_library "$DEV_BUILD_FULL_PATH_RELEASE"
+}
+
+# shellcheck disable=SC2317
+function dev_build_test() {
+  bl64_dbg_lib_show_function
+  dev_build_library "$DEV_BUILD_FULL_PATH_TEST"
+}
+
+# shellcheck disable=SC2317
+function dev_build_library() {
+  bl64_dbg_lib_show_function "$@"
+  local destination="$1"
   local file=''
-  local build_full="${DEV_BUILD_FULL_PATH_RELEASE}/${DEV_BUILD_NAME_SINGLE}"
-  local build_core="${DEV_BUILD_FULL_PATH_RELEASE}/${DEV_BUILD_NAME_CORE}"
-  local build_opt="${DEV_BUILD_FULL_PATH_RELEASE}/${DEV_BUILD_NAME_OPT}"
-  local build_module_core="${DEV_BUILD_FULL_PATH_RELEASE}/${DEV_BUILD_NAME_MODULE_CORE}"
+  local build_full="${destination}/${DEV_BUILD_NAME_SINGLE}"
+  local build_core="${destination}/${DEV_BUILD_NAME_CORE}"
+  local build_opt="${destination}/${DEV_BUILD_NAME_OPT}"
+  local build_module_core="${destination}/${DEV_BUILD_NAME_MODULE_CORE}"
   local build_module=''
   local module_name=''
 
   bl64_dbg_app_show_vars 'DEV_MODULES_CORE' 'DEV_MODULES_OPT'
   cd "$DEV_SRC" || return 1
 
-  bl64_fs_rm_full "$DEV_BUILD_FULL_PATH_RELEASE"
-  bl64_fs_create_dir '0777' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_BUILD_FULL_PATH_RELEASE" ||
+  bl64_msg_show_task "preparing destination (${destination})"
+  bl64_fs_rm_full "$destination"
+  bl64_fs_create_dir '0777' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$destination" ||
     return $?
 
   # Create header
@@ -90,7 +104,7 @@ function dev_build_release() {
     return $?
 
   for module_name in ${DEV_MODULES_CORE} ${DEV_MODULES_OPT}; do
-    build_module="${DEV_BUILD_FULL_PATH_RELEASE}/${DEV_BUILD_NAME_MODULE}-${module_name}.bash"
+    build_module="${destination}/${DEV_BUILD_NAME_MODULE}-${module_name}.bash"
     dev_add_modules "${build_module}.tmp" "$module_name"
     {
       "$BL64_OS_CMD_CAT" 'bl64-lib-header.bash' &&
@@ -104,28 +118,14 @@ function dev_build_release() {
   # shellcheck disable=SC2119
   { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_full" &&
     { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_core" &&
-    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_module_core"
-}
-
-# shellcheck disable=SC2317
-function dev_build_test() {
-  bl64_dbg_lib_show_function
-  local file=''
-  local build_full="${DEV_BUILD_FULL_PATH_TEST}/${DEV_BUILD_NAME_SINGLE}"
-
-  bl64_dbg_app_show_vars 'DEV_MODULES_CORE' 'DEV_MODULES_OPT'
-  cd "$DEV_SRC" || return 1
-
-  bl64_fs_rm_full "$DEV_BUILD_FULL_PATH_TEST"
-  bl64_fs_create_dir '0777' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_BUILD_FULL_PATH_TEST" ||
+    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_module_core" ||
     return $?
 
-  bl64_msg_show_task "creating stand-alone file for testing (${build_full})"
-  dev_build_create_header >"$build_full" &&
-    dev_add_modules "$build_full" "${DEV_MODULES_CORE} ${DEV_MODULES_OPT}" &&
-    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_full" ||
-    return $?
-  bl64_fs_run_chmod '0755' "$build_full"
+  bl64_msg_show_task 'making libraries executable'
+  bl64_fs_run_chmod '0755' \
+    "$build_full" \
+    "$build_core" \
+    "$build_module_core"
 }
 
 # shellcheck disable=SC2317
