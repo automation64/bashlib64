@@ -1,6 +1,6 @@
 ---
 # Template: 3.0.0
-name: "Test / Bash / Non-OS"
+name: "Test / Bash / Ansible"
 
 on:
   workflow_dispatch:
@@ -11,16 +11,11 @@ on:
     branches:
       - "feature/**"
     paths:
-      - "src/*-bsh"
-      - "src/*-check"
-      - "src/*-dbg"
-      - "src/*-msg"
-      - "src/*-rnd"
-      - "src/*-ui"
-      - "test/batscore/bash-non-os/**"
+      - "src/*-ans-*"
+      - "test/batscore/ansible/**"
 
 jobs:
-  test-non-os:
+  test-ansible:
     runs-on: "ubuntu-latest"
     steps:
 
@@ -36,5 +31,5 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./bin/dev-test-bash non_os"
+        run: "./bin/dev-test-ansible"
 ...
