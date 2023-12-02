@@ -118,7 +118,8 @@ function bl64_xsv_search_records() {
 function bl64_xsv_run_jq() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_XSV_MODULE' &&
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_XSV_MODULE' &&
     bl64_check_command "$BL64_XSV_CMD_JQ" ||
     return $?
 
@@ -145,7 +146,8 @@ function bl64_xsv_run_jq() {
 function bl64_xsv_run_yq() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_XSV_MODULE' &&
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_XSV_MODULE' &&
     bl64_check_command "$BL64_XSV_CMD_YQ" "$BL64_VAR_DEFAULT" 'yq' ||
     return $?
 
