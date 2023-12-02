@@ -191,7 +191,7 @@ function bl64_check_parameter() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local parameter_name="${1:-}"
   local description="${2:-parameter: ${parameter_name}}"
-  local -n parameter_ref="$parameter_name"
+  local parameter_ref=''
 
   if [[ -z "$parameter_name" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_MISSING} (${_BL64_CHECK_TXT_PARAMETER}: ${parameter_name} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
@@ -203,6 +203,7 @@ function bl64_check_parameter() {
     return $BL64_LIB_ERROR_PARAMETER_MISSING
   fi
 
+  parameter_ref="${!parameter_name}"
   if [[ -z "$parameter_ref" || "$parameter_ref" == "${BL64_VAR_NULL}" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_MISSING} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_EMPTY
@@ -236,7 +237,7 @@ function bl64_check_export() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local export_name="${1:-}"
   local description="${2:-export: $export_name}"
-  local -n export_ref="$export_name"
+  local export_ref=''
 
   bl64_check_parameter 'export_name' || return $?
 
@@ -246,6 +247,7 @@ function bl64_check_export() {
     return $BL64_LIB_ERROR_EXPORT_SET
   fi
 
+  export_ref="${!export_name}"
   if [[ -z "$export_ref" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_EXPORT_EMPTY} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
@@ -655,12 +657,13 @@ function bl64_check_parameters_none() {
 function bl64_check_module() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local module="${1:-}"
-  local -n setup_status="$module"
+  local -setup_status=''
 
   bl64_check_parameter 'module' &&
     bl64_lib_module_imported "$module" ||
     return $?
 
+  setup_status="${!module}"
   if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_NOT_SETUP} (${_BL64_CHECK_TXT_MODULE}: ${module} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
