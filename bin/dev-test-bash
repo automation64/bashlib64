@@ -118,7 +118,7 @@ bl64_check_export 'DEV_CICD_TESTMANSH' ||
 bl64_msg_all_enable_verbose
 bl64_msg_show_batch_start 'test-bash'
 case "$dev_test_group" in
-'ansible') dev_test_bash_os "$dev_test_family" ;;
+'ansible') dev_test_bash_ansible ;;
 'cloud') dev_test_bash_cloud ;;
 'container') dev_test_bash_container ;;
 'kubernetes') dev_test_bash_kubernetes ;;
