@@ -14,12 +14,15 @@ export BL64_LIB_TRAPS='0'
 # Disable compatibility mode to allow strict version checking
 export BL64_LIB_COMPATIBILITY='0'
 
+# Base path for the testing libraries
+export DEV_TEST_PATH_LIBRARY="${TESTMANSH_PROJECT_BUILD}/test"
+
 # Load the bashlib64 library for all test-cases
 export DEV_TEST_VALUE_LIBRARY_MODE="${DEV_TEST_VALUE_LIBRARY_MODE:-SA}"
 case "$DEV_TEST_VALUE_LIBRARY_MODE" in
-'SA') . "${TESTMANSH_PROJECT_BUILD}/test/bashlib64.bash" ;;
-'SPLIT') . "${TESTMANSH_PROJECT_BUILD}/test/bashlib64-core.bash" ;;
-'MODULAR') . "${TESTMANSH_PROJECT_BUILD}/test/bashlib64-module-core.bash" ;;
+'SA') . "${DEV_TEST_PATH_LIBRARY}/bashlib64.bash" ;;
+'SPLIT') . "${DEV_TEST_PATH_LIBRARY}/bashlib64-core.bash" ;;
+'MODULAR') . "${DEV_TEST_PATH_LIBRARY}/bashlib64-module-core.bash" ;;
 *)
   echo 'Error: invalid library option'
   exit 1
@@ -33,7 +36,7 @@ set +o 'nounset'
 # Do not set/unset: 'keyword', 'noexec'
 
 # Test-case specific variables
-export DEV_TEST_BASHLIB64="${TESTMANSH_PROJECT_BUILD}/test/bashlib64.bash"
+export DEV_TEST_BASHLIB64="${DEV_TEST_PATH_LIBRARY}/bashlib64.bash"
 
 export DEV_TEST_VALUE_GIT_OWNER='automation64'
 export DEV_TEST_VALUE_GIT_ASSET_REPO='bashlib64'

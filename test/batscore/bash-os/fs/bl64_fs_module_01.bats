@@ -4,10 +4,10 @@ setup() {
 }
 
 function test_load_module(){
-  . "${TESTMANSH_PROJECT_BUILD}/bashlib64-module-fs.bash"
+  . "${DEV_TEST_PATH_LIBRARY}/bashlib64-module-fs.bash"
 }
 
-@test "bl64_fs_module: module setup" {
+@test "bl64_fs_module: module load" {
   run test_load_module
   assert_success
 }
