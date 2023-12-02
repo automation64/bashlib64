@@ -5,6 +5,6 @@ setup() {
 }
 
 @test "bl64_xsv_run_yq: run command ok" {
-  run bl64_xsv_run_yq --help
+  run bl64_xsv_run_yq --version
   assert_success
 }
