@@ -23,6 +23,7 @@ function bl64_iam_setup() {
 
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     bl64_lib_module_imported 'BL64_RND_MODULE' &&
     _bl64_iam_set_command &&
@@ -30,8 +31,7 @@ function bl64_iam_setup() {
     _bl64_iam_set_options &&
     BL64_IAM_MODULE="$BL64_VAR_ON"
 
-  bl64_dbg_lib_show_function
-  bl64_check_alert_module_setup ' iam'
+  bl64_check_alert_module_setup 'iam'
 }
 
 #######################################

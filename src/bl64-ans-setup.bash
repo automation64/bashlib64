@@ -31,6 +31,7 @@ function bl64_ans_setup() {
 
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     bl64_lib_module_imported 'BL64_TXT_MODULE' &&
     _bl64_ans_set_command "$ansible_bin" &&
@@ -43,8 +44,7 @@ function bl64_ans_setup() {
     BL64_ANS_MODULE="$BL64_VAR_ON" &&
     BL64_ANS_ENV_IGNORE="$env_ignore"
 
-  bl64_dbg_lib_show_function
-  bl64_check_alert_module_setup ' ans'
+  bl64_check_alert_module_setup 'ans'
 }
 
 #######################################

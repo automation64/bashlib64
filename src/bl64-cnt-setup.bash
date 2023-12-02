@@ -24,14 +24,14 @@ function bl64_cnt_setup() {
 
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     _bl64_cnt_set_command &&
     bl64_cnt_set_paths &&
     _bl64_cnt_set_options &&
     BL64_CNT_MODULE="$BL64_VAR_ON"
 
-  bl64_dbg_lib_show_function
-  bl64_check_alert_module_setup ' cnt'
+  bl64_check_alert_module_setup 'cnt'
 }
 
 #######################################
