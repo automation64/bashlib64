@@ -2,6 +2,9 @@
 # Template: 4.1.0
 name: "Lint / Bash"
 
+env:
+  DEV_CICD_DEBUG: ""
+
 on:
   pull_request:
     branches:
