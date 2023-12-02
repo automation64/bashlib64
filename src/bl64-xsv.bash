@@ -146,7 +146,7 @@ function bl64_xsv_run_yq() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_module 'BL64_XSV_MODULE' &&
-    bl64_check_command "$BL64_XSV_CMD_YQ" ||
+    bl64_check_command "$BL64_XSV_CMD_YQ" "$BL64_VAR_DEFAULT" 'yq' ||
     return $?
 
   bl64_dbg_lib_trace_start
