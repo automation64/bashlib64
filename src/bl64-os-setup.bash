@@ -20,7 +20,6 @@ function bl64_os_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
   [[ "${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5' ]] &&
     bl64_msg_show_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
@@ -35,7 +34,8 @@ function bl64_os_setup() {
     _bl64_os_set_options &&
     BL64_OS_MODULE="$BL64_VAR_ON"
 
-  bl64_check_alert_module_setup 'os'
+  bl64_dbg_lib_show_function
+  bl64_check_alert_module_setup ' os'
 }
 
 #######################################

@@ -20,7 +20,6 @@ function bl64_bsh_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
   bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
@@ -28,7 +27,8 @@ function bl64_bsh_setup() {
     _bl64_bsh_set_version &&
     BL64_BSH_MODULE="$BL64_VAR_ON"
 
-  bl64_check_alert_module_setup 'bsh'
+  bl64_dbg_lib_show_function
+  bl64_check_alert_module_setup ' bsh'
 }
 
 #######################################

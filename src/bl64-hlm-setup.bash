@@ -36,7 +36,8 @@ function bl64_hlm_setup() {
     _bl64_hlm_set_runtime &&
     BL64_HLM_MODULE="$BL64_VAR_ON"
 
-  bl64_check_alert_module_setup 'hlm'
+  bl64_dbg_lib_show_function
+  bl64_check_alert_module_setup ' hlm'
 }
 
 #######################################

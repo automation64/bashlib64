@@ -40,7 +40,8 @@ function bl64_py_setup() {
     _bl64_py_setup "$BL64_VAR_DEFAULT"
   fi
 
-  bl64_check_alert_module_setup 'py'
+  bl64_dbg_lib_show_function
+  bl64_check_alert_module_setup ' py'
 }
 
 function _bl64_py_setup() {

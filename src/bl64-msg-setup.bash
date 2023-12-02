@@ -29,7 +29,8 @@ function bl64_msg_setup() {
     bl64_msg_app_enable_verbose &&
     BL64_MSG_MODULE="$BL64_VAR_ON"
 
-  bl64_check_alert_module_setup 'msg'
+  bl64_dbg_lib_show_function
+  bl64_check_alert_module_setup ' msg'
 }
 
 #######################################

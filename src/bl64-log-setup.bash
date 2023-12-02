@@ -38,7 +38,8 @@ function bl64_log_setup() {
     bl64_log_set_format "$format" &&
     BL64_LOG_MODULE="$BL64_VAR_ON"
 
-  bl64_check_alert_module_setup 'log'
+  bl64_dbg_lib_show_function
+  bl64_check_alert_module_setup ' log'
 }
 
 #######################################

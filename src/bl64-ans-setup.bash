@@ -43,7 +43,8 @@ function bl64_ans_setup() {
     BL64_ANS_MODULE="$BL64_VAR_ON" &&
     BL64_ANS_ENV_IGNORE="$env_ignore"
 
-  bl64_check_alert_module_setup 'ans'
+  bl64_dbg_lib_show_function
+  bl64_check_alert_module_setup ' ans'
 }
 
 #######################################

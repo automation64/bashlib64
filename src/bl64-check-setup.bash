@@ -26,5 +26,6 @@ function bl64_check_setup() {
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     BL64_CHECK_MODULE="$BL64_VAR_ON"
 
-  bl64_check_alert_module_setup 'check'
+  bl64_dbg_lib_show_function
+  bl64_check_alert_module_setup ' check'
 }
