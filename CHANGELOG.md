@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - all
   - removed dependency to allow individual module loading
+- cnt
+  - bl64_cnt_is_inside_container: fixed testing of shell-env when var is not defined
 
 ### Changed
 
@@ -21,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - core
   - bl64_lib_module_imported: migrated from check (bl64_lib_module_imported)
+
+### Refact
+
+- check
+  - bl64_check_export,bl64_check_parameter,bl64_check_module: replaced eval with test -n
 
 ## [17.3.0]
 
