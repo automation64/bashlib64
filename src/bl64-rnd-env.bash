@@ -2,9 +2,9 @@
 # BashLib64 / Module / Globals / Generate random data
 #######################################
 
-export BL64_RND_VERSION='1.2.0'
+export BL64_RND_VERSION='1.2.1'
 
-export BL64_RND_MODULE="$BL64_VAR_OFF"
+export BL64_RND_MODULE='0'
 
 declare -ig BL64_RND_LENGTH_1=1
 declare -ig BL64_RND_LENGTH_20=20

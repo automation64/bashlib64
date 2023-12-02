@@ -2,10 +2,10 @@
 # BashLib64 / Module / Globals / Write messages to logs
 #######################################
 
-export BL64_LOG_VERSION='2.1.0'
+export BL64_LOG_VERSION='2.1.1'
 
 # Optional module. Not enabled by default
-export BL64_LOG_MODULE="$BL64_VAR_OFF"
+export BL64_LOG_MODULE='0'
 
 # Log file types
 export BL64_LOG_FORMAT_CSV='C'

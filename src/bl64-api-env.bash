@@ -2,9 +2,9 @@
 # BashLib64 / Module / Globals / Interact with RESTful APIs
 #######################################
 
-export BL64_API_VERSION='1.1.0'
+export BL64_API_VERSION='1.1.1'
 
-export BL64_API_MODULE="$BL64_VAR_OFF"
+export BL64_API_MODULE='0'
 
 #
 # Common constants
