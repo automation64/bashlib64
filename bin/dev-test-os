@@ -29,7 +29,7 @@ bl64_check_export 'DEV_CICD_TESTMANSH' ||
   exit $?
 
 bl64_msg_all_enable_verbose
-bl64_msg_show_batch_start 'test-app'
+bl64_msg_show_batch_start 'test-bash'
 case "$family" in
 'single')
   for target in $DEV_TEST_CONTAINER_OS_SINGLE; do
@@ -63,4 +63,4 @@ case "$family" in
   ;;
 *) echo "invalid option" ;;
 esac
-bl64_msg_show_batch_finish $? 'test-app'
+bl64_msg_show_batch_finish $? 'test-bash'

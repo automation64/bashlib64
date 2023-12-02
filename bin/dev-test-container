@@ -28,8 +28,8 @@ bl64_check_export 'DEV_CICD_TESTMANSH' ||
   exit $?
 
 bl64_msg_all_enable_verbose
-bl64_msg_show_batch_start 'test-app'
+bl64_msg_show_batch_start 'test-bash'
 for target in $DEV_TEST_CONTAINER_CONTAINER; do
   "$DEV_CICD_TESTMANSH" -b -o -e "$target" -c "$DEV_TEST_CASE_CONTAINER" || exit $?
 done
-bl64_msg_show_batch_finish $? 'test-app'
+bl64_msg_show_batch_finish $? 'test-bash'

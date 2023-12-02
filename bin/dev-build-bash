@@ -1,16 +1,23 @@
 #!/usr/bin/env bash
 #
-# Create the BashLib64 stand-alone distributable file
+# Assemble modular script
+#
+# * Use to build script from multiple sources (modular)
+# * Template: 2.0.1
 #
 
-# shellcheck source=SCRIPTDIR/dev-set
-source './bin/dev-set' || {
-  echo 'unable to load dev env'
-  exit 1
-}
+#
+# Imports
+#
 
-# shellcheck source=SCRIPTDIR/../lib/bashlib64.bash
-source "$DEV_CICD_BASHLIB64" || exit 1
+# shellcheck source=bin/dev-set
+source ./bin/dev-set || exit 1
+# shellcheck source=lib/bl64/bashlib64.bash
+source "${DEV_CICD_BASHLIB64}/bashlib64.bash" || exit 1
+
+#
+# Functions
+#
 
 # shellcheck disable=SC2317
 function dev_add_modules() {
@@ -175,16 +182,6 @@ function dev_build_md() {
 
 }
 
-# shellcheck disable=SC2317
-function dev_promote() {
-  bl64_dbg_lib_show_function
-  local build_full="${DEV_BUILD_FULL_PATH_RELEASE}/${DEV_BUILD_NAME_SINGLE}"
-
-  dev_build_release &&
-    bl64_msg_show_task "promoting library from: ${build_full}" &&
-    bl64_fs_cp_file "$build_full" "$DEV_RELEASE_FULL_PATH"
-}
-
 function dev_build_check_requirements() {
   [[ -z "$dev_build_command" ]] && dev_build_help return 1
   bl64_check_directory "$DEV_SRC" || return 1
@@ -221,6 +218,7 @@ while getopts ':trdh' dev_build_option; do
   esac
 done
 dev_build_check_requirements || exit 1
+[[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
 
 bl64_msg_all_enable_verbose
 bl64_msg_show_batch_start "$dev_build_command"

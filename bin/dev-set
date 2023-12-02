@@ -3,7 +3,7 @@
 # Set development environment variables
 #
 # * Source this script from the project's root directory
-# * Template: 7.0.0
+# * Template: 7.0.1
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -67,6 +67,7 @@ function dev_set_load_local() {
 }
 
 function dev_set_load_gitlab() {
+  # shellcheck disable=SC2154
   dev_set_message "GitLab detected, setting project root (${CI_PROJECT_DIR})"
   # shellcheck disable=SC2155
   export DEV_ROOT="$CI_PROJECT_DIR"
@@ -82,7 +83,7 @@ function dev_set_load_github() {
   dot_local="${DEV_ROOT}/${dot_local}"
   if [[ -f "$dot_local" ]]; then
     dev_set_message "Load local github automatic environment variables (${dot_local})"
-    # shellcheck source=SCRIPTDIR/../.local-github
+    # shellcheck disable=SC1090
     source "${dot_local}" ||
       {
         dev_set_error "unable to source file (${dot_local})"
