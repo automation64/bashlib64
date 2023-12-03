@@ -29,10 +29,11 @@ function bl64_ans_setup() {
   local ansible_config="${2:-${BL64_VAR_DEFAULT}}"
   local env_ignore="${3:-${BL64_VAR_ON}}"
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_TXT_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
     _bl64_ans_set_command "$ansible_bin" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE_GALAXY" &&
@@ -40,9 +41,8 @@ function bl64_ans_setup() {
     _bl64_ans_set_runtime "$ansible_config" &&
     _bl64_ans_set_options &&
     _bl64_ans_set_version &&
-    BL64_ANS_MODULE="$BL64_VAR_ON" &&
-    BL64_ANS_ENV_IGNORE="$env_ignore"
-
+    BL64_ANS_ENV_IGNORE="$env_ignore" &&
+    BL64_ANS_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'ans'
 }
 

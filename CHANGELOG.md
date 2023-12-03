@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [18.0.0]
+
+### Fixed
+
+- all
+  - removed dependency to allow individual module loading
+- cnt
+  - bl64_cnt_is_inside_container: fixed testing of shell-env when var is not defined
+
+### Changed
+
+- check
+  - bl64_check_module_imported: **Breaking change**: migrated to core module: bl64_lib_module_imported
+
+### Added
+
+- core
+  - bl64_lib_module_imported: migrated from check (bl64_lib_module_imported)
+- bsh
+  - bl64_bsh_env_import_yaml: import and load shell environment variables from YAML file
+- check
+  - bl64_check_command: 3rd parameter to show command name when not available
+
+### Refact
+
+- check
+  - bl64_check_export,bl64_check_parameter,bl64_check_module: replaced eval with test -n
+
 ## [17.3.0]
 
 ### Added
@@ -109,7 +137,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - bl64_iam_check_user: migrated from bl64_check_user
 - check
-  - bl64_check_module_imported: check that the bl64 module is imported (sourced)
+  - bl64_lib_module_imported: check that the bl64 module is imported (sourced)
 
 ### Changed
 
@@ -532,6 +560,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[18.0.0]: https://github.com/automation64/bashlib64/compare/17.3.0...18.0.0
 [17.3.0]: https://github.com/automation64/bashlib64/compare/17.2.0...17.3.0
 [17.2.0]: https://github.com/automation64/bashlib64/compare/17.1.0...17.2.0
 [17.1.0]: https://github.com/automation64/bashlib64/compare/17.0.0...17.1.0

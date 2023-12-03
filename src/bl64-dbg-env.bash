@@ -2,9 +2,9 @@
 # BashLib64 / Module / Globals / Show shell debugging information
 #######################################
 
-export BL64_DBG_VERSION='2.4.0'
+export BL64_DBG_VERSION='2.4.1'
 
-export BL64_DBG_MODULE="$BL64_VAR_OFF"
+export BL64_DBG_MODULE='0'
 
 # Debug target
 export BL64_DBG_TARGET=''

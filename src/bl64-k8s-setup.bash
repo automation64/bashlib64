@@ -27,17 +27,17 @@ function bl64_k8s_setup() {
       return $?
   fi
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_TXT_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
     _bl64_k8s_set_command "$kubectl_bin" &&
     bl64_check_command "$BL64_K8S_CMD_KUBECTL" &&
     _bl64_k8s_set_version &&
     _bl64_k8s_set_options &&
     _bl64_k8s_set_runtime &&
     BL64_K8S_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'k8s'
 }
 

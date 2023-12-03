@@ -38,8 +38,7 @@ function _bl64_cnt_find_variable_marker() {
   bl64_dbg_lib_show_function "$@"
   local marker="$1"
   bl64_dbg_lib_show_info "check for variable marker (${marker})"
-
-  eval "[[ -n \"\${${marker}}\" ]]"
+  [[ -v "$marker" ]]
 }
 
 #######################################

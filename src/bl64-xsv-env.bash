@@ -2,9 +2,9 @@
 # BashLib64 / Module / Globals / Manipulate CSV like text files
 #######################################
 
-export BL64_XSV_VERSION='1.7.0'
+export BL64_XSV_VERSION='1.7.1'
 
-export BL64_XSV_MODULE="$BL64_VAR_OFF"
+export BL64_XSV_MODULE='0'
 
 export BL64_XSV_CMD_YQ="$BL64_VAR_UNAVAILABLE"
 export BL64_XSV_CMD_JQ="$BL64_VAR_UNAVAILABLE"

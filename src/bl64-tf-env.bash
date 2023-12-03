@@ -2,10 +2,10 @@
 # BashLib64 / Module / Globals / Interact with Terraform
 #######################################
 
-export BL64_TF_VERSION='1.4.0'
+export BL64_TF_VERSION='1.4.1'
 
 # Optional module. Not enabled by default
-export BL64_TF_MODULE="$BL64_VAR_OFF"
+export BL64_TF_MODULE='0'
 
 export BL64_TF_LOG_PATH=''
 export BL64_TF_LOG_LEVEL=''

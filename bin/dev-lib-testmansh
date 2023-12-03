@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
 #
-# Update dev-time external tools
+# Update dev-time external tool: TestManSH
 #
-# * Use to download or install external tools, libraries, etc
-# * Tools and libs should go to lib/
-# * Do not include operations that requires privileged access (i.e. sudo)
-# * Template: 2.1.0
+# * Template: 3.0.1
 #
 
 #
 # Imports
 #
 
-# shellcheck source=SCRIPTDIR/dev-set
+# shellcheck source=bin/dev-set
 source ./bin/dev-set || exit 1
-# shellcheck source=SCRIPTDIR/../lib/bashlib64.bash
-source "$DEV_CICD_BASHLIB64" || exit 1
+# shellcheck source=lib/bl64/bashlib64.bash
+source "${DEV_CICD_BASHLIB64}/bashlib64.bash" || exit 1
 
 #
 # Main
 #
+
+[[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
+
 bl64_check_export 'DEV_CICD_TESTMANSH' &&
   bl64_check_export 'DEV_CICD_TESTMANSH_REPO' ||
   exit $?

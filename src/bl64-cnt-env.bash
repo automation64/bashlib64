@@ -2,10 +2,10 @@
 # BashLib64 / Module / Globals / Interact with container engines
 #######################################
 
-export BL64_CNT_VERSION='2.0.0'
+export BL64_CNT_VERSION='2.0.1'
 
 # Optional module. Not enabled by default
-export BL64_CNT_MODULE="$BL64_VAR_OFF"
+export BL64_CNT_MODULE='0'
 
 export BL64_CNT_DRIVER_DOCKER='docker'
 export BL64_CNT_DRIVER_PODMAN='podman'

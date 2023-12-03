@@ -2,6 +2,9 @@
 # Template: 3.0.0
 name: "Test / Bash / OS"
 
+env:
+  DEV_CICD_DEBUG: ""
+
 on:
   workflow_dispatch:
   pull_request:
@@ -24,15 +27,22 @@ on:
       - "test/batscore/bash-os/**"
 
 jobs:
-  test-os-fedora:
+  test-os-:
     runs-on: "ubuntu-latest"
+    strategy:
+      matrix:
+        distro:
+          - "fedora"
+          - "redhat"
+          - "debian"
+          - "other"
     steps:
 
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
       - name: "Prepare build environment"
-        run: "./bin/dev-lib-bashlib64 && ./bin/dev-lib-testmansh"
+        run: "./bin/dev-lib-installer64 && ./bin/dev-lib-bashlib64 && ./bin/dev-lib-testmansh"
 
       - name: "Build app"
         shell: 'script -q -e -c "bash {0}"'
@@ -40,59 +50,4 @@ jobs:
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
-        run: "./bin/dev-test-os fedora"
-
-  test-os-redhat:
-    runs-on: "ubuntu-latest"
-    steps:
-
-      - name: "Check out repository code"
-        uses: "actions/checkout@main"
-
-      - name: "Prepare build environment"
-        run: "./bin/dev-lib-bashlib64 && ./bin/dev-lib-testmansh"
-
-      - name: "Build app"
-        shell: 'script -q -e -c "bash {0}"'
-        run: "./bin/dev-build-bash -t"
-
-      - name: "Run tests"
-        shell: 'script -q -e -c "bash {0}"'
-        run: "./bin/dev-test-os redhat"
-
-  test-os-debian:
-    runs-on: "ubuntu-latest"
-    steps:
-
-      - name: "Check out repository code"
-        uses: "actions/checkout@main"
-
-      - name: "Prepare build environment"
-        run: "./bin/dev-lib-bashlib64 && ./bin/dev-lib-testmansh"
-
-      - name: "Build app"
-        shell: 'script -q -e -c "bash {0}"'
-        run: "./bin/dev-build-bash -t"
-
-      - name: "Run tests"
-        shell: 'script -q -e -c "bash {0}"'
-        run: "./bin/dev-test-os debian"
-
-  test-os-other:
-    runs-on: "ubuntu-latest"
-    steps:
-
-      - name: "Check out repository code"
-        uses: "actions/checkout@main"
-
-      - name: "Prepare build environment"
-        run: "./bin/dev-lib-bashlib64 && ./bin/dev-lib-testmansh"
-
-      - name: "Build app"
-        shell: 'script -q -e -c "bash {0}"'
-        run: "./bin/dev-build-bash -t"
-
-      - name: "Run tests"
-        shell: 'script -q -e -c "bash {0}"'
-        run: "./bin/dev-test-os other"
-...
+        run: "./bin/dev-test-bash os ${{ matrix.distro }}"

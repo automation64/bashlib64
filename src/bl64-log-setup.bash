@@ -30,14 +30,14 @@ function bl64_log_setup() {
 
   [[ -z "$repository" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
 
-  bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_log_set_repository "$repository" &&
     bl64_log_set_target "$target" &&
     bl64_log_set_level "$level" &&
     bl64_log_set_format "$format" &&
     BL64_LOG_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'log'
 }
 

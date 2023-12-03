@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='17.3.0'
+export BL64_VERSION='18.0.0'
 
 #
 # Imported shell standard variables
@@ -142,37 +142,3 @@ export BL64_LIB_SIGNAL_QUIT='-'
 export BL64_LIB_SIGNAL_DEBUG='-'
 export BL64_LIB_SIGNAL_ERR='-'
 export BL64_LIB_SIGNAL_EXIT='bl64_dbg_runtime_show'
-
-#
-# Module IDs
-#
-
-export BL64_ANS_MODULE=''
-export BL64_API_MODULE=''
-export BL64_ARC_MODULE=''
-export BL64_AWS_MODULE=''
-export BL64_BSH_MODULE=''
-export BL64_CHECK_MODULE=''
-export BL64_CNT_MODULE=''
-export BL64_DBG_MODULE=''
-export BL64_FMT_MODULE=''
-export BL64_FS_MODULE=''
-export BL64_GCP_MODULE=''
-export BL64_HLM_MODULE=''
-export BL64_IAM_MODULE=''
-export BL64_K8S_MODULE=''
-export BL64_LOG_MODULE=''
-export BL64_MDB_MODULE=''
-export BL64_MSG_MODULE=''
-export BL64_OS_MODULE=''
-export BL64_PKG_MODULE=''
-export BL64_PY_MODULE=''
-export BL64_RBAC_MODULE=''
-export BL64_RND_MODULE=''
-export BL64_RXTX_MODULE=''
-export BL64_TF_MODULE=''
-export BL64_TM_MODULE=''
-export BL64_TXT_MODULE=''
-export BL64_UI_MODULE=''
-export BL64_VCS_MODULE=''
-export BL64_XSV_MODULE=''

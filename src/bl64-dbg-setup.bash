@@ -58,7 +58,6 @@ function bl64_dbg_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
   bl64_dbg_all_disable &&
     BL64_DBG_MODULE="$BL64_VAR_ON"

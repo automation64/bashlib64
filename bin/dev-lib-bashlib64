@@ -1,20 +1,17 @@
 #!/usr/bin/env bash
 #
-# Update dev-time external tools
+# Update dev-time external tool: BashLib64
 #
-# * Use to download or install external tools, libraries, etc
-# * Tools and libs should go to lib/
-# * Do not include operations that requires privileged access (i.e. sudo)
-# * Template: 1.2.0
+# * Template: 2.1.1
 #
 
-# shellcheck source=SCRIPTDIR/dev-set
+# shellcheck source=bin/dev-set
 source ./bin/dev-set || exit 1
 
-[[ -z "$DEV_CICD_BASHLIB64_REPO" ]] &&
-  echo 'error: required variable not defined (DEV_CICD_BASHLIB64_REPO)' &&
+[[ -z "$DEV_CICD_INSTALLER64_BIN" ]] &&
+  echo 'error: Installer64 not found. Use the dev-lib-instaler64 script to deploy it)' &&
   exit 1
 
-echo 'Download bash library: BashLib64'
-cd "$DEV_LIB" &&
-  curl -O "$DEV_CICD_BASHLIB64_REPO"
+echo 'Deploy application'
+export INST64_BASHLIB64_TARGET="$DEV_CICD_BASHLIB64"
+"${DEV_CICD_BASHLIB64_INSTALLER}"

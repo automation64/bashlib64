@@ -2,32 +2,39 @@
 #
 # Lint shell source code
 #
-# * Use to lint shell source code
 # * Check is done using shellcheck
 # * TestManSH is used to manage linting environment
-# * Template: 2.2.0
+# * Template: 4.0.1
 #
 
 #
 # Imports
 #
 
-# shellcheck source=SCRIPTDIR/dev-set
+# shellcheck source=bin/dev-set
 source ./bin/dev-set || exit 1
-# shellcheck source=SCRIPTDIR/../lib/bashlib64.bash
-source "$DEV_CICD_BASHLIB64" || exit 1
+# shellcheck source=lib/bl64/bashlib64-core.bash
+source "${DEV_CICD_BASHLIB64}/bashlib64-core.bash" || exit 1
 
 #
 # Main
 #
 
-bl64_check_export 'DEV_CICD_TESTMANSH' &&
-  bl64_check_export 'DEV_BASE_BUILD' &&
-  bl64_check_export 'DEV_BUILD_NAME_SINGLE' &&
-  bl64_check_export 'DEV_BASE_BUILD_TEST' ||
+declare dev_lint_target="${*:-$DEV_CICD_LINT_BASH_TARGET}"
+declare dev_lint_current=''
+
+[[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
+
+bl64_check_parameter 'dev_lint_target' &&
+  bl64_check_export 'DEV_CICD_LINT_BASH_CFG' &&
+  bl64_check_export 'DEV_CICD_TESTMANSH' &&
+  bl64_check_command "$DEV_CICD_TESTMANSH" ||
   exit $?
 
 bl64_msg_all_enable_verbose
-bl64_msg_show_batch_start 'lint-app'
-"$DEV_CICD_TESTMANSH" -t -o -c "${DEV_BASE_BUILD}/${DEV_BASE_BUILD_TEST}/${DEV_BUILD_NAME_SINGLE}"
-bl64_msg_show_batch_finish $? 'lint-app'
+bl64_msg_show_batch_start 'lint-bash'
+for dev_lint_current in $dev_lint_target; do
+  bl64_msg_show_phase "lint Bash target (${dev_lint_current})"
+  "$DEV_CICD_TESTMANSH" -t -o -c "$dev_lint_current"
+done
+bl64_msg_show_batch_finish $? 'lint-bash'

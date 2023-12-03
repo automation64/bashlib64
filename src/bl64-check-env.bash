@@ -2,9 +2,9 @@
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
 
-export BL64_CHECK_VERSION='4.3.0'
+export BL64_CHECK_VERSION='5.0.0'
 
-export BL64_CHECK_MODULE="$BL64_VAR_OFF"
+export BL64_CHECK_MODULE='0'
 
 export _BL64_CHECK_TXT_PARAMETER_MISSING='required parameter is missing'
 export _BL64_CHECK_TXT_PARAMETER_NOT_SET='required shell variable is not set'
@@ -43,7 +43,6 @@ export _BL64_CHECK_TXT_UNDEFINED='requested command is not defined or implemente
 export _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one parameter and none was provided'
 export _BL64_CHECK_TXT_FAILED='task execution failed'
 
-export _BL64_CHECK_TXT_MODULE_SET='required BashLib64 module not found. Please source the module before using it'
 export _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested BashLib64 module'
 export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module'
 

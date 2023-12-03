@@ -2,9 +2,9 @@
 # BashLib64 / Module / Globals / Manage native OS packages
 #######################################
 
-export BL64_PKG_VERSION='4.3.0'
+export BL64_PKG_VERSION='4.3.1'
 
-export BL64_PKG_MODULE="$BL64_VAR_OFF"
+export BL64_PKG_MODULE='0'
 
 export BL64_PKG_CMD_APK=''
 export BL64_PKG_CMD_APT=''

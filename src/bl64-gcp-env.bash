@@ -2,10 +2,10 @@
 # BashLib64 / Module / Globals / Interact with GCP
 #######################################
 
-export BL64_GCP_VERSION='1.6.0'
+export BL64_GCP_VERSION='1.6.1'
 
 # Optional module. Not enabled by default
-export BL64_GCP_MODULE="$BL64_VAR_OFF"
+export BL64_GCP_MODULE='0'
 
 export BL64_GCP_CMD_GCLOUD="$BL64_VAR_UNAVAILABLE"
 

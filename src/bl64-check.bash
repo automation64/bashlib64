@@ -2,12 +2,16 @@
 # BashLib64 / Module / Functions / Check for conditions and report status
 #######################################
 
+# DEPRECATED: to be removed in future releases
+function bl64_check_module_imported() { bl64_lib_module_imported "$@"; }
+
 #######################################
 # Check and report if the command is present and has execute permissions for the current user.
 #
 # Arguments:
 #   $1: Full path to the command to check
-#   $2: Not found error message. Default: _BL64_CHECK_TXT_COMMAND_NOT_FOUND
+#   $2: (optional) Not found error message. Default: _BL64_CHECK_TXT_COMMAND_NOT_FOUND
+#   $3: (optional) Command name. Displayed in the error message when not found
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
@@ -22,9 +26,11 @@
 function bl64_check_command() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
-  local message="${2:-${_BL64_CHECK_TXT_COMMAND_NOT_FOUND}}"
+  local message="${2:-$BL64_VAR_DEFAULT}"
+  local command_name="${3:-}"
 
   bl64_check_parameter 'path' || return $?
+  [[ "$message" == "$BL64_VAR_DEFAULT" ]] && message="$_BL64_CHECK_TXT_COMMAND_NOT_FOUND"
 
   if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (OS: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
@@ -33,7 +39,7 @@ function bl64_check_command() {
   fi
 
   if [[ "$path" == "$BL64_VAR_UNAVAILABLE" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_INSTALLED} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_INSTALLED} (${command_name:+${_BL64_CHECK_TXT_COMMAND}: ${command_name} ${BL64_MSG_COSMETIC_PIPE} }${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -185,6 +191,7 @@ function bl64_check_parameter() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local parameter_name="${1:-}"
   local description="${2:-parameter: ${parameter_name}}"
+  local parameter_ref=''
 
   if [[ -z "$parameter_name" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_MISSING} (${_BL64_CHECK_TXT_PARAMETER}: ${parameter_name} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
@@ -196,12 +203,13 @@ function bl64_check_parameter() {
     return $BL64_LIB_ERROR_PARAMETER_MISSING
   fi
 
-  if eval "[[ -z \"\${${parameter_name}}\" || \"\${${parameter_name}}\" == '${BL64_VAR_NULL}' ]]"; then
+  parameter_ref="${!parameter_name}"
+  if [[ -z "$parameter_ref" || "$parameter_ref" == "${BL64_VAR_NULL}" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_MISSING} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_EMPTY
   fi
 
-  if eval "[[ \"\${${parameter_name}}\" == '${BL64_VAR_DEFAULT}' ]]"; then
+  if [[ "$parameter_ref" == "${BL64_VAR_DEFAULT}" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_DEFAULT} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_INVALID
   fi
@@ -229,6 +237,7 @@ function bl64_check_export() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local export_name="${1:-}"
   local description="${2:-export: $export_name}"
+  local export_ref=''
 
   bl64_check_parameter 'export_name' || return $?
 
@@ -238,7 +247,8 @@ function bl64_check_export() {
     return $BL64_LIB_ERROR_EXPORT_SET
   fi
 
-  if eval "[[ -z \$${export_name} ]]"; then
+  export_ref="${!export_name}"
+  if [[ -z "$export_ref" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_EXPORT_EMPTY} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_EXPORT_EMPTY
@@ -650,43 +660,15 @@ function bl64_check_module() {
   local setup_status=''
 
   bl64_check_parameter 'module' &&
-    bl64_check_module_imported "$module" ||
+    bl64_lib_module_imported "$module" ||
     return $?
 
-  eval setup_status="\$$module"
+  setup_status="${!module}"
   if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_NOT_SETUP} (${_BL64_CHECK_TXT_MODULE}: ${module} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
   fi
 
-  return 0
-}
-
-#######################################
-# Check that the module is imported
-#
-# * Used for the modular version of bashlib64 to ensure dependant modules are loaded (sourced)
-# * A module is considered imported if the associated shell environment variable BL64_XXX_MODULE is defined
-# * This check will not verify if the module was also initialized. Use the function 'bl64_check_module' instead
-#
-# Arguments:
-#   $1: module id (eg: BL64_XXXX_MODULE)
-# Outputs:
-#   STDOUT: none
-#   STDERR: message
-# Returns:
-#   0: check ok
-#   BL64_LIB_ERROR_MODULE_NOT_IMPORTED
-#######################################
-function bl64_check_module_imported() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
-  local module="${1:-}"
-  bl64_check_parameter 'module' || return $?
-
-  if [[ ! -v "$module" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_SET} (${_BL64_CHECK_TXT_MODULE}: ${module} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
-    return $BL64_LIB_ERROR_MODULE_NOT_IMPORTED
-  fi
   return 0
 }
 

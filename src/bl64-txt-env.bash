@@ -2,9 +2,9 @@
 # BashLib64 / Module / Globals / Manipulate text files content
 #######################################
 
-export BL64_TXT_VERSION='1.13.0'
+export BL64_TXT_VERSION='1.13.1'
 
-export BL64_TXT_MODULE="$BL64_VAR_OFF"
+export BL64_TXT_MODULE='0'
 
 export BL64_TXT_CMD_AWK_POSIX="$BL64_VAR_UNAVAILABLE"
 export BL64_TXT_CMD_AWK="$BL64_VAR_UNAVAILABLE"

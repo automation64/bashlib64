@@ -1,6 +1,6 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  [[ -x /usr/bin/yq ]] || skip 'command not insttalled'
+  [[ -x /usr/bin/yq ]] || skip 'command not installed'
 }
 
 @test "bl64_xsv_run_jq: run command ok" {

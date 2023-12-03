@@ -2,10 +2,10 @@
 # BashLib64 / Module / Globals / Interact with AWS
 #######################################
 
-export BL64_AWS_VERSION='1.5.0'
+export BL64_AWS_VERSION='1.5.1'
 
 # Optional module. Not enabled by default
-export BL64_AWS_MODULE="$BL64_VAR_OFF"
+export BL64_AWS_MODULE='0'
 
 export BL64_AWS_CMD_AWS="$BL64_VAR_UNAVAILABLE"
 

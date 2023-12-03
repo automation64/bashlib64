@@ -1,0 +1,9 @@
+---
+test:
+  first: 2
+  second: "string"
+  third: true
+  forth:
+    - "list-0"
+    - "list-1"
+...

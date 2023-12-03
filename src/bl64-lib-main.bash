@@ -16,21 +16,21 @@ if bl64_lib_mode_strict_is_enabled; then
 fi
 
 # Initialize modules
-[[ -n "$BL64_DBG_MODULE" ]] && { bl64_dbg_setup || exit $?; }
-[[ -n "$BL64_CHECK_MODULE" ]] && { bl64_check_setup || exit $?; }
-[[ -n "$BL64_MSG_MODULE" ]] && { bl64_msg_setup || exit $?; }
-[[ -n "$BL64_BSH_MODULE" ]] && { bl64_bsh_setup || exit $?; }
-[[ -n "$BL64_RND_MODULE" ]] && { bl64_rnd_setup || exit $?; }
-[[ -n "$BL64_UI_MODULE" ]] && { bl64_ui_setup || exit $?; }
-[[ -n "$BL64_OS_MODULE" ]] && { bl64_os_setup || exit $?; }
-[[ -n "$BL64_TXT_MODULE" ]] && { bl64_txt_setup || exit $?; }
-[[ -n "$BL64_FMT_MODULE" ]] && { bl64_fmt_setup || exit $?; }
-[[ -n "$BL64_FS_MODULE" ]] && { bl64_fs_setup || exit $?; }
-[[ -n "$BL64_IAM_MODULE" ]] && { bl64_iam_setup || exit $?; }
-[[ -n "$BL64_RBAC_MODULE" ]] && { bl64_rbac_setup || exit $?; }
-[[ -n "$BL64_RXTX_MODULE" ]] && { bl64_rxtx_setup || exit $?; }
-[[ -n "$BL64_API_MODULE" ]] && { bl64_api_setup || exit $?; }
-[[ -n "$BL64_VCS_MODULE" ]] && { bl64_vcs_setup || exit $?; }
+[[ -n "${BL64_DBG_MODULE:-}" ]] && { bl64_dbg_setup || exit $?; }
+[[ -n "${BL64_CHECK_MODULE:-}" ]] && { bl64_check_setup || exit $?; }
+[[ -n "${BL64_MSG_MODULE:-}" ]] && { bl64_msg_setup || exit $?; }
+[[ -n "${BL64_BSH_MODULE:-}" ]] && { bl64_bsh_setup || exit $?; }
+[[ -n "${BL64_RND_MODULE:-}" ]] && { bl64_rnd_setup || exit $?; }
+[[ -n "${BL64_UI_MODULE:-}" ]] && { bl64_ui_setup || exit $?; }
+[[ -n "${BL64_OS_MODULE:-}" ]] && { bl64_os_setup || exit $?; }
+[[ -n "${BL64_TXT_MODULE:-}" ]] && { bl64_txt_setup || exit $?; }
+[[ -n "${BL64_FMT_MODULE:-}" ]] && { bl64_fmt_setup || exit $?; }
+[[ -n "${BL64_FS_MODULE:-}" ]] && { bl64_fs_setup || exit $?; }
+[[ -n "${BL64_IAM_MODULE:-}" ]] && { bl64_iam_setup || exit $?; }
+[[ -n "${BL64_RBAC_MODULE:-}" ]] && { bl64_rbac_setup || exit $?; }
+[[ -n "${BL64_RXTX_MODULE:-}" ]] && { bl64_rxtx_setup || exit $?; }
+[[ -n "${BL64_API_MODULE:-}" ]] && { bl64_api_setup || exit $?; }
+[[ -n "${BL64_VCS_MODULE:-}" ]] && { bl64_vcs_setup || exit $?; }
 
 # Set signal handlers
 # shellcheck disable=SC2064

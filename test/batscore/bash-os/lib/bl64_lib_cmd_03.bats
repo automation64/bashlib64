@@ -1,7 +1,6 @@
 setup() {
-  . "$TESTMANSH_CMD_BATS_HELPER_SUPPORT"
-  . "$TESTMANSH_CMD_BATS_HELPER_ASSERT"
-  . "$TESTMANSH_CMD_BATS_HELPER_FILE"
+  export DEV_TEST_INIT_ONLY='YES'
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 }
 
 function _bl64_lib_cmd_01() {
@@ -9,7 +8,7 @@ function _bl64_lib_cmd_01() {
 
   export BL64_LIB_TRAPS='0'
   export BL64_LIB_CMD='1'
-  "${TESTMANSH_PROJECT_BUILD}/test/bashlib64.bash" bl64_msg_show_text 'test'
+  "${DEV_TEST_PATH_LIBRARY}/bashlib64.bash" bl64_msg_show_text 'test'
   result=$?
   set -o 'errexit'
   set +o 'nounset'

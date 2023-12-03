@@ -2,9 +2,9 @@
 # BashLib64 / Module / Globals / Manage role based access service
 #######################################
 
-export BL64_RBAC_VERSION='1.13.0'
+export BL64_RBAC_VERSION='1.13.1'
 
-export BL64_RBAC_MODULE="$BL64_VAR_OFF"
+export BL64_RBAC_MODULE='0'
 
 export BL64_RBAC_CMD_SUDO=''
 export BL64_RBAC_CMD_VISUDO=''

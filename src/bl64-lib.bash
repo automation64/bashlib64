@@ -57,9 +57,7 @@ function bl64_lib_flag_is_enabled {
 # shellcheck disable=SC2120
 function bl64_lib_script_set_id() {
   local script_id="${1:-}"
-
-  bl64_check_parameter 'script_id' || return $?
-
+  [[ -z "$script_id" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
   BL64_SCRIPT_ID="$script_id"
 }
 
@@ -118,4 +116,36 @@ function _bl64_lib_script_get_name() {
   else
     printf '%s' "$base"
   fi
+}
+
+#######################################
+# Check that the module is imported
+#
+# * Used for the modular version of bashlib64 to ensure dependant modules are loaded (sourced)
+# * A module is considered imported if the associated shell environment variable BL64_XXX_MODULE is defined
+# * This check will not verify if the module was also initialized. Use the function 'bl64_check_module' instead
+#
+# Arguments:
+#   $1: module id (eg: BL64_XXXX_MODULE)
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_MODULE_NOT_IMPORTED
+#######################################
+function bl64_lib_module_imported() {
+  local module="${1:-}"
+  [[ -z "$module" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+
+  if [[ ! -v "$module" ]]; then
+    module="${module##BL64_}"
+    module="${module%%_MODULE}"
+    printf 'Error: required BashLib64 module not found. Please source the module before using it. (module: %s | caller: %s)\n' \
+      "${module%%BL64_}" \
+      "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE}" \
+      >&2
+    return $BL64_LIB_ERROR_MODULE_NOT_IMPORTED
+  fi
+  return 0
 }
