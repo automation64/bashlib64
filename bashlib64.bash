@@ -90,7 +90,7 @@ TERM="${TERM:-vt100}"
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='17.3.0'
+export BL64_VERSION='18.0.0'
 
 #
 # Imported shell standard variables
@@ -230,40 +230,6 @@ export BL64_LIB_SIGNAL_QUIT='-'
 export BL64_LIB_SIGNAL_DEBUG='-'
 export BL64_LIB_SIGNAL_ERR='-'
 export BL64_LIB_SIGNAL_EXIT='bl64_dbg_runtime_show'
-
-#
-# Module IDs
-#
-
-export BL64_ANS_MODULE=''
-export BL64_API_MODULE=''
-export BL64_ARC_MODULE=''
-export BL64_AWS_MODULE=''
-export BL64_BSH_MODULE=''
-export BL64_CHECK_MODULE=''
-export BL64_CNT_MODULE=''
-export BL64_DBG_MODULE=''
-export BL64_FMT_MODULE=''
-export BL64_FS_MODULE=''
-export BL64_GCP_MODULE=''
-export BL64_HLM_MODULE=''
-export BL64_IAM_MODULE=''
-export BL64_K8S_MODULE=''
-export BL64_LOG_MODULE=''
-export BL64_MDB_MODULE=''
-export BL64_MSG_MODULE=''
-export BL64_OS_MODULE=''
-export BL64_PKG_MODULE=''
-export BL64_PY_MODULE=''
-export BL64_RBAC_MODULE=''
-export BL64_RND_MODULE=''
-export BL64_RXTX_MODULE=''
-export BL64_TF_MODULE=''
-export BL64_TM_MODULE=''
-export BL64_TXT_MODULE=''
-export BL64_UI_MODULE=''
-export BL64_VCS_MODULE=''
-export BL64_XSV_MODULE=''
 #######################################
 # BashLib64 / Module / Functions / Setup script run-time environment
 #######################################
@@ -323,9 +289,7 @@ function bl64_lib_flag_is_enabled {
 # shellcheck disable=SC2120
 function bl64_lib_script_set_id() {
   local script_id="${1:-}"
-
-  bl64_check_parameter 'script_id' || return $?
-
+  [[ -z "$script_id" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
   BL64_SCRIPT_ID="$script_id"
 }
 
@@ -385,13 +349,45 @@ function _bl64_lib_script_get_name() {
     printf '%s' "$base"
   fi
 }
+
+#######################################
+# Check that the module is imported
+#
+# * Used for the modular version of bashlib64 to ensure dependant modules are loaded (sourced)
+# * A module is considered imported if the associated shell environment variable BL64_XXX_MODULE is defined
+# * This check will not verify if the module was also initialized. Use the function 'bl64_check_module' instead
+#
+# Arguments:
+#   $1: module id (eg: BL64_XXXX_MODULE)
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_MODULE_NOT_IMPORTED
+#######################################
+function bl64_lib_module_imported() {
+  local module="${1:-}"
+  [[ -z "$module" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+
+  if [[ ! -v "$module" ]]; then
+    module="${module##BL64_}"
+    module="${module%%_MODULE}"
+    printf 'Error: required BashLib64 module not found. Please source the module before using it. (module: %s | caller: %s)\n' \
+      "${module%%BL64_}" \
+      "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE}" \
+      >&2
+    return $BL64_LIB_ERROR_MODULE_NOT_IMPORTED
+  fi
+  return 0
+}
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
 
-export BL64_CHECK_VERSION='4.3.0'
+export BL64_CHECK_VERSION='5.0.0'
 
-export BL64_CHECK_MODULE="$BL64_VAR_OFF"
+export BL64_CHECK_MODULE='0'
 
 export _BL64_CHECK_TXT_PARAMETER_MISSING='required parameter is missing'
 export _BL64_CHECK_TXT_PARAMETER_NOT_SET='required shell variable is not set'
@@ -430,7 +426,6 @@ export _BL64_CHECK_TXT_UNDEFINED='requested command is not defined or implemente
 export _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one parameter and none was provided'
 export _BL64_CHECK_TXT_FAILED='task execution failed'
 
-export _BL64_CHECK_TXT_MODULE_SET='required BashLib64 module not found. Please source the module before using it'
 export _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested BashLib64 module'
 export _BL64_CHECK_TXT_MODULE_NOT_SETUP='required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module'
 
@@ -452,9 +447,9 @@ export _BL64_CHECK_TXT_PARAMETER='parameter'
 # BashLib64 / Module / Globals / Show shell debugging information
 #######################################
 
-export BL64_DBG_VERSION='2.4.0'
+export BL64_DBG_VERSION='2.4.1'
 
-export BL64_DBG_MODULE="$BL64_VAR_OFF"
+export BL64_DBG_MODULE='0'
 
 # Debug target
 export BL64_DBG_TARGET=''
@@ -545,10 +540,10 @@ export _BL64_DBG_TXT_WRONG_LEVEL='invalid debugging level. Must be one of: '
 # BashLib64 / Module / Globals / Write messages to logs
 #######################################
 
-export BL64_LOG_VERSION='2.1.0'
+export BL64_LOG_VERSION='2.1.1'
 
 # Optional module. Not enabled by default
-export BL64_LOG_MODULE="$BL64_VAR_OFF"
+export BL64_LOG_MODULE='0'
 
 # Log file types
 export BL64_LOG_FORMAT_CSV='C'
@@ -579,9 +574,9 @@ export _BL64_LOG_TXT_CREATE_REPOSITORY='create log repository'
 # BashLib64 / Module / Globals / Display messages
 #######################################
 
-export BL64_MSG_VERSION='4.3.0'
+export BL64_MSG_VERSION='4.3.1'
 
-export BL64_MSG_MODULE="$BL64_VAR_OFF"
+export BL64_MSG_MODULE='0'
 
 # Target verbosity)
 export BL64_MSG_VERBOSE=''
@@ -768,9 +763,9 @@ export _BL64_MSG_TXT_WARNING='Warning'
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #######################################
 
-export BL64_OS_VERSION='4.2.0'
+export BL64_OS_VERSION='4.2.1'
 
-export BL64_OS_MODULE="$BL64_VAR_OFF"
+export BL64_OS_MODULE='0'
 
 export BL64_OS_DISTRO=''
 
@@ -835,10 +830,10 @@ export BL64_OS_UNK='UNKNOWN'
 # BashLib64 / Module / Globals / Interact with Ansible CLI
 #######################################
 
-export BL64_ANS_VERSION='1.7.0'
+export BL64_ANS_VERSION='1.7.1'
 
 # Optional module. Not enabled by default
-export BL64_ANS_MODULE="$BL64_VAR_OFF"
+export BL64_ANS_MODULE='0'
 
 export BL64_ANS_ENV_IGNORE=''
 
@@ -862,9 +857,9 @@ export _BL64_ANS_TXT_ERROR_GET_VERSION='failed to get CLI version'
 # BashLib64 / Module / Globals / Interact with RESTful APIs
 #######################################
 
-export BL64_API_VERSION='1.1.0'
+export BL64_API_VERSION='1.1.1'
 
-export BL64_API_MODULE="$BL64_VAR_OFF"
+export BL64_API_MODULE='0'
 
 #
 # Common constants
@@ -881,9 +876,9 @@ export _BL64_API_TXT_ERROR_API_FAILED='API call failed'
 # BashLib64 / Module / Globals / Manage archive files
 #######################################
 
-export BL64_ARC_VERSION='2.2.0'
+export BL64_ARC_VERSION='2.2.1'
 
-export BL64_ARC_MODULE="$BL64_VAR_OFF"
+export BL64_ARC_MODULE='0'
 
 export BL64_ARC_CMD_TAR=''
 export BL64_ARC_CMD_UNZIP=''
@@ -899,10 +894,10 @@ export _BL64_ARC_TXT_OPEN_TAR='open tar archive'
 # BashLib64 / Module / Globals / Interact with AWS
 #######################################
 
-export BL64_AWS_VERSION='1.5.0'
+export BL64_AWS_VERSION='1.5.1'
 
 # Optional module. Not enabled by default
-export BL64_AWS_MODULE="$BL64_VAR_OFF"
+export BL64_AWS_MODULE='0'
 
 export BL64_AWS_CMD_AWS="$BL64_VAR_UNAVAILABLE"
 
@@ -933,22 +928,22 @@ export _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token fi
 # BashLib64 / Module / Globals / Interact with Bash shell
 #######################################
 
-export BL64_BSH_VERSION='2.0.0'
+export BL64_BSH_VERSION='2.1.0'
 
-export BL64_BSH_MODULE="$BL64_VAR_OFF"
+export BL64_BSH_MODULE='0'
 
 export BL64_BSH_VERSION_BASH=''
 
-export _BL64_BSH_TXT_UNSUPPORTED='BashLib64 is not supported in the current Bash version'
+export _BL64_BSH_TXT_IMPORT_YAML='convert and import shell variables from YAML file'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with container engines
 #######################################
 
-export BL64_CNT_VERSION='2.0.0'
+export BL64_CNT_VERSION='2.0.1'
 
 # Optional module. Not enabled by default
-export BL64_CNT_MODULE="$BL64_VAR_OFF"
+export BL64_CNT_MODULE='0'
 
 export BL64_CNT_DRIVER_DOCKER='docker'
 export BL64_CNT_DRIVER_PODMAN='podman'
@@ -999,9 +994,9 @@ export _BL64_CNT_TXT_MISSING_FILTER='no filter was selected. Task requires one o
 # BashLib64 / Module / Globals / Format text data
 #######################################
 
-export BL64_FMT_VERSION='2.2.1'
+export BL64_FMT_VERSION='2.2.2'
 
-export BL64_FMT_MODULE="$BL64_VAR_OFF"
+export BL64_FMT_MODULE='0'
 
 export _BL64_FMT_TXT_ERROR_VALUE_LIST_EMPTY='please provide at least one value to check against'
 export _BL64_FMT_TXT_ERROR_VALUE_LIST_WRONG='invalid value'
@@ -1011,9 +1006,9 @@ export _BL64_FMT_TXT_VALUE_LIST_VALID='Value must be one of'
 # BashLib64 / Module / Globals / Manage local filesystem
 #######################################
 
-export BL64_FS_VERSION='4.7.0'
+export BL64_FS_VERSION='4.7.1'
 
-export BL64_FS_MODULE="$BL64_VAR_OFF"
+export BL64_FS_MODULE='0'
 
 export BL64_FS_PATH_TEMPORAL=''
 export BL64_FS_PATH_CACHE=''
@@ -1101,10 +1096,10 @@ export _BL64_FS_TXT_ERROR_INVALID_DIR_TARGET='invalid directory destination. Pro
 # BashLib64 / Module / Globals / Interact with GCP
 #######################################
 
-export BL64_GCP_VERSION='1.6.0'
+export BL64_GCP_VERSION='1.6.1'
 
 # Optional module. Not enabled by default
-export BL64_GCP_MODULE="$BL64_VAR_OFF"
+export BL64_GCP_MODULE='0'
 
 export BL64_GCP_CMD_GCLOUD="$BL64_VAR_UNAVAILABLE"
 
@@ -1126,10 +1121,10 @@ export _BL64_TXT_CREATE_CFG='create private GCP configuration'
 # BashLib64 / Module / Globals / Interact with HLM
 #######################################
 
-export BL64_HLM_VERSION='1.3.0'
+export BL64_HLM_VERSION='1.3.1'
 
 # Optional module. Not enabled by default
-export BL64_HLM_MODULE="$BL64_VAR_OFF"
+export BL64_HLM_MODULE='0'
 
 export BL64_HLM_CMD_HELM="$BL64_VAR_UNAVAILABLE"
 
@@ -1148,9 +1143,9 @@ export BL64_HLM_TXT_DEPLOY_CHART='deploy helm chart'
 # BashLib64 / Module / Globals / Manage OS identity and access service
 #######################################
 
-export BL64_IAM_VERSION='3.1.0'
+export BL64_IAM_VERSION='3.1.1'
 
-export BL64_IAM_MODULE="$BL64_VAR_OFF"
+export BL64_IAM_MODULE='0'
 
 export BL64_IAM_CMD_USERADD=''
 export BL64_IAM_CMD_ID=''
@@ -1170,10 +1165,10 @@ export _BL64_IAM_TXT_USER_NOT_FOUND='required user is not present in the operati
 # BashLib64 / Module / Globals / Interact with Kubernetes
 #######################################
 
-export BL64_K8S_VERSION='2.1.0'
+export BL64_K8S_VERSION='2.1.1'
 
 # Optional module. Not enabled by default
-export BL64_K8S_MODULE="$BL64_VAR_OFF"
+export BL64_K8S_MODULE='0'
 
 export BL64_K8S_CMD_KUBECTL="$BL64_VAR_UNAVAILABLE"
 
@@ -1214,10 +1209,10 @@ export _BL64_K8S_TXT_ERROR_MISSING_COMMAND='kubectl command not provided'
 # BashLib64 / Module / Setup / Interact with MongoDB
 #######################################
 
-export BL64_MDB_VERSION='1.2.0'
+export BL64_MDB_VERSION='1.2.1'
 
 # Optional module. Not enabled by default
-export BL64_MDB_MODULE="$BL64_VAR_OFF"
+export BL64_MDB_MODULE='0'
 
 export BL64_MDB_CMD_MONGOSH="$BL64_VAR_UNAVAILABLE"
 export BL64_MDB_CMD_MONGORESTORE="$BL64_VAR_UNAVAILABLE"
@@ -1234,9 +1229,9 @@ export BL64_MDB_REPLICA_TIMEOUT=''
 # BashLib64 / Module / Globals / Manage native OS packages
 #######################################
 
-export BL64_PKG_VERSION='4.3.0'
+export BL64_PKG_VERSION='4.3.1'
 
-export BL64_PKG_MODULE="$BL64_VAR_OFF"
+export BL64_PKG_MODULE='0'
 
 export BL64_PKG_CMD_APK=''
 export BL64_PKG_CMD_APT=''
@@ -1293,10 +1288,10 @@ export _BL64_PKG_TXT_REPOSITORY_ADD_KEY='install GPG key'
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #######################################
 
-export BL64_PY_VERSION='1.16.0'
+export BL64_PY_VERSION='1.16.1'
 
 # Optional module. Not enabled by default
-export BL64_PY_MODULE="$BL64_VAR_OFF"
+export BL64_PY_MODULE='0'
 
 # Define placeholders for optional distro native python versions
 export BL64_PY_CMD_PYTHON3="$BL64_VAR_UNAVAILABLE"
@@ -1341,9 +1336,9 @@ export _BL64_PY_TXT_VENV_CREATE='create python virtual environment'
 # BashLib64 / Module / Globals / Manage role based access service
 #######################################
 
-export BL64_RBAC_VERSION='1.13.0'
+export BL64_RBAC_VERSION='1.13.1'
 
-export BL64_RBAC_MODULE="$BL64_VAR_OFF"
+export BL64_RBAC_MODULE='0'
 
 export BL64_RBAC_CMD_SUDO=''
 export BL64_RBAC_CMD_VISUDO=''
@@ -1362,9 +1357,9 @@ export _BL64_RBAC_TXT_ADD_ROOT='add password-less root privilege to user'
 # BashLib64 / Module / Globals / Generate random data
 #######################################
 
-export BL64_RND_VERSION='1.2.0'
+export BL64_RND_VERSION='1.2.1'
 
-export BL64_RND_MODULE="$BL64_VAR_OFF"
+export BL64_RND_MODULE='0'
 
 declare -ig BL64_RND_LENGTH_1=1
 declare -ig BL64_RND_LENGTH_20=20
@@ -1391,9 +1386,9 @@ export _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
 # BashLib64 / Module / Globals / Transfer and Receive data over the network
 #######################################
 
-export BL64_RXTX_VERSION='1.20.0'
+export BL64_RXTX_VERSION='1.20.1'
 
-export BL64_RXTX_MODULE="$BL64_VAR_OFF"
+export BL64_RXTX_MODULE='0'
 
 export BL64_RXTX_CMD_CURL=''
 export BL64_RXTX_CMD_WGET=''
@@ -1432,10 +1427,10 @@ export _BL64_RXTX_TXT_ERROR_DOWNLOAD_DIR='directory download failed'
 # BashLib64 / Module / Globals / Interact with Terraform
 #######################################
 
-export BL64_TF_VERSION='1.4.0'
+export BL64_TF_VERSION='1.4.1'
 
 # Optional module. Not enabled by default
-export BL64_TF_MODULE="$BL64_VAR_OFF"
+export BL64_TF_MODULE='0'
 
 export BL64_TF_LOG_PATH=''
 export BL64_TF_LOG_LEVEL=''
@@ -1465,17 +1460,17 @@ export _BL64_TF_TXT_ERROR_GET_VERSION='failed to get terraform CLI version'
 # BashLib64 / Module / Globals / Manage date-time data
 #######################################
 
-export BL64_TM_VERSION='1.1.0'
+export BL64_TM_VERSION='1.1.1'
 
-export BL64_TM_MODULE="$BL64_VAR_OFF"
+export BL64_TM_MODULE='0'
 
 #######################################
 # BashLib64 / Module / Globals / Manipulate text files content
 #######################################
 
-export BL64_TXT_VERSION='1.13.0'
+export BL64_TXT_VERSION='1.13.1'
 
-export BL64_TXT_MODULE="$BL64_VAR_OFF"
+export BL64_TXT_MODULE='0'
 
 export BL64_TXT_CMD_AWK_POSIX="$BL64_VAR_UNAVAILABLE"
 export BL64_TXT_CMD_AWK="$BL64_VAR_UNAVAILABLE"
@@ -1506,9 +1501,9 @@ export BL64_TXT_FLAG_STDIN='STDIN'
 # BashLib64 / Module / Globals / User Interface
 #######################################
 
-export BL64_UI_VERSION='1.1.0'
+export BL64_UI_VERSION='1.1.1'
 
-export BL64_UI_MODULE="$BL64_VAR_OFF"
+export BL64_UI_MODULE='0'
 
 export BL64_UI_READ_TIMEOUT='60'
 
@@ -1520,9 +1515,9 @@ export _BL64_UI_TXT_CONFIRMATION_ERROR='provided confirmation message is not wha
 # BashLib64 / Module / Globals / Manage Version Control System
 #######################################
 
-export BL64_VCS_VERSION='1.15.0'
+export BL64_VCS_VERSION='1.15.1'
 
-export BL64_VCS_MODULE="$BL64_VAR_OFF"
+export BL64_VCS_MODULE='0'
 
 export BL64_VCS_CMD_GIT=''
 
@@ -1548,9 +1543,9 @@ export _BL64_VCS_TXT_GET_LATEST_RELEASE_FAILED='unable to determine latest relea
 # BashLib64 / Module / Globals / Manipulate CSV like text files
 #######################################
 
-export BL64_XSV_VERSION='1.7.0'
+export BL64_XSV_VERSION='1.7.1'
 
-export BL64_XSV_MODULE="$BL64_VAR_OFF"
+export BL64_XSV_MODULE='0'
 
 export BL64_XSV_CMD_YQ="$BL64_VAR_UNAVAILABLE"
 export BL64_XSV_CMD_JQ="$BL64_VAR_UNAVAILABLE"
@@ -1597,10 +1592,10 @@ function bl64_check_setup() {
     return 21
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     BL64_CHECK_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'check'
 }
 
@@ -1608,12 +1603,16 @@ function bl64_check_setup() {
 # BashLib64 / Module / Functions / Check for conditions and report status
 #######################################
 
+# DEPRECATED: to be removed in future releases
+function bl64_check_module_imported() { bl64_lib_module_imported "$@"; }
+
 #######################################
 # Check and report if the command is present and has execute permissions for the current user.
 #
 # Arguments:
 #   $1: Full path to the command to check
-#   $2: Not found error message. Default: _BL64_CHECK_TXT_COMMAND_NOT_FOUND
+#   $2: (optional) Not found error message. Default: _BL64_CHECK_TXT_COMMAND_NOT_FOUND
+#   $3: (optional) Command name. Displayed in the error message when not found
 # Outputs:
 #   STDOUT: None
 #   STDERR: Error message
@@ -1628,9 +1627,11 @@ function bl64_check_setup() {
 function bl64_check_command() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
-  local message="${2:-${_BL64_CHECK_TXT_COMMAND_NOT_FOUND}}"
+  local message="${2:-$BL64_VAR_DEFAULT}"
+  local command_name="${3:-}"
 
   bl64_check_parameter 'path' || return $?
+  [[ "$message" == "$BL64_VAR_DEFAULT" ]] && message="$_BL64_CHECK_TXT_COMMAND_NOT_FOUND"
 
   if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (OS: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
@@ -1639,7 +1640,7 @@ function bl64_check_command() {
   fi
 
   if [[ "$path" == "$BL64_VAR_UNAVAILABLE" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_INSTALLED} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_INSTALLED} (${command_name:+${_BL64_CHECK_TXT_COMMAND}: ${command_name} ${BL64_MSG_COSMETIC_PIPE} }${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -1791,6 +1792,7 @@ function bl64_check_parameter() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local parameter_name="${1:-}"
   local description="${2:-parameter: ${parameter_name}}"
+  local parameter_ref=''
 
   if [[ -z "$parameter_name" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_MISSING} (${_BL64_CHECK_TXT_PARAMETER}: ${parameter_name} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
@@ -1802,12 +1804,13 @@ function bl64_check_parameter() {
     return $BL64_LIB_ERROR_PARAMETER_MISSING
   fi
 
-  if eval "[[ -z \"\${${parameter_name}}\" || \"\${${parameter_name}}\" == '${BL64_VAR_NULL}' ]]"; then
+  parameter_ref="${!parameter_name}"
+  if [[ -z "$parameter_ref" || "$parameter_ref" == "${BL64_VAR_NULL}" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_MISSING} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_EMPTY
   fi
 
-  if eval "[[ \"\${${parameter_name}}\" == '${BL64_VAR_DEFAULT}' ]]"; then
+  if [[ "$parameter_ref" == "${BL64_VAR_DEFAULT}" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_DEFAULT} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_INVALID
   fi
@@ -1835,6 +1838,7 @@ function bl64_check_export() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local export_name="${1:-}"
   local description="${2:-export: $export_name}"
+  local export_ref=''
 
   bl64_check_parameter 'export_name' || return $?
 
@@ -1844,7 +1848,8 @@ function bl64_check_export() {
     return $BL64_LIB_ERROR_EXPORT_SET
   fi
 
-  if eval "[[ -z \$${export_name} ]]"; then
+  export_ref="${!export_name}"
+  if [[ -z "$export_ref" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_EXPORT_EMPTY} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_EXPORT_EMPTY
@@ -2256,43 +2261,15 @@ function bl64_check_module() {
   local setup_status=''
 
   bl64_check_parameter 'module' &&
-    bl64_check_module_imported "$module" ||
+    bl64_lib_module_imported "$module" ||
     return $?
 
-  eval setup_status="\$$module"
+  setup_status="${!module}"
   if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
     bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_NOT_SETUP} (${_BL64_CHECK_TXT_MODULE}: ${module} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
   fi
 
-  return 0
-}
-
-#######################################
-# Check that the module is imported
-#
-# * Used for the modular version of bashlib64 to ensure dependant modules are loaded (sourced)
-# * A module is considered imported if the associated shell environment variable BL64_XXX_MODULE is defined
-# * This check will not verify if the module was also initialized. Use the function 'bl64_check_module' instead
-#
-# Arguments:
-#   $1: module id (eg: BL64_XXXX_MODULE)
-# Outputs:
-#   STDOUT: none
-#   STDERR: message
-# Returns:
-#   0: check ok
-#   BL64_LIB_ERROR_MODULE_NOT_IMPORTED
-#######################################
-function bl64_check_module_imported() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
-  local module="${1:-}"
-  bl64_check_parameter 'module' || return $?
-
-  if [[ ! -v "$module" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_SET} (${_BL64_CHECK_TXT_MODULE}: ${module} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
-    return $BL64_LIB_ERROR_MODULE_NOT_IMPORTED
-  fi
   return 0
 }
 
@@ -2444,7 +2421,6 @@ function bl64_dbg_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
   bl64_dbg_all_disable &&
     BL64_DBG_MODULE="$BL64_VAR_ON"
@@ -2957,14 +2933,14 @@ function bl64_log_setup() {
 
   [[ -z "$repository" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
 
-  bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_log_set_repository "$repository" &&
     bl64_log_set_target "$target" &&
     bl64_log_set_level "$level" &&
     bl64_log_set_format "$format" &&
     BL64_LOG_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'log'
 }
 
@@ -3280,13 +3256,13 @@ function bl64_msg_setup() {
     return 21
   bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_LOG_MODULE' &&
+  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_LOG_MODULE' &&
     bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI" &&
     bl64_msg_app_enable_verbose &&
     BL64_MSG_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'msg'
 }
 
@@ -4015,21 +3991,20 @@ function bl64_os_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
   [[ "${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5' ]] &&
     bl64_msg_show_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
     return $BL64_LIB_ERROR_OS_BASH_VERSION
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     _bl64_os_set_distro &&
     _bl64_os_set_runtime &&
     _bl64_os_set_command &&
     _bl64_os_set_options &&
     BL64_OS_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'os'
 }
 
@@ -4516,10 +4491,11 @@ function bl64_ans_setup() {
   local ansible_config="${2:-${BL64_VAR_DEFAULT}}"
   local env_ignore="${3:-${BL64_VAR_ON}}"
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_TXT_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
     _bl64_ans_set_command "$ansible_bin" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE_GALAXY" &&
@@ -4527,9 +4503,8 @@ function bl64_ans_setup() {
     _bl64_ans_set_runtime "$ansible_config" &&
     _bl64_ans_set_options &&
     _bl64_ans_set_version &&
-    BL64_ANS_MODULE="$BL64_VAR_ON" &&
-    BL64_ANS_ENV_IGNORE="$env_ignore"
-
+    BL64_ANS_ENV_IGNORE="$env_ignore" &&
+    BL64_ANS_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'ans'
 }
 
@@ -4908,14 +4883,13 @@ function bl64_api_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_TXT_MODULE' &&
-    bl64_check_module_imported 'BL64_RXTX_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
+    bl64_lib_module_imported 'BL64_RXTX_MODULE' &&
     BL64_API_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'api'
 }
 
@@ -5064,16 +5038,15 @@ function bl64_arc_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_FS_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_FS_MODULE' &&
     _bl64_arc_set_command &&
     _bl64_arc_set_options &&
     BL64_ARC_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'arc'
 }
 
@@ -5425,17 +5398,17 @@ function bl64_aws_setup() {
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_FS_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_FS_MODULE' &&
     _bl64_aws_set_command "$aws_bin" &&
     _bl64_aws_set_options &&
     _bl64_aws_set_resources &&
     bl64_check_command "$BL64_AWS_CMD_AWS" &&
     bl64_aws_set_paths &&
     BL64_AWS_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'aws'
 }
 
@@ -5904,14 +5877,16 @@ function bl64_bsh_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_FMT_MODULE' &&
+  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_FMT_MODULE' &&
+    bl64_lib_module_imported 'BL64_XSV_MODULE' &&
+    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
+    bl64_lib_module_imported 'BL64_FS_MODULE' &&
     _bl64_bsh_set_version &&
     BL64_BSH_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'bsh'
 }
 
@@ -6029,6 +6004,55 @@ function bl64_bsh_env_export_variable() {
 }
 
 #######################################
+# Import shell environment variables from YAML file
+#
+# * Conversion is done using YQ and Awk
+# * YAML nested variables are flatten and converted to single shell variables:
+#   * first.second: value -> FIRST_SECOND="value"
+#   * first.second[2]: value -> FIRST_SECOND_2="value"
+# * Shell variable names are created using uppercase and exported
+# * Resulting variables are saved to a temporary file which is then sourced into the current script
+#
+# Arguments:
+#   $1: path to the YAML file
+# Outputs:
+#   STDOUT: none
+#   STDERR: conversion errors
+# Returns:
+#   0: converted and lodaded ok
+#   >0: failed to convert
+#######################################
+function bl64_bsh_env_import_yaml() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local dynamic_env=''
+
+  bl64_check_parameter 'source' &&
+    bl64_check_file "$source" ||
+    return $?
+
+  # shellcheck disable=SC1090
+  bl64_msg_show_subtask "${_BL64_BSH_TXT_IMPORT_YAML} (${source})"
+  # shellcheck disable=SC1090
+  dynamic_env="$(bl64_fs_create_tmpfile)" &&
+    bl64_xsv_run_yq \
+      -o p \
+      '.' \
+      "$source" |
+    bl64_txt_run_awk \
+      -F ' = ' '
+  {
+      gsub( "[.]", "_", $1 )
+      print "export " toupper( $1 ) "='"'"'" $2 "'"'"'"
+  }' >"$dynamic_env" &&
+    source "$dynamic_env" ||
+    return $?
+
+  bl64_fs_rm_tmpfile "$dynamic_env"
+  return 0
+}
+
+#######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #######################################
 
@@ -6051,16 +6075,15 @@ function bl64_cnt_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     _bl64_cnt_set_command &&
     bl64_cnt_set_paths &&
     _bl64_cnt_set_options &&
     BL64_CNT_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'cnt'
 }
 
@@ -6259,8 +6282,7 @@ function _bl64_cnt_find_variable_marker() {
   bl64_dbg_lib_show_function "$@"
   local marker="$1"
   bl64_dbg_lib_show_info "check for variable marker (${marker})"
-
-  eval "[[ -n \"\${${marker}}\" ]]"
+  [[ -v "$marker" ]]
 }
 
 #######################################
@@ -7313,14 +7335,13 @@ function bl64_fmt_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_TXT_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
     BL64_FMT_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'fmt'
 }
 
@@ -7603,17 +7624,16 @@ function bl64_fs_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_FMT_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_FMT_MODULE' &&
     _bl64_fs_set_command &&
     _bl64_fs_set_alias &&
     _bl64_fs_set_options &&
     BL64_FS_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'fs'
 }
 
@@ -9188,14 +9208,14 @@ function bl64_gcp_setup() {
   bl64_dbg_lib_show_function "$@"
   local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     _bl64_gcp_set_command "$gcloud_bin" &&
     _bl64_gcp_set_options &&
     bl64_check_command "$BL64_GCP_CMD_GCLOUD" &&
     BL64_GCP_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'gcp'
 }
 
@@ -9519,15 +9539,15 @@ function bl64_hlm_setup() {
       return $?
   fi
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     _bl64_hlm_set_command "$helm_bin" &&
     bl64_check_command "$BL64_HLM_CMD_HELM" &&
     _bl64_hlm_set_options &&
     _bl64_hlm_set_runtime &&
     BL64_HLM_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'hlm'
 }
 
@@ -9818,17 +9838,16 @@ function bl64_iam_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_RND_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_RND_MODULE' &&
     _bl64_iam_set_command &&
     _bl64_iam_set_alias &&
     _bl64_iam_set_options &&
     BL64_IAM_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'iam'
 }
 
@@ -10215,17 +10234,17 @@ function bl64_k8s_setup() {
       return $?
   fi
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_TXT_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
     _bl64_k8s_set_command "$kubectl_bin" &&
     bl64_check_command "$BL64_K8S_CMD_KUBECTL" &&
     _bl64_k8s_set_version &&
     _bl64_k8s_set_options &&
     _bl64_k8s_set_runtime &&
     BL64_K8S_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'k8s'
 }
 
@@ -10949,9 +10968,10 @@ function bl64_mdb_setup() {
   bl64_dbg_lib_show_function "$@"
   local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     _bl64_mdb_set_command "$mdb_bin" &&
     bl64_check_command "$BL64_MDB_CMD_MONGOSH" &&
     bl64_check_command "$BL64_MDB_CMD_MONGORESTORE" &&
@@ -10959,7 +10979,6 @@ function bl64_mdb_setup() {
     _bl64_mdb_set_options &&
     _bl64_mdb_set_runtime &&
     BL64_MDB_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'mdb'
 }
 
@@ -11303,20 +11322,19 @@ function bl64_pkg_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2249
-  bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_FS_MODULE' &&
-    bl64_check_module_imported 'BL64_RXTX_MODULE' &&
+  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_FS_MODULE' &&
+    bl64_lib_module_imported 'BL64_RXTX_MODULE' &&
     _bl64_pkg_set_command &&
     _bl64_pkg_set_runtime &&
     _bl64_pkg_set_options &&
     _bl64_pkg_set_alias &&
     BL64_PKG_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'pkg'
 }
 
@@ -12230,9 +12248,10 @@ function _bl64_py_setup() {
       return $?
   fi
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     _bl64_py_set_command "$venv_path" &&
     bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
     _bl64_py_set_options &&
@@ -12732,19 +12751,18 @@ function bl64_rbac_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_FS_MODULE' &&
-    bl64_check_module_imported 'BL64_TXT_MODULE' &&
-    bl64_check_module_imported 'BL64_IAM_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_FS_MODULE' &&
+    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
+    bl64_lib_module_imported 'BL64_IAM_MODULE' &&
     _bl64_rbac_set_command &&
     _bl64_rbac_set_options &&
     _bl64_rbac_set_alias &&
     BL64_RBAC_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'rbac'
 }
 
@@ -13066,13 +13084,12 @@ function bl64_rnd_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     BL64_RND_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'rnd'
 }
 
@@ -13204,18 +13221,17 @@ function bl64_rxtx_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_FS_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_VCS_MODULE' &&
+  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_FS_MODULE' &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_VCS_MODULE' &&
     _bl64_rxtx_set_command &&
     _bl64_rxtx_set_options &&
     _bl64_rxtx_set_alias &&
     BL64_RXTX_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'rxtx'
 }
 
@@ -13760,17 +13776,17 @@ function bl64_tf_setup() {
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_TXT_MODULE' &&
+  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
     _bl64_tf_set_command "$terraform_bin" &&
     bl64_check_command "$BL64_TF_CMD_TERRAFORM" &&
     _bl64_tf_set_version &&
     _bl64_tf_set_options &&
     _bl64_tf_set_resources &&
     BL64_TF_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'tf'
 }
 
@@ -14050,12 +14066,11 @@ function bl64_tm_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
     BL64_TM_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'tm'
 }
 
@@ -14119,14 +14134,13 @@ function bl64_txt_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
+  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     _bl64_txt_set_command &&
     _bl64_txt_set_options &&
     BL64_TXT_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'txt'
 }
 
@@ -14673,13 +14687,12 @@ function bl64_ui_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     BL64_UI_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'ui'
 }
 
@@ -14741,19 +14754,18 @@ function bl64_vcs_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
 
-  bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_MSG_MODULE' &&
-    bl64_check_module_imported 'BL64_API_MODULE' &&
-    bl64_check_module_imported 'BL64_FS_MODULE' &&
-    bl64_check_module_imported 'BL64_TXT_MODULE' &&
-    bl64_check_module_imported 'BL64_OS_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    bl64_lib_module_imported 'BL64_API_MODULE' &&
+    bl64_lib_module_imported 'BL64_FS_MODULE' &&
+    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
+    bl64_lib_module_imported 'BL64_OS_MODULE' &&
     _bl64_vcs_set_command &&
     _bl64_vcs_set_options &&
     BL64_VCS_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'vcs'
 }
 
@@ -15122,15 +15134,14 @@ function bl64_xsv_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
-  bl64_dbg_lib_show_function
   local search_paths=("${@:-}")
 
-  bl64_check_module_imported 'BL64_DBG_MODULE' &&
-    bl64_check_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_check_module_imported 'BL64_TXT_MODULE' &&
+  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+    bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
     _bl64_xsv_set_command "${search_paths[@]}" &&
     BL64_XSV_MODULE="$BL64_VAR_ON"
-
   bl64_check_alert_module_setup 'xsv'
 }
 
@@ -15284,7 +15295,8 @@ function bl64_xsv_search_records() {
 function bl64_xsv_run_jq() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_XSV_MODULE' &&
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_XSV_MODULE' &&
     bl64_check_command "$BL64_XSV_CMD_JQ" ||
     return $?
 
@@ -15311,8 +15323,9 @@ function bl64_xsv_run_jq() {
 function bl64_xsv_run_yq() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_XSV_MODULE' &&
-    bl64_check_command "$BL64_XSV_CMD_YQ" ||
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_XSV_MODULE' &&
+    bl64_check_command "$BL64_XSV_CMD_YQ" "$BL64_VAR_DEFAULT" 'yq' ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -15338,21 +15351,21 @@ if bl64_lib_mode_strict_is_enabled; then
 fi
 
 # Initialize modules
-[[ -n "$BL64_DBG_MODULE" ]] && { bl64_dbg_setup || exit $?; }
-[[ -n "$BL64_CHECK_MODULE" ]] && { bl64_check_setup || exit $?; }
-[[ -n "$BL64_MSG_MODULE" ]] && { bl64_msg_setup || exit $?; }
-[[ -n "$BL64_BSH_MODULE" ]] && { bl64_bsh_setup || exit $?; }
-[[ -n "$BL64_RND_MODULE" ]] && { bl64_rnd_setup || exit $?; }
-[[ -n "$BL64_UI_MODULE" ]] && { bl64_ui_setup || exit $?; }
-[[ -n "$BL64_OS_MODULE" ]] && { bl64_os_setup || exit $?; }
-[[ -n "$BL64_TXT_MODULE" ]] && { bl64_txt_setup || exit $?; }
-[[ -n "$BL64_FMT_MODULE" ]] && { bl64_fmt_setup || exit $?; }
-[[ -n "$BL64_FS_MODULE" ]] && { bl64_fs_setup || exit $?; }
-[[ -n "$BL64_IAM_MODULE" ]] && { bl64_iam_setup || exit $?; }
-[[ -n "$BL64_RBAC_MODULE" ]] && { bl64_rbac_setup || exit $?; }
-[[ -n "$BL64_RXTX_MODULE" ]] && { bl64_rxtx_setup || exit $?; }
-[[ -n "$BL64_API_MODULE" ]] && { bl64_api_setup || exit $?; }
-[[ -n "$BL64_VCS_MODULE" ]] && { bl64_vcs_setup || exit $?; }
+[[ -n "${BL64_DBG_MODULE:-}" ]] && { bl64_dbg_setup || exit $?; }
+[[ -n "${BL64_CHECK_MODULE:-}" ]] && { bl64_check_setup || exit $?; }
+[[ -n "${BL64_MSG_MODULE:-}" ]] && { bl64_msg_setup || exit $?; }
+[[ -n "${BL64_BSH_MODULE:-}" ]] && { bl64_bsh_setup || exit $?; }
+[[ -n "${BL64_RND_MODULE:-}" ]] && { bl64_rnd_setup || exit $?; }
+[[ -n "${BL64_UI_MODULE:-}" ]] && { bl64_ui_setup || exit $?; }
+[[ -n "${BL64_OS_MODULE:-}" ]] && { bl64_os_setup || exit $?; }
+[[ -n "${BL64_TXT_MODULE:-}" ]] && { bl64_txt_setup || exit $?; }
+[[ -n "${BL64_FMT_MODULE:-}" ]] && { bl64_fmt_setup || exit $?; }
+[[ -n "${BL64_FS_MODULE:-}" ]] && { bl64_fs_setup || exit $?; }
+[[ -n "${BL64_IAM_MODULE:-}" ]] && { bl64_iam_setup || exit $?; }
+[[ -n "${BL64_RBAC_MODULE:-}" ]] && { bl64_rbac_setup || exit $?; }
+[[ -n "${BL64_RXTX_MODULE:-}" ]] && { bl64_rxtx_setup || exit $?; }
+[[ -n "${BL64_API_MODULE:-}" ]] && { bl64_api_setup || exit $?; }
+[[ -n "${BL64_VCS_MODULE:-}" ]] && { bl64_vcs_setup || exit $?; }
 
 # Set signal handlers
 # shellcheck disable=SC2064
