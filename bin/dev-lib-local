@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+#
+# Create local resources from templates
+#
+# * Use to populate local resources after repo cloning
+# * Template: 1.0.0
+#
+
+#
+# Functions
+#
+
+function dev_lib_create() {
+  local target="$1"
+  if [[ ! -f "$target" ]]; then
+    grep -v 'ACTION REQUIRED: this is a template file' "dot${target}" >"$target" ||
+      return $?
+  fi
+  return 0
+}
+
+#
+# Main
+#
+
+declare dev_lib_target=''
+
+[[ ! -f 'bin/dev-set' ]] && echo "Error: script must be run from the project's root path" && exit 1
+
+dev_lib_target='.local'
+dev_lib_create "$dev_lib_target" &&
+  dev_lib_target='.secrets' &&
+  dev_lib_create "$dev_lib_target"

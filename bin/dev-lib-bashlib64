@@ -2,16 +2,23 @@
 #
 # Update dev-time external tool: BashLib64
 #
-# * Template: 2.1.1
+# * Template: 3.0.0
+#
+
+#
+# Imports
 #
 
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || exit 1
 
-[[ -z "$DEV_CICD_INSTALLER64_BIN" ]] &&
+#
+# Main
+#
+
+[[ -z "$DEV_LIB_INSTALLER64_TARGET" ]] &&
   echo 'error: Installer64 not found. Use the dev-lib-instaler64 script to deploy it)' &&
   exit 1
 
-echo 'Deploy application'
 export INST64_BASHLIB64_TARGET="$DEV_CICD_BASHLIB64"
-"${DEV_CICD_BASHLIB64_INSTALLER}"
+"${DEV_LIB_INSTALLER64_TARGET}/install-bashlib64"
