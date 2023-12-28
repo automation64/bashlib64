@@ -3,14 +3,23 @@
 #
 # Project development environment / Local variables
 #
-# * this file should be excluded from GIT
-# * source before .env
+# * This file should be excluded from GIT
+# * Source before .env
+# * Version: 1.1.0
 #
 
 # Project base location. Adjust to your local GIT repo
 DEV_ROOT="$(pwd)"
 export DEV_ROOT
 
-#
-# Tools
-#
+# CICD / Debug flag for 'bin/' scripts
+DEV_CICD_DEBUG=''
+export DEV_CICD_DEBUG
+
+# Release / GitHub / Command
+DEV_LIB_GH_BIN="/usr/bin/gh"
+export DEV_LIB_GH_BIN
+
+# Repo / RSync / Command
+DEV_LIB_RSYNC_BIN="/usr/bin/rsync"
+export DEV_LIB_RSYNC_BIN

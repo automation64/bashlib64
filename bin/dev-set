@@ -3,7 +3,7 @@
 # Set development environment variables
 #
 # * Source this script from the project's root directory
-# * Template: 7.0.1
+# * Template: 7.1.0
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -122,6 +122,8 @@ function dev_set_load_env() {
 #
 # Main
 #
+
+[[ ! -f 'bin/dev-set' ]] && echo "Error: script must be run from the project's root path" && exit 1
 
 # shellcheck disable=SC2154
 if [[ -f ./.local ]]; then
