@@ -242,7 +242,8 @@ function bl64_os_match_compatible() {
     if ((status == 0)); then
       break
     elif ((status == 1)); then
-      bl64_msg_show_warning "$_BL64_OS_TXT_COMPATIBILITY_MODE (os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+      bl64_msg_show_warning \
+        "${_BL64_OS_TXT_COMPATIBILITY_MODE} (${_BL64_OS_TXT_OS_CURRENT}: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
       status=0
       break
     fi
@@ -314,7 +315,8 @@ function bl64_os_lang_is_available() {
 #
 # * Target use case is script compatibility. Use in the init part to halt execution if OS is not supported
 # * Not recommended for checking individual functions. Instead, use if or case structures to support multiple values based on the OS version
-# * The check is done against the provided list
+# * The check is done against the provided list, exact match
+# * Check is strict, ignores BL64_LIB_COMPATIBILITY global flag. If you need to check for compatibility, use bl64_os_check_compatibility() instead
 # * This is a wrapper to the bl64_os_match so it can be used as a check function
 #
 # Arguments:
@@ -329,8 +331,33 @@ function bl64_os_lang_is_available() {
 function bl64_os_check_version() {
   bl64_dbg_lib_show_function "$@"
 
+  bl64_os_match "$@" && return 0
+
+  bl64_msg_show_error \
+    "${_BL64_OS_TXT_TASK_NOT_SUPPORTED} (${_BL64_OS_TXT_OS_CURRENT}: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+}
+
+#######################################
+# Check the current OS version is compatible against the supported list
+#
+# * Same as bl64_os_check_version() but obeys the global BL64_LIB_COMPATIBILITY flag
+#
+# Arguments:
+#   $@: list of OS versions to check against. Format: same as bl64_os_match
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: check ok
+#   $BL64_LIB_ERROR_APP_INCOMPATIBLE
+#######################################
+function bl64_os_check_compatibility() {
+  bl64_dbg_lib_show_function "$@"
+
   bl64_os_match_compatible "$@" && return 0
 
-  bl64_msg_show_error "${_BL64_OS_TXT_TASK_NOT_SUPPORTED} (${_BL64_OS_TXT_OS_CURRENT}: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+  bl64_msg_show_error \
+    "${_BL64_OS_TXT_TASK_NOT_SUPPORTED} (${_BL64_OS_TXT_OS_CURRENT}: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }
