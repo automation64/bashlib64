@@ -409,7 +409,7 @@ function bl64_pkg_run_dnf() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_dbg_lib_command_enabled; then
+  if bl64_msg_lib_verbose_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -444,7 +444,7 @@ function bl64_pkg_run_yum() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_dbg_lib_command_enabled; then
+  if bl64_msg_lib_verbose_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -546,7 +546,7 @@ function bl64_pkg_run_apk() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_dbg_lib_command_enabled; then
+  if bl64_msg_lib_verbose_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -581,7 +581,7 @@ function bl64_pkg_run_brew() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_dbg_lib_command_enabled; then
+  if bl64_msg_lib_verbose_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -616,7 +616,7 @@ function bl64_pkg_run_zypper() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_dbg_lib_command_enabled; then
+  if bl64_msg_lib_verbose_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
