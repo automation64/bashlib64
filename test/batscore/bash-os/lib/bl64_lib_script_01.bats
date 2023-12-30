@@ -1,6 +1,8 @@
 setup() {
   export DEV_TEST_INIT_ONLY='YES'
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  # Disable compatibility mode to allow strict version checking
+  export BL64_LIB_COMPATIBILITY='OFF'
 }
 
 @test "bl64_lib_source: script vars are set" {
