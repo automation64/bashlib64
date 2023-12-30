@@ -573,7 +573,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
-[19.0.0]: https://github.com/automation64/bashlib64/compare/18.0.0...19.0.0
+[18.1.0]: https://github.com/automation64/bashlib64/compare/18.0.0...18.1.0
 [18.0.0]: https://github.com/automation64/bashlib64/compare/17.3.0...18.0.0
 [17.3.0]: https://github.com/automation64/bashlib64/compare/17.2.0...17.3.0
 [17.2.0]: https://github.com/automation64/bashlib64/compare/17.1.0...17.2.0
