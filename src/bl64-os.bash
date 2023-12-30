@@ -4,7 +4,8 @@
 
 function _bl64_os_match() {
   bl64_dbg_lib_show_function "$@"
-  local target="$1"
+  local check_compatibility="$1"
+  local target="$2"
   local target_os=''
   local target_major=''
   local target_minor=''
@@ -26,7 +27,7 @@ function _bl64_os_match() {
       ((current_major == target_major && current_minor == target_minor)); then
       :
     else
-      if bl64_lib_mode_compability_is_enabled; then
+      if bl64_lib_flag_is_enabled "$check_compatibility" && bl64_lib_mode_compability_is_enabled; then
         if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
           return 1
         else
@@ -50,7 +51,7 @@ function _bl64_os_match() {
       ((current_major == target_major)); then
       :
     else
-      if bl64_lib_mode_compability_is_enabled; then
+      if bl64_lib_flag_is_enabled "$check_compatibility" && bl64_lib_mode_compability_is_enabled; then
         if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
           return 1
         else
@@ -183,6 +184,8 @@ function _bl64_os_get_distro_from_os_release() {
 #######################################
 # Compare the current OS version against a list of OS versions
 #
+# * There is a match if both distro and version are equal to any target on the list
+#
 # Arguments:
 #   $@: each argument is an OS target. The list is any combintation of the formats: "$BL64_OS_<ALIAS>" "${BL64_OS_<ALIAS>}-V" "${BL64_OS_<ALIAS>}-V.S"
 # Outputs:
@@ -202,7 +205,39 @@ function bl64_os_match() {
   bl64_dbg_lib_show_info "Look for [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
-    _bl64_os_match "$item"
+    _bl64_os_match "$BL64_VAR_OFF" "$item"
+    status=$?
+    ((status == 0)) && break
+  done
+  return $status
+}
+
+#######################################
+# Compare the current OS version against a list of compatible OS versions
+#
+# * Compatibility is only verified if BL64_LIB_COMPATIBILITY == ON
+# * The OS is considered compatible if there is a Distro match, regardles of the version
+#
+# Arguments:
+#   $@: each argument is an OS target. The list is any combintation of the formats: "$BL64_OS_<ALIAS>" "${BL64_OS_<ALIAS>}-V" "${BL64_OS_<ALIAS>}-V.S"
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: os match
+#   BL64_LIB_ERROR_OS_NOT_MATCH
+#   BL64_LIB_ERROR_OS_TAG_INVALID
+#######################################
+function bl64_os_match_compatible() {
+  bl64_dbg_lib_show_function "$@"
+  local item=''
+  local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
+
+  bl64_check_module 'BL64_OS_MODULE' || return $?
+  bl64_dbg_lib_show_info "Look for [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
+  # shellcheck disable=SC2086
+  for item in "$@"; do
+    _bl64_os_match "$BL64_VAR_ON" "$item"
     status=$?
     if ((status == 0)); then
       break
@@ -294,7 +329,7 @@ function bl64_os_lang_is_available() {
 function bl64_os_check_version() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_os_match "$@" && return 0
+  bl64_os_match_compatible "$@" && return 0
 
   bl64_msg_show_error "${_BL64_OS_TXT_TASK_NOT_SUPPORTED} (${_BL64_OS_TXT_OS_CURRENT}: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
