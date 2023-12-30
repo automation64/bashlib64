@@ -1,5 +1,5 @@
 #
-# Main
+# Library Main
 #
 
 # Normalize locales to C until a better locale is found in bl64_os_setup
