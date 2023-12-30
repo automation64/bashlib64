@@ -4,5 +4,6 @@ setup() {
 }
 
 @test "_bl64_os_set_distro: identify platform" {
-  assert_not_equal "$BL64_OS_DISTRO" 'UNKNOWN'
+  run _bl64_os_set_distro
+  assert_success
 }
