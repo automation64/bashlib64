@@ -63,8 +63,8 @@ function _bl64_os_match() {
     target_os="$target"
 
     bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}]"
-    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] || r
-    eturn $BL64_LIB_ERROR_OS_NOT_MATCH
+    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] ||
+      return $BL64_LIB_ERROR_OS_NOT_MATCH
 
   else
     bl64_msg_show_error "${_BL64_OS_TXT_INVALID_OS_PATTERN} (${target})"
