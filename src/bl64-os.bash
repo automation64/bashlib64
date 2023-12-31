@@ -165,8 +165,8 @@ function _bl64_os_get_distro_from_os_release() {
   'DARWIN') BL64_OS_DISTRO="${L64_OS_MCOS}-${version_normalized}" ;;
   'OL') BL64_OS_DISTRO="${BL64_OS_OL}-${version_normalized}" ;;
   'ROCKY') BL64_OS_DISTRO="${BL64_OS_RCK}-${version_normalized}" ;;
-  'RHEL') BL64_OS_DISTRO="${L64_OS_RHEL}-${version_normalized}" ;;
-  'SLES') BL64_OS_DISTRO="${L64_OS_SLES}-${version_normalized}" ;;
+  'RHEL') BL64_OS_DISTRO="${BL64_OS_RHEL}-${version_normalized}" ;;
+  'SLES') BL64_OS_DISTRO="${BL64_OS_SLES}-${version_normalized}" ;;
   'UBUNTU') BL64_OS_DISTRO="${BL64_OS_UB}-${version_normalized}" ;;
   *)
     bl64_msg_show_error "${_BL64_OS_TXT_OS_NOT_KNOWN}. ${_BL64_OS_TXT_CHECK_OS_MATRIX} (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE})"
