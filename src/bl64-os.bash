@@ -27,12 +27,10 @@ function _bl64_os_match() {
       ((current_major == target_major && current_minor == target_minor)); then
       :
     else
-      if bl64_lib_flag_is_enabled "$check_compatibility" && bl64_lib_mode_compability_is_enabled; then
-        if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
-          return 1
-        else
-          return $BL64_LIB_ERROR_OS_NOT_MATCH
-        fi
+      if bl64_lib_flag_is_enabled "$check_compatibility" &&
+        bl64_lib_mode_compability_is_enabled &&
+        [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
+        return 1
       else
         return $BL64_LIB_ERROR_OS_NOT_MATCH
       fi
@@ -51,12 +49,10 @@ function _bl64_os_match() {
       ((current_major == target_major)); then
       :
     else
-      if bl64_lib_flag_is_enabled "$check_compatibility" && bl64_lib_mode_compability_is_enabled; then
-        if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
-          return 1
-        else
-          return $BL64_LIB_ERROR_OS_NOT_MATCH
-        fi
+      if bl64_lib_flag_is_enabled "$check_compatibility" &&
+        bl64_lib_mode_compability_is_enabled &&
+        [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
+        return 1
       else
         return $BL64_LIB_ERROR_OS_NOT_MATCH
       fi
@@ -67,7 +63,8 @@ function _bl64_os_match() {
     target_os="$target"
 
     bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}]"
-    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] || r
+    eturn $BL64_LIB_ERROR_OS_NOT_MATCH
 
   else
     bl64_msg_show_error "${_BL64_OS_TXT_INVALID_OS_PATTERN} (${target})"
@@ -234,20 +231,28 @@ function bl64_os_match_compatible() {
   local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
 
   bl64_check_module 'BL64_OS_MODULE' || return $?
-  bl64_dbg_lib_show_info "Look for [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
+  bl64_dbg_lib_show_info "Look for exact match [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
-    _bl64_os_match "$BL64_VAR_ON" "$item"
+    _bl64_os_match "$BL64_VAR_OFF" "$item"
     status=$?
-    if ((status == 0)); then
-      break
-    elif ((status == 1)); then
-      bl64_msg_show_warning \
-        "${_BL64_OS_TXT_COMPATIBILITY_MODE} (${_BL64_OS_TXT_OS_CURRENT}: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
-      status=0
-      break
-    fi
+    ((status == 0)) && break
   done
+  if ((status != 0)); then
+    bl64_dbg_lib_show_info "No exact match, look for compatibility"
+    for item in "$@"; do
+      _bl64_os_match "$BL64_VAR_ON" "$item"
+      status=$?
+      if ((status == 0)); then
+        break
+      elif ((status == 1)); then
+        bl64_msg_show_warning \
+          "${_BL64_OS_TXT_COMPATIBILITY_MODE} (${_BL64_OS_TXT_OS_CURRENT}: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+        status=0
+        break
+      fi
+    done
+  fi
   return $status
 }
 
