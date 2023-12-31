@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with container engines
 #######################################
 
-export BL64_CNT_VERSION='2.0.1'
+export BL64_CNT_VERSION='2.0.2'
 
 # Optional module. Not enabled by default
 export BL64_CNT_MODULE='0'

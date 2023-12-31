@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage native OS packages
 #######################################
 
-export BL64_PKG_VERSION='4.3.2'
+export BL64_PKG_VERSION='4.3.3'
 
 export BL64_PKG_MODULE='0'
 

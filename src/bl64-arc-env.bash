@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage archive files
 #######################################
 
-export BL64_ARC_VERSION='2.2.1'
+export BL64_ARC_VERSION='2.2.2'
 
 export BL64_ARC_MODULE='0'
 
