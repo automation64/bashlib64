@@ -162,7 +162,7 @@ function _bl64_os_get_distro_from_os_release() {
   'CENTOS') BL64_OS_DISTRO="${BL64_OS_CNT}-${version_normalized}" ;;
   'DEBIAN') BL64_OS_DISTRO="${BL64_OS_DEB}-${version_normalized}" ;;
   'FEDORA') BL64_OS_DISTRO="${BL64_OS_FD}-${version_normalized}" ;;
-  'DARWIN') BL64_OS_DISTRO="${L64_OS_MCOS}-${version_normalized}" ;;
+  'DARWIN') BL64_OS_DISTRO="${BL64_OS_MCOS}-${version_normalized}" ;;
   'OL') BL64_OS_DISTRO="${BL64_OS_OL}-${version_normalized}" ;;
   'ROCKY') BL64_OS_DISTRO="${BL64_OS_RCK}-${version_normalized}" ;;
   'RHEL') BL64_OS_DISTRO="${BL64_OS_RHEL}-${version_normalized}" ;;
