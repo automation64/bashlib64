@@ -45,7 +45,7 @@ if [[ -z "$DEV_TEST_INIT_ONLY" ]]; then
   export BL64_LIB_TRAPS='0'
 
   # Disable compatibility mode to allow strict version checking
-  export BL64_LIB_COMPATIBILITY='0'
+  export BL64_LIB_COMPATIBILITY='OFF'
 
   # Load the bashlib64 library for all test-cases
   export DEV_TEST_VALUE_LIBRARY_MODE="${DEV_TEST_VALUE_LIBRARY_MODE:-SA}"

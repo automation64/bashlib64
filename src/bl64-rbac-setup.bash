@@ -24,6 +24,7 @@ function bl64_rbac_setup() {
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_OS_MODULE' &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     bl64_lib_module_imported 'BL64_FS_MODULE' &&
     bl64_lib_module_imported 'BL64_TXT_MODULE' &&

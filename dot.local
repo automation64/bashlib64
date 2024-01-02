@@ -16,7 +16,7 @@ export DEV_ROOT
 DEV_CICD_DEBUG=''
 export DEV_CICD_DEBUG
 
-# Release / GitHub / Command
+# Lib / GitHub / Command
 DEV_LIB_GH_BIN="/usr/bin/gh"
 export DEV_LIB_GH_BIN
 

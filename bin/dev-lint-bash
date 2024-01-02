@@ -4,7 +4,7 @@
 #
 # * Check is done using shellcheck
 # * TestManSH is used to manage linting environment
-# * Template: 5.0.0
+# * Template: 6.0.0
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -28,8 +28,12 @@
 
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || exit 1
-# shellcheck source=lib/bl64/bashlib64-core.bash
-source "${DEV_CICD_BASHLIB64}/bashlib64-core.bash" || exit 1
+# shellcheck source-path=lib/bl64
+source "${DEV_CICD_BASHLIB64}/bashlib64-module-txt.bash" &&
+  source "${DEV_CICD_BASHLIB64}/bashlib64-module-fmt.bash" &&
+  source "${DEV_CICD_BASHLIB64}/bashlib64-module-fs.bash" &&
+  source "${DEV_CICD_BASHLIB64}/bashlib64-core.bash" ||
+  exit 1
 
 #
 # Functions
@@ -37,11 +41,17 @@ source "${DEV_CICD_BASHLIB64}/bashlib64-core.bash" || exit 1
 
 function dev_lint_bash() {
   bl64_dbg_app_show_function "$@"
-  local dev_lint_target="$*"
-  local dev_lint_current=''
-  for dev_lint_current in $dev_lint_target; do
-    bl64_msg_show_phase "lint Bash target (${dev_lint_current})"
-    "$DEV_LIB_TESTMANSH_BIN" -t -a -c "$dev_lint_current"
+  local target="$*"
+  local current=''
+
+  if [[ -z "$target" ]]; then
+    target="$(bl64_fs_find_files "$DEV_CICD_LINT_BASH_SOURCE")" ||
+      return $?
+  fi
+  for current in $target; do
+    bl64_msg_show_phase "lint target: ${current}"
+    "$DEV_LIB_TESTMANSH_BIN" -t -a -V NONE -c "$current" ||
+      return $?
   done
 }
 
@@ -49,13 +59,11 @@ function dev_lint_bash() {
 # Main
 #
 
-declare dev_lint_target="${*:-$DEV_CICD_LINT_BASH_TARGET}"
-declare dev_lint_current=''
+declare dev_lint_target="${*:-}"
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
 
-bl64_check_parameter 'dev_lint_target' &&
-  bl64_check_export 'DEV_CICD_LINT_BASH_CFG' &&
+bl64_check_export 'DEV_CICD_LINT_BASH_CFG' &&
   bl64_check_export 'DEV_LIB_TESTMANSH_BIN' &&
   bl64_check_command_search_path "$DEV_LIB_TESTMANSH_BIN" ||
   exit $?

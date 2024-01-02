@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [18.1.0]
+
+### Added
+
+- os
+  - bl64_os_match_compatible: compares current OS against the target list and matches if the OS is compatible
+  - bl64_os_check_compatibility: checks that current OS is compatible against a target list
+
+### Changed
+
+- core
+  - restored initial library compatibility check but using bl64_os_check_compatibility() to allow execution when then there is no exact OS match
+
 ## [18.0.0]
 
 ### Fixed
@@ -17,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - check
-  - bl64_check_module_imported: **Breaking change**: migrated to core module: bl64_lib_module_imported
+  - **Breaking change**: bl64_check_module_imported: migrated to core module: bl64_lib_module_imported
 
 ### Added
 
@@ -560,6 +573,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[18.1.0]: https://github.com/automation64/bashlib64/compare/18.0.0...18.1.0
 [18.0.0]: https://github.com/automation64/bashlib64/compare/17.3.0...18.0.0
 [17.3.0]: https://github.com/automation64/bashlib64/compare/17.2.0...17.3.0
 [17.2.0]: https://github.com/automation64/bashlib64/compare/17.1.0...17.2.0

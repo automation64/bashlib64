@@ -55,6 +55,7 @@ function _bl64_py_setup() {
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_OS_MODULE' &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     _bl64_py_set_command "$venv_path" &&
     bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
@@ -118,7 +119,7 @@ function _bl64_py_set_command() {
     "${BL64_OS_ALP}-3.16" | "${BL64_OS_ALP}-3.17") BL64_PY_CMD_PYTHON39='/usr/bin/python3.10' ;;
     ${BL64_OS_MCOS}-12.* | ${BL64_OS_MCOS}-13.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     *)
-      if bl64_lib_mode_compability_is_enabled; then
+      if bl64_check_compatibility_mode; then
         BL64_PY_CMD_PYTHON3='/usr/bin/python3'
       else
         bl64_check_alert_unsupported

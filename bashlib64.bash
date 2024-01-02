@@ -90,7 +90,7 @@ TERM="${TERM:-vt100}"
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='18.0.0'
+export BL64_VERSION='18.1.0'
 
 #
 # Imported shell standard variables
@@ -763,7 +763,7 @@ export _BL64_MSG_TXT_WARNING='Warning'
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #######################################
 
-export BL64_OS_VERSION='4.2.1'
+export BL64_OS_VERSION='4.3.0'
 
 export BL64_OS_MODULE='0'
 
@@ -786,44 +786,33 @@ export BL64_OS_SET_LOCALE_ALL=''
 export _BL64_OS_TXT_CHECK_OS_MATRIX='Please check the OS compatibility matrix for BashLib64'
 export _BL64_OS_TXT_ERROR_OS_RELEASE='failed to load OS information from /etc/os-release file'
 export _BL64_OS_TXT_INVALID_OS_PATTERN='invalid OS pattern'
-export _BL64_OS_TXT_OS_MATRIX='Compatible-versions'
+export _BL64_OS_TXT_OS_MATRIX='supported-os'
+export _BL64_OS_TXT_OS_CURRENT='current-os'
 export _BL64_OS_TXT_OS_NOT_KNOWN='current OS is not supported'
 export _BL64_OS_TXT_OS_NOT_SUPPORTED='BashLib64 not supported on the current OS'
 export _BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED='current OS version is not supported'
 export _BL64_OS_TXT_TASK_NOT_SUPPORTED='task not supported on the current OS version'
+export _BL64_OS_TXT_COMPATIBILITY_MODE='current OS version is not supported. Execution will continue since compatibility-mode was requested.'
 
 #
 # OS standard name tags
 #
 # * Used to normalize OS names
-# * Format: BL64_OS_TAG
+# * Value format: [A-Z]+
 #
 
-# ALM -> AlmaLinux
 export BL64_OS_ALM='ALMALINUX'
-# ALP -> Alpine Linux
 export BL64_OS_ALP='ALPINE'
-# AMZ -> Amazon Linux
-export BL64_OS_AMZ='AMZN'
-# CNT -> CentOS
+export BL64_OS_AMZ='AMAZONLINUX'
 export BL64_OS_CNT='CENTOS'
-# DEB -> Debian
 export BL64_OS_DEB='DEBIAN'
-# FD  -> Fedora
 export BL64_OS_FD='FEDORA'
-# MCOS-> MacOS (Darwin)
 export BL64_OS_MCOS='DARWIN'
-# OL  -> OracleLinux
-export BL64_OS_OL='OL'
-# RCK -> Rocky Linux
-export BL64_OS_RCK='ROCKY'
-# RHEL-> RedHat Enterprise Linux
+export BL64_OS_OL='ORACLELINUX'
+export BL64_OS_RCK='ROCKYLINUX'
 export BL64_OS_RHEL='RHEL'
-# SLES-> SUSE Linux Enterprise Server
 export BL64_OS_SLES='SLES'
-# UB  -> Ubuntu
 export BL64_OS_UB='UBUNTU'
-# UNK -> Unknown OS
 export BL64_OS_UNK='UNKNOWN'
 
 #######################################
@@ -876,7 +865,7 @@ export _BL64_API_TXT_ERROR_API_FAILED='API call failed'
 # BashLib64 / Module / Globals / Manage archive files
 #######################################
 
-export BL64_ARC_VERSION='2.2.1'
+export BL64_ARC_VERSION='2.2.2'
 
 export BL64_ARC_MODULE='0'
 
@@ -940,7 +929,7 @@ export _BL64_BSH_TXT_IMPORT_YAML='convert and import shell variables from YAML f
 # BashLib64 / Module / Globals / Interact with container engines
 #######################################
 
-export BL64_CNT_VERSION='2.0.1'
+export BL64_CNT_VERSION='2.0.2'
 
 # Optional module. Not enabled by default
 export BL64_CNT_MODULE='0'
@@ -1006,7 +995,7 @@ export _BL64_FMT_TXT_VALUE_LIST_VALID='Value must be one of'
 # BashLib64 / Module / Globals / Manage local filesystem
 #######################################
 
-export BL64_FS_VERSION='4.7.1'
+export BL64_FS_VERSION='4.8.0'
 
 export BL64_FS_MODULE='0'
 
@@ -1143,7 +1132,7 @@ export BL64_HLM_TXT_DEPLOY_CHART='deploy helm chart'
 # BashLib64 / Module / Globals / Manage OS identity and access service
 #######################################
 
-export BL64_IAM_VERSION='3.1.1'
+export BL64_IAM_VERSION='3.1.2'
 
 export BL64_IAM_MODULE='0'
 
@@ -1229,7 +1218,7 @@ export BL64_MDB_REPLICA_TIMEOUT=''
 # BashLib64 / Module / Globals / Manage native OS packages
 #######################################
 
-export BL64_PKG_VERSION='4.3.1'
+export BL64_PKG_VERSION='4.3.3'
 
 export BL64_PKG_MODULE='0'
 
@@ -1288,7 +1277,7 @@ export _BL64_PKG_TXT_REPOSITORY_ADD_KEY='install GPG key'
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #######################################
 
-export BL64_PY_VERSION='1.16.1'
+export BL64_PY_VERSION='1.16.2'
 
 # Optional module. Not enabled by default
 export BL64_PY_MODULE='0'
@@ -1336,7 +1325,7 @@ export _BL64_PY_TXT_VENV_CREATE='create python virtual environment'
 # BashLib64 / Module / Globals / Manage role based access service
 #######################################
 
-export BL64_RBAC_VERSION='1.13.1'
+export BL64_RBAC_VERSION='1.13.2'
 
 export BL64_RBAC_MODULE='0'
 
@@ -1386,7 +1375,7 @@ export _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
 # BashLib64 / Module / Globals / Transfer and Receive data over the network
 #######################################
 
-export BL64_RXTX_VERSION='1.20.1'
+export BL64_RXTX_VERSION='1.20.2'
 
 export BL64_RXTX_MODULE='0'
 
@@ -1468,7 +1457,7 @@ export BL64_TM_MODULE='0'
 # BashLib64 / Module / Globals / Manipulate text files content
 #######################################
 
-export BL64_TXT_VERSION='1.13.1'
+export BL64_TXT_VERSION='1.13.2'
 
 export BL64_TXT_MODULE='0'
 
@@ -1515,7 +1504,7 @@ export _BL64_UI_TXT_CONFIRMATION_ERROR='provided confirmation message is not wha
 # BashLib64 / Module / Globals / Manage Version Control System
 #######################################
 
-export BL64_VCS_VERSION='1.15.1'
+export BL64_VCS_VERSION='1.15.2'
 
 export BL64_VCS_MODULE='0'
 
@@ -2108,7 +2097,7 @@ function bl64_check_alert_unsupported() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local extra="${1:-}"
 
-  bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }OS: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+  bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
   return $BL64_LIB_ERROR_OS_INCOMPATIBLE
 }
 
@@ -4186,15 +4175,16 @@ function bl64_os_set_lang() {
 
 function _bl64_os_match() {
   bl64_dbg_lib_show_function "$@"
-  local target="$1"
+  local check_compatibility="$1"
+  local target="$2"
   local target_os=''
   local target_major=''
   local target_minor=''
-  local current_os=''
   local current_major=''
   local current_minor=''
 
   if [[ "$target" == +([[:alpha:]])-+([[:digit:]]).+([[:digit:]]) ]]; then
+    bl64_dbg_lib_show_info 'Analyze Pattern: match OS, Major and Minor'
     target_os="${target%%-*}"
     target_major="${target##*-}"
     target_minor="${target_major##*\.}"
@@ -4203,29 +4193,49 @@ function _bl64_os_match() {
     current_minor="${current_major##*\.}"
     current_major="${current_major%%\.*}"
 
-    bl64_dbg_lib_show_info "Pattern: match OS, Major and Minor [${BL64_OS_DISTRO}] == [${target_os}-${target_major}.${target_minor}]"
-    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
-      ((current_major == target_major && current_minor == target_minor)) ||
-      return $BL64_LIB_ERROR_OS_NOT_MATCH
+    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}-${target_major}.${target_minor}]"
+    if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
+      ((current_major == target_major && current_minor == target_minor)); then
+      :
+    else
+      if bl64_lib_flag_is_enabled "$check_compatibility" &&
+        bl64_lib_mode_compability_is_enabled &&
+        [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
+        return 1
+      else
+        return $BL64_LIB_ERROR_OS_NOT_MATCH
+      fi
+    fi
 
   elif [[ "$target" == +([[:alpha:]])-+([[:digit:]]) ]]; then
+    bl64_dbg_lib_show_info 'Pattern: match OS and Major'
     target_os="${target%%-*}"
     target_major="${target##*-}"
     target_major="${target_major%%\.*}"
-    current_os="${BL64_OS_DISTRO%%-*}"
     current_major="${BL64_OS_DISTRO##*-}"
     current_major="${current_major%%\.*}"
 
-    bl64_dbg_lib_show_info "Pattern: match OS and Major [${current_os}-${current_major}] == [${target_os}-${target_major}]"
-    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
-      ((current_major == target_major)) ||
-      return $BL64_LIB_ERROR_OS_NOT_MATCH
+    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}-${target_major}]"
+    if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
+      ((current_major == target_major)); then
+      :
+    else
+      if bl64_lib_flag_is_enabled "$check_compatibility" &&
+        bl64_lib_mode_compability_is_enabled &&
+        [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
+        return 1
+      else
+        return $BL64_LIB_ERROR_OS_NOT_MATCH
+      fi
+    fi
 
   elif [[ "$target" == +([[:alpha:]]) ]]; then
+    bl64_dbg_lib_show_info 'Pattern: match OS ID'
     target_os="$target"
 
-    bl64_dbg_lib_show_info "Pattern: match OS ID only [${BL64_OS_DISTRO}] == [${target_os}]"
-    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] || return $BL64_LIB_ERROR_OS_NOT_MATCH
+    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}]"
+    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] ||
+      return $BL64_LIB_ERROR_OS_NOT_MATCH
 
   else
     bl64_msg_show_error "${_BL64_OS_TXT_INVALID_OS_PATTERN} (${target})"
@@ -4295,45 +4305,41 @@ function _bl64_os_get_distro_from_uname() {
 #######################################
 function _bl64_os_get_distro_from_os_release() {
   bl64_dbg_lib_show_function
+  local version_pattern_single='^[0-9]+$'
+  local version_pattern_semver='^[0-9]+.[0-9]+.[0-9]+$'
+  local version_normalized=''
 
   # shellcheck disable=SC1091
-  source '/etc/os-release'
-  if [[ -n "${ID:-}" && -n "${VERSION_ID:-}" ]]; then
-    BL64_OS_DISTRO="${ID^^}-${VERSION_ID}"
-  else
+  bl64_dbg_app_show_info 'parse /etc/os-release'
+  if ! source '/etc/os-release' || [[ -z "$ID" || -z "$VERSION_ID" ]]; then
     bl64_msg_show_error "$_BL64_OS_TXT_ERROR_OS_RELEASE"
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
 
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_ALM}-8.* | ${BL64_OS_ALM}-9.*) : ;;
-  ${BL64_OS_ALP}-3.*) BL64_OS_DISTRO="${BL64_OS_ALP}-${VERSION_ID%.*}" ;;
-  "${BL64_OS_CNT}-7" | ${BL64_OS_CNT}-7.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_CNT}-7" ]] && BL64_OS_DISTRO="${BL64_OS_CNT}-7.0" ;;
-  "${BL64_OS_CNT}-8" | ${BL64_OS_CNT}-8.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_CNT}-8" ]] && BL64_OS_DISTRO="${BL64_OS_CNT}-8.0" ;;
-  "${BL64_OS_CNT}-9" | ${BL64_OS_CNT}-9.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_CNT}-9" ]] && BL64_OS_DISTRO="${BL64_OS_CNT}-9.0" ;;
-  "${BL64_OS_DEB}-9" | ${BL64_OS_DEB}-9.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-9" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-9.0" ;;
-  "${BL64_OS_DEB}-10" | ${BL64_OS_DEB}-10.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-10" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-10.0" ;;
-  "${BL64_OS_DEB}-11" | ${BL64_OS_DEB}-11.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_DEB}-11" ]] && BL64_OS_DISTRO="${BL64_OS_DEB}-11.0" ;;
-  "${BL64_OS_FD}-33" | ${BL64_OS_FD}-33.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-33" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-33.0" ;;
-  "${BL64_OS_FD}-34" | ${BL64_OS_FD}-34.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-34" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-34.0" ;;
-  "${BL64_OS_FD}-35" | ${BL64_OS_FD}-35.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-35" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-35.0" ;;
-  "${BL64_OS_FD}-36" | ${BL64_OS_FD}-36.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-36" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-36.0" ;;
-  "${BL64_OS_FD}-37" | ${BL64_OS_FD}-37.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-37" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-37.0" ;;
-  "${BL64_OS_FD}-38" | ${BL64_OS_FD}-38.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-38" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-38.0" ;;
-  "${BL64_OS_FD}-39" | ${BL64_OS_FD}-39.*) [[ "$BL64_OS_DISTRO" == "${BL64_OS_FD}-39" ]] && BL64_OS_DISTRO="${BL64_OS_FD}-39.0" ;;
-  ${BL64_OS_OL}-7.* | ${BL64_OS_OL}-8.* | ${BL64_OS_OL}-9.*) : ;;
-  ${BL64_OS_RCK}-8.* | ${BL64_OS_RCK}-9.*) : ;;
-  ${BL64_OS_RHEL}-8.* | ${BL64_OS_RHEL}-9.*) : ;;
-  ${BL64_OS_SLES}-15.*) : ;;
-  ${BL64_OS_UB}-18.* | ${BL64_OS_UB}-20.* | ${BL64_OS_UB}-21.* | ${BL64_OS_UB}-22.* | ${BL64_OS_UB}-23.*) : ;;
-  ${BL64_OS_ALM}-* | ${BL64_OS_ALP}-* | ${BL64_OS_CNT}-* | ${BL64_OS_DEB}-* | ${BL64_OS_FD}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_SLES}-* | ${BL64_OS_UB}-*)
-    if ! bl64_lib_mode_compability_is_enabled; then
-      bl64_msg_show_error "${_BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED}. ${_BL64_OS_TXT_CHECK_OS_MATRIX} (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE})"
-      return $BL64_LIB_ERROR_OS_INCOMPATIBLE
-    fi
-    ;;
+  bl64_dbg_lib_show_comments 'normalize OS version to match X.Y'
+  if [[ "$VERSION_ID" =~ $version_pattern_single ]]; then
+    version_normalized="${VERSION_ID}.0"
+  elif [[ "$VERSION_ID" =~ $version_pattern_semver ]]; then
+    version_normalized="${VERSION_ID%.*}"
+  else
+    version_normalized="$VERSION_ID"
+  fi
+
+  bl64_dbg_app_show_info 'set BL_OS_DISTRO'
+  case "${ID^^}" in
+  'ALMALINUX') BL64_OS_DISTRO="${BL64_OS_ALM}-${version_normalized}" ;;
+  'ALPINE') BL64_OS_DISTRO="${BL64_OS_ALP}-${version_normalized}" ;;
+  'AMZN') BL64_OS_DISTRO="${BL64_OS_AMZ}-${version_normalized}" ;;
+  'CENTOS') BL64_OS_DISTRO="${BL64_OS_CNT}-${version_normalized}" ;;
+  'DEBIAN') BL64_OS_DISTRO="${BL64_OS_DEB}-${version_normalized}" ;;
+  'FEDORA') BL64_OS_DISTRO="${BL64_OS_FD}-${version_normalized}" ;;
+  'DARWIN') BL64_OS_DISTRO="${L64_OS_MCOS}-${version_normalized}" ;;
+  'OL') BL64_OS_DISTRO="${BL64_OS_OL}-${version_normalized}" ;;
+  'ROCKY') BL64_OS_DISTRO="${BL64_OS_RCK}-${version_normalized}" ;;
+  'RHEL') BL64_OS_DISTRO="${BL64_OS_RHEL}-${version_normalized}" ;;
+  'SLES') BL64_OS_DISTRO="${BL64_OS_SLES}-${version_normalized}" ;;
+  'UBUNTU') BL64_OS_DISTRO="${BL64_OS_UB}-${version_normalized}" ;;
   *)
-    BL64_OS_DISTRO="$BL64_OS_UNK"
     bl64_msg_show_error "${_BL64_OS_TXT_OS_NOT_KNOWN}. ${_BL64_OS_TXT_CHECK_OS_MATRIX} (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE})"
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
     ;;
@@ -4345,6 +4351,8 @@ function _bl64_os_get_distro_from_os_release() {
 
 #######################################
 # Compare the current OS version against a list of OS versions
+#
+# * There is a match if both distro and version are equal to any target on the list
 #
 # Arguments:
 #   $@: each argument is an OS target. The list is any combintation of the formats: "$BL64_OS_<ALIAS>" "${BL64_OS_<ALIAS>}-V" "${BL64_OS_<ALIAS>}-V.S"
@@ -4362,16 +4370,60 @@ function bl64_os_match() {
   local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
 
   bl64_check_module 'BL64_OS_MODULE' || return $?
-
   bl64_dbg_lib_show_info "Look for [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
-    _bl64_os_match "$item"
+    _bl64_os_match "$BL64_VAR_OFF" "$item"
     status=$?
     ((status == 0)) && break
   done
+  return $status
+}
 
+#######################################
+# Compare the current OS version against a list of compatible OS versions
+#
+# * Compatibility is only verified if BL64_LIB_COMPATIBILITY == ON
+# * The OS is considered compatible if there is a Distro match, regardles of the version
+#
+# Arguments:
+#   $@: each argument is an OS target. The list is any combintation of the formats: "$BL64_OS_<ALIAS>" "${BL64_OS_<ALIAS>}-V" "${BL64_OS_<ALIAS>}-V.S"
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: os match
+#   BL64_LIB_ERROR_OS_NOT_MATCH
+#   BL64_LIB_ERROR_OS_TAG_INVALID
+#######################################
+function bl64_os_match_compatible() {
+  bl64_dbg_lib_show_function "$@"
+  local item=''
+  local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
+
+  bl64_check_module 'BL64_OS_MODULE' || return $?
+  bl64_dbg_lib_show_info "Look for exact match [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
   # shellcheck disable=SC2086
+  for item in "$@"; do
+    _bl64_os_match "$BL64_VAR_OFF" "$item"
+    status=$?
+    ((status == 0)) && break
+  done
+  if ((status != 0)); then
+    bl64_dbg_lib_show_info "No exact match, look for compatibility"
+    for item in "$@"; do
+      _bl64_os_match "$BL64_VAR_ON" "$item"
+      status=$?
+      if ((status == 0)); then
+        break
+      elif ((status == 1)); then
+        bl64_msg_show_warning \
+          "${_BL64_OS_TXT_COMPATIBILITY_MODE} (${_BL64_OS_TXT_OS_CURRENT}: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+        status=0
+        break
+      fi
+    done
+  fi
   return $status
 }
 
@@ -4439,7 +4491,8 @@ function bl64_os_lang_is_available() {
 #
 # * Target use case is script compatibility. Use in the init part to halt execution if OS is not supported
 # * Not recommended for checking individual functions. Instead, use if or case structures to support multiple values based on the OS version
-# * The check is done against the provided list
+# * The check is done against the provided list, exact match
+# * Check is strict, ignores BL64_LIB_COMPATIBILITY global flag. If you need to check for compatibility, use bl64_os_check_compatibility() instead
 # * This is a wrapper to the bl64_os_match so it can be used as a check function
 #
 # Arguments:
@@ -4456,7 +4509,32 @@ function bl64_os_check_version() {
 
   bl64_os_match "$@" && return 0
 
-  bl64_msg_show_error "${_BL64_OS_TXT_TASK_NOT_SUPPORTED} (OS: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+  bl64_msg_show_error \
+    "${_BL64_OS_TXT_TASK_NOT_SUPPORTED} (${_BL64_OS_TXT_OS_CURRENT}: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+}
+
+#######################################
+# Check the current OS version is compatible against the supported list
+#
+# * Same as bl64_os_check_version() but obeys the global BL64_LIB_COMPATIBILITY flag
+#
+# Arguments:
+#   $@: list of OS versions to check against. Format: same as bl64_os_match
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: check ok
+#   $BL64_LIB_ERROR_APP_INCOMPATIBLE
+#######################################
+function bl64_os_check_compatibility() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_os_match_compatible "$@" && return 0
+
+  bl64_msg_show_error \
+    "${_BL64_OS_TXT_TASK_NOT_SUPPORTED} (${_BL64_OS_TXT_OS_CURRENT}: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }
 
@@ -5042,6 +5120,7 @@ function bl64_arc_setup() {
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_OS_MODULE' &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     bl64_lib_module_imported 'BL64_FS_MODULE' &&
     _bl64_arc_set_command &&
@@ -6079,6 +6158,7 @@ function bl64_cnt_setup() {
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_OS_MODULE' &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     _bl64_cnt_set_command &&
     bl64_cnt_set_paths &&
@@ -7628,6 +7708,7 @@ function bl64_fs_setup() {
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_OS_MODULE' &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     bl64_lib_module_imported 'BL64_FMT_MODULE' &&
     _bl64_fs_set_command &&
@@ -8174,14 +8255,16 @@ function bl64_fs_merge_dir() {
 #######################################
 function bl64_fs_run_chown() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=''
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHOWN_VERBOSE"
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_dbg_lib_command_enabled && debug="$BL64_FS_SET_CHOWN_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CHOWN" $verbose "$@"
+  "$BL64_FS_CMD_CHOWN" $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -8201,13 +8284,13 @@ function bl64_fs_run_chown() {
 #######################################
 function bl64_fs_run_mktemp() {
   bl64_dbg_lib_show_function "$@"
-  local verbose="$BL64_FS_SET_MKTEMP_QUIET"
 
-  bl64_dbg_lib_command_enabled && verbose=''
+  bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_MKTEMP" $verbose "$@"
+  "$BL64_FS_CMD_MKTEMP" "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -8225,14 +8308,16 @@ function bl64_fs_run_mktemp() {
 #######################################
 function bl64_fs_run_chmod() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=''
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_dbg_lib_command_enabled && debug="$BL64_FS_SET_CHMOD_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CHMOD" $verbose "$@"
+  "$BL64_FS_CMD_CHMOD" $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -8354,14 +8439,16 @@ function bl64_fs_ln_symbolic() {
 #######################################
 function bl64_fs_run_mkdir() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=''
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_dbg_lib_command_enabled && debug="$BL64_FS_SET_MKDIR_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_MKDIR" $verbose "$@"
+  "$BL64_FS_CMD_MKDIR" $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -8397,14 +8484,16 @@ function bl64_fs_mkdir_full() {
 #######################################
 function bl64_fs_run_mv() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=''
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MV_VERBOSE"
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_dbg_lib_command_enabled && debug="$BL64_FS_SET_MV_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_MV" $verbose "$BL64_FS_SET_MV_FORCE" "$@"
+  "$BL64_FS_CMD_MV" $debug "$BL64_FS_SET_MV_FORCE" "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -8565,7 +8654,9 @@ function bl64_fs_run_find() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_command "$BL64_FS_CMD_FIND" || return $?
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_check_command "$BL64_FS_CMD_FIND" || return $?
 
   bl64_dbg_lib_trace_start
   "$BL64_FS_CMD_FIND" "$@"
@@ -8832,14 +8923,16 @@ function bl64_fs_fix_permissions() {
 #######################################
 function bl64_fs_run_cp() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=''
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_dbg_lib_command_enabled && debug="$BL64_FS_SET_CP_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CP" $verbose "$@"
+  "$BL64_FS_CMD_CP" $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -8857,14 +8950,16 @@ function bl64_fs_run_cp() {
 #######################################
 function bl64_fs_run_rm() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=''
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_dbg_lib_command_enabled && debug="$BL64_FS_SET_CP_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_RM" $verbose "$@"
+  "$BL64_FS_CMD_RM" $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -8883,7 +8978,9 @@ function bl64_fs_run_rm() {
 function bl64_fs_run_ls() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" || return $?
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
 
   bl64_dbg_lib_trace_start
   "$BL64_FS_CMD_LS" "$@"
@@ -8904,14 +9001,16 @@ function bl64_fs_run_ls() {
 #######################################
 function bl64_fs_run_ln() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=''
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_LN_VERBOSE"
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_dbg_lib_command_enabled && debug="$BL64_FS_SET_LN_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_LN" $verbose "$@"
+  "$BL64_FS_CMD_LN" $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -9842,6 +9941,7 @@ function bl64_iam_setup() {
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_OS_MODULE' &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     bl64_lib_module_imported 'BL64_RND_MODULE' &&
     _bl64_iam_set_command &&
@@ -11324,9 +11424,10 @@ function bl64_pkg_setup() {
     return 21
 
   # shellcheck disable=SC2249
-  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
-    bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_OS_MODULE' &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     bl64_lib_module_imported 'BL64_FS_MODULE' &&
     bl64_lib_module_imported 'BL64_RXTX_MODULE' &&
@@ -11975,7 +12076,7 @@ function bl64_pkg_run_dnf() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_dbg_lib_command_enabled; then
+  if bl64_msg_lib_verbose_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -12010,7 +12111,7 @@ function bl64_pkg_run_yum() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_dbg_lib_command_enabled; then
+  if bl64_msg_lib_verbose_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -12112,7 +12213,7 @@ function bl64_pkg_run_apk() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_dbg_lib_command_enabled; then
+  if bl64_msg_lib_verbose_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -12147,7 +12248,7 @@ function bl64_pkg_run_brew() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_dbg_lib_command_enabled; then
+  if bl64_msg_lib_verbose_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -12182,7 +12283,7 @@ function bl64_pkg_run_zypper() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_dbg_lib_command_enabled; then
+  if bl64_msg_lib_verbose_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -12251,6 +12352,7 @@ function _bl64_py_setup() {
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_OS_MODULE' &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     _bl64_py_set_command "$venv_path" &&
     bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
@@ -12314,7 +12416,7 @@ function _bl64_py_set_command() {
     "${BL64_OS_ALP}-3.16" | "${BL64_OS_ALP}-3.17") BL64_PY_CMD_PYTHON39='/usr/bin/python3.10' ;;
     ${BL64_OS_MCOS}-12.* | ${BL64_OS_MCOS}-13.*) BL64_PY_CMD_PYTHON39='/usr/bin/python3.9' ;;
     *)
-      if bl64_lib_mode_compability_is_enabled; then
+      if bl64_check_compatibility_mode; then
         BL64_PY_CMD_PYTHON3='/usr/bin/python3'
       else
         bl64_check_alert_unsupported
@@ -12755,6 +12857,7 @@ function bl64_rbac_setup() {
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_OS_MODULE' &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     bl64_lib_module_imported 'BL64_FS_MODULE' &&
     bl64_lib_module_imported 'BL64_TXT_MODULE' &&
@@ -13222,9 +13325,10 @@ function bl64_rxtx_setup() {
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
 
-  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
-    bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_OS_MODULE' &&
     bl64_lib_module_imported 'BL64_FS_MODULE' &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     bl64_lib_module_imported 'BL64_VCS_MODULE' &&
@@ -14135,9 +14239,10 @@ function bl64_txt_setup() {
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
 
-  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
-    bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
+    bl64_lib_module_imported 'BL64_OS_MODULE' &&
     _bl64_txt_set_command &&
     _bl64_txt_set_options &&
     BL64_TXT_MODULE="$BL64_VAR_ON"
@@ -14758,6 +14863,7 @@ function bl64_vcs_setup() {
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
+    bl64_lib_module_imported 'BL64_OS_MODULE' &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     bl64_lib_module_imported 'BL64_API_MODULE' &&
     bl64_lib_module_imported 'BL64_FS_MODULE' &&
@@ -15334,7 +15440,7 @@ function bl64_xsv_run_yq() {
 }
 
 #
-# Main
+# Library Main
 #
 
 # Normalize locales to C until a better locale is found in bl64_os_setup
@@ -15380,9 +15486,25 @@ if bl64_lib_trap_is_enabled; then
 fi
 
 # Set default umask
-umask -S 'u=rwx,g=,o=' > /dev/null
+umask -S 'u=rwx,g=,o=' >/dev/null
 
 bl64_lib_script_set_identity
+
+# Check OS compatibility
+if [[ "${BL64_OS_MODULE:-}" == "$BL64_VAR_ON" ]]; then
+  bl64_os_check_compatibility \
+    "${BL64_OS_ALM}-8" "${BL64_OS_ALM}-9" \
+    "${BL64_OS_ALP}-3" \
+    "${BL64_OS_CNT}-7" "${BL64_OS_CNT}-8" "${BL64_OS_CNT}-9" \
+    "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_DEB}-11" \
+    "${BL64_OS_FD}-33" "${BL64_OS_FD}-34" "${BL64_OS_FD}-35" "${BL64_OS_FD}-36" "${BL64_OS_FD}-37" "${BL64_OS_FD}-38" "${BL64_OS_FD}-39" \
+    "${BL64_OS_OL}-7" "${BL64_OS_OL}-8" "${BL64_OS_OL}-9" \
+    "${BL64_OS_RCK}-8" "${BL64_OS_RCK}-9" \
+    "${BL64_OS_RHEL}-8" "${BL64_OS_RHEL}-9" \
+    "${BL64_OS_SLES}-15" \
+    "${BL64_OS_UB}-18" "${BL64_OS_UB}-20" "${BL64_OS_UB}-21" "${BL64_OS_UB}-22" "${BL64_OS_UB}-23" ||
+    exit $?
+fi
 
 # Run as script or sourced library?
 if bl64_lib_mode_command_is_enabled; then

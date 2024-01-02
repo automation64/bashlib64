@@ -246,14 +246,16 @@ function bl64_fs_merge_dir() {
 #######################################
 function bl64_fs_run_chown() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=''
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHOWN_VERBOSE"
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_dbg_lib_command_enabled && debug="$BL64_FS_SET_CHOWN_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CHOWN" $verbose "$@"
+  "$BL64_FS_CMD_CHOWN" $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -273,13 +275,13 @@ function bl64_fs_run_chown() {
 #######################################
 function bl64_fs_run_mktemp() {
   bl64_dbg_lib_show_function "$@"
-  local verbose="$BL64_FS_SET_MKTEMP_QUIET"
 
-  bl64_dbg_lib_command_enabled && verbose=''
+  bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_MKTEMP" $verbose "$@"
+  "$BL64_FS_CMD_MKTEMP" "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -297,14 +299,16 @@ function bl64_fs_run_mktemp() {
 #######################################
 function bl64_fs_run_chmod() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=''
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CHMOD_VERBOSE"
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_dbg_lib_command_enabled && debug="$BL64_FS_SET_CHMOD_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CHMOD" $verbose "$@"
+  "$BL64_FS_CMD_CHMOD" $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -426,14 +430,16 @@ function bl64_fs_ln_symbolic() {
 #######################################
 function bl64_fs_run_mkdir() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=''
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MKDIR_VERBOSE"
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_dbg_lib_command_enabled && debug="$BL64_FS_SET_MKDIR_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_MKDIR" $verbose "$@"
+  "$BL64_FS_CMD_MKDIR" $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -469,14 +475,16 @@ function bl64_fs_mkdir_full() {
 #######################################
 function bl64_fs_run_mv() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=''
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_MV_VERBOSE"
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_dbg_lib_command_enabled && debug="$BL64_FS_SET_MV_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_MV" $verbose "$BL64_FS_SET_MV_FORCE" "$@"
+  "$BL64_FS_CMD_MV" $debug "$BL64_FS_SET_MV_FORCE" "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -637,7 +645,9 @@ function bl64_fs_run_find() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_command "$BL64_FS_CMD_FIND" || return $?
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_check_command "$BL64_FS_CMD_FIND" || return $?
 
   bl64_dbg_lib_trace_start
   "$BL64_FS_CMD_FIND" "$@"
@@ -904,14 +914,16 @@ function bl64_fs_fix_permissions() {
 #######################################
 function bl64_fs_run_cp() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=''
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_dbg_lib_command_enabled && debug="$BL64_FS_SET_CP_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_CP" $verbose "$@"
+  "$BL64_FS_CMD_CP" $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -929,14 +941,16 @@ function bl64_fs_run_cp() {
 #######################################
 function bl64_fs_run_rm() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=''
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_CP_VERBOSE"
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_dbg_lib_command_enabled && debug="$BL64_FS_SET_CP_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_RM" $verbose "$@"
+  "$BL64_FS_CMD_RM" $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -955,7 +969,9 @@ function bl64_fs_run_rm() {
 function bl64_fs_run_ls() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" || return $?
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
 
   bl64_dbg_lib_trace_start
   "$BL64_FS_CMD_LS" "$@"
@@ -976,14 +992,16 @@ function bl64_fs_run_ls() {
 #######################################
 function bl64_fs_run_ln() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=''
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_command_enabled && verbose="$BL64_FS_SET_LN_VERBOSE"
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+  bl64_dbg_lib_command_enabled && debug="$BL64_FS_SET_LN_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_FS_CMD_LN" $verbose "$@"
+  "$BL64_FS_CMD_LN" $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
