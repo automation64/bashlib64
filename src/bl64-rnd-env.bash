@@ -4,7 +4,7 @@
 
 export BL64_RND_VERSION='1.2.1'
 
-export BL64_RND_MODULE='0'
+declare BL64_RND_MODULE='0'
 
 declare -ig BL64_RND_LENGTH_1=1
 declare -ig BL64_RND_LENGTH_20=20

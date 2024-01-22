@@ -4,7 +4,7 @@
 
 export BL64_RBAC_VERSION='1.13.2'
 
-export BL64_RBAC_MODULE='0'
+declare BL64_RBAC_MODULE='0'
 
 export BL64_RBAC_CMD_SUDO=''
 export BL64_RBAC_CMD_VISUDO=''

@@ -4,8 +4,7 @@
 
 export BL64_CNT_VERSION='2.0.2'
 
-# Optional module. Not enabled by default
-export BL64_CNT_MODULE='0'
+declare BL64_CNT_MODULE='0'
 
 export BL64_CNT_DRIVER_DOCKER='docker'
 export BL64_CNT_DRIVER_PODMAN='podman'

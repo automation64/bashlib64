@@ -4,7 +4,7 @@
 
 export BL64_RXTX_VERSION='1.20.2'
 
-export BL64_RXTX_MODULE='0'
+declare BL64_RXTX_MODULE='0'
 
 export BL64_RXTX_CMD_CURL=''
 export BL64_RXTX_CMD_WGET=''

@@ -4,7 +4,7 @@
 
 export BL64_CHECK_VERSION='5.0.0'
 
-export BL64_CHECK_MODULE='0'
+declare BL64_CHECK_MODULE='0'
 
 export _BL64_CHECK_TXT_PARAMETER_MISSING='required parameter is missing'
 export _BL64_CHECK_TXT_PARAMETER_NOT_SET='required shell variable is not set'

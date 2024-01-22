@@ -4,7 +4,7 @@
 
 export BL64_API_VERSION='1.1.1'
 
-export BL64_API_MODULE='0'
+declare BL64_API_MODULE='0'
 
 #
 # Common constants

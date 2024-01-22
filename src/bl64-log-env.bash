@@ -4,8 +4,7 @@
 
 export BL64_LOG_VERSION='2.1.1'
 
-# Optional module. Not enabled by default
-export BL64_LOG_MODULE='0'
+declare BL64_LOG_MODULE='0'
 
 # Log file types
 export BL64_LOG_FORMAT_CSV='C'

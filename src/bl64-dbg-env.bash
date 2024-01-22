@@ -4,7 +4,7 @@
 
 export BL64_DBG_VERSION='2.4.1'
 
-export BL64_DBG_MODULE='0'
+declare BL64_DBG_MODULE='0'
 
 # Debug target
 export BL64_DBG_TARGET=''

@@ -4,7 +4,7 @@
 
 export BL64_IAM_VERSION='3.1.2'
 
-export BL64_IAM_MODULE='0'
+declare BL64_IAM_MODULE='0'
 
 export BL64_IAM_CMD_USERADD=''
 export BL64_IAM_CMD_ID=''

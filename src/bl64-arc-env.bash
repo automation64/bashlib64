@@ -4,7 +4,7 @@
 
 export BL64_ARC_VERSION='2.2.2'
 
-export BL64_ARC_MODULE='0'
+declare BL64_ARC_MODULE='0'
 
 export BL64_ARC_CMD_TAR=''
 export BL64_ARC_CMD_UNZIP=''

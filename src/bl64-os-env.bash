@@ -4,7 +4,7 @@
 
 export BL64_OS_VERSION='4.3.0'
 
-export BL64_OS_MODULE='0'
+declare BL64_OS_MODULE='0'
 
 export BL64_OS_DISTRO=''
 

@@ -4,8 +4,7 @@
 
 export BL64_ANS_VERSION='1.7.1'
 
-# Optional module. Not enabled by default
-export BL64_ANS_MODULE='0'
+declare BL64_ANS_MODULE='0'
 
 export BL64_ANS_ENV_IGNORE=''
 

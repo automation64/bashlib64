@@ -4,8 +4,7 @@
 
 export BL64_PY_VERSION='1.16.2'
 
-# Optional module. Not enabled by default
-export BL64_PY_MODULE='0'
+declare BL64_PY_MODULE='0'
 
 # Define placeholders for optional distro native python versions
 export BL64_PY_CMD_PYTHON3="$BL64_VAR_UNAVAILABLE"

@@ -4,7 +4,7 @@
 
 export BL64_FS_VERSION='4.8.0'
 
-export BL64_FS_MODULE='0'
+declare BL64_FS_MODULE='0'
 
 export BL64_FS_PATH_TEMPORAL=''
 export BL64_FS_PATH_CACHE=''

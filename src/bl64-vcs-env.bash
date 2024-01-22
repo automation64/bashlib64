@@ -4,7 +4,7 @@
 
 export BL64_VCS_VERSION='1.15.2'
 
-export BL64_VCS_MODULE='0'
+declare BL64_VCS_MODULE='0'
 
 export BL64_VCS_CMD_GIT=''
 

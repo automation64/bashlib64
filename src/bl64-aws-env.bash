@@ -4,8 +4,7 @@
 
 export BL64_AWS_VERSION='1.5.1'
 
-# Optional module. Not enabled by default
-export BL64_AWS_MODULE='0'
+declare BL64_AWS_MODULE='0'
 
 export BL64_AWS_CMD_AWS="$BL64_VAR_UNAVAILABLE"
 

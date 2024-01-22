@@ -4,7 +4,7 @@
 
 export BL64_PKG_VERSION='4.3.3'
 
-export BL64_PKG_MODULE='0'
+declare BL64_PKG_MODULE='0'
 
 export BL64_PKG_CMD_APK=''
 export BL64_PKG_CMD_APT=''

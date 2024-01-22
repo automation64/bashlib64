@@ -4,7 +4,7 @@
 
 export BL64_FMT_VERSION='2.2.2'
 
-export BL64_FMT_MODULE='0'
+declare BL64_FMT_MODULE='0'
 
 export _BL64_FMT_TXT_ERROR_VALUE_LIST_EMPTY='please provide at least one value to check against'
 export _BL64_FMT_TXT_ERROR_VALUE_LIST_WRONG='invalid value'

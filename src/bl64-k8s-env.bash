@@ -4,8 +4,7 @@
 
 export BL64_K8S_VERSION='2.1.1'
 
-# Optional module. Not enabled by default
-export BL64_K8S_MODULE='0'
+declare BL64_K8S_MODULE='0'
 
 export BL64_K8S_CMD_KUBECTL="$BL64_VAR_UNAVAILABLE"
 

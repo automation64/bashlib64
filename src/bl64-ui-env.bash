@@ -4,7 +4,7 @@
 
 export BL64_UI_VERSION='1.1.1'
 
-export BL64_UI_MODULE='0'
+declare BL64_UI_MODULE='0'
 
 export BL64_UI_READ_TIMEOUT='60'
 

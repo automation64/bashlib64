@@ -4,8 +4,7 @@
 
 export BL64_MDB_VERSION='1.2.1'
 
-# Optional module. Not enabled by default
-export BL64_MDB_MODULE='0'
+declare BL64_MDB_MODULE='0'
 
 export BL64_MDB_CMD_MONGOSH="$BL64_VAR_UNAVAILABLE"
 export BL64_MDB_CMD_MONGORESTORE="$BL64_VAR_UNAVAILABLE"

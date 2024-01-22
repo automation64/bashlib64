@@ -4,7 +4,7 @@
 
 export BL64_MSG_VERSION='4.3.1'
 
-export BL64_MSG_MODULE='0'
+declare BL64_MSG_MODULE='0'
 
 # Target verbosity)
 export BL64_MSG_VERBOSE=''

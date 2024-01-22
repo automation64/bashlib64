@@ -4,4 +4,4 @@
 
 export BL64_TM_VERSION='1.1.1'
 
-export BL64_TM_MODULE='0'
+declare BL64_TM_MODULE='0'
