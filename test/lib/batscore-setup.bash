@@ -22,7 +22,6 @@ export DEV_TEST_PATH_LIBRARY="${TESTMANSH_PROJECT_BUILD}/test"
 
 # Test-case specific variables
 export DEV_TEST_BASHLIB64="${DEV_TEST_PATH_LIBRARY}/bashlib64.bash"
-
 export DEV_TEST_VALUE_GIT_OWNER='automation64'
 export DEV_TEST_VALUE_GIT_ASSET_REPO='bashlib64'
 export DEV_TEST_VALUE_GIT_RELEASE_REPO='cli'

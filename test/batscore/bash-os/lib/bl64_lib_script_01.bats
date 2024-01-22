@@ -5,7 +5,7 @@ setup() {
   export BL64_LIB_COMPATIBILITY='OFF'
 }
 
-@test "bl64_lib_source: script vars are set" {
+@test "bl64_lib_script: script vars are set" {
 
   export _DEV_LIB_BASHLIB64_BUILD="${DEV_TEST_PATH_LIBRARY}/bashlib64.bash"
   run "${TESTMANSH_TEST_SAMPLES}/script_01/template" -t

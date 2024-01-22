@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+env | sort | grep BL64_
+#source "${DEV_TEST_PATH_LIBRARY}/bashlib64-core.bash"

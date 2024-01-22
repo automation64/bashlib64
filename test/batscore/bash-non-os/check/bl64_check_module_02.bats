@@ -17,7 +17,7 @@ setup() {
 }
 
 @test "bl64_check_module: module not setup" {
-  export BL64_XXX_MODULE='0'
+  declare BL64_XXX_MODULE='0'
   run bl64_check_module 'BL64_XXX_MODULE'
   assert_failure
 
