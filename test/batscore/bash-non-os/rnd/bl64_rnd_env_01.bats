@@ -19,6 +19,7 @@
 }
 
 @test "bl64_rnd_env: BL64_RND_POOL_UPPERCASE content" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   max=$(( ${#BL64_RND_POOL_UPPERCASE} - 1 ))
   assert_equal "$BL64_RND_POOL_UPPERCASE_MAX_IDX" "$max"
@@ -29,6 +30,7 @@
 }
 
 @test "bl64_rnd_env: BL64_RND_POOL_LOWERCASE content" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   max=$(( ${#BL64_RND_POOL_LOWERCASE} - 1 ))
   assert_equal "$BL64_RND_POOL_LOWERCASE_MAX_IDX" "$max"
@@ -39,6 +41,7 @@
 }
 
 @test "bl64_rnd_env: BL64_RND_POOL_DIGITS content" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   max=$(( ${#BL64_RND_POOL_DIGITS} - 1 ))
   assert_equal "$BL64_RND_POOL_DIGITS_MAX_IDX" "$max"
@@ -49,6 +52,7 @@
 }
 
 @test "bl64_rnd_env: BL64_RND_POOL_ALPHANUMERIC content" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   max=$(( ${#BL64_RND_POOL_ALPHANUMERIC} - 1 ))
   umax=$(( ${#BL64_RND_POOL_UPPERCASE} - 1 ))
