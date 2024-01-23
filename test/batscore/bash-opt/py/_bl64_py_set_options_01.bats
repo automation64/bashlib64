@@ -1,9 +1,9 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  bl64_py_setup
 }
 
 @test "_bl64_py_set_options: common globals are set" {
+  bl64_py_setup
 
   assert_not_equal "$BL64_PY_SET_PIP_VERBOSE" ''
   assert_not_equal "$BL64_PY_SET_PIP_VERSION" ''
@@ -17,5 +17,4 @@ setup() {
   assert_not_equal "$BL64_PY_DEF_VENV_CFG" ''
   assert_not_equal "$BL64_PY_DEF_MODULE_VENV" ''
   assert_not_equal "$BL64_PY_DEF_MODULE_PIP" ''
-
 }

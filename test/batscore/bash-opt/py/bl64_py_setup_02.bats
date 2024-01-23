@@ -2,17 +2,15 @@ setup() {
   export TEST_SANDBOX
 
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  bl64_cnt_is_inside_container || skip 'test-case for container mode'
 
   BATSLIB_TEMP_PRESERVE=0
   BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
 
   TEST_SANDBOX="$(temp_make)"
-
 }
 
 @test "bl64_py_setup: create venv" {
-  bl64_cnt_is_inside_container || skip 'test-case for container mode'
-
   target="${TEST_SANDBOX}/venv"
   bl64_py_setup
 
@@ -22,7 +20,6 @@ setup() {
   assert_dir_exist "$target"
   assert_file_exist "${target}/${BL64_PY_DEF_VENV_CFG}"
   assert_file_exist "$BL64_PY_CMD_PYTHON3"
-
 }
 
 teardown() {

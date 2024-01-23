@@ -7,7 +7,6 @@ setup() {
   BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
 
   TEST_SANDBOX="$(temp_make)"
-
 }
 
 @test "bl64_py_pip_usr_install: install module - venv" {

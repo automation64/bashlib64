@@ -3,8 +3,6 @@ setup() {
 
   export TEST_SANDBOX
 
-  bl64_py_setup
-
   BATSLIB_TEMP_PRESERVE=0
   BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
 
@@ -12,6 +10,7 @@ setup() {
 }
 
 @test "bl64_py_venv_check: no arg" {
+  bl64_py_setup
 
   run bl64_py_venv_check
   assert_failure
