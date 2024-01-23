@@ -1,10 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
-  bl64_msg_set_format "$BL64_MSG_FORMAT_FULL"
-}
-
 @test "bl64_msg_show_phase: output" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   local value='testing phase msg'
 
   run bl64_msg_show_phase "$value"

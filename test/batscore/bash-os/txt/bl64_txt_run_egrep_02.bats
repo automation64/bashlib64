@@ -1,7 +1,3 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 function _test_bl64_txt_run_egrep() {
 
   input='hello World'
@@ -10,6 +6,7 @@ function _test_bl64_txt_run_egrep() {
 }
 
 @test "bl64_txt_run_egrep: run ok" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   expected='hello World'
 
   run _test_bl64_txt_run_egrep

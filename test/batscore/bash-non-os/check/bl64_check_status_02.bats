@@ -5,6 +5,7 @@
 }
 
 @test "bl64_check_status: command false" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run "$BL64_OS_CMD_FALSE" && bl64_check_status $? "this command should be considered failed"
   assert_failure
 }

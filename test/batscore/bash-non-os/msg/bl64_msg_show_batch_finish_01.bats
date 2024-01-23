@@ -1,10 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
-  bl64_msg_set_format "$BL64_MSG_FORMAT_FULL"
-}
-
 @test "bl64_msg_show_batch_finish: ok" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   local value='testing batch msg'
   local finish=0
 
@@ -14,6 +9,7 @@ setup() {
 }
 
 @test "bl64_msg_show_batch_finish: error" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   local value='testing batch msg'
   local finish=10
 

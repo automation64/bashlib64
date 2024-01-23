@@ -1,7 +1,3 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 function _test_bl64_txt_run_cut() {
 
   input='hello world'
@@ -10,6 +6,7 @@ function _test_bl64_txt_run_cut() {
 }
 
 @test "bl64_txt_run_cut: run ok" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   expected='world'
 
   run _test_bl64_txt_run_cut

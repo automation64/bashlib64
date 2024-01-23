@@ -7,6 +7,7 @@
 }
 
 @test "bl64_log_setup: invalid repo" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_log_setup '/dev/null'
   assert_failure
