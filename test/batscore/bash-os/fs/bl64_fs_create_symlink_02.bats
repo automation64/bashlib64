@@ -1,6 +1,7 @@
 setup() {
+  DEV_TEST_INIT_ONLY='YES'
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
+  unset DEV_TEST_INIT_ONLY
   BATSLIB_TEMP_PRESERVE=0
   BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
 
@@ -8,6 +9,7 @@ setup() {
 }
 
 @test "bl64_fs_create_symlink: missing source" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_fs_create_symlink \
     "/fake/file" \
     "/not/needed"
@@ -15,6 +17,7 @@ setup() {
 }
 
 @test "bl64_fs_create_symlink: create ok, no previous" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   test_destination="${TEST_SANDBOX}/test1"
 
   run bl64_fs_create_symlink \
@@ -26,6 +29,7 @@ setup() {
 }
 
 @test "bl64_fs_create_symlink: create ok, previous overwrite" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   test_destination="${TEST_SANDBOX}/test1"
 
   run bl64_fs_create_symlink \
@@ -42,6 +46,7 @@ setup() {
 }
 
 @test "bl64_fs_create_symlink: create ok, previous no overwrite" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   test_destination="${TEST_SANDBOX}/test1"
 
   run bl64_fs_create_symlink \

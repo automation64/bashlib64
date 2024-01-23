@@ -1,6 +1,7 @@
 setup() {
+  DEV_TEST_INIT_ONLY='YES'
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
+  unset DEV_TEST_INIT_ONLY
   BATSLIB_TEMP_PRESERVE=0
   BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
 
@@ -10,6 +11,7 @@ setup() {
 }
 
 @test "bl64_fs_cp_file: copy file" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_fs_cp_file "${TEST_SOURCE}/${TEST_FILE}" "$TEST_SANDBOX"
   assert_success
   assert_file_exist "${TEST_SANDBOX}/${TEST_FILE}"

@@ -6,5 +6,6 @@
 }
 
 @test "bl64_lib_main: tty output var is set" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   assert_not_equal "$TERM" ''
 }

@@ -8,6 +8,7 @@
 }
 
 @test "bl64_fs_find_files: find pattern - not found" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_fs_find_files "$TESTMANSH_TEST_SAMPLES" 'fake_files*'
   assert_success

@@ -1,6 +1,7 @@
 setup() {
+  DEV_TEST_INIT_ONLY='YES'
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
+  unset DEV_TEST_INIT_ONLY
   TEST_SANDBOX="$(temp_make)"
   export TEST_SANDBOX
 }
@@ -12,6 +13,7 @@ teardown() {
 }
 
 @test "bl64_fs_restore: restore + result not ok + restore ok" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   # Create original file
   original_file_path="${TEST_SANDBOX}/original_file"

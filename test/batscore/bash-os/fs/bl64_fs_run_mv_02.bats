@@ -1,12 +1,14 @@
 setup() {
+  DEV_TEST_INIT_ONLY='YES'
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
+  unset DEV_TEST_INIT_ONLY
   TEST_SANDBOX="$(temp_make)"
   TEST_FILE="${TEST_SANDBOX}/test_file"
   TEST_NEW_FILE="${TEST_SANDBOX}/test_new_file"
 }
 
 @test "bl64_fs_run_mv: move a file to another dir" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   touch "${TEST_FILE}"
   run bl64_fs_run_mv "${TEST_FILE}" "$TEST_NEW_FILE"
   assert_success

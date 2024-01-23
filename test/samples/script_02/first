@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 declare bl64_path="${DEV_TEST_PATH_LIBRARY:-build/test}"
-declare samples_path='test/samples'
+declare samples_path="${TESTMANSH_TEST_SAMPLES:-test/samples}"
 
 source "${bl64_path}/bashlib64-module-txt.bash" &&
   source "${bl64_path}/bashlib64-core.bash"

@@ -1,6 +1,7 @@
 setup() {
+  DEV_TEST_INIT_ONLY='YES'
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
+  unset DEV_TEST_INIT_ONLY
   BATSLIB_TEMP_PRESERVE=0
   BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
 
@@ -8,6 +9,7 @@ setup() {
 }
 
 @test "bl64_fs_cp_dir: copy dir" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   source="${TEST_SANDBOX}/source"
   dest="${TEST_SANDBOX}/dest"
   mkdir "$source" &&
