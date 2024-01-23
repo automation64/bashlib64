@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 . bin/dev-set
+. "${DEV_BUILD_FULL_PATH_TEST}/bashlib64-module-py.bash"
 . "${DEV_BUILD_FULL_PATH_TEST}/bashlib64-core.bash"
 
 #
