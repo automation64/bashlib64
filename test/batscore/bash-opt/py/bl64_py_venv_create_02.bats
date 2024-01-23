@@ -17,16 +17,16 @@ setup() {
   assert_success
   assert_dir_exist "${TEST_SANDBOX}/new"
   assert_file_exist "${TEST_SANDBOX}/new/${BL64_PY_DEF_VENV_CFG}"
-
 }
 
 
 @test "bl64_py_venv_create: create on existing" {
   run bl64_py_venv_create "${TEST_SANDBOX}"
+  assert_directory "${TEST_SANDBOX}"
   assert_failure
-
 }
 
 teardown() {
+  bl64_cnt_is_inside_container || skip 'test-case for container mode'
   temp_del "$TEST_SANDBOX"
 }

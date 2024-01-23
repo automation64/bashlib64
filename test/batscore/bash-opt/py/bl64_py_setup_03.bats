@@ -21,5 +21,6 @@ setup() {
 }
 
 teardown() {
+  bl64_cnt_is_inside_container || skip 'test-case for container mode'
   temp_del "$TEST_SANDBOX"
 }

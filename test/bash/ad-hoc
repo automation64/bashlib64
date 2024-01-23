@@ -15,5 +15,3 @@ bl64_msg_all_enable_verbose
 #
 # * Keep the source clean, do not commit test cases below this section
 #
-
-bl64_msg_show_lib_info 'asdasd'
