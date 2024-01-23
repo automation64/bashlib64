@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='18.1.1'
+declare BL64_VERSION='19.0.0'
 
 #
 # Imported shell standard variables
@@ -18,25 +18,25 @@ export TERM
 #
 
 # Default value for parameters
-export BL64_VAR_DEFAULT='_'
+declare BL64_VAR_DEFAULT='_'
 
 # Flag for incompatible command or task
-export BL64_VAR_INCOMPATIBLE='_INC_'
+declare BL64_VAR_INCOMPATIBLE='_INC_'
 
 # Flag for unavailable command or task
-export BL64_VAR_UNAVAILABLE='_UNV_'
+declare BL64_VAR_UNAVAILABLE='_UNV_'
 
 # Pseudo null value
-export BL64_VAR_NULL='_NULL_'
+declare BL64_VAR_NULL='_NULL_'
 
 # Logical values
-export BL64_VAR_TRUE='0'
-export BL64_VAR_FALSE='1'
-export BL64_VAR_ON='1'
-export BL64_VAR_OFF='0'
-export BL64_VAR_OK='0'
-export BL64_VAR_NONE='_NONE_'
-export BL64_VAR_ALL='_ALL_'
+declare BL64_VAR_TRUE='0'
+declare BL64_VAR_FALSE='1'
+declare BL64_VAR_ON='1'
+declare BL64_VAR_OFF='0'
+declare BL64_VAR_OK='0'
+declare BL64_VAR_NONE='_NONE_'
+declare BL64_VAR_ALL='_ALL_'
 
 #
 # Global settings
@@ -46,19 +46,19 @@ export BL64_VAR_ALL='_ALL_'
 #
 
 # Run lib as command? (On/Off)
-export BL64_LIB_CMD="${BL64_LIB_CMD:-$BL64_VAR_OFF}"
+declare BL64_LIB_CMD="${BL64_LIB_CMD:-$BL64_VAR_OFF}"
 
 # Enable generic compatibility mode? (On/Off)
-export BL64_LIB_COMPATIBILITY="${BL64_LIB_COMPATIBILITY:-$BL64_VAR_ON}"
+declare BL64_LIB_COMPATIBILITY="${BL64_LIB_COMPATIBILITY:-$BL64_VAR_ON}"
 
 # Normalize locale? (On/Off)
-export BL64_LIB_LANG="${BL64_LIB_LANG:-$BL64_VAR_ON}"
+declare BL64_LIB_LANG="${BL64_LIB_LANG:-$BL64_VAR_ON}"
 
 # Enable strict security? (On/Off)
-export BL64_LIB_STRICT="${BL64_LIB_STRICT:-$BL64_VAR_ON}"
+declare BL64_LIB_STRICT="${BL64_LIB_STRICT:-$BL64_VAR_ON}"
 
 # Enable lib shell traps? (On/Off)
-export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
+declare BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
 
 #
 # Shared error codes
@@ -127,18 +127,18 @@ declare -ig BL64_LIB_ERROR_CHECK_FAILED=80
 # Script Identify
 #
 
-export BL64_SCRIPT_PATH=''
-export BL64_SCRIPT_NAME=''
-export BL64_SCRIPT_SID=''
-export BL64_SCRIPT_ID=''
+declare BL64_SCRIPT_PATH=''
+declare BL64_SCRIPT_NAME=''
+declare BL64_SCRIPT_SID=''
+declare BL64_SCRIPT_ID=''
 
 #
 # Set Signal traps
 #
 
-export BL64_LIB_SIGNAL_HUP='-'
-export BL64_LIB_SIGNAL_STOP='-'
-export BL64_LIB_SIGNAL_QUIT='-'
-export BL64_LIB_SIGNAL_DEBUG='-'
-export BL64_LIB_SIGNAL_ERR='-'
-export BL64_LIB_SIGNAL_EXIT='bl64_dbg_runtime_show'
+declare BL64_LIB_SIGNAL_HUP='-'
+declare BL64_LIB_SIGNAL_STOP='-'
+declare BL64_LIB_SIGNAL_QUIT='-'
+declare BL64_LIB_SIGNAL_DEBUG='-'
+declare BL64_LIB_SIGNAL_ERR='-'
+declare BL64_LIB_SIGNAL_EXIT='bl64_dbg_runtime_show'
