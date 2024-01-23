@@ -1,9 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
-}
-
 @test "bl64_rbac_run_command: no args" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_rbac_run_command
   assert_failure
 }

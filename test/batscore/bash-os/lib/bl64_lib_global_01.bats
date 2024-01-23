@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_lib_lang_is_enabled: run function" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_lib_lang_is_enabled
   assert_success
 }

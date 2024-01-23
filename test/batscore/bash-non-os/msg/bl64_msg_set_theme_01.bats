@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_msg_set_theme: no args" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_msg_set_theme
   assert_failure

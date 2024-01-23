@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_dbg_set_level: no args" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_dbg_set_level
   assert_failure

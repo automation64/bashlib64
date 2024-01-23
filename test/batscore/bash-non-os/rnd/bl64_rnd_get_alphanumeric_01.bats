@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_rnd_get_alphanumeric: check length 1" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   length=1
   run bl64_rnd_get_alphanumeric $length

@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "_bl64_py_set_options: common globals are set" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   bl64_py_setup
 
   assert_not_equal "$BL64_PY_SET_PIP_VERBOSE" ''

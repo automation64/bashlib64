@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_check_overwrite: exist, overwrite on" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_check_overwrite /etc/hosts "$BL64_VAR_ON"
   assert_success
 }

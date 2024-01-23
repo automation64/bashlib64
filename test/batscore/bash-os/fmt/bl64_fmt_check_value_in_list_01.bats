@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_fmt_check_value_in_list: parameter is not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_fmt_check_value_in_list
   assert_failure
 }

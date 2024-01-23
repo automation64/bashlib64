@@ -1,9 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
-}
-
 @test "bl64_rnd_env: public constants are set" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   assert_equal "$BL64_RND_LENGTH_1" 1
   assert_equal "$BL64_RND_LENGTH_20" 20

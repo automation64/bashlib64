@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_fs_find_files: find pattern - found" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_fs_find_files "$TESTMANSH_TEST_SAMPLES" 'text_lines*'
   assert_success

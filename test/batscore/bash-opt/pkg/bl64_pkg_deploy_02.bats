@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_pkg_deploy: deploy package + explicit sudo" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   bl64_pkg_setup
   bl64_os_match 'UB-21.04' && skip 'UB-21.04 is EOL'
   bl64_cnt_is_inside_container || skip 'test-case for container mode'

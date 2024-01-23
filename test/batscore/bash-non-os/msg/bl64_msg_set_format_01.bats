@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_msg_set_format: missing format" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_msg_set_format
   assert_failure

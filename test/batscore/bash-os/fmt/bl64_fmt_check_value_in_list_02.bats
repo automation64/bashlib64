@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_fmt_check_value_in_list: value is ok, 1 value" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_fmt_check_value_in_list "$BL64_VAR_DEFAULT" 'VALUE1' 'VALUE1'
   assert_success
 }

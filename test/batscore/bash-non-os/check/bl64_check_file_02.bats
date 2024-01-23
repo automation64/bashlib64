@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_check_file: file is present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_check_file "$BL64_FS_CMD_CP"
   assert_success
@@ -10,6 +7,7 @@ setup() {
 }
 
 @test "bl64_check_file: file is not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_check_file '/fake/file'
   assert_failure
@@ -18,6 +16,7 @@ setup() {
 }
 
 @test "bl64_check_file: file is not readable" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   local test_file=''
   if bl64_os_match 'MCOS'; then
     test_file='/etc/master.passwd'

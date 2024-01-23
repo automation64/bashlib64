@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_check_parameter: parameter is present + numeric" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   test_parameter=1
   run bl64_check_parameter 'test_parameter' 'test_parameter'

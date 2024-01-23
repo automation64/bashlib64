@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_check_path_absolute: dir is absolute" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_check_path_absolute '/etc'
   assert_success

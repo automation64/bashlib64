@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_os_check_compatibility: os in list, compatibility OFF" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   export BL64_LIB_COMPATIBILITY='OFF'
   export BL64_OS_DISTRO="${BL64_OS_ALM}-8.5"

@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_py_pip_get_version: get version" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   bl64_py_setup
 
   run bl64_py_pip_get_version

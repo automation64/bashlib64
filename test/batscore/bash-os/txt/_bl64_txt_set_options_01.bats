@@ -1,9 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
-}
-
 @test "_bl64_txt_set_options: common globals are set" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   assert_not_equal "$BL64_TXT_SET_AWS_FS" ''
   assert_not_equal "$BL64_TXT_SET_GREP_ERE" ''

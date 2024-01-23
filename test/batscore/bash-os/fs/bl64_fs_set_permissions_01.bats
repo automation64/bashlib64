@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_fs_set_permissions: no args" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_fs_set_permissions
   assert_failure
 }

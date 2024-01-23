@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_rxtx_web_get_file: function parameter missing" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_rxtx_web_get_file
   assert_failure
 }

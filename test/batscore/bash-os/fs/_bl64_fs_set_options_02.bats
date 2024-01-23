@@ -1,9 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
-}
-
 @test "_bl64_fs_set_options: common sets are defined" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
     assert_not_equal "$BL64_FS_SET_CHMOD_RECURSIVE" ''
     assert_not_equal "$BL64_FS_SET_CHMOD_VERBOSE" ''

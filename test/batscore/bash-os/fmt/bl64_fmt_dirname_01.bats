@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_fmt_dirname: /dir/file" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   output='/full/path/to'
   input='/full/path/to/testfile'

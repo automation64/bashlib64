@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "_bl64_os_set_command: commands are set" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   assert_not_equal "${BL64_OS_CMD_BASH}" ''
   assert_not_equal "${BL64_OS_CMD_CAT}" ''
   assert_not_equal "${BL64_OS_CMD_DATE}" ''

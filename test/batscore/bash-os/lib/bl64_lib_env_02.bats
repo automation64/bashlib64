@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_lib_env: public constants are set" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   # Default value for parameters
   assert_equal "$BL64_VAR_DEFAULT" '_'
 

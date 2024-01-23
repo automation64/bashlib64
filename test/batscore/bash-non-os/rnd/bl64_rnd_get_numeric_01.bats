@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_rnd_get_numeric: check length" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   local length=10
 

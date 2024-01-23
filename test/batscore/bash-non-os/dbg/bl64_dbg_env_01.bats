@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_dbg_env: debug constants are set" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   assert_equal "$BL64_DBG_TARGET_NONE" 'NONE'
   assert_equal "$BL64_DBG_TARGET_APP_TRACE" 'APP_TRACE'
   assert_equal "$BL64_DBG_TARGET_APP_TASK" 'APP_TASK'

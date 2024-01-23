@@ -1,9 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
-}
-
 @test "bl64_os_env: public OS constants are set" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   assert_equal "$BL64_OS_ALM" 'ALMALINUX'
   assert_equal "$BL64_OS_ALP" 'ALPINE'
   assert_equal "$BL64_OS_AMZ" 'AMAZONLINUX'

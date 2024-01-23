@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_fmt_list_to_string: prefix" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   expected='a5 a6 a7'
 
   output="$(printf '%s\n%s\n%s\n' 5 6 7 | bl64_fmt_list_to_string "$BL64_VAR_DEFAULT" 'a')"

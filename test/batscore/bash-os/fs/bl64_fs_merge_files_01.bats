@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_fs_merge_files: no args" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_fs_merge_files
   assert_failure
 }
