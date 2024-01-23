@@ -60,7 +60,6 @@ function _bl64_py_setup() {
     _bl64_py_set_command "$venv_path" &&
     bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
     _bl64_py_set_options &&
-    _bl64_py_set_resources &&
     BL64_PY_MODULE="$BL64_VAR_ON"
 }
 
@@ -197,30 +196,6 @@ function _bl64_py_set_options() {
   BL64_PY_SET_PIP_QUIET='--quiet'
   BL64_PY_SET_PIP_SITE='--system-site-packages'
   BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
-
-  return 0
-}
-
-#######################################
-# Declare version specific definitions
-#
-# * Use to capture default file names, values, attributes, etc
-# * Do not use to capture CLI flags. Use *_set_options instead
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_py_set_resources() {
-  bl64_dbg_lib_show_function
-
-  BL64_PY_DEF_VENV_CFG='pyvenv.cfg'
-  BL64_PY_DEF_MODULE_VENV='venv'
-  BL64_PY_DEF_MODULE_PIP='pip'
 
   return 0
 }

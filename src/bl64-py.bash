@@ -44,20 +44,9 @@ function bl64_py_venv_check() {
   bl64_dbg_lib_show_function "$@"
   local venv_path="${1:-}"
 
-  bl64_check_parameter 'venv_path' ||
-    return $?
-
-  if [[ ! -d "$venv_path" ]]; then
-    bl64_msg_show_error "${message} (command: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_PY_TXT_VENV_MISSING}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
-    return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
-  fi
-
-  if [[ ! -r "${venv_path}/${BL64_PY_DEF_VENV_CFG}" ]]; then
-    bl64_msg_show_error "${message} (command: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_PY_TXT_VENV_INVALID}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
-    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
-  fi
-
-  return 0
+  bl64_check_parameter 'venv_path' &&
+    bl64_check_directory "$venv_path" "$_BL64_PY_TXT_VENV_MISSING" &&
+    bl64_check_file "${venv_path}/${BL64_PY_DEF_VENV_CFG}" "$_BL64_PY_TXT_VENV_INVALID"
 }
 
 #######################################

@@ -33,9 +33,9 @@ declare BL64_PY_SET_PIP_QUIET=''
 declare BL64_PY_SET_PIP_SITE=''
 declare BL64_PY_SET_PIP_NO_WARN_SCRIPT=''
 
-declare BL64_PY_DEF_VENV_CFG=''
-declare BL64_PY_DEF_MODULE_VENV=''
-declare BL64_PY_DEF_MODULE_PIP=''
+declare BL64_PY_DEF_VENV_CFG='pyvenv.cfg'
+declare BL64_PY_DEF_MODULE_VENV='venv'
+declare BL64_PY_DEF_MODULE_PIP='pip'
 
 declare _BL64_PY_TXT_PIP_PREPARE_PIP='upgrade pip module'
 declare _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
