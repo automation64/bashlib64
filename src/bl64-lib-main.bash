@@ -15,7 +15,7 @@ if bl64_lib_mode_strict_is_enabled; then
   set -o 'privileged'
 fi
 
-# Initialize modules
+# Initialize common modules
 [[ -n "${BL64_DBG_MODULE:-}" ]] && { bl64_dbg_setup || exit $?; }
 [[ -n "${BL64_CHECK_MODULE:-}" ]] && { bl64_check_setup || exit $?; }
 [[ -n "${BL64_MSG_MODULE:-}" ]] && { bl64_msg_setup || exit $?; }
