@@ -12,6 +12,7 @@
 }
 
 @test "_bl64_os_set_command: commands are present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   assert_file_executable "${BL64_OS_CMD_BASH}"
   assert_file_executable "${BL64_OS_CMD_CAT}"
   assert_file_executable "${BL64_OS_CMD_DATE}"

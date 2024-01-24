@@ -9,6 +9,7 @@
 }
 
 @test "bl64_os_check_version: os version not in list, compatibility OFF" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   export BL64_LIB_COMPATIBILITY='OFF'
   export BL64_OS_DISTRO="${BL64_OS_ALM}-9.0"
@@ -18,6 +19,7 @@
 }
 
 @test "bl64_os_check_version: os not in list, compatibility OFF" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   export BL64_LIB_COMPATIBILITY='OFF'
   export BL64_OS_DISTRO="${BL64_OS_OL}-9.0"

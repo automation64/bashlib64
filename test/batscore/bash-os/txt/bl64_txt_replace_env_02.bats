@@ -4,6 +4,7 @@ setup() {
 }
 
 function _test_bl64_txt_replace_env() {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   export _SAMPLES_ENVSUBST_01='hello world'
   bl64_txt_replace_env "$TESTMANSH_TEST_SAMPLES/envsubst_01/simple.txt"

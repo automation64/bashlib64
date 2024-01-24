@@ -19,6 +19,7 @@
 }
 
 @test "bl64_os_check_compatibility: full list, not supported, compatibility OFF" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   export BL64_LIB_COMPATIBILITY='ON'
   export BL64_OS_DISTRO="${BL64_OS_ALM}-5.0"

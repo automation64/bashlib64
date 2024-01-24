@@ -8,6 +8,7 @@
 }
 
 @test "bl64_os_match: os = BL64_OS_ALP" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   export BL64_OS_DISTRO="${BL64_OS_ALP}-3.0"
   run bl64_os_match "$BL64_OS_ALP"
@@ -16,6 +17,7 @@
 }
 
 @test "bl64_os_match: os = BL64_OS_CNT" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   export BL64_OS_DISTRO="${BL64_OS_CNT}-8.5"
   run bl64_os_match "$BL64_OS_CNT"
@@ -24,6 +26,7 @@
 }
 
 @test "bl64_os_match: os = BL64_OS_DEB" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   export BL64_OS_DISTRO="${BL64_OS_DEB}-10.0"
   run bl64_os_match "$BL64_OS_DEB"
@@ -32,6 +35,7 @@
 }
 
 @test "bl64_os_match: os = BL64_OS_FD" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   export BL64_OS_DISTRO="${BL64_OS_FD}-33.0"
   run bl64_os_match "$BL64_OS_FD"
@@ -40,6 +44,7 @@
 }
 
 @test "bl64_os_match: os = BL64_OS_OL" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   export BL64_OS_DISTRO="${BL64_OS_OL}-8.5"
   run bl64_os_match "$BL64_OS_OL"
@@ -48,6 +53,7 @@
 }
 
 @test "bl64_os_match: os = BL64_OS_RHEL" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   export BL64_OS_DISTRO="${BL64_OS_RHEL}-8.5"
   run bl64_os_match "$BL64_OS_RHEL"
@@ -56,6 +62,7 @@
 }
 
 @test "bl64_os_match: os = BL64_OS_UB" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   export BL64_OS_DISTRO="${BL64_OS_UB}-20.4"
   run bl64_os_match "$BL64_OS_UB"

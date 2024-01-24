@@ -11,6 +11,7 @@ function _test_bl64_txt_run_envsubst() {
 }
 
 @test "bl64_txt_run_envsubst: run ok" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   expected='example text with shell variable: [hello world]'
 
   run _test_bl64_txt_run_envsubst

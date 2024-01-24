@@ -1,6 +1,4 @@
 setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
   _bl64_rxtx_web_get_file_destination="$(mktemp -d)"
   _bl64_rxtx_web_get_file_source="$DEV_TEST_VALUE_GIT_RAW_URL"
   export _bl64_rxtx_web_get_file_destination
@@ -14,6 +12,7 @@ teardown() {
 }
 
 @test "bl64_rxtx_web_get_file: fail download file + replace on + old content" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   sample="${TESTMANSH_TEST_SAMPLES}/text_01.txt"
   test_file="${_bl64_rxtx_web_get_file_destination}/test"
