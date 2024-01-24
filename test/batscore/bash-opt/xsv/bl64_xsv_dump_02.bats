@@ -11,6 +11,7 @@ teardown() {
 }
 
 @test "bl64_xsv_dump: dump csv file" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   expected="$(<${TESTMANSH_TEST_SAMPLES}/csv_02.txt)"
 

@@ -1,7 +1,7 @@
 setup() {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   export TEST_SANDBOX
 
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   bl64_cnt_is_inside_container || skip 'test-case for container mode'
 
   BATSLIB_TEMP_PRESERVE=0
@@ -12,6 +12,7 @@ setup() {
 }
 
 @test "bl64_py_setup: enable venv" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   bl64_py_setup
   bl64_py_venv_create "$TEST_VENV"
 
@@ -21,6 +22,5 @@ setup() {
 }
 
 teardown() {
-  bl64_cnt_is_inside_container || skip 'test-case for container mode'
   temp_del "$TEST_SANDBOX"
 }

@@ -11,6 +11,7 @@ setup() {
 }
 
 @test "bl64_py_venv_create: parameter is not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   bl64_py_setup
   run bl64_py_venv_create
   assert_failure

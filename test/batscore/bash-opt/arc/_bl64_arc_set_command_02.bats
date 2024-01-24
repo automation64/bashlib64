@@ -6,6 +6,7 @@
 }
 
 @test "_bl64_arc_set_command: commands are present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   bl64_arc_setup
   assert_file_executable "${BL64_ARC_CMD_TAR}"
   assert_file_executable "${BL64_ARC_CMD_UNZIP}"

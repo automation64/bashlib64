@@ -11,6 +11,7 @@ setup() {
 }
 
 @test "bl64_py_venv_create: create ok" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   bl64_py_setup
 
   run bl64_py_venv_create "${TEST_SANDBOX}/new"
@@ -21,6 +22,7 @@ setup() {
 
 
 @test "bl64_py_venv_create: create on existing" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_py_venv_create "${TEST_SANDBOX}"
   assert_directory "${TEST_SANDBOX}"
   assert_failure

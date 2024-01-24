@@ -6,6 +6,7 @@
 }
 
 @test "bl64_arc_run_tar: parameters are present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_arc_run_tar
   assert_failure
 }

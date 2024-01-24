@@ -10,12 +10,14 @@ setup() {
 }
 
 @test "bl64_py_venv_check: check not existing" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_py_venv_check "/not/a/valid/path"
   assert_failure
 }
 
 @test "bl64_py_venv_check: check invalid venv" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_py_venv_check "$TEST_SANDBOX"
   assert_failure

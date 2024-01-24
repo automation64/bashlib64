@@ -7,6 +7,7 @@
 }
 
 @test "bl64_xsv_search_records: search one record + found" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   search='record1'
   found='bl64_arc_env.bats'
@@ -23,6 +24,7 @@
 }
 
 @test "bl64_xsv_search_records: search one record + not found" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   search='record10'
   found='bl64_arc_env.bats'
@@ -39,6 +41,7 @@
 }
 
 @test "bl64_xsv_search_records: search one record + found + 2 output" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   search='record1'
   found='bl64_arc_env.bats:file'
@@ -55,6 +58,7 @@
 }
 
 @test "bl64_xsv_search_records: search 2 records + found + 2 output" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   search="file${BL64_XSV_FS}record1"
   found='bl64_arc_env.bats:file'

@@ -1,4 +1,5 @@
 setup() {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   TEST_SANDBOX="$(temp_make)"
 }
 
