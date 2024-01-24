@@ -5,6 +5,7 @@
 }
 
 @test "bl64_gcp_secret_get: no version" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_gcp_secret_get 'test-secret'
   assert_failure
 }
