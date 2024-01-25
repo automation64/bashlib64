@@ -56,14 +56,19 @@ function bl64_xsv_search_records() {
   # shellcheck disable=SC2086
   bl64_check_parameter 'values' 'search value' || return $?
 
-  # shellcheck disable=SC2016
-  bl64_txt_run_awk \
-    -F "$fs_src" \
-    -v VALUES="${values}" \
-    -v KEYS="$keys" \
-    -v FIELDS="$fields" \
-    -v FS_OUT="$fs_out" \
-    '
+  bl64_dbg_lib_show_comments 'run in a subshell to avoid leaving exported vars'
+  {
+    export BL64_XSV_FS_COLON
+    export BL64_XSV_FS
+    export BL64_LIB_ERROR_PARAMETER_INVALID
+    # shellcheck disable=SC2016
+    bl64_txt_run_awk \
+      -F "$fs_src" \
+      -v VALUES="${values}" \
+      -v KEYS="$keys" \
+      -v FIELDS="$fields" \
+      -v FS_OUT="$fs_out" \
+      '
       BEGIN {
         show_total = split( FIELDS, show_fields, ENVIRON["BL64_XSV_FS_COLON"] )
         keys_total = split( KEYS, keys_fields, ENVIRON["BL64_XSV_FS_COLON"] )
@@ -97,7 +102,8 @@ function bl64_xsv_search_records() {
       }
       END {}
     ' \
-    "$source"
+      "$source"
+  }
 }
 
 #######################################
