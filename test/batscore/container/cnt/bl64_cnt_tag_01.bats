@@ -6,11 +6,13 @@ setup() {
 }
 
 @test "bl64_cnt_tag: parameters are not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_cnt_tag
   assert_failure
 }
 
 @test "bl64_cnt_tag: 2nd parameter is not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_cnt_tag '/dev/null'
   assert_failure
 }

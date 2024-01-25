@@ -4,6 +4,7 @@ setup() {
 }
 
 @test "_bl64_cnt_docker_login: parameters are not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run _bl64_cnt_docker_login
   assert_failure
 }

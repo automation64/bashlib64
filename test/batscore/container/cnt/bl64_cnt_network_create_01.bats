@@ -4,6 +4,7 @@ setup() {
 }
 
 @test "bl64_cnt_network_create: parameters are not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_cnt_network_create
   assert_failure
 }

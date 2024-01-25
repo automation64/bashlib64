@@ -4,6 +4,7 @@ setup() {
 }
 
 @test "bl64_cnt_setup: module setup" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_cnt_setup
   assert_success
 }

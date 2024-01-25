@@ -5,6 +5,7 @@ setup() {
 }
 
 @test "_bl64_tf_set_version: run ok" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   export BL64_TF_CMD_TERRAFORM="$terraform_test_bin"
   run _bl64_tf_set_version
   assert_success

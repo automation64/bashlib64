@@ -4,6 +4,7 @@ setup() {
 }
 
 @test "bl64_cnt_login_file: file parameter not existing" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_cnt_login_file '/xxx/yy/zzz/not_existing' 'test'
   assert_failure
 }

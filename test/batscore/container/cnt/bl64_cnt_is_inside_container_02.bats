@@ -4,6 +4,7 @@ setup() {
 }
 
 @test "bl64_cnt_is_inside_container: run ok" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_cnt_is_inside_container
   assert_failure
 }

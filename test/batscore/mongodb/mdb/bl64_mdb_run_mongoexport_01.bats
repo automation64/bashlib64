@@ -4,6 +4,7 @@ setup() {
 }
 
 @test "bl64_mdb_run_mongoexport: parameters are not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_mdb_run_mongoexport
   assert_failure
 }
