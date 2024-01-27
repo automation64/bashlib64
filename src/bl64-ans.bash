@@ -68,7 +68,7 @@ function bl64_ans_run_ansible() {
 #######################################
 # Command wrapper with verbose, debug and common options
 #
-# * Trust noone. Use default config
+# * Trust no one. Use default config
 #
 # Arguments:
 #   $1: command
@@ -111,7 +111,7 @@ function bl64_ans_run_ansible_galaxy() {
 #######################################
 # Command wrapper with verbose, debug and common options
 #
-# * Trust noone. Use default config
+# * Trust no one. Use default config
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command

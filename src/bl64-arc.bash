@@ -5,7 +5,7 @@
 #######################################
 # Unzip wrapper debug and common options
 #
-# * Trust noone. Ignore env args
+# * Trust no one. Ignore env args
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command

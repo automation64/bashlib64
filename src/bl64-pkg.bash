@@ -135,8 +135,8 @@ function _bl64_pkg_repository_add_apt() {
       "$component" \
       >"$definition" ||
       return $?
-    bl64_msg_show_lib_subtask "${_BL64_PKG_TXT_REPOSITORY_ADD_KEY} (${gpgkey})"
     bl64_rxtx_web_get_file "$gpgkey" "$gpgkey_file" "$BL64_VAR_ON" "$file_mode"
+    bl64_msg_show_lib_subtask "${_BL64_PKG_TXT_REPOSITORY_ADD_KEY} (${gpgkey_file})"
   else
     printf 'deb %s %s %s\n' \
       "$source" \
