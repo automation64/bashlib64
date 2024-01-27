@@ -489,7 +489,7 @@ function bl64_k8s_blank_kubectl() {
 #   STDERR: nothing unless debug
 # Returns:
 #   0: resource exists
-#   >0: resources does not exist or execution error
+#   >0: BL64_LIB_ERROR_IS_NOT or execution error
 #######################################
 function bl64_k8s_resource_is_created() {
   bl64_dbg_lib_show_function "$@"

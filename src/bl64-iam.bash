@@ -117,7 +117,9 @@ function bl64_iam_user_add() {
 #   STDOUT: native user add command output
 #   STDERR: native user add command error messages
 # Returns:
-#   native user add command error status
+#   0: it is
+#   BL64_LIB_ERROR_IS_NOT
+#   command error status
 #######################################
 function bl64_iam_user_is_created() {
   bl64_dbg_lib_show_function "$@"
