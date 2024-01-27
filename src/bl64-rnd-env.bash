@@ -6,11 +6,11 @@ declare BL64_RND_VERSION='1.2.1'
 
 declare BL64_RND_MODULE='0'
 
-declare -ig BL64_RND_LENGTH_1=1
-declare -ig BL64_RND_LENGTH_20=20
-declare -ig BL64_RND_LENGTH_100=100
-declare -ig BL64_RND_RANDOM_MIN=0
-declare -ig BL64_RND_RANDOM_MAX=32767
+declare -i BL64_RND_LENGTH_1=1
+declare -i BL64_RND_LENGTH_20=20
+declare -i BL64_RND_LENGTH_100=100
+declare -i BL64_RND_RANDOM_MIN=0
+declare -i BL64_RND_RANDOM_MAX=32767
 
 # shellcheck disable=SC2155
 declare BL64_RND_POOL_UPPERCASE="$(printf '%b' "$(printf '\\%o' {65..90})")"
