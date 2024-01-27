@@ -26,6 +26,7 @@ BashLib64 is a **Bash** library that provides a simple abstraction layer for dev
 | [bl64-bsh](https://automation64.github.io/bashlib64/bl64-bsh/)     | Interact with Bash shell                           |
 | [bl64-check](https://automation64.github.io/bashlib64/bl64-check/) | Check for conditions and report status             |
 | [bl64-cnt](https://automation64.github.io/bashlib64/bl64-cnt/)     | Interact with container engines                    |
+| [bl64-cryp](https://automation64.github.io/bashlib64/bl64-cryp/)   | Cryptography tools                                 |
 | [bl64-dbg](https://automation64.github.io/bashlib64/bl64-dbg/)     | Show shell debugging information                   |
 | [bl64-fmt](https://automation64.github.io/bashlib64/bl64-fmt/)     | Format text data                                   |
 | [bl64-fs](https://automation64.github.io/bashlib64/bl64-fs/)       | Manage local filesystem                            |
