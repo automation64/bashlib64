@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_fs_create_tmpfile: command runs ok" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   export tempfile="$(bl64_fs_create_tmpfile)"
   assert_file_exist "$tempfile"
 }

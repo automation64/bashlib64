@@ -39,7 +39,6 @@ function bl64_pkg_repository_add() {
     bl64_check_parameter 'source' ||
     return $?
 
-  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_REPOSITORY_ADD (${name})"
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     _bl64_pkg_repository_add_apt "$name" "$source" "$gpgkey" "$extra1" "$extra2"
@@ -133,10 +132,9 @@ function _bl64_pkg_repository_add_apt() {
       "$source" \
       "$suite" \
       "$component" \
-      >"$definition" ||
-      return $?
-    bl64_msg_show_lib_subtask "${_BL64_PKG_TXT_REPOSITORY_ADD_KEY} (${gpgkey})"
-    bl64_rxtx_web_get_file "$gpgkey" "$gpgkey_file" "$BL64_VAR_ON" "$file_mode"
+      >"$definition" &&
+      bl64_cryp_key_download \
+        "$gpgkey" "$gpgkey_file" "$BL64_VAR_DEFAULT" "$file_mode"
   else
     printf 'deb %s %s %s\n' \
       "$source" \

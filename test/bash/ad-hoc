@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
 . bin/dev-set
-. "${DEV_BUILD_FULL_PATH_TEST}/${DEV_BUILD_NAME_SA}"
+#. "${DEV_BUILD_FULL_PATH_TEST:-build/test}/bashlib64-core.bash"
+. "${DEV_BUILD_FULL_PATH_TEST:-build/test}/bashlib64.bash"
 
 #
 # Skeleton for ad-hoc testiong.
 #
 
-# bl64_dbg_all_enable
-bl64_msg_all_enable_verbose
+#bl64_dbg_all_enable
+#bl64_msg_all_enable_verbose
 
 #
 # Test Cases

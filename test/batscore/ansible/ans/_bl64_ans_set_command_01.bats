@@ -5,12 +5,16 @@ setup() {
 }
 
 @test "_bl64_ans_set_command: commands are set" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  bl64_ans_setup
   assert_not_equal "$BL64_ANS_CMD_ANSIBLE" ''
   assert_not_equal "$BL64_ANS_CMD_ANSIBLE_PLAYBOOK" ''
   assert_not_equal "$BL64_ANS_CMD_ANSIBLE_GALAXY" ''
 }
 
 @test "_bl64_ans_set_command: paths are set" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  bl64_ans_setup
   assert_not_equal "$BL64_ANS_PATH_USR_ANSIBLE" ''
   assert_not_equal "$BL64_ANS_PATH_USR_COLLECTIONS" ''
 }

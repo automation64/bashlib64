@@ -1,6 +1,7 @@
 setup() {
+  DEV_TEST_INIT_ONLY='YES'
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
+  unset DEV_TEST_INIT_ONLY
   BATSLIB_TEMP_PRESERVE=0
   BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
 
@@ -11,6 +12,7 @@ setup() {
 }
 
 @test "bl64_fs_copy_files: copy files + perm" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_fs_copy_files \
     "0600" \
     "$BL64_VAR_DEFAULT" \

@@ -4,11 +4,13 @@ setup() {
 }
 
 @test "bl64_cnt_login_stdin: parameters are not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_cnt_login_stdin
   assert_failure
 }
 
 @test "bl64_cnt_login_stdin: 2nd parameter is not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_cnt_login_stdin '/dev/null'
   assert_failure
 }

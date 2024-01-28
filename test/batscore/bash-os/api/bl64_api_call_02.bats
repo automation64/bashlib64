@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_api_call: call executed ok" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_api_call \
     "$DEV_TEST_VALUE_API_PUBLIC_URL" \
     '/post' \
@@ -14,6 +11,7 @@ setup() {
 }
 
 @test "bl64_api_call: api call fail" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_api_call \
     "$DEV_TEST_VALUE_API_PUBLIC_URL" \
     '/test/ignore' \

@@ -6,6 +6,7 @@ setup() {
 }
 
 @test "bl64_cnt_run_docker: CLI runs ok" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_cnt_run_podman --version
   assert_success

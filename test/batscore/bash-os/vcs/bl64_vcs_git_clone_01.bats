@@ -1,6 +1,4 @@
 setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
   _bl64_vcs_git_clone_destination="$(mktemp -d)"
   export _bl64_vcs_git_clone_destination
 }
@@ -12,6 +10,7 @@ teardown() {
 }
 
 @test "bl64_vcs_git_clone: parameter 1 is not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_vcs_git_clone
   assert_failure
@@ -19,6 +18,7 @@ teardown() {
 }
 
 @test "bl64_vcs_git_clone: parameter 2 is not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_vcs_git_clone 'source'
   assert_failure
@@ -26,6 +26,7 @@ teardown() {
 }
 
 @test "bl64_vcs_git_clone: clone repo" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_vcs_git_clone "$DEV_TEST_VALUE_GIT_CLONE_URL" "$_bl64_vcs_git_clone_destination" 'main'
   assert_success

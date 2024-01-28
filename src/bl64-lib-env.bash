@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-export BL64_VERSION='18.1.1'
+declare BL64_VERSION='19.0.0'
 
 #
 # Imported shell standard variables
@@ -18,25 +18,25 @@ export TERM
 #
 
 # Default value for parameters
-export BL64_VAR_DEFAULT='_'
+declare BL64_VAR_DEFAULT='_'
 
 # Flag for incompatible command or task
-export BL64_VAR_INCOMPATIBLE='_INC_'
+declare BL64_VAR_INCOMPATIBLE='_INC_'
 
 # Flag for unavailable command or task
-export BL64_VAR_UNAVAILABLE='_UNV_'
+declare BL64_VAR_UNAVAILABLE='_UNV_'
 
 # Pseudo null value
-export BL64_VAR_NULL='_NULL_'
+declare BL64_VAR_NULL='_NULL_'
 
 # Logical values
-export BL64_VAR_TRUE='0'
-export BL64_VAR_FALSE='1'
-export BL64_VAR_ON='1'
-export BL64_VAR_OFF='0'
-export BL64_VAR_OK='0'
-export BL64_VAR_NONE='_NONE_'
-export BL64_VAR_ALL='_ALL_'
+declare BL64_VAR_TRUE='0'
+declare BL64_VAR_FALSE='1'
+declare BL64_VAR_ON='1'
+declare BL64_VAR_OFF='0'
+declare BL64_VAR_OK='0'
+declare BL64_VAR_NONE='_NONE_'
+declare BL64_VAR_ALL='_ALL_'
 
 #
 # Global settings
@@ -46,99 +46,99 @@ export BL64_VAR_ALL='_ALL_'
 #
 
 # Run lib as command? (On/Off)
-export BL64_LIB_CMD="${BL64_LIB_CMD:-$BL64_VAR_OFF}"
+declare BL64_LIB_CMD="${BL64_LIB_CMD:-$BL64_VAR_OFF}"
 
 # Enable generic compatibility mode? (On/Off)
-export BL64_LIB_COMPATIBILITY="${BL64_LIB_COMPATIBILITY:-$BL64_VAR_ON}"
+declare BL64_LIB_COMPATIBILITY="${BL64_LIB_COMPATIBILITY:-$BL64_VAR_ON}"
 
 # Normalize locale? (On/Off)
-export BL64_LIB_LANG="${BL64_LIB_LANG:-$BL64_VAR_ON}"
+declare BL64_LIB_LANG="${BL64_LIB_LANG:-$BL64_VAR_ON}"
 
 # Enable strict security? (On/Off)
-export BL64_LIB_STRICT="${BL64_LIB_STRICT:-$BL64_VAR_ON}"
+declare BL64_LIB_STRICT="${BL64_LIB_STRICT:-$BL64_VAR_ON}"
 
 # Enable lib shell traps? (On/Off)
-export BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
+declare BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
 
 #
-# Shared error codes
+# Shared exit codes
 #
-# * Warning: bashlib64 error codes must be declared in this section only to avoid module level duplicates
-# * Error code 1 and 2 are reserved for the caller script
-# * Codes must be between 3 and 127
+# * Exit code 1 and 2 are reserved for the caller script
+# * Exit codes for bashlib64 functions must be between 3 and 127
 #
 
 # Application reserved. Not used by bashlib64
-# declare -ig BL64_LIB_ERROR_APP_1=1
-# declare -ig BL64_LIB_ERROR_APP_2=2
+declare -i BL64_LIB_ERROR_APP_1=1
+declare -i BL64_LIB_ERROR_APP_2=2
 
 # Parameters
-declare -ig BL64_LIB_ERROR_PARAMETER_INVALID=3
-declare -ig BL64_LIB_ERROR_PARAMETER_MISSING=4
-declare -ig BL64_LIB_ERROR_PARAMETER_RANGE=5
-declare -ig BL64_LIB_ERROR_PARAMETER_EMPTY=6
+declare -i BL64_LIB_ERROR_PARAMETER_INVALID=3
+declare -i BL64_LIB_ERROR_PARAMETER_MISSING=4
+declare -i BL64_LIB_ERROR_PARAMETER_RANGE=5
+declare -i BL64_LIB_ERROR_PARAMETER_EMPTY=6
 
 # Function operation
-declare -ig BL64_LIB_ERROR_TASK_FAILED=10
-declare -ig BL64_LIB_ERROR_TASK_BACKUP=11
-declare -ig BL64_LIB_ERROR_TASK_RESTORE=12
-declare -ig BL64_LIB_ERROR_TASK_TEMP=13
-declare -ig BL64_LIB_ERROR_TASK_UNDEFINED=14
+declare -i BL64_LIB_ERROR_TASK_FAILED=10
+declare -i BL64_LIB_ERROR_TASK_BACKUP=11
+declare -i BL64_LIB_ERROR_TASK_RESTORE=12
+declare -i BL64_LIB_ERROR_TASK_TEMP=13
+declare -i BL64_LIB_ERROR_TASK_UNDEFINED=14
 
 # Module operation
-declare -ig BL64_LIB_ERROR_MODULE_SETUP_INVALID=20
-declare -ig BL64_LIB_ERROR_MODULE_SETUP_MISSING=21
-declare -ig BL64_LIB_ERROR_MODULE_NOT_IMPORTED=22
+declare -i BL64_LIB_ERROR_MODULE_SETUP_INVALID=20
+declare -i BL64_LIB_ERROR_MODULE_SETUP_MISSING=21
+declare -i BL64_LIB_ERROR_MODULE_NOT_IMPORTED=22
 
 # OS
-declare -ig BL64_LIB_ERROR_OS_NOT_MATCH=30
-declare -ig BL64_LIB_ERROR_OS_TAG_INVALID=31
-declare -ig BL64_LIB_ERROR_OS_INCOMPATIBLE=32
-declare -ig BL64_LIB_ERROR_OS_BASH_VERSION=33
+declare -i BL64_LIB_ERROR_OS_NOT_MATCH=30
+declare -i BL64_LIB_ERROR_OS_TAG_INVALID=31
+declare -i BL64_LIB_ERROR_OS_INCOMPATIBLE=32
+declare -i BL64_LIB_ERROR_OS_BASH_VERSION=33
 
 # External commands
-declare -ig BL64_LIB_ERROR_APP_INCOMPATIBLE=40
-declare -ig BL64_LIB_ERROR_APP_MISSING=41
+declare -i BL64_LIB_ERROR_APP_INCOMPATIBLE=40
+declare -i BL64_LIB_ERROR_APP_MISSING=41
 
 # Filesystem
-declare -ig BL64_LIB_ERROR_FILE_NOT_FOUND=50
-declare -ig BL64_LIB_ERROR_FILE_NOT_READ=51
-declare -ig BL64_LIB_ERROR_FILE_NOT_EXECUTE=52
-declare -ig BL64_LIB_ERROR_DIRECTORY_NOT_FOUND=53
-declare -ig BL64_LIB_ERROR_DIRECTORY_NOT_READ=54
-declare -ig BL64_LIB_ERROR_PATH_NOT_RELATIVE=55
-declare -ig BL64_LIB_ERROR_PATH_NOT_ABSOLUTE=56
-declare -ig BL64_LIB_ERROR_PATH_NOT_FOUND=57
-declare -ig BL64_LIB_ERROR_PATH_PRESENT=58
+declare -i BL64_LIB_ERROR_FILE_NOT_FOUND=50
+declare -i BL64_LIB_ERROR_FILE_NOT_READ=51
+declare -i BL64_LIB_ERROR_FILE_NOT_EXECUTE=52
+declare -i BL64_LIB_ERROR_DIRECTORY_NOT_FOUND=53
+declare -i BL64_LIB_ERROR_DIRECTORY_NOT_READ=54
+declare -i BL64_LIB_ERROR_PATH_NOT_RELATIVE=55
+declare -i BL64_LIB_ERROR_PATH_NOT_ABSOLUTE=56
+declare -i BL64_LIB_ERROR_PATH_NOT_FOUND=57
+declare -i BL64_LIB_ERROR_PATH_PRESENT=58
 
 # IAM
-declare -ig BL64_LIB_ERROR_PRIVILEGE_IS_ROOT=60
-declare -ig BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT=61
-declare -ig BL64_LIB_ERROR_USER_NOT_FOUND=62
-#declare -ig BL64_LIB_ERROR_GROUP_NOT_FOUND=63
+declare -i BL64_LIB_ERROR_PRIVILEGE_IS_ROOT=60
+declare -i BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT=61
+declare -i BL64_LIB_ERROR_USER_NOT_FOUND=62
+#declare -i BL64_LIB_ERROR_GROUP_NOT_FOUND=63
 
 # General
-declare -ig BL64_LIB_ERROR_EXPORT_EMPTY=70
-declare -ig BL64_LIB_ERROR_EXPORT_SET=71
-declare -ig BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED=72
-declare -ig BL64_LIB_ERROR_CHECK_FAILED=80
+declare -i BL64_LIB_ERROR_EXPORT_EMPTY=70
+declare -i BL64_LIB_ERROR_EXPORT_SET=71
+declare -i BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED=72
+declare -i BL64_LIB_ERROR_CHECK_FAILED=80
+declare -i BL64_LIB_ERROR_IS_NOT=85
 
 #
 # Script Identify
 #
 
-export BL64_SCRIPT_PATH=''
-export BL64_SCRIPT_NAME=''
-export BL64_SCRIPT_SID=''
-export BL64_SCRIPT_ID=''
+declare BL64_SCRIPT_PATH=''
+declare BL64_SCRIPT_NAME=''
+declare BL64_SCRIPT_SID=''
+declare BL64_SCRIPT_ID=''
 
 #
 # Set Signal traps
 #
 
-export BL64_LIB_SIGNAL_HUP='-'
-export BL64_LIB_SIGNAL_STOP='-'
-export BL64_LIB_SIGNAL_QUIT='-'
-export BL64_LIB_SIGNAL_DEBUG='-'
-export BL64_LIB_SIGNAL_ERR='-'
-export BL64_LIB_SIGNAL_EXIT='bl64_dbg_runtime_show'
+declare BL64_LIB_SIGNAL_HUP='-'
+declare BL64_LIB_SIGNAL_STOP='-'
+declare BL64_LIB_SIGNAL_QUIT='-'
+declare BL64_LIB_SIGNAL_DEBUG='-'
+declare BL64_LIB_SIGNAL_ERR='-'
+declare BL64_LIB_SIGNAL_EXIT='bl64_dbg_runtime_show'

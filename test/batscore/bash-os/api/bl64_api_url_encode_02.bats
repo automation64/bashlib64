@@ -11,24 +11,28 @@ setup() {
 }
 
 @test "bl64_api_url_encode: printable_non_alphanumeric" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   output="$(bl64_api_url_encode "$(<${printable_non_alphanumeric})")"
   sample="$(<$url_chars_ascii_non_alphanumeric)"
   assert_equal "$output" "$sample"
 }
 
 @test "bl64_api_url_encode: printable_alphanumeric" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   output="$(bl64_api_url_encode "$(<${printable_alphanumeric})")"
   sample="$(<$url_chars_ascii_alphanumeric)"
   assert_equal "$output" "$sample"
 }
 
 @test "bl64_api_url_encode: printable_all" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   output="$(bl64_api_url_encode "$(<${printable_all})")"
   sample="$(<$url_chars_ascii_all)"
   assert_equal "$output" "$sample"
 }
 
 @test "bl64_api_url_encode: url_chars_ascii_reserved" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   output="$(bl64_api_url_encode "$(<${url_chars_ascii_url_reserved})")"
   sample="$(<$url_chars_encoded_url_reserved)"
   assert_equal "$output" "$sample"

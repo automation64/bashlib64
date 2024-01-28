@@ -1,9 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
-}
-
 @test "_bl64_txt_set_command: commands are set" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   assert_not_equal "$BL64_TXT_CMD_AWK" ''
   assert_not_equal "$BL64_TXT_CMD_BASE64" ''
   assert_not_equal "$BL64_TXT_CMD_CUT" ''
@@ -16,6 +12,7 @@ setup() {
 }
 
 @test "_bl64_txt_set_command: commands are present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   assert_file_executable "$BL64_TXT_CMD_AWK"
   assert_file_executable "$BL64_TXT_CMD_BASE64"
   assert_file_executable "$BL64_TXT_CMD_CUT"

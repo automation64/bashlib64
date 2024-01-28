@@ -1,9 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
-}
-
 @test "bl64_fs_set_env: umask permissions" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
     assert_equal "$BL64_FS_UMASK_RW_USER" 'u=rwx,g=,o='
     assert_equal "$BL64_FS_UMASK_RW_GROUP" 'u=rwx,g=rwx,o='

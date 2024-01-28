@@ -489,7 +489,7 @@ function bl64_k8s_blank_kubectl() {
 #   STDERR: nothing unless debug
 # Returns:
 #   0: resource exists
-#   >0: resources does not exist or execution error
+#   >0: BL64_LIB_ERROR_IS_NOT or execution error
 #######################################
 function bl64_k8s_resource_is_created() {
   bl64_dbg_lib_show_function "$@"
@@ -508,10 +508,10 @@ function bl64_k8s_resource_is_created() {
   if bl64_dbg_lib_task_enabled; then
     bl64_k8s_run_kubectl "$kubeconfig" \
       'get' "$type" "$name" \
-      $BL64_K8S_SET_OUTPUT_NAME $namespace
+      $BL64_K8S_SET_OUTPUT_NAME $namespace || return $BL64_LIB_ERROR_IS_NOT
   else
     bl64_k8s_run_kubectl "$kubeconfig" \
       'get' "$type" "$name" \
-      $BL64_K8S_SET_OUTPUT_NAME $namespace >/dev/null 2>&1
+      $BL64_K8S_SET_OUTPUT_NAME $namespace >/dev/null 2>&1 || return $BL64_LIB_ERROR_IS_NOT
   fi
 }

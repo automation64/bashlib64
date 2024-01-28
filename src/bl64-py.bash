@@ -24,8 +24,7 @@ function bl64_py_venv_create() {
     return $?
 
   bl64_msg_show_lib_task "${_BL64_PY_TXT_VENV_CREATE} (${venv_path})"
-  bl64_py_run_python -m "$BL64_PY_DEF_MODULE_VENV" "$venv_path"
-
+  bl64_py_run_python -m 'venv' "$venv_path"
 }
 
 #######################################
@@ -44,20 +43,9 @@ function bl64_py_venv_check() {
   bl64_dbg_lib_show_function "$@"
   local venv_path="${1:-}"
 
-  bl64_check_parameter 'venv_path' ||
-    return $?
-
-  if [[ ! -d "$venv_path" ]]; then
-    bl64_msg_show_error "${message} (command: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_PY_TXT_VENV_MISSING}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
-    return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
-  fi
-
-  if [[ ! -r "${venv_path}/${BL64_PY_DEF_VENV_CFG}" ]]; then
-    bl64_msg_show_error "${message} (command: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_PY_TXT_VENV_INVALID}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
-    return $BL64_LIB_ERROR_MODULE_SETUP_INVALID
-  fi
-
-  return 0
+  bl64_check_parameter 'venv_path' &&
+    bl64_check_directory "$venv_path" "$_BL64_PY_TXT_VENV_MISSING" &&
+    bl64_check_file "${venv_path}/${BL64_PY_DEF_VENV_CFG}" "$_BL64_PY_TXT_VENV_INVALID"
 }
 
 #######################################
@@ -104,7 +92,7 @@ function bl64_py_pip_get_version() {
 #######################################
 function bl64_py_pip_usr_prepare() {
   bl64_dbg_lib_show_function
-  local modules_pip="$BL64_PY_DEF_MODULE_PIP"
+  local modules_pip='pip'
   local modules_setup='setuptools wheel stevedore'
   local flag_user="$BL64_PY_SET_PIP_USER"
 
@@ -290,19 +278,17 @@ function bl64_py_blank_python() {
 function bl64_py_run_pip() {
   bl64_dbg_lib_show_function "$@"
   local debug="$BL64_PY_SET_PIP_QUIET"
-  local temporal=' '
   local cache=' '
 
   bl64_msg_lib_verbose_enabled && debug=' '
   bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
-  [[ -n "$BL64_FS_PATH_TEMPORAL" ]] && temporal="TMPDIR=${BL64_FS_PATH_TEMPORAL}"
   [[ -n "$BL64_FS_PATH_CACHE" ]] && cache="--cache-dir=${BL64_FS_PATH_CACHE}"
 
   # shellcheck disable=SC2086
-  eval $temporal bl64_py_run_python \
-    -m "$BL64_PY_DEF_MODULE_PIP" \
+  TMPDIR="${BL64_FS_PATH_TEMPORAL:-}" bl64_py_run_python \
+    -m 'pip' \
     $debug \
     $cache \
-    "$*"
+    "$@"
 }

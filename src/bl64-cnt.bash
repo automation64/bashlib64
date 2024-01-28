@@ -13,7 +13,8 @@
 #   STDOUT: None
 #   STDERR: None
 # Returns:
-#   check status
+#   0: it is
+#   BL64_LIB_ERROR_IS_NOT
 #######################################
 function bl64_cnt_is_inside_container() {
   bl64_dbg_lib_show_function
@@ -24,7 +25,7 @@ function bl64_cnt_is_inside_container() {
   _bl64_cnt_find_variable_marker 'DOCKER_CONTAINER' && return 0
   _bl64_cnt_find_variable_marker 'KUBERNETES_SERVICE_HOST' && return 0
 
-  return 1
+  return $BL64_LIB_ERROR_IS_NOT
 }
 
 function _bl64_cnt_find_file_marker() {
@@ -369,7 +370,7 @@ function bl64_cnt_cli() {
 #   STDERR: command stderr
 # Returns:
 #   0: true
-#   >0: false or cmd error
+#   >0: BL64_LIB_ERROR_IS_NOT or cmd error
 #######################################
 function bl64_cnt_container_is_running() {
   bl64_dbg_lib_show_function "$@"
@@ -390,9 +391,9 @@ function bl64_cnt_container_is_running() {
   bl64_dbg_lib_show_vars 'result'
 
   if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ "$result" == "$name" ]]
+    [[ "$result" == "$name" ]] || return $BL64_LIB_ERROR_IS_NOT
   elif [[ "$id" == "$BL64_VAR_DEFAULT" ]]; then
-    [[ "$result" != "$id" ]]
+    [[ "$result" != "$id" ]] || return $BL64_LIB_ERROR_IS_NOT
   fi
 }
 
@@ -406,7 +407,7 @@ function bl64_cnt_container_is_running() {
 #   STDERR: command stderr
 # Returns:
 #   0: defined
-#   >0: not defined or error
+#   >0: BL64_LIB_ERROR_IS_NOT or error
 #######################################
 function bl64_cnt_network_is_defined() {
   bl64_dbg_lib_show_function "$@"
@@ -428,8 +429,8 @@ function bl64_cnt_network_is_defined() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   0: defined
-#   >0: not defined or error
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function bl64_cnt_network_create() {
   bl64_dbg_lib_show_function "$@"
@@ -689,7 +690,7 @@ function _bl64_cnt_docker_run() {
 #   STDERR: command stderr
 # Returns:
 #   0: defined
-#   >0: not defined or error
+#   >0: BL64_LIB_ERROR_IS_NOT or error
 #######################################
 function _bl64_cnt_docker_network_is_defined() {
   bl64_dbg_lib_show_function "$@"
@@ -704,7 +705,7 @@ function _bl64_cnt_docker_network_is_defined() {
   )"
 
   bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
-  [[ -n "$network_id" ]]
+  [[ -n "$network_id" ]] || return $BL64_LIB_ERROR_IS_NOT
 }
 
 #######################################
@@ -716,8 +717,8 @@ function _bl64_cnt_docker_network_is_defined() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   0: defined
-#   >0: not defined or error
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_network_create() {
   bl64_dbg_lib_show_function "$@"
@@ -739,8 +740,8 @@ function _bl64_cnt_docker_network_create() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   0: defined
-#   >0: not defined or error
+#   0: operation completed ok
+#   >0: operation failed
 #######################################
 function _bl64_cnt_docker_ps_filter() {
   bl64_dbg_lib_show_function "$@"
@@ -993,7 +994,7 @@ function _bl64_cnt_podman_run() {
 #   STDERR: command stderr
 # Returns:
 #   0: defined
-#   >0: not defined or error
+#   >0: BL64_LIB_ERROR_IS_NOT or error
 #######################################
 function _bl64_cnt_podman_network_is_defined() {
   bl64_dbg_lib_show_function "$@"
@@ -1008,7 +1009,7 @@ function _bl64_cnt_podman_network_is_defined() {
   )"
 
   bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
-  [[ -n "$network_id" ]]
+  [[ -n "$network_id" ]] || return $BL64_LIB_ERROR_IS_NOT
 }
 
 #######################################

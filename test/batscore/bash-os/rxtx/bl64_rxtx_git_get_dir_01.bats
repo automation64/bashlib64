@@ -1,6 +1,5 @@
 setup() {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
   _bl64_rxtx_git_get_dir_destination="$(temp_make)"
   _bl64_rxtx_git_get_dir_source="$DEV_TEST_VALUE_GIT_CLONE_URL"
   export _bl64_rxtx_git_get_dir_destination
@@ -12,6 +11,7 @@ teardown() {
 }
 
 @test "bl64_rxtx_git_get_dir: git dir + replace off" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   test_dir="${_bl64_rxtx_git_get_dir_destination}/target"
 

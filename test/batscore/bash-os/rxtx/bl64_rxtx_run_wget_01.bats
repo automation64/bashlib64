@@ -6,8 +6,12 @@ setup() {
   export _bl64_rxtx_git_get_dir_source
 
 }
+teardown() {
+  temp_del "$_bl64_rxtx_git_get_dir_destination"
+}
 
 @test "bl64_rxtx_run_wget: parameters are not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_rxtx_run_wget
   assert_failure
 }

@@ -4,6 +4,8 @@ setup() {
 }
 
 @test "bl64_mdb_run_mongosh: CLI runs ok" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  bl64_mdb_setup
   run bl64_mdb_run_mongosh --help
   assert_success
 }

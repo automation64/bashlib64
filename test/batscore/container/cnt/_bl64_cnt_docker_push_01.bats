@@ -4,6 +4,7 @@ setup() {
 }
 
 @test "_bl64_cnt_docker_push: parameters are not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run _bl64_cnt_docker_push
   assert_failure
 }

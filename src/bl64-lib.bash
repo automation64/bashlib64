@@ -27,8 +27,8 @@ function bl64_lib_trap_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_TRAPS"; 
 #   STDERR: command stderr
 # Returns:
 #   0: flag enabled
-#   1: flag disabled
-#   $BL64_LIB_ERROR_PARAMETER_MISSING
+#   BL64_LIB_ERROR_IS_NOT
+#   BL64_LIB_ERROR_PARAMETER_MISSING
 #######################################
 function bl64_lib_flag_is_enabled {
   local -u flag="${1:-}"
@@ -37,7 +37,7 @@ function bl64_lib_flag_is_enabled {
 
   [[ "$flag" == "$BL64_VAR_ON" ||
     "$flag" == 'ON' ||
-    "$flag" == 'YES' ]]
+    "$flag" == 'YES' ]] || return $BL64_LIB_ERROR_IS_NOT
 }
 
 #######################################

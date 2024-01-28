@@ -4,11 +4,13 @@ setup() {
 }
 
 @test "bl64_os_lang_is_available: locale is present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_os_lang_is_available 'C'
   assert_success
 }
 
 @test "bl64_os_lang_is_available: locale is not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_os_lang_is_available 'XXX'
   assert_failure
 }

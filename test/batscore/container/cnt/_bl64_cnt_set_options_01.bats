@@ -5,6 +5,8 @@ setup() {
 }
 
 @test "_bl64_cnt_set_options: common globals are set" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  bl64_cnt_setup
   assert_not_equal "$BL64_CNT_SET_FILTER" ''
   assert_not_equal "$BL64_CNT_SET_DEBUG" ''
   assert_not_equal "$BL64_CNT_SET_ENTRYPOINT" ''

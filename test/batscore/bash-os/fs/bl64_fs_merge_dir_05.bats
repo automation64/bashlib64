@@ -1,6 +1,7 @@
 setup() {
+  DEV_TEST_INIT_ONLY='YES'
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
+  unset DEV_TEST_INIT_ONLY
   BATSLIB_TEMP_PRESERVE=0
   BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
 
@@ -8,6 +9,7 @@ setup() {
 }
 
 @test "bl64_fs_merge_dir: copy dir + file names with spaces + subdirs" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   source="$TESTMANSH_TEST_SAMPLES/dir_04"
   target="$TEST_SANDBOX/target"
   mkdir "$target"

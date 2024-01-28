@@ -22,7 +22,6 @@ export DEV_TEST_PATH_LIBRARY="${TESTMANSH_PROJECT_BUILD}/test"
 
 # Test-case specific variables
 export DEV_TEST_BASHLIB64="${DEV_TEST_PATH_LIBRARY}/bashlib64.bash"
-
 export DEV_TEST_VALUE_GIT_OWNER='automation64'
 export DEV_TEST_VALUE_GIT_ASSET_REPO='bashlib64'
 export DEV_TEST_VALUE_GIT_RELEASE_REPO='cli'
@@ -31,6 +30,7 @@ export DEV_TEST_VALUE_GIT_ASSET_FILE='bashlib64-modular.tgz'
 export DEV_TEST_VALUE_GIT_CLONE_URL="https://github.com/${DEV_TEST_VALUE_GIT_OWNER}/bashlib64.git"
 export DEV_TEST_VALUE_GIT_RAW_URL="https://raw.githubusercontent.com/${DEV_TEST_VALUE_GIT_OWNER}/bashlib64/main/bashlib64.bash"
 export DEV_TEST_VALUE_API_PUBLIC_URL='https://httpbin.org'
+export DEV_TEST_VALUE_CRYP_GPG_URL='https://download.docker.com/linux/ubuntu/gpg'
 
 # Setup initialization only?. Empty: No, Not-Empty: Yes
 export DEV_TEST_INIT_ONLY="${DEV_TEST_INIT_ONLY:-}"

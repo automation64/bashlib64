@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_fmt_dirname: /dir/file" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   output='/full/path/to'
   input='/full/path/to/testfile'
@@ -12,6 +9,7 @@ setup() {
 }
 
 @test "bl64_fmt_dirname: /dir/dir/" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   output='/full/path/to'
   input='/full/path/to/'
@@ -21,6 +19,7 @@ setup() {
 }
 
 @test "bl64_fmt_dirname: dir/file" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   output='full/path/to'
   input='full/path/to/testfile'
@@ -30,6 +29,7 @@ setup() {
 }
 
 @test "bl64_fmt_dirname: dir/dir/" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   output='full/path/to'
   input='full/path/to/'
@@ -39,6 +39,7 @@ setup() {
 }
 
 @test "bl64_fmt_dirname: dir" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   output='testdir'
   input='testdir'
@@ -48,6 +49,7 @@ setup() {
 }
 
 @test "bl64_fmt_dirname: /dir" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   output='/'
   input='/testdir'
@@ -57,6 +59,7 @@ setup() {
 }
 
 @test "bl64_fmt_dirname: /" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   output='/'
   input='/'

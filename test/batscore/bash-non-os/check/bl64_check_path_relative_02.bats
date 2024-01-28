@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_check_path_relative: dir is absolute" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_check_path_relative '/etc'
   assert_failure
@@ -10,6 +7,7 @@ setup() {
 }
 
 @test "bl64_check_path_relative: dir is /" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_check_path_relative '/'
   assert_failure
@@ -17,6 +15,7 @@ setup() {
 }
 
 @test "bl64_check_path_relative: dir is ." {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_check_path_relative '.'
   assert_success
@@ -24,6 +23,7 @@ setup() {
 }
 
 @test "bl64_check_path_relative: file path is relative" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_check_path_relative 'path/to/file'
   assert_success
@@ -31,6 +31,7 @@ setup() {
 }
 
 @test "bl64_check_path_relative: dir is relative" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_check_path_relative 'path/to/file/'
   assert_success
@@ -38,6 +39,7 @@ setup() {
 }
 
 @test "bl64_check_path_relative: ./dir is relative" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_check_path_relative './path/to/file/'
   assert_success

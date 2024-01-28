@@ -4,6 +4,7 @@ setup() {
 }
 
 @test "bl64_cnt_run_interactive: parameters are not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_cnt_run_interactive
   assert_failure
 }

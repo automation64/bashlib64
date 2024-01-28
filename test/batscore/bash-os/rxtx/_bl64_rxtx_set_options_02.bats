@@ -1,9 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
-}
-
 @test "_bl64_rxtx_set_options: options are set" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   assert_not_equal "$BL64_RXTX_SET_CURL_FAIL" ''
   assert_not_equal "$BL64_RXTX_SET_CURL_HEADER" ''
   assert_not_equal "$BL64_RXTX_SET_CURL_INCLUDE" ''

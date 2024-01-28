@@ -5,6 +5,7 @@ setup() {
 }
 
 @test "_bl64_cnt_docker_run_interactive: CLI runs ok" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run _bl64_cnt_docker_run_interactive "$BL64_CNT_SET_VERSION"
   assert_success
 }

@@ -1,8 +1,5 @@
-setup() {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-}
-
 @test "bl64_check_directory: directory is present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_check_directory '/etc'
   assert_success
@@ -10,6 +7,7 @@ setup() {
 }
 
 @test "bl64_check_directory: directory is not present" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_check_directory '/fake/dir'
   assert_failure

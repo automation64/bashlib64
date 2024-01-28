@@ -312,7 +312,7 @@ function bl64_os_lang_is_available() {
     [[ "$line" == "$locale" ]] && return 0
   done
 
-  return 1
+  return $BL64_LIB_ERROR_IS_NOT
 }
 
 #######################################

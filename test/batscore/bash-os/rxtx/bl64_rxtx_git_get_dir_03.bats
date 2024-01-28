@@ -4,7 +4,6 @@ setup() {
   _bl64_rxtx_git_get_dir_source="$DEV_TEST_VALUE_GIT_CLONE_URL"
   export _bl64_rxtx_git_get_dir_destination
   export _bl64_rxtx_git_get_dir_source
-
 }
 
 teardown() {
@@ -12,6 +11,7 @@ teardown() {
 }
 
 @test "bl64_rxtx_git_get_dir: git dir ." {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
 
   run bl64_rxtx_git_get_dir \
     "$_bl64_rxtx_git_get_dir_source" \
