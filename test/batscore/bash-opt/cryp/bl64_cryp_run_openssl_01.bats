@@ -1,5 +1,5 @@
 setup() {
-  [[ -f /usr/bin/openssl ]] || skip 'gpg not installed'
+  [[ -f /usr/bin/openssl ]] || skip 'openssl not installed'
 }
 
 @test "bl64_cryp_run_openssl: run command" {
