@@ -5,6 +5,7 @@ setup() {
 
 @test "bl64_hlm_run_helm: CLI runs ok" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  bl64_hlm_setup
   run bl64_hlm_run_helm --help
   assert_success
 }
