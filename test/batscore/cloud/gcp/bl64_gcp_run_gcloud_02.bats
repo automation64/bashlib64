@@ -5,6 +5,7 @@ setup() {
 
 @test "bl64_gcp_run_gcloud: CLI runs ok" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  bl64_gcp_setup
   run bl64_gcp_run_gcloud --version
   assert_success
 }
