@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- cryp: new module for cryptography tools: GPG, OpenSSL
+- cryp
+  - new module for cryptography tools: GPG, OpenSSL
 
 ### Changed
 
@@ -17,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - global variables are now declared by default instead of exported to enhance script re-entry (fork)
 - py
   - bl64_py_venv_check: improved check method
+- rxtx
+  - bl64_rxtx_web_get_file: added param for setting owner, group
 
 ## [18.1.1]
 

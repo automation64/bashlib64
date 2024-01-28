@@ -10,8 +10,10 @@
 # Arguments:
 #   $1: Source URL
 #   $2: Full path to the destination file
-#   $3: replace existing content Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
-#   $4: permissions. Regular chown format accepted. Default: umask defined
+#   $3: replace existing file. Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
+#   $4: file permissions. Format: chown format. Default: use current umask
+#   $5: file user name. Default: current
+#   $6: file group name. Default: current
 # Outputs:
 #   STDOUT: None unless BL64_DBG_TARGET_LIB_CMD
 #   STDERR: command error
@@ -24,7 +26,9 @@ function bl64_rxtx_web_get_file() {
   local source="$1"
   local destination="$2"
   local replace="${3:-${BL64_VAR_DEFAULT}}"
-  local mode="${4:-${BL64_VAR_DEFAULT}}"
+  local file_mode="${4:-${BL64_VAR_DEFAULT}}"
+  local file_user="${5:-${BL64_VAR_DEFAULT}}"
+  local file_group="${6:-${BL64_VAR_DEFAULT}}"
   local -i status=0
 
   bl64_check_module 'BL64_RXTX_MODULE' &&
@@ -37,7 +41,7 @@ function bl64_rxtx_web_get_file() {
 
   bl64_fs_safeguard "$destination" >/dev/null || return $?
 
-  bl64_msg_show_lib_subtask "$_BL64_RXTX_TXT_DOWNLOAD_FILE ($source)"
+  bl64_msg_show_lib_subtask "$_BL64_RXTX_TXT_DOWNLOAD_FILE (${source})"
   # shellcheck disable=SC2086
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
     bl64_rxtx_run_curl \
@@ -55,16 +59,15 @@ function bl64_rxtx_web_get_file() {
     bl64_msg_show_error "$_BL64_RXTX_TXT_MISSING_COMMAND (wget or curl)" &&
       return $BL64_LIB_ERROR_APP_MISSING
   fi
-  (( status != 0 )) && bl64_msg_show_error "$_BL64_RXTX_TXT_ERROR_DOWNLOAD_FILE"
 
-  bl64_dbg_lib_show_comments 'Determine if asked to set mode'
-  if [[ "$status" == '0' && "$mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_fs_run_chmod "$mode" "$destination"
+  if (( status != 0 )); then
+    bl64_msg_show_error "$_BL64_RXTX_TXT_ERROR_DOWNLOAD_FILE"
+  else
+    bl64_fs_set_permissions "$file_mode" "$file_user" "$file_group" "$destination"
     status=$?
   fi
 
   bl64_fs_restore "$destination" "$status" || return $?
-
   return $status
 }
 
