@@ -16,12 +16,12 @@ setup() {
   run bl64_py_setup "$target"
 
   assert_success
-  assert_dir_exist "x$TEST_SANDBOX"
   assert_dir_exist "$target"
   assert_file_exist "${target}/${BL64_PY_DEF_VENV_CFG}"
   assert_file_exist "$BL64_PY_CMD_PYTHON3"
 }
 
 teardown() {
-  temp_del "$TEST_SANDBOX"
+  [[ -d "$TEST_SANDBOX" ]] && temp_del "$TEST_SANDBOX"
+  :
 }
