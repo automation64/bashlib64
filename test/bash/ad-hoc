@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 . bin/dev-set
-. "${DEV_BUILD_FULL_PATH_TEST:-build/test}/bashlib64-module-py.bash"
-. "${DEV_BUILD_FULL_PATH_TEST:-build/test}/bashlib64-core.bash"
+#. "${DEV_BUILD_FULL_PATH_TEST:-build/test}/bashlib64-core.bash"
+. "${DEV_BUILD_FULL_PATH_TEST:-build/test}/bashlib64.bash"
 
 #
 # Skeleton for ad-hoc testiong.
@@ -16,8 +16,3 @@
 #
 # * Keep the source clean, do not commit test cases below this section
 #
-
-bl64_py_setup
-bl64_py_pip_usr_prepare
-
-bl64_py_pip_usr_install 'pip-install-test'
