@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with container engines
 #######################################
 
-declare BL64_CNT_VERSION='2.0.2'
+declare BL64_CNT_VERSION='3.0.0'
 
 declare BL64_CNT_MODULE='0'
 

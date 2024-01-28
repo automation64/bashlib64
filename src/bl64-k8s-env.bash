@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with Kubernetes
 #######################################
 
-declare BL64_K8S_VERSION='2.1.1'
+declare BL64_K8S_VERSION='3.0.0'
 
 declare BL64_K8S_MODULE='0'
 

@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Format text data
 #######################################
 
-declare BL64_FMT_VERSION='2.2.2'
+declare BL64_FMT_VERSION='3.0.0'
 
 declare BL64_FMT_MODULE='0'
 

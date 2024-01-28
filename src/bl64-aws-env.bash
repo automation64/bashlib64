@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with AWS
 #######################################
 
-declare BL64_AWS_VERSION='1.5.1'
+declare BL64_AWS_VERSION='2.0.0'
 
 declare BL64_AWS_MODULE='0'
 

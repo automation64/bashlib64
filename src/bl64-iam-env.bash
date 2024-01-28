@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage OS identity and access service
 #######################################
 
-declare BL64_IAM_VERSION='3.1.2'
+declare BL64_IAM_VERSION='4.0.0'
 
 declare BL64_IAM_MODULE='0'
 

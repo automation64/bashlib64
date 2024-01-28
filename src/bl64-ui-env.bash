@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / User Interface
 #######################################
 
-declare BL64_UI_VERSION='1.1.1'
+declare BL64_UI_VERSION='2.0.0'
 
 declare BL64_UI_MODULE='0'
 

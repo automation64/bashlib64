@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Cryptography tools
 #######################################
 
-declare BL64_CRYP_VERSION='1.0.0'
+declare BL64_CRYP_VERSION='2.0.0'
 
 declare BL64_CRYP_MODULE='0'
 

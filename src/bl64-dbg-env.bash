@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Show shell debugging information
 #######################################
 
-declare BL64_DBG_VERSION='2.4.1'
+declare BL64_DBG_VERSION='3.0.0'
 
 declare BL64_DBG_MODULE='0'
 

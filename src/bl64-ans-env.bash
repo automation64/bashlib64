@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with Ansible CLI
 #######################################
 
-declare BL64_ANS_VERSION='1.7.1'
+declare BL64_ANS_VERSION='2.0.0'
 
 declare BL64_ANS_MODULE='0'
 

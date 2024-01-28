@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Display messages
 #######################################
 
-declare BL64_MSG_VERSION='4.3.1'
+declare BL64_MSG_VERSION='5.0.0'
 
 declare BL64_MSG_MODULE='0'
 

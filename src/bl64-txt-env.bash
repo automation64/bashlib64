@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manipulate text files content
 #######################################
 
-declare BL64_TXT_VERSION='1.13.2'
+declare BL64_TXT_VERSION='2.0.0'
 
 declare BL64_TXT_MODULE='0'
 

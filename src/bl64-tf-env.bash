@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with Terraform
 #######################################
 
-declare BL64_TF_VERSION='1.4.1'
+declare BL64_TF_VERSION='2.0.0'
 
 declare BL64_TF_MODULE='0'
 

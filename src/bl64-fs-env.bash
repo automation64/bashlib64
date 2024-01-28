@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage local filesystem
 #######################################
 
-declare BL64_FS_VERSION='4.8.0'
+declare BL64_FS_VERSION='5.0.0'
 
 declare BL64_FS_MODULE='0'
 

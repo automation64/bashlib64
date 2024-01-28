@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage archive files
 #######################################
 
-declare BL64_ARC_VERSION='2.2.2'
+declare BL64_ARC_VERSION='3.0.0'
 
 declare BL64_ARC_MODULE='0'
 

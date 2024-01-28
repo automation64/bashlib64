@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #######################################
 
-declare BL64_OS_VERSION='4.3.0'
+declare BL64_OS_VERSION='5.0.0'
 
 declare BL64_OS_MODULE='0'
 

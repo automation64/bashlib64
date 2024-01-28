@@ -2,7 +2,7 @@
 # BashLib64 / Module / Setup / Interact with MongoDB
 #######################################
 
-declare BL64_MDB_VERSION='1.2.1'
+declare BL64_MDB_VERSION='2.0.0'
 
 declare BL64_MDB_MODULE='0'
 

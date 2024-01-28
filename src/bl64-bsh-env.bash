@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with Bash shell
 #######################################
 
-declare BL64_BSH_VERSION='2.1.0'
+declare BL64_BSH_VERSION='3.0.0'
 
 declare BL64_BSH_MODULE='0'
 

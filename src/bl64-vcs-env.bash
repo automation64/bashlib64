@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Manage Version Control System
 #######################################
 
-declare BL64_VCS_VERSION='1.15.2'
+declare BL64_VCS_VERSION='2.0.0'
 
 declare BL64_VCS_MODULE='0'
 
