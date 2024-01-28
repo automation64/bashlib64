@@ -56,7 +56,7 @@ function dev_test_bash_container() {
 
 function dev_test_bash_kubernetes() {
   bl64_dbg_lib_show_function
-  "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$DEV_TEST_CONTAINER_TERRAFORM" -c "$DEV_TEST_CASE_TERRAFORM"
+  "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$DEV_TEST_CONTAINER_KUBERNETES" -c "$DEV_TEST_CASE_KUBERNETES"
 }
 
 function dev_test_bash_mongodb() {
