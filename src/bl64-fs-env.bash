@@ -87,3 +87,7 @@ declare _BL64_FS_TXT_ERROR_NOT_TMPDIR='provided directory was not created by bl6
 declare _BL64_FS_TXT_ERROR_NOT_TMPFILE='provided directory was not created by bl64_fs_create_tmpfile'
 declare _BL64_FS_TXT_ERROR_INVALID_FILE_TARGET='invalid file destination. Provided path exists and is a directory'
 declare _BL64_FS_TXT_ERROR_INVALID_DIR_TARGET='invalid directory destination. Provided path exists and is a file'
+
+declare _BL64_FS_TXT_SET_MODE='set new file permissions'
+declare _BL64_FS_TXT_SET_OWNER='set new file owner'
+declare _BL64_FS_TXT_SET_GROUP='set new file group'

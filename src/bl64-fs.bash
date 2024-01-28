@@ -828,17 +828,17 @@ function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_info "path list:[${*}]"
 
   if [[ "$mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_comments "set new permissions (${mode})"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SET_MODE} (${mode} ${BL64_MSG_COSMETIC_ARROW2} ${*})"
     bl64_fs_run_chmod "$mode" "$@" || return $?
   fi
 
   if [[ "$user" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_comments "set new user (${user})"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SET_OWNER} (${user} ${BL64_MSG_COSMETIC_ARROW2} ${*})"
     bl64_fs_run_chown "${user}" "$@" || return $?
   fi
 
   if [[ "$group" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_comments "set new group (${group})"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SET_GROUP} (${group} ${BL64_MSG_COSMETIC_ARROW2} ${*})"
     bl64_fs_run_chown ":${group}" "$@" || return $?
   fi
 
