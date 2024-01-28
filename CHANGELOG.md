@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_py_venv_check: improved check method
 - rxtx
   - bl64_rxtx_web_get_file: added param for setting owner, group
+- pkg
+  - **Breaking change**: added module dependency: `cryp`
+  - bl64_pkg_repository_add: added GPG key dearmor for Ubuntu
 
 ## [18.1.1]
 

@@ -27,6 +27,7 @@ function bl64_pkg_setup() {
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     bl64_lib_module_imported 'BL64_FS_MODULE' &&
     bl64_lib_module_imported 'BL64_RXTX_MODULE' &&
+    bl64_lib_module_imported 'BL64_CRYP_MODULE' &&
     _bl64_pkg_set_command &&
     _bl64_pkg_set_runtime &&
     _bl64_pkg_set_options &&
