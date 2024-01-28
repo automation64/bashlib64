@@ -290,5 +290,5 @@ function bl64_py_run_pip() {
     -m 'pip' \
     $debug \
     $cache \
-    "$*"
+    "$@"
 }
