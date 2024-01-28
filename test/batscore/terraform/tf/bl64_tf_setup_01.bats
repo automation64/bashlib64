@@ -11,6 +11,7 @@ setup() {
 
 @test "bl64_tf_setup: invalid path" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  bl64_tf_setup
   run bl64_tf_setup '/1/2/3'
   assert_failure
 }

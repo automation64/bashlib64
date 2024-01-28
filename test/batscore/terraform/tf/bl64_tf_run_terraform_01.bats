@@ -5,6 +5,7 @@ setup() {
 
 @test "bl64_tf_run_terraform: parameters are not present" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  bl64_tf_setup
   run bl64_tf_run_terraform
   assert_failure
 }

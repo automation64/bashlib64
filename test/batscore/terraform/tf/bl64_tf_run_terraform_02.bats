@@ -5,6 +5,7 @@ setup() {
 
 @test "bl64_tf_run_terraform: CLI runs ok" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
+  bl64_tf_setup
   run bl64_tf_run_terraform --help
   assert_success
 }
