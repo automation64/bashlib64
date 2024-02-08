@@ -1,0 +1,264 @@
+#!/usr/bin/env bash
+#######################################
+# Dev / Build / Custom / Assemble modular script
+#
+# * Use to build library distributables
+# * Version: 2.2.0
+#
+#######################################
+# Copyright [2023] [serdigital64@gmail.com]
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#######################################
+
+#
+# Imports
+#
+
+# shellcheck source=bin/dev-set
+source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+# shellcheck source-path=bin
+source ./bin/dev-env-custom || exit 1
+
+# shellcheck source-path=lib/bl64
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
+
+#
+# Functions
+#
+
+# shellcheck disable=SC2317
+function dev_add_modules() {
+  bl64_dbg_lib_show_function "$@"
+  local destination="$1"
+  local modules="$2"
+
+  # shellcheck disable=SC2119
+  for file in $modules; do
+    [[ ! -f "bl64-${file}-env.bash" ]] && continue
+    { "$BL64_OS_CMD_CAT" "bl64-${file}-env.bash" && bl64_fmt_separator_line; } >>"$destination" ||
+      return $?
+  done
+
+  # shellcheck disable=SC2119
+  for file in $modules; do
+    {
+      [[ -f "bl64-${file}-setup.bash" ]] && "$BL64_OS_CMD_CAT" "bl64-${file}-setup.bash" && bl64_fmt_separator_line
+      "$BL64_OS_CMD_CAT" "bl64-${file}.bash" && bl64_fmt_separator_line
+    } >>"$destination" ||
+      return $?
+  done
+}
+
+# shellcheck disable=SC2317
+function dev_build_create_header() {
+  bl64_dbg_lib_show_function
+  "$BL64_OS_CMD_CAT" "bl64-lib-header.bash" &&
+    bl64_fmt_separator_line &&
+    "$BL64_OS_CMD_CAT" "bl64-lib-bootstrap.bash" &&
+    bl64_fmt_separator_line &&
+    "$BL64_OS_CMD_CAT" "bl64-lib-env.bash" &&
+    "$BL64_OS_CMD_CAT" "bl64-lib.bash"
+}
+
+# shellcheck disable=SC2317
+function dev_build_release() {
+  bl64_dbg_lib_show_function
+  dev_build_library "$DEV_BUILD_CUSTOM_FULL_PATH_RELEASE"
+}
+
+# shellcheck disable=SC2317
+function dev_build_test() {
+  bl64_dbg_lib_show_function
+  dev_build_library "$DEV_BUILD_CUSTOM_FULL_PATH_TEST"
+}
+
+# shellcheck disable=SC2317
+function dev_build_library() {
+  bl64_dbg_lib_show_function "$@"
+  local destination="$1"
+  local file=''
+  local build_sa="${destination}/${DEV_BUILD_CUSTOM_NAME_SA}"
+  local build_core="${destination}/${DEV_BUILD_CUSTOM_NAME_CORE}"
+  local build_opt="${destination}/${DEV_BUILD_CUSTOM_NAME_OPT}"
+  local build_module_core="${destination}/${DEV_BUILD_CUSTOM_NAME_MODULE_CORE}"
+  local build_module=''
+  local module_name=''
+
+  bl64_dbg_app_show_vars 'DEV_ENV_CUSTOM_MODULES_CORE' 'DEV_ENV_CUSTOM_MODULES_OPT'
+  cd "$DEV_PATH_SRC" || return 1
+
+  bl64_msg_show_task "preparing destination (${destination})"
+  bl64_fs_rm_full "$destination"
+  bl64_fs_create_dir '0777' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$destination" ||
+    return $?
+
+  # Create header
+  bl64_msg_show_task 'creating library header'
+  # shellcheck disable=SC2119
+  dev_build_create_header >"$build_sa" &&
+    bl64_fs_cp_file "$build_sa" "$build_core" &&
+    bl64_fs_cp_file "$build_sa" "$build_module_core" ||
+    return $?
+  # shellcheck disable=SC2119
+  {
+    "$BL64_OS_CMD_CAT" "bl64-lib-header.bash" && bl64_fmt_separator_line
+  } >"$build_opt" || return 1
+
+  bl64_msg_show_task 'adding modules'
+  dev_add_modules "$build_sa" "${DEV_ENV_CUSTOM_MODULES_CORE} ${DEV_ENV_CUSTOM_MODULES_OPT}" &&
+    dev_add_modules "$build_core" "$DEV_ENV_CUSTOM_MODULES_CORE" &&
+    dev_add_modules "$build_opt" "$DEV_ENV_CUSTOM_MODULES_OPT" ||
+    return $?
+
+  for module_name in ${DEV_ENV_CUSTOM_MODULES_CORE} ${DEV_ENV_CUSTOM_MODULES_OPT}; do
+    build_module="${destination}/${DEV_BUILD_CUSTOM_NAME_MODULE}-${module_name}.bash"
+    dev_add_modules "${build_module}.tmp" "$module_name"
+    {
+      "$BL64_OS_CMD_CAT" 'bl64-lib-header.bash' &&
+        bl64_fmt_separator_line &&
+        "$BL64_OS_CMD_CAT" "${build_module}.tmp"
+    } >"$build_module" &&
+      bl64_fs_run_chmod '0755' "$build_module" ||
+      return $?
+    bl64_fs_rm_file "${build_module}.tmp"
+  done
+
+  bl64_msg_show_task 'adding main'
+  # shellcheck disable=SC2119
+  { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_sa" &&
+    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_core" &&
+    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$build_module_core" &&
+    bl64_fs_run_chmod '0755' \
+      "$build_sa" \
+      "$build_module_core" \
+      "$build_core" \
+      "$build_opt" ||
+    return $?
+
+}
+
+# shellcheck disable=SC2317
+function dev_build_docs() {
+  bl64_dbg_lib_show_function
+  local file=''
+  local module_env=''
+  local module_code=''
+  local module_init=''
+
+  bl64_dbg_app_show_info "DEV_ENV_CUSTOM_MODULES_CORE='${DEV_ENV_CUSTOM_MODULES_CORE}'"
+  cd "$DEV_PATH_SRC" || return 1
+
+  for file in lib $DEV_ENV_CUSTOM_MODULES_CORE $DEV_ENV_CUSTOM_MODULES_OPT; do
+    module_env="bl64-${file}-env.bash"
+    [[ ! -f "$module_env" ]] && module_env="$BL64_VAR_NULL"
+    module_code="bl64-${file}.bash"
+    [[ ! -f "$module_code" ]] && module_code="$BL64_VAR_NULL"
+    module_init="bl64-${file}-setup.bash"
+    [[ ! -f "$module_init" ]] && module_init="$BL64_VAR_NULL"
+
+    bl64_msg_show_task "creating document for: ${file}"
+    dev_build_md "$file" "$module_env" "$module_code" "$module_init" >"${DEV_DOCS}/bl64-${file}.md"
+  done
+}
+
+# shellcheck disable=SC2317
+function dev_build_md() {
+  bl64_dbg_lib_show_function "$@"
+  local module="$1"
+  local module_env="$2"
+  local module_code="$3"
+  local module_init="$4"
+
+  printf '# Module: %s\n\n' "${module}"
+
+  if [[ "$module_env" != "$BL64_VAR_NULL" ]]; then
+    printf '## Header\n\n'
+    printf '```shell\n'
+    [[ "$module" == 'lib' ]] && printf '{%% include "../src/bl64-%s.header" %%}\n' "$module"
+    printf '{%% include "../src/bl64-%s-env.bash" %%}\n' "$module"
+    printf '```\n\n'
+  fi
+  if [[ "$module_init" != "$BL64_VAR_NULL" ]]; then
+    printf '## Setup\n\n'
+    printf '```shell\n'
+    printf '{%% include "../src/bl64-%s.init" %%}\n' "$module"
+    printf '```\n\n'
+  fi
+  printf '## Code\n\n'
+  printf '```shell\n'
+  printf '{%% include "../src/bl64-%s.bash" %%}\n' "$module"
+  printf '```\n'
+
+}
+
+function dev_build_check_requirements() {
+  bl64_dbg_app_show_function "$@"
+  local command="$1"
+
+  [[ -z "$command" ]] && dev_build_help return 1
+
+  bl64_check_export 'DEV_BUILD_CUSTOM_FULL_PATH_TEST' &&
+    bl64_check_export 'DEV_BUILD_CUSTOM_NAME_CORE' &&
+    bl64_check_export 'DEV_BUILD_CUSTOM_NAME_MODULE_CORE' &&
+    bl64_check_export 'DEV_BUILD_CUSTOM_NAME_MODULE' &&
+    bl64_check_export 'DEV_BUILD_CUSTOM_NAME_OPT' &&
+    bl64_check_export 'DEV_BUILD_CUSTOM_NAME_SA' &&
+    bl64_check_export 'DEV_ENV_CUSTOM_MODULES_CORE' &&
+    bl64_check_export 'DEV_ENV_CUSTOM_MODULES_OPT' &&
+    bl64_check_export 'DEV_BUILD_CUSTOM_FULL_PATH_RELEASE'
+}
+
+function dev_build_help() {
+  bl64_msg_show_usage \
+    '<-t|-r|-d> [-h]' \
+    'Create the BashLib64 stand-alone distributable file' \
+    '
+  -t: Build stand-alone file for testing
+  -r: Build release files
+  -d: Build documentation
+  ' '
+  -h: Show Help
+  ' ''
+}
+
+#
+# Main
+#
+
+declare dev_build_command=''
+declare dev_build_option=''
+
+(($# == 0)) && dev_build_help && exit 1
+while getopts ':trdh' dev_build_option; do
+  case "$dev_build_option" in
+  t) dev_build_command='dev_build_test' ;;
+  r) dev_build_command='dev_build_release' ;;
+  d) dev_build_command='dev_build_docs' ;;
+  h) dev_build_help && exit ;;
+  *) dev_build_help && exit 1 ;;
+  esac
+done
+dev_build_check_requirements "$dev_build_command" || exit 1
+[[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
+
+bl64_msg_all_enable_verbose
+bl64_msg_show_batch_start "$dev_build_command"
+case "$dev_build_command" in
+'dev_build_docs' | 'dev_build_test' | 'dev_build_release') "$dev_build_command" ;;
+*) bl64_check_alert_undefined "$dev_build_command" ;;
+esac
+bl64_msg_show_batch_finish $? "$dev_build_command"

@@ -24,7 +24,7 @@ jobs:
         run: "./bin/dev-lib-installer64 && ./bin/dev-lib-bashlib64"
 
       - name: "Build app for release"
-        run: "./bin/dev-build-bash -r"
+        run: "./bin/dev-build-custom -r"
 
       - name: "Create distributable packages"
         run: "./bin/dev-pack"

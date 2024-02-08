@@ -27,7 +27,7 @@ jobs:
         run: "./bin/dev-lib-installer64 && ./bin/dev-lib-testmansh"
 
       - name: "Build app"
-        run: "./bin/dev-build-bash"
+        run: "./bin/dev-build-custom"
 
       - name: "Lint app"
         run: "./bin/dev-lint-testmansh"
