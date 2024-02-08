@@ -1,25 +1,14 @@
-# ** ACTION REQUIRED: this is a template file. Copy to .local and remove this line **
-#!/bin/sh
+** ACTION REQUIRED: this is a template file. Copy to .local and remove this line **
+#!/usr/bin/env bash
 #
-# Project development environment / Local variables
+# Development environment / Local variables
 #
-# * This file should be excluded from GIT
+# * This file must be excluded from GIT
+# * Automatically loaded by dev-set on non CICD environments
+# * For CICD environments, create variables and values based on this file
 # * Source before .env
-# * Version: 1.1.0
+# * Version: 1.2.1
 #
 
-# Project base location. Adjust to your local GIT repo
-DEV_ROOT="$(pwd)"
-export DEV_ROOT
-
-# CICD / Debug flag for 'bin/' scripts
-DEV_CICD_DEBUG=''
-export DEV_CICD_DEBUG
-
-# Lib / GitHub / Command
-DEV_LIB_GH_BIN="/usr/bin/gh"
-export DEV_LIB_GH_BIN
-
-# Repo / RSync / Command
-DEV_LIB_RSYNC_BIN="/usr/bin/rsync"
-export DEV_LIB_RSYNC_BIN
+# CICD / Debug flag for bin/ scripts
+export DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-}"
