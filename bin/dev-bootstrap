@@ -201,7 +201,7 @@ function dev_bootstrap_gitignore_create() {
 #
 # GIT Ignore
 #
-# * Template version: 1.2.0
+# * Template version: 1.2.1
 #
 
 # VScode
@@ -222,12 +222,12 @@ function dev_bootstrap_gitignore_create() {
 # Local variables
 /.local
 
-# Keep placeholder for empty directories
-!/**/.gitkeep
-
 #
 # Project specific exclusions
 #
+
+# Keep placeholder for empty directories
+!/**/.gitkeep
 ' \
     >'.gitignore' &&
     touch \
