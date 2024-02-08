@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #######################################
-# Lint shell source code
+# Dev / Lint / TestManSH / Lint bash scripts
 #
 # * Check is done using shellcheck
 # * TestManSH is used to manage linting environment
-# * Template: 6.0.0
+# * Version: 6.2.0
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -27,32 +27,45 @@
 #
 
 # shellcheck source=bin/dev-set
-source ./bin/dev-set || exit 1
+source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+# shellcheck source-path=bin
+source ./bin/dev-env-testmansh || exit 1
 # shellcheck source-path=lib/bl64
-source "${DEV_CICD_BASHLIB64}/bashlib64-module-txt.bash" &&
-  source "${DEV_CICD_BASHLIB64}/bashlib64-module-fmt.bash" &&
-  source "${DEV_CICD_BASHLIB64}/bashlib64-module-fs.bash" &&
-  source "${DEV_CICD_BASHLIB64}/bashlib64-core.bash" ||
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" ||
   exit 1
+
+#
+# Globals
+#
+
+# Lint / TestmanSH / Configuration
+export DEV_LINT_TESTMANSH_CFG="${DEV_PATH_ROOT}/.shellcheckrc"
 
 #
 # Functions
 #
 
-function dev_lint_bash() {
+function dev_lint_testmansh() {
   bl64_dbg_app_show_function "$@"
   local target="$*"
   local current=''
 
-  if [[ -z "$target" ]]; then
-    target="$(bl64_fs_find_files "$DEV_CICD_LINT_BASH_SOURCE")" ||
-      return $?
-  fi
+  [[ -z "$target" ]] && target="$DEV_LINT_TESTMANSH_SOURCE"
   for current in $target; do
     bl64_msg_show_phase "lint target: ${current}"
-    "$DEV_LIB_TESTMANSH_BIN" -t -a -V NONE -c "$current" ||
+    "$DEV_LIB_TESTMANSH_BIN" \
+      -t -a -V 'NONE' \
+      -c "$current" ||
       return $?
   done
+}
+
+function dev_lint_initialize() {
+  bl64_dbg_app_show_function
+  bl64_check_command_search_path "$DEV_LIB_TESTMANSH_BIN"
 }
 
 #
@@ -63,12 +76,8 @@ declare dev_lint_target="${*:-}"
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
 
-bl64_check_export 'DEV_CICD_LINT_BASH_CFG' &&
-  bl64_check_export 'DEV_LIB_TESTMANSH_BIN' &&
-  bl64_check_command_search_path "$DEV_LIB_TESTMANSH_BIN" ||
-  exit $?
-
 bl64_msg_all_enable_verbose
-bl64_msg_show_batch_start 'lint-bash'
-dev_lint_bash "$dev_lint_target"
-bl64_msg_show_batch_finish $? 'lint-bash'
+bl64_msg_show_batch_start 'dev-lint-testmansh'
+dev_lint_initialize &&
+  dev_lint_testmansh "$dev_lint_target"
+bl64_msg_show_batch_finish $? 'dev-lint-testmansh'
