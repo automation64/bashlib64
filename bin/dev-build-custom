@@ -211,15 +211,8 @@ function dev_build_check_requirements() {
 
   [[ -z "$command" ]] && dev_build_help return 1
 
-  bl64_check_export 'DEV_BUILD_CUSTOM_FULL_PATH_TEST' &&
-    bl64_check_export 'DEV_BUILD_CUSTOM_NAME_CORE' &&
-    bl64_check_export 'DEV_BUILD_CUSTOM_NAME_MODULE_CORE' &&
-    bl64_check_export 'DEV_BUILD_CUSTOM_NAME_MODULE' &&
-    bl64_check_export 'DEV_BUILD_CUSTOM_NAME_OPT' &&
-    bl64_check_export 'DEV_BUILD_CUSTOM_NAME_SA' &&
-    bl64_check_export 'DEV_ENV_CUSTOM_MODULES_CORE' &&
-    bl64_check_export 'DEV_ENV_CUSTOM_MODULES_OPT' &&
-    bl64_check_export 'DEV_BUILD_CUSTOM_FULL_PATH_RELEASE'
+  bl64_check_export 'DEV_ENV_CUSTOM_MODULES_CORE' &&
+    bl64_check_export 'DEV_ENV_CUSTOM_MODULES_OPT'
 }
 
 function dev_build_help() {

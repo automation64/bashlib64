@@ -39,6 +39,12 @@ export DEV_BUILD_CUSTOM_NAME_MODULE_CORE='bashlib64-module-core.bash'
 # Build / Custom / Target full path
 export DEV_BUILD_CUSTOM_FULL_PATH_TEST="${DEV_PATH_BUILD}/test"
 export DEV_BUILD_CUSTOM_FULL_PATH_RELEASE="${DEV_PATH_BUILD}/release"
+# Pack / Custom / Package name
+export DEV_PACK_CUSTOM_NAME_SA='bashlib64-stand-alone.tgz'
+export DEV_PACK_CUSTOM_NAME_SPLIT='bashlib64-split.tgz'
+export DEV_PACK_CUSTOM_NAME_MODULAR='bashlib64-modular.tgz'
+# Pack / Custom / Package name
+export DEV_PACK_CUSTOM_STORE="${DEV_PATH_BUILD}/pack"
 
 #
 # Locals
