@@ -153,15 +153,16 @@ function _bl64_py_set_command() {
 #######################################
 function _bl64_py_set_options() {
   bl64_dbg_lib_show_function
-  # Common sets - unversioned
-  BL64_PY_SET_PIP_VERBOSE='--verbose'
-  BL64_PY_SET_PIP_DEBUG='-vvv'
-  BL64_PY_SET_PIP_VERSION='--version'
-  BL64_PY_SET_PIP_UPGRADE='--upgrade'
-  BL64_PY_SET_PIP_USER='--user'
-  BL64_PY_SET_PIP_QUIET='--quiet'
-  BL64_PY_SET_PIP_SITE='--system-site-packages'
-  BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
+
+  # shellcheck disable=SC2034
+  BL64_PY_SET_PIP_VERBOSE='--verbose' &&
+    BL64_PY_SET_PIP_DEBUG='-vvv' &&
+    BL64_PY_SET_PIP_VERSION='--version' &&
+    BL64_PY_SET_PIP_UPGRADE='--upgrade' &&
+    BL64_PY_SET_PIP_USER='--user' &&
+    BL64_PY_SET_PIP_QUIET='--quiet' &&
+    BL64_PY_SET_PIP_SITE='--system-site-packages' &&
+    BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
 
   return 0
 }

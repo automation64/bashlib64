@@ -92,13 +92,13 @@ function _bl64_tf_set_command() {
 function _bl64_tf_set_options() {
   bl64_dbg_lib_show_function
 
-  # TF_LOG values
-  BL64_TF_SET_LOG_TRACE='TRACE'
-  BL64_TF_SET_LOG_DEBUG='DEBUG'
-  BL64_TF_SET_LOG_INFO='INFO'
-  BL64_TF_SET_LOG_WARN='WARN'
-  BL64_TF_SET_LOG_ERROR='ERROR'
-  BL64_TF_SET_LOG_OFF='OFF'
+  # shellcheck disable=SC2034
+  BL64_TF_SET_LOG_TRACE='TRACE' &&
+    BL64_TF_SET_LOG_DEBUG='DEBUG' &&
+    BL64_TF_SET_LOG_INFO='INFO' &&
+    BL64_TF_SET_LOG_WARN='WARN' &&
+    BL64_TF_SET_LOG_ERROR='ERROR' &&
+    BL64_TF_SET_LOG_OFF='OFF'
 }
 
 #######################################
@@ -143,9 +143,11 @@ function _bl64_tf_set_resources() {
   bl64_dbg_lib_show_function
 
   # Terraform configuration lock file name
+  # shellcheck disable=SC2034
   BL64_TF_DEF_PATH_LOCK='.terraform.lock.hcl'
 
   # Runtime directory created by terraform init
+  # shellcheck disable=SC2034
   BL64_TF_DEF_PATH_RUNTIME='.terraform'
 
   return 0
@@ -174,6 +176,7 @@ function _bl64_tf_set_version() {
   bl64_dbg_lib_show_vars 'cli_version'
 
   if [[ -n "$cli_version" ]]; then
+    # shellcheck disable=SC2034
     BL64_TF_VERSION_CLI="$cli_version"
   else
     bl64_msg_show_error "${_BL64_TF_TXT_ERROR_GET_VERSION} (${BL64_TF_CMD_TERRAFORM} --version)"

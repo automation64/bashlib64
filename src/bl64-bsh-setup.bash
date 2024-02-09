@@ -51,6 +51,7 @@ function bl64_bsh_setup() {
 function _bl64_bsh_set_version() {
   bl64_dbg_lib_show_function
 
+  # shellcheck disable=SC2034
   case "${BASH_VERSINFO[0]}" in
   4*) BL64_BSH_VERSION_BASH='4.0' ;;
   5*) BL64_BSH_VERSION_BASH='5.0' ;;

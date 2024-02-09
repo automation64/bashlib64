@@ -19,7 +19,6 @@ declare BL64_AWS_CLI_MODE='0700'
 declare BL64_AWS_CLI_HOME=''
 declare BL64_AWS_CLI_CONFIG=''
 declare BL64_AWS_CLI_CREDENTIALS=''
-declare BL64_AWS_CLI_TOKEN=''
 declare BL64_AWS_CLI_REGION=''
 
 declare BL64_AWS_SET_FORMAT_JSON=''

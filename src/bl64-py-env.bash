@@ -15,7 +15,6 @@ declare BL64_PY_VENV_PATH=''
 
 # Version info
 declare BL64_PY_VERSION_PYTHON3=''
-declare BL64_PY_VERSION_PIP3=''
 
 declare BL64_PY_SET_PIP_VERBOSE=''
 declare BL64_PY_SET_PIP_VERSION=''

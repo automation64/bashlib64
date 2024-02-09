@@ -1104,6 +1104,6 @@ function bl64_cnt_check_in_container() {
 function bl64_cnt_check_not_in_container() {
   bl64_dbg_lib_show_function
   bl64_cnt_is_inside_container || return 0
-  bl64_msg_show_error "${_BL64_CNT_TXT_ERROR_RUN_NOT IN_CONTAINER}"
+  bl64_msg_show_error "${_BL64_CNT_TXT_ERROR_RUN_NOT_IN_CONTAINER}"
   return $BL64_LIB_ERROR_TASK_REQUIREMENTS
 }

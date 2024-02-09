@@ -87,9 +87,10 @@ function _bl64_gcp_set_command() {
 function _bl64_gcp_set_options() {
   bl64_dbg_lib_show_function
 
-  BL64_GCP_SET_FORMAT_YAML='--format yaml'
-  BL64_GCP_SET_FORMAT_TEXT='--format text'
-  BL64_GCP_SET_FORMAT_JSON='--format json'
+  # shellcheck disable=SC2034
+  BL64_GCP_SET_FORMAT_YAML='--format yaml' &&
+    BL64_GCP_SET_FORMAT_TEXT='--format text' &&
+    BL64_GCP_SET_FORMAT_JSON='--format json'
 }
 
 #######################################

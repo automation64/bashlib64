@@ -20,8 +20,6 @@ declare BL64_OS_CMD_TEE=''
 declare BL64_OS_CMD_TRUE=''
 declare BL64_OS_CMD_UNAME=''
 
-declare BL64_OS_ALIAS_ID_USER=''
-
 declare BL64_OS_SET_LOCALE_ALL=''
 
 declare _BL64_OS_TXT_CHECK_OS_MATRIX='Please check the OS compatibility matrix for BashLib64'

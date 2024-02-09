@@ -2,6 +2,7 @@
 # BashLib64 / Module / Globals / Interact with Kubernetes
 #######################################
 
+# shellcheck disable=SC2034
 declare BL64_K8S_VERSION='3.0.0'
 
 declare BL64_K8S_MODULE='0'
