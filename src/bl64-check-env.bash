@@ -5,7 +5,6 @@
 # shellcheck disable=SC2034
 declare BL64_CHECK_VERSION='6.0.0'
 
-# shellcheck disable=SC2034
 declare BL64_CHECK_MODULE='0'
 
 declare _BL64_CHECK_TXT_PARAMETER_MISSING='required parameter is missing'

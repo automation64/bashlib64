@@ -5,7 +5,6 @@
 # shellcheck disable=SC2034
 declare BL64_TXT_VERSION='2.0.0'
 
-# shellcheck disable=SC2034
 declare BL64_TXT_MODULE='0'
 
 declare BL64_TXT_CMD_AWK_POSIX="$BL64_VAR_UNAVAILABLE"

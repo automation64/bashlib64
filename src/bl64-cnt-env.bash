@@ -5,7 +5,6 @@
 # shellcheck disable=SC2034
 declare BL64_CNT_VERSION='3.1.0'
 
-# shellcheck disable=SC2034
 declare BL64_CNT_MODULE='0'
 
 declare BL64_CNT_DRIVER_DOCKER='docker'

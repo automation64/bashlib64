@@ -5,7 +5,6 @@
 # shellcheck disable=SC2034
 declare BL64_FS_VERSION='5.0.0'
 
-# shellcheck disable=SC2034
 declare BL64_FS_MODULE='0'
 
 declare BL64_FS_PATH_TEMPORAL=''
@@ -62,11 +61,15 @@ declare BL64_FS_SET_RM_FORCE=''
 declare BL64_FS_SET_RM_RECURSIVE=''
 declare BL64_FS_SET_RM_VERBOSE=''
 
-declare BL64_FS_UMASK_RW_USER='u=rwx,g=,o='
-declare BL64_FS_UMASK_RW_GROUP='u=rwx,g=rwx,o='
-declare BL64_FS_UMASK_RW_ALL='u=rwx,g=rwx,o=rwx'
-declare BL64_FS_UMASK_RW_USER_RO_ALL='u=rwx,g=rx,o=rx'
-declare BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
+#
+# File permission modes
+#
+# shellcheck disable=SC2034
+declare BL64_FS_UMASK_RW_USER='u=rwx,g=,o=' &&
+  declare BL64_FS_UMASK_RW_GROUP='u=rwx,g=rwx,o=' &&
+  declare BL64_FS_UMASK_RW_ALL='u=rwx,g=rwx,o=rwx' &&
+  declare BL64_FS_UMASK_RW_USER_RO_ALL='u=rwx,g=rx,o=rx' &&
+  declare BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
 
 declare BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
 

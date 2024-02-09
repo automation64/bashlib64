@@ -5,7 +5,6 @@
 # shellcheck disable=SC2034
 declare BL64_RND_VERSION='2.0.0'
 
-# shellcheck disable=SC2034
 declare BL64_RND_MODULE='0'
 
 declare -i BL64_RND_LENGTH_1=1

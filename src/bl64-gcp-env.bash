@@ -5,7 +5,6 @@
 # shellcheck disable=SC2034
 declare BL64_GCP_VERSION='2.0.0'
 
-# shellcheck disable=SC2034
 declare BL64_GCP_MODULE='0'
 
 declare BL64_GCP_CMD_GCLOUD="$BL64_VAR_UNAVAILABLE"

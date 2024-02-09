@@ -5,7 +5,6 @@
 # shellcheck disable=SC2034
 declare BL64_ANS_VERSION='2.0.0'
 
-# shellcheck disable=SC2034
 declare BL64_ANS_MODULE='0'
 
 declare BL64_ANS_ENV_IGNORE=''

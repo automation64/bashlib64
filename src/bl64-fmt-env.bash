@@ -5,7 +5,6 @@
 # shellcheck disable=SC2034
 declare BL64_FMT_VERSION='3.0.0'
 
-# shellcheck disable=SC2034
 declare BL64_FMT_MODULE='0'
 
 declare _BL64_FMT_TXT_ERROR_VALUE_LIST_EMPTY='please provide at least one value to check against'

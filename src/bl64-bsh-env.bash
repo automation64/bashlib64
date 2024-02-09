@@ -5,7 +5,6 @@
 # shellcheck disable=SC2034
 declare BL64_BSH_VERSION='3.0.0'
 
-# shellcheck disable=SC2034
 declare BL64_BSH_MODULE='0'
 
 declare BL64_BSH_VERSION_BASH=''

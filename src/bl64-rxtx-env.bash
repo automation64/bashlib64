@@ -5,7 +5,6 @@
 # shellcheck disable=SC2034
 declare BL64_RXTX_VERSION='2.0.1'
 
-# shellcheck disable=SC2034
 declare BL64_RXTX_MODULE='0'
 
 declare BL64_RXTX_CMD_CURL=''

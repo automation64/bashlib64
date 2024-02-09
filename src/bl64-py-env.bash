@@ -5,7 +5,6 @@
 # shellcheck disable=SC2034
 declare BL64_PY_VERSION='3.0.0'
 
-# shellcheck disable=SC2034
 declare BL64_PY_MODULE='0'
 
 # Define placeholders for optional distro native python versions
