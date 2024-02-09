@@ -34,8 +34,10 @@ jobs:
         target:
           - "BASH_OS_REDHAT_A"
           - "BASH_OS_REDHAT_B"
+          - "BASH_OS_REDHAT_C"
+          - "BASH_OS_FEDORA_A"
+          - "BASH_OS_FEDORA_B"
           - "BASH_OS_DEBIAN"
-          - "BASH_OS_FEDORA"
           - "BASH_OS_UBUNTU"
           - "BASH_OS_OTHER"
     steps:
