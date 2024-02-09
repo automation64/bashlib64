@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- all
+  - Added Debian12 support
 - cnt
   - bl64_cnt_check_in_container,bl64_cnt_check_not_in_container: new check functions
 - os
