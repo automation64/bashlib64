@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - rxtx
   - Fixed module setup
+- msg
+  - bl64_msg_show_batch_finish: fixed wrong exit status when verbose=NONE
 
 ## [19.0.0]
 
