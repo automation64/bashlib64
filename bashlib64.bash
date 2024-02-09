@@ -589,7 +589,7 @@ declare _BL64_LOG_TXT_CREATE_REPOSITORY='create log repository'
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_MSG_VERSION='5.0.0'
+declare BL64_MSG_VERSION='5.0.1'
 
 declare BL64_MSG_MODULE='0'
 
@@ -2627,15 +2627,13 @@ function bl64_dbg_runtime_show_paths() {
 #   STDOUT: None
 #   STDERR: None
 # Returns:
-#   0: always ok
+#   exit status from previous command
 #######################################
 function bl64_dbg_app_trace_stop() {
   local -i state=$?
   bl64_dbg_app_trace_enabled || return $state
-
   set +x
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
-
   return $state
 }
 
@@ -2652,10 +2650,8 @@ function bl64_dbg_app_trace_stop() {
 #######################################
 function bl64_dbg_app_trace_start() {
   bl64_dbg_app_trace_enabled || return 0
-
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_START}"
   set -x
-
   return 0
 }
 
@@ -3926,7 +3922,7 @@ function bl64_msg_show_batch_start() {
 # Display batch process complete message
 #
 # * Use in the main section of task oriented scripts to show start/end of batch process
-# * Can be used as last command in shell script to both show status and return exit status
+# * Can be used as last command in shell script to both show result and return exit status
 #
 # Arguments:
 #   $1: process exit status
@@ -3939,12 +3935,14 @@ function bl64_msg_show_batch_start() {
 #   >0: printf error
 #######################################
 function bl64_msg_show_batch_finish() {
-  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function "$@"
   local -i status=$1
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function "$@"
   local message="${2-}"
 
+  # shellcheck disable=SC2086
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${status}:${message}" &&
-    bl64_msg_app_verbose_enabled || return 0
+    bl64_msg_app_verbose_enabled ||
+    return $status
 
   if ((status == 0)); then
     _bl64_msg_print "$BL64_MSG_TYPE_BATCHOK" "$_BL64_MSG_TXT_BATCH" "[${message}] ${_BL64_MSG_TXT_BATCH_FINISH_OK}"
