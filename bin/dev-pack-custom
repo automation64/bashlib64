@@ -70,6 +70,10 @@ function dev_pack_custom() {
 function dev_pack_initialize() {
   bl64_dbg_app_show_function
   bl64_arc_setup &&
+    bl64_check_export 'DEV_PACK_CUSTOM_NAME_SA' &&
+    bl64_check_export 'DEV_PACK_CUSTOM_NAME_SPLIT' &&
+    bl64_check_export 'DEV_PACK_CUSTOM_NAME_MODULAR' &&
+    bl64_check_export 'DEV_PACK_CUSTOM_STORE' &&
     bl64_check_export 'DEV_BUILD_CUSTOM_FULL_PATH_RELEASE' &&
     bl64_check_directory "$DEV_BUILD_CUSTOM_FULL_PATH_RELEASE"
 }
