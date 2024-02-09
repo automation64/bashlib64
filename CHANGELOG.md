@@ -9,11 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- cnt
+  - bl64_cnt_check_in_container,bl64_cnt_check_not_in_container: new check functions
 - os
-  - bl64_os_run_sleep: added function
+  - bl64_os_run_sleep: new wrapper function
 
 ### Changed
 
+- core
+  - Add to the auto-setup task remaining optional modules that do not require init parameters
 - py
   - Optimized command detection
 
