@@ -1,0 +1,45 @@
+---
+# Template: 3.2.1
+name: "Test / TestManSH / Cloud"
+
+env:
+  DEV_CICD_DEBUG: ""
+
+on:
+  pull_request:
+    branches:
+      - "main"
+  push:
+    branches:
+      - "feature/**"
+    paths:
+      - "src/*-aws-*"
+      - "src/*-gcp-*"
+      - "test/batscore/cloud/**"
+
+jobs:
+  test-testmansh-cloud:
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - "CLOUD"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare dev environment"
+        run: "./bin/dev-lib-installer64 && ./bin/dev-lib-testmansh"
+
+      - name: "Build app"
+        run: "./bin/dev-build-custom -t"
+
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: |
+          source ./bin/dev-set &&
+          source ./bin/dev-env-custom &&
+          ./bin/dev-test-testmansh "$DEV_TEST_TESTMANSH_CONTAINER_${{matrix.target}}" "$DEV_TEST_TESTMANSH_CASES_${{matrix.target}}"
+...
