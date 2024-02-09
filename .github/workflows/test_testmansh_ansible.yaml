@@ -1,5 +1,5 @@
 ---
-# Template: 3.2.0
+# Template: 3.2.1
 name: "Test / TestManSH / Ansible"
 
 env:

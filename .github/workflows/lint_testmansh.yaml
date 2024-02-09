@@ -1,5 +1,5 @@
 ---
-# Template: 4.3.0
+# Template: 4.3.1
 name: "Lint / TestManSH"
 
 env:
@@ -30,5 +30,6 @@ jobs:
         run: "./bin/dev-build-custom -t"
 
       - name: "Lint app"
+        shell: 'script -q -e -c "bash {0}"'
         run: "./bin/dev-lint-testmansh"
 ...
