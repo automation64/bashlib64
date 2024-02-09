@@ -63,7 +63,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_FALSE='/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
-    BL64_OS_CMD_SLEEP='/usr/bin/sleep'
+    BL64_OS_CMD_SLEEP='/bin/sleep'
     BL64_OS_CMD_TEE='/usr/bin/tee'
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
