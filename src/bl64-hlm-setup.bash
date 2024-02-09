@@ -27,6 +27,7 @@ function bl64_hlm_setup() {
       return $?
   fi
 
+  # shellcheck disable=SC2034
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
@@ -94,10 +95,11 @@ function _bl64_hlm_set_command() {
 function _bl64_hlm_set_options() {
   bl64_dbg_lib_show_function
 
-  BL64_HLM_SET_DEBUG='--debug'
-  BL64_HLM_SET_OUTPUT_TABLE='--output table'
-  BL64_HLM_SET_OUTPUT_JSON='--output json'
-  BL64_HLM_SET_OUTPUT_YAML='--output yaml'
+  # shellcheck disable=SC2034
+  BL64_HLM_SET_DEBUG='--debug' &&
+    BL64_HLM_SET_OUTPUT_TABLE='--output table' &&
+    BL64_HLM_SET_OUTPUT_JSON='--output json' &&
+    BL64_HLM_SET_OUTPUT_YAML='--output yaml'
 }
 
 #######################################

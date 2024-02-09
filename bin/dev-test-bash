@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 #######################################
-# Run test-cases
+# Dev / Test / Bash / Simple test runner
 #
-# * Test cases are done using bats-core
-# * TestManSH is used to manage test environment
-# * Tests are located in the default path "test/batscore"
-# * Template: 2.2.0
+# * Run tests in test/bash using containers
+# * Version: 1.0.0
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -24,124 +22,94 @@
 #######################################
 
 #
+# Globals
+#
+
+# Dev / Test / Base / Flag for marking container environment
+export _DEV_TEST_BASH_CONTAINER_ENVIRONMENT='OFF'
+
+#
 # Imports
 #
 
 # shellcheck source=bin/dev-set
-source ./bin/dev-set || exit 1
-# shellcheck source=lib/bl64/bashlib64-core.bash
-source "${DEV_CICD_BASHLIB64}/bashlib64-core.bash" || exit 1
+source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+# shellcheck source-path=bin
+source ./bin/dev-env-bash || exit 1
+# shellcheck source-path=lib/bl64
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-cnt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
 #
 # Functions
 #
 
-function dev_test_bash_ansible() {
-  bl64_dbg_lib_show_function
-  "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$DEV_TEST_CONTAINER_ANSIBLE" -c "$DEV_TEST_CASE_ANSIBLE"
+function dev_test_run() {
+  bl64_dbg_app_show_function "$@"
+  local container_path="$1"
+  local test_file="$2"
+
+  bl64_msg_show_phase "run test target: ${test_file}"
+  # shellcheck disable=SC2086
+  bl64_cnt_run \
+    $BL64_CNT_SET_RM \
+    $BL64_CNT_SET_TTY \
+    --env=_DEV_TEST_BASH_CONTAINER_ENVIRONMENT='ON' \
+    --workdir="$DEV_ENV_BASH_CONTAINER_PATH_ROOT" \
+    --mount "type=bind,source=${DEV_PATH_SRC},target=${DEV_ENV_BASH_CONTAINER_PATH_SRC},readonly" \
+    --mount "type=bind,source=${DEV_PATH_ROOT},target=${DEV_ENV_BASH_CONTAINER_PATH_ROOT},readonly" \
+    --mount "type=bind,source=${DEV_PATH_TEST},target=${DEV_ENV_BASH_CONTAINER_PATH_TEST},readonly" \
+    --entrypoint="${DEV_ENV_BASH_CONTAINER_PATH_ROOT}/${test_file}" \
+    "${DEV_ENV_BASH_REGISTRY}/${container_path}" ||
+    return $?
 }
 
-function dev_test_bash_cloud() {
-  bl64_dbg_lib_show_function
-  "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$DEV_TEST_CONTAINER_CLOUD" -c "$DEV_TEST_CASE_CLOUD"
-}
+function dev_test_bash() {
+  bl64_dbg_app_show_function "$@"
+  local container="$1"
+  shift
+  local target="$*"
+  local current=''
+  local tests=''
 
-function dev_test_bash_container() {
-  bl64_dbg_lib_show_function
-  local target=''
-  for target in $DEV_TEST_CONTAINER_CONTAINER; do
-    "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$target" -c "$DEV_TEST_CASE_CONTAINER" || exit $?
+  bl64_dbg_app_show_comments 'define target tests'
+  if [[ -z "$target" ]]; then
+    target="$DEV_TEST_BASH_CASES"
+  fi
+  if [[ -d "$target" ]]; then
+    bl64_dbg_app_show_comments "look for tests (${target})"
+    tests="$(bl64_fs_find_files "$target")" ||
+      return $?
+  else
+    tests="$target"
+  fi
+  bl64_msg_show_info "test container: ${container}"
+  for current in $tests; do
+    dev_test_run "${container}" "$current" ||
+      return $?
   done
 }
 
-function dev_test_bash_kubernetes() {
-  bl64_dbg_lib_show_function
-  "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$DEV_TEST_CONTAINER_KUBERNETES" -c "$DEV_TEST_CASE_KUBERNETES"
-}
-
-function dev_test_bash_mongodb() {
-  bl64_dbg_lib_show_function
-  "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$DEV_TEST_CONTAINER_MONGODB" -c "$DEV_TEST_CASE_MONGODB"
-}
-
-function dev_test_bash_non_os() {
-  bl64_dbg_lib_show_function
-  "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$DEV_TEST_CONTAINER_NON_OS" -c "$DEV_TEST_CASE_NON_OS"
-}
-
-function dev_test_bash_opt() {
-  bl64_dbg_lib_show_function
-  "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$DEV_TEST_CONTAINER_OPT" -c "$DEV_TEST_CASE_OPT"
-}
-
-function dev_test_bash_terraform() {
-  bl64_dbg_lib_show_function
-  "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$DEV_TEST_CONTAINER_TERRAFORM" -c "$DEV_TEST_CASE_TERRAFORM"
-}
-
-function dev_test_bash_os() {
-  bl64_dbg_lib_show_function "$@"
-  local family="$1"
-  local target=''
-  case "$family" in
-  'single')
-    for target in $DEV_TEST_CONTAINER_OS_SINGLE; do
-      "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$target" -c "$DEV_TEST_CASE_OS" || exit $?
-    done
-    ;;
-  'fedora')
-    for target in $DEV_TEST_CONTAINER_OS_FEDORA; do
-      "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$target" -c "$DEV_TEST_CASE_OS" || exit $?
-    done
-    ;;
-  'redhat')
-    for target in $DEV_TEST_CONTAINER_OS_REDHAT; do
-      "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$target" -c "$DEV_TEST_CASE_OS" || exit $?
-    done
-    ;;
-  'debian')
-    for target in $DEV_TEST_CONTAINER_OS_DEBIAN; do
-      "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$target" -c "$DEV_TEST_CASE_OS" || exit $?
-    done
-    ;;
-  'other')
-    for target in $DEV_TEST_CONTAINER_OS_OTHER; do
-      "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$target" -c "$DEV_TEST_CASE_OS" || exit $?
-    done
-    ;;
-  'reduced')
-    for target in $DEV_TEST_CONTAINER_OS_REDUCED; do
-      "$DEV_LIB_TESTMANSH_BIN" -b -a -e "$target" -c "$DEV_TEST_CASE_OS" || exit $?
-    done
-    ;;
-  *) bl64_check_alert_undefined "$family" ;;
-  esac
+function dev_test_initialize() {
+  bl64_dbg_app_show_function
+  bl64_cnt_setup
 }
 
 #
 # Main
 #
 
-declare dev_test_group="${1:-os}"
-declare dev_test_family="${2:-other}"
+declare dev_test_container="${1:-${DEV_TEST_BASH_CONTAINER}}"
+shift
+declare dev_test_target="${*:-}"
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
 
-bl64_check_export 'DEV_LIB_TESTMANSH_BIN' ||
-  exit $?
-
 bl64_msg_all_enable_verbose
-bl64_msg_show_batch_start 'test-bash'
-case "$dev_test_group" in
-'ansible') dev_test_bash_ansible ;;
-'cloud') dev_test_bash_cloud ;;
-'container') dev_test_bash_container ;;
-'kubernetes') dev_test_bash_kubernetes ;;
-'mongodb') dev_test_bash_mongodb ;;
-'non_os') dev_test_bash_non_os ;;
-'opt') dev_test_bash_opt ;;
-'os') dev_test_bash_os "$dev_test_family" ;;
-'terraform') dev_test_bash_terraform ;;
-*) bl64_check_alert_undefined "$dev_test_group" ;;
-esac
-bl64_msg_show_batch_finish $? 'test-bash'
+bl64_msg_show_batch_start 'dev-test-bash'
+dev_test_initialize &&
+  dev_test_bash "$dev_test_container" "$dev_test_target"
+bl64_msg_show_batch_finish $? 'dev-test-bash'

@@ -2,6 +2,7 @@
 # BashLib64 / Module / Globals / Write messages to logs
 #######################################
 
+# shellcheck disable=SC2034
 declare BL64_LOG_VERSION='2.1.1'
 
 declare BL64_LOG_MODULE='0'

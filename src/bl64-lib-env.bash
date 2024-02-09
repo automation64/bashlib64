@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-declare BL64_VERSION='19.0.0'
+declare BL64_VERSION='19.1.0'
 
 #
 # Imported shell standard variables
@@ -30,13 +30,14 @@ declare BL64_VAR_UNAVAILABLE='_UNV_'
 declare BL64_VAR_NULL='_NULL_'
 
 # Logical values
-declare BL64_VAR_TRUE='0'
-declare BL64_VAR_FALSE='1'
-declare BL64_VAR_ON='1'
-declare BL64_VAR_OFF='0'
-declare BL64_VAR_OK='0'
-declare BL64_VAR_NONE='_NONE_'
-declare BL64_VAR_ALL='_ALL_'
+# shellcheck disable=SC2034
+declare BL64_VAR_TRUE='0' &&
+  declare BL64_VAR_FALSE='1' &&
+  declare BL64_VAR_ON='1' &&
+  declare BL64_VAR_OFF='0' &&
+  declare BL64_VAR_OK='0' &&
+  declare BL64_VAR_NONE='_NONE_' &&
+  declare BL64_VAR_ALL='_ALL_'
 
 #
 # Global settings
@@ -68,69 +69,80 @@ declare BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
 #
 
 # Application reserved. Not used by bashlib64
-declare -i BL64_LIB_ERROR_APP_1=1
-declare -i BL64_LIB_ERROR_APP_2=2
+# shellcheck disable=SC2034
+declare -i BL64_LIB_ERROR_APP_1=1 &&
+  declare -i BL64_LIB_ERROR_APP_2=2
 
 # Parameters
-declare -i BL64_LIB_ERROR_PARAMETER_INVALID=3
-declare -i BL64_LIB_ERROR_PARAMETER_MISSING=4
-declare -i BL64_LIB_ERROR_PARAMETER_RANGE=5
-declare -i BL64_LIB_ERROR_PARAMETER_EMPTY=6
+# shellcheck disable=SC2034
+declare -i BL64_LIB_ERROR_PARAMETER_INVALID=3 &&
+  declare -i BL64_LIB_ERROR_PARAMETER_MISSING=4 &&
+  declare -i BL64_LIB_ERROR_PARAMETER_RANGE=5 &&
+  declare -i BL64_LIB_ERROR_PARAMETER_EMPTY=6
 
 # Function operation
-declare -i BL64_LIB_ERROR_TASK_FAILED=10
-declare -i BL64_LIB_ERROR_TASK_BACKUP=11
-declare -i BL64_LIB_ERROR_TASK_RESTORE=12
-declare -i BL64_LIB_ERROR_TASK_TEMP=13
-declare -i BL64_LIB_ERROR_TASK_UNDEFINED=14
+# shellcheck disable=SC2034
+declare -i BL64_LIB_ERROR_TASK_FAILED=10 &&
+  declare -i BL64_LIB_ERROR_TASK_BACKUP=11 &&
+  declare -i BL64_LIB_ERROR_TASK_RESTORE=12 &&
+  declare -i BL64_LIB_ERROR_TASK_TEMP=13 &&
+  declare -i BL64_LIB_ERROR_TASK_UNDEFINED=14 &&
+  declare -i BL64_LIB_ERROR_TASK_REQUIREMENTS=15
 
 # Module operation
-declare -i BL64_LIB_ERROR_MODULE_SETUP_INVALID=20
-declare -i BL64_LIB_ERROR_MODULE_SETUP_MISSING=21
-declare -i BL64_LIB_ERROR_MODULE_NOT_IMPORTED=22
+# shellcheck disable=SC2034
+declare -i BL64_LIB_ERROR_MODULE_SETUP_INVALID=20 &&
+  declare -i BL64_LIB_ERROR_MODULE_SETUP_MISSING=21 &&
+  declare -i BL64_LIB_ERROR_MODULE_NOT_IMPORTED=22
 
 # OS
-declare -i BL64_LIB_ERROR_OS_NOT_MATCH=30
-declare -i BL64_LIB_ERROR_OS_TAG_INVALID=31
-declare -i BL64_LIB_ERROR_OS_INCOMPATIBLE=32
-declare -i BL64_LIB_ERROR_OS_BASH_VERSION=33
+# shellcheck disable=SC2034
+declare -i BL64_LIB_ERROR_OS_NOT_MATCH=30 &&
+  declare -i BL64_LIB_ERROR_OS_TAG_INVALID=31 &&
+  declare -i BL64_LIB_ERROR_OS_INCOMPATIBLE=32 &&
+  declare -i BL64_LIB_ERROR_OS_BASH_VERSION=33
 
 # External commands
-declare -i BL64_LIB_ERROR_APP_INCOMPATIBLE=40
-declare -i BL64_LIB_ERROR_APP_MISSING=41
+# shellcheck disable=SC2034
+declare -i BL64_LIB_ERROR_APP_INCOMPATIBLE=40 &&
+  declare -i BL64_LIB_ERROR_APP_MISSING=41
 
 # Filesystem
-declare -i BL64_LIB_ERROR_FILE_NOT_FOUND=50
-declare -i BL64_LIB_ERROR_FILE_NOT_READ=51
-declare -i BL64_LIB_ERROR_FILE_NOT_EXECUTE=52
-declare -i BL64_LIB_ERROR_DIRECTORY_NOT_FOUND=53
-declare -i BL64_LIB_ERROR_DIRECTORY_NOT_READ=54
-declare -i BL64_LIB_ERROR_PATH_NOT_RELATIVE=55
-declare -i BL64_LIB_ERROR_PATH_NOT_ABSOLUTE=56
-declare -i BL64_LIB_ERROR_PATH_NOT_FOUND=57
-declare -i BL64_LIB_ERROR_PATH_PRESENT=58
+# shellcheck disable=SC2034
+declare -i BL64_LIB_ERROR_FILE_NOT_FOUND=50 &&
+  declare -i BL64_LIB_ERROR_FILE_NOT_READ=51 &&
+  declare -i BL64_LIB_ERROR_FILE_NOT_EXECUTE=52 &&
+  declare -i BL64_LIB_ERROR_DIRECTORY_NOT_FOUND=53 &&
+  declare -i BL64_LIB_ERROR_DIRECTORY_NOT_READ=54 &&
+  declare -i BL64_LIB_ERROR_PATH_NOT_RELATIVE=55 &&
+  declare -i BL64_LIB_ERROR_PATH_NOT_ABSOLUTE=56 &&
+  declare -i BL64_LIB_ERROR_PATH_NOT_FOUND=57 &&
+  declare -i BL64_LIB_ERROR_PATH_PRESENT=58
 
 # IAM
-declare -i BL64_LIB_ERROR_PRIVILEGE_IS_ROOT=60
-declare -i BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT=61
-declare -i BL64_LIB_ERROR_USER_NOT_FOUND=62
-#declare -i BL64_LIB_ERROR_GROUP_NOT_FOUND=63
+# shellcheck disable=SC2034
+declare -i BL64_LIB_ERROR_PRIVILEGE_IS_ROOT=60 &&
+  declare -i BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT=61 &&
+  declare -i BL64_LIB_ERROR_USER_NOT_FOUND=62 &&
+  declare -i BL64_LIB_ERROR_GROUP_NOT_FOUND=63
 
 # General
-declare -i BL64_LIB_ERROR_EXPORT_EMPTY=70
-declare -i BL64_LIB_ERROR_EXPORT_SET=71
-declare -i BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED=72
-declare -i BL64_LIB_ERROR_CHECK_FAILED=80
-declare -i BL64_LIB_ERROR_IS_NOT=85
+# shellcheck disable=SC2034
+declare -i BL64_LIB_ERROR_EXPORT_EMPTY=70 &&
+  declare -i BL64_LIB_ERROR_EXPORT_SET=71 &&
+  declare -i BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED=72 &&
+  declare -i BL64_LIB_ERROR_CHECK_FAILED=80 &&
+  declare -i BL64_LIB_ERROR_IS_NOT=85
 
 #
 # Script Identify
 #
 
-declare BL64_SCRIPT_PATH=''
-declare BL64_SCRIPT_NAME=''
-declare BL64_SCRIPT_SID=''
-declare BL64_SCRIPT_ID=''
+# shellcheck disable=SC2034
+declare BL64_SCRIPT_PATH='' &&
+  declare BL64_SCRIPT_NAME='' &&
+  declare BL64_SCRIPT_SID='' &&
+  declare BL64_SCRIPT_ID=''
 
 #
 # Set Signal traps

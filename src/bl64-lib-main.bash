@@ -15,7 +15,7 @@ if bl64_lib_mode_strict_is_enabled; then
   set -o 'privileged'
 fi
 
-# Initialize common modules
+# Initialize optional modules that do not require setup parameters
 [[ -n "${BL64_DBG_MODULE:-}" ]] && { bl64_dbg_setup || exit $?; }
 [[ -n "${BL64_CHECK_MODULE:-}" ]] && { bl64_check_setup || exit $?; }
 [[ -n "${BL64_MSG_MODULE:-}" ]] && { bl64_msg_setup || exit $?; }
@@ -31,6 +31,11 @@ fi
 [[ -n "${BL64_RXTX_MODULE:-}" ]] && { bl64_rxtx_setup || exit $?; }
 [[ -n "${BL64_API_MODULE:-}" ]] && { bl64_api_setup || exit $?; }
 [[ -n "${BL64_VCS_MODULE:-}" ]] && { bl64_vcs_setup || exit $?; }
+[[ -n "${BL64_ARC_MODULE:-}" ]] && { bl64_arc_setup || exit $?; }
+[[ -n "${BL64_PKG_MODULE:-}" ]] && { bl64_pkg_setup || exit $?; }
+[[ -n "${BL64_RND_MODULE:-}" ]] && { bl64_rnd_setup || exit $?; }
+[[ -n "${BL64_TM_MODULE:-}" ]] && { bl64_tm_setup || exit $?; }
+[[ -n "${BL64_UI_MODULE:-}" ]] && { bl64_ui_setup || exit $?; }
 
 # Set signal handlers
 # shellcheck disable=SC2064

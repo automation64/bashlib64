@@ -27,6 +27,7 @@ function bl64_k8s_setup() {
       return $?
   fi
 
+  # shellcheck disable=SC2034
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
@@ -95,6 +96,7 @@ function _bl64_k8s_set_command() {
 function _bl64_k8s_set_options() {
   bl64_dbg_lib_show_function
 
+  # shellcheck disable=SC2034
   case "$BL64_K8S_VERSION_KUBECTL" in
   1.2?)
     BL64_K8S_SET_VERBOSE_NONE='--v=0'

@@ -38,6 +38,7 @@ function bl64_aws_setup() {
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
+  # shellcheck disable=SC2034
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
@@ -107,15 +108,16 @@ function _bl64_aws_set_command() {
 function _bl64_aws_set_options() {
   bl64_dbg_lib_show_function
 
-  BL64_AWS_SET_FORMAT_JSON='--output json'
-  BL64_AWS_SET_FORMAT_TEXT='--output text'
-  BL64_AWS_SET_FORMAT_TABLE='--output table'
-  BL64_AWS_SET_FORMAT_YAML='--output yaml'
-  BL64_AWS_SET_FORMAT_STREAM='--output yaml-stream'
-  BL64_AWS_SET_DEBUG='--debug'
-  BL64_AWS_SET_OUPUT_NO_PAGER='--no-cli-pager'
-  BL64_AWS_SET_OUPUT_NO_COLOR='--color off'
-  BL64_AWS_SET_INPUT_NO_PROMPT='--no-cli-auto-prompt'
+  # shellcheck disable=SC2034
+  BL64_AWS_SET_FORMAT_JSON='--output json' &&
+    BL64_AWS_SET_FORMAT_TEXT='--output text' &&
+    BL64_AWS_SET_FORMAT_TABLE='--output table' &&
+    BL64_AWS_SET_FORMAT_YAML='--output yaml' &&
+    BL64_AWS_SET_FORMAT_STREAM='--output yaml-stream' &&
+    BL64_AWS_SET_DEBUG='--debug' &&
+    BL64_AWS_SET_OUPUT_NO_PAGER='--no-cli-pager' &&
+    BL64_AWS_SET_OUPUT_NO_COLOR='--color off' &&
+    BL64_AWS_SET_INPUT_NO_PROMPT='--no-cli-auto-prompt'
 
   return 0
 }

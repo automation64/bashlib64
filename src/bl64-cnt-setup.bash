@@ -22,6 +22,7 @@ function bl64_cnt_setup() {
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
 
+  # shellcheck disable=SC2034
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
@@ -114,21 +115,22 @@ function _bl64_cnt_set_options() {
   # * Common to both podman and docker
   #
 
-  BL64_CNT_SET_DEBUG='--debug'
-  BL64_CNT_SET_ENTRYPOINT='--entrypoint'
-  BL64_CNT_SET_FILE='--file'
-  BL64_CNT_SET_FILTER='--filter'
-  BL64_CNT_SET_INTERACTIVE='--interactive'
-  BL64_CNT_SET_LOG_LEVEL='--log-level'
-  BL64_CNT_SET_NO_CACHE='--no-cache'
-  BL64_CNT_SET_PASSWORD_STDIN='--password-stdin'
-  BL64_CNT_SET_PASSWORD='--password'
-  BL64_CNT_SET_QUIET='--quiet'
-  BL64_CNT_SET_RM='--rm'
-  BL64_CNT_SET_TAG='--tag'
-  BL64_CNT_SET_TTY='--tty'
-  BL64_CNT_SET_USERNAME='--username'
-  BL64_CNT_SET_VERSION='version'
+  # shellcheck disable=SC2034
+  BL64_CNT_SET_DEBUG='--debug' &&
+    BL64_CNT_SET_ENTRYPOINT='--entrypoint' &&
+    BL64_CNT_SET_FILE='--file' &&
+    BL64_CNT_SET_FILTER='--filter' &&
+    BL64_CNT_SET_INTERACTIVE='--interactive' &&
+    BL64_CNT_SET_LOG_LEVEL='--log-level' &&
+    BL64_CNT_SET_NO_CACHE='--no-cache' &&
+    BL64_CNT_SET_PASSWORD_STDIN='--password-stdin' &&
+    BL64_CNT_SET_PASSWORD='--password' &&
+    BL64_CNT_SET_QUIET='--quiet' &&
+    BL64_CNT_SET_RM='--rm' &&
+    BL64_CNT_SET_TAG='--tag' &&
+    BL64_CNT_SET_TTY='--tty' &&
+    BL64_CNT_SET_USERNAME='--username' &&
+    BL64_CNT_SET_VERSION='version'
 
   #
   # Common parameter values
@@ -136,12 +138,13 @@ function _bl64_cnt_set_options() {
   # * Common to both podman and docker
   #
 
-  BL64_CNT_SET_FILTER_ID='{{.ID}}'
-  BL64_CNT_SET_FILTER_NAME='{{.Names}}'
-  BL64_CNT_SET_LOG_LEVEL_DEBUG='debug'
-  BL64_CNT_SET_LOG_LEVEL_ERROR='error'
-  BL64_CNT_SET_LOG_LEVEL_INFO='info'
-  BL64_CNT_SET_STATUS_RUNNING='running'
+  # shellcheck disable=SC2034
+  BL64_CNT_SET_FILTER_ID='{{.ID}}' &&
+    BL64_CNT_SET_FILTER_NAME='{{.Names}}' &&
+    BL64_CNT_SET_LOG_LEVEL_DEBUG='debug' &&
+    BL64_CNT_SET_LOG_LEVEL_ERROR='error' &&
+    BL64_CNT_SET_LOG_LEVEL_INFO='info' &&
+    BL64_CNT_SET_STATUS_RUNNING='running'
 
   return 0
 }
@@ -166,6 +169,7 @@ function _bl64_cnt_set_options() {
 function bl64_cnt_set_paths() {
   bl64_dbg_lib_show_function "$@"
 
+  # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'

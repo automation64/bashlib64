@@ -21,6 +21,7 @@ function bl64_rxtx_setup() {
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
 
+  # shellcheck disable=SC2034
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
@@ -94,7 +95,7 @@ function _bl64_rxtx_set_options() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_DEB}-9.* | ${BL64_OS_UB}-18.* | ${BL64_OS_DEB}-10.* | ${BL64_OS_DEB}-11.*)
+  ${BL64_OS_UB}-18.* | ${BL64_OS_DEB}-9.* | ${BL64_OS_DEB}-10.* | ${BL64_OS_DEB}-11.*)
     BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
@@ -109,7 +110,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_SECURE='--no-config'
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_UB}-* | ${BL64_OS_UB}-* | ${BL64_OS_UB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
@@ -220,6 +221,7 @@ function _bl64_rxtx_set_options() {
 #######################################
 function _bl64_rxtx_set_alias() {
   bl64_dbg_lib_show_function
+  # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"

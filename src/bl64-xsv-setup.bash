@@ -20,6 +20,7 @@ function bl64_xsv_setup() {
     return 21
   local search_paths=("${@:-}")
 
+  # shellcheck disable=SC2034
   bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
     bl64_lib_module_imported 'BL64_CHECK_MODULE' &&

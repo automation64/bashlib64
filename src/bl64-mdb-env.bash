@@ -2,6 +2,7 @@
 # BashLib64 / Module / Setup / Interact with MongoDB
 #######################################
 
+# shellcheck disable=SC2034
 declare BL64_MDB_VERSION='2.0.0'
 
 declare BL64_MDB_MODULE='0'

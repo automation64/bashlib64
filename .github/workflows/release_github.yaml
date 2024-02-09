@@ -1,10 +1,10 @@
 ---
-# Template: 1.0.1
-name: "Release"
+# Template: 1.0.0
+name: "Release / GitHub"
 
 env:
   DEV_CICD_DEBUG: ""
-  DEV_LIB_GH_BIN: "gh"
+  DEV_LIB_GITHUB_BIN: "gh"
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
       - "v?[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
-  release:
+  release-github:
     runs-on: "ubuntu-latest"
     permissions: "write-all"
     steps:
@@ -21,16 +21,16 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare dev environment"
-        run: "./bin/dev-lib-installer64 && ./bin/dev-lib-bashlib64"
+        run: "./bin/dev-lib-installer64"
 
       - name: "Build app for release"
-        run: "./bin/dev-build-bash -r"
+        run: "./bin/dev-build-custom -r"
 
       - name: "Create distributable packages"
-        run: "./bin/dev-pack"
+        run: "./bin/dev-pack-custom"
 
-      - name: "Create GitHub release"
-        run: "./bin/dev-release ${GITHUB_REF_NAME}"
+      - name: "Create release"
+        run: "./bin/dev-release-github ${GITHUB_REF_NAME}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ...

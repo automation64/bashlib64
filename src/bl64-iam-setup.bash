@@ -21,6 +21,7 @@ function bl64_iam_setup() {
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
 
+  # shellcheck disable=SC2034
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
@@ -95,6 +96,7 @@ function _bl64_iam_set_command() {
 function _bl64_iam_set_alias() {
   bl64_dbg_lib_show_function
 
+  # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"

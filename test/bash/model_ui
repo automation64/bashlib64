@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
 . bin/dev-set
-. "${DEV_BUILD_FULL_PATH_TEST}/${DEV_BUILD_NAME_SA}"
+. "${DEV_BUILD_CUSTOM_FULL_PATH_TEST}/${DEV_BUILD_CUSTOM_NAME_SA}"
 
 bl64_ui_ask_confirmation

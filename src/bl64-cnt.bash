@@ -1069,3 +1069,41 @@ function _bl64_cnt_podman_ps_filter() {
     ps \
     ${filter} ${filter_status} --format "$format"
 }
+
+#######################################
+# Check that the script is running inside a container
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_TASK_REQUIREMENTS
+#######################################
+function bl64_cnt_check_in_container() {
+  bl64_dbg_lib_show_function
+  bl64_cnt_is_inside_container && return 0
+  bl64_msg_show_error "${_BL64_CNT_TXT_ERROR_RUN_IN_CONTAINER}"
+  return $BL64_LIB_ERROR_TASK_REQUIREMENTS
+}
+
+#######################################
+# Check that the script is not running inside a container
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_TASK_REQUIREMENTS
+#######################################
+function bl64_cnt_check_not_in_container() {
+  bl64_dbg_lib_show_function
+  bl64_cnt_is_inside_container || return 0
+  bl64_msg_show_error "${_BL64_CNT_TXT_ERROR_RUN_NOT_IN_CONTAINER}"
+  return $BL64_LIB_ERROR_TASK_REQUIREMENTS
+}

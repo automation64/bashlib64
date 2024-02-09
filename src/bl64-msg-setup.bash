@@ -22,6 +22,7 @@ function bl64_msg_setup() {
     return 21
   bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function
 
+  # shellcheck disable=SC2034
   bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
     bl64_lib_module_imported 'BL64_CHECK_MODULE' &&

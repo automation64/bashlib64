@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #######################################
-# Duplicate content from one GIT repository to other
+# Dev / GIT / Duplicate content from one GIT repository to other
 #
 # * Both repositories are independant from each other: they don't share the same origin
 # * Duplication will add and remove files from destination as needed
 # * Excluded from duplication: GIT metadata (.git) and temporary locations (tmp, lib)
 # * Operation is done using rsync tool
-# * Template: 3.0.0
+# * Version: 3.2.0
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -29,32 +29,34 @@
 #
 
 # shellcheck source=bin/dev-set
-source ./bin/dev-set || exit 1
-# shellcheck source=lib/bl64/bashlib64.bash
-source "${DEV_CICD_BASHLIB64}/bashlib64.bash" || exit 1
+source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+# shellcheck source-path=bin
+source ./bin/dev-env-git || exit 1
+# shellcheck source=lib/bl64/bashlib64-core.bash
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
 #
 # Functions
 #
 
-function dev_repo_duplicate() {
+function dev_git_repo_duplicate() {
   bl64_dbg_app_show_function "$@"
-  local dev_repo_destination="$1"
-  local dev_repo_dry_run="$2"
-  local dev_repo_source=''
+  local dev_git_destination="$1"
+  local dev_git_dry_run="$2"
+  local dev_git_source=''
 
-  dev_repo_source="$(pwd)/"
-  bl64_msg_show_task "duplicate repositories (${dev_repo_source}->${dev_repo_destination})"
-  if [[ -z "$dev_repo_dry_run" ]]; then
+  dev_git_source="$(pwd)/"
+  bl64_msg_show_task "duplicate repositories (${dev_git_source}->${dev_git_destination})"
+  if [[ -z "$dev_git_dry_run" ]]; then
     bl64_msg_show_warning 'using dry-run mode. No action will be performed. Set the 2nd parameter to OFF to perform the action'
-    dev_repo_dry_run='--dry-run'
+    dev_git_dry_run='--dry-run'
   else
-    [[ -n "$dev_repo_dry_run" ]] && dev_repo_dry_run=''
+    [[ -n "$dev_git_dry_run" ]] && dev_git_dry_run=''
   fi
 
   # shellcheck disable=SC2086
   "$DEV_LIB_RSYNC_BIN" \
-    ${dev_repo_dry_run} \
+    ${dev_git_dry_run} \
     --one-file-system \
     --human-readable \
     --progress \
@@ -71,26 +73,28 @@ function dev_repo_duplicate() {
     --exclude='.git/' \
     --exclude='tmp/' \
     --exclude='lib/' \
-    --exclude='var/fluxcd/' \
-    "$dev_repo_source" \
-    "${dev_repo_destination}/"
+    "$dev_git_source" \
+    "${dev_git_destination}/"
+}
+
+function dev_git_initialize() {
+  bl64_dbg_app_show_function
+  bl64_check_command_search_path "$DEV_LIB_RSYNC_BIN" &&
+    bl64_check_parameter 'dev_git_destination' &&
+    bl64_check_directory "$dev_git_destination"
 }
 
 #
 # Main
 #
 
-declare dev_repo_destination="${1:-}"
-declare dev_repo_dry_run="${2:-}"
+declare dev_git_destination="${1:-}"
+declare dev_git_dry_run="${2:-}"
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_check_export 'DEV_LIB_RSYNC_BIN' &&
-  bl64_check_command_search_path "$DEV_LIB_RSYNC_BIN" &&
-  bl64_check_parameter 'dev_repo_destination' &&
-  bl64_check_directory "$dev_repo_destination" ||
-  exit $?
 
 bl64_msg_all_enable_verbose
-bl64_msg_show_batch_start 'repo-duplicate'
-dev_repo_duplicate "$dev_repo_destination" "$dev_repo_dry_run"
-bl64_msg_show_batch_finish $? 'repo-duplicate'
+bl64_msg_show_batch_start 'dev-git-repo-duplicate'
+dev_git_initialize &&
+  dev_git_repo_duplicate "$dev_git_destination" "$dev_git_dry_run"
+bl64_msg_show_batch_finish $? 'dev-git-repo-duplicate'

@@ -22,6 +22,7 @@ function bl64_gcp_setup() {
   bl64_dbg_lib_show_function "$@"
   local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 
+  # shellcheck disable=SC2034
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
@@ -86,9 +87,10 @@ function _bl64_gcp_set_command() {
 function _bl64_gcp_set_options() {
   bl64_dbg_lib_show_function
 
-  BL64_GCP_SET_FORMAT_YAML='--format yaml'
-  BL64_GCP_SET_FORMAT_TEXT='--format text'
-  BL64_GCP_SET_FORMAT_JSON='--format json'
+  # shellcheck disable=SC2034
+  BL64_GCP_SET_FORMAT_YAML='--format yaml' &&
+    BL64_GCP_SET_FORMAT_TEXT='--format text' &&
+    BL64_GCP_SET_FORMAT_JSON='--format json'
 }
 
 #######################################

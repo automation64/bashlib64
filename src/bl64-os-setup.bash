@@ -25,6 +25,7 @@ function bl64_os_setup() {
     bl64_msg_show_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
     return $BL64_LIB_ERROR_OS_BASH_VERSION
 
+  # shellcheck disable=SC2034
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
@@ -62,6 +63,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_FALSE='/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
+    BL64_OS_CMD_SLEEP='/bin/sleep'
     BL64_OS_CMD_TEE='/usr/bin/tee'
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
@@ -73,6 +75,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
+    BL64_OS_CMD_SLEEP='/usr/bin/sleep'
     BL64_OS_CMD_TEE='/usr/bin/tee'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
@@ -84,6 +87,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
+    BL64_OS_CMD_SLEEP='/usr/bin/sleep'
     BL64_OS_CMD_TEE='/usr/bin/tee'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/usr/bin/uname'
@@ -95,6 +99,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_FALSE='/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
+    BL64_OS_CMD_SLEEP='/bin/sleep'
     BL64_OS_CMD_TEE='/usr/bin/tee'
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
@@ -107,6 +112,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
+    BL64_OS_CMD_SLEEP='/usr/bin/sleep'
     BL64_OS_CMD_TEE='/usr/bin/tee'
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/usr/bin/uname'

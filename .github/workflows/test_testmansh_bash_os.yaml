@@ -1,0 +1,60 @@
+---
+# Template: 3.2.1
+name: "Test / TestManSH / Bash OS"
+
+env:
+  DEV_CICD_DEBUG: ""
+
+on:
+  pull_request:
+    branches:
+      - "main"
+  push:
+    branches:
+      - "feature/**"
+    paths:
+      - "src/*-api-*"
+      - "src/*-fmt-*"
+      - "src/*-fs-*"
+      - "src/*-iam-*"
+      - "src/*-lib-*"
+      - "src/*-os-*"
+      - "src/*-rbac-*"
+      - "src/*-rxtx-*"
+      - "src/*-txt-*"
+      - "src/*-vcs-*"
+      - "test/batscore/bash-os/**"
+
+jobs:
+  test-testmansh-bash-os:
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - "BASH_OS_REDHAT_A"
+          - "BASH_OS_REDHAT_B"
+          - "BASH_OS_REDHAT_C"
+          - "BASH_OS_FEDORA_A"
+          - "BASH_OS_FEDORA_B"
+          - "BASH_OS_DEBIAN"
+          - "BASH_OS_UBUNTU"
+          - "BASH_OS_OTHER"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare dev environment"
+        run: "./bin/dev-lib-installer64 && ./bin/dev-lib-testmansh"
+
+      - name: "Build app"
+        run: "./bin/dev-build-custom -t"
+
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: |
+          source ./bin/dev-set &&
+          source ./bin/dev-env-custom &&
+          ./bin/dev-test-testmansh "$DEV_TEST_TESTMANSH_CONTAINER_${{matrix.target}}" "$DEV_TEST_TESTMANSH_CASES_${{matrix.target}}"
+...

@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [19.1.0]
+
+### Added
+
+- all
+  - Added Debian12 support
+- cnt
+  - bl64_cnt_check_in_container,bl64_cnt_check_not_in_container: new check functions
+- os
+  - bl64_os_run_sleep: new wrapper function
+
+### Changed
+
+- core
+  - Add to the auto-setup task remaining optional modules that do not require init parameters
+- py
+  - Optimized command detection
+  - Droped obsolete globals: `BL64_PY_CMD_PYTHON3*`
+
+### Fixed
+
+- rxtx
+  - Fixed module setup
+- msg
+  - bl64_msg_show_batch_finish: fixed wrong exit status when verbose=NONE
+
 ## [19.0.0]
 
 ### Added
@@ -592,6 +618,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[19.1.0]: https://github.com/automation64/bashlib64/compare/19.0.0...19.1.0
 [19.0.0]: https://github.com/automation64/bashlib64/compare/18.1.1...19.0.0
 [18.1.1]: https://github.com/automation64/bashlib64/compare/18.0.0...18.1.1
 [18.0.0]: https://github.com/automation64/bashlib64/compare/17.3.0...18.0.0

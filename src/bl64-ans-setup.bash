@@ -29,6 +29,7 @@ function bl64_ans_setup() {
   local ansible_config="${2:-${BL64_VAR_DEFAULT}}"
   local env_ignore="${3:-${BL64_VAR_ON}}"
 
+  # shellcheck disable=SC2034
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
@@ -170,7 +171,8 @@ function bl64_ans_set_paths() {
     BL64_ANS_PATH_USR_ANSIBLE="$ansible"
   fi
 
-  if [[ "$collections" == "$BL64_VAR_DEFAULT" ]]; then
+  # shellcheck disable=SC2034
+    if [[ "$collections" == "$BL64_VAR_DEFAULT" ]]; then
     BL64_ANS_PATH_USR_COLLECTIONS="${BL64_ANS_PATH_USR_ANSIBLE}/collections/ansible_collections"
   else
     bl64_check_directory "$collections" || return $?
@@ -204,6 +206,7 @@ function _bl64_ans_set_version() {
   bl64_dbg_lib_show_vars 'cli_version'
 
   if [[ -n "$cli_version" ]]; then
+    # shellcheck disable=SC2034
     BL64_ANS_VERSION_CORE="$cli_version"
   else
     bl64_msg_show_error "${_BL64_ANS_TXT_ERROR_GET_VERSION} (${BL64_ANS_CMD_ANSIBLE} --version)"
