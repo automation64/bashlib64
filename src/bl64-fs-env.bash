@@ -5,6 +5,7 @@
 # shellcheck disable=SC2034
 declare BL64_FS_VERSION='5.0.0'
 
+# shellcheck disable=SC2034
 declare BL64_FS_MODULE='0'
 
 declare BL64_FS_PATH_TEMPORAL=''

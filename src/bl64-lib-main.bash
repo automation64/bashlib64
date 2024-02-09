@@ -37,7 +37,6 @@ fi
 [[ -n "${BL64_RND_MODULE:-}" ]] && { bl64_rnd_setup || exit $?; }
 [[ -n "${BL64_TM_MODULE:-}" ]] && { bl64_tm_setup || exit $?; }
 [[ -n "${BL64_UI_MODULE:-}" ]] && { bl64_ui_setup || exit $?; }
-[[ -n "${BL64_XSV_MODULE:-}" ]] && { bl64_xsv_setup || exit $?; }
 
 # Set signal handlers
 # shellcheck disable=SC2064

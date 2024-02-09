@@ -5,6 +5,7 @@
 # shellcheck disable=SC2034
 declare BL64_LOG_VERSION='2.1.1'
 
+# shellcheck disable=SC2034
 declare BL64_LOG_MODULE='0'
 
 # Log file types

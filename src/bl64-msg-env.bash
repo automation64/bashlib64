@@ -5,6 +5,7 @@
 # shellcheck disable=SC2034
 declare BL64_MSG_VERSION='5.0.0'
 
+# shellcheck disable=SC2034
 declare BL64_MSG_MODULE='0'
 
 # Target verbosity)

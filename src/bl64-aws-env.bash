@@ -5,6 +5,7 @@
 # shellcheck disable=SC2034
 declare BL64_AWS_VERSION='2.0.0'
 
+# shellcheck disable=SC2034
 declare BL64_AWS_MODULE='0'
 
 declare BL64_AWS_CMD_AWS="$BL64_VAR_UNAVAILABLE"

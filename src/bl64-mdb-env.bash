@@ -5,6 +5,7 @@
 # shellcheck disable=SC2034
 declare BL64_MDB_VERSION='2.0.0'
 
+# shellcheck disable=SC2034
 declare BL64_MDB_MODULE='0'
 
 declare BL64_MDB_CMD_MONGOSH="$BL64_VAR_UNAVAILABLE"

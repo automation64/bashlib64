@@ -5,6 +5,7 @@
 # shellcheck disable=SC2034
 declare BL64_VCS_VERSION='2.0.0'
 
+# shellcheck disable=SC2034
 declare BL64_VCS_MODULE='0'
 
 declare BL64_VCS_CMD_GIT=''

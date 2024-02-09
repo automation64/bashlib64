@@ -89,35 +89,27 @@ function _bl64_py_set_command() {
     if [[ -x '/usr/bin/python3.12' ]]; then
       BL64_PY_VERSION_PYTHON3='3.12'
       BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-      BL64_PY_CMD_PYTHON312="$BL64_PY_CMD_PYTHON3"
     elif [[ -x '/usr/bin/python3.11' ]]; then
       BL64_PY_VERSION_PYTHON3='3.11'
       BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-      BL64_PY_CMD_PYTHON311="$BL64_PY_CMD_PYTHON3"
     elif [[ -x '/usr/bin/python3.10' ]]; then
       BL64_PY_VERSION_PYTHON3='3.10'
       BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-      BL64_PY_CMD_PYTHON310="$BL64_PY_CMD_PYTHON3"
     elif [[ -x '/usr/bin/python3.9' ]]; then
       BL64_PY_VERSION_PYTHON3='3.9'
       BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-      BL64_PY_CMD_PYTHON39="$BL64_PY_CMD_PYTHON3"
     elif [[ -x '/usr/bin/python3.8' ]]; then
       BL64_PY_VERSION_PYTHON3='3.8'
       BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-      BL64_PY_CMD_PYTHON38="$BL64_PY_CMD_PYTHON3"
     elif [[ -x '/usr/bin/python3.7' ]]; then
       BL64_PY_VERSION_PYTHON3='3.7'
       BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-      BL64_PY_CMD_PYTHON37="$BL64_PY_CMD_PYTHON3"
     elif [[ -x '/usr/bin/python3.6' ]]; then
       BL64_PY_VERSION_PYTHON3='3.6'
       BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-      BL64_PY_CMD_PYTHON36="$BL64_PY_CMD_PYTHON3"
     elif [[ -x '/usr/bin/python3.5' ]]; then
       BL64_PY_VERSION_PYTHON3='3.5'
       BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-      BL64_PY_CMD_PYTHON35="$BL64_PY_CMD_PYTHON3"
     else
       if bl64_check_compatibility_mode; then
         BL64_PY_CMD_PYTHON3='/usr/bin/python3'

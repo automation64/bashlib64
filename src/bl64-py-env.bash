@@ -3,20 +3,13 @@
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_PY_VERSION='2.1.0'
+declare BL64_PY_VERSION='3.0.0'
 
+# shellcheck disable=SC2034
 declare BL64_PY_MODULE='0'
 
 # Define placeholders for optional distro native python versions
 declare BL64_PY_CMD_PYTHON3="$BL64_VAR_UNAVAILABLE"
-declare BL64_PY_CMD_PYTHON35="$BL64_VAR_UNAVAILABLE"
-declare BL64_PY_CMD_PYTHON36="$BL64_VAR_UNAVAILABLE"
-declare BL64_PY_CMD_PYTHON37="$BL64_VAR_UNAVAILABLE"
-declare BL64_PY_CMD_PYTHON38="$BL64_VAR_UNAVAILABLE"
-declare BL64_PY_CMD_PYTHON39="$BL64_VAR_UNAVAILABLE"
-declare BL64_PY_CMD_PYTHON310="$BL64_VAR_UNAVAILABLE"
-declare BL64_PY_CMD_PYTHON311="$BL64_VAR_UNAVAILABLE"
-declare BL64_PY_CMD_PYTHON312="$BL64_VAR_UNAVAILABLE"
 
 # Full path to the python venv activated by bl64_py_setup
 declare BL64_PY_VENV_PATH=''

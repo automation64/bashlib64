@@ -5,6 +5,7 @@
 # shellcheck disable=SC2034
 declare BL64_HLM_VERSION='2.0.0'
 
+# shellcheck disable=SC2034
 declare BL64_HLM_MODULE='0'
 
 declare BL64_HLM_CMD_HELM="$BL64_VAR_UNAVAILABLE"

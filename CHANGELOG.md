@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Add to the auto-setup task remaining optional modules that do not require init parameters
 - py
   - Optimized command detection
+  - Droped obsolete globals: `BL64_PY_CMD_PYTHON3*`
 
 ### Fixed
 
