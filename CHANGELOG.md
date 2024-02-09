@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [19.1.0]
 
+### Added
+
+- os
+  - bl64_os_run_sleep: added function
+
 ### Changed
 
 - py
