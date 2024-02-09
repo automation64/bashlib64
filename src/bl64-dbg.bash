@@ -122,15 +122,13 @@ function bl64_dbg_runtime_show_paths() {
 #   STDOUT: None
 #   STDERR: None
 # Returns:
-#   0: always ok
+#   exit status from previous command
 #######################################
 function bl64_dbg_app_trace_stop() {
   local -i state=$?
   bl64_dbg_app_trace_enabled || return $state
-
   set +x
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
-
   return $state
 }
 
@@ -147,10 +145,8 @@ function bl64_dbg_app_trace_stop() {
 #######################################
 function bl64_dbg_app_trace_start() {
   bl64_dbg_app_trace_enabled || return 0
-
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_START}"
   set -x
-
   return 0
 }
 
