@@ -1,5 +1,6 @@
 setup() {
   [[ -f /usr/bin/gpg ]] || skip 'gpg not installed'
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   TEST_SANDBOX="$(temp_make)"
 }
 
