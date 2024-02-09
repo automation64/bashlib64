@@ -59,6 +59,7 @@ function bl64_dbg_setup() {
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
 
+  # shellcheck disable=SC2034
   bl64_dbg_all_disable &&
     BL64_DBG_MODULE="$BL64_VAR_ON"
 }

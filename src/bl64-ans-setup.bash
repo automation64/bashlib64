@@ -29,6 +29,7 @@ function bl64_ans_setup() {
   local ansible_config="${2:-${BL64_VAR_DEFAULT}}"
   local env_ignore="${3:-${BL64_VAR_ON}}"
 
+  # shellcheck disable=SC2034
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&

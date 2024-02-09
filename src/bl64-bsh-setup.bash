@@ -21,6 +21,7 @@ function bl64_bsh_setup() {
     echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
     return 21
 
+  # shellcheck disable=SC2034
   bl64_lib_module_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
     bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
