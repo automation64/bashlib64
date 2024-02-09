@@ -32,7 +32,6 @@ fi
 [[ -n "${BL64_API_MODULE:-}" ]] && { bl64_api_setup || exit $?; }
 [[ -n "${BL64_VCS_MODULE:-}" ]] && { bl64_vcs_setup || exit $?; }
 [[ -n "${BL64_ARC_MODULE:-}" ]] && { bl64_arc_setup || exit $?; }
-[[ -n "${BL64_CNT_MODULE:-}" ]] && { bl64_cnt_setup || exit $?; }
 [[ -n "${BL64_PKG_MODULE:-}" ]] && { bl64_pkg_setup || exit $?; }
 [[ -n "${BL64_RND_MODULE:-}" ]] && { bl64_rnd_setup || exit $?; }
 [[ -n "${BL64_TM_MODULE:-}" ]] && { bl64_tm_setup || exit $?; }
