@@ -6,7 +6,7 @@ setup() {
 
 @test "bl64_cryp_gpg_key_armor: export ok" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  bl64_cryp_gpg_setup
+  bl64_cryp_setup
   run bl64_cryp_gpg_key_armor "${TESTMANSH_TEST_SAMPLES}/gpg_01/gpg_key_dearmored.gpg" "${TEST_SANDBOX}/armored.gpg"
   assert_success
 }
