@@ -1,6 +1,6 @@
 ---
 # Template: 3.2.1
-name: "Test / TestManSH / Opt"
+name: "Test / TestManSH / Bash Opt"
 
 env:
   DEV_CICD_DEBUG: ""
@@ -20,16 +20,16 @@ on:
       - "src/*-py"
       - "src/*-tm"
       - "src/*-xsv"
-      - "test/batscore/opt/**"
+      - "test/batscore/bash-opt/**"
 
 jobs:
-  test-testmansh-opt:
+  test-testmansh-bash-opt:
     runs-on: "ubuntu-latest"
     strategy:
       fail-fast: false
       matrix:
         target:
-          - "OPT"
+          - "BASH_OPT"
     steps:
 
       - name: "Check out repository code"
