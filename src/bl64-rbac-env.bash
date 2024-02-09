@@ -2,6 +2,7 @@
 # BashLib64 / Module / Globals / Manage role based access service
 #######################################
 
+# shellcheck disable=SC2034
 declare BL64_RBAC_VERSION='2.0.0'
 
 declare BL64_RBAC_MODULE='0'

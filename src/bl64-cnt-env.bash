@@ -2,6 +2,7 @@
 # BashLib64 / Module / Globals / Interact with container engines
 #######################################
 
+# shellcheck disable=SC2034
 declare BL64_CNT_VERSION='3.1.0'
 
 declare BL64_CNT_MODULE='0'

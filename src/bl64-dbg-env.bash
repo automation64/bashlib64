@@ -2,6 +2,7 @@
 # BashLib64 / Module / Globals / Show shell debugging information
 #######################################
 
+# shellcheck disable=SC2034
 declare BL64_DBG_VERSION='3.0.0'
 
 declare BL64_DBG_MODULE='0'

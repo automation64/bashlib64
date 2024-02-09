@@ -2,6 +2,7 @@
 # BashLib64 / Module / Globals / Transfer and Receive data over the network
 #######################################
 
+# shellcheck disable=SC2034
 declare BL64_RXTX_VERSION='2.0.1'
 
 declare BL64_RXTX_MODULE='0'

@@ -2,6 +2,7 @@
 # BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
 #######################################
 
+# shellcheck disable=SC2034
 declare BL64_OS_VERSION='5.1.0'
 
 declare BL64_OS_MODULE='0'

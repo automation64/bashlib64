@@ -2,6 +2,7 @@
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #######################################
 
+# shellcheck disable=SC2034
 declare BL64_PY_VERSION='2.1.0'
 
 declare BL64_PY_MODULE='0'

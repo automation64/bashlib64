@@ -2,6 +2,7 @@
 # BashLib64 / Module / Globals / Manipulate CSV like text files
 #######################################
 
+# shellcheck disable=SC2034
 declare BL64_XSV_VERSION='2.0.0'
 
 declare BL64_XSV_MODULE='0'

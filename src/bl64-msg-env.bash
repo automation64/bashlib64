@@ -2,6 +2,7 @@
 # BashLib64 / Module / Globals / Display messages
 #######################################
 
+# shellcheck disable=SC2034
 declare BL64_MSG_VERSION='5.0.0'
 
 declare BL64_MSG_MODULE='0'

@@ -2,6 +2,7 @@
 # BashLib64 / Module / Globals / Interact with HLM
 #######################################
 
+# shellcheck disable=SC2034
 declare BL64_HLM_VERSION='2.0.0'
 
 declare BL64_HLM_MODULE='0'

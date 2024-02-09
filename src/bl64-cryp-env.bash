@@ -2,6 +2,7 @@
 # BashLib64 / Module / Globals / Cryptography tools
 #######################################
 
+# shellcheck disable=SC2034
 declare BL64_CRYP_VERSION='2.0.0'
 
 declare BL64_CRYP_MODULE='0'

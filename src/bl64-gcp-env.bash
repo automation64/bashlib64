@@ -2,6 +2,7 @@
 # BashLib64 / Module / Globals / Interact with GCP
 #######################################
 
+# shellcheck disable=SC2034
 declare BL64_GCP_VERSION='2.0.0'
 
 declare BL64_GCP_MODULE='0'
