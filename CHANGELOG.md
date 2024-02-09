@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [19.1.0]
 
+### Changed
+
+- py
+  - Optimized command detection
+
 ### Fixed
 
 - rxtx

@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Interact with system-wide Python
 #######################################
 
-declare BL64_PY_VERSION='2.0.0'
+declare BL64_PY_VERSION='2.1.0'
 
 declare BL64_PY_MODULE='0'
 
