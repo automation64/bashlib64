@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-declare BL64_VERSION='19.1.0'
+declare BL64_VERSION='19.2.0'
 
 #
 # Imported shell standard variables
