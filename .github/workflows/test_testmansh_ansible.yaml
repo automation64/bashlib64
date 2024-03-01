@@ -40,5 +40,5 @@ jobs:
         run: |
           source ./bin/dev-set &&
           source ./bin/dev-env-custom &&
-          ./bin/dev-test-testmansh "$DEV_TEST_TESTMANSH_CONTAINER_${{matrix.target}}" "$DEV_TEST_TESTMANSH_CASES_${{matrix.target}}"
+          ./bin/dev-test-testmansh "$DEV_TEST_TESTMANSH_CONTAINER_${{matrix.target}}" "$DEV_TEST_TESTMANSH_CASES_ANSIBLE"
 ...
