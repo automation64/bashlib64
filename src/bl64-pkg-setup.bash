@@ -57,7 +57,7 @@ function _bl64_pkg_set_command() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_PKG_CMD_APT='/usr/bin/apt-get'
     ;;
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -103,7 +103,7 @@ function _bl64_pkg_set_options() {
     BL64_PKG_SET_QUIET='--quiet --quiet'
     BL64_PKG_SET_VERBOSE='--show-progress'
     ;;
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     BL64_PKG_SET_ASSUME_YES='--assumeyes'
     BL64_PKG_SET_SLIM='--nodocs'
     BL64_PKG_SET_QUIET='--quiet'
@@ -162,7 +162,7 @@ function _bl64_pkg_set_alias() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
     BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
     BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
@@ -237,7 +237,7 @@ function bl64_pkg_set_paths() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d'
     ;;
   ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)

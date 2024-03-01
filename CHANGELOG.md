@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [19.2.0]
+
+### Added
+
+- all
+  - OS flavor support: to allow compatibility functions to check against OS families instead of particular distros.
+  - AmazonLinux 2023 support
+
+### Changed
+
+- os
+  - bl64_os_match: renamed to `bl64_os_is_distro`. Old name kept for compatibility until version 21
+  - bl64_os_match_compatible: renamed to `bl64_os_is_compatible`. Old name kept for compatibility until version 21
+
 ## [19.1.0]
 
 ### Added
@@ -618,6 +632,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
+[19.2.0]: https://github.com/automation64/bashlib64/compare/19.1.0...19.2.0
 [19.1.0]: https://github.com/automation64/bashlib64/compare/19.0.0...19.1.0
 [19.0.0]: https://github.com/automation64/bashlib64/compare/18.1.1...19.0.0
 [18.1.1]: https://github.com/automation64/bashlib64/compare/18.0.0...18.1.1

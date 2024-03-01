@@ -3,7 +3,7 @@
 # Dev / Test / Bash / Simple test runner
 #
 # * Run tests in test/bash using containers
-# * Version: 1.0.0
+# * Version: 1.0.1
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -22,13 +22,6 @@
 #######################################
 
 #
-# Globals
-#
-
-# Dev / Test / Base / Flag for marking container environment
-export _DEV_TEST_BASH_CONTAINER_ENVIRONMENT='OFF'
-
-#
 # Imports
 #
 
@@ -42,6 +35,13 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-cnt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
+
+#
+# Globals
+#
+
+# Dev / Test / Base / Flag for marking container environment
+export _DEV_TEST_BASH_CONTAINER_ENVIRONMENT='OFF'
 
 #
 # Functions

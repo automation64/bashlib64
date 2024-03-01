@@ -43,7 +43,7 @@ function bl64_pkg_repository_add() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     _bl64_pkg_repository_add_apt "$name" "$source" "$gpgkey" "$extra1" "$extra2"
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     _bl64_pkg_repository_add_yum "$name" "$source" "$gpgkey"
     ;;
   ${BL64_OS_SLES}-*)
@@ -167,7 +167,7 @@ function bl64_pkg_repository_refresh() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_pkg_run_apt 'update'
     ;;
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     bl64_pkg_run_dnf 'makecache'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -261,7 +261,7 @@ function bl64_pkg_install() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_pkg_run_apt 'install' $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES -- "$@"
     ;;
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -309,7 +309,7 @@ function bl64_pkg_upgrade() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES -- "$@"
     ;;
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -357,7 +357,7 @@ function bl64_pkg_cleanup() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_pkg_run_apt 'clean'
     ;;
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     bl64_pkg_run_dnf 'clean' 'all'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)

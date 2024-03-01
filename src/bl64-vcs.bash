@@ -154,7 +154,7 @@ function bl64_vcs_git_sparse() {
   cd "$destination"
 
   bl64_dbg_lib_show_info 'detect if current git supports sparse-checkout option'
-  if bl64_os_match "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_UB}-18" "${BL64_OS_UB}-20" "${BL64_OS_OL}-7" "${BL64_OS_CNT}-7"; then
+  if bl64_os_is_distro "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_UB}-18" "${BL64_OS_UB}-20" "${BL64_OS_OL}-7" "${BL64_OS_CNT}-7"; then
     bl64_dbg_lib_show_info 'git sparse-checkout not supported. Using alternative method'
     # shellcheck disable=SC2086
     bl64_vcs_run_git init &&

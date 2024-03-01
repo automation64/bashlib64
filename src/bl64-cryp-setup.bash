@@ -56,7 +56,7 @@ function _bl64_cryp_set_command() {
     BL64_CRYP_CMD_GPG='/usr/bin/gpg'
     BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_CRYP_CMD_GPG='/usr/bin/gpg'
     BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
     ;;

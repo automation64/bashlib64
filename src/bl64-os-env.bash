@@ -3,11 +3,15 @@
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_OS_VERSION='5.1.0'
+declare BL64_OS_VERSION='5.2.0'
 
 declare BL64_OS_MODULE='0'
 
+# Current OS Distro ID
 declare BL64_OS_DISTRO=''
+
+# Current OS Flavor ID
+declare BL64_OS_FLAVOR=''
 
 declare BL64_OS_CMD_BASH=''
 declare BL64_OS_CMD_CAT=''
@@ -53,3 +57,15 @@ declare BL64_OS_RHEL='RHEL'
 declare BL64_OS_SLES='SLES'
 declare BL64_OS_UB='UBUNTU'
 declare BL64_OS_UNK='UNKNOWN'
+
+#
+# OS flavor tags
+#
+# * Flavor defines groups of OS distros that are 100% compatible between them
+
+declare BL64_OS_FLAVOR_ALPINE='ALPINE'
+declare BL64_OS_FLAVOR_DEBIAN='DEBIAN'
+declare BL64_OS_FLAVOR_FEDORA='FEDORA'
+declare BL64_OS_FLAVOR_MACOS='MACOS'
+declare BL64_OS_FLAVOR_REDHAT='REDHAT'
+declare BL64_OS_FLAVOR_SUSE='SUSE'

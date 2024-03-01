@@ -55,8 +55,8 @@ function bl64_os_setup() {
 # Warning: bootstrap function
 function _bl64_os_set_command() {
   # shellcheck disable=SC2034
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  case "$BL64_OS_FLAVOR" in
+  "$BL64_OS_FLAVOR_DEBIAN")
     BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
@@ -68,7 +68,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  "$BL64_OS_FLAVOR_FEDORA" | "$BL64_OS_FLAVOR_REDHAT" )
     BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/usr/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
@@ -80,7 +80,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
-  ${BL64_OS_SLES}-*)
+  "$BL64_OS_FLAVOR_SUSE")
     BL64_OS_CMD_BASH='/usr/bin/bash'
     BL64_OS_CMD_CAT='/usr/bin/cat'
     BL64_OS_CMD_DATE='/usr/bin/date'
@@ -92,7 +92,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/usr/bin/uname'
     ;;
-  ${BL64_OS_ALP}-*)
+  "$BL64_OS_FLAVOR_ALPINE")
     BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
@@ -104,7 +104,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
-  ${BL64_OS_MCOS}-*)
+  "$BL64_OS_FLAVOR_MACOS")
     # Homebrew used when no native option available
     BL64_OS_CMD_BASH='/opt/homebre/bin/bash'
     BL64_OS_CMD_CAT='/bin/cat'
@@ -159,7 +159,7 @@ function _bl64_os_set_runtime() {
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
       bl64_os_set_lang 'C.UTF-8'
       ;;
-    ${BL64_OS_FD}-*)
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* )
       bl64_os_set_lang 'C.UTF-8'
       ;;
     ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
