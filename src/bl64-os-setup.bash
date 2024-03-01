@@ -159,7 +159,7 @@ function _bl64_os_set_runtime() {
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
       bl64_os_set_lang 'C.UTF-8'
       ;;
-    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_AMZ}-*)
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* )
       bl64_os_set_lang 'C.UTF-8'
       ;;
     ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
