@@ -59,6 +59,7 @@ The library has been tested on the following operating systems:
 
 - AlmaLinux: 8,9
 - Alpine: 3
+- AmazonLinux: 2023
 - CentOS: 7,8,9
 - Debian: 9,10,11
 - Fedora: 33,34,35,36,37,38,39

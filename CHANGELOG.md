@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- core
-  - OS flavor support: to allow compatibility functions to check against OS families instead of particular distros. 
+- all
+  - OS flavor support: to allow compatibility functions to check against OS families instead of particular distros.
+  - AmazonLinux 2023 support
 
 ### Changed
 
