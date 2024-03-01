@@ -101,6 +101,7 @@ function _bl64_os_get_distro_from_uname() {
   'Darwin')
     os_version="$("$cmd_sw_vers" -productVersion)"
     BL64_OS_DISTRO="DARWIN-${os_version}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_MACOS"
     ;;
   *)
     BL64_OS_DISTRO="$BL64_OS_UNK"
@@ -156,18 +157,54 @@ function _bl64_os_get_distro_from_os_release() {
 
   bl64_dbg_app_show_info 'set BL_OS_DISTRO'
   case "${ID^^}" in
-  'ALMALINUX') BL64_OS_DISTRO="${BL64_OS_ALM}-${version_normalized}" ;;
-  'ALPINE') BL64_OS_DISTRO="${BL64_OS_ALP}-${version_normalized}" ;;
-  'AMZN') BL64_OS_DISTRO="${BL64_OS_AMZ}-${version_normalized}" ;;
-  'CENTOS') BL64_OS_DISTRO="${BL64_OS_CNT}-${version_normalized}" ;;
-  'DEBIAN') BL64_OS_DISTRO="${BL64_OS_DEB}-${version_normalized}" ;;
-  'FEDORA') BL64_OS_DISTRO="${BL64_OS_FD}-${version_normalized}" ;;
-  'DARWIN') BL64_OS_DISTRO="${BL64_OS_MCOS}-${version_normalized}" ;;
-  'OL') BL64_OS_DISTRO="${BL64_OS_OL}-${version_normalized}" ;;
-  'ROCKY') BL64_OS_DISTRO="${BL64_OS_RCK}-${version_normalized}" ;;
-  'RHEL') BL64_OS_DISTRO="${BL64_OS_RHEL}-${version_normalized}" ;;
-  'SLES') BL64_OS_DISTRO="${BL64_OS_SLES}-${version_normalized}" ;;
-  'UBUNTU') BL64_OS_DISTRO="${BL64_OS_UB}-${version_normalized}" ;;
+  'ALMALINUX')
+    BL64_OS_DISTRO="${BL64_OS_ALM}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+    ;;
+  'ALPINE')
+    BL64_OS_DISTRO="${BL64_OS_ALP}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_ALPINE"
+    ;;
+  'AMZN')
+    BL64_OS_DISTRO="${BL64_OS_AMZ}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_FEDORA"
+    ;;
+  'CENTOS')
+    BL64_OS_DISTRO="${BL64_OS_CNT}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+    ;;
+  'DEBIAN')
+    BL64_OS_DISTRO="${BL64_OS_DEB}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_DEBIAN"
+    ;;
+  'FEDORA')
+    BL64_OS_DISTRO="${BL64_OS_FD}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_FEDORA"
+    ;;
+  'DARWIN')
+    BL64_OS_DISTRO="${BL64_OS_MCOS}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_MACOS"
+    ;;
+  'OL')
+    BL64_OS_DISTRO="${BL64_OS_OL}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+    ;;
+  'ROCKY')
+    BL64_OS_DISTRO="${BL64_OS_RCK}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+    ;;
+  'RHEL')
+    BL64_OS_DISTRO="${BL64_OS_RHEL}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+    ;;
+  'SLES')
+    BL64_OS_DISTRO="${BL64_OS_SLES}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_SUSE"
+    ;;
+  'UBUNTU')
+    BL64_OS_DISTRO="${BL64_OS_UB}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_DEBIAN"
+    ;;
   *)
     bl64_msg_show_error "${_BL64_OS_TXT_OS_NOT_KNOWN}. ${_BL64_OS_TXT_CHECK_OS_MATRIX} (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE})"
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
@@ -176,6 +213,31 @@ function _bl64_os_get_distro_from_os_release() {
   bl64_dbg_lib_show_vars 'BL64_OS_DISTRO'
 
   return 0
+}
+
+#######################################
+# Compare the current OS against the provided flavor
+#
+# Arguments:
+#   $1: flavor ID: BL64_OS_FLAVOR_*
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: flavor match
+#   BL64_LIB_ERROR_OS_NOT_MATCH
+#   BL64_LIB_ERROR_OS_TAG_INVALID
+#######################################
+function bl64_os_is_flavor() {
+  bl64_dbg_lib_show_function "$@"
+  local os_flavor="$1"
+
+  bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_parameter "$os_flavor" ||
+    return $?
+
+  [[ "$BL64_OS_FLAVOR" == "$os_flavor" ]] && return 0
+  return $BL64_LIB_ERROR_OS_NOT_MATCH
 }
 
 #######################################
@@ -194,11 +256,16 @@ function _bl64_os_get_distro_from_os_release() {
 #   BL64_LIB_ERROR_OS_TAG_INVALID
 #######################################
 function bl64_os_match() {
+  bl64_os_is_distro "$@"
+}
+function bl64_os_is_distro() {
   bl64_dbg_lib_show_function "$@"
   local item=''
   local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
 
-  bl64_check_module 'BL64_OS_MODULE' || return $?
+  bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_parameters_none $# ||
+    return $?
   bl64_dbg_lib_show_info "Look for [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
@@ -226,11 +293,16 @@ function bl64_os_match() {
 #   BL64_LIB_ERROR_OS_TAG_INVALID
 #######################################
 function bl64_os_match_compatible() {
+  bl64_os_is_compatible "$@"
+}
+function bl64_os_is_compatible() {
   bl64_dbg_lib_show_function "$@"
   local item=''
   local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
 
-  bl64_check_module 'BL64_OS_MODULE' || return $?
+  bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_parameters_none $# ||
+    return $?
   bl64_dbg_lib_show_info "Look for exact match [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
