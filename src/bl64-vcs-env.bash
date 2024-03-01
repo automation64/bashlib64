@@ -3,7 +3,7 @@
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_VCS_VERSION='2.0.0'
+declare BL64_VCS_VERSION='2.1.0'
 
 declare BL64_VCS_MODULE='0'
 

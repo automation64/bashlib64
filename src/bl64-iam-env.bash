@@ -3,7 +3,7 @@
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_IAM_VERSION='4.0.0'
+declare BL64_IAM_VERSION='4.1.0'
 
 declare BL64_IAM_MODULE='0'
 

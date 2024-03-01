@@ -66,7 +66,7 @@ function _bl64_fs_set_command() {
     BL64_FS_CMD_RM='/bin/rm'
     BL64_FS_CMD_TOUCH='/usr/bin/touch'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_FS_CMD_CHMOD='/usr/bin/chmod'
     BL64_FS_CMD_CHOWN='/usr/bin/chown'
     BL64_FS_CMD_CP='/usr/bin/cp'
@@ -168,7 +168,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_RM_RECURSIVE='--recursive'
     BL64_FS_SET_RM_VERBOSE='--verbose'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
     BL64_FS_SET_CHMOD_VERBOSE='--verbose'
     BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
