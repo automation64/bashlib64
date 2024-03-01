@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [19.2.0]
+## [19.2.1]
 
 ### Added
 
@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - os
   - bl64_os_match: renamed to `bl64_os_is_distro`. Old name kept for compatibility until version 21
   - bl64_os_match_compatible: renamed to `bl64_os_is_compatible`. Old name kept for compatibility until version 21
+
+### Fixed
+
+- core
+  - Added missing Debian-12 compatibility check
 
 ## [19.1.0]
 
@@ -632,7 +637,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check
   - bl64_check_alert_failed
 
-[19.2.0]: https://github.com/automation64/bashlib64/compare/19.1.0...19.2.0
+[19.2.1]: https://github.com/automation64/bashlib64/compare/19.1.0...19.2.1
 [19.1.0]: https://github.com/automation64/bashlib64/compare/19.0.0...19.1.0
 [19.0.0]: https://github.com/automation64/bashlib64/compare/18.1.1...19.0.0
 [18.1.1]: https://github.com/automation64/bashlib64/compare/18.0.0...18.1.1
@@ -646,6 +651,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [15.0.0]: https://github.com/automation64/bashlib64/compare/14.0.0...15.0.0
 [14.0.0]: https://github.com/automation64/bashlib64/compare/13.0.0...14.0.0
 [13.0.0]: https://github.com/automation64/bashlib64/compare/12.6.0...13.0.0
+: https://github.com/automation64/bashlib64/compare/17.0.0...17.1.0
+[17.0.0]: https://github.com/automation64/bashlib64/compare/16.1.0...17.0.Fixed
+
+- core
+  - Added missing Debian-12 compatibility check
+
 [12.6.0]: https://github.com/automation64/bashlib64/compare/12.5.0...12.6.0
 [12.5.0]: https://github.com/automation64/bashlib64/compare/12.4.0...12.5.0
 [12.4.0]: https://github.com/automation64/bashlib64/compare/12.3.0...12.4.0
