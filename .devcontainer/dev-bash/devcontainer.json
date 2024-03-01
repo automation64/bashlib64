@@ -5,7 +5,54 @@
 	"forwardPorts": [],
 	"customizations": {
 		"vscode": {
-			"extensions": []
+			"extensions": [
+				//
+				// VSCode / Extensions / Base
+				//
+				// Settings Template Version: 27FEB24
+				// VSCode Version: >= 1.66
+				//
+				"aaron-bond.better-comments",
+				"alefragnani.bookmarks",
+				"alefragnani.project-manager",
+				"esbenp.prettier-vscode",
+				"fabiospampinato.vscode-diff",
+				"jannisx11.batch-rename-extension",
+				"louiswt.regexp-preview",
+				"ms-vscode-remote.remote-containers",
+				"ms-vscode-remote.remote-ssh-edit",
+				"ms-vscode-remote.remote-ssh",
+				"ms-vscode-remote.remote-ssh",
+				"ms-vscode-remote.remote-wsl",
+				"oderwat.indent-rainbow",
+				"ryu1kn.partial-diff",
+				"sleistner.vscode-fileutils",
+				"streetsidesoftware.code-spell-checker",
+				"tyriar.sort-lines",
+				"visualstudioexptteam.vscodeintellicode",
+				//
+				// VSCode / Extensions / GIT
+				//
+				// Settings Template Version: 19FEB24
+				// VSCode Version: >= 1.66
+				//
+				"donjayamanne.githistory",
+				"eamodio.gitlens",
+				//
+				// VSCode / Extensions / Shell
+				//
+				// Settings Template Version: 26APR22
+				// VSCode Version: >= 1.66
+				//
+				"foxundermoon.shell-format",
+				"ironmansoftware.powershellprotools",
+				"ms-vscode.powershell",
+				"remisa.shellman",
+				"timonwong.shellcheck",
+				"mads-hartmann.bash-ide-vscode",
+				"rogalmic.bash-debug",
+				"shakram02.bash-beautify"
+			]
 		}
 	}
 }
