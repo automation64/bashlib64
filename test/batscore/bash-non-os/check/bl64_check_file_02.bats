@@ -18,7 +18,7 @@
 @test "bl64_check_file: file is not readable" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
   local test_file=''
-  if bl64_os_match 'MCOS'; then
+  if bl64_os_is_distro 'MCOS'; then
     test_file='/etc/master.passwd'
   else
     test_file='/etc/shadow'
