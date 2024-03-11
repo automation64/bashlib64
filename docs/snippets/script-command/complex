@@ -1,0 +1,13 @@
+# X_FUNCTION_HEADER_PLACEHOLDER_X
+function X_APP_NAMESPACE_X_X_FUNCTION_NAME_X() {
+  bl64_dbg_app_show_function "@"
+  local option="$1"
+  local flag="$2"
+  local -i status=1
+
+  bl64_check_parameter 'option' || return 1
+  # X_CODE_PLACEHOLDER_X
+  status=$?
+
+  return $status
+}
