@@ -129,3 +129,66 @@ function bl64_bsh_env_import_yaml() {
   bl64_fs_rm_tmpfile "$dynamic_env"
   return 0
 }
+
+#######################################
+# Determine the full path of a command
+#
+# * valid for command type only (type -p)
+# * if the command is already a path, nothing else is done
+#
+# Arguments:
+#   $1: command name with/without path
+# Outputs:
+#   STDOUT: full path
+#   STDERR: Error messages
+# Returns:
+#   0: full path detected
+#   >0: unable to detect or error
+#######################################
+function bl64_bsh_command_get_path() {
+  bl64_dbg_lib_show_function "$@"
+  local command="${1:-}"
+  local full_path=''
+
+  bl64_check_parameter 'command' ||
+    return $?
+
+  full_path="$(type -p "${command}")"
+  if [[ -n "$full_path" ]]; then
+    echo "$full_path"
+    return 0
+  fi
+  return $BL64_LIB_ERROR_TASK_FAILED
+}
+
+#######################################
+# Check if the command is executable
+#
+# * command is first converted to full path
+#
+# Arguments:
+#   $1: command name with/without path
+# Outputs:
+#   STDOUT: none
+#   STDERR: Error messages
+# Returns:
+#   0: command is executable
+#   >0: command is not present or not executable
+#######################################
+function bl64_bsh_command_is_executable() {
+  bl64_dbg_lib_show_function "$@"
+  local command="${1:-}"
+  local full_path=''
+
+  bl64_check_parameter 'command' ||
+    return $?
+
+  full_path="$(bl64_bsh_command_get_path "${command}")" ||
+    return $?
+  [[ ! -e "$full_path" ]] &&
+    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+  [[ ! -x "$full_path" ]] &&
+    return $BL64_LIB_ERROR_FILE_NOT_EXECUTE
+  [[ -x "$full_path" ]] ||
+    return $BL64_LIB_ERROR_TASK_FAILED
+}

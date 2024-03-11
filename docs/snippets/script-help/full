@@ -1,0 +1,16 @@
+# X_HELP_PLACEHOLDER_X
+
+  bl64_msg_show_usage \
+    '-x|-w [-y X_OPT1_X] [-z] [-V Verbose] [-D Debug] [-h]' \
+    'X_APP_INFO_X' \
+    '
+    -x         : X_COMMAND_INFO_X
+    -w         : X_COMMAND_INFO_X
+    ' '
+    -z         : X_FLAG_INFO_X
+    -h         : Show help
+    ' '
+    -y X_OPT1_X: X_OPTION_INFO_X
+    -V Verbose : Set verbosity level. Format: one of BL64_MSG_VERBOSE_*
+    -D Debug   : Enable debugging mode. Format: one of BL64_DBG_TARGET_*
+    '

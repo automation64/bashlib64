@@ -1,0 +1,8 @@
+# X_INITIALIZE_PLACEHOLDER_X
+
+  local command="$1"
+
+  bl64_check_parameter 'command' ||
+    { X_APP_NAMESPACE_X_help && return 1; }
+
+  return 0

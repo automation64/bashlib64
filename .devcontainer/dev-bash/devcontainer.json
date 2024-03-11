@@ -1,5 +1,5 @@
 {
-	"name": "dev-bash",
+	"name": "Dev / Bash",
 	"image": "ghcr.io/automation64/dev/ubuntu-22.4-dev-bash:latest",
 	"features": {},
 	"forwardPorts": [],
