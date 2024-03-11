@@ -90,7 +90,7 @@ TERM="${TERM:-vt100}"
 # BashLib64 / Module / Globals / Setup script run-time environment
 #######################################
 
-declare BL64_VERSION='19.1.0'
+declare BL64_VERSION='19.3.0'
 
 #
 # Imported shell standard variables
@@ -277,11 +277,14 @@ function bl64_lib_trap_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_TRAPS"; 
 function bl64_lib_flag_is_enabled {
   local -u flag="${1:-}"
 
+  # shellcheck disable=SC2086
   [[ -z "$flag" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
 
+  # shellcheck disable=SC2086
   [[ "$flag" == "$BL64_VAR_ON" ||
     "$flag" == 'ON' ||
-    "$flag" == 'YES' ]] || return $BL64_LIB_ERROR_IS_NOT
+    "$flag" == 'YES' ]] ||
+    return $BL64_LIB_ERROR_IS_NOT
 }
 
 #######################################
@@ -301,6 +304,7 @@ function bl64_lib_flag_is_enabled {
 # shellcheck disable=SC2120
 function bl64_lib_script_set_id() {
   local script_id="${1:-}"
+  # shellcheck disable=SC2086
   [[ -z "$script_id" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
   BL64_SCRIPT_ID="$script_id"
 }
@@ -356,6 +360,7 @@ function _bl64_lib_script_get_name() {
     base="${path##*/}"
   fi
   if [[ -z "$base" || "$base" == */* ]]; then
+    # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PARAMETER_INVALID
   else
     printf '%s' "$base"
@@ -389,6 +394,7 @@ function bl64_lib_module_imported() {
       "${module%%BL64_}" \
       "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE}" \
       >&2
+    # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_MODULE_NOT_IMPORTED
   fi
   return 0
@@ -398,7 +404,7 @@ function bl64_lib_module_imported() {
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_CHECK_VERSION='6.0.0'
+declare BL64_CHECK_VERSION='6.1.0'
 
 declare BL64_CHECK_MODULE='0'
 
@@ -785,11 +791,15 @@ declare _BL64_MSG_TXT_WARNING='Warning'
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_OS_VERSION='5.1.0'
+declare BL64_OS_VERSION='5.2.0'
 
 declare BL64_OS_MODULE='0'
 
+# Current OS Distro ID
 declare BL64_OS_DISTRO=''
+
+# Current OS Flavor ID
+declare BL64_OS_FLAVOR=''
 
 declare BL64_OS_CMD_BASH=''
 declare BL64_OS_CMD_CAT=''
@@ -835,6 +845,18 @@ declare BL64_OS_RHEL='RHEL'
 declare BL64_OS_SLES='SLES'
 declare BL64_OS_UB='UBUNTU'
 declare BL64_OS_UNK='UNKNOWN'
+
+#
+# OS flavor tags
+#
+# * Flavor defines groups of OS distros that are 100% compatible between them
+
+declare BL64_OS_FLAVOR_ALPINE='ALPINE'
+declare BL64_OS_FLAVOR_DEBIAN='DEBIAN'
+declare BL64_OS_FLAVOR_FEDORA='FEDORA'
+declare BL64_OS_FLAVOR_MACOS='MACOS'
+declare BL64_OS_FLAVOR_REDHAT='REDHAT'
+declare BL64_OS_FLAVOR_SUSE='SUSE'
 
 #######################################
 # BashLib64 / Module / Globals / Interact with Ansible CLI
@@ -889,7 +911,7 @@ declare _BL64_API_TXT_ERROR_API_FAILED='API call failed'
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_ARC_VERSION='3.0.0'
+declare BL64_ARC_VERSION='3.1.0'
 
 declare BL64_ARC_MODULE='0'
 
@@ -954,7 +976,7 @@ declare _BL64_BSH_TXT_IMPORT_YAML='convert and import shell variables from YAML 
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_CNT_VERSION='3.1.0'
+declare BL64_CNT_VERSION='3.2.0'
 
 declare BL64_CNT_MODULE='0'
 
@@ -1010,7 +1032,7 @@ declare _BL64_CNT_TXT_ERROR_RUN_NOT_IN_CONTAINER='current task must not be run i
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_CRYP_VERSION='2.0.0'
+declare BL64_CRYP_VERSION='2.1.0'
 
 declare BL64_CRYP_MODULE='0'
 
@@ -1038,7 +1060,7 @@ declare _BL64_FMT_TXT_VALUE_LIST_VALID='Value must be one of'
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_FS_VERSION='5.0.0'
+declare BL64_FS_VERSION='5.1.0'
 
 declare BL64_FS_MODULE='0'
 
@@ -1184,7 +1206,7 @@ declare BL64_HLM_TXT_DEPLOY_CHART='deploy helm chart'
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_IAM_VERSION='4.0.0'
+declare BL64_IAM_VERSION='4.1.0'
 
 declare BL64_IAM_MODULE='0'
 
@@ -1271,7 +1293,7 @@ declare BL64_MDB_REPLICA_TIMEOUT=''
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_PKG_VERSION='5.0.0'
+declare BL64_PKG_VERSION='5.1.0'
 
 declare BL64_PKG_MODULE='0'
 
@@ -1368,7 +1390,7 @@ declare _BL64_PY_TXT_VENV_CREATE='create python virtual environment'
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_RBAC_VERSION='2.0.0'
+declare BL64_RBAC_VERSION='2.1.0'
 
 declare BL64_RBAC_MODULE='0'
 
@@ -1418,7 +1440,7 @@ declare _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_RXTX_VERSION='2.0.1'
+declare BL64_RXTX_VERSION='2.1.0'
 
 declare BL64_RXTX_MODULE='0'
 
@@ -1502,7 +1524,7 @@ declare BL64_TM_MODULE='0'
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_TXT_VERSION='2.0.0'
+declare BL64_TXT_VERSION='2.1.0'
 
 declare BL64_TXT_MODULE='0'
 
@@ -1551,7 +1573,7 @@ declare _BL64_UI_TXT_CONFIRMATION_ERROR='provided confirmation message is not wh
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_VCS_VERSION='2.0.0'
+declare BL64_VCS_VERSION='2.1.0'
 
 declare BL64_VCS_MODULE='0'
 
@@ -4068,8 +4090,8 @@ function bl64_os_setup() {
 # Warning: bootstrap function
 function _bl64_os_set_command() {
   # shellcheck disable=SC2034
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  case "$BL64_OS_FLAVOR" in
+  "$BL64_OS_FLAVOR_DEBIAN")
     BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
@@ -4081,7 +4103,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  "$BL64_OS_FLAVOR_FEDORA" | "$BL64_OS_FLAVOR_REDHAT" )
     BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/usr/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
@@ -4093,7 +4115,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
-  ${BL64_OS_SLES}-*)
+  "$BL64_OS_FLAVOR_SUSE")
     BL64_OS_CMD_BASH='/usr/bin/bash'
     BL64_OS_CMD_CAT='/usr/bin/cat'
     BL64_OS_CMD_DATE='/usr/bin/date'
@@ -4105,7 +4127,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_TRUE='/usr/bin/true'
     BL64_OS_CMD_UNAME='/usr/bin/uname'
     ;;
-  ${BL64_OS_ALP}-*)
+  "$BL64_OS_FLAVOR_ALPINE")
     BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
@@ -4117,7 +4139,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
-  ${BL64_OS_MCOS}-*)
+  "$BL64_OS_FLAVOR_MACOS")
     # Homebrew used when no native option available
     BL64_OS_CMD_BASH='/opt/homebre/bin/bash'
     BL64_OS_CMD_CAT='/bin/cat'
@@ -4172,7 +4194,7 @@ function _bl64_os_set_runtime() {
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
       bl64_os_set_lang 'C.UTF-8'
       ;;
-    ${BL64_OS_FD}-*)
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* )
       bl64_os_set_lang 'C.UTF-8'
       ;;
     ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -4331,6 +4353,7 @@ function _bl64_os_get_distro_from_uname() {
   'Darwin')
     os_version="$("$cmd_sw_vers" -productVersion)"
     BL64_OS_DISTRO="DARWIN-${os_version}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_MACOS"
     ;;
   *)
     BL64_OS_DISTRO="$BL64_OS_UNK"
@@ -4386,18 +4409,54 @@ function _bl64_os_get_distro_from_os_release() {
 
   bl64_dbg_app_show_info 'set BL_OS_DISTRO'
   case "${ID^^}" in
-  'ALMALINUX') BL64_OS_DISTRO="${BL64_OS_ALM}-${version_normalized}" ;;
-  'ALPINE') BL64_OS_DISTRO="${BL64_OS_ALP}-${version_normalized}" ;;
-  'AMZN') BL64_OS_DISTRO="${BL64_OS_AMZ}-${version_normalized}" ;;
-  'CENTOS') BL64_OS_DISTRO="${BL64_OS_CNT}-${version_normalized}" ;;
-  'DEBIAN') BL64_OS_DISTRO="${BL64_OS_DEB}-${version_normalized}" ;;
-  'FEDORA') BL64_OS_DISTRO="${BL64_OS_FD}-${version_normalized}" ;;
-  'DARWIN') BL64_OS_DISTRO="${BL64_OS_MCOS}-${version_normalized}" ;;
-  'OL') BL64_OS_DISTRO="${BL64_OS_OL}-${version_normalized}" ;;
-  'ROCKY') BL64_OS_DISTRO="${BL64_OS_RCK}-${version_normalized}" ;;
-  'RHEL') BL64_OS_DISTRO="${BL64_OS_RHEL}-${version_normalized}" ;;
-  'SLES') BL64_OS_DISTRO="${BL64_OS_SLES}-${version_normalized}" ;;
-  'UBUNTU') BL64_OS_DISTRO="${BL64_OS_UB}-${version_normalized}" ;;
+  'ALMALINUX')
+    BL64_OS_DISTRO="${BL64_OS_ALM}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+    ;;
+  'ALPINE')
+    BL64_OS_DISTRO="${BL64_OS_ALP}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_ALPINE"
+    ;;
+  'AMZN')
+    BL64_OS_DISTRO="${BL64_OS_AMZ}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_FEDORA"
+    ;;
+  'CENTOS')
+    BL64_OS_DISTRO="${BL64_OS_CNT}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+    ;;
+  'DEBIAN')
+    BL64_OS_DISTRO="${BL64_OS_DEB}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_DEBIAN"
+    ;;
+  'FEDORA')
+    BL64_OS_DISTRO="${BL64_OS_FD}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_FEDORA"
+    ;;
+  'DARWIN')
+    BL64_OS_DISTRO="${BL64_OS_MCOS}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_MACOS"
+    ;;
+  'OL')
+    BL64_OS_DISTRO="${BL64_OS_OL}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+    ;;
+  'ROCKY')
+    BL64_OS_DISTRO="${BL64_OS_RCK}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+    ;;
+  'RHEL')
+    BL64_OS_DISTRO="${BL64_OS_RHEL}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+    ;;
+  'SLES')
+    BL64_OS_DISTRO="${BL64_OS_SLES}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_SUSE"
+    ;;
+  'UBUNTU')
+    BL64_OS_DISTRO="${BL64_OS_UB}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_DEBIAN"
+    ;;
   *)
     bl64_msg_show_error "${_BL64_OS_TXT_OS_NOT_KNOWN}. ${_BL64_OS_TXT_CHECK_OS_MATRIX} (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE})"
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
@@ -4406,6 +4465,31 @@ function _bl64_os_get_distro_from_os_release() {
   bl64_dbg_lib_show_vars 'BL64_OS_DISTRO'
 
   return 0
+}
+
+#######################################
+# Compare the current OS against the provided flavor
+#
+# Arguments:
+#   $1: flavor ID: BL64_OS_FLAVOR_*
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: flavor match
+#   BL64_LIB_ERROR_OS_NOT_MATCH
+#   BL64_LIB_ERROR_OS_TAG_INVALID
+#######################################
+function bl64_os_is_flavor() {
+  bl64_dbg_lib_show_function "$@"
+  local os_flavor="$1"
+
+  bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_parameter "$os_flavor" ||
+    return $?
+
+  [[ "$BL64_OS_FLAVOR" == "$os_flavor" ]] && return 0
+  return $BL64_LIB_ERROR_OS_NOT_MATCH
 }
 
 #######################################
@@ -4424,11 +4508,16 @@ function _bl64_os_get_distro_from_os_release() {
 #   BL64_LIB_ERROR_OS_TAG_INVALID
 #######################################
 function bl64_os_match() {
+  bl64_os_is_distro "$@"
+}
+function bl64_os_is_distro() {
   bl64_dbg_lib_show_function "$@"
   local item=''
   local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
 
-  bl64_check_module 'BL64_OS_MODULE' || return $?
+  bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_parameters_none $# ||
+    return $?
   bl64_dbg_lib_show_info "Look for [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
@@ -4456,11 +4545,16 @@ function bl64_os_match() {
 #   BL64_LIB_ERROR_OS_TAG_INVALID
 #######################################
 function bl64_os_match_compatible() {
+  bl64_os_is_compatible "$@"
+}
+function bl64_os_is_compatible() {
   bl64_dbg_lib_show_function "$@"
   local item=''
   local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
 
-  bl64_check_module 'BL64_OS_MODULE' || return $?
+  bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_parameters_none $# ||
+    return $?
   bl64_dbg_lib_show_info "Look for exact match [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
@@ -5241,7 +5335,7 @@ function _bl64_arc_set_command() {
     BL64_ARC_CMD_TAR='/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_ARC_CMD_TAR='/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
     ;;
@@ -5280,7 +5374,7 @@ function _bl64_arc_set_options() {
     BL64_ARC_SET_TAR_VERBOSE='--verbose'
     BL64_ARC_SET_UNZIP_OVERWRITE='-o'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_ARC_SET_TAR_VERBOSE='--verbose'
     BL64_ARC_SET_UNZIP_OVERWRITE='-o'
     ;;
@@ -5438,7 +5532,7 @@ function bl64_arc_open_tar() {
       --auto-compress \
       --file="$source"
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     bl64_arc_run_tar \
       --overwrite \
       --extract \
@@ -6226,6 +6320,69 @@ function bl64_bsh_env_import_yaml() {
 }
 
 #######################################
+# Determine the full path of a command
+#
+# * valid for command type only (type -p)
+# * if the command is already a path, nothing else is done
+#
+# Arguments:
+#   $1: command name with/without path
+# Outputs:
+#   STDOUT: full path
+#   STDERR: Error messages
+# Returns:
+#   0: full path detected
+#   >0: unable to detect or error
+#######################################
+function bl64_bsh_command_get_path() {
+  bl64_dbg_lib_show_function "$@"
+  local command="${1:-}"
+  local full_path=''
+
+  bl64_check_parameter 'command' ||
+    return $?
+
+  full_path="$(type -p "${command}")"
+  if [[ -n "$full_path" ]]; then
+    echo "$full_path"
+    return 0
+  fi
+  return $BL64_LIB_ERROR_TASK_FAILED
+}
+
+#######################################
+# Check if the command is executable
+#
+# * command is first converted to full path
+#
+# Arguments:
+#   $1: command name with/without path
+# Outputs:
+#   STDOUT: none
+#   STDERR: Error messages
+# Returns:
+#   0: command is executable
+#   >0: command is not present or not executable
+#######################################
+function bl64_bsh_command_is_executable() {
+  bl64_dbg_lib_show_function "$@"
+  local command="${1:-}"
+  local full_path=''
+
+  bl64_check_parameter 'command' ||
+    return $?
+
+  full_path="$(bl64_bsh_command_get_path "${command}")" ||
+    return $?
+  [[ ! -e "$full_path" ]] &&
+    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+  [[ ! -x "$full_path" ]] &&
+    return $BL64_LIB_ERROR_FILE_NOT_EXECUTE
+  [[ -x "$full_path" ]] ||
+    return $BL64_LIB_ERROR_TASK_FAILED
+}
+
+#######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #######################################
 
@@ -6284,7 +6441,7 @@ function _bl64_cnt_set_command() {
     BL64_CNT_CMD_PODMAN='/usr/bin/podman'
     BL64_CNT_CMD_DOCKER='/usr/bin/docker'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_CNT_CMD_PODMAN='/usr/bin/podman'
     BL64_CNT_CMD_DOCKER='/usr/bin/docker'
     ;;
@@ -6401,7 +6558,7 @@ function bl64_cnt_set_paths() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
     ;;
   ${BL64_OS_SLES}-*)
@@ -7588,7 +7745,7 @@ function _bl64_cryp_set_command() {
     BL64_CRYP_CMD_GPG='/usr/bin/gpg'
     BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_CRYP_CMD_GPG='/usr/bin/gpg'
     BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
     ;;
@@ -8203,7 +8360,7 @@ function _bl64_fs_set_command() {
     BL64_FS_CMD_RM='/bin/rm'
     BL64_FS_CMD_TOUCH='/usr/bin/touch'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_FS_CMD_CHMOD='/usr/bin/chmod'
     BL64_FS_CMD_CHOWN='/usr/bin/chown'
     BL64_FS_CMD_CP='/usr/bin/cp'
@@ -8305,7 +8462,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_RM_RECURSIVE='--recursive'
     BL64_FS_SET_RM_VERBOSE='--verbose'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
     BL64_FS_SET_CHMOD_VERBOSE='--verbose'
     BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
@@ -8675,7 +8832,7 @@ function bl64_fs_merge_dir() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_fs_cp_dir --no-target-directory "$source" "$target"
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     bl64_fs_cp_dir --no-target-directory "$source" "$target"
     ;;
   ${BL64_OS_SLES}-*)
@@ -10433,7 +10590,7 @@ function _bl64_iam_set_command() {
     BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
     BL64_IAM_CMD_ID='/usr/bin/id'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
     BL64_IAM_CMD_ID='/usr/bin/id'
     ;;
@@ -10476,7 +10633,7 @@ function _bl64_iam_set_alias() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
     ;;
   ${BL64_OS_SLES}-*)
@@ -10516,7 +10673,7 @@ function _bl64_iam_set_options() {
     BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
     BL64_IAM_SET_USERADD_SHELL='--shell'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
     BL64_IAM_SET_USERADD_GECO='--comment'
     BL64_IAM_SET_USERADD_GROUP='--gid'
@@ -10614,7 +10771,7 @@ function bl64_iam_user_add() {
       $BL64_IAM_SET_USERADD_CREATE_HOME \
       "$login"
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     "$BL64_IAM_CMD_USERADD" \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
@@ -10706,7 +10863,7 @@ function bl64_iam_user_get_id() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     "${BL64_IAM_CMD_ID}" -u $user
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     "${BL64_IAM_CMD_ID}" -u $user
     ;;
   ${BL64_OS_SLES}-*)
@@ -11926,7 +12083,7 @@ function _bl64_pkg_set_command() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_PKG_CMD_APT='/usr/bin/apt-get'
     ;;
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -11972,7 +12129,7 @@ function _bl64_pkg_set_options() {
     BL64_PKG_SET_QUIET='--quiet --quiet'
     BL64_PKG_SET_VERBOSE='--show-progress'
     ;;
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     BL64_PKG_SET_ASSUME_YES='--assumeyes'
     BL64_PKG_SET_SLIM='--nodocs'
     BL64_PKG_SET_QUIET='--quiet'
@@ -12031,7 +12188,7 @@ function _bl64_pkg_set_alias() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
     BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
     BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
@@ -12106,7 +12263,7 @@ function bl64_pkg_set_paths() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d'
     ;;
   ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
@@ -12176,7 +12333,7 @@ function bl64_pkg_repository_add() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     _bl64_pkg_repository_add_apt "$name" "$source" "$gpgkey" "$extra1" "$extra2"
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     _bl64_pkg_repository_add_yum "$name" "$source" "$gpgkey"
     ;;
   ${BL64_OS_SLES}-*)
@@ -12300,7 +12457,7 @@ function bl64_pkg_repository_refresh() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_pkg_run_apt 'update'
     ;;
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     bl64_pkg_run_dnf 'makecache'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -12394,7 +12551,7 @@ function bl64_pkg_install() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_pkg_run_apt 'install' $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES -- "$@"
     ;;
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -12442,7 +12599,7 @@ function bl64_pkg_upgrade() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES -- "$@"
     ;;
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -12490,7 +12647,7 @@ function bl64_pkg_cleanup() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_pkg_run_apt 'clean'
     ;;
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     bl64_pkg_run_dnf 'clean' 'all'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
@@ -13285,7 +13442,7 @@ function _bl64_rbac_set_command() {
     BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
     BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
     BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
     BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
@@ -13331,7 +13488,7 @@ function _bl64_rbac_set_alias() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_RBAC_ALIAS_SUDO_ENV="$BL64_RBAC_CMD_SUDO --preserve-env --set-home"
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_RBAC_ALIAS_SUDO_ENV="$BL64_RBAC_CMD_SUDO --preserve-env --set-home"
     ;;
   ${BL64_OS_SLES}-*)
@@ -13756,7 +13913,7 @@ function _bl64_rxtx_set_command() {
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
     BL64_RXTX_CMD_WGET='/usr/bin/wget'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
     BL64_RXTX_CMD_WGET='/usr/bin/wget'
     ;;
@@ -13793,7 +13950,7 @@ function _bl64_rxtx_set_options() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-18.* | ${BL64_OS_DEB}-9.* | ${BL64_OS_DEB}-10.* | ${BL64_OS_DEB}-11.*)
+  ${BL64_OS_UB}-18.* | ${BL64_OS_DEB}-9.* | ${BL64_OS_DEB}-10.*)
     BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
@@ -13823,7 +13980,7 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_SECURE='--no-config'
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
-  ${BL64_OS_FD}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
     BL64_RXTX_SET_CURL_INCLUDE='--include'
@@ -13925,7 +14082,7 @@ function _bl64_rxtx_set_alias() {
     BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
     BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
     BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
     ;;
@@ -14694,7 +14851,7 @@ function _bl64_txt_set_command() {
       BL64_TXT_CMD_AWK_POSIX='/usr/bin/mawk'
     fi
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_TXT_CMD_AWK='/usr/bin/awk'
     BL64_TXT_CMD_BASE64='/usr/bin/base64'
     BL64_TXT_CMD_CUT='/usr/bin/cut'
@@ -14788,7 +14945,7 @@ function _bl64_txt_set_options() {
       BL64_TXT_SET_AWK_POSIX='--posix'
     fi
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_TXT_SET_AWK_POSIX='--posix'
     BL64_TXT_SET_AWS_FS='-F'
     BL64_TXT_SET_GREP_ERE='-E'
@@ -15303,7 +15460,7 @@ function _bl64_vcs_set_command() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_VCS_CMD_GIT='/usr/bin/git'
     ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_VCS_CMD_GIT='/usr/bin/git'
     ;;
   ${BL64_OS_SLES}-*)
@@ -15495,7 +15652,7 @@ function bl64_vcs_git_sparse() {
   cd "$destination"
 
   bl64_dbg_lib_show_info 'detect if current git supports sparse-checkout option'
-  if bl64_os_match "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_UB}-18" "${BL64_OS_UB}-20" "${BL64_OS_OL}-7" "${BL64_OS_CNT}-7"; then
+  if bl64_os_is_distro "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_UB}-18" "${BL64_OS_UB}-20" "${BL64_OS_OL}-7" "${BL64_OS_CNT}-7"; then
     bl64_dbg_lib_show_info 'git sparse-checkout not supported. Using alternative method'
     # shellcheck disable=SC2086
     bl64_vcs_run_git init &&
@@ -15914,8 +16071,9 @@ if [[ "${BL64_OS_MODULE:-}" == "$BL64_VAR_ON" ]]; then
   bl64_os_check_compatibility \
     "${BL64_OS_ALM}-8" "${BL64_OS_ALM}-9" \
     "${BL64_OS_ALP}-3" \
+    "${BL64_OS_AMZ}-2023" \
     "${BL64_OS_CNT}-7" "${BL64_OS_CNT}-8" "${BL64_OS_CNT}-9" \
-    "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_DEB}-11" \
+    "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_DEB}-11" "${BL64_OS_DEB}-12" \
     "${BL64_OS_FD}-33" "${BL64_OS_FD}-34" "${BL64_OS_FD}-35" "${BL64_OS_FD}-36" "${BL64_OS_FD}-37" "${BL64_OS_FD}-38" "${BL64_OS_FD}-39" \
     "${BL64_OS_OL}-7" "${BL64_OS_OL}-8" "${BL64_OS_OL}-9" \
     "${BL64_OS_RCK}-8" "${BL64_OS_RCK}-9" \
