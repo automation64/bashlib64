@@ -3,7 +3,7 @@
 # Dev / Build / Custom / Assemble modular script
 #
 # * Use to build library distributables
-# * Version: 2.2.0
+# * Version: 3.0.0
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -151,60 +151,6 @@ function dev_build_library() {
 
 }
 
-# shellcheck disable=SC2317
-function dev_build_docs() {
-  bl64_dbg_lib_show_function
-  local file=''
-  local module_env=''
-  local module_code=''
-  local module_init=''
-
-  bl64_dbg_app_show_info "DEV_ENV_CUSTOM_MODULES_CORE='${DEV_ENV_CUSTOM_MODULES_CORE}'"
-  cd "$DEV_PATH_SRC" || return 1
-
-  for file in lib $DEV_ENV_CUSTOM_MODULES_CORE $DEV_ENV_CUSTOM_MODULES_OPT; do
-    module_env="bl64-${file}-env.bash"
-    [[ ! -f "$module_env" ]] && module_env="$BL64_VAR_NULL"
-    module_code="bl64-${file}.bash"
-    [[ ! -f "$module_code" ]] && module_code="$BL64_VAR_NULL"
-    module_init="bl64-${file}-setup.bash"
-    [[ ! -f "$module_init" ]] && module_init="$BL64_VAR_NULL"
-
-    bl64_msg_show_task "creating document for: ${file}"
-    dev_build_md "$file" "$module_env" "$module_code" "$module_init" >"${DEV_DOCS}/bl64-${file}.md"
-  done
-}
-
-# shellcheck disable=SC2317
-function dev_build_md() {
-  bl64_dbg_lib_show_function "$@"
-  local module="$1"
-  local module_env="$2"
-  local module_code="$3"
-  local module_init="$4"
-
-  printf '# Module: %s\n\n' "${module}"
-
-  if [[ "$module_env" != "$BL64_VAR_NULL" ]]; then
-    printf '## Header\n\n'
-    printf '```shell\n'
-    [[ "$module" == 'lib' ]] && printf '{%% include "../src/bl64-%s.header" %%}\n' "$module"
-    printf '{%% include "../src/bl64-%s-env.bash" %%}\n' "$module"
-    printf '```\n\n'
-  fi
-  if [[ "$module_init" != "$BL64_VAR_NULL" ]]; then
-    printf '## Setup\n\n'
-    printf '```shell\n'
-    printf '{%% include "../src/bl64-%s.init" %%}\n' "$module"
-    printf '```\n\n'
-  fi
-  printf '## Code\n\n'
-  printf '```shell\n'
-  printf '{%% include "../src/bl64-%s.bash" %%}\n' "$module"
-  printf '```\n'
-
-}
-
 function dev_build_check_requirements() {
   bl64_dbg_app_show_function "$@"
   local command="$1"
@@ -217,12 +163,11 @@ function dev_build_check_requirements() {
 
 function dev_build_help() {
   bl64_msg_show_usage \
-    '<-t|-r|-d> [-h]' \
+    '<-t|-r> [-h]' \
     'Create the BashLib64 stand-alone distributable file' \
     '
   -t: Build stand-alone file for testing
   -r: Build release files
-  -d: Build documentation
   ' '
   -h: Show Help
   ' ''
@@ -236,11 +181,10 @@ declare dev_build_command=''
 declare dev_build_option=''
 
 (($# == 0)) && dev_build_help && exit 1
-while getopts ':trdh' dev_build_option; do
+while getopts ':trh' dev_build_option; do
   case "$dev_build_option" in
   t) dev_build_command='dev_build_test' ;;
   r) dev_build_command='dev_build_release' ;;
-  d) dev_build_command='dev_build_docs' ;;
   h) dev_build_help && exit ;;
   *) dev_build_help && exit 1 ;;
   esac
@@ -251,7 +195,7 @@ dev_build_check_requirements "$dev_build_command" || exit 1
 bl64_msg_all_enable_verbose
 bl64_msg_show_batch_start "$dev_build_command"
 case "$dev_build_command" in
-'dev_build_docs' | 'dev_build_test' | 'dev_build_release') "$dev_build_command" ;;
+'dev_build_test' | 'dev_build_release') "$dev_build_command" ;;
 *) bl64_check_alert_undefined "$dev_build_command" ;;
 esac
 bl64_msg_show_batch_finish $? "$dev_build_command"
