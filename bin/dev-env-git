@@ -2,7 +2,7 @@
 #######################################
 # Dev / Env / GIT / Shared environment variables
 #
-# * Version: 1.1.0
+# * Version: 1.1.1
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -26,14 +26,17 @@
 # * Use .env file to override values
 #
 
-# GIT / Main branch name
-export DEV_GIT_BRANCH_MAIN="${DEV_GIT_BRANCH_MAIN:-main}"
-# GIT / Origin remote name
-export DEV_GIT_REMOTE_ORIGIN="${DEV_GIT_REMOTE_ORIGIN:-origin}"
-# GIT / Use upstream repository? (ON|OFF)
-export DEV_GIT_REMOTE_UPSTREAM_ENABLED="${DEV_GIT_REMOTE_UPSTREAM_ENABLED:-ON}"
-# GIT / Upstream remote name
-export DEV_GIT_REMOTE_UPSTREAM="${DEV_GIT_REMOTE_UPSTREAM:-upstream}"
+# shellcheck disable=2154
+{
+    # GIT / Main branch name
+    export DEV_GIT_BRANCH_MAIN="${DEV_GIT_BRANCH_MAIN:-main}"
+    # GIT / Origin remote name
+    export DEV_GIT_REMOTE_ORIGIN="${DEV_GIT_REMOTE_ORIGIN:-origin}"
+    # GIT / Use upstream repository? (ON|OFF)
+    export DEV_GIT_REMOTE_UPSTREAM_ENABLED="${DEV_GIT_REMOTE_UPSTREAM_ENABLED:-ON}"
+    # GIT / Upstream remote name
+    export DEV_GIT_REMOTE_UPSTREAM="${DEV_GIT_REMOTE_UPSTREAM:-upstream}"
+}
 
 #
 # Locals
@@ -41,8 +44,11 @@ export DEV_GIT_REMOTE_UPSTREAM="${DEV_GIT_REMOTE_UPSTREAM:-upstream}"
 # * Use .local file or CICD variables to override values
 #
 
-# Lib / RSync / Command
-export DEV_LIB_RSYNC_BIN="${DEV_LIB_RSYNC_BIN:-/usr/bin/rsync}"
+# shellcheck disable=2154
+{
+    # Lib / RSync / Command
+    export DEV_LIB_RSYNC_BIN="${DEV_LIB_RSYNC_BIN:-/usr/bin/rsync}"
+}
 
 #
 # Secrets
