@@ -34,12 +34,12 @@ jobs:
         run: "./bin/dev-lib-installer64 && ./bin/dev-lib-testmansh"
 
       - name: "Build app"
-        run: "./bin/dev-build-custom -t"
+        run: "./bin/dev-build-project -t"
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
         run: |
           source ./bin/dev-set &&
-          source ./bin/dev-env-custom &&
+          source ./bin/dev-env-project &&
           ./bin/dev-test-testmansh "$DEV_TEST_TESTMANSH_CONTAINER_${{matrix.target}}" "$DEV_TEST_TESTMANSH_CASES_CLOUD"
 ...
