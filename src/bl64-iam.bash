@@ -54,7 +54,7 @@ function bl64_iam_user_add() {
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    "$BL64_IAM_CMD_USERADD" \
+    bl64_iam_run_useradd \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
@@ -63,7 +63,7 @@ function bl64_iam_user_add() {
       "$login"
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    "$BL64_IAM_CMD_USERADD" \
+    bl64_iam_run_useradd \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
@@ -73,7 +73,7 @@ function bl64_iam_user_add() {
     ;;
   ${BL64_OS_SLES}-*)
     bl64_dbg_lib_show_comments 'force primary group creation'
-    "$BL64_IAM_CMD_USERADD" \
+    bl64_iam_run_useradd \
       --user-group \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
@@ -84,7 +84,7 @@ function bl64_iam_user_add() {
     ;;
   ${BL64_OS_ALP}-*)
     bl64_dbg_lib_show_comments 'disable automatic password generation'
-    "$BL64_IAM_CMD_USERADD" \
+    bl64_iam_run_adduser \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
@@ -95,7 +95,7 @@ function bl64_iam_user_add() {
     ;;
   ${BL64_OS_MCOS}-*)
     password="$(bl64_rnd_get_numeric)" || return $?
-    "$BL64_IAM_CMD_USERADD" \
+    bl64_iam_run_sysadminctl \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
@@ -152,19 +152,19 @@ function bl64_iam_user_get_id() {
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    "${BL64_IAM_CMD_ID}" -u $user
+    bl64_iam_run_id -u $user
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    "${BL64_IAM_CMD_ID}" -u $user
+    bl64_iam_run_id -u $user
     ;;
   ${BL64_OS_SLES}-*)
-    "${BL64_IAM_CMD_ID}" -u $user
+    bl64_iam_run_id -u $user
     ;;
   ${BL64_OS_ALP}-*)
-    "${BL64_IAM_CMD_ID}" -u $user
+    bl64_iam_run_id -u $user
     ;;
   ${BL64_OS_MCOS}-*)
-    "${BL64_IAM_CMD_ID}" -u $user
+    bl64_iam_run_id -u $user
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -185,7 +185,7 @@ function bl64_iam_user_get_id() {
 #######################################
 function bl64_iam_user_get_current() {
   bl64_dbg_lib_show_function
-  "${BL64_IAM_CMD_ID}" -u -n
+  bl64_iam_run_id -u -n
 }
 
 #######################################
@@ -213,4 +213,252 @@ function bl64_iam_check_user() {
   else
     return 0
   fi
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_iam_run_useradd() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity=' '
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_command "$BL64_IAM_CMD_USERADD" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_IAM_CMD_USERADD" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_iam_run_groupadd() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity=' '
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_command  "$BL64_IAM_CMD_GROUPADD" &&
+    bl64_check_module 'BL64_IAM_MODULE' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_IAM_CMD_GROUPADD" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_iam_run_groupmod() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity=' '
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_command  "$BL64_IAM_CMD_GROUPMOD" &&
+    bl64_check_module 'BL64_IAM_MODULE' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_IAM_CMD_GROUPMOD" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_iam_run_usermod() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity=' '
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_command  "$BL64_IAM_CMD_USERMOD" &&
+    bl64_check_module 'BL64_IAM_MODULE' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_IAM_CMD_USERMOD" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_iam_run_adduser() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity=' '
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_command  "$BL64_IAM_CMD_ADDUSER" &&
+    bl64_check_module 'BL64_IAM_MODULE' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_IAM_CMD_ADDUSER" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_iam_run_addgroup() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity=' '
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_command  "$BL64_IAM_CMD_ADDGROUP" &&
+    bl64_check_module 'BL64_IAM_MODULE' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_IAM_CMD_ADDGROUP" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_iam_run_id() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity=' '
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_command  "$BL64_IAM_CMD_ID" &&
+    bl64_check_module 'BL64_IAM_MODULE' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_IAM_CMD_ID" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_iam_run_sysadminctl() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity=' '
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_command  "$BL64_IAM_CMD_SYSADMINCTL" &&
+    bl64_check_module 'BL64_IAM_MODULE' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_IAM_CMD_SYSADMINCTL" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
 }

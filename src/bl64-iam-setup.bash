@@ -56,22 +56,32 @@ function _bl64_iam_set_command() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
+    BL64_IAM_CMD_USERMOD='/usr/sbin/usermod'
+    BL64_IAM_CMD_GROUPADD='/usr/sbin/groupadd'
+    BL64_IAM_CMD_GROUPMOD='/usr/sbin/groupmod'
     BL64_IAM_CMD_ID='/usr/bin/id'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
+    BL64_IAM_CMD_USERMOD='/usr/sbin/usermod'
+    BL64_IAM_CMD_GROUPADD='/usr/sbin/groupadd'
+    BL64_IAM_CMD_GROUPMOD='/usr/sbin/groupmod'
     BL64_IAM_CMD_ID='/usr/bin/id'
     ;;
   ${BL64_OS_SLES}-*)
     BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
+    BL64_IAM_CMD_USERMOD='/usr/sbin/usermod'
+    BL64_IAM_CMD_GROUPADD='/usr/sbin/groupadd'
+    BL64_IAM_CMD_GROUPMOD='/usr/sbin/groupmod'
     BL64_IAM_CMD_ID='/usr/bin/id'
     ;;
   ${BL64_OS_ALP}-*)
-    BL64_IAM_CMD_USERADD='/usr/sbin/adduser'
+    BL64_IAM_CMD_ADDUSER='/usr/sbin/adduser'
+    BL64_IAM_CMD_ADDGROUP='/usr/sbin/addgroup'
     BL64_IAM_CMD_ID='/usr/bin/id'
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_IAM_CMD_USERADD='/usr/sbin/sysadminctl'
+    BL64_IAM_CMD_SYSADMINCTL='/usr/sbin/sysadminctl'
     BL64_IAM_CMD_ID='/usr/bin/id'
     ;;
   *) bl64_check_alert_unsupported ;;
@@ -108,10 +118,10 @@ function _bl64_iam_set_alias() {
     BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
     ;;
   ${BL64_OS_ALP}-*)
-    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
+    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_ADDUSER"
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD "
+    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_SYSADMINCTL"
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -156,7 +166,6 @@ function _bl64_iam_set_options() {
     BL64_IAM_SET_USERADD_SHELL='--shell'
     ;;
   ${BL64_OS_ALP}-*)
-    # Home is created by default
     BL64_IAM_SET_USERADD_CREATE_HOME=' '
     BL64_IAM_SET_USERADD_GECO='-g'
     BL64_IAM_SET_USERADD_GROUP='-G'
@@ -164,7 +173,6 @@ function _bl64_iam_set_options() {
     BL64_IAM_SET_USERADD_SHELL='-s'
     ;;
   ${BL64_OS_MCOS}-*)
-    # Home is created by default
     BL64_IAM_SET_USERADD_CREATE_HOME=' '
     BL64_IAM_SET_USERADD_GECO='-fullName'
     BL64_IAM_SET_USERADD_GROUP='-gid'
