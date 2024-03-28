@@ -36,8 +36,7 @@ function bl64_iam_user_add() {
   local gecos="${5:-$BL64_VAR_DEFAULT}"
   local password=''
 
-  bl64_check_privilege_root &&
-    bl64_check_parameter 'login' ||
+  bl64_check_parameter 'login' ||
     return $?
 
   [[ "$home" == "$BL64_VAR_DEFAULT" ]] && home=''
@@ -109,6 +108,55 @@ function bl64_iam_user_add() {
 }
 
 #######################################
+# Create local user group
+#
+# Arguments:
+#   $1: group name
+#   $2: (optional) group ID
+# Outputs:
+#   STDOUT: Progress info
+#   STDERR: Command execution error
+# Returns:
+#   0: group created ok
+#   >0: failed to create group
+#######################################
+function bl64_iam_group_add() {
+  bl64_dbg_lib_show_function "$@"
+  local group_name="$1"
+  local group_id="${2:-$BL64_VAR_DEFAULT}"
+
+  [[ "$group_id" == "$BL64_VAR_DEFAULT" ]] && group_id=''
+  bl64_check_parameter 'group_name' ||
+    return $?
+
+  bl64_msg_show_lib_subtask "$_BL64_IAM_TXT_ADD_GROUP ($group_name)"
+  # shellcheck disable=SC2086
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_iam_run_groupadd \
+      ${group_id:+--gid ${group_id}} \
+      "$group_name"
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    bl64_iam_run_groupadd \
+      ${group_id:+--gid ${group_id}} \
+      "$group_name"
+    ;;
+  ${BL64_OS_SLES}-*)
+    bl64_iam_run_groupadd \
+      ${group_id:+--gid ${group_id}} \
+      "$group_name"
+    ;;
+  ${BL64_OS_ALP}-*)
+    bl64_iam_run_groupadd \
+      ${group_id:+--gid ${group_id}} \
+      "$group_name"
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+}
+
+#######################################
 # Determine if the user is created
 #
 # Arguments:
@@ -128,9 +176,7 @@ function bl64_iam_user_is_created() {
   bl64_check_parameter 'user' ||
     return $?
 
-  # Use the ID command to detect if the user is created
   bl64_iam_user_get_id "$user" >/dev/null 2>&1 || return $BL64_LIB_ERROR_IS_NOT
-
 }
 
 #######################################
@@ -235,6 +281,7 @@ function bl64_iam_run_useradd() {
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_USERADD" ||
     return $?
 
@@ -265,8 +312,9 @@ function bl64_iam_run_groupadd() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_command  "$BL64_IAM_CMD_GROUPADD" &&
-    bl64_check_module 'BL64_IAM_MODULE' ||
+    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_privilege_root &&
+    bl64_check_command "$BL64_IAM_CMD_GROUPADD" ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -296,8 +344,9 @@ function bl64_iam_run_groupmod() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_command  "$BL64_IAM_CMD_GROUPMOD" &&
-    bl64_check_module 'BL64_IAM_MODULE' ||
+    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_privilege_root &&
+    bl64_check_command "$BL64_IAM_CMD_GROUPMOD" ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -327,8 +376,9 @@ function bl64_iam_run_usermod() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_command  "$BL64_IAM_CMD_USERMOD" &&
-    bl64_check_module 'BL64_IAM_MODULE' ||
+    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_privilege_root &&
+    bl64_check_command "$BL64_IAM_CMD_USERMOD" ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -358,8 +408,9 @@ function bl64_iam_run_adduser() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_command  "$BL64_IAM_CMD_ADDUSER" &&
-    bl64_check_module 'BL64_IAM_MODULE' ||
+    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_privilege_root &&
+    bl64_check_command "$BL64_IAM_CMD_ADDUSER" ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -389,8 +440,9 @@ function bl64_iam_run_addgroup() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_command  "$BL64_IAM_CMD_ADDGROUP" &&
-    bl64_check_module 'BL64_IAM_MODULE' ||
+    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_privilege_root &&
+    bl64_check_command "$BL64_IAM_CMD_ADDGROUP" ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -420,8 +472,8 @@ function bl64_iam_run_id() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_command  "$BL64_IAM_CMD_ID" &&
-    bl64_check_module 'BL64_IAM_MODULE' ||
+    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_command "$BL64_IAM_CMD_ID" ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -451,8 +503,9 @@ function bl64_iam_run_sysadminctl() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_command  "$BL64_IAM_CMD_SYSADMINCTL" &&
-    bl64_check_module 'BL64_IAM_MODULE' ||
+    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_privilege_root &&
+    bl64_check_command "$BL64_IAM_CMD_SYSADMINCTL" ||
     return $?
 
   bl64_dbg_lib_trace_start

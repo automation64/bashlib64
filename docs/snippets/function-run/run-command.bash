@@ -17,7 +17,9 @@ function bl64_X_MODULE_X_run_X_COMMAND_X() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_X_MODULE_ID_X_MODULE' ||
+    bl64_check_module 'BL64_X_MODULE_ID_X_MODULE' &&
+    # optional # bl64_check_privilege_root &&
+    bl64_check_command "$BL64_X_MODULE_ID_X_CMD_X_CMD_X" ||
     return $?
 
   # optional # bl64_msg_lib_verbose_enabled && verbosity='X_VERBOSE_FLAG_X'
