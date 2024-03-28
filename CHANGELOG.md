@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - wrappers for user add commands 
   - group add
+  - check if group exists
 - os
   - getent wrapper
 

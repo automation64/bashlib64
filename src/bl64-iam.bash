@@ -125,11 +125,16 @@ function bl64_iam_group_add() {
   local group_name="$1"
   local group_id="${2:-$BL64_VAR_DEFAULT}"
 
-  [[ "$group_id" == "$BL64_VAR_DEFAULT" ]] && group_id=''
   bl64_check_parameter 'group_name' ||
     return $?
 
+  if bl64_iam_user_is_created "$group_name"; then
+    bl64_msg_show_warning "${_BL64_IAM_TXT_EXISTING_GROUP} ($group_name)"
+    return 0
+  fi
+
   bl64_msg_show_lib_subtask "$_BL64_IAM_TXT_ADD_GROUP ($group_name)"
+  [[ "$group_id" == "$BL64_VAR_DEFAULT" ]] && group_id=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -162,21 +167,44 @@ function bl64_iam_group_add() {
 # Arguments:
 #   $1: login name
 # Outputs:
-#   STDOUT: native user add command output
-#   STDERR: native user add command error messages
+#   STDOUT: command output
+#   STDERR: command error messages
 # Returns:
 #   0: it is
 #   BL64_LIB_ERROR_IS_NOT
-#   command error status
+#   >0: command error status
 #######################################
 function bl64_iam_user_is_created() {
   bl64_dbg_lib_show_function "$@"
-  local user="$1"
+  local user_name="$1"
 
-  bl64_check_parameter 'user' ||
+  bl64_check_parameter 'user_name' ||
     return $?
 
-  bl64_iam_user_get_id "$user" >/dev/null 2>&1 || return $BL64_LIB_ERROR_IS_NOT
+  bl64_iam_user_get_id "$user_name" >/dev/null 2>&1 || return $BL64_LIB_ERROR_IS_NOT
+}
+
+#######################################
+# Determine if the group is created
+#
+# Arguments:
+#   $1: group name
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command error messages
+# Returns:
+#   0: it is
+#   BL64_LIB_ERROR_IS_NOT
+#   >0: command error status
+#######################################
+function bl64_iam_group_is_created() {
+  bl64_dbg_lib_show_function "$@"
+  local group_name="$1"
+
+  bl64_check_parameter 'group_name' ||
+    return $?
+
+  bl64_os_run_getent 'group' "$group_name" >/dev/null 2>&1 || return $BL64_LIB_ERROR_IS_NOT
 }
 
 #######################################
