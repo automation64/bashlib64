@@ -62,18 +62,20 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
+    BL64_OS_CMD_GETENT='/usr/bin/getent'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_SLEEP='/bin/sleep'
     BL64_OS_CMD_TEE='/usr/bin/tee'
     BL64_OS_CMD_TRUE='/bin/true'
     BL64_OS_CMD_UNAME='/bin/uname'
     ;;
-  "$BL64_OS_FLAVOR_FEDORA" | "$BL64_OS_FLAVOR_REDHAT" )
+  "$BL64_OS_FLAVOR_FEDORA" | "$BL64_OS_FLAVOR_REDHAT")
     BL64_OS_CMD_BASH='/bin/bash'
     BL64_OS_CMD_CAT='/usr/bin/cat'
     BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
+    BL64_OS_CMD_GETENT='/usr/bin/getent'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_SLEEP='/usr/bin/sleep'
     BL64_OS_CMD_TEE='/usr/bin/tee'
@@ -86,6 +88,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_DATE='/usr/bin/date'
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
+    BL64_OS_CMD_GETENT='/usr/bin/getent'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_SLEEP='/usr/bin/sleep'
     BL64_OS_CMD_TEE='/usr/bin/tee'
@@ -98,6 +101,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
+    BL64_OS_CMD_GETENT='/usr/bin/getent'
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_SLEEP='/bin/sleep'
     BL64_OS_CMD_TEE='/usr/bin/tee'
@@ -111,6 +115,7 @@ function _bl64_os_set_command() {
     BL64_OS_CMD_DATE='/bin/date'
     BL64_OS_CMD_FALSE='/usr/bin/false'
     BL64_OS_CMD_HOSTNAME='/bin/hostname'
+    BL64_OS_CMD_GETENT="$BL64_VAR_INCOMPATIBLE"
     BL64_OS_CMD_LOCALE='/usr/bin/locale'
     BL64_OS_CMD_SLEEP='/usr/bin/sleep'
     BL64_OS_CMD_TEE='/usr/bin/tee'
@@ -159,7 +164,7 @@ function _bl64_os_set_runtime() {
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
       bl64_os_set_lang 'C.UTF-8'
       ;;
-    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* )
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
       bl64_os_set_lang 'C.UTF-8'
       ;;
     ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)

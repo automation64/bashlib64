@@ -3,7 +3,7 @@
 #######################################
 
 # shellcheck disable=SC2034
-declare BL64_OS_VERSION='5.2.0'
+declare BL64_OS_VERSION='5.3.0'
 
 declare BL64_OS_MODULE='0'
 
@@ -17,6 +17,7 @@ declare BL64_OS_CMD_BASH=''
 declare BL64_OS_CMD_CAT=''
 declare BL64_OS_CMD_DATE=''
 declare BL64_OS_CMD_FALSE=''
+declare BL64_OS_CMD_GETENT=''
 declare BL64_OS_CMD_HOSTNAME=''
 declare BL64_OS_CMD_LOCALE=''
 declare BL64_OS_CMD_SLEEP=''

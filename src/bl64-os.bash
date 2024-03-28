@@ -463,3 +463,33 @@ function bl64_os_run_sleep() {
   "$BL64_OS_CMD_SLEEP" "$@"
   bl64_dbg_lib_trace_stop
 }
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_os_run_getent() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_command "$BL64_OS_CMD_GETENT" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_OS_CMD_GETENT" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
