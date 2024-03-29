@@ -4,9 +4,11 @@
 # Arguments:
 #   $1: X_PARAMETER_DESCRIPTION_X
 # Outputs:
-#   STDOUT: X_OUTPUT_DESCRIPTION_X
-#   STDERR: X_ERROR_DESCRIPTION_X
+#   STDOUT: Task progress | None
+#   STDERR: Task errors | None
 # Returns:
+#   0: task executed ok
+#   >0: task failed
 #   X_EXITCODE_X: X_EXITCODE_DESCRIPTION_X
 #######################################
 function bl64_X_MODULE_X_X_FUNCTION_X() {
