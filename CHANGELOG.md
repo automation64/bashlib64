@@ -10,11 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - iam
-  - wrappers for user add commands 
-  - group add
-  - check if group exists
+  - bl64_iam_run_*: wrappers for user add commands 
+  - bl64_iam_group_add: add local user group
+  - bl64_iam_group_is_created: verify that group exists
+  - bl64_iam_user_add: added UID parameter (optional)
+  - bl64_iam_xdg_create: create user's xdg dirs
 - os
-  - getent wrapper
+  - bl64_os_run_getent: getent wrapper
 
 ## [19.3.0]
 
