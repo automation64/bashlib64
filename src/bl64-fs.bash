@@ -1073,7 +1073,7 @@ function bl64_fs_set_ephemeral() {
 #######################################
 # Create temporal directory
 #
-# * Wrapper to the mktemp tool
+# * Wrapper for the mktemp tool
 #
 # Arguments:
 #   None
@@ -1097,7 +1097,7 @@ function bl64_fs_create_tmpdir() {
 #######################################
 # Create temporal file
 #
-# * Wrapper to the mktemp tool
+# * Wrapper for the mktemp tool
 #
 # Arguments:
 #   None
@@ -1236,7 +1236,7 @@ function bl64_fs_check_new_dir() {
 #######################################
 # Create symbolic link
 #
-# * Wrapper to the ln -s command
+# * Wrapper for the ln -s command
 # * Provide extra checks and verbosity
 #
 # Arguments:
