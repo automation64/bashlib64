@@ -584,3 +584,68 @@ function bl64_iam_xdg_create() {
     "${xdg_local}/share" \
     "${xdg_local}/state"
 }
+
+#######################################
+# Modify local user
+#
+# * Wrapper for native user mod command
+#
+# Arguments:
+#   $1: login name
+#   $2: (optional) primary group. Format: group name. Default: os native
+#   $3: (optional) shell. Format: full path. Default: os native
+#   $4: (optional) description. Default: none
+#   $5: (optional) user ID. Default: os native
+# Outputs:
+#   STDOUT: progress
+#   STDERR: execution errors
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_iam_user_modify() {
+  bl64_dbg_lib_show_function "$@"
+  local login="${1:-}"
+  local group="${3:-$BL64_VAR_DEFAULT}"
+  local shell="${4:-$BL64_VAR_DEFAULT}"
+  local gecos="${5:-$BL64_VAR_DEFAULT}"
+  local uid="${6:-$BL64_VAR_DEFAULT}"
+
+  bl64_check_parameter 'login' ||
+    return $?
+
+  bl64_msg_show_lib_subtask "$_BL64_IAM_TXT_MOD_USER ($login)"
+  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && group=''
+  [[ "$shell" == "$BL64_VAR_DEFAULT" ]] && shell=''
+  [[ "$gecos" == "$BL64_VAR_DEFAULT" ]] && gecos=''
+  [[ "$uid" == "$BL64_VAR_DEFAULT" ]] && uid=''
+  # shellcheck disable=SC2086
+  case "$BL64_OS_DISTRO" in
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    bl64_iam_run_usermod \
+      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
+      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+      "$login"
+    ;;
+  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    bl64_iam_run_usermod \
+      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
+      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+      "$login"
+    ;;
+  ${BL64_OS_SLES}-*)
+    bl64_dbg_lib_show_comments 'force primary group creation'
+    bl64_iam_run_usermod \
+      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
+      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+      "$login"
+    ;;
+  *) bl64_check_alert_unsupported ;;
+  esac
+}

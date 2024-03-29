@@ -25,6 +25,7 @@
 
   declare BL64_IAM_ALIAS_USERADD=''
 
+  declare _BL64_IAM_TXT_MOD_USER='modify local user account'
   declare _BL64_IAM_TXT_ADD_USER='create local user account'
   declare _BL64_IAM_TXT_ADD_GROUP='create local user group'
   declare _BL64_IAM_TXT_XDG_CREATE='create user XDG directories'

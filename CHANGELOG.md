@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_iam_group_is_created: verify that group exists
   - bl64_iam_user_add: added UID parameter (optional)
   - bl64_iam_xdg_create: create user's xdg dirs
+  - bl64_iam_user_modify: modify existing user attributes
 - os
   - bl64_os_run_getent: getent wrapper
 
