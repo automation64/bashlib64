@@ -5,22 +5,16 @@
 #######################################
 # Create local OS user
 #
-# * Wrapper to native user creation command
-# * Objective is to cover common options that are available on all suported platforms
-#   * set primary group
-#   * set shell
-#   * set home path
-#   * set user description
-#   * create home
-#   * create primary group
+# * Wrapper for native user creation command
 # * If the user is already created nothing is done, no error
 #
 # Arguments:
 #   $1: login name
-#   $2: home path. Format: full path. Default: os native
-#   $3: primary group ID. Format: group name. Default: os native
-#   $4: shell. Format: full path. Default: os native
-#   $5: description. Default: none
+#   $2: (optional) home path. Format: full path. Default: os native
+#   $3: (optional) primary group. Format: group name. Default: os native
+#   $4: (optional) shell. Format: full path. Default: os native
+#   $5: (optional) description. Default: none
+#   $6: (optional) user ID. Default: os native
 # Outputs:
 #   STDOUT: native user add command output
 #   STDERR: native user add command error messages
@@ -34,15 +28,11 @@ function bl64_iam_user_add() {
   local group="${3:-$BL64_VAR_DEFAULT}"
   local shell="${4:-$BL64_VAR_DEFAULT}"
   local gecos="${5:-$BL64_VAR_DEFAULT}"
+  local uid="${6:-$BL64_VAR_DEFAULT}"
   local password=''
 
   bl64_check_parameter 'login' ||
     return $?
-
-  [[ "$home" == "$BL64_VAR_DEFAULT" ]] && home=''
-  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && group=''
-  [[ "$shell" == "$BL64_VAR_DEFAULT" ]] && shell=''
-  [[ "$gecos" == "$BL64_VAR_DEFAULT" ]] && gecos=''
 
   if bl64_iam_user_is_created "$login"; then
     bl64_msg_show_warning "${_BL64_IAM_TXT_EXISTING_USER} ($login)"
@@ -50,10 +40,16 @@ function bl64_iam_user_add() {
   fi
 
   bl64_msg_show_lib_subtask "$_BL64_IAM_TXT_ADD_USER ($login)"
+  [[ "$home" == "$BL64_VAR_DEFAULT" ]] && home=''
+  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && group=''
+  [[ "$shell" == "$BL64_VAR_DEFAULT" ]] && shell=''
+  [[ "$gecos" == "$BL64_VAR_DEFAULT" ]] && gecos=''
+  [[ "$uid" == "$BL64_VAR_DEFAULT" ]] && uid=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
     bl64_iam_run_useradd \
+      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
@@ -63,6 +59,7 @@ function bl64_iam_user_add() {
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     bl64_iam_run_useradd \
+      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
@@ -74,6 +71,7 @@ function bl64_iam_user_add() {
     bl64_dbg_lib_show_comments 'force primary group creation'
     bl64_iam_run_useradd \
       --user-group \
+      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
@@ -84,6 +82,7 @@ function bl64_iam_user_add() {
   ${BL64_OS_ALP}-*)
     bl64_dbg_lib_show_comments 'disable automatic password generation'
     bl64_iam_run_adduser \
+      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
@@ -95,6 +94,7 @@ function bl64_iam_user_add() {
   ${BL64_OS_MCOS}-*)
     password="$(bl64_rnd_get_numeric)" || return $?
     bl64_iam_run_sysadminctl \
+      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
       ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
@@ -128,7 +128,7 @@ function bl64_iam_group_add() {
   bl64_check_parameter 'group_name' ||
     return $?
 
-  if bl64_iam_user_is_created "$group_name"; then
+  if bl64_iam_group_is_created "$group_name"; then
     bl64_msg_show_warning "${_BL64_IAM_TXT_EXISTING_GROUP} ($group_name)"
     return 0
   fi
@@ -167,7 +167,7 @@ function bl64_iam_group_add() {
 # Arguments:
 #   $1: login name
 # Outputs:
-#   STDOUT: command output
+#   STDOUT: None
 #   STDERR: command error messages
 # Returns:
 #   0: it is
@@ -181,7 +181,8 @@ function bl64_iam_user_is_created() {
   bl64_check_parameter 'user_name' ||
     return $?
 
-  bl64_iam_user_get_id "$user_name" >/dev/null 2>&1 || return $BL64_LIB_ERROR_IS_NOT
+  bl64_iam_user_get_id "$user_name" >/dev/null 2>&1 ||
+    return $BL64_LIB_ERROR_IS_NOT
 }
 
 #######################################
@@ -190,7 +191,7 @@ function bl64_iam_user_is_created() {
 # Arguments:
 #   $1: group name
 # Outputs:
-#   STDOUT: command output
+#   STDOUT: None
 #   STDERR: command error messages
 # Returns:
 #   0: it is
@@ -204,7 +205,8 @@ function bl64_iam_group_is_created() {
   bl64_check_parameter 'group_name' ||
     return $?
 
-  bl64_os_run_getent 'group' "$group_name" >/dev/null 2>&1 || return $BL64_LIB_ERROR_IS_NOT
+  bl64_os_run_getent 'group' "$group_name" >/dev/null 2>&1 ||
+    return $BL64_LIB_ERROR_IS_NOT
 }
 
 #######################################
@@ -542,4 +544,43 @@ function bl64_iam_run_sysadminctl() {
     $verbosity \
     "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Create XDG directories in user's home
+#
+# Arguments:
+#   $1: full path to the user's home directory
+#   $2: permissions. Format: chown format. Default: use current umask
+#   $3: user name. Default: current
+#   $4: group name. Default: current
+# Outputs:
+#   STDOUT: progress
+#   STDERR: execution errors
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_iam_xdg_create() {
+  bl64_dbg_lib_show_function "$@"
+  local home_path="${1:-}"
+  local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
+  local dir_user="${3:-${BL64_VAR_DEFAULT}}"
+  local dir_group="${4:-${BL64_VAR_DEFAULT}}"
+  local xdg_config="${home_path}/.config"
+  local xdg_cache="${home_path}/.cache"
+  local xdg_local="${home_path}/.local"
+
+  bl64_check_parameter 'home_path' ||
+    return $?
+
+  bl64_msg_show_lib_task "${_BL64_IAM_TXT_XDG_CREATE} (${home_path})"
+  bl64_fs_create_dir "$dir_mode" "$dir_user" "$dir_group" \
+    "$xdg_config" \
+    "$xdg_local" \
+    "$xdg_cache" \
+    "${xdg_local}/bin" \
+    "${xdg_local}/lib" \
+    "${xdg_local}/share" \
+    "${xdg_local}/state"
 }
