@@ -1273,3 +1273,40 @@ function bl64_fs_create_symlink() {
   bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SYMLINK_CREATE} (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
   bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination"
 }
+
+#######################################
+# Creates an empty regular file
+#
+# * Creates file if not existing only
+# * If existing, warn and return with no error
+#
+# Arguments:
+#   $1: full path to the file
+#   $2: (optional) permissions. Format: chown format. Default: use current umask
+#   $3: (optional) user name. Default: current
+#   $4: (optional) group name. Default: current
+# Outputs:
+#   STDOUT: Task progress
+#   STDERR: Task errors
+# Returns:
+#   0: task executed ok
+#   >0: task failed
+#######################################
+function bl64_fs_create_file() {
+  bl64_dbg_lib_show_function "$@"
+  local file_path="$1"
+  local mode="${2:-${BL64_VAR_DEFAULT}}"
+  local user="${3:-${BL64_VAR_DEFAULT}}"
+  local group="${4:-${BL64_VAR_DEFAULT}}"
+
+  bl64_check_parameter 'file_path' ||
+    return $?
+
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CREATE_FILE} (${file_path})"
+  [[ -f "$file_path" ]] &&
+    bl64_msg_show_warning "$_BL64_FS_TXT_WARN_EXISTING_FILE" &&
+    return 0
+
+  "$BL64_FS_CMD_TOUCH" "$file_path" &&
+    bl64_fs_set_permissions "$mode" "$user" "$group" "$file_path"
+}

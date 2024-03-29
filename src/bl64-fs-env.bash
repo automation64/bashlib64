@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='5.1.0'
+  declare BL64_FS_VERSION='5.2.0'
 
   declare BL64_FS_MODULE='0'
 
@@ -88,7 +88,9 @@
   declare _BL64_FS_TXT_SAFEGUARD_OBJECT='backup original file'
   declare _BL64_FS_TXT_SYMLINK_CREATE='create symbolick link'
   declare _BL64_FS_TXT_SYMLINK_EXISTING='target symbolick link is already present. No further action taken'
+  declare _BL64_FS_TXT_CREATE_FILE='create empty regular file'
 
+  declare _BL64_FS_TXT_WARN_EXISTING_FILE='target file is already created'
   declare _BL64_FS_TXT_ERROR_NOT_TMPDIR='provided directory was not created by bl64_fs_create_tmpdir'
   declare _BL64_FS_TXT_ERROR_NOT_TMPFILE='provided directory was not created by bl64_fs_create_tmpfile'
   declare _BL64_FS_TXT_ERROR_INVALID_FILE_TARGET='invalid file destination. Provided path exists and is a directory'

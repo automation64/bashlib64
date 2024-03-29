@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_iam_user_modify: modify existing user attributes
 - os
   - bl64_os_run_getent: getent wrapper
+- fs
+  bl64_fs_create_file: create empty file
 
 ## [19.3.0]
 
