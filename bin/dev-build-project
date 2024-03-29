@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #######################################
-# Dev / Build / Custom / Assemble modular script
+# Dev / Build / Project / Assemble modular script
 #
 # * Use to build library distributables
 # * Version: 3.0.0
@@ -28,7 +28,7 @@
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
 # shellcheck source-path=bin
-source ./bin/dev-env-custom || exit 1
+source ./bin/dev-env-project || exit 1
 
 # shellcheck source-path=lib/bl64
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
@@ -77,13 +77,13 @@ function dev_build_create_header() {
 # shellcheck disable=SC2317
 function dev_build_release() {
   bl64_dbg_lib_show_function
-  dev_build_library "$DEV_BUILD_CUSTOM_FULL_PATH_RELEASE"
+  dev_build_library "$DEV_BUILD_PROJECT_FULL_PATH_RELEASE"
 }
 
 # shellcheck disable=SC2317
 function dev_build_test() {
   bl64_dbg_lib_show_function
-  dev_build_library "$DEV_BUILD_CUSTOM_FULL_PATH_TEST"
+  dev_build_library "$DEV_BUILD_PROJECT_FULL_PATH_TEST"
 }
 
 # shellcheck disable=SC2317
@@ -91,14 +91,14 @@ function dev_build_library() {
   bl64_dbg_lib_show_function "$@"
   local destination="$1"
   local file=''
-  local build_sa="${destination}/${DEV_BUILD_CUSTOM_NAME_SA}"
-  local build_core="${destination}/${DEV_BUILD_CUSTOM_NAME_CORE}"
-  local build_opt="${destination}/${DEV_BUILD_CUSTOM_NAME_OPT}"
-  local build_module_core="${destination}/${DEV_BUILD_CUSTOM_NAME_MODULE_CORE}"
+  local build_sa="${destination}/${DEV_BUILD_PROJECT_NAME_SA}"
+  local build_core="${destination}/${DEV_BUILD_PROJECT_NAME_CORE}"
+  local build_opt="${destination}/${DEV_BUILD_PROJECT_NAME_OPT}"
+  local build_module_core="${destination}/${DEV_BUILD_PROJECT_NAME_MODULE_CORE}"
   local build_module=''
   local module_name=''
 
-  bl64_dbg_app_show_vars 'DEV_ENV_CUSTOM_MODULES_CORE' 'DEV_ENV_CUSTOM_MODULES_OPT'
+  bl64_dbg_app_show_vars 'DEV_ENV_PROJECT_MODULES_CORE' 'DEV_ENV_PROJECT_MODULES_OPT'
   cd "$DEV_PATH_SRC" || return 1
 
   bl64_msg_show_task "preparing destination (${destination})"
@@ -119,13 +119,13 @@ function dev_build_library() {
   } >"$build_opt" || return 1
 
   bl64_msg_show_task 'adding modules'
-  dev_add_modules "$build_sa" "${DEV_ENV_CUSTOM_MODULES_CORE} ${DEV_ENV_CUSTOM_MODULES_OPT}" &&
-    dev_add_modules "$build_core" "$DEV_ENV_CUSTOM_MODULES_CORE" &&
-    dev_add_modules "$build_opt" "$DEV_ENV_CUSTOM_MODULES_OPT" ||
+  dev_add_modules "$build_sa" "${DEV_ENV_PROJECT_MODULES_CORE} ${DEV_ENV_PROJECT_MODULES_OPT}" &&
+    dev_add_modules "$build_core" "$DEV_ENV_PROJECT_MODULES_CORE" &&
+    dev_add_modules "$build_opt" "$DEV_ENV_PROJECT_MODULES_OPT" ||
     return $?
 
-  for module_name in ${DEV_ENV_CUSTOM_MODULES_CORE} ${DEV_ENV_CUSTOM_MODULES_OPT}; do
-    build_module="${destination}/${DEV_BUILD_CUSTOM_NAME_MODULE}-${module_name}.bash"
+  for module_name in ${DEV_ENV_PROJECT_MODULES_CORE} ${DEV_ENV_PROJECT_MODULES_OPT}; do
+    build_module="${destination}/${DEV_BUILD_PROJECT_NAME_MODULE}-${module_name}.bash"
     dev_add_modules "${build_module}.tmp" "$module_name"
     {
       "$BL64_OS_CMD_CAT" 'bl64-lib-header.bash' &&
@@ -157,8 +157,8 @@ function dev_build_check_requirements() {
 
   [[ -z "$command" ]] && dev_build_help return 1
 
-  bl64_check_export 'DEV_ENV_CUSTOM_MODULES_CORE' &&
-    bl64_check_export 'DEV_ENV_CUSTOM_MODULES_OPT'
+  bl64_check_export 'DEV_ENV_PROJECT_MODULES_CORE' &&
+    bl64_check_export 'DEV_ENV_PROJECT_MODULES_OPT'
 }
 
 function dev_build_help() {

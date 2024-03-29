@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [19.4.0]
+
+### Added
+
+- iam
+  - bl64_iam_run_*: wrappers for user add commands 
+  - bl64_iam_group_add: add local user group
+  - bl64_iam_group_is_created: verify that group exists
+  - bl64_iam_user_add: added UID parameter (optional)
+  - bl64_iam_xdg_create: create user's xdg dirs
+  - bl64_iam_user_modify: modify existing user attributes
+- os
+  - bl64_os_run_getent: getent wrapper
+- fs
+  bl64_fs_create_file: create empty file
+
 ## [19.3.0]
 
 ### Added
@@ -260,6 +276,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - MacOS: replaced dscl for sysadminctl
 
+[19.4.0]: https://github.com/automation64/bashlib64/compare/19.3.0...19.4.0
 [19.3.0]: https://github.com/automation64/bashlib64/compare/19.2.1...19.3.0
 [19.2.1]: https://github.com/automation64/bashlib64/compare/19.1.0...19.2.1
 [19.1.0]: https://github.com/automation64/bashlib64/compare/19.0.0...19.1.0

@@ -2,7 +2,7 @@
 #######################################
 # Dev / Env / Installer64 / Shared environment variables
 #
-# * Version: 1.0.1
+# * Version: 1.1.1
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -26,8 +26,13 @@
 # * Use .env file to override values
 #
 
-# Lib / Installer64 / Location
-export DEV_LIB_INSTALLER64_TARGET="${DEV_LIB_INSTALLER64_TARGET:-${DEV_PATH_LIB}/inst64}"
+# shellcheck disable=2154
+{
+    # Lib / Installer64 / Location
+    export DEV_LIB_INSTALLER64_TARGET="${DEV_LIB_INSTALLER64_TARGET:-${DEV_PATH_LIB}/inst64}"
+    # Lib / Installer64 / Source
+    export DEV_LIB_INSTALLER64_URL='https://raw.githubusercontent.com/automation64/installer64/main/src/install-installer64'
+}
 
 #
 # Locals

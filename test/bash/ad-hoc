@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 . bin/dev-set
-#. "${DEV_BUILD_CUSTOM_FULL_PATH_TEST:-build/test}/bashlib64-core.bash"
-. "${DEV_BUILD_CUSTOM_FULL_PATH_TEST:-build/test}/bashlib64.bash"
+#. "${DEV_BUILD_PROJECT_FULL_PATH_TEST:-build/test}/bashlib64-core.bash"
+. "${DEV_BUILD_PROJECT_FULL_PATH_TEST:-build/test}/bashlib64.bash"
 
 #
 # Skeleton for ad-hoc testiong.

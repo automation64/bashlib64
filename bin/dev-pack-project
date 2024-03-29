@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #######################################
-# Dev / Pack / Custom / Create distributable package
+# Dev / Pack / Project / Create distributable package
 #
 # * Version: 2.0.0
 #
@@ -27,7 +27,7 @@
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
 # shellcheck source-path=bin
-source ./bin/dev-env-custom || exit 1
+source ./bin/dev-env-project || exit 1
 # shellcheck source-path=lib/bl64
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-arc.bash" &&
@@ -41,41 +41,41 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
 
 function dev_pack_custom() {
   bl64_dbg_app_show_function
-  bl64_fs_rm_full "$DEV_PACK_CUSTOM_STORE"
-  bl64_fs_create_dir "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_PACK_CUSTOM_STORE" ||
+  bl64_fs_rm_full "$DEV_PACK_PROJECT_STORE"
+  bl64_fs_create_dir "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_PACK_PROJECT_STORE" ||
     return $?
 
-  cd "$DEV_BUILD_CUSTOM_FULL_PATH_RELEASE"
-  bl64_msg_show_task "create stand-alone distributable package (${DEV_PACK_CUSTOM_NAME_SA})"
+  cd "$DEV_BUILD_PROJECT_FULL_PATH_RELEASE"
+  bl64_msg_show_task "create stand-alone distributable package (${DEV_PACK_PROJECT_NAME_SA})"
   bl64_arc_run_tar \
     zcf \
-    "${DEV_PACK_CUSTOM_STORE}/${DEV_PACK_CUSTOM_NAME_SA}" \
-    "$DEV_BUILD_CUSTOM_NAME_SA" ||
+    "${DEV_PACK_PROJECT_STORE}/${DEV_PACK_PROJECT_NAME_SA}" \
+    "$DEV_BUILD_PROJECT_NAME_SA" ||
     return $?
 
-  bl64_msg_show_task "create core+opt alternative distributable package (${DEV_PACK_CUSTOM_NAME_SPLIT})"
+  bl64_msg_show_task "create core+opt alternative distributable package (${DEV_PACK_PROJECT_NAME_SPLIT})"
   bl64_arc_run_tar \
     zcf \
-    "${DEV_PACK_CUSTOM_STORE}/${DEV_PACK_CUSTOM_NAME_SPLIT}" \
-    "$DEV_BUILD_CUSTOM_NAME_CORE" "$DEV_BUILD_CUSTOM_NAME_OPT" ||
+    "${DEV_PACK_PROJECT_STORE}/${DEV_PACK_PROJECT_NAME_SPLIT}" \
+    "$DEV_BUILD_PROJECT_NAME_CORE" "$DEV_BUILD_PROJECT_NAME_OPT" ||
     return $?
 
-  bl64_msg_show_task "create modular alternative distributable package (${DEV_PACK_CUSTOM_NAME_MODULAR})"
+  bl64_msg_show_task "create modular alternative distributable package (${DEV_PACK_PROJECT_NAME_MODULAR})"
   bl64_arc_run_tar \
     zcf \
-    "${DEV_PACK_CUSTOM_STORE}/${DEV_PACK_CUSTOM_NAME_MODULAR}" \
-    ${DEV_BUILD_CUSTOM_NAME_MODULE}-*.bash
+    "${DEV_PACK_PROJECT_STORE}/${DEV_PACK_PROJECT_NAME_MODULAR}" \
+    ${DEV_BUILD_PROJECT_NAME_MODULE}-*.bash
 }
 
 function dev_pack_initialize() {
   bl64_dbg_app_show_function
   bl64_arc_setup &&
-    bl64_check_export 'DEV_PACK_CUSTOM_NAME_SA' &&
-    bl64_check_export 'DEV_PACK_CUSTOM_NAME_SPLIT' &&
-    bl64_check_export 'DEV_PACK_CUSTOM_NAME_MODULAR' &&
-    bl64_check_export 'DEV_PACK_CUSTOM_STORE' &&
-    bl64_check_export 'DEV_BUILD_CUSTOM_FULL_PATH_RELEASE' &&
-    bl64_check_directory "$DEV_BUILD_CUSTOM_FULL_PATH_RELEASE"
+    bl64_check_export 'DEV_PACK_PROJECT_NAME_SA' &&
+    bl64_check_export 'DEV_PACK_PROJECT_NAME_SPLIT' &&
+    bl64_check_export 'DEV_PACK_PROJECT_NAME_MODULAR' &&
+    bl64_check_export 'DEV_PACK_PROJECT_STORE' &&
+    bl64_check_export 'DEV_BUILD_PROJECT_FULL_PATH_RELEASE' &&
+    bl64_check_directory "$DEV_BUILD_PROJECT_FULL_PATH_RELEASE"
 }
 
 #
@@ -85,7 +85,7 @@ function dev_pack_initialize() {
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
 
 bl64_msg_all_enable_verbose
-bl64_msg_show_batch_start 'dev-pack-custom'
+bl64_msg_show_batch_start 'dev-pack-project'
 dev_pack_initialize &&
   dev_pack_custom
-bl64_msg_show_batch_finish $? 'dev-pack-custom'
+bl64_msg_show_batch_finish $? 'dev-pack-project'

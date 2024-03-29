@@ -11,7 +11,7 @@
 #
 # Author: SerDigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/automation64/installer64
-# Version: 2.1.0
+# Version: 3.0.0
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -34,15 +34,16 @@
 #
 
 # Env / Initial values
-declare DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-}"
-declare DEV_LIB_BASHLIB64_TARGET=''
-declare DEV_LIB_INSTALLER64_TARGET=''
-declare DEV_LIB_INSTALLER64_OWNER='automation64/installer64'
-declare DEV_PATH_ROOT=''
-declare DEV_PATH_LIB=''
-declare DEV_BASE_DOT_LOCAL='dot.local'
-declare DEV_BASE_DOT_SECRETS='dot.secrets'
-declare DEV_BASE_ENV='.env'
+export DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-}"
+export DEV_LIB_BASHLIB64_TARGET=''
+export DEV_LIB_INSTALLER64_TARGET=''
+export DEV_LIB_INSTALLER64_OWNER='automation64/installer64'
+export DEV_PATH_ROOT=''
+export DEV_PATH_LIB=''
+export DEV_PATH_TMP=''
+export DEV_BASE_DOT_LOCAL='dot.local'
+export DEV_BASE_DOT_SECRETS='dot.secrets'
+export DEV_BASE_ENV='.env'
 
 # Installer64 / Parameters
 export DEV_PATH_BIN=''
@@ -51,6 +52,7 @@ export INST64_BASHLIB64_TARGET=''
 # Bootstrap
 declare DEV_BOOTSTRAP_DIR_MODE='0755'
 declare DEV_BOOTSTRAP_EXE_MODE='0755'
+declare DEV_BOOTSTRAP_FILE_MODE='0644'
 declare DEV_BOOTSTRAP_PATHS='bin build docs etc lib logs src test tmp var vault'
 declare DEV_BOOTSTRAP_INSTALLER64_NAME='inst64'
 declare DEV_BOOTSTRAP_BASHLIB64_NAME='bl64'
@@ -140,7 +142,7 @@ function dev_bootstrap_dot_env_create() {
 # * Used by DevBin64 to define project wide variables
 # * Automatically loaded by dev-set
 # * Do not include local variables (workstation specific) and secrets. Use .local and .secrets instead
-# * Version: 3.2.0
+# * Version: 3.3.0
 #
 
 # Main / Base file and directory names
@@ -191,13 +193,8 @@ export DEV_PATH_TMP="${DEV_PATH_ROOT}/tmp"
 # DevOps Tools
 #
 
-# Lib / Installer64 / Repo Owner
-export DEV_LIB_INSTALLER64_OWNER="%s"
-# Lib / Installer64 / Target
-export DEV_LIB_INSTALLER64_TARGET="${DEV_PATH_LIB}/%s"
-
-# Lib / BashLib64 / Target
-export DEV_LIB_BASHLIB64_TARGET="${DEV_PATH_LIB}/%s"
+# Main / List of modules to load
+export DEV_MODULE_LOAD=""
 
 #
 # Project specific variables
@@ -206,11 +203,8 @@ export DEV_LIB_BASHLIB64_TARGET="${DEV_PATH_LIB}/%s"
     "$DEV_BASE_DOT_LOCAL" \
     "$DEV_BASE_DOT_SECRETS" \
     "$DEV_BASE_ENV" \
-    "$DEV_LIB_INSTALLER64_OWNER" \
-    "$DEV_BOOTSTRAP_INSTALLER64_NAME" \
-    "$DEV_BOOTSTRAP_BASHLIB64_NAME" \
     >"$target_file" &&
-    chmod "$DEV_BOOTSTRAP_DIR_MODE" "$target_file"
+    chmod "$DEV_BOOTSTRAP_FILE_MODE" "$target_file"
 }
 
 function dev_bootstrap_lib_base_create() {
@@ -267,7 +261,7 @@ export DEV_ENVIRONMENT="${DEV_ENVIRONMENT:-}"
 export DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-}"
 ' \
     >"$target_file" &&
-    chmod "$DEV_BOOTSTRAP_DIR_MODE" "$target_file"
+    chmod "$DEV_BOOTSTRAP_FILE_MODE" "$target_file"
 }
 
 function dev_bootstrap_dot_secrets_create() {
@@ -288,7 +282,7 @@ function dev_bootstrap_dot_secrets_create() {
 #
 ' \
     >"$DEV_BASE_DOT_SECRETS" &&
-    chmod "$DEV_BOOTSTRAP_DIR_MODE" "$DEV_BASE_DOT_SECRETS"
+    chmod "$DEV_BOOTSTRAP_FILE_MODE" "$DEV_BASE_DOT_SECRETS"
 }
 
 function dev_bootstrap_gitignore_create() {
@@ -350,7 +344,7 @@ function dev_bootstrap_dot_env_load() {
   source "$DEV_BASE_ENV"
 }
 
-function dev_bootstrap_initializer() {
+function dev_bootstrap_initialize() {
   # Initialize .env variables for the bootstrap process
   DEV_PATH_ROOT="$(pwd)"
   DEV_PATH_LIB="${DEV_PATH_ROOT}/lib"
@@ -372,7 +366,7 @@ declare -i dev_bootstrap_status=0
 [[ -n "$DEV_CICD_DEBUG" ]] && set -x
 
 echo "Process: [${dev_bootstrap_process}] started"
-dev_bootstrap_initializer &&
+dev_bootstrap_initialize &&
   dev_bootstrap_dir_create &&
   dev_bootstrap_dot_env_create &&
   dev_bootstrap_dot_local_create &&

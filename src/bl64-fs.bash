@@ -715,10 +715,11 @@ function bl64_fs_find_files() {
 #   $1: safeguard path (produced by bl64_fs_safeguard)
 #   $2: task status (exit status from last operation)
 # Outputs:
-#   STDOUT: command dependant
-#   STDERR: command dependant
+#   STDOUT: Task progress
+#   STDERR: Task errors
 # Returns:
-#   command dependant
+#   0: task executed ok
+#   >0: task failed
 #######################################
 function bl64_fs_safeguard() {
   bl64_dbg_lib_show_function "$@"
@@ -754,10 +755,11 @@ function bl64_fs_safeguard() {
 #   $1: safeguard path (produced by bl64_fs_safeguard)
 #   $2: task status (exit status from last operation)
 # Outputs:
-#   STDOUT: command dependant
-#   STDERR: command dependant
+#   STDOUT: Task progress
+#   STDERR: Task errors
 # Returns:
-#   command dependant
+#   0: task executed ok
+#   >0: task failed
 #######################################
 function bl64_fs_restore() {
   bl64_dbg_lib_show_function "$@"
@@ -876,7 +878,7 @@ function bl64_fs_fix_permissions() {
   bl64_dbg_lib_show_info "path list:[${*}]"
 
   if [[ "$file_mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_comments "fix file permissions (${file_mode})"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_FIX_FILE_PERMS} (${file_mode} ${BL64_MSG_COSMETIC_PIPE} ${*})"
     # shellcheck disable=SC2086
     bl64_fs_run_find \
       "$@" \
@@ -887,7 +889,7 @@ function bl64_fs_fix_permissions() {
   fi
 
   if [[ "$dir_mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_comments "fix directory permissions (${dir_mode})"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_FIX_DIR_PERMS} (${dir_mode} ${BL64_MSG_COSMETIC_PIPE} ${*})"
     # shellcheck disable=SC2086
     bl64_fs_run_find \
       "$@" \
@@ -1025,6 +1027,7 @@ function bl64_fs_set_umask() {
   bl64_dbg_lib_show_function "$@"
   local permissions="${1:-${BL64_FS_UMASK_RW_USER}}"
 
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_UMASK_SET} (${permissions})"
   umask -S "$permissions" >/dev/null
 }
 
@@ -1073,7 +1076,7 @@ function bl64_fs_set_ephemeral() {
 #######################################
 # Create temporal directory
 #
-# * Wrapper to the mktemp tool
+# * Wrapper for the mktemp tool
 #
 # Arguments:
 #   None
@@ -1097,7 +1100,7 @@ function bl64_fs_create_tmpdir() {
 #######################################
 # Create temporal file
 #
-# * Wrapper to the mktemp tool
+# * Wrapper for the mktemp tool
 #
 # Arguments:
 #   None
@@ -1236,7 +1239,7 @@ function bl64_fs_check_new_dir() {
 #######################################
 # Create symbolic link
 #
-# * Wrapper to the ln -s command
+# * Wrapper for the ln -s command
 # * Provide extra checks and verbosity
 #
 # Arguments:
@@ -1272,4 +1275,41 @@ function bl64_fs_create_symlink() {
   fi
   bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SYMLINK_CREATE} (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
   bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination"
+}
+
+#######################################
+# Creates an empty regular file
+#
+# * Creates file if not existing only
+# * If existing, warn and return with no error
+#
+# Arguments:
+#   $1: full path to the file
+#   $2: (optional) permissions. Format: chown format. Default: use current umask
+#   $3: (optional) user name. Default: current
+#   $4: (optional) group name. Default: current
+# Outputs:
+#   STDOUT: Task progress
+#   STDERR: Task errors
+# Returns:
+#   0: task executed ok
+#   >0: task failed
+#######################################
+function bl64_fs_create_file() {
+  bl64_dbg_lib_show_function "$@"
+  local file_path="$1"
+  local mode="${2:-${BL64_VAR_DEFAULT}}"
+  local user="${3:-${BL64_VAR_DEFAULT}}"
+  local group="${4:-${BL64_VAR_DEFAULT}}"
+
+  bl64_check_parameter 'file_path' ||
+    return $?
+
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CREATE_FILE} (${file_path})"
+  [[ -f "$file_path" ]] &&
+    bl64_msg_show_warning "$_BL64_FS_TXT_WARN_EXISTING_FILE" &&
+    return 0
+
+  "$BL64_FS_CMD_TOUCH" "$file_path" &&
+    bl64_fs_set_permissions "$mode" "$user" "$group" "$file_path"
 }

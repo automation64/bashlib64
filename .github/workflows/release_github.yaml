@@ -24,10 +24,10 @@ jobs:
         run: "./bin/dev-lib-installer64"
 
       - name: "Build app for release"
-        run: "./bin/dev-build-custom -r"
+        run: "./bin/dev-build-project -r"
 
       - name: "Create distributable packages"
-        run: "./bin/dev-pack-custom"
+        run: "./bin/dev-pack-project"
 
       - name: "Create release"
         run: "./bin/dev-release-github ${GITHUB_REF_NAME}"
