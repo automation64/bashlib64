@@ -715,10 +715,11 @@ function bl64_fs_find_files() {
 #   $1: safeguard path (produced by bl64_fs_safeguard)
 #   $2: task status (exit status from last operation)
 # Outputs:
-#   STDOUT: command dependant
-#   STDERR: command dependant
+#   STDOUT: Task progress
+#   STDERR: Task errors
 # Returns:
-#   command dependant
+#   0: task executed ok
+#   >0: task failed
 #######################################
 function bl64_fs_safeguard() {
   bl64_dbg_lib_show_function "$@"
@@ -754,10 +755,11 @@ function bl64_fs_safeguard() {
 #   $1: safeguard path (produced by bl64_fs_safeguard)
 #   $2: task status (exit status from last operation)
 # Outputs:
-#   STDOUT: command dependant
-#   STDERR: command dependant
+#   STDOUT: Task progress
+#   STDERR: Task errors
 # Returns:
-#   command dependant
+#   0: task executed ok
+#   >0: task failed
 #######################################
 function bl64_fs_restore() {
   bl64_dbg_lib_show_function "$@"
@@ -876,7 +878,7 @@ function bl64_fs_fix_permissions() {
   bl64_dbg_lib_show_info "path list:[${*}]"
 
   if [[ "$file_mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_comments "fix file permissions (${file_mode})"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_FIX_FILE_PERMS} (${file_mode} ${BL64_MSG_COSMETIC_PIPE} ${*})"
     # shellcheck disable=SC2086
     bl64_fs_run_find \
       "$@" \
@@ -887,7 +889,7 @@ function bl64_fs_fix_permissions() {
   fi
 
   if [[ "$dir_mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_dbg_lib_show_comments "fix directory permissions (${dir_mode})"
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_FIX_DIR_PERMS} (${dir_mode} ${BL64_MSG_COSMETIC_PIPE} ${*})"
     # shellcheck disable=SC2086
     bl64_fs_run_find \
       "$@" \
@@ -1025,6 +1027,7 @@ function bl64_fs_set_umask() {
   bl64_dbg_lib_show_function "$@"
   local permissions="${1:-${BL64_FS_UMASK_RW_USER}}"
 
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_UMASK_SET} (${permissions})"
   umask -S "$permissions" >/dev/null
 }
 
