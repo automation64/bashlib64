@@ -489,7 +489,6 @@ function bl64_os_run_getent() {
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_OS_CMD_GETENT" \
-    $verbosity \
     "$@"
   bl64_dbg_lib_trace_stop
 }
