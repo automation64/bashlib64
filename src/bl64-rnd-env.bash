@@ -2,7 +2,7 @@
 # BashLib64 / Module / Globals / Generate random data
 #######################################
 
-# shellcheck disable=SC2034
+# shellcheck disable=SC2034,SC2155
 {
   declare BL64_RND_VERSION='2.0.0'
 
@@ -14,7 +14,6 @@
   declare -i BL64_RND_RANDOM_MIN=0
   declare -i BL64_RND_RANDOM_MAX=32767
 
-  # shellcheck disable=SC2155
   declare BL64_RND_POOL_UPPERCASE="$(printf '%b' "$(printf '\\%o' {65..90})")"
   declare BL64_RND_POOL_UPPERCASE_MAX_IDX="$((${#BL64_RND_POOL_UPPERCASE} - 1))"
   declare BL64_RND_POOL_LOWERCASE="$(printf '%b' "$(printf '\\%o' {97..122})")"
