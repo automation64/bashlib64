@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [19.4.0]
+## [19.4.1]
 
 ### Added
 
@@ -20,6 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_os_run_getent: getent wrapper
 - fs
   bl64_fs_create_file: create empty file
+
+### Fixed
+
+- pkg
+  - bl64_pkg_upgrade: removed '--' param separator to avoid incorrect interpretation by package manager (e.g.: alpine apk)
 
 ## [19.3.0]
 
@@ -276,7 +281,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - MacOS: replaced dscl for sysadminctl
 
-[19.4.0]: https://github.com/automation64/bashlib64/compare/19.3.0...19.4.0
+[19.4.1]: https://github.com/automation64/bashlib64/compare/19.3.0...19.4.1
 [19.3.0]: https://github.com/automation64/bashlib64/compare/19.2.1...19.3.0
 [19.2.1]: https://github.com/automation64/bashlib64/compare/19.1.0...19.2.1
 [19.1.0]: https://github.com/automation64/bashlib64/compare/19.0.0...19.1.0

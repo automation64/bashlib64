@@ -307,22 +307,22 @@ function bl64_pkg_upgrade() {
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES -- "$@"
+    bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES "$@"
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
+    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
+    bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
     ;;
   ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
-    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' -- "$@"
+    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
     ;;
   ${BL64_OS_SLES}-*)
-    bl64_pkg_run_zypper 'update' $BL64_PKG_SET_ASSUME_YES -- "$@"
+    bl64_pkg_run_zypper 'update' $BL64_PKG_SET_ASSUME_YES "$@"
     ;;
   ${BL64_OS_ALP}-*)
-    bl64_pkg_run_apk 'upgrade' -- "$@"
+    bl64_pkg_run_apk 'upgrade' "$@"
     ;;
   ${BL64_OS_MCOS}-*)
     "$BL64_PKG_CMD_BRW" 'upgrade' "$@"
