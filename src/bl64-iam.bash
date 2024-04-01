@@ -153,7 +153,7 @@ function bl64_iam_group_add() {
       "$group_name"
     ;;
   ${BL64_OS_ALP}-*)
-    bl64_iam_run_groupadd \
+    bl64_iam_run_addgroup \
       ${group_id:+--gid ${group_id}} \
       "$group_name"
     ;;
