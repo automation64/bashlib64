@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - env store support
   - bash profile snippet generators
   - PATH snippet generator
+- k8s
+  - cli compatibility for 1.3x
 
 ### Fixed
 
