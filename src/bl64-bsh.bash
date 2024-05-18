@@ -192,3 +192,155 @@ function bl64_bsh_command_is_executable() {
   [[ -x "$full_path" ]] ||
     return $BL64_LIB_ERROR_TASK_FAILED
 }
+
+#######################################
+# Create env file store
+#
+# * Use to store .env files that can later be automatically loaded by the shell profile
+#
+# Arguments:
+#   $1: User home path. Default: HOME
+#   $2: env files store directory name. Default: BL64_BSH_ENV_STORE
+# Outputs:
+#   STDOUT: progress
+#   STDERR: Error messages
+# Returns:
+#   0: task executed ok
+#   >0: failed to execute task
+#######################################
+function bl64_bsh_env_store_create() {
+  bl64_dbg_lib_show_function "$@"
+  local home="${1:-$HOME}"
+  local store="${2:-$BL64_BSH_ENV_STORE}"
+
+  bl64_fs_create_dir "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+    "${home}/${store}"
+}
+
+#######################################
+# Generate env file loader snippet
+#
+# * Use to generate bash snippet that can be added to user's profile
+#
+# Arguments:
+#   $1: env files store directory name. Default: BL64_BSH_ENV_STORE
+# Outputs:
+#   STDOUT: snippet
+#   STDERR: none
+# Returns:
+#   0: task executed ok
+#   >0: failed to execute task
+#######################################
+function bl64_bsh_env_store_generate() {
+  bl64_dbg_lib_show_function "$@"
+  local store="${1:-$BL64_BSH_ENV_STORE}"
+
+  # shellcheck disable=SC2016
+  printf '
+# Load .env files from user store
+if [[ -d "${HOME}/%s" ]]; then
+  _module=""
+  for _module in "${HOME}/%s"/*.env; do
+    [[ -r "$_module" ]] &&
+      source "$_module"
+  done
+  unset _module
+fi\n
+' "$store" "$store"
+}
+
+#######################################
+# Generate bash rc snippet
+#
+# * Generic bashrc content to allow modular content
+# * System PATH setting only
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: snippet
+#   STDERR: none
+# Returns:
+#   0: task executed ok
+#   >0: failed to execute task
+#######################################
+function bl64_bsh_profile_rc_generate() {
+  bl64_dbg_lib_show_function
+  # shellcheck disable=SC2016
+  printf '
+# Set initial system path
+export PATH="/bin:/usr/bin"
+
+# Load global RC
+[[ -f '/etc/bashrc' ]] &&
+  source '/etc/bashrc'
+
+# Load user RC
+if [[ -d "${HOME}/.bashrc.d" ]]; then
+  _module=""
+  for _module in "${HOME}/.bashrc.d"/*.sh; do
+    [[ -r "$_module" ]] &&
+      source "$_module"
+  done
+  unset _module
+fi\n
+'
+}
+
+#######################################
+# Generate bash profile snippet
+#
+# * Generic bash_profile content to allow modular content
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: snippet
+#   STDERR: none
+# Returns:
+#   0: task executed ok
+#   >0: failed to execute task
+#######################################
+function bl64_bsh_profile_bash_generate() {
+  bl64_dbg_lib_show_function
+  # shellcheck disable=SC2016
+  printf '
+# Import BashRC content
+if [[ -f "${HOME}/.bashrc" ]]; then
+  source "${HOME}/.bashrc"
+fi\n
+'
+}
+
+#######################################
+# Generate bash PATH snippet
+#
+# Arguments:
+#   $1: insecure setting?: ON: user paths first. OFF: user paths last. Default: OFF
+#   $2: include system paths?. Default: OFF
+#   $3: extra paths
+# Outputs:
+#   STDOUT: snippet
+#   STDERR: none
+# Returns:
+#   0: task executed ok
+#   >0: failed to execute task
+#######################################
+function bl64_bsh_profile_path_generate() {
+  bl64_dbg_lib_show_function "$@"
+  local insecure="${1:-$BL64_VAR_OFF}"
+  local system="${2:-$BL64_VAR_OFF}"
+  local paths_extra="${3:-}"
+  local paths_base='/bin:/usr/bin:/usr/local/bin'
+  local paths_system='/sbin:/usr/sbin:/usr/local/sbin'
+  local paths_user='$HOME/bin:$HOME/.local/bin'
+
+  bl64_lib_flag_is_enabled "$system" &&
+    paths_base+=":${paths_system}"
+
+  if bl64_lib_flag_is_enabled "$insecure"; then
+    echo "${paths_extra}${paths_extra:+:}${paths_user}:${paths_base}"
+  else
+    echo "${paths_base}:${paths_user}${paths_extra:+:}${paths_extra}"
+  fi
+}
