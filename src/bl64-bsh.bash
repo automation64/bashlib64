@@ -339,8 +339,8 @@ function bl64_bsh_profile_path_generate() {
     paths_base+=":${paths_system}"
 
   if bl64_lib_flag_is_enabled "$insecure"; then
-    echo "${paths_extra}${paths_extra:+:}${paths_user}:${paths_base}"
+    printf '\nPATH="%s"\n' "${paths_extra}${paths_extra:+:}${paths_user}:${paths_base}"
   else
-    echo "${paths_base}:${paths_user}${paths_extra:+:}${paths_extra}"
+    printf '\nPATH="%s"\n' "${paths_base}:${paths_user}${paths_extra:+:}${paths_extra}"
   fi
 }
