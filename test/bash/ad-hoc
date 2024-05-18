@@ -8,7 +8,7 @@
 # Skeleton for ad-hoc testiong.
 #
 
-#bl64_dbg_all_enable
+bl64_dbg_all_enable
 #bl64_msg_all_enable_verbose
 
 #
@@ -16,3 +16,7 @@
 #
 # * Keep the source clean, do not commit test cases below this section
 #
+
+user='testusr2'
+bl64_iam_group_add $user
+bl64_iam_user_add $user $BL64_VAR_DEFAULT $user
