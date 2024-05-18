@@ -98,7 +98,7 @@ function _bl64_k8s_set_options() {
 
   # shellcheck disable=SC2034
   case "$BL64_K8S_VERSION_KUBECTL" in
-  1.2?)
+  1.2?|1.3?)
     BL64_K8S_SET_VERBOSE_NONE='--v=0'
     BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
     BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
