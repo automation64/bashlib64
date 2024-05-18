@@ -235,6 +235,7 @@ function bl64_bsh_env_store_generate() {
   bl64_dbg_lib_show_function "$@"
   local store="${1:-$BL64_BSH_ENV_STORE}"
 
+  # shellcheck disable=SC2016
   printf '
 # Load .env files from user store
 if [[ -d "${HOME}/%s" ]]; then
@@ -265,6 +266,7 @@ fi\n
 #######################################
 function bl64_bsh_profile_rc_generate() {
   bl64_dbg_lib_show_function
+  # shellcheck disable=SC2016
   printf '
 # Set initial system path
 export PATH="/bin:/usr/bin"
@@ -301,6 +303,7 @@ fi\n
 #######################################
 function bl64_bsh_profile_bash_generate() {
   bl64_dbg_lib_show_function
+  # shellcheck disable=SC2016
   printf '
 # Import BashRC content
 if [[ -f "${HOME}/.bashrc" ]]; then
