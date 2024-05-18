@@ -201,6 +201,7 @@ function bl64_bsh_command_is_executable() {
 # Arguments:
 #   $1: User home path. Default: HOME
 #   $2: env files store directory name. Default: BL64_BSH_ENV_STORE
+#   $3: directory permissions. Default: 0750
 # Outputs:
 #   STDOUT: progress
 #   STDERR: Error messages
@@ -212,8 +213,9 @@ function bl64_bsh_env_store_create() {
   bl64_dbg_lib_show_function "$@"
   local home="${1:-$HOME}"
   local store="${2:-$BL64_BSH_ENV_STORE}"
+  local mode="${3:-0750}"
 
-  bl64_fs_create_dir "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+  bl64_fs_create_dir "$mode" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
     "${home}/${store}"
 }
 
