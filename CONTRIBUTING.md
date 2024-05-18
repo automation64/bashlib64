@@ -23,36 +23,43 @@
 - Download dev support scripts
 
   ```shell
-  ./bin/dev-lib
+  ./bin/dev-lib-base
   ```
 
 ## Update source code
 
 - Add/Edit source code in: `src/`
 
-## Build library
-
-- Build testing library and refresh docs:
-
-```shell
- ./bin/dev-build -t
- ./bin/dev-build -d
-```
-
-## Test source code
+## Batch test source code locally
 
 - Add/update test-cases in: `test/batscore`
-- Build testing library:
+- Build for testing:
 
-```shell
- ./bin/dev-build -t
-```
+  ```shell
+  ./bin/dev-build-project -t
+  ```
 
 - Run test-cases using container images bundled with the `testmansh` tool
 
-```shell
-./lib/testmansh -b -o
-```
+  ```shell
+  ./bin/dev-test-testmansh [CONTAINER] [TEST_CASE]
+  # example:
+  ./bin/dev-test-testmansh bash-test/sles-15-bash-test test/batscore/bash-os/iam/bl64_iam_user_add_08 
+  ```
+
+## Test source code in live container
+
+- Open a lab (sandbox) container
+
+  ```shell
+  ./bin/dev-lab-bash [CONTAINER]
+  ```
+
+- Run ad-hoc tests
+
+  ```shell
+  ./test/bash/ad-hoc
+  ```
 
 ## Repositories
 

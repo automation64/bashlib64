@@ -30,6 +30,7 @@ function bl64_iam_user_add() {
   local gecos="${5:-$BL64_VAR_DEFAULT}"
   local uid="${6:-$BL64_VAR_DEFAULT}"
   local password=''
+  local extra_params=''
 
   bl64_check_parameter 'login' ||
     return $?
@@ -69,9 +70,10 @@ function bl64_iam_user_add() {
     ;;
   ${BL64_OS_SLES}-*)
     bl64_dbg_lib_show_comments 'SLES: force primary group creation when group is not specified'
+    [[ -z "$group" ]] && extra_params='--user-group'
     bl64_dbg_lib_show_comments 'SLES: --user-group and --gid can not be used together'
     bl64_iam_run_useradd \
-      ${group:---user-group} \
+      ${extra_params} \
       ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
