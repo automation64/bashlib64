@@ -1,5 +1,5 @@
-@test "bl64_bsh_env_store_generate: generate" {
+@test "bl64_bsh_env_store_create: create" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  run bl64_bsh_env_store_generate
+  run bl64_bsh_env_store_create
   assert_success
 }
