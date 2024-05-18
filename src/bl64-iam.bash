@@ -68,9 +68,10 @@ function bl64_iam_user_add() {
       "$login"
     ;;
   ${BL64_OS_SLES}-*)
-    bl64_dbg_lib_show_comments 'force primary group creation'
+    bl64_dbg_lib_show_comments 'SLES: force primary group creation when group is not specified'
+    bl64_dbg_lib_show_comments 'SLES: --user-group and --gid can not be used together'
     bl64_iam_run_useradd \
-      --user-group \
+      ${group:---user-group} \
       ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
       ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
@@ -80,7 +81,7 @@ function bl64_iam_user_add() {
       "$login"
     ;;
   ${BL64_OS_ALP}-*)
-    bl64_dbg_lib_show_comments 'disable automatic password generation'
+    bl64_dbg_lib_show_comments 'ALP: disable automatic password generation'
     bl64_iam_run_adduser \
       ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
