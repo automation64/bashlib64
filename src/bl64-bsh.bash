@@ -217,6 +217,28 @@ function bl64_bsh_env_store_create() {
 }
 
 #######################################
+# Determines if the env store is present
+#
+# * Check that the store is presend only (directory path)
+# * No check is done to detect if the shell properly configured to auto-load on login from the store
+#
+# Arguments:
+#   $1: User home path. Default: HOME
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0: store is present
+#   >0: store is not present or error
+#######################################
+function bl64_bsh_env_store_is_present() {
+  bl64_dbg_lib_show_function
+  local home="${1:-$HOME}"
+
+  [[ -d "${home}/${BL64_BSH_ENV_STORE}" ]]
+}
+
+#######################################
 # Publish existing .env files to the store
 #
 # * The source file is sym-linked to the store
@@ -366,6 +388,7 @@ function bl64_bsh_profile_path_generate() {
   local paths_extra="${3:-}"
   local paths_base='/bin:/usr/bin:/usr/local/bin'
   local paths_system='/sbin:/usr/sbin:/usr/local/sbin'
+  # shellcheck disable=SC2016
   local paths_user='$HOME/bin:$HOME/.local/bin'
 
   bl64_lib_flag_is_enabled "$system" &&
