@@ -200,8 +200,6 @@ function bl64_bsh_command_is_executable() {
 #
 # Arguments:
 #   $1: User home path. Default: HOME
-#   $2: env files store directory name. Default: BL64_BSH_ENV_STORE
-#   $3: directory permissions. Default: 0750
 # Outputs:
 #   STDOUT: progress
 #   STDERR: Error messages
@@ -212,11 +210,68 @@ function bl64_bsh_command_is_executable() {
 function bl64_bsh_env_store_create() {
   bl64_dbg_lib_show_function "$@"
   local home="${1:-$HOME}"
-  local store="${2:-$BL64_BSH_ENV_STORE}"
-  local mode="${3:-0750}"
+  local mode='0750'
 
   bl64_fs_create_dir "$mode" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
-    "${home}/${store}"
+    "${home}/${BL64_BSH_ENV_STORE}"
+}
+
+#######################################
+# Determines if the env store is present
+#
+# * Check that the store is presend only (directory path)
+# * No check is done to detect if the shell properly configured to auto-load on login from the store
+#
+# Arguments:
+#   $1: User home path. Default: HOME
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0: store is present
+#   >0: store is not present or error
+#######################################
+function bl64_bsh_env_store_is_present() {
+  bl64_dbg_lib_show_function
+  local home="${1:-$HOME}"
+
+  [[ -d "${home}/${BL64_BSH_ENV_STORE}" ]]
+}
+
+#######################################
+# Publish existing .env files to the store
+#
+# * The source file is sym-linked to the store
+# * The source file must have permissions for the user to use it
+#
+# Arguments:
+#   $1: Full path to the source .env file
+#   $2: Load priority. Default: 64
+#   $3: User home path. Default: HOME
+# Outputs:
+#   STDOUT: progress
+#   STDERR: Error messages
+# Returns:
+#   0: task executed ok
+#   >0: failed to execute task
+#######################################
+function bl64_bsh_env_store_publish() {
+  bl64_dbg_lib_show_function "$@"
+  local source_env="${1:-}"
+  local priority="${2:-64}"
+  local home="${3:-$HOME}"
+  local target=''
+
+  bl64_check_parameter 'source_env' &&
+    bl64_check_file "$source_env" &&
+    bl64_check_directory "${home}/${BL64_BSH_ENV_STORE}" ||
+    return $?
+
+  target="${home}/${BL64_BSH_ENV_STORE}/${priority}_$(bl64_fmt_basename "$source_env")" &&
+  bl64_fs_create_symlink \
+    "$source_env" \
+    "$target" \
+    "$BL64_VAR_ON"
 }
 
 #######################################
@@ -225,7 +280,7 @@ function bl64_bsh_env_store_create() {
 # * Use to generate bash snippet that can be added to user's profile
 #
 # Arguments:
-#   $1: env files store directory name. Default: BL64_BSH_ENV_STORE
+#   None
 # Outputs:
 #   STDOUT: snippet
 #   STDERR: none
@@ -234,9 +289,7 @@ function bl64_bsh_env_store_create() {
 #   >0: failed to execute task
 #######################################
 function bl64_bsh_env_store_generate() {
-  bl64_dbg_lib_show_function "$@"
-  local store="${1:-$BL64_BSH_ENV_STORE}"
-
+  bl64_dbg_lib_show_function
   # shellcheck disable=SC2016
   printf '
 # Load .env files from user store
@@ -248,7 +301,7 @@ if [[ -d "${HOME}/%s" ]]; then
   done
   unset _module
 fi\n
-' "$store" "$store"
+' "$BL64_BSH_ENV_STORE" "$BL64_BSH_ENV_STORE"
 }
 
 #######################################
@@ -335,6 +388,7 @@ function bl64_bsh_profile_path_generate() {
   local paths_extra="${3:-}"
   local paths_base='/bin:/usr/bin:/usr/local/bin'
   local paths_system='/sbin:/usr/sbin:/usr/local/sbin'
+  # shellcheck disable=SC2016
   local paths_user='$HOME/bin:$HOME/.local/bin'
 
   bl64_lib_flag_is_enabled "$system" &&
