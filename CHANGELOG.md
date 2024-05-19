@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [19.5.4]
+## [19.5.5]
 
 ### Added
 
@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - iam
   - bl64_iam_user_add: SLES: do not force primary group creation when group name is provided
+  - bl64_iam_xdg_create: add missing default dir permission
 
 ## [19.4.1]
 
