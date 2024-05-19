@@ -554,7 +554,7 @@ function bl64_iam_run_sysadminctl() {
 #
 # Arguments:
 #   $1: full path to the user's home directory
-#   $2: permissions. Format: chown format. Default: use current umask
+#   $2: permissions. Default: 0750
 #   $3: user name. Default: current
 #   $4: group name. Default: current
 # Outputs:
@@ -578,6 +578,7 @@ function bl64_iam_xdg_create() {
     return $?
 
   bl64_msg_show_lib_task "${_BL64_IAM_TXT_XDG_CREATE} (${home_path})"
+  [[ "$dir_mode" == "$BL64_VAR_DEFAULT" ]] && dir_mode='0750'
   bl64_fs_create_dir "$dir_mode" "$dir_user" "$dir_group" \
     "$xdg_config" \
     "$xdg_local" \

@@ -200,6 +200,9 @@ function bl64_bsh_command_is_executable() {
 #
 # Arguments:
 #   $1: User home path. Default: HOME
+#   $2: permissions. Default: 0750
+#   $3: user name. Default: current
+#   $4: group name. Default: current
 # Outputs:
 #   STDOUT: progress
 #   STDERR: Error messages
@@ -210,9 +213,13 @@ function bl64_bsh_command_is_executable() {
 function bl64_bsh_env_store_create() {
   bl64_dbg_lib_show_function "$@"
   local home="${1:-$HOME}"
+  local mode="${2:-$BL64_VAR_DEFAULT}"
+  local user="${3:-$BL64_VAR_DEFAULT}"
+  local group="${4:-$BL64_VAR_DEFAULT}"
   local mode='0750'
 
-  bl64_fs_create_dir "$mode" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+  [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && mode='0750'
+  bl64_fs_create_dir "$mode" "$user" "$group" \
     "${home}/${BL64_BSH_ENV_STORE}"
 }
 
