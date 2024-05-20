@@ -83,7 +83,7 @@ function bl64_vcs_blank_git() {
 # Arguments:
 #   $1: URL to the GIT repository
 #   $2: destination path where the repository will be created
-#   $3: branch name. Default: main
+#   $3: (optional) branch name
 #   $4: (optional) new repository name
 # Outputs:
 #   STDOUT: git output
@@ -96,22 +96,34 @@ function bl64_vcs_git_clone() {
   local source="${1}"
   local destination="${2}"
   local branch="${3:-$BL64_VAR_DEFAULT}"
-  local name="${4:-}"
+  local name="${4:-$BL64_VAR_DEFAULT}"
 
+  [[ "$branch" == "$BL64_VAR_DEFAULT" ]] && branch=''
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_check_command "$BL64_VCS_CMD_GIT" ||
     return $?
 
-  bl64_msg_show_lib_subtask "$_BL64_VCS_TXT_CLONE_REPO ($source)"
+  bl64_msg_show_lib_subtask "$_BL64_VCS_TXT_CLONE_REPO (${source} -> ${destination})"
   bl64_fs_create_dir "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" &&
-    cd "$destination" &&
+    cd "$destination" ||
+    return $?
+
+  if [[ "$name" == "$BL64_VAR_DEFAULT" ]]; then
     bl64_vcs_run_git \
       clone \
       --depth 1 \
       --single-branch \
-      --branch "$branch" \
+      ${branch:+--branch $branch} \
+      "$source"
+  else
+    bl64_vcs_run_git \
+      clone \
+      --depth 1 \
+      --single-branch \
+      ${branch:+--branch $branch} \
       "$source" "$name"
+  fi
 }
 
 #######################################
