@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [19.6.0]
+
+### Changed
+
+- vcs
+  - bl64_vcs_git_clone: added optional new repo name
+
 ## [19.5.5]
 
 ### Added
@@ -300,19 +307,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - iam
   - MacOS: replaced dscl for sysadminctl
-
-[19.5.2]: https://github.com/automation64/bashlib64/compare/19.4.1...19.5.2
-[19.4.1]: https://github.com/automation64/bashlib64/compare/19.3.0...19.4.1
-[19.3.0]: https://github.com/automation64/bashlib64/compare/19.2.1...19.3.0
-[19.2.1]: https://github.com/automation64/bashlib64/compare/19.1.0...19.2.1
-[19.1.0]: https://github.com/automation64/bashlib64/compare/19.0.0...19.1.0
-[19.0.0]: https://github.com/automation64/bashlib64/compare/18.1.1...19.0.0
-[18.1.1]: https://github.com/automation64/bashlib64/compare/18.0.0...18.1.1
-[18.0.0]: https://github.com/automation64/bashlib64/compare/17.3.0...18.0.0
-[17.3.0]: https://github.com/automation64/bashlib64/compare/17.2.0...17.3.0
-[17.2.0]: https://github.com/automation64/bashlib64/compare/17.1.0...17.2.0
-[17.1.0]: https://github.com/automation64/bashlib64/compare/17.0.0...17.1.0
-[17.0.0]: https://github.com/automation64/bashlib64/compare/16.1.0...17.0.0
-[16.1.0]: https://github.com/automation64/bashlib64/compare/16.0.0...16.1.0
-[16.0.0]: https://github.com/automation64/bashlib64/compare/15.0.0...16.0.0
-[15.0.0]: https://github.com/automation64/bashlib64/compare/14.0.0...15.0.0
