@@ -277,3 +277,138 @@ function bl64_aws_blank_aws() {
 
   return 0
 }
+
+#######################################
+# Set profile credential information
+#
+# * CLI access mode will be set to use the target profile
+# * The profile must be already configure, no check is done to verify it
+# * Access mode is tested by calling sts caller id
+#
+# Arguments:
+#   $1: Profile name
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_aws_access_enable_profile() {
+  bl64_dbg_lib_show_function "$@"
+  local profile_name="${1:-}"
+
+  bl64_check_parameter 'profile_name' &&
+    bl64_check_module 'BL64_AWS_MODULE' ||
+    return $?
+
+  bl64_msg_show_lib_task "Enable AWS CLI Profile access mode (${profile_name})"
+  BL64_AWS_ACCESS_PROFILE="$profile_name"
+  BL64_AWS_ACCESS_MODE="$BL64_AWS_ACCESS_MODE_PROFILE"
+  bl64_dbg_lib_show_vars 'BL64_AWS_ACCESS_MODE' 'BL64_AWS_ACCESS_PROFILE'
+  bl64_aws_sts_get_caller_arn
+}
+
+#######################################
+# Set sso credential information
+#
+# * CLI access mode will be set to use the target SSO profile
+# * The profile must be already configure, no check is done to verify it
+# * SSO Login must be already called before this function
+# * Access mode is tested by calling sts caller id
+#
+# Arguments:
+#   $1: Profile name
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_aws_access_enable_sso() {
+  bl64_dbg_lib_show_function "$@"
+  local profile_name="${1:-}"
+
+  bl64_check_parameter 'profile_name' &&
+    bl64_check_module 'BL64_AWS_MODULE' ||
+    return $?
+
+  bl64_msg_show_lib_task "Enable AWS SSO access mode (${profile_name})"
+  BL64_AWS_ACCESS_PROFILE="$profile_name"
+  BL64_AWS_ACCESS_MODE="$BL64_AWS_ACCESS_MODE_SSO"
+  bl64_dbg_lib_show_vars 'BL64_AWS_ACCESS_MODE' 'BL64_AWS_ACCESS_PROFILE'
+  bl64_aws_sts_get_caller_arn
+}
+
+#######################################
+# Set Key credential information
+#
+# * CLI access mode will be set to use IAM API Keys
+# * Access mode is tested by calling sts caller id
+#
+# Arguments:
+#   $1: Key ID
+#   $2: Key Secret
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_aws_access_enable_key() {
+  bl64_dbg_lib_show_function "$@"
+  local key_id="${1:-}"
+  local key_secret="${2:-}"
+
+  bl64_check_parameter 'key_id' &&
+    bl64_check_parameter 'key_secret' &&
+    bl64_check_module 'BL64_AWS_MODULE' ||
+    return $?
+
+  bl64_msg_show_lib_task "Enable AWS IAM Key access mode (${key_id})"
+  BL64_AWS_ACCESS_KEY_ID="$key_id"
+  BL64_AWS_ACCESS_KEY_SECRET="$key_secret"
+  BL64_AWS_ACCESS_MODE="$BL64_AWS_ACCESS_MODE_KEY"
+  bl64_dbg_lib_show_vars 'BL64_AWS_ACCESS_MODE' 'BL64_AWS_ACCESS_KEY_ID'
+  bl64_aws_sts_get_caller_arn
+}
+
+#######################################
+# Set session token credential information
+#
+# * CLI access mode will be set to use session token
+# * Access mode is tested by calling sts caller id
+#
+# Arguments:
+#   $1: Key ID
+#   $2: Key Secret
+#   $3: Token
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_aws_access_enable_token() {
+  bl64_dbg_lib_show_function "$@"
+  local key_id="${1:-}"
+  local key_secret="${2:-}"
+  local token="${3:-}"
+
+  bl64_check_parameter 'key_id' &&
+    bl64_check_parameter 'key_secret' &&
+    bl64_check_parameter 'token' &&
+    bl64_check_module 'BL64_AWS_MODULE' ||
+    return $?
+
+  bl64_msg_show_lib_task "Enable AWS Session Token access mode (${key_id})"
+  BL64_AWS_ACCESS_KEY_ID="$key_id"
+  BL64_AWS_ACCESS_KEY_SECRET="$key_secret"
+  BL64_AWS_ACCESS_TOKEN="$token"
+  BL64_AWS_ACCESS_MODE="$BL64_AWS_ACCESS_MODE_TOKEN"
+  bl64_dbg_lib_show_vars 'BL64_AWS_ACCESS_MODE' 'BL64_AWS_ACCESS_KEY_ID' 'BL64_AWS_ACCESS_TOKEN'
+  bl64_aws_sts_get_caller_arn
+}
