@@ -16,9 +16,3 @@ bl64_msg_all_enable_verbose
 #
 # * Keep the source clean, do not commit test cases below this section
 #
-
-bl64_aws_setup
-bl64_aws_access_enable_key \
-  'AKIAV6CFYAMSA72LGEF7' \
-  'K1/PtJIGBKU3F+LC5yMoUioHNCRPL870wuM9YfB2'
-bl64_aws_sts_get_caller_arn
