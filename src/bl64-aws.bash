@@ -87,7 +87,7 @@ function bl64_aws_sso_login() {
 #   >0: failed to get
 #######################################
 function bl64_aws_sts_get_caller_arn() {
-  bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_show_function
   # shellcheck disable=SC2086
   bl64_aws_run_aws \
     $BL64_AWS_SET_FORMAT_TEXT \
