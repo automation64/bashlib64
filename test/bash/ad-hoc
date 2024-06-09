@@ -8,11 +8,17 @@
 # Skeleton for ad-hoc testiong.
 #
 
-bl64_dbg_all_enable
-#bl64_msg_all_enable_verbose
+#bl64_dbg_all_enable
+bl64_msg_all_enable_verbose
 
 #
 # Test Cases
 #
 # * Keep the source clean, do not commit test cases below this section
 #
+
+bl64_aws_setup
+bl64_aws_access_enable_key \
+  'AKIAV6CFYAMSA72LGEF7' \
+  'K1/PtJIGBKU3F+LC5yMoUioHNCRPL870wuM9YfB2'
+bl64_aws_sts_get_caller_arn
