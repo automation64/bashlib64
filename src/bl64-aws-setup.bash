@@ -107,15 +107,18 @@ function _bl64_aws_set_command() {
 #######################################
 function _bl64_aws_set_options() {
   bl64_dbg_lib_show_function
-  BL64_AWS_SET_FORMAT_JSON='--output json'
-  BL64_AWS_SET_FORMAT_TEXT='--output text'
-  BL64_AWS_SET_FORMAT_TABLE='--output table'
-  BL64_AWS_SET_FORMAT_YAML='--output yaml'
-  BL64_AWS_SET_FORMAT_STREAM='--output yaml-stream'
-  BL64_AWS_SET_DEBUG='--debug'
-  BL64_AWS_SET_OUPUT_NO_PAGER='--no-cli-pager'
-  BL64_AWS_SET_OUPUT_NO_COLOR='--color off'
-  BL64_AWS_SET_INPUT_NO_PROMPT='--no-cli-auto-prompt'
+  # shellcheck disable=SC2034
+  {
+    BL64_AWS_SET_FORMAT_JSON='--output json'
+    BL64_AWS_SET_FORMAT_TEXT='--output text'
+    BL64_AWS_SET_FORMAT_TABLE='--output table'
+    BL64_AWS_SET_FORMAT_YAML='--output yaml'
+    BL64_AWS_SET_FORMAT_STREAM='--output yaml-stream'
+    BL64_AWS_SET_DEBUG='--debug'
+    BL64_AWS_SET_OUPUT_NO_PAGER='--no-cli-pager'
+    BL64_AWS_SET_OUPUT_NO_COLOR='--color off'
+    BL64_AWS_SET_INPUT_NO_PROMPT='--no-cli-auto-prompt'
+  }
   return 0
 }
 
@@ -135,11 +138,14 @@ function _bl64_aws_set_options() {
 #######################################
 function _bl64_aws_set_resources() {
   bl64_dbg_lib_show_function
-  BL64_AWS_DEF_SUFFIX_TOKEN='json'
-  BL64_AWS_DEF_SUFFIX_HOME='.aws'
-  BL64_AWS_DEF_SUFFIX_CACHE='sso/cache'
-  BL64_AWS_DEF_SUFFIX_CONFIG='cfg'
-  BL64_AWS_DEF_SUFFIX_CREDENTIALS='secret'
+  # shellcheck disable=SC2034
+  {
+    BL64_AWS_DEF_SUFFIX_TOKEN='json'
+    BL64_AWS_DEF_SUFFIX_HOME='.aws'
+    BL64_AWS_DEF_SUFFIX_CACHE='sso/cache'
+    BL64_AWS_DEF_SUFFIX_CONFIG='cfg'
+    BL64_AWS_DEF_SUFFIX_CREDENTIALS='secret'
+  }
   return 0
 }
 
