@@ -33,7 +33,7 @@ function bl64_aws_cli_create_sso() {
     bl64_check_parameter 'start_url' &&
     bl64_check_parameter 'sso_region' &&
     bl64_check_parameter 'sso_account_id' &&
-    bl64_check_parameter 'sso_role_name' &&BL64_AWS_ACCESS_KEY_TOKEN
+    bl64_check_parameter 'sso_role_name' &&
     bl64_check_module 'BL64_AWS_MODULE' ||
     return $?
 
@@ -225,7 +225,7 @@ function _bl64_aws_cli_prepare() {
   "$BL64_AWS_ACCESS_MODE_TOKEN")
     export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
     export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
-    export AWS_SESSION_TOKEN="$BL64_AWS_ACCESS_KEY_TOKEN"
+    export AWS_SESSION_TOKEN="$BL64_AWS_ACCESS_TOKEN"
     bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY' 'AWS_SESSION_TOKEN'
     ;;
   *)
