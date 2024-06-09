@@ -8,8 +8,8 @@
 # Skeleton for ad-hoc testiong.
 #
 
-bl64_dbg_all_enable
-#bl64_msg_all_enable_verbose
+#bl64_dbg_all_enable
+bl64_msg_all_enable_verbose
 
 #
 # Test Cases

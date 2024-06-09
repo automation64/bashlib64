@@ -11,7 +11,7 @@
 #
 # Author: SerDigital64 (https://github.com/serdigital64)
 # Repository: https://github.com/automation64/installer64
-# Version: 3.0.0
+# Version: 3.1.0
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -105,8 +105,17 @@ function dev_bootstrap_bin_populate() {
 }
 
 function dev_bootstrap_lib_local_run() {
-  echo "Task: create local files (.local / .secrets)"
-  "${DEV_PATH_BIN}/dev-lib-local"
+  local target=''
+
+  for target in "$DEV_BASE_LOCAL" "$DEV_BASE_SECRETS"; do
+    if [[ ! -f "$target" ]]; then
+      echo "Task: create local files (${target})"
+      grep -v 'ACTION REQUIRED: this is a template file' "dot${target}" >"$target" ||
+        return $?
+    else
+      echo "Warning: resource already created, no further action will be taken (${target})" 2>&1
+    fi
+  done
 }
 
 function dev_bootstrap_lib_base_run() {
@@ -142,7 +151,7 @@ function dev_bootstrap_dot_env_create() {
 # * Used by DevBin64 to define project wide variables
 # * Automatically loaded by dev-set
 # * Do not include local variables (workstation specific) and secrets. Use .local and .secrets instead
-# * Version: 3.3.0
+# * Version: 3.4.0
 #
 
 # Main / Base file and directory names
@@ -151,10 +160,12 @@ export DEV_BASE_TEST="test"
 export DEV_BASE_SRC="src"
 export DEV_BASE_DOT_LOCAL="%s"
 export DEV_BASE_LOCAL=".local"
+export DEV_BASE_LOCAL_POST=".local-post"
 export DEV_BASE_DOT_SECRETS="%s"
 export DEV_BASE_SECRETS=".secrets"
 export DEV_BASE_ENV="%s"
 export DEV_BASE_CHANGELOG="CHANGELOG.md"
+export DEV_BASE_PROFILE="prof"
 
 # Main / Project source code
 export DEV_PATH_SRC="${DEV_PATH_ROOT}/${DEV_BASE_SRC}"
@@ -188,6 +199,15 @@ export DEV_PATH_LOGS="${DEV_PATH_ROOT}/logs"
 
 # Main / DevOps ephemeral data. Content excluded from GIT
 export DEV_PATH_TMP="${DEV_PATH_ROOT}/tmp"
+
+# Main / Profile dependant variables
+export DEV_PROFILE="${DEV_PROFILE:-default}"
+export DEV_PATH_PROF_BUILD="${DEV_PATH_BUILD}/${DEV_BASE_PROFILE}/${DEV_PROFILE}"
+export DEV_PATH_PROF_ETC="${DEV_PATH_ETC}/${DEV_BASE_PROFILE}/${DEV_PROFILE}"
+export DEV_PATH_PROF_LOGS="${DEV_PATH_LOGS}/${DEV_BASE_PROFILE}/${DEV_PROFILE}"
+export DEV_PATH_PROF_TMP="${DEV_PATH_TMP}/${DEV_BASE_PROFILE}/${DEV_PROFILE}"
+export DEV_PATH_PROF_VAR="${DEV_PATH_VAR}/${DEV_BASE_PROFILE}/${DEV_PROFILE}"
+export DEV_PATH_PROF_VAULT="${DEV_PATH_VAULT}/${DEV_BASE_PROFILE}/${DEV_PROFILE}"
 
 #
 # DevOps Tools
@@ -251,14 +271,15 @@ function dev_bootstrap_dot_local_create() {
 # * Automatically loaded by dev-set on non CICD environments
 # * For CICD environments, create variables and values based on this file
 # * Source before .env
-# * Version: 1.3.1
+# * Version: 2.0.0
 #
-
-# Main / Current environment
-export DEV_ENVIRONMENT="${DEV_ENVIRONMENT:-}"
 
 # Main / Debug flag for bin/ scripts
 export DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-}"
+
+#
+# Project specific variables
+#
 ' \
     >"$target_file" &&
     chmod "$DEV_BOOTSTRAP_FILE_MODE" "$target_file"

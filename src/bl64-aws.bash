@@ -49,6 +49,7 @@ function bl64_aws_cli_create_sso() {
 #######################################
 # Login to AWS using SSO
 #
+# * Run bl64_aws_set_access_sso to set the target profile first
 # * Equivalent to aws --profile X sso login
 # * The SSO profile must be already created
 # * SSO login requires a browser connection. The command will show the URL to open to get the one time code
@@ -63,22 +64,21 @@ function bl64_aws_cli_create_sso() {
 #   >0: failed to login
 #######################################
 function bl64_aws_sso_login() {
-  bl64_dbg_lib_show_function "$@"
-  local profile="${1:-${BL64_VAR_DEFAULT}}"
-
-  bl64_aws_run_aws_profile \
-    "$profile" \
+  bl64_dbg_lib_show_function
+  bl64_check_module 'BL64_AWS_MODULE' &&
+    bl64_check_parameter 'BL64_AWS_ACCESS_PROFILE' ||
+    return $?
+  bl64_aws_run_aws \
     sso \
     login \
     --no-browser
-
 }
 
 #######################################
 # Get current caller ARN
 #
 # Arguments:
-#   $1: profile name
+#   None
 # Outputs:
 #   STDOUT: ARN
 #   STDERR: command stderr
@@ -87,17 +87,13 @@ function bl64_aws_sso_login() {
 #   >0: failed to get
 #######################################
 function bl64_aws_sts_get_caller_arn() {
-  bl64_dbg_lib_show_function "$@"
-  local profile="${1:-${BL64_VAR_DEFAULT}}"
-
+  bl64_dbg_lib_show_function
   # shellcheck disable=SC2086
-  bl64_aws_run_aws_profile \
-    "$profile" \
+  bl64_aws_run_aws \
     $BL64_AWS_SET_FORMAT_TEXT \
     --query '[Arn]' \
     sts \
     get-caller-identity
-
 }
 
 #######################################
@@ -143,38 +139,9 @@ function bl64_aws_sso_get_token() {
 }
 
 #######################################
-# Command wrapper for aws cli with mandatory profile
-#
-# * profile entry must be previously generated
-#
-# Arguments:
-#   $1: profile name
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   0: operation completed ok
-#   >0: operation failed
-#######################################
-function bl64_aws_run_aws_profile() {
-  bl64_dbg_lib_show_function "$@"
-  local profile="${1:-}"
-
-  bl64_check_module 'BL64_AWS_MODULE' &&
-    bl64_check_parameter 'profile' &&
-    bl64_check_file "$BL64_AWS_CLI_CONFIG" ||
-    return $?
-
-  shift
-  bl64_aws_run_aws \
-    --profile "$profile" \
-    "$@"
-}
-
-#######################################
 # Command wrapper with verbose, debug and common options
 #
+# * Use bl64_aws_set_access_* to set access mode first. If not, will use defaults
 # * Trust no one. Ignore inherited config and use explicit config
 #
 # Arguments:
@@ -197,20 +164,9 @@ function bl64_aws_run_aws() {
   bl64_msg_lib_verbose_enabled && verbosity=' '
   bl64_dbg_lib_command_enabled && verbosity="$BL64_AWS_SET_DEBUG"
 
-  bl64_aws_blank_aws
-
-  bl64_dbg_lib_show_info 'Set mandatory configuration and credential variables'
-  export AWS_CONFIG_FILE="$BL64_AWS_CLI_CONFIG"
-  export AWS_SHARED_CREDENTIALS_FILE="$BL64_AWS_CLI_CREDENTIALS"
-  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE' 'AWS_SHARED_CREDENTIALS_FILE'
-
-  if [[ -n "$BL64_AWS_CLI_REGION" ]]; then
-    bl64_dbg_lib_show_info 'Set region as requested'
-    export AWS_REGION="$BL64_AWS_CLI_REGION"
-    bl64_dbg_lib_show_vars 'AWS_REGION'
-  else
-    bl64_dbg_lib_show_info 'Not setting region, not requested'
-  fi
+  bl64_aws_blank_aws &&
+    _bl64_aws_cli_prepare ||
+    return $?
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -220,6 +176,63 @@ function bl64_aws_run_aws() {
     $verbosity \
     "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Prepare CLI environment for execution
+#
+# * Sets access credential
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: preparation ok
+#   >0: failed to prepare
+#######################################
+function _bl64_aws_cli_prepare() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'Set CLI configuration'
+  export AWS_CONFIG_FILE="$BL64_AWS_CLI_CONFIG"
+  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE'
+
+  if [[ -n "$BL64_AWS_CLI_REGION" ]]; then
+    bl64_dbg_lib_show_info 'Set Default region'
+    export AWS_REGION="$BL64_AWS_CLI_REGION"
+    bl64_dbg_lib_show_vars 'AWS_REGION'
+  fi
+
+  bl64_dbg_lib_show_info 'Set credentials'
+  export AWS_SHARED_CREDENTIALS_FILE="$BL64_AWS_CLI_CREDENTIALS"
+  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE' 'AWS_SHARED_CREDENTIALS_FILE'
+  case "$BL64_AWS_ACCESS_MODE" in
+  "$BL64_AWS_ACCESS_MODE_PROFILE")
+    export AWS_PROFILE="$BL64_AWS_ACCESS_PROFILE"
+    bl64_dbg_lib_show_vars 'AWS_PROFILE'
+    ;;
+  "$BL64_AWS_ACCESS_MODE_SSO")
+    export AWS_PROFILE="$BL64_AWS_ACCESS_PROFILE"
+    bl64_dbg_lib_show_vars 'AWS_PROFILE'
+    ;;
+  "$BL64_AWS_ACCESS_MODE_KEY")
+    export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
+    export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
+    bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY'
+    ;;
+  "$BL64_AWS_ACCESS_MODE_TOKEN")
+    export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
+    export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
+    export AWS_SESSION_TOKEN="$BL64_AWS_ACCESS_TOKEN"
+    bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY' 'AWS_SESSION_TOKEN'
+    ;;
+  *)
+    bl64_dbg_lib_show_info 'No access mode requested, using CLI defaults'
+    ;;
+  esac
+  return 0
 }
 
 #######################################
@@ -263,4 +276,139 @@ function bl64_aws_blank_aws() {
   bl64_dbg_lib_trace_stop
 
   return 0
+}
+
+#######################################
+# Set profile credential information
+#
+# * CLI access mode will be set to use the target profile
+# * The profile must be already configure, no check is done to verify it
+# * Access mode is tested by calling sts caller id
+#
+# Arguments:
+#   $1: Profile name
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_aws_access_enable_profile() {
+  bl64_dbg_lib_show_function "$@"
+  local profile_name="${1:-}"
+
+  bl64_check_parameter 'profile_name' &&
+    bl64_check_module 'BL64_AWS_MODULE' ||
+    return $?
+
+  bl64_msg_show_lib_task "Enable AWS CLI Profile access mode (${profile_name})"
+  BL64_AWS_ACCESS_PROFILE="$profile_name"
+  BL64_AWS_ACCESS_MODE="$BL64_AWS_ACCESS_MODE_PROFILE"
+  bl64_dbg_lib_show_vars 'BL64_AWS_ACCESS_MODE' 'BL64_AWS_ACCESS_PROFILE'
+  bl64_aws_sts_get_caller_arn
+}
+
+#######################################
+# Set sso credential information
+#
+# * CLI access mode will be set to use the target SSO profile
+# * The profile must be already configure, no check is done to verify it
+# * SSO Login must be already called before this function
+# * Access mode is tested by calling sts caller id
+#
+# Arguments:
+#   $1: Profile name
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_aws_access_enable_sso() {
+  bl64_dbg_lib_show_function "$@"
+  local profile_name="${1:-}"
+
+  bl64_check_parameter 'profile_name' &&
+    bl64_check_module 'BL64_AWS_MODULE' ||
+    return $?
+
+  bl64_msg_show_lib_task "Enable AWS SSO access mode (${profile_name})"
+  BL64_AWS_ACCESS_PROFILE="$profile_name"
+  BL64_AWS_ACCESS_MODE="$BL64_AWS_ACCESS_MODE_SSO"
+  bl64_dbg_lib_show_vars 'BL64_AWS_ACCESS_MODE' 'BL64_AWS_ACCESS_PROFILE'
+  bl64_aws_sts_get_caller_arn
+}
+
+#######################################
+# Set Key credential information
+#
+# * CLI access mode will be set to use IAM API Keys
+# * Access mode is tested by calling sts caller id
+#
+# Arguments:
+#   $1: Key ID
+#   $2: Key Secret
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_aws_access_enable_key() {
+  bl64_dbg_lib_show_function "$@"
+  local key_id="${1:-}"
+  local key_secret="${2:-}"
+
+  bl64_check_parameter 'key_id' &&
+    bl64_check_parameter 'key_secret' &&
+    bl64_check_module 'BL64_AWS_MODULE' ||
+    return $?
+
+  bl64_msg_show_lib_task "Enable AWS IAM Key access mode (${key_id})"
+  BL64_AWS_ACCESS_KEY_ID="$key_id"
+  BL64_AWS_ACCESS_KEY_SECRET="$key_secret"
+  BL64_AWS_ACCESS_MODE="$BL64_AWS_ACCESS_MODE_KEY"
+  bl64_dbg_lib_show_vars 'BL64_AWS_ACCESS_MODE' 'BL64_AWS_ACCESS_KEY_ID'
+  bl64_aws_sts_get_caller_arn
+}
+
+#######################################
+# Set session token credential information
+#
+# * CLI access mode will be set to use session token
+# * Access mode is tested by calling sts caller id
+#
+# Arguments:
+#   $1: Key ID
+#   $2: Key Secret
+#   $3: Token
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_aws_access_enable_token() {
+  bl64_dbg_lib_show_function "$@"
+  local key_id="${1:-}"
+  local key_secret="${2:-}"
+  local token="${3:-}"
+
+  bl64_check_parameter 'key_id' &&
+    bl64_check_parameter 'key_secret' &&
+    bl64_check_parameter 'token' &&
+    bl64_check_module 'BL64_AWS_MODULE' ||
+    return $?
+
+  bl64_msg_show_lib_task "Enable AWS Session Token access mode (${key_id})"
+  BL64_AWS_ACCESS_KEY_ID="$key_id"
+  BL64_AWS_ACCESS_KEY_SECRET="$key_secret"
+  BL64_AWS_ACCESS_TOKEN="$token"
+  BL64_AWS_ACCESS_MODE="$BL64_AWS_ACCESS_MODE_TOKEN"
+  bl64_dbg_lib_show_vars 'BL64_AWS_ACCESS_MODE' 'BL64_AWS_ACCESS_KEY_ID' 'BL64_AWS_ACCESS_TOKEN'
+  bl64_aws_sts_get_caller_arn
 }
