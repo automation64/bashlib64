@@ -107,18 +107,15 @@ function _bl64_aws_set_command() {
 #######################################
 function _bl64_aws_set_options() {
   bl64_dbg_lib_show_function
-
-  # shellcheck disable=SC2034
-  BL64_AWS_SET_FORMAT_JSON='--output json' &&
-    BL64_AWS_SET_FORMAT_TEXT='--output text' &&
-    BL64_AWS_SET_FORMAT_TABLE='--output table' &&
-    BL64_AWS_SET_FORMAT_YAML='--output yaml' &&
-    BL64_AWS_SET_FORMAT_STREAM='--output yaml-stream' &&
-    BL64_AWS_SET_DEBUG='--debug' &&
-    BL64_AWS_SET_OUPUT_NO_PAGER='--no-cli-pager' &&
-    BL64_AWS_SET_OUPUT_NO_COLOR='--color off' &&
-    BL64_AWS_SET_INPUT_NO_PROMPT='--no-cli-auto-prompt'
-
+  BL64_AWS_SET_FORMAT_JSON='--output json'
+  BL64_AWS_SET_FORMAT_TEXT='--output text'
+  BL64_AWS_SET_FORMAT_TABLE='--output table'
+  BL64_AWS_SET_FORMAT_YAML='--output yaml'
+  BL64_AWS_SET_FORMAT_STREAM='--output yaml-stream'
+  BL64_AWS_SET_DEBUG='--debug'
+  BL64_AWS_SET_OUPUT_NO_PAGER='--no-cli-pager'
+  BL64_AWS_SET_OUPUT_NO_COLOR='--color off'
+  BL64_AWS_SET_INPUT_NO_PROMPT='--no-cli-auto-prompt'
   return 0
 }
 
@@ -138,13 +135,11 @@ function _bl64_aws_set_options() {
 #######################################
 function _bl64_aws_set_resources() {
   bl64_dbg_lib_show_function
-
   BL64_AWS_DEF_SUFFIX_TOKEN='json'
   BL64_AWS_DEF_SUFFIX_HOME='.aws'
   BL64_AWS_DEF_SUFFIX_CACHE='sso/cache'
   BL64_AWS_DEF_SUFFIX_CONFIG='cfg'
   BL64_AWS_DEF_SUFFIX_CREDENTIALS='secret'
-
   return 0
 }
 
@@ -162,7 +157,6 @@ function _bl64_aws_set_resources() {
 #######################################
 function _bl64_aws_set_runtime() {
   bl64_dbg_lib_show_function
-
   bl64_aws_set_paths
 }
 
@@ -221,11 +215,118 @@ function bl64_aws_set_paths() {
 function bl64_aws_set_region() {
   bl64_dbg_lib_show_function "$@"
   local region="${1:-}"
-
   bl64_check_parameter 'region' || return $?
-
   BL64_AWS_CLI_REGION="$region"
-
   bl64_dbg_lib_show_vars 'BL64_AWS_CLI_REGION'
+  return 0
+}
+
+#######################################
+# Set profile credential information
+#
+# * CLI access mode will be set to use the target profile
+# * The profile must be already configure, no check is done to verify it
+#
+# Arguments:
+#   $1: Profile name
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_aws_set_access_profile() {
+  bl64_dbg_lib_show_function "$@"
+  local profile_name="${1:-}"
+  bl64_check_parameter 'profile_name' || return $?
+  BL64_AWS_ACCESS_PROFILE="$profile_name"
+  BL64_AWS_ACCESS_MODE="$BL64_AWS_ACCESS_MODE_PROFILE"
+  bl64_dbg_lib_show_vars 'BL64_AWS_ACCESS_MODE' 'BL64_AWS_ACCESS_PROFILE'
+  return 0
+}
+
+#######################################
+# Set sso credential information
+#
+# * CLI access mode will be set to use the target SSO profile
+# * The profile must be already configure, no check is done to verify it
+#
+# Arguments:
+#   $1: Profile name
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_aws_set_access_sso() {
+  bl64_dbg_lib_show_function "$@"
+  local profile_name="${1:-}"
+  bl64_check_parameter 'profile_name' || return $?
+  BL64_AWS_ACCESS_PROFILE="$profile_name"
+  BL64_AWS_ACCESS_MODE="$BL64_AWS_ACCESS_MODE_SSO"
+  bl64_dbg_lib_show_vars 'BL64_AWS_ACCESS_MODE' 'BL64_AWS_ACCESS_PROFILE'
+  return 0
+}
+
+#######################################
+# Set Key credential information
+#
+# * CLI access mode will be set to use IAM API Keys
+#
+# Arguments:
+#   $1: Key ID
+#   $2: Key Secret
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_aws_set_access_key() {
+  bl64_dbg_lib_show_function "$@"
+  local key_id="${1:-}"
+  local key_secret="${2:-}"
+  bl64_check_parameter 'key_id' &&
+    bl64_check_parameter 'key_secret' || return $?
+  BL64_AWS_ACCESS_KEY_ID="$key_id"
+  BL64_AWS_ACCESS_KEY_SECRET="$key_secret"
+  BL64_AWS_ACCESS_MODE="$BL64_AWS_ACCESS_MODE_KEY"
+  bl64_dbg_lib_show_vars 'BL64_AWS_ACCESS_MODE' 'BL64_AWS_ACCESS_KEY_ID'
+  return 0
+}
+
+#######################################
+# Set session token credential information
+#
+# * CLI access mode will be set to use session token
+#
+# Arguments:
+#   $1: Key ID
+#   $2: Key Secret
+#   $3: Token
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: set ok
+#   >0: failed to set
+#######################################
+function bl64_aws_set_access_token() {
+  bl64_dbg_lib_show_function "$@"
+  local key_id="${1:-}"
+  local key_secret="${2:-}"
+  local token="${3:-}"
+  bl64_check_parameter 'key_id' &&
+    bl64_check_parameter 'key_secret' &&
+    bl64_check_parameter 'token' || return $?
+  BL64_AWS_ACCESS_KEY_ID="$key_id"
+  BL64_AWS_ACCESS_KEY_SECRET="$key_secret"
+  BL64_AWS_ACCESS_KEY_TOKEN="$token"
+  BL64_AWS_ACCESS_MODE="$BL64_AWS_ACCESS_MODE_TOKEN"
+  bl64_dbg_lib_show_vars 'BL64_AWS_ACCESS_MODE' 'BL64_AWS_ACCESS_KEY_ID' 'BL64_AWS_ACCESS_KEY_TOKEN'
   return 0
 }

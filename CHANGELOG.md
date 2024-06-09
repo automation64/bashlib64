@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [20.0.0]
+
+### Added
+
+- aws
+  - bl64_aws_set_access_*: Set CLI access modes: SSO, Profile, IAM Key, Session Token
+
+### Changed
+
+- aws
+  - **Breaking change**: updated functions to use new access mode
+    - bl64_aws_sso_login
+    - bl64_aws_sts_get_caller_arn
+
+### Removed
+
+- aws
+  - **Breaking change**: bl64_aws_run_aws_profile: use bl64_aws_run_aws instead with bl64_aws_set_access_*
+
 ## [19.6.0]
 
 ### Changed
