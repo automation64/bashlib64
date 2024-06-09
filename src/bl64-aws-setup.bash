@@ -331,8 +331,8 @@ function bl64_aws_set_access_token() {
     bl64_check_parameter 'token' || return $?
   BL64_AWS_ACCESS_KEY_ID="$key_id"
   BL64_AWS_ACCESS_KEY_SECRET="$key_secret"
-  BL64_AWS_ACCESS_KEY_TOKEN="$token"
+  BL64_AWS_ACCESS_TOKEN="$token"
   BL64_AWS_ACCESS_MODE="$BL64_AWS_ACCESS_MODE_TOKEN"
-  bl64_dbg_lib_show_vars 'BL64_AWS_ACCESS_MODE' 'BL64_AWS_ACCESS_KEY_ID' 'BL64_AWS_ACCESS_KEY_TOKEN'
+  bl64_dbg_lib_show_vars 'BL64_AWS_ACCESS_MODE' 'BL64_AWS_ACCESS_KEY_ID' 'BL64_AWS_ACCESS_TOKEN'
   return 0
 }
