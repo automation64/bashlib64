@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [20.1.0]
+
+### Added
+
+- msg
+  - bl64_msg_show_init: message for script initialization
+- fs
+  - bl64_fs_path_copy
+  - bl64_fs_path_permission_set
+  - bl64_fs_path_remove
+- aws
+  - bl64_aws_set_home: allow using custom AWS_HOME
+- vcs
+  - bl64_vcs_changelog_get_release: get release description
+
+### Modified
+
+- aws
+  - bl64_aws_setup: allow using custom AWS_HOME
+
+### Deprecated
+
+- fs
+  - bl64_fs_copy_files: migrate to bl64_fs_path_copy
+  - bl64_fs_cp_file: migrate to bl64_fs_path_copy
+  - bl64_fs_cp_dir: migrate to bl64_fs_path_copy
+  - bl64_fs_set_permissions: migrate to bl64_fs_path_permission_set
+  - bl64_fs_fix_permissions: migrate to bl64_fs_path_permission_set
+  - bl64_fs_rm_file: migrate to bl64_fs_path_remove
+  - bl64_fs_rm_full: migrate to bl64_fs_path_remove
+
 ## [20.0.0]
 
 ### Added

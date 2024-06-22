@@ -22,7 +22,8 @@ function bl64_aws_get_cli_credentials() {
 # Setup the bashlib64 module
 #
 # Arguments:
-#   $1: (optional) Full path where commands are
+#   $1: CLI Path. Format: Full path. Default: $PATH
+#   $2: AWS_HOME. Format: full path. Default: AWS CLI default
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -37,6 +38,7 @@ function bl64_aws_setup() {
     return 21
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
+  local aws_home="${2:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
   bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
@@ -45,10 +47,10 @@ function bl64_aws_setup() {
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     bl64_lib_module_imported 'BL64_FS_MODULE' &&
     _bl64_aws_set_command "$aws_bin" &&
+    bl64_check_command "$BL64_AWS_CMD_AWS" &&
     _bl64_aws_set_options &&
     _bl64_aws_set_resources &&
-    bl64_check_command "$BL64_AWS_CMD_AWS" &&
-    bl64_aws_set_paths &&
+    _bl64_aws_set_runtime "$aws_home" &&
     BL64_AWS_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'aws'
 }
@@ -162,8 +164,39 @@ function _bl64_aws_set_resources() {
 #   >0: failed to set
 #######################################
 function _bl64_aws_set_runtime() {
-  bl64_dbg_lib_show_function
-  bl64_aws_set_paths
+  bl64_dbg_lib_show_function "$@"
+  local aws_home="$1"
+  bl64_aws_set_home "$aws_home" &&
+    bl64_aws_set_paths "$aws_home"
+}
+
+#######################################
+# Set AWS_HOME
+#
+# * Use a different path to avoid inheriting or altering user's current setup
+# * Home is created if not present. Current user and groups are used
+#
+# Arguments:
+#   $1: Full path. Default: $HOME/.aws
+# Outputs:
+#   STDOUT: verbose operation
+#   STDERR: check errors
+# Returns:
+#   0: paths prepared ok
+#   >0: failed to prepare paths
+#######################################
+# shellcheck disable=SC2120
+function bl64_aws_set_home() {
+  bl64_dbg_lib_show_function "$@"
+  local aws_home="${1:-$BL64_VAR_DEFAULT}"
+
+  if [[ "$aws_home" == "$BL64_VAR_DEFAULT" ]]; then
+    bl64_check_home || return $?
+    aws_home="${HOME}/${BL64_AWS_DEF_SUFFIX_HOME}"
+  fi
+  bl64_msg_show_lib_subtask "prepare AWS CLI home (${aws_home})"
+  bl64_fs_create_dir "$BL64_AWS_CLI_MODE" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$aws_home" &&
+    BL64_AWS_CLI_HOME="$aws_home"
 }
 
 #######################################
@@ -187,20 +220,13 @@ function bl64_aws_set_paths() {
   bl64_dbg_lib_show_function "$@"
   local configuration="${1:-${BL64_SCRIPT_ID}}"
   local credentials="${2:-${BL64_SCRIPT_ID}}"
-  local aws_home=''
-
-  bl64_dbg_lib_show_info 'prepare AWS_HOME'
-  bl64_check_home || return $?
-  aws_home="${HOME}/${BL64_AWS_DEF_SUFFIX_HOME}"
-  bl64_fs_create_dir "$BL64_AWS_CLI_MODE" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$aws_home" || return $?
 
   bl64_dbg_lib_show_info 'set configuration paths'
-  BL64_AWS_CLI_HOME="$aws_home"
   BL64_AWS_CLI_CACHE="${BL64_AWS_CLI_HOME}/${BL64_AWS_DEF_SUFFIX_CACHE}"
   BL64_AWS_CLI_CONFIG="${BL64_AWS_CLI_HOME}/${configuration}.${BL64_AWS_DEF_SUFFIX_CONFIG}"
   BL64_AWS_CLI_CREDENTIALS="${BL64_AWS_CLI_HOME}/${credentials}.${BL64_AWS_DEF_SUFFIX_CREDENTIALS}"
 
-  bl64_dbg_lib_show_vars 'BL64_AWS_CLI_HOME' 'BL64_AWS_CLI_CACHE' 'BL64_AWS_CLI_CONFIG' 'BL64_AWS_CLI_CREDENTIALS'
+  bl64_dbg_lib_show_vars 'BL64_AWS_CLI_CACHE' 'BL64_AWS_CLI_CONFIG' 'BL64_AWS_CLI_CREDENTIALS'
   return 0
 }
 
@@ -223,6 +249,6 @@ function bl64_aws_set_region() {
   local region="${1:-}"
   bl64_check_parameter 'region' || return $?
   BL64_AWS_CLI_REGION="$region"
-  bl64_dbg_lib_show_vars 'BL64_AWS_CLI_REGION'
+  bl64_msg_show_lib_subtask "set AWS region (${BL64_AWS_CLI_REGION})"
   return 0
 }

@@ -294,3 +294,66 @@ function _bl64_vcs_github_release_get_latest() {
         gsub(/[ ",]/,"", $2); print $2
       }'
 }
+
+#######################################
+# Changelog / Get release description for a semver tag
+#
+# * Uses standard Changelog format
+# * Uses standard semver tag
+#
+# Arguments:
+#   $1: changelog path
+#   $2: semver release tag
+# Outputs:
+#   STDOUT: release description
+#   STDERR: execution error
+# Returns:
+#   0: release description found
+#   >0: unable to get release description
+#######################################
+function bl64_vcs_changelog_get_release() {
+  bl64_dbg_lib_show_function "$@"
+  local changelog_path="$1"
+  local release_tag="$2"
+  local description=''
+
+  bl64_check_parameter 'changelog_path' &&
+    bl64_check_parameter 'release_tag' &&
+    bl64_check_file "$changelog_path" ||
+    return $?
+
+  description="$(
+    _bl64_vcs_changelog_get_release \
+      "$changelog_path" \
+      "$release_tag"
+  )" &&
+    [[ -n "$description" ]] &&
+    printf '%s' "$description"
+}
+
+function _bl64_vcs_changelog_get_release() {
+  bl64_dbg_lib_show_function "$@"
+  local changelog_path="$1"
+  local release_tag="$2"
+
+  bl64_txt_run_awk \
+    -v tag="$release_tag" '
+  BEGIN {
+      section = 0
+      pattern = "## \\[" tag "\\]"
+  }
+  /^$/ { next }
+  section == 0 && $0 ~ pattern {
+    section = 1
+    next
+  }
+  section == 1 && (/^## \[[0-9]+\.[0-9]\.+[0-9]+\]$/ || /^\[[0-9]+\.[0-9]\.+[0-9]+\]: /) {
+    exit
+  }
+  section == 1 {
+    gsub(/#/,"*")
+    print $0
+    next
+  }
+  ' "$changelog_path"
+}
