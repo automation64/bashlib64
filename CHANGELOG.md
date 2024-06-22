@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fs
   - bl64_fs_path_copy
   - bl64_fs_path_permission_set
+  - bl64_fs_path_remove
 
 ### Deprecated
 
@@ -23,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_fs_cp_dir: migrate to bl64_fs_path_copy
   - bl64_fs_set_permissions: migrate to bl64_fs_path_permission_set
   - bl64_fs_fix_permissions: migrate to bl64_fs_path_permission_set
+  - bl64_fs_rm_file: migrate to bl64_fs_path_remove
+  - bl64_fs_rm_full: migrate to bl64_fs_path_remove
 
 ## [20.0.0]
 

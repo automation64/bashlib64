@@ -16,10 +16,11 @@
 #   $3: group name. Default: current
 #   $@: full directory paths
 # Outputs:
-#   STDOUT: command dependant
-#   STDERR: command dependant
+#   STDOUT: verbose operation
+#   STDOUT: command errors
 # Returns:
-#   command dependant
+#   0: Operation completed ok
+#   >0: Operation failed
 #######################################
 function bl64_fs_create_dir() {
   bl64_dbg_lib_show_function "$@"
@@ -68,10 +69,11 @@ function bl64_fs_create_dir() {
 #   $4: destination path
 #   $@: full file paths
 # Outputs:
-#   STDOUT: command dependant
-#   STDERR: command dependant
+#   STDOUT: verbose operation
+#   STDOUT: command errors
 # Returns:
-#   command dependant
+#   0: Operation completed ok
+#   >0: Operation failed
 #######################################
 function bl64_fs_copy_files() {
   bl64_dbg_lib_show_function "$@"
@@ -96,6 +98,40 @@ function bl64_fs_copy_files() {
 }
 
 #######################################
+#  Remove paths (files, directories)
+#
+# * Recursive
+# * No error if the path is not present
+# * No backup previous to removal
+#
+# Arguments:
+#   $@: list of full file paths
+# Outputs:
+#   STDOUT: verbose operation
+#   STDOUT: command errors
+# Returns:
+#   0: Operation completed ok
+#   >0: Operation failed
+#######################################
+function bl64_fs_path_remove() {
+  bl64_dbg_lib_show_function "$@"
+  local path_current=''
+
+  bl64_check_parameters_none "$#" ||
+    return $?
+
+  for path_current in "$@"; do
+    [[ ! -e "$path_current" ]] && next
+    bl64_msg_show_lib_subtask "remove path (${path_current})"
+    bl64_fs_run_rm \
+      "$BL64_FS_SET_RM_FORCE" \
+      "$BL64_FS_SET_RM_RECURSIVE" \
+      "$path_current" ||
+      return $?
+  done
+}
+
+#######################################
 # Copy one ore more paths to a single destination. Optinally set owner and permissions
 #
 # * Wildcards are not allowed. Use run_cp instead if needed
@@ -112,10 +148,11 @@ function bl64_fs_copy_files() {
 #   $5: destination path
 #   $@: full source paths. No wildcards allowed
 # Outputs:
-#   STDOUT: command dependant
-#   STDERR: command dependant
+#   STDOUT: verbose operation
+#   STDERR: command errors
 # Returns:
-#   command dependant
+#   0: Operation completed ok
+#   >0: Operation failed
 #######################################
 function bl64_fs_path_copy() {
   bl64_dbg_lib_show_function "$@"
@@ -174,8 +211,8 @@ function bl64_fs_path_copy() {
 #   $5: destination file. Full path
 #   $@: source files. Full path
 # Outputs:
-#   STDOUT: command dependant
-#   STDERR: command dependant
+#   STDOUT: verbose operation
+#   STDOUT: command errors
 # Returns:
 #   command dependant
 #   $BL64_FS_ERROR_EXISTING_FILE
@@ -245,8 +282,6 @@ function bl64_fs_merge_files() {
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
-#   bl64_check_parameter
-#   bl64_check_directory
 #   0: operation completed ok
 #   >0: operation failed
 #######################################
@@ -547,6 +582,8 @@ function bl64_fs_run_mv() {
 #######################################
 # Remove files using the verbose and force flags. Limited to current filesystem
 #
+# * TODO: to be removed in future versions. Migrate to bl64_fs_path_remove
+#
 # Arguments:
 #   $@: arguments are passed as-is to the command
 # Outputs:
@@ -558,14 +595,13 @@ function bl64_fs_run_mv() {
 #######################################
 function bl64_fs_rm_file() {
   bl64_dbg_lib_show_function "$@"
-
-  bl64_check_parameters_none "$#" || return $?
-
-  bl64_fs_run_rm "$BL64_FS_SET_RM_FORCE" "$@"
+  bl64_fs_path_remove "$@"
 }
 
 #######################################
 # Remove directories using the verbose and force flags. Limited to current filesystem
+#
+# * TODO: to be removed in future versions. Migrate to bl64_fs_path_remove
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -578,10 +614,7 @@ function bl64_fs_rm_file() {
 #######################################
 function bl64_fs_rm_full() {
   bl64_dbg_lib_show_function "$@"
-
-  bl64_check_parameters_none "$#" || return $?
-
-  bl64_fs_run_rm "$BL64_FS_SET_RM_FORCE" "$BL64_FS_SET_RM_RECURSIVE" "$@"
+  bl64_fs_path_remove "$@"
 }
 
 #######################################
@@ -1355,8 +1388,8 @@ function bl64_fs_check_new_dir() {
 #   $2: destination path
 #   $3: overwrite if already present?
 # Outputs:
-#   STDOUT: command dependant
-#   STDERR: command dependant
+#   STDOUT: verbose operation
+#   STDOUT: command errors
 # Returns:
 #   0: operation completed ok
 #   >0: operation failed
