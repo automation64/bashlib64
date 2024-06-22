@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.0.1'
+  declare BL64_MSG_VERSION='5.1.0'
 
   declare BL64_MSG_MODULE='0'
 
@@ -33,6 +33,7 @@
   declare BL64_MSG_TYPE_BATCHOK='BATCHOK'
   declare BL64_MSG_TYPE_ERROR='ERROR'
   declare BL64_MSG_TYPE_INFO='INFO'
+  declare BL64_MSG_TYPE_INIT='INIT'
   declare BL64_MSG_TYPE_INPUT='INPUT'
   declare BL64_MSG_TYPE_LIBINFO='LIBINFO'
   declare BL64_MSG_TYPE_LIBSUBTASK='LIBSUBTASK'
@@ -80,6 +81,7 @@
   declare BL64_MSG_THEME_ASCII_STD_FMTHOST=''
   declare BL64_MSG_THEME_ASCII_STD_FMTTIME=''
   declare BL64_MSG_THEME_ASCII_STD_INFO='(I)'
+  declare BL64_MSG_THEME_ASCII_STD_INIT='(:)'
   declare BL64_MSG_THEME_ASCII_STD_INPUT='(?)'
   declare BL64_MSG_THEME_ASCII_STD_LIBINFO='(II)'
   declare BL64_MSG_THEME_ASCII_STD_LIBSUBTASK='(>>)'
@@ -100,6 +102,7 @@
   declare BL64_MSG_THEME_ANSI_STD_FMTHOST='34'
   declare BL64_MSG_THEME_ANSI_STD_FMTTIME='36'
   declare BL64_MSG_THEME_ANSI_STD_INFO='36'
+  declare BL64_MSG_THEME_ANSI_STD_INIT='36'
   declare BL64_MSG_THEME_ANSI_STD_INPUT='5;30;47'
   declare BL64_MSG_THEME_ANSI_STD_LIBINFO='1;32'
   declare BL64_MSG_THEME_ANSI_STD_LIBSUBTASK='1;36'
@@ -184,6 +187,7 @@
   declare _BL64_MSG_TXT_COMMANDS='Commands'
   declare _BL64_MSG_TXT_ERROR='Error'
   declare _BL64_MSG_TXT_FLAGS='Flags'
+  declare _BL64_MSG_TXT_INIT='Init'
   declare _BL64_MSG_TXT_INFO='Info'
   declare _BL64_MSG_TXT_INPUT='Input'
   declare _BL64_MSG_TXT_INVALID_VALUE='invalid value. Not one of'

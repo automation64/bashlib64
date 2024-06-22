@@ -221,6 +221,28 @@ function bl64_msg_show_warning() {
 }
 
 #######################################
+# Display script initialization message
+#
+# Arguments:
+#   $1: message
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_init() {
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function "$@"
+  local message="$1"
+
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
+    bl64_msg_app_verbose_enabled || return 0
+
+  _bl64_msg_print "$BL64_MSG_TYPE_INIT" "$_BL64_MSG_TXT_INIT" "$message"
+}
+
+#######################################
 # Display info message
 #
 # Arguments:
