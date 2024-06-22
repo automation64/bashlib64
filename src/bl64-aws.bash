@@ -143,6 +143,7 @@ function bl64_aws_sso_get_token() {
 #
 # * Use bl64_aws_set_access_* to set access mode first. If not, will use defaults
 # * Trust no one. Ignore inherited config and use explicit config
+# * AWS CLI has no verbosity control other than debug info
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -160,12 +161,12 @@ function bl64_aws_run_aws() {
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_AWS_MODULE' ||
     return $?
-
+  
   bl64_msg_lib_verbose_enabled && verbosity=' '
   bl64_dbg_lib_command_enabled && verbosity="$BL64_AWS_SET_DEBUG"
 
   bl64_aws_blank_aws &&
-    _bl64_aws_cli_prepare ||
+    _bl64_aws_run_aws_prepare ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -192,7 +193,7 @@ function bl64_aws_run_aws() {
 #   0: preparation ok
 #   >0: failed to prepare
 #######################################
-function _bl64_aws_cli_prepare() {
+function _bl64_aws_run_aws_prepare() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'Set CLI configuration'
