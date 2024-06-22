@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - msg
   - bl64_msg_show_init: message for script initialization
+- fs
+  - bl64_fs_path_copy
+  - bl64_fs_path_permission_set
+
+### Deprecated
+
+- fs
+  - bl64_fs_copy_files: migrate to bl64_fs_path_copy
+  - bl64_fs_cp_file: migrate to bl64_fs_path_copy
+  - bl64_fs_cp_dir: migrate to bl64_fs_path_copy
+  - bl64_fs_set_permissions: migrate to bl64_fs_path_permission_set
+  - bl64_fs_fix_permissions: migrate to bl64_fs_path_permission_set
 
 ## [20.0.0]
 

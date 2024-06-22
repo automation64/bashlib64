@@ -54,6 +54,8 @@ function bl64_fs_create_dir() {
 #######################################
 # Copy one ore more files to a single destination, then set owner and permissions
 #
+# * TODO: to be removed in future versions. Migrate to bl64_fs_path_copy
+#
 # Requirements:
 #   * Destination path should be present
 #   * root privilege (sudo) if paths are restricted or change owner is requested
@@ -77,8 +79,53 @@ function bl64_fs_copy_files() {
   local user="${2:-${BL64_VAR_DEFAULT}}"
   local group="${3:-${BL64_VAR_DEFAULT}}"
   local destination="${4:-${BL64_VAR_DEFAULT}}"
-  local path=''
-  local target=''
+
+  # Remove consumed parameters
+  shift
+  shift
+  shift
+  shift
+
+  bl64_fs_path_copy \
+    "$mode" \
+    "$BL64_VAR_DEFAULT" \
+    "$user" \
+    "$group" \
+    "$destination" \
+    "$@"
+}
+
+#######################################
+# Copy one ore more paths to a single destination. Optinally set owner and permissions
+#
+# * Wildcards are not allowed. Use run_cp instead if needed
+# * Path can be directory and/or file only
+# * Destination path should be present
+# * Root privilege (sudo) needed if paths are restricted or change owner is requested
+# * No rollback in case of errors. The process will not remove already copied files
+#
+# Arguments:
+#   $1: file permissions. Format: chown format. Default: use current umask
+#   $2: directory permissions. Format: chown format. Default: use current umask
+#   $3: user name. Default: current
+#   $4: group name. Default: current
+#   $5: destination path
+#   $@: full source paths. No wildcards allowed
+# Outputs:
+#   STDOUT: command dependant
+#   STDERR: command dependant
+# Returns:
+#   command dependant
+#######################################
+function bl64_fs_path_copy() {
+  bl64_dbg_lib_show_function "$@"
+  local file_mode="${1:-${BL64_VAR_DEFAULT}}"
+  local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
+  local user="${3:-${BL64_VAR_DEFAULT}}"
+  local group="${4:-${BL64_VAR_DEFAULT}}"
+  local destination="${5:-${BL64_VAR_DEFAULT}}"
+  local path_current=''
+  local path_base=
 
   bl64_check_directory "$destination" || return $?
 
@@ -87,22 +134,29 @@ function bl64_fs_copy_files() {
   shift
   shift
   shift
+  shift
 
   # shellcheck disable=SC2086
   bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_show_info "paths:[${*}]"
-  for path in "$@"; do
-    target=''
-    bl64_check_path_absolute "$path" &&
-      target="${destination}/$(bl64_fmt_basename "$path")" || return $?
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_COPY_FILE_PATH} (${*} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
+  # shellcheck disable=SC2086
+  bl64_fs_run_cp \
+    $BL64_FS_SET_CP_FORCE \
+    $BL64_FS_SET_CP_RECURSIVE \
+    "$@" \
+    "$destination" ||
+    return $?
 
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_COPY_FILE_PATH} (${path} ${BL64_MSG_COSMETIC_ARROW2} ${target})"
-    bl64_fs_cp_file "$path" "$target" &&
-      bl64_fs_set_permissions "$mode" "$user" "$group" "$target" ||
+  for path_current in "$@"; do
+    path_base="$(bl64_fmt_basename "$path_current")"
+    bl64_fs_path_permission_set \
+      "$file_mode" \
+      "$dir_mode" \
+      "$user" \
+      "$group" \
+      "${destination}/${path_base}" ||
       return $?
   done
-
-  return 0
 }
 
 #######################################
@@ -357,6 +411,7 @@ function bl64_fs_chmod_dir() {
 #######################################
 # Copy files with force flag
 #
+# * TODO: to be removed in future versions. Migrate to bl64_fs_path_copy
 # * Simple command wrapper
 #
 # Arguments:
@@ -378,6 +433,7 @@ function bl64_fs_cp_file() {
 #######################################
 # Copy directory with recursive and force flags
 #
+# * TODO: to be removed in future versions. Migrate to bl64_fs_path_copy
 # * Simple command wrapper
 #
 # Arguments:
@@ -798,13 +854,14 @@ function bl64_fs_restore() {
 #######################################
 # Set object permissions and ownership
 #
+# * TODO: to be removed in future versions. Migrate to bl64_fs_path_permission_set
 # * work on individual files
 # * no recurse option
 # * all files get the same permissions, user, group
 #
 # Arguments:
 #   $1: permissions. Format: chown format. Default: use current umask
-#   $2: user name. Default: nonde
+#   $2: user name. Default: none
 #   $3: group name. Default: current
 #   $@: list of objects. Must use full path for each
 # Outputs:
@@ -826,30 +883,18 @@ function bl64_fs_set_permissions() {
   shift
   shift
 
-  bl64_check_parameters_none "$#" || return $?
-  bl64_dbg_lib_show_info "path list:[${*}]"
-
-  if [[ "$mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SET_MODE} (${mode} ${BL64_MSG_COSMETIC_ARROW2} ${*})"
-    bl64_fs_run_chmod "$mode" "$@" || return $?
-  fi
-
-  if [[ "$user" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SET_OWNER} (${user} ${BL64_MSG_COSMETIC_ARROW2} ${*})"
-    bl64_fs_run_chown "${user}" "$@" || return $?
-  fi
-
-  if [[ "$group" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SET_GROUP} (${group} ${BL64_MSG_COSMETIC_ARROW2} ${*})"
-    bl64_fs_run_chown ":${group}" "$@" || return $?
-  fi
-
-  return 0
+  bl64_fs_path_permission_set \
+    "$mode" \
+    "$BL64_VAR_DEFAULT" \
+    "$user" \
+    "$group" \
+    "$@"
 }
 
 #######################################
 # Fix path permissions
 #
+# * TODO: to be removed in future versions. Migrate to bl64_fs_path_permission_set
 # * allow different permissions for files and directories
 # * recursive
 #
@@ -871,6 +916,49 @@ function bl64_fs_fix_permissions() {
   local path=''
 
   # Remove consumed parameters
+  shift
+  shift
+
+  bl64_fs_path_permission_set \
+    "$file_mode" \
+    "$dir_mode" \
+    "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_DEFAULT" \
+    "$@"
+}
+
+#######################################
+# Set path permissions and ownership
+#
+# * Path: directory and/or file only
+# * Allow different permissions for files and directories
+# * Requires root privilege if current user is not the path owner
+# * Path wildcards are not allowed
+# * Recursive
+#
+# Arguments:
+#   $1: file permissions. Format: chown format. Default: no change
+#   $2: directory permissions. Format: chown format. Default: no change
+#   $3: user name. Default: no change
+#   $4: group name. Default: no change
+#   $@: list of paths. Must use full path for each
+# Outputs:
+#   STDOUT: command stdin
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_fs_path_permission_set() {
+  bl64_dbg_lib_show_function "$@"
+  local file_mode="${1:-${BL64_VAR_DEFAULT}}"
+  local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
+  local user="${3:-${BL64_VAR_DEFAULT}}"
+  local group="${4:-${BL64_VAR_DEFAULT}}"
+
+  # Remove consumed parameters
+  shift
+  shift
   shift
   shift
 
@@ -896,6 +984,26 @@ function bl64_fs_fix_permissions() {
       ${BL64_FS_SET_FIND_STAY} \
       ${BL64_FS_SET_FIND_TYPE_DIR} \
       ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$dir_mode" "{}" \; ||
+      return $?
+  fi
+
+  if [[ "$user" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SET_OWNER} (${user} ${BL64_MSG_COSMETIC_ARROW2} ${*})"
+    # shellcheck disable=SC2086
+    bl64_fs_run_chown \
+      $BL64_FS_SET_CHOWN_RECURSIVE \
+      "${user}" \
+      "$@" ||
+      return $?
+  fi
+
+  if [[ "$group" != "$BL64_VAR_DEFAULT" ]]; then
+    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SET_GROUP} (${group} ${BL64_MSG_COSMETIC_ARROW2} ${*})"
+    # shellcheck disable=SC2086
+    bl64_fs_run_chown \
+      $BL64_FS_SET_CHOWN_RECURSIVE \
+      ":${group}" \
+      "$@" ||
       return $?
   fi
 
