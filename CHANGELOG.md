@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_fs_path_remove
 - aws
   - bl64_aws_set_home: allow using custom AWS_HOME
+- vcs
+  - bl64_vcs_changelog_get_release: get release description
 
 ### Modified
 
