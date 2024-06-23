@@ -172,7 +172,7 @@ function bl64_fs_path_copy() {
 
   # shellcheck disable=SC2086
   bl64_check_parameters_none "$#" || return $?
-  bl64_msg_show_lib_subtask "copy path (${*} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
+  bl64_msg_show_lib_subtask "copy paths (${*} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
   # shellcheck disable=SC2086
   bl64_fs_run_cp \
     $BL64_FS_SET_CP_FORCE \
@@ -998,6 +998,7 @@ function bl64_fs_path_permission_set() {
   shift
   shift
   shift
+  shift
 
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "path list:[${*}]"
@@ -1018,11 +1019,11 @@ function _bl64_fs_path_permission_set_file() {
   local path="$3"
 
   [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && return 0
-  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_FIX_FILE_PERMS} (${file_mode} ${BL64_MSG_COSMETIC_PIPE} ${path})"
+  bl64_msg_show_lib_subtask "set file permissions (${file_mode} ${BL64_MSG_COSMETIC_ARROW} ${path})"
   if bl64_lib_flag_is_enabled "$recursive"; then
     # shellcheck disable=SC2086
     bl64_fs_run_find \
-      "$@" \
+      "$path" \
       ${BL64_FS_SET_FIND_STAY} \
       ${BL64_FS_SET_FIND_TYPE_FILE} \
       ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$file_mode" "{}" \;
@@ -1039,11 +1040,11 @@ function _bl64_fs_path_permission_set_dir() {
   local path="$3"
 
   [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && return 0
-  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_FIX_DIR_PERMS} (${dir_mode} ${BL64_MSG_COSMETIC_PIPE} ${path})"
+  bl64_msg_show_lib_subtask "set directory permissions (${dir_mode} ${BL64_MSG_COSMETIC_ARROW} ${path})"
   if bl64_lib_flag_is_enabled "$recursive"; then
     # shellcheck disable=SC2086
     bl64_fs_run_find \
-      "$@" \
+      "$path" \
       ${BL64_FS_SET_FIND_STAY} \
       ${BL64_FS_SET_FIND_TYPE_DIR} \
       ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$dir_mode" "{}" \;

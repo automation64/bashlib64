@@ -89,8 +89,6 @@
   declare _BL64_FS_TXT_SYMLINK_EXISTING='target symbolick link is already present. No further action taken'
   declare _BL64_FS_TXT_CREATE_FILE='create empty regular file'
   declare _BL64_FS_TXT_UMASK_SET='temporary change current script umask'
-  declare _BL64_FS_TXT_FIX_FILE_PERMS='recursively fix file permissions'
-  declare _BL64_FS_TXT_FIX_DIR_PERMS='recursively fix directory permissions'
 
   declare _BL64_FS_TXT_WARN_EXISTING_FILE='target file is already created'
   declare _BL64_FS_TXT_ERROR_NOT_TMPDIR='provided directory was not created by bl64_fs_create_tmpdir'
