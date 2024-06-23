@@ -121,7 +121,7 @@ function bl64_fs_path_remove() {
     return $?
 
   for path_current in "$@"; do
-    [[ ! -e "$path_current" ]] && next
+    [[ ! -e "$path_current" ]] && continue
     bl64_msg_show_lib_subtask "remove path (${path_current})"
     bl64_fs_run_rm \
       "$BL64_FS_SET_RM_FORCE" \
