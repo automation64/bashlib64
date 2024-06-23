@@ -63,7 +63,7 @@ function bl64_rxtx_web_get_file() {
   if (( status != 0 )); then
     bl64_msg_show_error "$_BL64_RXTX_TXT_ERROR_DOWNLOAD_FILE"
   else
-    bl64_fs_set_permissions "$file_mode" "$file_user" "$file_group" "$destination"
+    bl64_fs_path_permission_set "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" "$destination"
     status=$?
   fi
 

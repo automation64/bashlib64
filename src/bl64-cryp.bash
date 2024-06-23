@@ -129,7 +129,7 @@ function bl64_cryp_gpg_key_armor() {
     --armor \
     --output "$target_key_file" \
     "$source_key_file" &&
-    bl64_fs_set_permissions "$file_mode" "$file_user" "$file_group" "$target_key_file"
+    bl64_fs_path_permission_set "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" "$target_key_file"
 }
 
 #######################################
@@ -182,7 +182,7 @@ function bl64_cryp_gpg_key_dearmor() {
     "$BL64_OS_CMD_CAT" "$target_key_file" >"$source_key_file" &&
       bl64_fs_rm_file "$target_key_file"
   fi
-  bl64_fs_set_permissions "$file_mode" "$file_user" "$file_group" "$target_key_file"
+  bl64_fs_path_permission_set "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" "$target_key_file"
 }
 
 #######################################
