@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='5.3.1'
+  declare BL64_FS_VERSION='5.4.0'
 
   declare BL64_FS_MODULE='0'
 
@@ -79,7 +79,6 @@
   declare _BL64_FS_TXT_CLEANUP_CACHES='clean up OS cache contents'
   declare _BL64_FS_TXT_CLEANUP_LOGS='clean up OS logs'
   declare _BL64_FS_TXT_CLEANUP_TEMP='clean up OS temporary files'
-  declare _BL64_FS_TXT_COPY_FILE_PATH='copy file'
   declare _BL64_FS_TXT_CREATE_DIR_PATH='create directory'
   declare _BL64_FS_TXT_MERGE_ADD_SOURCE='merge content from source'
   declare _BL64_FS_TXT_MERGE_DIRS='merge directories content'

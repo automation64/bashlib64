@@ -38,17 +38,13 @@ function bl64_fs_create_dir() {
   bl64_dbg_lib_show_info "path list:[${*}]"
 
   for path in "$@"; do
-
     bl64_check_path_absolute "$path" || return $?
     [[ -d "$path" ]] && continue
-
     bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CREATE_DIR_PATH} (${path})"
     bl64_fs_run_mkdir "$path" &&
       bl64_fs_set_permissions "$mode" "$user" "$group" "$path" ||
       return $?
-
   done
-
   return 0
 }
 
@@ -139,6 +135,7 @@ function bl64_fs_path_remove() {
 # * Destination path should be present
 # * Root privilege (sudo) needed if paths are restricted or change owner is requested
 # * No rollback in case of errors. The process will not remove already copied files
+# * Recursive
 #
 # Arguments:
 #   $1: file permissions. Format: chown format. Default: use current umask
@@ -175,7 +172,7 @@ function bl64_fs_path_copy() {
 
   # shellcheck disable=SC2086
   bl64_check_parameters_none "$#" || return $?
-  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_COPY_FILE_PATH} (${*} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
+  bl64_msg_show_lib_subtask "copy path (${*} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
   # shellcheck disable=SC2086
   bl64_fs_run_cp \
     $BL64_FS_SET_CP_FORCE \
@@ -191,6 +188,7 @@ function bl64_fs_path_copy() {
       "$dir_mode" \
       "$user" \
       "$group" \
+      "$BL64_VAR_ON" \
       "${destination}/${path_base}" ||
       return $?
   done
@@ -921,6 +919,7 @@ function bl64_fs_set_permissions() {
     "$BL64_VAR_DEFAULT" \
     "$user" \
     "$group" \
+    "$BL64_VAR_OFF" \
     "$@"
 }
 
@@ -957,6 +956,7 @@ function bl64_fs_fix_permissions() {
     "$dir_mode" \
     "$BL64_VAR_DEFAULT" \
     "$BL64_VAR_DEFAULT" \
+    "$BL64_VAR_ON" \
     "$@"
 }
 
@@ -974,6 +974,7 @@ function bl64_fs_fix_permissions() {
 #   $2: directory permissions. Format: chown format. Default: no change
 #   $3: user name. Default: no change
 #   $4: group name. Default: no change
+#   $5: Recursive. Format: ON|OFF. Default: OFF
 #   $@: list of paths. Must use full path for each
 # Outputs:
 #   STDOUT: command stdin
@@ -988,7 +989,10 @@ function bl64_fs_path_permission_set() {
   local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
   local user="${3:-${BL64_VAR_DEFAULT}}"
   local group="${4:-${BL64_VAR_DEFAULT}}"
+  local recursive="${5:-${BL64_VAR_DEFAULT}}"
+  local target_path=''
 
+  [[ "$recursive" == "$BL64_VAR_DEFAULT" ]] && recursive="$BL64_VAR_OFF"
   # Remove consumed parameters
   shift
   shift
@@ -997,50 +1001,90 @@ function bl64_fs_path_permission_set() {
 
   bl64_check_parameters_none "$#" || return $?
   bl64_dbg_lib_show_info "path list:[${*}]"
+  for target_path in "$@"; do
+    bl64_check_path "$target_path" || return $?
+    _bl64_fs_path_permission_set_file "$file_mode" "$recursive" "$target_path" &&
+      _bl64_fs_path_permission_set_dir "$dir_mode" "$recursive" "$target_path" &&
+      _bl64_fs_path_permission_set_user "$user" "$recursive" "$target_path" &&
+      _bl64_fs_path_permission_set_group "$group" "$recursive" "$target_path" ||
+      return $?
+  done
+}
 
-  if [[ "$file_mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_FIX_FILE_PERMS} (${file_mode} ${BL64_MSG_COSMETIC_PIPE} ${*})"
+function _bl64_fs_path_permission_set_file() {
+  bl64_dbg_lib_show_function "$@"
+  local mode="$1"
+  local recursive="$2"
+  local path="$3"
+
+  [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_FIX_FILE_PERMS} (${file_mode} ${BL64_MSG_COSMETIC_PIPE} ${path})"
+  if bl64_lib_flag_is_enabled "$recursive"; then
     # shellcheck disable=SC2086
     bl64_fs_run_find \
       "$@" \
       ${BL64_FS_SET_FIND_STAY} \
       ${BL64_FS_SET_FIND_TYPE_FILE} \
-      ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$file_mode" "{}" \; ||
-      return $?
+      ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$file_mode" "{}" \;
+  else
+    [[ ! -f "$path" ]] && return 0
+    bl64_fs_run_chmod "$mode" "$path"
   fi
+}
 
-  if [[ "$dir_mode" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_FIX_DIR_PERMS} (${dir_mode} ${BL64_MSG_COSMETIC_PIPE} ${*})"
+function _bl64_fs_path_permission_set_dir() {
+  bl64_dbg_lib_show_function "$@"
+  local mode="$1"
+  local recursive="$2"
+  local path="$3"
+
+  [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_FIX_DIR_PERMS} (${dir_mode} ${BL64_MSG_COSMETIC_PIPE} ${path})"
+  if bl64_lib_flag_is_enabled "$recursive"; then
     # shellcheck disable=SC2086
     bl64_fs_run_find \
       "$@" \
       ${BL64_FS_SET_FIND_STAY} \
       ${BL64_FS_SET_FIND_TYPE_DIR} \
-      ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$dir_mode" "{}" \; ||
-      return $?
+      ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$dir_mode" "{}" \;
+  else
+    [[ ! -d "$path" ]] && return 0
+    bl64_fs_run_chmod "$mode" "$path"
   fi
+}
 
-  if [[ "$user" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SET_OWNER} (${user} ${BL64_MSG_COSMETIC_ARROW2} ${*})"
-    # shellcheck disable=SC2086
-    bl64_fs_run_chown \
-      $BL64_FS_SET_CHOWN_RECURSIVE \
-      "${user}" \
-      "$@" ||
-      return $?
-  fi
+function _bl64_fs_path_permission_set_user() {
+  bl64_dbg_lib_show_function "$@"
+  local user="$1"
+  local recursive="$2"
+  local path="$3"
+  local cli_options=' '
 
-  if [[ "$group" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SET_GROUP} (${group} ${BL64_MSG_COSMETIC_ARROW2} ${*})"
-    # shellcheck disable=SC2086
-    bl64_fs_run_chown \
-      $BL64_FS_SET_CHOWN_RECURSIVE \
-      ":${group}" \
-      "$@" ||
-      return $?
-  fi
+  [[ "$user" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_lib_flag_is_enabled "$recursive" && cli_options="$BL64_FS_SET_CHOWN_RECURSIVE"
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SET_OWNER} (${user} ${BL64_MSG_COSMETIC_ARROW2} ${path})"
+  # shellcheck disable=SC2086
+  bl64_fs_run_chown \
+    $cli_options \
+    "${user}" \
+    "$path"
+}
 
-  return 0
+function _bl64_fs_path_permission_set_group() {
+  bl64_dbg_lib_show_function "$@"
+  local group="$1"
+  local recursive="$2"
+  local path="$3"
+  local cli_options=' '
+
+  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_lib_flag_is_enabled "$recursive" && cli_options="$BL64_FS_SET_CHOWN_RECURSIVE"
+  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SET_GROUP} (${group} ${BL64_MSG_COSMETIC_ARROW2} ${path})"
+  # shellcheck disable=SC2086
+  bl64_fs_run_chown \
+    $cli_options \
+    ":${group}" \
+    "$path"
 }
 
 #######################################
