@@ -42,7 +42,7 @@ function bl64_fs_create_dir() {
     [[ -d "$path" ]] && continue
     bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CREATE_DIR_PATH} (${path})"
     bl64_fs_run_mkdir "$path" &&
-      bl64_fs_set_permissions "$mode" "$user" "$group" "$path" ||
+      bl64_fs_path_permission_set "$BL64_VAR_DEFAULT" "$mode" "$user" "$group" "$BL64_VAR_OFF" "$path" ||
       return $?
   done
   return 0
@@ -258,7 +258,7 @@ function bl64_fs_merge_files() {
 
   if ((status == 0)); then
     bl64_dbg_lib_show_comments "merge commplete, update permissions if needed (${destination})"
-    bl64_fs_set_permissions "$mode" "$user" "$group" "$destination"
+    bl64_fs_path_permission_set "$mode" "$BL64_VAR_DEFAULT" "$user" "$group" "$BL64_VAR_OFF" "$destination"
     status=$?
   else
     bl64_dbg_lib_show_comments "merge failed, removing incomplete file (${destination})"
@@ -916,7 +916,7 @@ function bl64_fs_set_permissions() {
 
   bl64_fs_path_permission_set \
     "$mode" \
-    "$BL64_VAR_DEFAULT" \
+    "$mode" \
     "$user" \
     "$group" \
     "$BL64_VAR_OFF" \
@@ -1497,5 +1497,5 @@ function bl64_fs_create_file() {
     return 0
 
   "$BL64_FS_CMD_TOUCH" "$file_path" &&
-    bl64_fs_set_permissions "$mode" "$user" "$group" "$file_path"
+    bl64_fs_path_permission_set "$mode" "$BL64_VAR_DEFAULT" "$user" "$group" "$BL64_VAR_OFF" "$file_path"
 }
