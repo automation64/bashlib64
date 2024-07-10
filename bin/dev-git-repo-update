@@ -2,7 +2,7 @@
 #######################################
 # Dev / GIT / Update GIT repository
 #
-# * Version: 1.4.0
+# * Version: 1.5.0
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -59,6 +59,8 @@ function dev_repo_update() {
     bl64_vcs_run_git fetch "$DEV_GIT_REMOTE_ORIGIN" &&
       bl64_vcs_run_git pull "$DEV_GIT_REMOTE_ORIGIN" "$DEV_GIT_BRANCH_MAIN"
   fi
+  bl64_msg_show_task 'run local garbage collector'
+  bl64_vcs_run_git gc
 }
 
 function dev_git_initialize() {

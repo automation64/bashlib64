@@ -2,7 +2,7 @@
 #######################################
 # Dev / Release / GitHub / Create application release from tag
 #
-# * Version: 2.1.2
+# * Version: 2.2.2
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -30,7 +30,11 @@ source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2
 source ./bin/dev-env-git &&
   source ./bin/dev-env-github || exit 1
 # shellcheck source=lib/bl64/bashlib64.bash
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-vcs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-rxtx.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-api.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-vcs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
@@ -38,32 +42,6 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
 #
 # Functions
 #
-
-function dev_release_get_changes() {
-  bl64_dbg_app_show_function "$@"
-  local tag="$1"
-  bl64_dbg_app_show_comments 'remove prefix from tag to match semver version on changelog'
-  bl64_txt_run_awk -v tag="${tag#v}" '
-  BEGIN {
-      section = 0
-      patter_section_prefix = "^##$"
-      patter_section_tittle = tag
-      patter_section_diff = "^[v0-9[]:]+"
-  }
-  /^$/ { next }
-  section == 0 && $1 ~ patter_section_prefix && $2 ~ patter_section_tittle {
-    section = 1
-    next
-  }
-  section == 1 && ($1 ~ patter_section_prefix || $1 ~ patter_section_diff) {
-    exit
-  }
-  section == 1 {
-    print $0
-    next
-  }
-  ' "$DEV_BASE_CHANGELOG"
-}
 
 function dev_release_create() {
   bl64_dbg_app_show_function "$@"
@@ -105,7 +83,7 @@ function dev_release() {
   local -i status=0
 
   notes="$(bl64_fs_create_tmpfile).md" &&
-    dev_release_get_changes "$tag" >"$notes"
+    bl64_vcs_changelog_get_release "$DEV_BASE_CHANGELOG" "$tag" >"$notes"
   [[ ! -s "$notes" ]] && bl64_msg_show_error 'Unable to extract changelog for the requested tag' && status=1
 
   if ((status == 0)); then
@@ -122,7 +100,8 @@ function dev_release_initialize() {
   bl64_check_parameter 'dev_release_tag' &&
     bl64_check_export 'DEV_RELEASE_GITHUB_REPO_OWNER' &&
     bl64_check_export 'DEV_RELEASE_GITHUB_REPO_NAME' &&
-    bl64_check_command_search_path "$DEV_LIB_GITHUB_BIN"
+    bl64_check_command_search_path "$DEV_LIB_GITHUB_BIN" &&
+    bl64_check_file "$DEV_BASE_CHANGELOG"
 }
 
 #

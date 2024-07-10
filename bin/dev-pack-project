@@ -41,29 +41,29 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
 
 function dev_pack_custom() {
   bl64_dbg_app_show_function
-  bl64_fs_rm_full "$DEV_PACK_PROJECT_STORE"
-  bl64_fs_create_dir "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_PACK_PROJECT_STORE" ||
+  bl64_fs_rm_full "$DEV_PATH_BUILD_PACK"
+  bl64_fs_create_dir "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_PATH_BUILD_PACK" ||
     return $?
 
   cd "$DEV_BUILD_PROJECT_FULL_PATH_RELEASE"
   bl64_msg_show_task "create stand-alone distributable package (${DEV_PACK_PROJECT_NAME_SA})"
   bl64_arc_run_tar \
     zcf \
-    "${DEV_PACK_PROJECT_STORE}/${DEV_PACK_PROJECT_NAME_SA}" \
+    "${DEV_PATH_BUILD_PACK}/${DEV_PACK_PROJECT_NAME_SA}" \
     "$DEV_BUILD_PROJECT_NAME_SA" ||
     return $?
 
   bl64_msg_show_task "create core+opt alternative distributable package (${DEV_PACK_PROJECT_NAME_SPLIT})"
   bl64_arc_run_tar \
     zcf \
-    "${DEV_PACK_PROJECT_STORE}/${DEV_PACK_PROJECT_NAME_SPLIT}" \
+    "${DEV_PATH_BUILD_PACK}/${DEV_PACK_PROJECT_NAME_SPLIT}" \
     "$DEV_BUILD_PROJECT_NAME_CORE" "$DEV_BUILD_PROJECT_NAME_OPT" ||
     return $?
 
   bl64_msg_show_task "create modular alternative distributable package (${DEV_PACK_PROJECT_NAME_MODULAR})"
   bl64_arc_run_tar \
     zcf \
-    "${DEV_PACK_PROJECT_STORE}/${DEV_PACK_PROJECT_NAME_MODULAR}" \
+    "${DEV_PATH_BUILD_PACK}/${DEV_PACK_PROJECT_NAME_MODULAR}" \
     ${DEV_BUILD_PROJECT_NAME_MODULE}-*.bash
 }
 
@@ -73,7 +73,7 @@ function dev_pack_initialize() {
     bl64_check_export 'DEV_PACK_PROJECT_NAME_SA' &&
     bl64_check_export 'DEV_PACK_PROJECT_NAME_SPLIT' &&
     bl64_check_export 'DEV_PACK_PROJECT_NAME_MODULAR' &&
-    bl64_check_export 'DEV_PACK_PROJECT_STORE' &&
+    bl64_check_export 'DEV_PATH_BUILD_PACK' &&
     bl64_check_export 'DEV_BUILD_PROJECT_FULL_PATH_RELEASE' &&
     bl64_check_directory "$DEV_BUILD_PROJECT_FULL_PATH_RELEASE"
 }
