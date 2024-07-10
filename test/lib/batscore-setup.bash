@@ -12,7 +12,7 @@
 . "$TESTMANSH_CMD_BATS_HELPER_SUPPORT" &&
   . "$TESTMANSH_CMD_BATS_HELPER_ASSERT" &&
   . "$TESTMANSH_CMD_BATS_HELPER_FILE" &&
-  . test/lib/test.env ||
+  . "${TESTMANSH_TEST_LIB}/test.env" ||
   { echo 'test:Error: unable to load test environment' 2>&1 && exit 1; }
 
 #
