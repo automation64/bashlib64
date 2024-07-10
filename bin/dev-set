@@ -4,7 +4,7 @@
 #
 # * Source this script from the project's root directory
 # * Warning: source from interactive shell is supported on Bash and ZSH only
-# * Version: 7.6.0
+# * Version: 8.0.0
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -30,9 +30,9 @@
 export DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-}"
 # Main / Increase verbosity? Set to YES to increase
 export DEV_SET_VERBOSE="${DEV_SET_VERBOSE:-}"
-# Main / Base file and directory names
-export DEV_BASE_LOCAL='.local'
-export DEV_BASE_SECRETS='.secrets'
+# Main / Bootstrap files. Must be the same as defined in .env
+export DEV_BASE_LOCAL='.local.env'
+export DEV_BASE_SECRETS='.secrets.env'
 export DEV_BASE_ENV='.env'
 # Main / Project root
 export DEV_PATH_ROOT="${DEV_PATH_ROOT:-}"
@@ -67,14 +67,14 @@ function dev_set_load_workstation() {
   dev_set_show_task "load workstation environment variables ($(pwd)/${DEV_BASE_LOCAL})"
   DEV_PATH_ROOT="${DEV_PATH_ROOT:-$(pwd)}"
 
-  # shellcheck source=./.local
+  # shellcheck source=./.local.env
   source "$DEV_BASE_LOCAL" ||
     { dev_set_show_error "unable to source file (${DEV_BASE_LOCAL})" && return 1; }
 
   DEV_BASE_SECRETS="${DEV_PATH_ROOT}/${DEV_BASE_SECRETS}"
   if [[ -f "$DEV_BASE_SECRETS" ]]; then
     dev_set_show_task "load workstation secrets (${DEV_BASE_SECRETS})"
-    # shellcheck source=./.secrets
+    # shellcheck source=./.secrets.env
     source "${DEV_BASE_SECRETS}" ||
       { dev_set_show_error "unable to source file (${DEV_BASE_SECRETS})" && return 1; }
   fi
@@ -89,16 +89,16 @@ function dev_set_load_gitlab() {
 }
 
 function dev_set_load_local_post() {
-  if [[ -f "$DEV_BASE_LOCAL_POST" ]]; then
-    # shellcheck source=./.local-post
-    source "${DEV_BASE_LOCAL_POST}" ||
-      { dev_set_show_error "unable to source file (${DEV_BASE_LOCAL_POST})" && return 1; }
+  if [[ -f "$DEV_BASE_POST" ]]; then
+    # shellcheck source=./.post.env
+    source "${DEV_BASE_POST}" ||
+      { dev_set_show_error "unable to source file (${DEV_BASE_POST})" && return 1; }
   fi
   return 0
 }
 
 function dev_set_load_github() {
-  local DEV_BASE_LOCAL='.local-github'
+  local DEV_BASE_LOCAL='.local-github.env'
 
   dev_set_show_task "Info: GitHub detected, setting project root (${GITHUB_WORKSPACE})"
   # shellcheck disable=SC2155
@@ -107,7 +107,7 @@ function dev_set_load_github() {
   DEV_BASE_LOCAL="${DEV_PATH_ROOT}/${DEV_BASE_LOCAL}"
   if [[ -f "$DEV_BASE_LOCAL" ]]; then
     dev_set_show_task "Load local github automatic environment variables (${DEV_BASE_LOCAL})"
-    # shellcheck source=./.local
+    # shellcheck source=./.local-github.env
     source "${DEV_BASE_LOCAL}" ||
       { dev_set_show_error "unable to source file (${DEV_BASE_LOCAL})" && return 1; }
   fi

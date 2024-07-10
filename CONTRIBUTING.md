@@ -36,7 +36,7 @@
 - Build for testing:
 
   ```shell
-  ./bin/dev-build-project -t
+  ./bin/dev-build-project
   ```
 
 - Run test-cases using container images bundled with the `testmansh` tool

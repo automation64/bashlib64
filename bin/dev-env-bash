@@ -2,7 +2,7 @@
 #######################################
 # Dev / Env / Bash / Shared environment variables
 #
-# * Version: 1.1.2
+# * Version: 1.1.3
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -39,7 +39,7 @@
     # Build / Bash / Source full path
     export DEV_BUILD_BASH_SOURCE="${DEV_BUILD_BASH_SOURCE:-${DEV_PATH_SRC}}"
     # Build / Bash / Build full path
-    export DEV_BUILD_BASH_TARGET="${DEV_BUILD_BASH_TARGET:-${DEV_PATH_BUILD}/${DEV_BUILD_BASH_NAME}}"
+    export DEV_BUILD_BASH_TARGET="${DEV_BUILD_BASH_TARGET:-${DEV_PATH_BUILD_PREPARE}/${DEV_BUILD_BASH_NAME}}"
     # Build / Bash / Target file full path
     export DEV_BUILD_BASH_FILE="${DEV_BUILD_BASH_FILE:-${DEV_BUILD_BASH_TARGET}/${DEV_BUILD_BASH_NAME}}"
     # Build / Bash / Libraries

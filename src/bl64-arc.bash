@@ -119,10 +119,10 @@ function bl64_arc_open_tar() {
     bl64_check_directory "$destination" ||
     return $?
 
-  bl64_msg_show_lib_subtask "$_BL64_ARC_TXT_OPEN_TAR ($source)"
+  bl64_msg_show_lib_subtask "open tar archive ($source)"
 
-  # shellcheck disable=SC2164
-  cd "$destination"
+  bl64_bsh_run_pushd "$destination" ||
+    return $?
 
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
@@ -178,8 +178,10 @@ function bl64_arc_open_tar() {
   esac
   status=$?
 
-  ((status == 0)) && bl64_fs_rm_file "$source"
-
+  if ((status == 0)); then
+    bl64_fs_rm_file "$source"
+    bl64_bsh_run_popd
+  fi
   return $status
 }
 
@@ -212,7 +214,7 @@ function bl64_arc_open_zip() {
     bl64_check_directory "$destination" ||
     return $?
 
-  bl64_msg_show_lib_subtask "$_BL64_ARC_TXT_OPEN_ZIP ($source)"
+  bl64_msg_show_lib_subtask "open zip archive ($source)"
   # shellcheck disable=SC2086
   bl64_arc_run_unzip \
     $BL64_ARC_SET_UNZIP_OVERWRITE \

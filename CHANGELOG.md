@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [20.2.0]
+
+### Added
+
+- bsh
+  - bl64_bsh_run_pushd
+  - bl64_bsh_run_popd
+- fs
+  - bl64_fs_dir_reset
+  - bl64_fs_file_remove
+  - bl64_fs_dir_create
+  - bl64_fs_dir_reset
+
+### Fixed
+
+- crypt
+  - bl64_cryp_gpg_key_armor: error condition when source is already armored
+
+### Changed
+
+- pkg
+  - Use `apt` instead of `apt-get`
+
+### Deprecated
+
+- bl64_fs_create_dir: migrate to bl64_fs_dir_create
+- bl64_fs_ln_symbolic: migrate to bl64_fs_create_symlink
+
 ## [20.1.3]
 
 ### Added

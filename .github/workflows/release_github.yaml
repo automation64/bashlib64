@@ -24,7 +24,7 @@ jobs:
         run: "./bin/dev-lib-installer64"
 
       - name: "Build app for release"
-        run: "./bin/dev-build-project -r"
+        run: "./bin/dev-build-project"
 
       - name: "Create distributable packages"
         run: "./bin/dev-pack-project"

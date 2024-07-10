@@ -110,7 +110,7 @@ function bl64_bsh_env_import_yaml() {
     return $?
 
   # shellcheck disable=SC1090
-  bl64_msg_show_subtask "${_BL64_BSH_TXT_IMPORT_YAML} (${source})"
+  bl64_msg_show_subtask "convert and import shell variables from YAML file (${source})"
   # shellcheck disable=SC1090
   dynamic_env="$(bl64_fs_create_tmpfile)" &&
     bl64_xsv_run_yq \
@@ -406,4 +406,41 @@ function bl64_bsh_profile_path_generate() {
   else
     printf '\nPATH="%s"\n' "${paths_base}:${paths_user}${paths_extra:+:}${paths_extra}"
   fi
+}
+
+#######################################
+# Simplified command wrapper
+#
+# Arguments:
+#   $1: target path
+# Outputs:
+#   STDOUT: None
+#   STDERR: Command error
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_bsh_run_pushd() {
+  bl64_dbg_lib_show_function "$@"
+  local path="${1:-}"
+  # shellcheck disable=SC2164
+  pushd "$path" > /dev/null
+}
+
+#######################################
+# Simplified command wrapper
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Command error
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_bsh_run_popd() {
+  bl64_dbg_lib_show_function
+  # shellcheck disable=SC2164
+  popd > /dev/null
 }
