@@ -41,11 +41,8 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
 
 function dev_pack_custom() {
   bl64_dbg_app_show_function
-  bl64_fs_path_remove "$DEV_PATH_BUILD_PACK"
-  bl64_fs_create_dir "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_PATH_BUILD_PACK" ||
-    return $?
 
-  cd "$DEV_BUILD_PROJECT_FULL_PATH_RELEASE"
+  cd "$DEV_PATH_BUILD_PREPARE"
   bl64_msg_show_task "create stand-alone distributable package (${DEV_PACK_PROJECT_NAME_SA})"
   bl64_arc_run_tar \
     zcf \
@@ -74,8 +71,10 @@ function dev_pack_initialize() {
     bl64_check_export 'DEV_PACK_PROJECT_NAME_SPLIT' &&
     bl64_check_export 'DEV_PACK_PROJECT_NAME_MODULAR' &&
     bl64_check_export 'DEV_PATH_BUILD_PACK' &&
-    bl64_check_export 'DEV_BUILD_PROJECT_FULL_PATH_RELEASE' &&
-    bl64_check_directory "$DEV_BUILD_PROJECT_FULL_PATH_RELEASE"
+    bl64_check_export 'DEV_PATH_BUILD_PREPARE' &&
+    bl64_check_directory "$DEV_PATH_BUILD_PREPARE" &&
+    bl64_fs_path_remove "$DEV_PATH_BUILD_PACK" &&
+    bl64_fs_create_dir "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_PATH_BUILD_PACK"
 }
 
 #
