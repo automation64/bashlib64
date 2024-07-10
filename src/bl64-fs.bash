@@ -1438,7 +1438,10 @@ function bl64_fs_file_remove() {
 # * Recursive delete if path is present
 #
 # Arguments:
-#   $@: same as bl64_fs_dir_create
+#   $1: permissions. Format: chown format. Default: use current umask
+#   $2: user name. Default: current
+#   $3: group name. Default: current
+#   $@: full directory paths
 # Outputs:
 #   STDOUT: verbose operation
 #   STDOUT: command errors
@@ -1448,14 +1451,15 @@ function bl64_fs_file_remove() {
 #######################################
 function bl64_fs_dir_reset() {
   bl64_dbg_lib_show_function "$@"
-  local path_current=''
+  local mode="${1:-${BL64_VAR_DEFAULT}}"
+  local user="${2:-${BL64_VAR_DEFAULT}}"
+  local group="${3:-${BL64_VAR_DEFAULT}}"
 
-  bl64_check_parameters_none "$#" ||
-    return $?
+  # Remove consumed parameters
+  shift
+  shift
+  shift
 
-  for path_current in "$@"; do
-    bl64_fs_path_remove "path_current" &&
-      bl64_fs_dir_create "$@" ||
-      return $?
-  done
+  bl64_fs_path_remove "$@" &&
+    bl64_fs_dir_create "$mode" "$user" "$group" "$@"
 }
