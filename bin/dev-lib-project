@@ -44,8 +44,7 @@ function dev_lib_project() {
     "$DEV_PATH_SRC" \
     "$DEV_PATH_TEST" \
     "$DEV_PATH_BUILD" \
-    '.env' \
-    '.local'
+    "$DEV_BASE_ENV"
 }
 
 function dev_lib_initialize() {
