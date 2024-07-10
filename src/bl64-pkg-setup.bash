@@ -55,7 +55,7 @@ function _bl64_pkg_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
-    BL64_PKG_CMD_APT='/usr/bin/apt-get'
+    BL64_PKG_CMD_APT='/usr/bin/apt'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'

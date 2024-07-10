@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PKG_VERSION='5.1.1'
+  declare BL64_PKG_VERSION='5.1.2'
 
   declare BL64_PKG_MODULE='0'
 
