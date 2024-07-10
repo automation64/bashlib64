@@ -22,7 +22,7 @@
 #   0: Operation completed ok
 #   >0: Operation failed
 #######################################
-function bl64_fs_create_dir() {
+function bl64_fs_dir_create() {
   bl64_dbg_lib_show_function "$@"
   local mode="${1:-${BL64_VAR_DEFAULT}}"
   local user="${2:-${BL64_VAR_DEFAULT}}"
@@ -51,7 +51,7 @@ function bl64_fs_create_dir() {
 #######################################
 # Copy one ore more files to a single destination, then set owner and permissions
 #
-# * TODO: to be removed in future versions. Migrate to bl64_fs_path_copy
+# * DEPRECATION: to be removed in future versions. Migrate to bl64_fs_path_copy
 #
 # Requirements:
 #   * Destination path should be present
@@ -101,7 +101,7 @@ function bl64_fs_copy_files() {
 # * No backup previous to removal
 #
 # Arguments:
-#   $@: list of full file paths
+#   $@: list of full paths
 # Outputs:
 #   STDOUT: verbose operation
 #   STDOUT: command errors
@@ -442,70 +442,6 @@ function bl64_fs_chmod_dir() {
 }
 
 #######################################
-# Copy files with force flag
-#
-# * TODO: to be removed in future versions. Migrate to bl64_fs_path_copy
-# * Simple command wrapper
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   0: operation completed ok
-#   >0: operation failed
-#######################################
-function bl64_fs_cp_file() {
-  bl64_dbg_lib_show_function "$@"
-
-  # shellcheck disable=SC2086
-  bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$@"
-}
-
-#######################################
-# Copy directory with recursive and force flags
-#
-# * TODO: to be removed in future versions. Migrate to bl64_fs_path_copy
-# * Simple command wrapper
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   0: operation completed ok
-#   >0: operation failed
-#######################################
-function bl64_fs_cp_dir() {
-  bl64_dbg_lib_show_function "$@"
-
-  # shellcheck disable=SC2086
-  bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" "$@"
-}
-
-#######################################
-# Create a symbolic link
-#
-# * Simple command wrapper
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   0: operation completed ok
-#   >0: operation failed
-#######################################
-function bl64_fs_ln_symbolic() {
-  bl64_dbg_lib_show_function "$@"
-
-  bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$@"
-}
-
-#######################################
 # Command wrapper with verbose, debug and common options
 #
 # Arguments:
@@ -575,44 +511,6 @@ function bl64_fs_run_mv() {
   # shellcheck disable=SC2086
   "$BL64_FS_CMD_MV" $debug "$BL64_FS_SET_MV_FORCE" "$@"
   bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Remove files using the verbose and force flags. Limited to current filesystem
-#
-# * TODO: to be removed in future versions. Migrate to bl64_fs_path_remove
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   0: operation completed ok
-#   >0: operation failed
-#######################################
-function bl64_fs_rm_file() {
-  bl64_dbg_lib_show_function "$@"
-  bl64_fs_path_remove "$@"
-}
-
-#######################################
-# Remove directories using the verbose and force flags. Limited to current filesystem
-#
-# * TODO: to be removed in future versions. Migrate to bl64_fs_path_remove
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   0: operation completed ok
-#   >0: operation failed
-#######################################
-function bl64_fs_rm_full() {
-  bl64_dbg_lib_show_function "$@"
-  bl64_fs_path_remove "$@"
 }
 
 #######################################
@@ -885,7 +783,7 @@ function bl64_fs_restore() {
 #######################################
 # Set object permissions and ownership
 #
-# * TODO: to be removed in future versions. Migrate to bl64_fs_path_permission_set
+# * DEPRECATION: to be removed in future versions. Migrate to bl64_fs_path_permission_set
 # * work on individual files
 # * no recurse option
 # * all files get the same permissions, user, group
@@ -926,7 +824,7 @@ function bl64_fs_set_permissions() {
 #######################################
 # Fix path permissions
 #
-# * TODO: to be removed in future versions. Migrate to bl64_fs_path_permission_set
+# * DEPRECATION: to be removed in future versions. Migrate to bl64_fs_path_permission_set
 # * allow different permissions for files and directories
 # * recursive
 #
@@ -1498,4 +1396,66 @@ function bl64_fs_create_file() {
 
   "$BL64_FS_CMD_TOUCH" "$file_path" &&
     bl64_fs_path_permission_set "$mode" "$BL64_VAR_DEFAULT" "$user" "$group" "$BL64_VAR_OFF" "$file_path"
+}
+
+#######################################
+#  Remove files
+#
+# * No error if the path is not present
+# * No backup previous to removal
+#
+# Arguments:
+#   $@: list of full file paths
+# Outputs:
+#   STDOUT: verbose operation
+#   STDOUT: command errors
+# Returns:
+#   0: Operation completed ok
+#   >0: Operation failed
+#######################################
+function bl64_fs_file_remove() {
+  bl64_dbg_lib_show_function "$@"
+  local path_current=''
+
+  bl64_check_parameters_none "$#" ||
+    return $?
+
+  for path_current in "$@"; do
+    [[ ! -f "$path_current" ]] && continue
+    bl64_msg_show_lib_subtask "remove file (${path_current})"
+    bl64_fs_run_rm \
+      "$BL64_FS_SET_RM_FORCE" \
+      "$path_current" ||
+      return $?
+  done
+}
+
+#######################################
+#  Recreate ephemeral directory path
+#
+# * No error if the path is not present
+# * No backup previous to removal
+# * Recursive delete if path is present
+#
+# Arguments:
+#   $@: same as bl64_fs_dir_create
+# Outputs:
+#   STDOUT: verbose operation
+#   STDOUT: command errors
+# Returns:
+#   0: Operation completed ok
+#   >0: Operation failed
+#######################################
+function bl64_fs_dir_reset() {
+  bl64_dbg_lib_show_function "$@"
+  local path_current=''
+
+  bl64_check_parameters_none "$#" ||
+    return $?
+
+  for path_current in "$@"; do
+    bl64_fs_path_remove "path_current" &&
+      bl64_fs_dir_create "$@" ||
+      return $?
+  done
 }
