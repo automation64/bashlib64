@@ -114,6 +114,7 @@ function bl64_rxtx_git_get_dir() {
   bl64_check_overwrite_skip "$destination" "$replace" && return $?
   bl64_fs_safeguard "$destination" || return $?
 
+  bl64_msg_show_lib_subtask "clone source repository (${source_url})"
   if [[ "$source_path" == '.' || "$source_path" == './' ]]; then
     _bl64_rxtx_git_get_dir_root "$source_url" "$destination" "$branch"
   else
@@ -123,10 +124,11 @@ function bl64_rxtx_git_get_dir() {
   (( status != 0 )) && bl64_msg_show_error "$_BL64_RXTX_TXT_ERROR_DOWNLOAD_DIR"
 
   if [[ "$status" == '0' && -d "${destination}/.git" ]]; then
-    bl64_dbg_lib_show_info "remove git metadata (${destination}/.git)"
+    bl64_msg_show_lib_subtask "remove git metadata (${destination}/.git)"
     # shellcheck disable=SC2164
-    cd "$destination"
+    bl64_bsh_run_pushd "$destination" || return $?
     bl64_fs_rm_full '.git' >/dev/null
+    bl64_bsh_run_popd
   fi
 
   bl64_fs_restore "$destination" "$status" || return $?

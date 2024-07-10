@@ -106,7 +106,7 @@ function bl64_vcs_git_clone() {
 
   bl64_msg_show_lib_subtask "$_BL64_VCS_TXT_CLONE_REPO (${source} -> ${destination})"
   bl64_fs_create_dir "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" &&
-    cd "$destination" ||
+    bl64_bsh_run_pushd "$destination" ||
     return $?
 
   if [[ "$name" == "$BL64_VAR_DEFAULT" ]]; then
@@ -115,15 +115,18 @@ function bl64_vcs_git_clone() {
       --depth 1 \
       --single-branch \
       ${branch:+--branch $branch} \
-      "$source"
+      "$source" ||
+      return $?
   else
     bl64_vcs_run_git \
       clone \
       --depth 1 \
       --single-branch \
       ${branch:+--branch $branch} \
-      "$source" "$name"
+      "$source" "$name" ||
+      return $?
   fi
+  bl64_bsh_run_popd
 }
 
 #######################################
@@ -157,10 +160,9 @@ function bl64_vcs_git_sparse() {
     bl64_check_parameter 'destination' &&
     bl64_check_parameter 'pattern' || return $?
 
-  bl64_fs_create_dir "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" || returnn $?
-
-  # shellcheck disable=SC2164
-  cd "$destination"
+  bl64_fs_create_dir "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" &&
+    bl64_bsh_run_pushd "$destination" ||
+    return $?
 
   bl64_dbg_lib_show_info 'detect if current git supports sparse-checkout option'
   if bl64_os_is_distro "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_UB}-18" "${BL64_OS_UB}-20" "${BL64_OS_OL}-7" "${BL64_OS_CNT}-7"; then
@@ -174,7 +176,8 @@ function bl64_vcs_git_sparse() {
         for item in $pattern; do echo "$item" >>'.git/info/sparse-checkout'; done
         unset IFS
       } &&
-      bl64_vcs_run_git pull --depth 1 origin "$branch"
+      bl64_vcs_run_git pull --depth 1 origin "$branch" ||
+      return $?
   else
     bl64_dbg_lib_show_info 'git sparse-checkout is supported'
     # shellcheck disable=SC2086
@@ -185,11 +188,10 @@ function bl64_vcs_git_sparse() {
         for item in $pattern; do echo "$item"; done | bl64_vcs_run_git sparse-checkout add --stdin
       } &&
       bl64_vcs_run_git remote add origin "$source" &&
-      bl64_vcs_run_git pull --depth 1 origin "$branch"
+      bl64_vcs_run_git pull --depth 1 origin "$branch" ||
+      return $?
   fi
-  status=$?
-
-  return $status
+  bl64_bsh_run_popd
 }
 
 #######################################
