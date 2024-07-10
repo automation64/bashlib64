@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_bsh_run_pushd
   - bl64_bsh_run_popd
 
+### Fixed
+
+- crypt
+  - bl64_cryp_gpg_key_armor: error condition when source is already armored
+
 ## [20.1.3]
 
 ### Added

@@ -123,13 +123,18 @@ function bl64_cryp_gpg_key_armor() {
     bl64_check_file "$source_key_file" ||
     return $?
 
-  bl64_msg_show_lib_subtask "${_BL64_CRYP_TXT_KEY_ARMOR} (${source_key_file})"
+  bl64_msg_show_lib_subtask "export GPG key file and prepare for distribution (${source_key_file})"
   bl64_cryp_run_gpg \
     --export \
     --armor \
     --output "$target_key_file" \
-    "$source_key_file" &&
-    bl64_fs_path_permission_set "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" "$target_key_file"
+    "$source_key_file" ||
+    return $?
+
+  if [[ -f "$target_key_file" ]]; then
+    bl64_fs_path_permission_set "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" \
+      "$target_key_file"
+  fi
 }
 
 #######################################
@@ -170,7 +175,7 @@ function bl64_cryp_gpg_key_dearmor() {
       replace=1
   fi
 
-  bl64_msg_show_lib_subtask "${_BL64_CRYP_TXT_KEY_DEARMOR} (${source_key_file})"
+  bl64_msg_show_lib_subtask "dearmor exported GPG key file (${source_key_file})"
   bl64_cryp_run_gpg \
     --dearmor \
     --output "$target_key_file" \
@@ -181,8 +186,9 @@ function bl64_cryp_gpg_key_dearmor() {
     bl64_dbg_lib_show_info "replacing key (${target_key_file} -> ${source_key_file})"
     "$BL64_OS_CMD_CAT" "$target_key_file" >"$source_key_file" &&
       bl64_fs_rm_file "$target_key_file"
+  else
+    bl64_fs_path_permission_set "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" "$target_key_file"
   fi
-  bl64_fs_path_permission_set "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" "$target_key_file"
 }
 
 #######################################
@@ -229,8 +235,6 @@ function bl64_cryp_key_download() {
     return $?
 
   if bl64_cryp_gpg_key_is_armored "$target_key_file"; then
-    bl64_cryp_gpg_key_dearmor "$target_key_file" ||
-      return $?
+    bl64_cryp_gpg_key_dearmor "$target_key_file"
   fi
-  return 0
 }
