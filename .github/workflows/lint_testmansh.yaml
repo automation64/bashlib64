@@ -27,7 +27,7 @@ jobs:
         run: "./bin/dev-lib-base"
 
       - name: "Build app"
-        run: "./bin/dev-build-project -t"
+        run: "./bin/dev-build-project"
 
       - name: "Lint app"
         shell: 'script -q -e -c "bash {0}"'

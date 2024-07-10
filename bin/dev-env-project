@@ -36,9 +36,6 @@ export DEV_BUILD_PROJECT_NAME_CORE='bashlib64-core.bash'
 export DEV_BUILD_PROJECT_NAME_OPT='bashlib64-opt.bash'
 export DEV_BUILD_PROJECT_NAME_MODULE='bashlib64-module'
 export DEV_BUILD_PROJECT_NAME_MODULE_CORE='bashlib64-module-core.bash'
-# Build / Project / Target full path
-export DEV_BUILD_PROJECT_FULL_PATH_TEST="${DEV_PATH_BUILD}/test"
-export DEV_BUILD_PROJECT_FULL_PATH_RELEASE="${DEV_PATH_BUILD}/release"
 # Pack / Project / Package name
 export DEV_PACK_PROJECT_NAME_SA="${DEV_PACK_PROJECT_NAME_SA:-}"
 export DEV_PACK_PROJECT_NAME_SPLIT="${DEV_PACK_PROJECT_NAME_SPLIT:-}"

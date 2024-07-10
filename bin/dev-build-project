@@ -40,7 +40,6 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
 # Functions
 #
 
-# shellcheck disable=SC2317
 function dev_add_modules() {
   bl64_dbg_lib_show_function "$@"
   local destination="$1"
@@ -63,7 +62,6 @@ function dev_add_modules() {
   done
 }
 
-# shellcheck disable=SC2317
 function dev_build_create_header() {
   bl64_dbg_lib_show_function
   "$BL64_OS_CMD_CAT" "bl64-lib-header.bash" &&
@@ -74,19 +72,11 @@ function dev_build_create_header() {
     "$BL64_OS_CMD_CAT" "bl64-lib.bash"
 }
 
-# shellcheck disable=SC2317
 function dev_build_release() {
   bl64_dbg_lib_show_function
-  dev_build_library "$DEV_BUILD_PROJECT_FULL_PATH_RELEASE"
+  dev_build_library "$DEV_PATH_BUILD_PREPARE"
 }
 
-# shellcheck disable=SC2317
-function dev_build_test() {
-  bl64_dbg_lib_show_function
-  dev_build_library "$DEV_BUILD_PROJECT_FULL_PATH_TEST"
-}
-
-# shellcheck disable=SC2317
 function dev_build_library() {
   bl64_dbg_lib_show_function "$@"
   local destination="$1"
@@ -102,7 +92,7 @@ function dev_build_library() {
   cd "$DEV_PATH_SRC" || return 1
 
   bl64_msg_show_task "preparing destination (${destination})"
-  bl64_fs_rm_full "$destination"
+  bl64_fs_path_remove "$destination"
   bl64_fs_create_dir '0777' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$destination" ||
     return $?
 
@@ -134,7 +124,7 @@ function dev_build_library() {
     } >"$build_module" &&
       bl64_fs_run_chmod '0755' "$build_module" ||
       return $?
-    bl64_fs_rm_file "${build_module}.tmp"
+    bl64_fs_path_remove "${build_module}.tmp"
   done
 
   bl64_msg_show_task 'adding main'
@@ -151,51 +141,22 @@ function dev_build_library() {
 
 }
 
-function dev_build_check_requirements() {
-  bl64_dbg_app_show_function "$@"
-  local command="$1"
-
-  [[ -z "$command" ]] && dev_build_help return 1
-
+function dev_build_initialize() {
+  bl64_dbg_app_show_function
   bl64_check_export 'DEV_ENV_PROJECT_MODULES_CORE' &&
-    bl64_check_export 'DEV_ENV_PROJECT_MODULES_OPT'
-}
-
-function dev_build_help() {
-  bl64_msg_show_usage \
-    '<-t|-r> [-h]' \
-    'Create the BashLib64 stand-alone distributable file' \
-    '
-  -t: Build stand-alone file for testing
-  -r: Build release files
-  ' '
-  -h: Show Help
-  ' ''
+    bl64_check_export 'DEV_ENV_PROJECT_MODULES_OPT' &&
+    bl64_fs_path_remove "$DEV_PATH_BUILD_PREPARE" &&
+    bl64_fs_create_dir '0777' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_PATH_BUILD_PREPARE"
 }
 
 #
 # Main
 #
 
-declare dev_build_command=''
-declare dev_build_option=''
-
-(($# == 0)) && dev_build_help && exit 1
-while getopts ':trh' dev_build_option; do
-  case "$dev_build_option" in
-  t) dev_build_command='dev_build_test' ;;
-  r) dev_build_command='dev_build_release' ;;
-  h) dev_build_help && exit ;;
-  *) dev_build_help && exit 1 ;;
-  esac
-done
-dev_build_check_requirements "$dev_build_command" || exit 1
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
 
 bl64_msg_all_enable_verbose
-bl64_msg_show_batch_start "$dev_build_command"
-case "$dev_build_command" in
-'dev_build_test' | 'dev_build_release') "$dev_build_command" ;;
-*) bl64_check_alert_undefined "$dev_build_command" ;;
-esac
-bl64_msg_show_batch_finish $? "$dev_build_command"
+bl64_msg_show_batch_start 'dev-build'
+dev_build_initialize &&
+  dev_build_release
+bl64_msg_show_batch_finish $? 'dev-build'
