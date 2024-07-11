@@ -31,6 +31,7 @@ function bl64_vcs_setup() {
     bl64_lib_module_imported 'BL64_FS_MODULE' &&
     bl64_lib_module_imported 'BL64_TXT_MODULE' &&
     bl64_lib_module_imported 'BL64_OS_MODULE' &&
+    bl64_lib_module_imported 'BL64_BSH_MODULE' &&
     _bl64_vcs_set_command &&
     _bl64_vcs_set_options &&
     BL64_VCS_MODULE="$BL64_VAR_ON"

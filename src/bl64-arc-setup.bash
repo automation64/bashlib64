@@ -28,6 +28,7 @@ function bl64_arc_setup() {
     bl64_lib_module_imported 'BL64_OS_MODULE' &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     bl64_lib_module_imported 'BL64_FS_MODULE' &&
+    bl64_lib_module_imported 'BL64_BSH_MODULE' &&
     _bl64_arc_set_command &&
     _bl64_arc_set_options &&
     BL64_ARC_MODULE="$BL64_VAR_ON"

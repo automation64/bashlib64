@@ -29,6 +29,7 @@ function bl64_rxtx_setup() {
     bl64_lib_module_imported 'BL64_FS_MODULE' &&
     bl64_lib_module_imported 'BL64_MSG_MODULE' &&
     bl64_lib_module_imported 'BL64_VCS_MODULE' &&
+    bl64_lib_module_imported 'BL64_BSH_MODULE' &&
     _bl64_rxtx_set_command &&
     _bl64_rxtx_set_options &&
     _bl64_rxtx_set_alias &&
