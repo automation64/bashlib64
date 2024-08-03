@@ -23,7 +23,7 @@ function bl64_py_venv_create() {
     bl64_check_path_not_present "$venv_path" ||
     return $?
 
-  bl64_msg_show_lib_task "${_BL64_PY_TXT_VENV_CREATE} (${venv_path})"
+  bl64_msg_show_lib_task "create python virtual environment (${venv_path})"
   bl64_py_run_python -m 'venv' "$venv_path"
 }
 
@@ -44,8 +44,8 @@ function bl64_py_venv_check() {
   local venv_path="${1:-}"
 
   bl64_check_parameter 'venv_path' &&
-    bl64_check_directory "$venv_path" "$_BL64_PY_TXT_VENV_MISSING" &&
-    bl64_check_file "${venv_path}/${BL64_PY_DEF_VENV_CFG}" "$_BL64_PY_TXT_VENV_INVALID"
+    bl64_check_directory "$venv_path" 'requested python virtual environment is missing' &&
+    bl64_check_file "${venv_path}/${BL64_PY_DEF_VENV_CFG}" 'requested python virtual environment is invalid (no pyvenv.cfg found)'
 }
 
 #######################################
@@ -98,7 +98,7 @@ function bl64_py_pip_usr_prepare() {
 
   [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
 
-  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_PIP"
+  bl64_msg_show_lib_task 'upgrade pip module'
   # shellcheck disable=SC2086
   bl64_py_run_pip \
     'install' \
@@ -107,7 +107,7 @@ function bl64_py_pip_usr_prepare() {
     $modules_pip ||
     return $?
 
-  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_PREPARE_SETUP"
+  bl64_msg_show_lib_task 'install and upgrade setuptools modules'
   # shellcheck disable=SC2086
   bl64_py_run_pip \
     'install' \
@@ -143,7 +143,7 @@ function bl64_py_pip_usr_install() {
   # If venv is in use no need to flag usr install
   [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
 
-  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_INSTALL ($*)"
+  bl64_msg_show_lib_task "install modules ($*)"
   # shellcheck disable=SC2086
   bl64_py_run_pip \
     'install' \
@@ -198,7 +198,7 @@ function bl64_py_pip_usr_deploy() {
 function bl64_py_pip_usr_cleanup() {
   bl64_dbg_lib_show_function
 
-  bl64_msg_show_lib_task "$_BL64_PY_TXT_PIP_CLEANUP_PIP"
+  bl64_msg_show_lib_task 'cleanup pip cache'
   bl64_py_run_pip \
     'cache' \
     'purge'
