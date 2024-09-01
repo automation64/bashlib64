@@ -3,7 +3,7 @@
 # Dev / Test / Bash / Simple test runner
 #
 # * Run tests in test/bash using containers
-# * Version: 1.0.1
+# * Version: 1.2.0
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -30,18 +30,13 @@ source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2
 # shellcheck source-path=bin
 source ./bin/dev-env-bash || exit 1
 # shellcheck source-path=lib/bl64
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-cnt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
-
-#
-# Globals
-#
-
-# Dev / Test / Base / Flag for marking container environment
-export _DEV_TEST_BASH_CONTAINER_ENVIRONMENT='OFF'
 
 #
 # Functions
@@ -52,12 +47,18 @@ function dev_test_run() {
   local container_path="$1"
   local test_file="$2"
 
+  bl64_dbg_app_show_comments 'silently ignore .gitkeep file as its not a test script'
+  [[ "$test_file" =~ "$DEV_BASE_GITKEEP" ]] && return 0
+
   bl64_msg_show_phase "run test target: ${test_file}"
   # shellcheck disable=SC2086
   bl64_cnt_run \
     $BL64_CNT_SET_RM \
     $BL64_CNT_SET_TTY \
-    --env=_DEV_TEST_BASH_CONTAINER_ENVIRONMENT='ON' \
+    --env=DEV_TEST_BASH_CONTAINER_ENVIRONMENT='ON' \
+    --env=DEV_ENV_BASH_CONTAINER_PATH_SRC \
+    --env=DEV_ENV_BASH_CONTAINER_PATH_ROOT \
+    --env=DEV_ENV_BASH_CONTAINER_PATH_TEST \
     --workdir="$DEV_ENV_BASH_CONTAINER_PATH_ROOT" \
     --mount "type=bind,source=${DEV_PATH_SRC},target=${DEV_ENV_BASH_CONTAINER_PATH_SRC},readonly" \
     --mount "type=bind,source=${DEV_PATH_ROOT},target=${DEV_ENV_BASH_CONTAINER_PATH_ROOT},readonly" \
@@ -95,7 +96,8 @@ function dev_test_bash() {
 
 function dev_test_initialize() {
   bl64_dbg_app_show_function
-  bl64_cnt_setup
+  bl64_cnt_setup &&
+    bl64_check_directory "$DEV_TEST_BASH_CASES"
 }
 
 #

@@ -26,7 +26,7 @@
 # * Use .env file to override values
 #
 
-# shellcheck disable=2154
+# shellcheck disable=SC2154
 {
     # GIT / Main branch name
     export DEV_GIT_BRANCH_MAIN="${DEV_GIT_BRANCH_MAIN:-main}"
@@ -41,10 +41,10 @@
 #
 # Locals
 #
-# * Use .local file or CICD variables to override values
+# * Use .local.env file or CICD variables to override values
 #
 
-# shellcheck disable=2154
+# shellcheck disable=SC2154
 {
     # Lib / RSync / Command
     export DEV_LIB_RSYNC_BIN="${DEV_LIB_RSYNC_BIN:-/usr/bin/rsync}"
@@ -53,5 +53,5 @@
 #
 # Secrets
 #
-# * Use .secrets file or CICD secrets to override values
+# * Use .secrets.env file or CICD secrets to override values
 #
