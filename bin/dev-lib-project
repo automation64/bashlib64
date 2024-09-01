@@ -2,7 +2,8 @@
 #######################################
 # Dev / Lib / Project / Download
 #
-# * Version: 1.0.0
+# * Version: 1.1.0
+# * Template: 2.0.0
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -26,6 +27,8 @@
 
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+# shellcheck source-path=bin
+source ./bin/dev-env-project || exit 1
 # shellcheck source-path=lib/bl64
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
@@ -36,9 +39,14 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
 # Functions
 #
 
-function dev_lib_project() {
+function dev_lib_download() {
   bl64_dbg_app_show_function
-  bl64_msg_show_task 'Fix repository permissions for container access'
+  ./bin/dev-lib-testmansh
+}
+
+function dev_lib_normalize() {
+  bl64_dbg_app_show_function
+  bl64_msg_show_task 'Normalize repository permissions'
   bl64_fs_path_permission_set '0755' '0755' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_ON" \
     "$DEV_PATH_BIN" \
     "$DEV_PATH_SRC" \
@@ -60,5 +68,6 @@ function dev_lib_initialize() {
 bl64_msg_all_enable_verbose
 bl64_msg_show_batch_start 'dev-lib-project'
 dev_lib_initialize &&
-  dev_lib_project
+  dev_lib_download &&
+  dev_lib_normalize
 bl64_msg_show_batch_finish $? 'dev-lib-project'
