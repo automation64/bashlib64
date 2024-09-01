@@ -2,15 +2,23 @@
 #
 # Dev / Lib / Base / Install base dev-time tools
 #
-# * Use to download or install external tools, libraries, etc
+# * Use to download DevBin64 components in ephemeral environments
 # * Tools and libs should go to lib/
-# * Customize as needed
-# * Template: 1.1.1
+# * For project specific tools, use dev-lib-project
+# * Version: 2.0.0
 #
 
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
 
+# Download main components
 ./bin/dev-lib-installer64 &&
-  ./bin/dev-lib-testmansh &&
+  ./bin/dev-lib-sysop64 ||
+  exit $?
+
+# Download project related components
+if [[ -f ./bin/dev-lib-project ]]; then
   ./bin/dev-lib-project
+else
+  exit 0
+fi

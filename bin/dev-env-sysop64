@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 #######################################
-# Dev / Env / BashLib64 / Shared environment variables
+# Dev / Env / SysOp64 / Shared environment variables
 #
 # * Version: 1.0.0
+# * Template: 1.0.1
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -28,8 +29,10 @@
 
 # shellcheck disable=SC2154
 {
-    # Lib / BashLib64 / Location
-    export DEV_LIB_BASHLIB64_TARGET="${DEV_LIB_BASHLIB64_TARGET:-${DEV_PATH_LIB}/bl64}"
+  # Lib / SysOp64 / Installer
+  export DEV_LIB_SYSOP64_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-sysop64"
+  # Lib / SysOp64 / Target
+  export DEV_LIB_SYSOP64_TARGET="${DEV_LIB_SYSOP64_TARGET:-${DEV_PATH_LIB}/so64}"
 }
 
 #
