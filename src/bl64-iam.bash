@@ -48,7 +48,7 @@ function bl64_iam_user_add() {
   [[ "$uid" == "$BL64_VAR_DEFAULT" ]] && uid=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     bl64_iam_run_useradd \
       ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
@@ -140,7 +140,7 @@ function bl64_iam_group_add() {
   [[ "$group_id" == "$BL64_VAR_DEFAULT" ]] && group_id=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     bl64_iam_run_groupadd \
       ${group_id:+--gid ${group_id}} \
       "$group_name"
@@ -230,7 +230,7 @@ function bl64_iam_user_get_id() {
 
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     bl64_iam_run_id -u $user
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
@@ -625,7 +625,7 @@ function bl64_iam_user_modify() {
   [[ "$uid" == "$BL64_VAR_DEFAULT" ]] && uid=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     bl64_iam_run_usermod \
       ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
       ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \

@@ -2,6 +2,10 @@
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #######################################
 
+# DEPRECATED
+function bl64_os_match() { bl64_os_is_distro "$@"; }
+function bl64_os_match_compatible() { bl64_os_is_compatible "$@"; }
+
 function _bl64_os_match() {
   bl64_dbg_lib_show_function "$@"
   local check_compatibility="$1"
@@ -67,7 +71,7 @@ function _bl64_os_match() {
       return $BL64_LIB_ERROR_OS_NOT_MATCH
 
   else
-    bl64_msg_show_error "${_BL64_OS_TXT_INVALID_OS_PATTERN} (${target})"
+    bl64_msg_show_error "invalid OS pattern (${target})"
     return $BL64_LIB_ERROR_OS_TAG_INVALID
   fi
 
@@ -105,7 +109,8 @@ function _bl64_os_get_distro_from_uname() {
     ;;
   *)
     BL64_OS_DISTRO="$BL64_OS_UNK"
-    bl64_msg_show_error "${_BL64_OS_TXT_OS_NOT_SUPPORTED}. ${_BL64_OS_TXT_CHECK_OS_MATRIX} ($(uname -a))"
+    bl64_msg_show_error \
+      "BashLib64 not supported on the current OS. Please check the OS compatibility matrix for BashLib64 ($(uname -a))"
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
     ;;
   esac
@@ -142,7 +147,7 @@ function _bl64_os_get_distro_from_os_release() {
   # shellcheck disable=SC1091
   bl64_dbg_app_show_info 'parse /etc/os-release'
   if ! source '/etc/os-release' || [[ -z "$ID" || -z "$VERSION_ID" ]]; then
-    bl64_msg_show_error "$_BL64_OS_TXT_ERROR_OS_RELEASE"
+    bl64_msg_show_error 'failed to load OS information from /etc/os-release file'
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
 
@@ -185,6 +190,10 @@ function _bl64_os_get_distro_from_os_release() {
     BL64_OS_DISTRO="${BL64_OS_MCOS}-${version_normalized}"
     BL64_OS_FLAVOR="$BL64_OS_FLAVOR_MACOS"
     ;;
+  'KALI')
+    BL64_OS_DISTRO="${BL64_OS_KL}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_DEBIAN"
+    ;;
   'OL')
     BL64_OS_DISTRO="${BL64_OS_OL}-${version_normalized}"
     BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
@@ -206,7 +215,8 @@ function _bl64_os_get_distro_from_os_release() {
     BL64_OS_FLAVOR="$BL64_OS_FLAVOR_DEBIAN"
     ;;
   *)
-    bl64_msg_show_error "${_BL64_OS_TXT_OS_NOT_KNOWN}. ${_BL64_OS_TXT_CHECK_OS_MATRIX} (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE})"
+    bl64_msg_show_error \
+      "current OS is not supported. Please check the OS compatibility matrix for BashLib64 (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE})"
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
     ;;
   esac
@@ -233,7 +243,7 @@ function bl64_os_is_flavor() {
   local os_flavor="$1"
 
   bl64_check_module 'BL64_OS_MODULE' &&
-    bl64_check_parameter "$os_flavor" ||
+    bl64_check_parameter 'os_flavor' ||
     return $?
 
   [[ "$BL64_OS_FLAVOR" == "$os_flavor" ]] && return 0
@@ -255,9 +265,6 @@ function bl64_os_is_flavor() {
 #   BL64_LIB_ERROR_OS_NOT_MATCH
 #   BL64_LIB_ERROR_OS_TAG_INVALID
 #######################################
-function bl64_os_match() {
-  bl64_os_is_distro "$@"
-}
 function bl64_os_is_distro() {
   bl64_dbg_lib_show_function "$@"
   local item=''
@@ -292,9 +299,6 @@ function bl64_os_is_distro() {
 #   BL64_LIB_ERROR_OS_NOT_MATCH
 #   BL64_LIB_ERROR_OS_TAG_INVALID
 #######################################
-function bl64_os_match_compatible() {
-  bl64_os_is_compatible "$@"
-}
 function bl64_os_is_compatible() {
   bl64_dbg_lib_show_function "$@"
   local item=''
@@ -319,7 +323,7 @@ function bl64_os_is_compatible() {
         break
       elif ((status == 1)); then
         bl64_msg_show_warning \
-          "${_BL64_OS_TXT_COMPATIBILITY_MODE} (${_BL64_OS_TXT_OS_CURRENT}: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+          "current OS version is not supported. Execution will continue since compatibility-mode was requested. (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
         status=0
         break
       fi
@@ -411,7 +415,7 @@ function bl64_os_check_version() {
   bl64_os_match "$@" && return 0
 
   bl64_msg_show_error \
-    "${_BL64_OS_TXT_TASK_NOT_SUPPORTED} (${_BL64_OS_TXT_OS_CURRENT}: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    "task not supported on the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }
 
@@ -435,7 +439,7 @@ function bl64_os_check_compatibility() {
   bl64_os_match_compatible "$@" && return 0
 
   bl64_msg_show_error \
-    "${_BL64_OS_TXT_TASK_NOT_SUPPORTED} (${_BL64_OS_TXT_OS_CURRENT}: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_OS_TXT_OS_MATRIX}: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    "task not supported on the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }
 

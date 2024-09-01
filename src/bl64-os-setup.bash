@@ -161,7 +161,7 @@ function _bl64_os_set_runtime() {
   if bl64_lib_lang_is_enabled; then
     # shellcheck disable=SC2034
     case "$BL64_OS_DISTRO" in
-    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
       bl64_os_set_lang 'C.UTF-8'
       ;;
     ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)

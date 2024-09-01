@@ -21,7 +21,7 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Prepare dev environment"
-        run: "./bin/dev-lib-installer64"
+        run: "./bin/dev-lib-base"
 
       - name: "Build app for release"
         run: "./bin/dev-build-project"

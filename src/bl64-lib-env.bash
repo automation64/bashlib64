@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.2.1'
+  declare BL64_VERSION='20.3.0'
 
   #
   # Imported shell standard variables
@@ -20,7 +20,8 @@
   #
 
   # Default value for parameters
-  declare BL64_VAR_DEFAULT='_'
+  declare BL64_VAR_DEFAULT='DEFAULT'
+  declare BL64_VAR_DEFAULT_LEGACY='_'
 
   # Flag for incompatible command or task
   declare BL64_VAR_INCOMPATIBLE='_INC_'

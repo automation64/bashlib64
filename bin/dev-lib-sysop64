@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #######################################
-# Dev / Lib / Project / Download
+# Dev / Lib / SysOp64 / Download
 #
-# * Version: 1.1.0
-# * Template: 2.0.0
+# * Version: 1.0.0
+# * Template: 1.0.1
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -28,12 +28,9 @@
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
 # shellcheck source-path=bin
-source ./bin/dev-env-project || exit 1
+source ./bin/dev-env-sysop64 || exit 1
 # shellcheck source-path=lib/bl64
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
 #
 # Functions
@@ -41,22 +38,14 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
 
 function dev_lib_download() {
   bl64_dbg_app_show_function
-  ./bin/dev-lib-testmansh
-}
-
-function dev_lib_normalize() {
-  bl64_dbg_app_show_function
-  bl64_msg_show_task 'Normalize repository permissions'
-  bl64_fs_path_permission_set '0755' '0755' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_ON" \
-    "$DEV_PATH_BIN" \
-    "$DEV_PATH_SRC" \
-    "$DEV_PATH_TEST" \
-    "$DEV_PATH_BUILD" \
-    "$DEV_BASE_ENV"
+  INST64_SYSOP64_TARGET="$DEV_LIB_SYSOP64_TARGET" \
+    INST64_SYSOP64_SYSTEM_WIDE='NO' \
+    "${DEV_LIB_SYSOP64_INSTALLER}"
 }
 
 function dev_lib_initialize() {
   bl64_dbg_app_show_function
+  bl64_check_file "$DEV_LIB_SYSOP64_INSTALLER"
 }
 
 #
@@ -66,8 +55,7 @@ function dev_lib_initialize() {
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
 
 bl64_msg_all_enable_verbose
-bl64_msg_show_batch_start 'dev-lib-project'
+bl64_msg_show_batch_start 'dev-lib-sysop64'
 dev_lib_initialize &&
-  dev_lib_download &&
-  dev_lib_normalize
-bl64_msg_show_batch_finish $? 'dev-lib-project'
+  dev_lib_download
+bl64_msg_show_batch_finish $? 'dev-lib-sysop64'

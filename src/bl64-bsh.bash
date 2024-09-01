@@ -4,7 +4,6 @@
 
 # DEPRECATED: to be removed in future releases
 function bl64_bsh_script_set_id() { bl64_lib_script_set_id "$@"; }
-# DEPRECATED: to be removed in future releases
 function bl64_bsh_script_set_identity() { bl64_lib_script_set_identity "$@"; }
 
 #######################################

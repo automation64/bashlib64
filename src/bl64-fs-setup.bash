@@ -67,7 +67,7 @@ function bl64_fs_setup() {
 function _bl64_fs_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_FS_CMD_CHMOD='/bin/chmod'
     BL64_FS_CMD_CHOWN='/bin/chown'
     BL64_FS_CMD_CP='/bin/cp'
@@ -153,7 +153,7 @@ function _bl64_fs_set_command() {
 function _bl64_fs_set_options() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
     BL64_FS_SET_CHMOD_VERBOSE='--verbose'
     BL64_FS_SET_CHOWN_RECURSIVE='--recursive'

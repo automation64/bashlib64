@@ -26,7 +26,7 @@
 # * Use .env file to override values
 #
 
-# shellcheck disable=2154
+# shellcheck disable=SC2154
 {
     # Release / GitHub / Repository Owner
     export DEV_RELEASE_GITHUB_REPO_OWNER="${DEV_RELEASE_GITHUB_REPO_OWNER:-}"
@@ -39,10 +39,10 @@
 #
 # Locals
 #
-# * Use .local file or CICD variables to override values
+# * Use .local.env file or CICD variables to override values
 #
 
-# shellcheck disable=2154
+# shellcheck disable=SC2154
 {
     # Lib / GitHub / Command
     export DEV_LIB_GITHUB_BIN="${DEV_LIB_GITHUB_BIN:-/usr/bin/gh}"
@@ -51,5 +51,5 @@
 #
 # Secrets
 #
-# * Use .secrets file or CICD secrets to override values
+# * Use .secrets.env file or CICD secrets to override values
 #

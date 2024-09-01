@@ -3,7 +3,7 @@
 # Dev / Build / Bash / Assemble modular script
 #
 # * Use to build script from multiple sources (modular)
-# * Version: 4.0.1
+# * Version: 4.0.2
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -61,9 +61,8 @@ function dev_build_initialize() {
   bl64_dbg_app_show_function
   bl64_check_export 'DEV_BUILD_BASH_NAME' &&
     bl64_check_directory "$DEV_BUILD_BASH_SOURCE" &&
-    bl64_fs_path_remove "$DEV_BUILD_BASH_TARGET" &&
-    bl64_fs_create_dir \
-      '0755' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_BUILD_BASH_TARGET"
+    bl64_fs_dir_reset \
+      '0755' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_PATH_BUILD_PREPARE"
 }
 
 #

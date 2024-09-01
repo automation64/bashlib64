@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 #######################################
-# Dev / Set development environment variables
+# Dev / Set
 #
-# * Source this script from the project's root directory
-# * Warning: source from interactive shell is supported on Bash and ZSH only
-# * Version: 8.0.0
+# * Loads DevBin64 environment variables
+# * To be used by DevBin64 scripts
+# * Warning: Bash is the only supported shell. Other shells may work as long as they are compatible with Bash syntax
+# * Version: 8.2.1
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -42,6 +43,7 @@ export DEV_MODULE_LOAD="${DEV_MODULE_LOAD:-}"
 # From CICD products
 export GITHUB_WORKSPACE="${GITHUB_WORKSPACE:-}"
 export GITLAB_CI="${GITLAB_CI:-}"
+export TESTMANSH_PROJECT_ROOT="${TESTMANSH_PROJECT_ROOT:-}"
 
 #
 # Functions
@@ -64,14 +66,16 @@ function dev_set_show_task() {
 }
 
 function dev_set_load_workstation() {
-  dev_set_show_task "load workstation environment variables ($(pwd)/${DEV_BASE_LOCAL})"
+  dev_set_show_task 'set project root (DEV_PATH_ROOT)'
   DEV_PATH_ROOT="${DEV_PATH_ROOT:-$(pwd)}"
 
-  # shellcheck source=./.local.env
-  source "$DEV_BASE_LOCAL" ||
-    { dev_set_show_error "unable to source file (${DEV_BASE_LOCAL})" && return 1; }
+  if [[ -f "$DEV_BASE_LOCAL" ]]; then
+    dev_set_show_task "load workstation environment variables (${DEV_BASE_LOCAL})"
+    # shellcheck source=./.local.env
+    source "$DEV_BASE_LOCAL" ||
+      { dev_set_show_error "unable to source file (${DEV_BASE_LOCAL})" && return 1; }
+  fi
 
-  DEV_BASE_SECRETS="${DEV_PATH_ROOT}/${DEV_BASE_SECRETS}"
   if [[ -f "$DEV_BASE_SECRETS" ]]; then
     dev_set_show_task "load workstation secrets (${DEV_BASE_SECRETS})"
     # shellcheck source=./.secrets.env
@@ -132,9 +136,9 @@ function dev_set_load_modules() {
   local module_name=''
   local module_env=''
 
-  # Load mandatory base modules
-  source "${DEV_PATH_BIN}/dev-env-installer64" &&
-    source "${DEV_PATH_BIN}/dev-env-bashlib64" ||
+  # Load mandatory base modules, based on dependency order
+  source "${DEV_PATH_BIN}/dev-env-bashlib64" &&
+    source "${DEV_PATH_BIN}/dev-env-installer64" ||
     { dev_set_show_error "unable to load environment core modules" && return 1; }
 
   # Warning: no using direct var expansion to avoid compatibility issues with ZSH
@@ -148,14 +152,14 @@ function dev_set_load_modules() {
 }
 
 function dev_set_load_local() {
-  if [[ -f "$DEV_BASE_LOCAL" ]]; then
-    dev_set_load_workstation
-  elif [[ -n "$GITHUB_WORKSPACE" ]]; then
+  if [[ -n "$GITHUB_WORKSPACE" ]]; then
     dev_set_load_github
   elif [[ -n "$GITLAB_CI" ]]; then
     dev_set_load_gitlab
   elif [[ -n "$TESTMANSH_PROJECT_ROOT" ]]; then
     dev_set_load_testmansh
+  else
+    dev_set_load_workstation
   fi
   if [[ -z "$DEV_PATH_ROOT" ]]; then
     dev_set_show_error 'unable to identify current repository location. Check that the variable DEV_PATH_ROOT is correctly set' &&
@@ -181,7 +185,19 @@ dev_set_initialize &&
   dev_set_load_local &&
   dev_set_load_env &&
   dev_set_load_modules &&
-  dev_set_load_local_post ||
+  dev_set_load_local_post &&
+  unset dev_set_load_github &&
+  unset dev_set_load_gitlab &&
+  unset dev_set_load_testmansh &&
+  unset dev_set_load_workstation &&
+  unset dev_set_initialize &&
+  unset dev_set_load_local &&
+  unset dev_set_load_env &&
+  unset dev_set_load_modules &&
+  unset dev_set_load_local_post &&
+  unset dev_set_show_warning &&
+  unset dev_set_show_task &&
+  unset dev_set_show_error ||
   { dev_set_show_error 'failed to load Dev environment variables' && return 1; }
 [[ -n "$DEV_CICD_DEBUG" ]] && set +x
 :

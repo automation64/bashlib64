@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_OS_VERSION='5.3.0'
+  declare BL64_OS_VERSION='5.4.0'
 
   declare BL64_OS_MODULE='0'
 
@@ -28,17 +28,6 @@
 
   declare BL64_OS_SET_LOCALE_ALL=''
 
-  declare _BL64_OS_TXT_CHECK_OS_MATRIX='Please check the OS compatibility matrix for BashLib64'
-  declare _BL64_OS_TXT_ERROR_OS_RELEASE='failed to load OS information from /etc/os-release file'
-  declare _BL64_OS_TXT_INVALID_OS_PATTERN='invalid OS pattern'
-  declare _BL64_OS_TXT_OS_MATRIX='supported-os'
-  declare _BL64_OS_TXT_OS_CURRENT='current-os'
-  declare _BL64_OS_TXT_OS_NOT_KNOWN='current OS is not supported'
-  declare _BL64_OS_TXT_OS_NOT_SUPPORTED='BashLib64 not supported on the current OS'
-  declare _BL64_OS_TXT_OS_VERSION_NOT_SUPPORTED='current OS version is not supported'
-  declare _BL64_OS_TXT_TASK_NOT_SUPPORTED='task not supported on the current OS version'
-  declare _BL64_OS_TXT_COMPATIBILITY_MODE='current OS version is not supported. Execution will continue since compatibility-mode was requested.'
-
   #
   # OS standard name tags
   #
@@ -52,6 +41,7 @@
   declare BL64_OS_CNT='CENTOS'
   declare BL64_OS_DEB='DEBIAN'
   declare BL64_OS_FD='FEDORA'
+  declare BL64_OS_KL='KALILINUX'
   declare BL64_OS_MCOS='DARWIN'
   declare BL64_OS_OL='ORACLELINUX'
   declare BL64_OS_RCK='ROCKYLINUX'

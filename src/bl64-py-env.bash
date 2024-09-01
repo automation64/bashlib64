@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='3.0.0'
+  declare BL64_PY_VERSION='3.1.0'
 
   declare BL64_PY_MODULE='0'
 
@@ -27,12 +27,4 @@
   declare BL64_PY_SET_PIP_NO_WARN_SCRIPT=''
 
   declare BL64_PY_DEF_VENV_CFG='pyvenv.cfg'
-
-  declare _BL64_PY_TXT_PIP_PREPARE_PIP='upgrade pip module'
-  declare _BL64_PY_TXT_PIP_PREPARE_SETUP='install and upgrade setuptools modules'
-  declare _BL64_PY_TXT_PIP_CLEANUP_PIP='cleanup pip cache'
-  declare _BL64_PY_TXT_PIP_INSTALL='install modules'
-  declare _BL64_PY_TXT_VENV_MISSING='requested python virtual environment is missing'
-  declare _BL64_PY_TXT_VENV_INVALID='requested python virtual environment is invalid (no pyvenv.cfg found)'
-  declare _BL64_PY_TXT_VENV_CREATE='create python virtual environment'
 }

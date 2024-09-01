@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [20.3.0]
+
+### Added
+
+- all
+  - Kali Linux support
+
+### Changed
+
+- core
+  - Changed BL64_VAR_DEFAULT value to facilitate usage from CLI: `_` -> `DEFAULT`
+  - bl64_lib_var_is_default: accept both new and legacy values
+
+### Fixed
+
+- os
+  - bl64_os_is_flavor: fixed param check
+
 ## [20.2.1]
 
 ### Added

@@ -3,6 +3,7 @@
 "${BL64_OS_CNT}" \
 "${BL64_OS_DEB}" \
 "${BL64_OS_FD}" \
+"${BL64_OS_KL}" \
 "${BL64_OS_OL}" \
 "${BL64_OS_RCK}" \
 "${BL64_OS_RHEL}" \
