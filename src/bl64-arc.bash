@@ -125,7 +125,7 @@ function bl64_arc_open_tar() {
     return $?
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     bl64_arc_run_tar \
       --overwrite \
       --extract \

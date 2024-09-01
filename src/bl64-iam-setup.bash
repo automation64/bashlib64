@@ -54,7 +54,7 @@ function _bl64_iam_set_command() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
     BL64_IAM_CMD_USERMOD='/usr/sbin/usermod'
     BL64_IAM_CMD_GROUPADD='/usr/sbin/groupadd'
@@ -108,7 +108,7 @@ function _bl64_iam_set_alias() {
 
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
@@ -144,7 +144,7 @@ function _bl64_iam_set_options() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
     BL64_IAM_SET_USERADD_GECO='--comment'
     BL64_IAM_SET_USERADD_GROUP='--gid'

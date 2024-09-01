@@ -40,7 +40,7 @@ function bl64_pkg_repository_add() {
     return $?
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     _bl64_pkg_repository_add_apt "$name" "$source" "$gpgkey" "$extra1" "$extra2"
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
@@ -164,7 +164,7 @@ function bl64_pkg_repository_refresh() {
   bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_REPOSITORY_REFRESH"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     bl64_pkg_run_apt 'update'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
@@ -258,7 +258,7 @@ function bl64_pkg_install() {
   bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_INSTALL (${*})"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     bl64_pkg_run_apt 'install' $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES -- "$@"
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
@@ -306,7 +306,7 @@ function bl64_pkg_upgrade() {
   bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_UPGRADE"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES "$@"
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
@@ -354,7 +354,7 @@ function bl64_pkg_cleanup() {
   bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_CLEAN"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     bl64_pkg_run_apt 'clean'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)

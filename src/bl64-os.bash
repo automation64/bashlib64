@@ -190,6 +190,10 @@ function _bl64_os_get_distro_from_os_release() {
     BL64_OS_DISTRO="${BL64_OS_MCOS}-${version_normalized}"
     BL64_OS_FLAVOR="$BL64_OS_FLAVOR_MACOS"
     ;;
+  'KALI')
+    BL64_OS_DISTRO="${BL64_OS_KL}-${version_normalized}"
+    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_DEBIAN"
+    ;;
   'OL')
     BL64_OS_DISTRO="${BL64_OS_OL}-${version_normalized}"
     BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"

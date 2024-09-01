@@ -53,7 +53,7 @@ function bl64_arc_setup() {
 function _bl64_arc_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_ARC_CMD_TAR='/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
     ;;
@@ -92,7 +92,7 @@ function _bl64_arc_set_command() {
 #######################################
 function _bl64_arc_set_options() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_ARC_SET_TAR_VERBOSE='--verbose'
     BL64_ARC_SET_UNZIP_OVERWRITE='-o'
     ;;

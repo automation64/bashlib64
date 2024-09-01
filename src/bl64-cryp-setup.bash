@@ -52,7 +52,7 @@ function bl64_cryp_setup() {
 function _bl64_cryp_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-*)
+  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_CRYP_CMD_GPG='/usr/bin/gpg'
     BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
     ;;
