@@ -237,7 +237,7 @@ function bl64_os_is_flavor() {
   local os_flavor="$1"
 
   bl64_check_module 'BL64_OS_MODULE' &&
-    bl64_check_parameter "$os_flavor" ||
+    bl64_check_parameter 'os_flavor' ||
     return $?
 
   [[ "$BL64_OS_FLAVOR" == "$os_flavor" ]] && return 0
