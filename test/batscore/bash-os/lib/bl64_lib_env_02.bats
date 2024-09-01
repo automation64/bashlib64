@@ -1,7 +1,8 @@
 @test "bl64_lib_env: public constants are set" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
   # Default value for parameters
-  assert_equal "$BL64_VAR_DEFAULT" '_'
+  assert_equal "$BL64_VAR_DEFAULT" 'DEFAULT'
+  assert_equal "$BL64_VAR_DEFAULT_LEGACY" '_'
 
   # Flag for incompatible command or task
   assert_equal "$BL64_VAR_INCOMPATIBLE" '_INC_'
