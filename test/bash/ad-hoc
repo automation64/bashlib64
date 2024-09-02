@@ -7,13 +7,11 @@
 # Skeleton for ad-hoc testiong.
 #
 
-bl64_dbg_all_enable
-bl64_msg_all_enable_verbose
+#bl64_dbg_all_enable
+#bl64_msg_all_enable_verbose
 
 #
 # Test Cases
 #
 # * Keep the source clean, do not commit test cases below this section
 #
-bl64_cryp_setup
-bl64_cryp_gpg_key_armor "${TESTMANSH_TEST_SAMPLES}/gpg_01/gpg_key_dearmored.gpg" $HOME/armored.gpg

@@ -22,12 +22,13 @@ function _bl64_msg_print() {
   local type="${2:-}"
   local message="${3:-}"
 
+  bl64_lib_module_is_setup 'BL64_MSG_MODULE' || return $?
   [[ -n "$attribute" && -n "$type" && -n "$message" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
 
   case "$BL64_MSG_OUTPUT" in
   "$BL64_MSG_OUTPUT_ASCII") _bl64_msg_format_ascii "$attribute" "$type" "$message" ;;
   "$BL64_MSG_OUTPUT_ANSI") _bl64_msg_format_ansi "$attribute" "$type" "$message" ;;
-  *) bl64_check_alert_parameter_invalid ;;
+  *) bl64_lib_alert_parameter_invalid 'BL64_MSG_OUTPUT' "$BL64_VAR_DEFAULT" "$BL64_MSG_OUTPUT" ;;
   esac
 }
 
@@ -78,7 +79,7 @@ function _bl64_msg_format_ansi() {
       "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
-  *) bl64_check_alert_parameter_invalid ;;
+  *) bl64_lib_alert_parameter_invalid 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
   esac
 }
 
@@ -129,7 +130,7 @@ function _bl64_msg_format_ascii() {
       "${!style} $type" \
       "$message"
     ;;
-  *) bl64_check_alert_parameter_invalid ;;
+  *) bl64_lib_alert_parameter_invalid 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
   esac
 }
 

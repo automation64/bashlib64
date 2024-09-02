@@ -123,7 +123,10 @@ function dev_build() {
   bl64_dbg_app_show_function
   cd "$DEV_PATH_SRC" &&
     dev_build_create_header &&
-    dev_build_create_modules
+    dev_build_create_modules &&
+    dev_build_merge_main &&
+    bl64_fs_path_permission_set '0755' '0755' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_ON" \
+      "$DEV_PATH_BUILD_PREPARE"
 }
 
 function dev_build_initialize() {
