@@ -157,3 +157,37 @@ function bl64_lib_module_imported() {
   fi
   return 0
 }
+
+function bl64_lib_alert_parameter_invalid() {
+  local parameter="${1:-${BL64_VAR_DEFAULT}}"
+  local message="${2:-${BL64_VAR_DEFAULT}}"
+  local value="${3:-${BL64_VAR_DEFAULT}}"
+
+  [[ "$parameter" == "$BL64_VAR_DEFAULT" ]] && parameter=''
+  [[ "$message" == "$BL64_VAR_DEFAULT" ]] && message='Error: the requested operation was provided with an invalid parameter value'
+  [[ "$value" == "$BL64_VAR_DEFAULT" ]] && value=''
+  printf '%s (%s%scaller: %s)\n' \
+    "$message" \
+    "${parameter:+parameter: ${parameter} | }" \
+    "${value:+value: ${value} | }" \
+    "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE}" \
+    >&2
+  return $BL64_LIB_ERROR_PARAMETER_INVALID
+}
+
+function bl64_lib_module_is_setup() {
+  local module="${1:-}"
+  local setup_status=''
+  [[ -z "$module" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  bl64_lib_module_imported "$module" || return $?
+
+  setup_status="${!module}"
+  if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
+    printf 'Error: required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module (module-id: %s | function: %s)\n' \
+    "${module}" \
+    "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE}" \
+    >&2
+    return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
+  fi
+  return 0
+}
