@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 . bin/dev-set
-. "${DEV_BUILD_PROJECT_FULL_PATH_TEST}/${DEV_BUILD_PROJECT_NAME_SA}"
+. "${DEV_BUILD_PROJECT_FULL_PATH_TEST}/${DEV_PACK_PROJECT_ASSETS_SA}"
 
 #
 # Model logging

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 . bin/dev-set
-. "${DEV_BUILD_PROJECT_FULL_PATH_TEST}/${DEV_BUILD_PROJECT_NAME_SA}"
+. "${DEV_BUILD_PROJECT_FULL_PATH_TEST}/${DEV_PACK_PROJECT_ASSETS_SA}"
 bl64_msg_all_enable_verbose
 bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI"
 
