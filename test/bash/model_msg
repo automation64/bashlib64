@@ -2,3 +2,5 @@
 
 . bin/dev-set
 . "${DEV_PATH_BUILD_PREPARE}/${DEV_PACK_PROJECT_ASSETS_SA}"
+
+bl64_msg_show_info 'show info'
