@@ -1,24 +1,10 @@
 #!/usr/bin/env bash
-#######################################
-# Dev / Pack / Project / Create distributable package
+#
+# Dev / Pack / Project / Create distributable release
 #
 # * Version: 2.0.0
+# * Template: 2.0.1
 #
-#######################################
-# Copyright [2023] [serdigital64@gmail.com]
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#######################################
 
 #
 # Imports
@@ -29,52 +15,80 @@ source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2
 # shellcheck source-path=bin
 source ./bin/dev-env-project || exit 1
 # shellcheck source-path=lib/bl64
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-arc.bash" &&
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-arc.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
 #
 # Functions
 #
 
-function dev_pack_custom() {
+function dev_pack_prepare() {
   bl64_dbg_app_show_function
+  local file_mode='0755'
+  bl64_msg_show_task "gather distributable package content (${DEV_PATH_BUILD_STAGING})"
+  bl64_fs_path_copy \
+    "$file_mode" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+    "$DEV_PATH_BUILD_STAGING" \
+    "$DEV_PATH_BUILD_PREPARE"/*
+}
 
-  cd "$DEV_PATH_BUILD_PREPARE"
-  bl64_msg_show_task "create stand-alone distributable package (${DEV_PACK_PROJECT_NAME_SA})"
-  bl64_arc_run_tar \
-    zcf \
-    "${DEV_PATH_BUILD_PACK}/${DEV_PACK_PROJECT_NAME_SA}" \
-    "$DEV_BUILD_PROJECT_NAME_SA" ||
-    return $?
+function dev_pack_create_modular() {
+  bl64_dbg_app_show_function
+  bl64_msg_show_task "create dstributable bundle (${DEV_PACK_PROJECT_BUNDLE_MODULAR})"
+  # shellcheck disable=SC2086
+  cd "$DEV_PATH_BUILD_STAGING" &&
+    bl64_arc_run_tar \
+      czf "${DEV_PATH_BUILD_PACK}/${DEV_PACK_PROJECT_BUNDLE_MODULAR}" \
+      $BL64_ARC_SET_TAR_VERBOSE \
+      "$DEV_PACK_PROJECT_ASSETS_MODULE"-*.bash
+}
 
-  bl64_msg_show_task "create core+opt alternative distributable package (${DEV_PACK_PROJECT_NAME_SPLIT})"
-  bl64_arc_run_tar \
-    zcf \
-    "${DEV_PATH_BUILD_PACK}/${DEV_PACK_PROJECT_NAME_SPLIT}" \
-    "$DEV_BUILD_PROJECT_NAME_CORE" "$DEV_BUILD_PROJECT_NAME_OPT" ||
-    return $?
+function dev_pack_create_split() {
+  bl64_dbg_app_show_function
+  bl64_msg_show_task "create dstributable bundle (${DEV_PACK_PROJECT_BUNDLE_SPLIT})"
+  # shellcheck disable=SC2086
+  cd "$DEV_PATH_BUILD_STAGING" &&
+    bl64_arc_run_tar \
+      czf "${DEV_PATH_BUILD_PACK}/${DEV_PACK_PROJECT_BUNDLE_SPLIT}" \
+      $BL64_ARC_SET_TAR_VERBOSE \
+      "$DEV_PACK_PROJECT_ASSETS_CORE" "$DEV_PACK_PROJECT_ASSETS_OPT"
+}
 
-  bl64_msg_show_task "create modular alternative distributable package (${DEV_PACK_PROJECT_NAME_MODULAR})"
-  bl64_arc_run_tar \
-    zcf \
-    "${DEV_PATH_BUILD_PACK}/${DEV_PACK_PROJECT_NAME_MODULAR}" \
-    ${DEV_BUILD_PROJECT_NAME_MODULE}-*.bash
+function dev_pack_create_sa() {
+  bl64_dbg_app_show_function
+  bl64_msg_show_task "create dstributable bundle (${DEV_PACK_PROJECT_BUNDLE_SA})"
+  # shellcheck disable=SC2086
+  cd "$DEV_PATH_BUILD_STAGING" &&
+    bl64_arc_run_tar \
+      czf "${DEV_PATH_BUILD_PACK}/${DEV_PACK_PROJECT_BUNDLE_SA}" \
+      $BL64_ARC_SET_TAR_VERBOSE \
+      "$DEV_PACK_PROJECT_ASSETS_SA"
+}
+
+function dev_pack() {
+  bl64_dbg_app_show_function
+  bl64_msg_show_task "prepare packages destination (${DEV_PATH_BUILD_PACK})"
+  dev_pack_prepare &&
+    dev_pack_create_sa &&
+    dev_pack_create_split &&
+        dev_pack_create_modular
 }
 
 function dev_pack_initialize() {
   bl64_dbg_app_show_function
-  bl64_arc_setup &&
-    bl64_check_export 'DEV_PACK_PROJECT_NAME_SA' &&
-    bl64_check_export 'DEV_PACK_PROJECT_NAME_SPLIT' &&
-    bl64_check_export 'DEV_PACK_PROJECT_NAME_MODULAR' &&
-    bl64_check_export 'DEV_PATH_BUILD_PACK' &&
-    bl64_check_export 'DEV_PATH_BUILD_PREPARE' &&
-    bl64_check_directory "$DEV_PATH_BUILD_PREPARE" &&
-    bl64_fs_path_remove "$DEV_PATH_BUILD_PACK" &&
-    bl64_fs_create_dir "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_PATH_BUILD_PACK"
+  bl64_check_export 'DEV_PACK_PROJECT_BUNDLE_SA' &&
+    bl64_check_export 'DEV_PACK_PROJECT_BUNDLE_SPLIT' &&
+    bl64_check_export 'DEV_PACK_PROJECT_BUNDLE_MODULAR' &&
+    bl64_arc_setup &&
+    bl64_fs_dir_reset \
+      "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+      "$DEV_PATH_BUILD_STAGING" \
+      "$DEV_PATH_BUILD_PACK"
 }
 
 #
@@ -86,5 +100,5 @@ function dev_pack_initialize() {
 bl64_msg_all_enable_verbose
 bl64_msg_show_batch_start 'dev-pack-project'
 dev_pack_initialize &&
-  dev_pack_custom
+  dev_pack
 bl64_msg_show_batch_finish $? 'dev-pack-project'
