@@ -41,7 +41,7 @@
   declare BL64_OS_CNT='CENTOS'
   declare BL64_OS_DEB='DEBIAN'
   declare BL64_OS_FD='FEDORA'
-  declare BL64_OS_KL='KALILINUX'
+  declare BL64_OS_KL='KALI'
   declare BL64_OS_MCOS='DARWIN'
   declare BL64_OS_OL='ORACLELINUX'
   declare BL64_OS_RCK='ROCKYLINUX'
