@@ -2,6 +2,10 @@
 # BashLib64 / Module / Functions / Show shell debugging information
 #######################################
 
+# DEPRECATED
+function bl64_dbg_app_show_variables() { bl64_dbg_app_show_globals "$@"; }
+function bl64_dbg_lib_show_variables() { bl64_dbg_lib_show_globals "$@"; }
+
 function _bl64_dbg_show() {
   local message="$1"
 
@@ -387,7 +391,7 @@ function bl64_dbg_app_show_comments() {
 }
 
 #######################################
-# Show non BL64 variables and attributes
+# Show non BL64 global variables and attributes
 #
 # Arguments:
 #   None
@@ -397,7 +401,7 @@ function bl64_dbg_app_show_comments() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_dbg_app_show_variables() {
+function bl64_dbg_app_show_globals() {
   bl64_dbg_app_task_enabled || return 0
   local filter='^declare .*BL64_.*=.*'
 
@@ -411,7 +415,7 @@ function bl64_dbg_app_show_variables() {
 }
 
 #######################################
-# Show BL64 variables and attributes
+# Show BL64 global variables and attributes
 #
 # Arguments:
 #   None
@@ -421,7 +425,7 @@ function bl64_dbg_app_show_variables() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_dbg_lib_show_variables() {
+function bl64_dbg_lib_show_globals() {
   bl64_dbg_lib_task_enabled || return 0
   local filter='^declare .*BL64_.*=.*'
 
