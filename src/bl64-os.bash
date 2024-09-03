@@ -51,7 +51,7 @@ function _bl64_os_match() {
     bl64_dbg_lib_show_vars 'target_os' 'target_major' 'current_major'
 
     bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}-${target_major}]"
-    if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]) ]] &&
+    if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
       ((current_major == target_major)); then
       :
     else
@@ -141,6 +141,7 @@ function _bl64_os_get_distro_from_uname() {
 #   >0: error or os not recognized
 #######################################
 function _bl64_os_get_distro_from_os_release() {
+  BL64_DBG_TARGET=LIB # =X=
   bl64_dbg_lib_show_function
   local version_pattern_single='^[0-9]+$'
   local version_pattern_semver='^[0-9]+.[0-9]+.[0-9]+$'
@@ -162,7 +163,10 @@ function _bl64_os_get_distro_from_os_release() {
   else
     version_normalized="$VERSION_ID"
   fi
-  bl64_dbg_lib_show_vars 'version_normalized'
+  if [[ "$version_normalized" != +([[:digit:]]).+([[:digit:]]) ]]; then
+    bl64_msg_show_error "unable to normalize OS version (Major.Minor != ${version_normalized})"
+    return $BL64_LIB_ERROR_TASK_FAILED
+  fi
 
   bl64_dbg_lib_show_info 'set BL_OS_DISTRO'
   case "${ID^^}" in
