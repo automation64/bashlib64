@@ -143,6 +143,7 @@ function _bl64_os_get_distro_from_uname() {
 function _bl64_os_get_distro_from_os_release() {
   bl64_dbg_lib_show_function
   local version_pattern_single='^[0-9]+$'
+  local version_pattern_major_minor='^[0-9]+.[0-9]+$'
   local version_pattern_semver='^[0-9]+.[0-9]+.[0-9]+$'
   local version_normalized=''
 
@@ -157,13 +158,15 @@ function _bl64_os_get_distro_from_os_release() {
   bl64_dbg_lib_show_info 'normalize OS version to match X.Y'
   if [[ "$VERSION_ID" =~ $version_pattern_single ]]; then
     version_normalized="${VERSION_ID}.0"
+  elif [[ "$VERSION_ID" =~ $version_pattern_major_minor ]]; then
+    version_normalized="${VERSION_ID}"
   elif [[ "$VERSION_ID" =~ $version_pattern_semver ]]; then
     version_normalized="${VERSION_ID%.*}"
   else
     version_normalized="$VERSION_ID"
   fi
   if [[ "$version_normalized" != +([[:digit:]]).+([[:digit:]]) ]]; then
-    bl64_msg_show_error "unable to normalize OS version (Major.Minor != ${version_normalized})"
+    bl64_msg_show_error "unable to normalize OS version (${VERSION_ID} != Major.Minor != ${version_normalized})"
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
 
