@@ -145,11 +145,12 @@ function _bl64_os_get_distro_from_os_release() {
   local version_normalized=''
 
   # shellcheck disable=SC1091
-  bl64_dbg_app_show_info 'parse /etc/os-release'
+  bl64_dbg_lib_show_comments 'parse /etc/os-release'
   if ! source '/etc/os-release' || [[ -z "$ID" || -z "$VERSION_ID" ]]; then
     bl64_msg_show_error 'failed to load OS information from /etc/os-release file'
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
+  bl64_dbg_lib_show_vars 'ID' 'VERSION_ID'
 
   bl64_dbg_lib_show_comments 'normalize OS version to match X.Y'
   if [[ "$VERSION_ID" =~ $version_pattern_single ]]; then
@@ -159,8 +160,9 @@ function _bl64_os_get_distro_from_os_release() {
   else
     version_normalized="$VERSION_ID"
   fi
+  bl64_dbg_lib_show_vars 'version_normalized'
 
-  bl64_dbg_app_show_info 'set BL_OS_DISTRO'
+  bl64_dbg_lib_show_comments 'set BL_OS_DISTRO'
   case "${ID^^}" in
   'ALMALINUX')
     BL64_OS_DISTRO="${BL64_OS_ALM}-${version_normalized}"
@@ -220,8 +222,7 @@ function _bl64_os_get_distro_from_os_release() {
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
     ;;
   esac
-  bl64_dbg_lib_show_vars 'BL64_OS_DISTRO'
-
+  bl64_dbg_lib_show_vars 'BL64_OS_DISTRO' 'BL64_OS_FLAVOR'
   return 0
 }
 
