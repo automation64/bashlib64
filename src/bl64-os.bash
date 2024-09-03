@@ -25,6 +25,7 @@ function _bl64_os_match() {
     current_major="${BL64_OS_DISTRO##*-}"
     current_minor="${current_major##*\.}"
     current_major="${current_major%%\.*}"
+    bl64_dbg_lib_show_vars 'target_os' 'target_major' 'target_minor' 'current_major' 'current_minor'
 
     bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}-${target_major}.${target_minor}]"
     if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
@@ -47,6 +48,7 @@ function _bl64_os_match() {
     target_major="${target_major%%\.*}"
     current_major="${BL64_OS_DISTRO##*-}"
     current_major="${current_major%%\.*}"
+    bl64_dbg_lib_show_vars 'target_os' 'target_major' 'current_major'
 
     bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}-${target_major}]"
     if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
@@ -141,26 +143,34 @@ function _bl64_os_get_distro_from_uname() {
 function _bl64_os_get_distro_from_os_release() {
   bl64_dbg_lib_show_function
   local version_pattern_single='^[0-9]+$'
+  local version_pattern_major_minor='^[0-9]+.[0-9]+$'
   local version_pattern_semver='^[0-9]+.[0-9]+.[0-9]+$'
   local version_normalized=''
 
   # shellcheck disable=SC1091
-  bl64_dbg_app_show_info 'parse /etc/os-release'
+  bl64_dbg_lib_show_info 'parse /etc/os-release'
   if ! source '/etc/os-release' || [[ -z "$ID" || -z "$VERSION_ID" ]]; then
     bl64_msg_show_error 'failed to load OS information from /etc/os-release file'
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
+  bl64_dbg_lib_show_vars 'ID' 'VERSION_ID'
 
-  bl64_dbg_lib_show_comments 'normalize OS version to match X.Y'
+  bl64_dbg_lib_show_info 'normalize OS version to match X.Y'
   if [[ "$VERSION_ID" =~ $version_pattern_single ]]; then
     version_normalized="${VERSION_ID}.0"
+  elif [[ "$VERSION_ID" =~ $version_pattern_major_minor ]]; then
+    version_normalized="${VERSION_ID}"
   elif [[ "$VERSION_ID" =~ $version_pattern_semver ]]; then
     version_normalized="${VERSION_ID%.*}"
   else
     version_normalized="$VERSION_ID"
   fi
+  if [[ "$version_normalized" != +([[:digit:]]).+([[:digit:]]) ]]; then
+    bl64_msg_show_error "unable to normalize OS version (${VERSION_ID} != Major.Minor != ${version_normalized})"
+    return $BL64_LIB_ERROR_TASK_FAILED
+  fi
 
-  bl64_dbg_app_show_info 'set BL_OS_DISTRO'
+  bl64_dbg_lib_show_info 'set BL_OS_DISTRO'
   case "${ID^^}" in
   'ALMALINUX')
     BL64_OS_DISTRO="${BL64_OS_ALM}-${version_normalized}"
@@ -220,8 +230,7 @@ function _bl64_os_get_distro_from_os_release() {
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
     ;;
   esac
-  bl64_dbg_lib_show_vars 'BL64_OS_DISTRO'
-
+  bl64_dbg_lib_show_vars 'BL64_OS_DISTRO' 'BL64_OS_FLAVOR'
   return 0
 }
 
@@ -436,7 +445,7 @@ function bl64_os_check_version() {
 function bl64_os_check_compatibility() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_os_match_compatible "$@" && return 0
+  bl64_os_is_compatible "$@" && return 0
 
   bl64_msg_show_error \
     "task not supported on the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}) ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"

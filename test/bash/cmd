@@ -3,7 +3,5 @@
 . bin/dev-set ||
   { echo 'test:Error: unable to load test environment' 2>&1 && exit 1; }
 
-bl64_msg_all_enable_verbose
-
-bl64_msg_show_info 'show info'
-bl64_msg_show_error 'show error'
+  export BL64_LIB_CMD='1'
+. "${DEV_PATH_BUILD_PREPARE}/${DEV_PACK_PROJECT_ASSETS_SA}" echo hello-world
