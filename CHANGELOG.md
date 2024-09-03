@@ -23,6 +23,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - os
   - bl64_os_is_flavor: fixed param check
 
+### Deprecated
+
+- lib
+  - bl64_dbg_app_show_variables: replaced by bl64_dbg_app_show_globals
+  - bl64_dbg_lib_show_variables: replaced by bl64_dbg_lib_show_globals
+
 ## [20.2.1]
 
 ### Added
