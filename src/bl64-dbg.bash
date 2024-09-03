@@ -206,7 +206,7 @@ function bl64_dbg_lib_trace_start() {
 #######################################
 function bl64_dbg_lib_show_info() {
   bl64_dbg_lib_task_enabled || return 0
-  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${*}"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_INFO}: ${*}"
   return 0
 }
 
@@ -223,7 +223,7 @@ function bl64_dbg_lib_show_info() {
 #######################################
 function bl64_dbg_app_show_info() {
   bl64_dbg_app_task_enabled || return 0
-  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${*}"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_INFO}: ${*}"
   return 0
 }
 
