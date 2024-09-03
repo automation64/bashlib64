@@ -141,7 +141,6 @@ function _bl64_os_get_distro_from_uname() {
 #   >0: error or os not recognized
 #######################################
 function _bl64_os_get_distro_from_os_release() {
-  BL64_DBG_TARGET=LIB # =X=
   bl64_dbg_lib_show_function
   local version_pattern_single='^[0-9]+$'
   local version_pattern_semver='^[0-9]+.[0-9]+.[0-9]+$'
