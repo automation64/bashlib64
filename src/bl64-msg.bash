@@ -557,3 +557,30 @@ function bl64_msg_show_deprecated() {
   bl64_log_warning "${FUNCNAME[1]:-MAIN}" "deprecated: ${feature}" &&
     _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Deprecated' "Feature to be removed from future versions: ${feature}. Replace with: ${replacement}" >&2
 }
+
+#######################################
+# Display setup information
+#
+# Arguments:
+#   $1: (optional) message
+#   $@: variable names
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_setup() {
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function "$@"
+  local message="${1:-$BL64_VAR_DEFAULT}"
+  local variable=''
+
+  [[ "$message" == "$BL64_VAR_DEFAULT" ]] && message='Task to be executed with the following parameters'
+  shift
+
+  bl64_msg_show_info "$message"
+  for variable in "$@"; do
+    eval "bl64_msg_show_info \"${BL64_MSG_COSMETIC_TAB2}${variable}=\$${variable}\""
+  done
+}

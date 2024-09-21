@@ -72,7 +72,6 @@
   #
 
   declare BL64_MSG_THEME_ID_ASCII_STD='ascii-std'
-  # shellcheck disable=SC2034
   declare BL64_MSG_THEME_ASCII_STD_BATCH='(@)'
   declare BL64_MSG_THEME_ASCII_STD_BATCHERR='(@)'
   declare BL64_MSG_THEME_ASCII_STD_BATCHOK='(@)'
@@ -93,7 +92,6 @@
   declare BL64_MSG_THEME_ASCII_STD_WARNING='(*)'
 
   declare BL64_MSG_THEME_ID_ANSI_STD='ansi-std'
-  # shellcheck disable=SC2034
   declare BL64_MSG_THEME_ANSI_STD_BATCH='30;1;47'
   declare BL64_MSG_THEME_ANSI_STD_BATCHERR='5;30;41'
   declare BL64_MSG_THEME_ANSI_STD_BATCHOK='30;42'
@@ -120,7 +118,6 @@
   # ANSI codes
   #
 
-  # shellcheck disable=SC2034
   declare BL64_MSG_ANSI_FG_BLACK='30'
   declare BL64_MSG_ANSI_FG_RED='31'
   declare BL64_MSG_ANSI_FG_GREEN='32'
@@ -138,7 +135,6 @@
   declare BL64_MSG_ANSI_FG_LIGHT_CYAN='1;36'
   declare BL64_MSG_ANSI_FG_WHITE='1;37'
 
-  # shellcheck disable=SC2034
   declare BL64_MSG_ANSI_BG_BLACK='40'
   declare BL64_MSG_ANSI_BG_RED='41'
   declare BL64_MSG_ANSI_BG_GREEN='42'
@@ -156,7 +152,6 @@
   declare BL64_MSG_ANSI_BG_LIGHT_CYAN='1;46'
   declare BL64_MSG_ANSI_BG_WHITE='1;47'
 
-  # shellcheck disable=SC2034
   declare BL64_MSG_ANSI_CHAR_NORMAL='0'
   declare BL64_MSG_ANSI_CHAR_BOLD='1'
   declare BL64_MSG_ANSI_CHAR_UNDERLINE='4'
@@ -167,7 +162,9 @@
   # Cosmetic
   #
 
-  # shellcheck disable=SC2034
+  declare BL64_MSG_COSMETIC_TAB2='  '
+  declare BL64_MSG_COSMETIC_TAB4='    '
+  declare BL64_MSG_COSMETIC_TAB6='      '
   declare BL64_MSG_COSMETIC_ARROW='-->'
   declare BL64_MSG_COSMETIC_ARROW2='==>'
   declare BL64_MSG_COSMETIC_ARROW3='>>>'
@@ -177,4 +174,5 @@
   declare BL64_MSG_COSMETIC_PHASE_PREFIX='===['
   declare BL64_MSG_COSMETIC_PHASE_SUFIX=']==='
   declare BL64_MSG_COSMETIC_PIPE='|'
+  declare BL64_MSG_COSMETIC_ARROW='-->'
 }
