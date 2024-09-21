@@ -1,0 +1,29 @@
+---
+# Template: 1.0.0
+name: "SAST / GitLeaks"
+
+on:
+  pull_request:
+    branches:
+      - "main"
+  push:
+    branches:
+      - "feature/**"
+
+jobs:
+  sast-GitLeaks:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare environment"
+        run: "./bin/dev-lib-base"
+
+      - name: "Download tools"
+        run: "./bin/dev-lib-gitleaks"
+
+      - name: "Run SAST"
+        run: "./bin/dev-sast-gitleaks"
+...
