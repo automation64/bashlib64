@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [20.4.0]
 
+### Added
+
+- msg
+  - bl64_msg_show_deprecated
+
 ## [20.3.0]
 
 ### Added

@@ -535,3 +535,25 @@ function bl64_msg_show_separator() {
 
   _bl64_msg_print "$BL64_MSG_TYPE_SEPARATOR" "$BL64_MSG_COSMETIC_ARROW3" "${message}${output}"
 }
+
+#######################################
+# Display deprecation message
+#
+# Arguments:
+#   $1: feature
+#   $2: replacement
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_deprecated() {
+  bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function "$@"
+  local feature="${1:-}"
+  local replacement="${2:-non-available}"
+
+  bl64_log_warning "${FUNCNAME[1]:-MAIN}" "deprecated: ${feature}" &&
+    _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Deprecated' "Feature to be removed from future versions: ${feature}. Replace with: ${replacement}" >&2
+}
