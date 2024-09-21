@@ -3,8 +3,14 @@
 #######################################
 
 # DEPRECATED: to be removed in future releases
-function bl64_bsh_script_set_id() { bl64_msg_show_deprecated 'bl64_bsh_script_set_id' 'bl64_lib_script_set_id'; bl64_lib_script_set_id "$@"; }
-function bl64_bsh_script_set_identity() { bl64_msg_show_deprecated 'bl64_bsh_script_set_identity' 'bl64_lib_script_set_identity'; bl64_lib_script_set_identity "$@"; }
+function bl64_bsh_script_set_id() {
+  bl64_msg_show_deprecated 'bl64_bsh_script_set_id' 'bl64_lib_script_set_id'
+  bl64_lib_script_set_id "$@"
+}
+function bl64_bsh_script_set_identity() {
+  bl64_msg_show_deprecated 'bl64_bsh_script_set_identity' 'bl64_lib_script_set_identity'
+  bl64_lib_script_set_identity "$@"
+}
 
 #######################################
 # Get current script location
@@ -274,10 +280,10 @@ function bl64_bsh_env_store_publish() {
     return $?
 
   target="${home}/${BL64_BSH_ENV_STORE}/${priority}_$(bl64_fmt_basename "$source_env")" &&
-  bl64_fs_create_symlink \
-    "$source_env" \
-    "$target" \
-    "$BL64_VAR_ON"
+    bl64_fs_create_symlink \
+      "$source_env" \
+      "$target" \
+      "$BL64_VAR_ON"
 }
 
 #######################################
@@ -423,7 +429,7 @@ function bl64_bsh_run_pushd() {
   bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   # shellcheck disable=SC2164
-  pushd "$path" > /dev/null
+  pushd "$path" >/dev/null
 }
 
 #######################################
@@ -441,5 +447,48 @@ function bl64_bsh_run_pushd() {
 function bl64_bsh_run_popd() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2164
-  popd > /dev/null
+  popd >/dev/null
+}
+
+#######################################
+# Search for the command in well known locations
+#
+# Arguments:
+#   $1: command name
+#   $@: (optional) list of additional paths where to look on
+# Outputs:
+#   STDOUT: full path
+#   STDERR: Error messages
+# Returns:
+#   0: full path detected
+#   >0: unable to detect or error
+#######################################
+function bl64_bsh_command_locate() {
+  bl64_dbg_lib_show_function "$@"
+  local command="${1:-}"
+  local search_list=''
+  local full_path=''
+  local current_path=''
+
+  shift
+  bl64_check_parameter 'command' ||
+    return $?
+
+  search_list+=' /home/linuxbrew/.linuxbrew/bin'
+  search_list+=' /opt/homebrew/bin'
+  search_list+=' /usr/local/bin'
+  search_list+=' /usr/bin'
+  search_list+=' /bin'
+  search_list+=' /usr/sbin'
+  search_list+=' /sbin'
+
+  for current_path in $search_list "${@:-}"; do
+    bl64_dbg_lib_show_info "search in: ${current_path}/${command}"
+    [[ ! -d "$current_path" ]] && continue
+    if [[ -x "${current_path}/${command}" ]]; then
+      echo "${current_path}/${command}"
+      return 0
+    fi
+  done
+  bl64_check_alert_resource_not_found "$command"
 }

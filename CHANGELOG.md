@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - msg
   - bl64_msg_show_deprecated
   - bl64_msg_show_setup
+- bsh
+  - bl64_bsh_command_locate
 
 ## [20.3.0]
 
