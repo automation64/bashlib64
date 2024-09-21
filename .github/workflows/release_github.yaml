@@ -18,8 +18,8 @@ on:
 jobs:
   release-github:
     runs-on: "ubuntu-latest"
-    steps:
     permissions: "write-all"
+    steps:
 
       - name: "Check out repository code"
         uses: "actions/checkout@main"
