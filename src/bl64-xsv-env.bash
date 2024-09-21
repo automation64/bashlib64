@@ -26,7 +26,4 @@
   declare BL64_XSV_FS_AT='@'
   declare BL64_XSV_FS_DOLLAR='$'
   declare BL64_XSV_FS_SLASH='/'
-
-  # Common search paths for commands
-  declare -a _BL64_XSV_SEARCH_PATHS=('/home/linuxbrew/.linuxbrew/bin' '/opt/homebrew/bin' '/usr/local/bin' '/usr/bin')
 }

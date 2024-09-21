@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - bsh
   - bl64_bsh_command_locate
 
+### Changed
+
+- xsv
+  - now dependes on bsh module
+
 ## [20.3.0]
 
 ### Added
