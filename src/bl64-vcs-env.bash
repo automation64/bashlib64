@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VCS_VERSION='2.4.0'
+  declare BL64_VCS_VERSION='2.5.0'
 
   declare BL64_VCS_MODULE='0'
 
@@ -23,8 +23,4 @@
   declare BL64_VCS_GITHUB_API_VERSION='2022-11-28'
   # Special tag for latest release
   declare BL64_VCS_GITHUB_LATEST='latest'
-
-  declare _BL64_VCS_TXT_CLONE_REPO='clone single branch from GIT repository'
-  declare _BL64_VCS_TXT_GET_LATEST_RELEASE='get release tag from latest release'
-  declare _BL64_VCS_TXT_GET_LATEST_RELEASE_FAILED='unable to determine latest release'
 }
