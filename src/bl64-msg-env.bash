@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.2.0'
+  declare BL64_MSG_VERSION='5.3.0'
 
   declare BL64_MSG_MODULE='0'
 
@@ -170,32 +170,11 @@
   # shellcheck disable=SC2034
   declare BL64_MSG_COSMETIC_ARROW='-->'
   declare BL64_MSG_COSMETIC_ARROW2='==>'
+  declare BL64_MSG_COSMETIC_ARROW3='>>>'
   declare BL64_MSG_COSMETIC_LEFT_ARROW='<--'
   declare BL64_MSG_COSMETIC_LEFT_ARROW2='<=='
+  declare BL64_MSG_COSMETIC_LEFT_ARROW3='<<<'
   declare BL64_MSG_COSMETIC_PHASE_PREFIX='===['
   declare BL64_MSG_COSMETIC_PHASE_SUFIX=']==='
   declare BL64_MSG_COSMETIC_PIPE='|'
-
-  #
-  # Display messages
-  #
-
-  declare _BL64_MSG_TXT_BATCH_FINISH_ERROR='finished with errors'
-  declare _BL64_MSG_TXT_BATCH_FINISH_OK='finished successfully'
-  declare _BL64_MSG_TXT_BATCH_START='started'
-  declare _BL64_MSG_TXT_BATCH='Process'
-  declare _BL64_MSG_TXT_COMMANDS='Commands'
-  declare _BL64_MSG_TXT_ERROR='Error'
-  declare _BL64_MSG_TXT_FLAGS='Flags'
-  declare _BL64_MSG_TXT_INIT='Init'
-  declare _BL64_MSG_TXT_INFO='Info'
-  declare _BL64_MSG_TXT_INPUT='Input'
-  declare _BL64_MSG_TXT_INVALID_VALUE='invalid value. Not one of'
-  declare _BL64_MSG_TXT_PARAMETERS='Parameters'
-  declare _BL64_MSG_TXT_PHASE='Phase'
-  declare _BL64_MSG_TXT_SEPARATOR='>>>>>'
-  declare _BL64_MSG_TXT_SUBTASK='Subtask'
-  declare _BL64_MSG_TXT_TASK='Task'
-  declare _BL64_MSG_TXT_USAGE='Usage'
-  declare _BL64_MSG_TXT_WARNING='Warning'
 }
