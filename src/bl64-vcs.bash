@@ -104,7 +104,7 @@ function bl64_vcs_git_clone() {
     bl64_check_command "$BL64_VCS_CMD_GIT" ||
     return $?
 
-  bl64_msg_show_lib_subtask "$_BL64_VCS_TXT_CLONE_REPO (${source} -> ${destination})"
+  bl64_msg_show_lib_subtask "clone single branch (${source}/${branch} -> ${destination})"
   bl64_fs_create_dir "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" &&
     bl64_bsh_run_pushd "$destination" ||
     return $?
@@ -277,7 +277,7 @@ function bl64_vcs_github_release_get_latest() {
   if [[ -n "$repo_tag" ]]; then
     echo "$repo_tag"
   else
-    bl64_msg_show_error "$_BL64_VCS_TXT_GET_LATEST_RELEASE_FAILED (${repo_owner}/${repo_name})"
+    bl64_msg_show_error "failed to determine latest release (${repo_owner}/${repo_name})"
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
 }

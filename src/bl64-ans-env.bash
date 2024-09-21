@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ANS_VERSION='2.0.0'
+  declare BL64_ANS_VERSION='2.1.0'
 
   declare BL64_ANS_MODULE='0'
 
@@ -23,6 +23,4 @@
   declare BL64_ANS_SET_VERBOSE=''
   declare BL64_ANS_SET_DIFF=''
   declare BL64_ANS_SET_DEBUG=''
-
-  declare _BL64_ANS_TXT_ERROR_GET_VERSION='failed to get CLI version'
 }

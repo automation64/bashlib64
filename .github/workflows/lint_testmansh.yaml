@@ -1,6 +1,10 @@
 ---
-# Template: 4.3.1
+# Template: 4.5.0
 name: "Lint / TestManSH"
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
 
 env:
   DEV_CICD_DEBUG: ""
@@ -23,8 +27,11 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Prepare dev environment"
+      - name: "Prepare environment"
         run: "./bin/dev-lib-base"
+
+      - name: "Download tools"
+        run: "./bin/dev-lib-testmansh"
 
       - name: "Build app"
         run: "./bin/dev-build-project"

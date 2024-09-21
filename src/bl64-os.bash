@@ -3,8 +3,8 @@
 #######################################
 
 # DEPRECATED
-function bl64_os_match() { bl64_os_is_distro "$@"; }
-function bl64_os_match_compatible() { bl64_os_is_compatible "$@"; }
+function bl64_os_match() { bl64_msg_show_deprecated 'bl64_os_match' 'bl64_os_is_distro'; bl64_os_is_distro "$@"; }
+function bl64_os_match_compatible() { bl64_msg_show_deprecated 'bl64_os_match_compatible' 'bl64_os_is_compatible'; bl64_os_is_compatible "$@"; }
 
 function _bl64_os_match() {
   bl64_dbg_lib_show_function "$@"

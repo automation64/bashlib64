@@ -5,7 +5,7 @@
 # * Use to download DevBin64 components in ephemeral environments
 # * Tools and libs should go to lib/
 # * For project specific tools, use dev-lib-project
-# * Version: 2.0.0
+# * Version: 3.0.0
 #
 
 # shellcheck source=bin/dev-set
@@ -13,12 +13,4 @@ source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2
 
 # Download main components
 ./bin/dev-lib-installer64 &&
-  ./bin/dev-lib-sysop64 ||
-  exit $?
-
-# Download project related components
-if [[ -f ./bin/dev-lib-project ]]; then
-  ./bin/dev-lib-project
-else
-  exit 0
-fi
+  ./bin/dev-lib-sysop64

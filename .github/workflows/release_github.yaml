@@ -1,6 +1,10 @@
 ---
-# Template: 1.0.0
+# Template: 1.1.2
 name: "Release / GitHub"
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
 
 env:
   DEV_CICD_DEBUG: ""
@@ -14,13 +18,13 @@ on:
 jobs:
   release-github:
     runs-on: "ubuntu-latest"
-    permissions: "write-all"
     steps:
+    permissions: "write-all"
 
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Prepare dev environment"
+      - name: "Prepare environment"
         run: "./bin/dev-lib-base"
 
       - name: "Build app for release"

@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_GCP_VERSION='2.0.0'
+  declare BL64_GCP_VERSION='2.1.0'
 
   declare BL64_GCP_MODULE='0'
 
@@ -19,8 +19,4 @@
 
   declare BL64_GCP_CLI_PROJECT=''
   declare BL64_GCP_CLI_IMPERSONATE_SA=''
-
-  declare _BL64_TXT_REMOVE_CREDENTIALS='remove previous GCP credentials'
-  declare _BL64_TXT_LOGIN_SA='activate service account'
-  declare _BL64_TXT_CREATE_CFG='create private GCP configuration'
 }

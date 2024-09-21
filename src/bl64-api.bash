@@ -56,7 +56,7 @@ function bl64_api_call() {
     "$@"
   bl64_dbg_lib_trace_stop
   status=$?
-  ((status != 0)) && bl64_msg_show_error "${_BL64_API_TXT_ERROR_API_FAILED} (${api_url}${api_path})"
+  ((status != 0)) && bl64_msg_show_error "API call failed (${api_url}${api_path})"
   return $status
 }
 

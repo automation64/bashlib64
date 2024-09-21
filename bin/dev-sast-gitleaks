@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+#
+# Dev / SAST / GitLeaks / Static code analysis
+#
+# * Version: 1.0.0
+# * Template: 1.6.0
+#
+
+#
+# Imports
+#
+
+# shellcheck source=bin/dev-set
+source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+# shellcheck source-path=bin
+source ./bin/dev-env-gitleaks || exit 1
+# shellcheck source-path=lib/bl64
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
+
+#
+# Functions
+#
+
+function dev_sast() {
+  bl64_dbg_app_show_function
+  "$DEV_LIB_GITLEAKS_BIN" \
+    detect \
+    --exit-code 1 \
+    --report-format "$DEV_SAST_GITLEAKS_FORMAT" \
+    "$DEV_PATH_ROOT"
+}
+
+function dev_initialize() {
+  bl64_dbg_app_show_function
+}
+
+#
+# Main
+#
+
+[[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
+
+bl64_msg_all_enable_verbose
+bl64_msg_show_batch_start 'dev-sast-gitleaks'
+dev_initialize &&
+  dev_sast
+bl64_msg_show_batch_finish $? 'dev-sast-gitleaks'

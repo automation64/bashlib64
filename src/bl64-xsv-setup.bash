@@ -25,6 +25,7 @@ function bl64_xsv_setup() {
     bl64_dbg_lib_show_function &&
     bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
     bl64_lib_module_imported 'BL64_TXT_MODULE' &&
+    bl64_lib_module_imported 'BL64_BSH_MODULE' &&
     _bl64_xsv_set_command "${search_paths[@]}" &&
     BL64_XSV_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'xsv'
@@ -47,15 +48,6 @@ function bl64_xsv_setup() {
 #######################################
 function _bl64_xsv_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local search_paths=("${@:-${_BL64_XSV_SEARCH_PATHS[@]}}")
-
-  for path in "${search_paths[@]}"; do
-    bl64_dbg_lib_show_info "search for commands in the path (${path})"
-    [[ ! -d "$path" ]] && continue
-    [[ -x "${path}/jq" ]] && BL64_XSV_CMD_JQ="${path}/jq"
-    [[ -x "${path}/yq" ]] && BL64_XSV_CMD_YQ="${path}/yq"
-  done
-
-  bl64_dbg_lib_show_vars 'BL64_XSV_CMD_YQ' 'BL64_XSV_CMD_JQ'
-  return 0
+  BL64_XSV_CMD_JQ="$(bl64_bsh_command_locate 'jq' "$@")" &&
+    BL64_XSV_CMD_YQ="$(bl64_bsh_command_locate 'yq' "$@")"
 }

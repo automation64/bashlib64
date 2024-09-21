@@ -132,7 +132,7 @@ function bl64_aws_sso_get_token() {
   if [[ -n "$token_file" && -r "$token_file" ]]; then
     echo "$token_file"
   else
-    bl64_msg_show_error "$_BL64_AWS_TXT_TOKEN_NOT_FOUND"
+    bl64_msg_show_error 'unable to locate temporary access token file'
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
 

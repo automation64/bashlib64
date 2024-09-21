@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_AWS_VERSION='3.0.1'
+  declare BL64_AWS_VERSION='3.1.0'
 
   declare BL64_AWS_MODULE='0'
 
@@ -40,6 +40,4 @@
   declare BL64_AWS_ACCESS_MODE_SSO='S'
   declare BL64_AWS_ACCESS_MODE_KEY='K'
   declare BL64_AWS_ACCESS_MODE_TOKEN='T'
-
-  declare _BL64_AWS_TXT_TOKEN_NOT_FOUND='unable to locate temporary access token file'
 }

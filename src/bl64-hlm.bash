@@ -24,14 +24,14 @@ function bl64_hlm_repo_add() {
     bl64_check_parameter 'source' ||
     return $?
 
-  bl64_msg_show_lib_subtask "${BL64_HLM_TXT_ADD_REPO} (${repository} ${BL64_MSG_COSMETIC_LEFT_ARROW2} ${source})"
+  bl64_msg_show_lib_subtask "add Helm repository (${repository} ${BL64_MSG_COSMETIC_LEFT_ARROW2} ${source})"
   bl64_hlm_run_helm \
     repo add \
     "$repository" \
     "$source" ||
     return $?
 
-  bl64_msg_show_lib_subtask "${BL64_HLM_TXT_UPDATE_REPO} (${repository})"
+  bl64_msg_show_lib_subtask "update Helm repository catalog (${repository})"
   bl64_hlm_run_helm repo update "$repository"
 
   return 0
@@ -75,7 +75,7 @@ function bl64_hlm_chart_upgrade() {
   shift
   shift
 
-  bl64_msg_show_lib_subtask "${BL64_HLM_TXT_DEPLOY_CHART} (${namespace}/${chart})"
+  bl64_msg_show_lib_subtask "deploy helm chart (${namespace}/${chart})"
   bl64_hlm_run_helm \
     upgrade \
     "$chart" \

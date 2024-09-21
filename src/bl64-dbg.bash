@@ -3,8 +3,8 @@
 #######################################
 
 # DEPRECATED
-function bl64_dbg_app_show_variables() { bl64_dbg_app_show_globals "$@"; }
-function bl64_dbg_lib_show_variables() { bl64_dbg_lib_show_globals "$@"; }
+function bl64_dbg_app_show_variables() { bl64_msg_show_deprecated 'bl64_dbg_app_show_variables' 'bl64_dbg_app_show_globals'; bl64_dbg_app_show_globals "$@"; }
+function bl64_dbg_lib_show_variables() { bl64_msg_show_deprecated 'bl64_dbg_lib_show_variables' 'bl64_dbg_lib_show_globals'; bl64_dbg_lib_show_globals "$@"; }
 
 function _bl64_dbg_show() {
   local message="$1"

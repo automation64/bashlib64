@@ -3,7 +3,7 @@
 #######################################
 
 # DEPRECATED: to be removed in future releases
-function bl64_check_module_imported() { bl64_lib_module_imported "$@"; }
+function bl64_check_module_imported() { bl64_msg_show_deprecated 'bl64_check_module_imported' 'bl64_lib_module_imported'; bl64_lib_module_imported "$@"; }
 
 #######################################
 # Check and report if the command is present and has execute permissions for the current user.

@@ -66,7 +66,7 @@ function bl64_msg_set_level() {
     ;;
   *)
     bl64_check_alert_parameter_invalid 'BL64_MSG_VERBOSE' \
-      "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_VERBOSE_NONE}|${BL64_MSG_VERBOSE_ALL}|${BL64_MSG_VERBOSE_APP}|${BL64_MSG_VERBOSE_LIB}"
+      "invalid value. Not one of: ${BL64_MSG_VERBOSE_NONE}|${BL64_MSG_VERBOSE_ALL}|${BL64_MSG_VERBOSE_APP}|${BL64_MSG_VERBOSE_LIB}"
     return $?
     ;;
   esac
@@ -108,7 +108,7 @@ function bl64_msg_set_format() {
     ;;
   *)
     bl64_check_alert_parameter_invalid 'BL64_MSG_FORMAT' \
-      "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_FORMAT_PLAIN}|${BL64_MSG_FORMAT_HOST}|${BL64_MSG_FORMAT_TIME}|${BL64_MSG_FORMAT_CALLER}|${BL64_MSG_FORMAT_FULL}"
+      "invalid value. Not one of: ${BL64_MSG_FORMAT_PLAIN}|${BL64_MSG_FORMAT_HOST}|${BL64_MSG_FORMAT_TIME}|${BL64_MSG_FORMAT_CALLER}|${BL64_MSG_FORMAT_FULL}"
     return $?
     ;;
   esac
@@ -143,7 +143,7 @@ function bl64_msg_set_theme() {
     ;;
   *)
     bl64_check_alert_parameter_invalid 'BL64_MSG_THEME' \
-      "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_THEME_ID_ASCII_STD}|${BL64_MSG_THEME_ID_ANSI_STD}"
+      "invalid value. Not one of: ${BL64_MSG_THEME_ID_ASCII_STD}|${BL64_MSG_THEME_ID_ANSI_STD}"
     return $?
     ;;
   esac
@@ -185,7 +185,7 @@ function bl64_msg_set_output() {
     ;;
   *)
     bl64_check_alert_parameter_invalid 'BL64_MSG_OUTPUT' \
-      "${_BL64_MSG_TXT_INVALID_VALUE}: ${BL64_MSG_OUTPUT_ASCII}|${BL64_MSG_OUTPUT_ANSI}"
+      "invalid value. Not one of: ${BL64_MSG_OUTPUT_ASCII}|${BL64_MSG_OUTPUT_ANSI}"
     return $?
     ;;
   esac

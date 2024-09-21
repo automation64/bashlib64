@@ -9,7 +9,9 @@ bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI"
 bl64_msg_set_format "$BL64_MSG_FORMAT_FULL"
 bl64_msg_show_error 'bl64_msg_show_error'
 bl64_msg_show_warning 'bl64_msg_show_warning'
+bl64_msg_show_deprecated 'bl64_msg_show_deprecated'
 bl64_msg_show_info 'bl64_msg_show_info'
+bl64_msg_show_setup 'bl64_msg_show_setup' 'BL64_VAR_DEFAULT'
 bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
 bl64_msg_show_phase 'bl64_msg_show_phase'
 bl64_msg_show_task 'bl64_msg_show_task'
@@ -25,7 +27,9 @@ bl64_msg_show_batch_finish 1 'bl64_msg_show_batch_finish'
 bl64_msg_set_format "$BL64_MSG_FORMAT_PLAIN"
 bl64_msg_show_error 'bl64_msg_show_error'
 bl64_msg_show_warning 'bl64_msg_show_warning'
+bl64_msg_show_deprecated 'bl64_msg_show_deprecated'
 bl64_msg_show_info 'bl64_msg_show_info'
+bl64_msg_show_setup 'bl64_msg_show_setup' 'BL64_VAR_DEFAULT'
 bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
 bl64_msg_show_phase 'bl64_msg_show_phase'
 bl64_msg_show_task 'bl64_msg_show_task'
@@ -41,7 +45,9 @@ bl64_msg_show_batch_finish 1 'bl64_msg_show_batch_finish'
 bl64_msg_set_format "$BL64_MSG_FORMAT_HOST"
 bl64_msg_show_error 'bl64_msg_show_error'
 bl64_msg_show_warning 'bl64_msg_show_warning'
+bl64_msg_show_deprecated 'bl64_msg_show_deprecated'
 bl64_msg_show_info 'bl64_msg_show_info'
+bl64_msg_show_setup 'bl64_msg_show_setup' 'BL64_VAR_DEFAULT'
 bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
 bl64_msg_show_phase 'bl64_msg_show_phase'
 bl64_msg_show_task 'bl64_msg_show_task'
@@ -57,7 +63,9 @@ bl64_msg_show_batch_finish 1 'bl64_msg_show_batch_finish'
 bl64_msg_set_format "$BL64_MSG_FORMAT_TIME"
 bl64_msg_show_error 'bl64_msg_show_error'
 bl64_msg_show_warning 'bl64_msg_show_warning'
+bl64_msg_show_deprecated 'bl64_msg_show_deprecated'
 bl64_msg_show_info 'bl64_msg_show_info'
+bl64_msg_show_setup 'bl64_msg_show_setup' 'BL64_VAR_DEFAULT'
 bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
 bl64_msg_show_phase 'bl64_msg_show_phase'
 bl64_msg_show_task 'bl64_msg_show_task'
@@ -73,7 +81,9 @@ bl64_msg_show_batch_finish 1 'bl64_msg_show_batch_finish'
 bl64_msg_set_format "$BL64_MSG_FORMAT_CALLER"
 bl64_msg_show_error 'bl64_msg_show_error'
 bl64_msg_show_warning 'bl64_msg_show_warning'
+bl64_msg_show_deprecated 'bl64_msg_show_deprecated'
 bl64_msg_show_info 'bl64_msg_show_info'
+bl64_msg_show_setup 'bl64_msg_show_setup' 'BL64_VAR_DEFAULT'
 bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
 bl64_msg_show_phase 'bl64_msg_show_phase'
 bl64_msg_show_task 'bl64_msg_show_task'

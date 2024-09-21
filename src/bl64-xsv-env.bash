@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_XSV_VERSION='2.0.0'
+  declare BL64_XSV_VERSION='2.1.0'
 
   declare BL64_XSV_MODULE='0'
 
@@ -26,9 +26,4 @@
   declare BL64_XSV_FS_AT='@'
   declare BL64_XSV_FS_DOLLAR='$'
   declare BL64_XSV_FS_SLASH='/'
-
-  # Common search paths for commands
-  declare -a _BL64_XSV_SEARCH_PATHS=('/home/linuxbrew/.linuxbrew/bin' '/opt/homebrew/bin' '/usr/local/bin' '/usr/bin')
-
-  declare _BL64_XSV_TXT_SOURCE_NOT_FOUND='source file not found'
 }

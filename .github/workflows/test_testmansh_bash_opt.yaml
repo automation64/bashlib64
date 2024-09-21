@@ -1,9 +1,13 @@
 ---
-# Template: 3.2.1
+# Template: 3.4.0
 name: "Test / TestManSH / Bash Opt"
 
 env:
   DEV_CICD_DEBUG: ""
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
 
 on:
   pull_request:
@@ -35,8 +39,11 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Prepare dev environment"
+      - name: "Prepare environment"
         run: "./bin/dev-lib-base"
+
+      - name: "Download tools"
+        run: "./bin/dev-lib-testmansh"
 
       - name: "Build app"
         run: "./bin/dev-build-project"

@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.2.0'
+  declare BL64_MSG_VERSION='5.3.0'
 
   declare BL64_MSG_MODULE='0'
 
@@ -72,7 +72,6 @@
   #
 
   declare BL64_MSG_THEME_ID_ASCII_STD='ascii-std'
-  # shellcheck disable=SC2034
   declare BL64_MSG_THEME_ASCII_STD_BATCH='(@)'
   declare BL64_MSG_THEME_ASCII_STD_BATCHERR='(@)'
   declare BL64_MSG_THEME_ASCII_STD_BATCHOK='(@)'
@@ -93,7 +92,6 @@
   declare BL64_MSG_THEME_ASCII_STD_WARNING='(*)'
 
   declare BL64_MSG_THEME_ID_ANSI_STD='ansi-std'
-  # shellcheck disable=SC2034
   declare BL64_MSG_THEME_ANSI_STD_BATCH='30;1;47'
   declare BL64_MSG_THEME_ANSI_STD_BATCHERR='5;30;41'
   declare BL64_MSG_THEME_ANSI_STD_BATCHOK='30;42'
@@ -120,7 +118,6 @@
   # ANSI codes
   #
 
-  # shellcheck disable=SC2034
   declare BL64_MSG_ANSI_FG_BLACK='30'
   declare BL64_MSG_ANSI_FG_RED='31'
   declare BL64_MSG_ANSI_FG_GREEN='32'
@@ -138,7 +135,6 @@
   declare BL64_MSG_ANSI_FG_LIGHT_CYAN='1;36'
   declare BL64_MSG_ANSI_FG_WHITE='1;37'
 
-  # shellcheck disable=SC2034
   declare BL64_MSG_ANSI_BG_BLACK='40'
   declare BL64_MSG_ANSI_BG_RED='41'
   declare BL64_MSG_ANSI_BG_GREEN='42'
@@ -156,7 +152,6 @@
   declare BL64_MSG_ANSI_BG_LIGHT_CYAN='1;46'
   declare BL64_MSG_ANSI_BG_WHITE='1;47'
 
-  # shellcheck disable=SC2034
   declare BL64_MSG_ANSI_CHAR_NORMAL='0'
   declare BL64_MSG_ANSI_CHAR_BOLD='1'
   declare BL64_MSG_ANSI_CHAR_UNDERLINE='4'
@@ -167,35 +162,17 @@
   # Cosmetic
   #
 
-  # shellcheck disable=SC2034
+  declare BL64_MSG_COSMETIC_TAB2='  '
+  declare BL64_MSG_COSMETIC_TAB4='    '
+  declare BL64_MSG_COSMETIC_TAB6='      '
   declare BL64_MSG_COSMETIC_ARROW='-->'
   declare BL64_MSG_COSMETIC_ARROW2='==>'
+  declare BL64_MSG_COSMETIC_ARROW3='>>>'
   declare BL64_MSG_COSMETIC_LEFT_ARROW='<--'
   declare BL64_MSG_COSMETIC_LEFT_ARROW2='<=='
+  declare BL64_MSG_COSMETIC_LEFT_ARROW3='<<<'
   declare BL64_MSG_COSMETIC_PHASE_PREFIX='===['
   declare BL64_MSG_COSMETIC_PHASE_SUFIX=']==='
   declare BL64_MSG_COSMETIC_PIPE='|'
-
-  #
-  # Display messages
-  #
-
-  declare _BL64_MSG_TXT_BATCH_FINISH_ERROR='finished with errors'
-  declare _BL64_MSG_TXT_BATCH_FINISH_OK='finished successfully'
-  declare _BL64_MSG_TXT_BATCH_START='started'
-  declare _BL64_MSG_TXT_BATCH='Process'
-  declare _BL64_MSG_TXT_COMMANDS='Commands'
-  declare _BL64_MSG_TXT_ERROR='Error'
-  declare _BL64_MSG_TXT_FLAGS='Flags'
-  declare _BL64_MSG_TXT_INIT='Init'
-  declare _BL64_MSG_TXT_INFO='Info'
-  declare _BL64_MSG_TXT_INPUT='Input'
-  declare _BL64_MSG_TXT_INVALID_VALUE='invalid value. Not one of'
-  declare _BL64_MSG_TXT_PARAMETERS='Parameters'
-  declare _BL64_MSG_TXT_PHASE='Phase'
-  declare _BL64_MSG_TXT_SEPARATOR='>>>>>'
-  declare _BL64_MSG_TXT_SUBTASK='Subtask'
-  declare _BL64_MSG_TXT_TASK='Task'
-  declare _BL64_MSG_TXT_USAGE='Usage'
-  declare _BL64_MSG_TXT_WARNING='Warning'
+  declare BL64_MSG_COSMETIC_ARROW='-->'
 }

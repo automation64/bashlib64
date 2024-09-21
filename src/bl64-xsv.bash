@@ -19,7 +19,7 @@ function bl64_xsv_dump() {
   local source="$1"
 
   bl64_check_parameter 'source' &&
-    bl64_check_file "$source" "$_BL64_XSV_TXT_SOURCE_NOT_FOUND" || return $?
+    bl64_check_file "$source" 'source file not found' || return $?
 
   bl64_txt_run_egrep "$BL64_TXT_SET_GREP_INVERT" '^#.*$|^$' "$source"
 
