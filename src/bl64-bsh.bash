@@ -3,8 +3,8 @@
 #######################################
 
 # DEPRECATED: to be removed in future releases
-function bl64_bsh_script_set_id() { bl64_lib_script_set_id "$@"; }
-function bl64_bsh_script_set_identity() { bl64_lib_script_set_identity "$@"; }
+function bl64_bsh_script_set_id() { bl64_msg_show_deprecated 'bl64_bsh_script_set_id' 'bl64_lib_script_set_id'; bl64_lib_script_set_id "$@"; }
+function bl64_bsh_script_set_identity() { bl64_msg_show_deprecated 'bl64_bsh_script_set_identity' 'bl64_lib_script_set_identity'; bl64_lib_script_set_identity "$@"; }
 
 #######################################
 # Get current script location

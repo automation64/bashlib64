@@ -24,6 +24,7 @@
 #######################################
 function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
+  bl64_msg_show_deprecated 'bl64_fs_set_permissions' 'bl64_fs_path_permission_set'
   local mode="${1:-${BL64_VAR_DEFAULT}}"
   local user="${2:-${BL64_VAR_DEFAULT}}"
   local group="${3:-${BL64_VAR_DEFAULT}}"
@@ -63,6 +64,7 @@ function bl64_fs_set_permissions() {
 #######################################
 function bl64_fs_fix_permissions() {
   bl64_dbg_lib_show_function "$@"
+  bl64_msg_show_deprecated 'bl64_fs_fix_permissions' 'bl64_fs_path_permission_set'
   local file_mode="${1:-${BL64_VAR_DEFAULT}}"
   local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
   local path=''
@@ -105,6 +107,7 @@ function bl64_fs_fix_permissions() {
 #######################################
 function bl64_fs_copy_files() {
   bl64_dbg_lib_show_function "$@"
+  bl64_msg_show_deprecated 'bl64_fs_copy_files' 'bl64_fs_path_copy'
   local mode="${1:-${BL64_VAR_DEFAULT}}"
   local user="${2:-${BL64_VAR_DEFAULT}}"
   local group="${3:-${BL64_VAR_DEFAULT}}"
