@@ -74,13 +74,13 @@ function bl64_gcp_login_sa() {
 
   _bl64_gcp_configure
 
-  bl64_msg_show_lib_subtask "$_BL64_TXT_REMOVE_CREDENTIALS"
+  bl64_msg_show_lib_subtask 'remove previous GCP credentials'
   bl64_gcp_run_gcloud \
     auth \
     revoke \
     --all
 
-  bl64_msg_show_lib_subtask "$_BL64_TXT_LOGIN_SA"
+  bl64_msg_show_lib_subtask 'activate service account'
   bl64_gcp_run_gcloud \
     auth \
     activate-service-account \
@@ -91,7 +91,7 @@ function bl64_gcp_login_sa() {
 function _bl64_gcp_configure() {
   bl64_dbg_lib_show_function
   if [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_VAR_FALSE" ]]; then
-    bl64_msg_show_lib_subtask "${_BL64_TXT_CREATE_CFG} (${BL64_GCP_CONFIGURATION_NAME})"
+    bl64_msg_show_lib_subtask "create private GCP configuration (${BL64_GCP_CONFIGURATION_NAME})"
     bl64_gcp_run_gcloud \
       config \
       configurations \
