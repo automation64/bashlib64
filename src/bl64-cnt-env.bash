@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CNT_VERSION='3.4.0'
+  declare BL64_CNT_VERSION='3.4.1'
 
   declare BL64_CNT_MODULE='0'
 
@@ -42,15 +42,5 @@
 
   declare BL64_CNT_PATH_DOCKER_SOCKET=''
 
-  declare _BL64_CNT_TXT_NO_CLI='unable to detect supported container engine'
-  declare _BL64_CNT_TXT_EXISTING_NETWORK='container network already created. No further action needed'
-  declare _BL64_CNT_TXT_CREATE_NETWORK='creating container network'
   declare _BL64_CNT_TXT_LOGIN_REGISTRY='loging to container registry'
-  declare _BL64_CNT_TXT_BUILD='build container image'
-  declare _BL64_CNT_TXT_PUSH='push container image to registry'
-  declare _BL64_CNT_TXT_PULL='pull container image from registry'
-  declare _BL64_CNT_TXT_TAG='add tag to container image'
-  declare _BL64_CNT_TXT_MISSING_FILTER='no filter was selected. Task requires one of them'
-  declare _BL64_CNT_TXT_ERROR_RUN_IN_CONTAINER='current task must be run inside a container'
-  declare _BL64_CNT_TXT_ERROR_RUN_NOT_IN_CONTAINER='current task must not be run inside a container'
 }

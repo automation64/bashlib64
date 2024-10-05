@@ -9,7 +9,7 @@ function bl64_dbg_lib_show_variables() { bl64_msg_show_deprecated 'bl64_dbg_lib_
 function _bl64_dbg_show() {
   local message="$1"
 
-  printf '%s: %s\n' "$_BL64_DBG_TXT_DEBUG" "$message" >&2
+  printf '%s: %s\n' 'Debug' "$message" >&2
 }
 
 #######################################
@@ -30,18 +30,18 @@ function bl64_dbg_runtime_show() {
   local label="${_BL64_DBG_TXT_LABEL_BASH_RUNTIME}"
   bl64_dbg_app_command_enabled || return $last_status
 
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_BASH}: [${BASH}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_BASHOPTS}: [${BASHOPTS:-NONE}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_SHELLOPTS}: [${SHELLOPTS:-NONE}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_BASH_VERSION}: [${BASH_VERSION}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_OSTYPE}: [${OSTYPE:-NONE}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_LC_ALL}: [${LC_ALL:-NONE}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_HOSTNAME}: [${HOSTNAME:-EMPTY}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_EUID}: [${EUID}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_UID}: [${UID}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_BASH_ARGV}: [${BASH_ARGV[*]:-NONE}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_COMMAND}: [${BASH_COMMAND:-NONE}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_STATUS}: [${last_status}]"
+  _bl64_dbg_show "${label} Bash / Interpreter path: [${BASH}]"
+  _bl64_dbg_show "${label} Bash / ShOpt Options: [${BASHOPTS:-NONE}]"
+  _bl64_dbg_show "${label} Bash / Set -o Options: [${SHELLOPTS:-NONE}]"
+  _bl64_dbg_show "${label} Bash / Version: [${BASH_VERSION}]"
+  _bl64_dbg_show "${label} Bash / Detected OS: [${OSTYPE:-NONE}]"
+  _bl64_dbg_show "${label} Shell / Locale setting: [${LC_ALL:-NONE}]"
+  _bl64_dbg_show "${label} Shell / Hostname: [${HOSTNAME:-EMPTY}]"
+  _bl64_dbg_show "${label} Script / User ID: [${EUID}]"
+  _bl64_dbg_show "${label} Script / Effective User ID: [${UID}]"
+  _bl64_dbg_show "${label} Script / Arguments: [${BASH_ARGV[*]:-NONE}]"
+  _bl64_dbg_show "${label} Script / Last executed command: [${BASH_COMMAND:-NONE}]"
+  _bl64_dbg_show "${label} Script / Last exit status: [${last_status}]"
 
   bl64_dbg_runtime_show_paths
   bl64_dbg_runtime_show_callstack
@@ -63,7 +63,7 @@ function bl64_dbg_runtime_show() {
 #   latest exit status (before function call)
 #######################################
 function bl64_dbg_runtime_show_bashlib64() {
-  local label="${_BL64_DBG_TXT_LABEL_BL64_RUNTIME}"
+  local label='[bl64-runtime]'
   bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
   _bl64_dbg_show "${label} BL64_SCRIPT_NAME: [${BL64_SCRIPT_NAME:-NOTSET}]"
   _bl64_dbg_show "${label} BL64_SCRIPT_SID: [${BL64_SCRIPT_SID:-NOTSET}]"
@@ -106,13 +106,13 @@ function bl64_dbg_runtime_show_callstack() {
 function bl64_dbg_runtime_show_paths() {
   local label="${_BL64_DBG_TXT_LABEL_BASH_RUNTIME}"
   bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_SCRIPT_PATH}: [${BL64_SCRIPT_PATH:-EMPTY}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_HOME}: [${HOME:-EMPTY}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_PATH}: [${PATH:-EMPTY}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_CD_PWD}: [${PWD:-EMPTY}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_CD_OLDPWD}: [${OLDPWD:-EMPTY}]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_PWD}: [$(pwd)]"
-  _bl64_dbg_show "${label} ${_BL64_DBG_TXT_TMPDIR}: [${TMPDIR:-NONE}]"
+  _bl64_dbg_show "${label} Initial script path (BL64_SCRIPT_PATH): [${BL64_SCRIPT_PATH:-EMPTY}]"
+  _bl64_dbg_show "${label} Home directory (HOME): [${HOME:-EMPTY}]"
+  _bl64_dbg_show "${label} Search path (PATH): [${PATH:-EMPTY}]"
+  _bl64_dbg_show "${label} Current cd working directory (PWD): [${PWD:-EMPTY}]"
+  _bl64_dbg_show "${label} Previous cd working directory (OLDPWD): [${OLDPWD:-EMPTY}]"
+  _bl64_dbg_show "${label} Current working directory (pwd command): [$(pwd)]"
+  _bl64_dbg_show "${label} Temporary path (TMPDIR): [${TMPDIR:-NONE}]"
 }
 
 #######################################
@@ -289,7 +289,7 @@ function bl64_dbg_app_show_vars() {
 # shellcheck disable=SC2120
 function bl64_dbg_lib_show_function() {
   bl64_dbg_lib_task_enabled || return 0
-  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_FUNCTION} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_LIB_RUN}: ${*}"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_FUNCTION} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] run bashlib64 function. Parameters: ${*}"
   return 0
 }
 
@@ -307,7 +307,7 @@ function bl64_dbg_lib_show_function() {
 # shellcheck disable=SC2120
 function bl64_dbg_app_show_function() {
   bl64_dbg_app_task_enabled || return 0
-  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_FUNCTION} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_APP_RUN}: (${*})"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_FUNCTION} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] run app function. Parameters: (${*})"
   return 0
 }
 

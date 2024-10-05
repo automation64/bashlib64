@@ -209,7 +209,7 @@ function bl64_cnt_build() {
   shift
   shift
 
-  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_BUILD} (Dockerfile: ${file} ${BL64_MSG_COSMETIC_PIPE} Tag: ${tag})"
+  bl64_msg_show_lib_subtask "build container image (Dockerfile: ${file} ${BL64_MSG_COSMETIC_PIPE} Tag: ${tag})"
   bl64_bsh_run_pushd "${context}" &&
     "_bl64_cnt_${BL64_CNT_DRIVER}_build" "$file" "$tag" "$@" &&
     bl64_bsh_run_popd
@@ -240,7 +240,7 @@ function bl64_cnt_push() {
     bl64_check_parameter 'destination' ||
     return $?
 
-  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_PUSH} (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
+  bl64_msg_show_lib_subtask "push container image to registry (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_push" "$source" "$destination"
 }
 
@@ -264,7 +264,7 @@ function bl64_cnt_pull() {
     bl64_check_parameter 'source' ||
     return $?
 
-  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_PULL} (${source})"
+  bl64_msg_show_lib_subtask "pull container image from registry (${source})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_pull" "$source"
 }
 
@@ -305,7 +305,7 @@ function bl64_cnt_tag() {
     bl64_check_parameter 'target' ||
     return $?
 
-  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_TAG} (${source} ${BL64_MSG_COSMETIC_ARROW2} ${target})"
+  bl64_msg_show_lib_subtask "add tag to container image (${source} ${BL64_MSG_COSMETIC_ARROW2} ${target})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_tag" "$source" "$target"
 }
 
@@ -378,7 +378,7 @@ function bl64_cnt_container_is_running() {
   local result=''
 
   if [[ "$name" == "$BL64_VAR_DEFAULT" && "$id" == "$BL64_VAR_DEFAULT" ]]; then
-    bl64_check_alert_parameter_invalid "$BL64_VAR_DEFAULT" "$_BL64_CNT_TXT_MISSING_FILTER (ID, Name)"
+    bl64_check_alert_parameter_invalid "$BL64_VAR_DEFAULT" "no filter was selected. Task requires one of them (ID, Name)"
     return $?
   fi
 
@@ -440,11 +440,11 @@ function bl64_cnt_network_create() {
     return $?
 
   if bl64_cnt_network_is_defined "$network"; then
-    bl64_msg_show_lib_info "${_BL64_CNT_TXT_EXISTING_NETWORK} (${network})"
+    bl64_msg_show_lib_info "container network already created. No further action needed (${network})"
     return 0
   fi
 
-  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_CREATE_NETWORK} (${network})"
+  bl64_msg_show_lib_subtask "creating container network (${network})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_network_create" "$network"
 }
 
@@ -1084,7 +1084,7 @@ function _bl64_cnt_podman_ps_filter() {
 function bl64_cnt_check_in_container() {
   bl64_dbg_lib_show_function
   bl64_cnt_is_inside_container && return 0
-  bl64_msg_show_error "${_BL64_CNT_TXT_ERROR_RUN_IN_CONTAINER}"
+  bl64_msg_show_error 'current task must be run inside a container'
   return $BL64_LIB_ERROR_TASK_REQUIREMENTS
 }
 
@@ -1103,6 +1103,6 @@ function bl64_cnt_check_in_container() {
 function bl64_cnt_check_not_in_container() {
   bl64_dbg_lib_show_function
   bl64_cnt_is_inside_container || return 0
-  bl64_msg_show_error "${_BL64_CNT_TXT_ERROR_RUN_NOT_IN_CONTAINER}"
+  bl64_msg_show_error 'current task must not be run inside a container'
   return $BL64_LIB_ERROR_TASK_REQUIREMENTS
 }
