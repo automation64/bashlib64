@@ -37,7 +37,7 @@ function bl64_k8s_label_set() {
 
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
-  bl64_msg_show_lib_task "${_BL64_K8S_TXT_SET_LABEL} (${resource}/${name}/${key})"
+  bl64_msg_show_lib_task "set or update label (${resource}/${name}/${key})"
   # shellcheck disable=SC2086
   bl64_k8s_run_kubectl \
     "$kubeconfig" \
@@ -86,7 +86,7 @@ function bl64_k8s_annotation_set() {
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
   [[ "$namespace" == "$BL64_VAR_NONE" ]] && namespace='' || namespace="--namespace ${namespace}"
 
-  bl64_msg_show_lib_task "${_BL64_K8S_TXT_SET_ANNOTATION} (${resource}/${name})"
+  bl64_msg_show_lib_task "set or update annotation (${resource}/${name})"
   # shellcheck disable=SC2086
   bl64_k8s_run_kubectl \
     "$kubeconfig" \
@@ -215,7 +215,7 @@ function bl64_k8s_secret_create() {
     return 0
   fi
 
-  bl64_msg_show_lib_task "${_BL64_K8S_TXT_CREATE_SECRET} (${namespace}/${secret}/${key})"
+  bl64_msg_show_lib_task "create generic secret (${namespace}/${secret}/${key})"
   # shellcheck disable=SC2086
   bl64_k8s_run_kubectl "$kubeconfig" \
     'create' $verbosity --namespace="$namespace" \
@@ -262,7 +262,7 @@ function bl64_k8s_secret_copy() {
 
   resource="$($BL64_FS_CMD_MKTEMP)" || return $?
 
-  bl64_msg_show_lib_task "${_BL64_K8S_TXT_GET_SECRET} (${namespace_src}/${secret})"
+  bl64_msg_show_lib_task "get secret definition from source (${namespace_src}/${secret})"
   bl64_k8s_resource_get "$kubeconfig" "$BL64_K8S_RESOURCE_SECRET" "$secret" "$namespace_src" |
     bl64_txt_run_awk $BL64_TXT_SET_AWS_FS ':' '
       BEGIN { metadata = 0 }
@@ -273,7 +273,7 @@ function bl64_k8s_secret_copy() {
   status=$?
 
   if ((status == 0)); then
-    bl64_msg_show_lib_task "${_BL64_K8S_TXT_CREATE_SECRET} (${namespace_dst}/${secret})"
+    bl64_msg_show_lib_task "copy secret to destination (${namespace_dst}/${secret})"
     bl64_k8s_resource_update "$kubeconfig" "$namespace_dst" "$resource"
     status=$?
   fi
@@ -312,7 +312,7 @@ function bl64_k8s_resource_update() {
 
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
-  bl64_msg_show_lib_task "${_BL64_K8S_TXT_RESOURCE_UPDATE} (${definition} -> ${namespace})"
+  bl64_msg_show_lib_task "create or update resource definition (${definition} -> ${namespace})"
   # shellcheck disable=SC2086
   bl64_k8s_run_kubectl \
     "$kubeconfig" \

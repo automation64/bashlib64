@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_K8S_VERSION='3.1.0'
+  declare BL64_K8S_VERSION='3.1.1'
 
   declare BL64_K8S_MODULE='0'
 
@@ -32,14 +32,7 @@
 
   declare _BL64_K8S_TXT_CREATE_NS='create namespace'
   declare _BL64_K8S_TXT_CREATE_SA='create service account'
-  declare _BL64_K8S_TXT_CREATE_SECRET='create generic secret'
-  declare _BL64_K8S_TXT_SET_LABEL='set or update label'
-  declare _BL64_K8S_TXT_SET_ANNOTATION='set or update annotation'
-  declare _BL64_K8S_TXT_GET_SECRET='get secret definition from source'
-  declare _BL64_K8S_TXT_CREATE_SECRET='copy secret to destination'
-  declare _BL64_K8S_TXT_RESOURCE_UPDATE='create or update resource definition'
   declare _BL64_K8S_TXT_RESOURCE_EXISTING='the resource is already created. No further actions are needed'
-  declare _BL64_K8S_TXT_ERROR_KUBECTL_VERSION='unable to determine kubectl version'
   declare _BL64_K8S_TXT_ERROR_INVALID_KUBECONF='kubectl config file not found'
   declare _BL64_K8S_TXT_ERROR_MISSING_COMMAND='kubectl command not provided'
 }
