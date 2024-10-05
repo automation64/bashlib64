@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_DBG_VERSION='3.1.1'
+  declare BL64_DBG_VERSION='3.1.2'
 
   declare BL64_DBG_MODULE='0'
 
@@ -65,32 +65,5 @@
   declare _BL64_DBG_TXT_LABEL_INFO='==='
   declare _BL64_DBG_TXT_LABEL_TRACE='***'
 
-  declare _BL64_DBG_TXT_BASH='Bash / Interpreter path'
-  declare _BL64_DBG_TXT_BASHOPTS='Bash / ShOpt Options'
-  declare _BL64_DBG_TXT_SHELLOPTS='Bash / Set -o Options'
-  declare _BL64_DBG_TXT_BASH_VERSION='Bash / Version'
-  declare _BL64_DBG_TXT_OSTYPE='Bash / Detected OS'
-  declare _BL64_DBG_TXT_LC_ALL='Shell / Locale setting'
-  declare _BL64_DBG_TXT_HOSTNAME='Shell / Hostname'
-  declare _BL64_DBG_TXT_EUID='Script / User ID'
-  declare _BL64_DBG_TXT_UID='Script / Effective User ID'
-  declare _BL64_DBG_TXT_BASH_ARGV='Script / Arguments'
-  declare _BL64_DBG_TXT_COMMAND='Script / Last executed command'
-  declare _BL64_DBG_TXT_STATUS='Script / Last exit status'
-
-  declare _BL64_DBG_TXT_FUNCTION_APP_RUN='run app function with parameters'
-  declare _BL64_DBG_TXT_FUNCTION_LIB_RUN='run bashlib64 function with parameters'
-
   declare _BL64_DBG_TXT_CALLSTACK='Last executed function'
-
-  declare _BL64_DBG_TXT_HOME='Home directory (HOME)'
-  declare _BL64_DBG_TXT_PATH='Search path (PATH)'
-  declare _BL64_DBG_TXT_CD_PWD='Current cd working directory (PWD)'
-  declare _BL64_DBG_TXT_CD_OLDPWD='Previous cd working directory (OLDPWD)'
-  declare _BL64_DBG_TXT_SCRIPT_PATH='Initial script path (BL64_SCRIPT_PATH)'
-  declare _BL64_DBG_TXT_TMPDIR='Temporary path (TMPDIR)'
-  declare _BL64_DBG_TXT_PWD='Current working directory (pwd command)'
-  declare _BL64_DBG_TXT_DEBUG='Debug'
-
-  declare _BL64_DBG_TXT_WRONG_LEVEL='invalid debugging level. Must be one of: '
 }
