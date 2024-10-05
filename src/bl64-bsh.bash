@@ -382,10 +382,14 @@ fi\n
 #######################################
 # Generate bash PATH snippet
 #
+# * Includes common search paths for:
+# *  XDG
+# *  NPM
+#
 # Arguments:
 #   $1: insecure setting?: ON: user paths first. OFF: user paths last. Default: OFF
 #   $2: include system paths?. Default: OFF
-#   $3: extra paths
+#   $3: extra paths, separated by :
 # Outputs:
 #   STDOUT: snippet
 #   STDERR: none
@@ -398,10 +402,24 @@ function bl64_bsh_profile_path_generate() {
   local insecure="${1:-$BL64_VAR_OFF}"
   local system="${2:-$BL64_VAR_OFF}"
   local paths_extra="${3:-}"
-  local paths_base='/bin:/usr/bin:/usr/local/bin'
-  local paths_system='/sbin:/usr/sbin:/usr/local/sbin'
+  local paths_base=''
+  local paths_system=''
+  local paths_user=''
+
+  paths_base+='/bin:'
+  paths_base+='/usr/bin:'
+  paths_base+='/usr/local/bin'
+
+  paths_system+='/sbin:'
+  paths_system+='/usr/sbin:'
+  paths_system+='/usr/local/sbin'
+
   # shellcheck disable=SC2016
-  local paths_user='$HOME/bin:$HOME/.local/bin'
+  paths_user+='$HOME/bin:'
+  # shellcheck disable=SC2016
+  paths_user+='$HOME/.local/bin:'
+  # shellcheck disable=SC2016
+  paths_user+='$HOME/node_modules/.bin'
 
   bl64_lib_flag_is_enabled "$system" &&
     paths_base+=":${paths_system}"
