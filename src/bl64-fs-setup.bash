@@ -2,20 +2,6 @@
 # BashLib64 / Module / Setup / Manage local filesystem
 #######################################
 
-#
-# Deprecation aliases
-#
-# * Aliases to deprecated functions 
-# * Needed to maintain compatibility up to N-2 versions
-#
-
-function bl64_fs_create_dir() { bl64_fs_dir_create "$@"; }
-function bl64_fs_cp_file() { bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$@"; }
-function bl64_fs_cp_dir() { bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" "$@"; }
-function bl64_fs_ln_symbolic() { bl64_fs_create_symlink "$1" "$2"; }
-function bl64_fs_rm_file() { bl64_fs_file_remove "$@"; }
-function bl64_fs_rm_full() { bl64_fs_path_remove "$@"; }
-
 #######################################
 # Setup the bashlib64 module
 #

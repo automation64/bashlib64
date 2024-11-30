@@ -2,15 +2,29 @@
 # BashLib64 / Module / Functions / Show shell debugging information
 #######################################
 
-# DEPRECATED
+#
+# Deprecation aliases
+#
+# * Aliases to deprecated functions 
+# * Needed to maintain compatibility up to N-2 versions
+#
+
 function bl64_dbg_app_show_variables() { bl64_msg_show_deprecated 'bl64_dbg_app_show_variables' 'bl64_dbg_app_show_globals'; bl64_dbg_app_show_globals "$@"; }
 function bl64_dbg_lib_show_variables() { bl64_msg_show_deprecated 'bl64_dbg_lib_show_variables' 'bl64_dbg_lib_show_globals'; bl64_dbg_lib_show_globals "$@"; }
+
+#
+# Internal functions
+#
 
 function _bl64_dbg_show() {
   local message="$1"
 
   printf '%s: %s\n' 'Debug' "$message" >&2
 }
+
+#
+# Public functions
+#
 
 #######################################
 # Show runtime info

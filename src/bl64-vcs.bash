@@ -139,7 +139,7 @@ function bl64_vcs_git_clone() {
 #   $1: URL to the GIT repository
 #   $2: destination path where the repository will be created
 #   $3: branch name. Default: main
-#   $4: include pattern list. Field separator: space
+#   $4: include search_pattern list. Field separator: space
 # Outputs:
 #   STDOUT: git output
 #   STDERR: git stderr
@@ -151,14 +151,14 @@ function bl64_vcs_git_sparse() {
   local source="${1}"
   local destination="${2}"
   local branch="${3:-main}"
-  local pattern="${4}"
+  local search_pattern="${4}"
   local item=''
   local -i status=0
 
   bl64_check_command "$BL64_VCS_CMD_GIT" &&
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
-    bl64_check_parameter 'pattern' || return $?
+    bl64_check_parameter 'search_pattern' || return $?
 
   bl64_fs_create_dir "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" &&
     bl64_bsh_run_pushd "$destination" ||
@@ -173,7 +173,7 @@ function bl64_vcs_git_sparse() {
       bl64_vcs_run_git config core.sparseCheckout true &&
       {
         IFS=' '
-        for item in $pattern; do echo "$item" >>'.git/info/sparse-checkout'; done
+        for item in $search_pattern; do echo "$item" >>'.git/info/sparse-checkout'; done
         unset IFS
       } &&
       bl64_vcs_run_git pull --depth 1 origin "$branch" ||
@@ -185,7 +185,7 @@ function bl64_vcs_git_sparse() {
       bl64_vcs_run_git sparse-checkout set &&
       {
         IFS=' '
-        for item in $pattern; do echo "$item"; done | bl64_vcs_run_git sparse-checkout add --stdin
+        for item in $search_pattern; do echo "$item"; done | bl64_vcs_run_git sparse-checkout add --stdin
       } &&
       bl64_vcs_run_git remote add origin "$source" &&
       bl64_vcs_run_git pull --depth 1 origin "$branch" ||
@@ -249,7 +249,7 @@ function bl64_vcs_github_run_api() {
 #
 # * Uses GitHub API
 # * Assumes repo uses standard github release process which binds the latest release to a tag name representing the last version
-# * Looks for pattern in json output: "tag_name": "xxxxx"
+# * Looks for search_pattern in json output: "tag_name": "xxxxx"
 #
 # Arguments:
 #   $1: repo owner
@@ -302,6 +302,7 @@ function _bl64_vcs_github_release_get_latest() {
 #
 # * Uses standard Changelog format
 # * Uses standard semver tag
+# * Replaces # markers with * to avoid post-processing formatting issues
 #
 # Arguments:
 #   $1: changelog path
@@ -330,7 +331,7 @@ function bl64_vcs_changelog_get_release() {
       "$release_tag"
   )" &&
     [[ -n "$description" ]] &&
-    printf '%s' "$description"
+    printf '%s\n' "$description"
 }
 
 function _bl64_vcs_changelog_get_release() {
@@ -341,18 +342,18 @@ function _bl64_vcs_changelog_get_release() {
   bl64_txt_run_awk \
     -v tag="$release_tag" '
   BEGIN {
-      section = 0
-      pattern = "## \\[" tag "\\]"
+      found = 0
+      search_pattern = "## ." tag "."
   }
-  /^$/ { next }
-  section == 0 && $0 ~ pattern {
-    section = 1
+  found == 0 && $0 ~ search_pattern {
+    found = 1
+    print "** Release: " tag
     next
   }
-  section == 1 && (/^## \[[0-9]+\.[0-9]\.+[0-9]+\]$/ || /^\[[0-9]+\.[0-9]\.+[0-9]+\]: /) {
+  found == 1 && $1 == "##" || $1 ~ /^.[0-9]+.[0-9].+[0-9]+.:/ {
     exit
   }
-  section == 1 {
+  found == 1 {
     gsub(/#/,"*")
     print $0
     next

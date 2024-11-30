@@ -2,7 +2,13 @@
 # BashLib64 / Module / Functions / Interact with Bash shell
 #######################################
 
-# DEPRECATED: to be removed in future releases
+#
+# Deprecation aliases
+#
+# * Aliases to deprecated functions 
+# * Needed to maintain compatibility up to N-2 versions
+#
+
 function bl64_bsh_script_set_id() {
   bl64_msg_show_deprecated 'bl64_bsh_script_set_id' 'bl64_lib_script_set_id'
   bl64_lib_script_set_id "$@"
@@ -11,6 +17,10 @@ function bl64_bsh_script_set_identity() {
   bl64_msg_show_deprecated 'bl64_bsh_script_set_identity' 'bl64_lib_script_set_identity'
   bl64_lib_script_set_identity "$@"
 }
+
+#
+# Public functions
+#
 
 #######################################
 # Get current script location

@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PKG_VERSION='5.2.0'
+  declare BL64_PKG_VERSION='5.3.0'
 
   declare BL64_PKG_MODULE='0'
 
@@ -48,14 +48,5 @@
   declare BL64_PKG_DEF_SUFIX_GPG_FILE='gpg'
   declare BL64_PKG_DEF_SUFIX_YUM_REPOSITORY='repo'
 
-  declare _BL64_PKG_TXT_CLEAN='clean up package manager run-time environment'
-  declare _BL64_PKG_TXT_INSTALL='install packages'
-  declare _BL64_PKG_TXT_UPGRADE='upgrade packages'
-  declare _BL64_PKG_TXT_PREPARE='initialize package manager'
-  declare _BL64_PKG_TXT_REPOSITORY_REFRESH='refresh package repository content'
-  declare _BL64_PKG_TXT_REPOSITORY_ADD='add remote package repository'
   declare _BL64_PKG_TXT_REPOSITORY_EXISTING='requested repository is already present. Continue using existing one.'
-  declare _BL64_PKG_TXT_REPOSITORY_ADD_YUM='create YUM repository definition'
-  declare _BL64_PKG_TXT_REPOSITORY_ADD_APT='create APT repository definition'
-  declare _BL64_PKG_TXT_REPOSITORY_ADD_KEY='install GPG key'
 }

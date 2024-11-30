@@ -1,0 +1,18 @@
+** Release: 19.2.1
+
+*** Added
+
+- all
+  - OS flavor support: to allow compatibility functions to check against OS families instead of particular distros.
+  - AmazonLinux 2023 support
+
+*** Changed
+
+- os
+  - bl64_os_match: renamed to `bl64_os_is_distro`. Old name kept for compatibility until version 21
+  - bl64_os_match_compatible: renamed to `bl64_os_is_compatible`. Old name kept for compatibility until version 21
+
+*** Fixed
+
+- core
+  - Added missing Debian-12 compatibility check
