@@ -6,7 +6,7 @@
 function bl64_os_match() { bl64_msg_show_deprecated 'bl64_os_match' 'bl64_os_is_distro'; bl64_os_is_distro "$@"; }
 function bl64_os_match_compatible() { bl64_msg_show_deprecated 'bl64_os_match_compatible' 'bl64_os_is_compatible'; bl64_os_is_compatible "$@"; }
 
-function _bl64_os_match() {
+function _bl64_os_is_distro() {
   bl64_dbg_lib_show_function "$@"
   local check_compatibility="$1"
   local target="$2"
@@ -285,7 +285,7 @@ function bl64_os_is_distro() {
   bl64_dbg_lib_show_info "Look for [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
-    _bl64_os_match "$BL64_VAR_OFF" "$item"
+    _bl64_os_is_distro "$BL64_VAR_OFF" "$item"
     status=$?
     ((status == 0)) && break
   done
@@ -319,14 +319,14 @@ function bl64_os_is_compatible() {
   bl64_dbg_lib_show_info "Look for exact match [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
   # shellcheck disable=SC2086
   for item in "$@"; do
-    _bl64_os_match "$BL64_VAR_OFF" "$item"
+    _bl64_os_is_distro "$BL64_VAR_OFF" "$item"
     status=$?
     ((status == 0)) && break
   done
   if ((status != 0)); then
     bl64_dbg_lib_show_info "No exact match, look for compatibility"
     for item in "$@"; do
-      _bl64_os_match "$BL64_VAR_ON" "$item"
+      _bl64_os_is_distro "$BL64_VAR_ON" "$item"
       status=$?
       if ((status == 0)); then
         break
