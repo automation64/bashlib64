@@ -76,7 +76,7 @@ function _bl64_pkg_repository_add_yum() {
     bl64_msg_show_warning "${_BL64_PKG_TXT_REPOSITORY_EXISTING} (${definition})" &&
     return 0
 
-  bl64_msg_show_lib_subtask "${_BL64_PKG_TXT_REPOSITORY_ADD_YUM} (${definition})"
+  bl64_msg_show_lib_subtask "create YUM repository definition (${definition})"
   if [[ "$gpgkey" != "$BL64_VAR_NONE" ]]; then
     printf '[%s]\n
 name=%s
@@ -124,7 +124,7 @@ function _bl64_pkg_repository_add_apt() {
     bl64_msg_show_warning "${_BL64_PKG_TXT_REPOSITORY_EXISTING} (${definition})" &&
     return 0
 
-  bl64_msg_show_lib_subtask "${_BL64_PKG_TXT_REPOSITORY_ADD_APT} (${definition})"
+  bl64_msg_show_lib_subtask "create APT repository definition (${definition})"
   if [[ "$gpgkey" != "$BL64_VAR_NONE" ]]; then
     gpgkey_file="${BL64_PKG_PATH_GPG_KEYRINGS}/${name}.${BL64_PKG_DEF_SUFIX_GPG_FILE}"
     printf 'deb [signed-by=%s] %s %s %s\n' \
@@ -161,7 +161,7 @@ function _bl64_pkg_repository_add_apt() {
 function bl64_pkg_repository_refresh() {
   bl64_dbg_lib_show_function
 
-  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_REPOSITORY_REFRESH"
+  bl64_msg_show_lib_subtask 'refresh package repository content'
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -230,7 +230,7 @@ function bl64_pkg_deploy() {
 function bl64_pkg_prepare() {
   bl64_dbg_lib_show_function
 
-  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_PREPARE"
+  bl64_msg_show_lib_subtask 'initialize package manager'
   bl64_pkg_repository_refresh
 }
 
@@ -255,7 +255,7 @@ function bl64_pkg_install() {
 
   bl64_check_parameters_none $# || return $?
 
-  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_INSTALL (${*})"
+  bl64_msg_show_lib_subtask "install packages (${*})"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -303,7 +303,7 @@ function bl64_pkg_install() {
 function bl64_pkg_upgrade() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_UPGRADE"
+  bl64_msg_show_lib_subtask "upgrade packages (${*})"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -351,7 +351,7 @@ function bl64_pkg_cleanup() {
   bl64_dbg_lib_show_function
   local target=''
 
-  bl64_msg_show_lib_subtask "$_BL64_PKG_TXT_CLEAN"
+  bl64_msg_show_lib_subtask 'clean up package manager run-time environment'
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
