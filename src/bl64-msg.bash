@@ -2,6 +2,10 @@
 # BashLib64 / Module / Functions / Display messages
 #######################################
 
+#
+# Internal functions
+#
+
 #######################################
 # Display message helper
 #
@@ -133,6 +137,10 @@ function _bl64_msg_format_ascii() {
   *) bl64_lib_alert_parameter_invalid 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
   esac
 }
+
+#
+# Public functions
+#
 
 #######################################
 # Show script usage information
