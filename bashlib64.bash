@@ -13474,9 +13474,9 @@ function _bl64_pkg_set_options() {
     ;;
   ${BL64_OS_FD}-41.*)
     BL64_PKG_SET_ASSUME_YES='--assumeyes'
-    BL64_PKG_SET_SLIM='--nodocs'
+    BL64_PKG_SET_SLIM='--no-docs'
     BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--verbose'
+    BL64_PKG_SET_VERBOSE=' ' # Not implemented in DNF-5
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     BL64_PKG_SET_ASSUME_YES='--assumeyes'
