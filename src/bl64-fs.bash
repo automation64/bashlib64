@@ -2,6 +2,13 @@
 # BashLib64 / Module / Functions / Manage local filesystem
 #######################################
 
+#
+# Deprecation aliases
+#
+# * Aliases to deprecated functions 
+# * Needed to maintain compatibility up to N-2 versions
+#
+
 #######################################
 # Set object permissions and ownership
 #
@@ -127,6 +134,10 @@ function bl64_fs_copy_files() {
     "$destination" \
     "$@"
 }
+
+#
+# Public functions
+#
 
 #######################################
 # Create one ore more directories, then set owner and permissions

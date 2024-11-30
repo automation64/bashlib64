@@ -2,8 +2,18 @@
 # BashLib64 / Module / Functions / Check for conditions and report status
 #######################################
 
-# DEPRECATED: to be removed in future releases
+#
+# Deprecation aliases
+#
+# * Aliases to deprecated functions 
+# * Needed to maintain compatibility up to N-2 versions
+#
+
 function bl64_check_module_imported() { bl64_msg_show_deprecated 'bl64_check_module_imported' 'bl64_lib_module_imported'; bl64_lib_module_imported "$@"; }
+
+#
+# Public functions
+#
 
 #######################################
 # Check and report if the command is present and has execute permissions for the current user.

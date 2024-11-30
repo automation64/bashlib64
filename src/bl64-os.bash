@@ -2,9 +2,19 @@
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #######################################
 
-# DEPRECATED
+#
+# Deprecation aliases
+#
+# * Aliases to deprecated functions 
+# * Needed to maintain compatibility up to N-2 versions
+#
+
 function bl64_os_match() { bl64_msg_show_deprecated 'bl64_os_match' 'bl64_os_is_distro'; bl64_os_is_distro "$@"; }
 function bl64_os_match_compatible() { bl64_msg_show_deprecated 'bl64_os_match_compatible' 'bl64_os_is_compatible'; bl64_os_is_compatible "$@"; }
+
+#
+# Internal functions
+#
 
 function _bl64_os_is_distro() {
   bl64_dbg_lib_show_function "$@"
@@ -233,6 +243,10 @@ function _bl64_os_get_distro_from_os_release() {
   bl64_dbg_lib_show_vars 'BL64_OS_DISTRO' 'BL64_OS_FLAVOR'
   return 0
 }
+
+#
+# Public functions
+#
 
 #######################################
 # Compare the current OS against the provided flavor
