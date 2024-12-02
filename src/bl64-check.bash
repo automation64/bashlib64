@@ -43,25 +43,25 @@ function bl64_check_command() {
   [[ "$message" == "$BL64_VAR_DEFAULT" ]] && message="$_BL64_CHECK_TXT_COMMAND_NOT_FOUND"
 
   if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (OS: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (OS: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
 
   if [[ "$path" == "$BL64_VAR_UNAVAILABLE" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_INSTALLED} (${command_name:+${_BL64_CHECK_TXT_COMMAND}: ${command_name} ${BL64_MSG_COSMETIC_PIPE} }${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_INSTALLED} (${command_name:+command: ${command_name} ${BL64_MSG_COSMETIC_PIPE} }caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
 
   if [[ ! -e "$path" ]]; then
-    bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_COMMAND}: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${message} (command: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_FOUND
   fi
 
   if [[ ! -x "$path" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE} (${_BL64_CHECK_TXT_COMMAND}: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE} (command: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_EXECUTE
   fi
@@ -91,17 +91,17 @@ function bl64_check_file() {
 
   bl64_check_parameter 'path' || return $?
   if [[ ! -e "$path" ]]; then
-    bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_PATH}: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${message} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -f "$path" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_FILE_NOT_FILE} (${_BL64_CHECK_TXT_PATH}: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_FILE_NOT_FILE} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_FOUND
   fi
   if [[ ! -r "$path" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_FILE_NOT_READABLE} (${_BL64_CHECK_TXT_FILE}: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_FILE_NOT_READABLE} (file: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_READ
   fi
@@ -130,17 +130,17 @@ function bl64_check_directory() {
 
   bl64_check_parameter 'path' || return $?
   if [[ ! -e "$path" ]]; then
-    bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_PATH}: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${message} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_DIRECTORY_NOT_FOUND
   fi
   if [[ ! -d "$path" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_DIRECTORY_NOT_DIR} (${_BL64_CHECK_TXT_PATH}: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_DIRECTORY_NOT_DIR} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_DIRECTORY_NOT_FOUND
   fi
   if [[ ! -r "$path" || ! -x "$path" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE} (${_BL64_CHECK_TXT_PATH}: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_DIRECTORY_NOT_READABLE} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_DIRECTORY_NOT_READ
   fi
@@ -170,7 +170,7 @@ function bl64_check_path() {
 
   bl64_check_parameter 'path' || return $?
   if [[ ! -e "$path" ]]; then
-    bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_PATH}: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${message} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PATH_NOT_FOUND
   fi
@@ -204,23 +204,23 @@ function bl64_check_parameter() {
   local parameter_ref=''
 
   if [[ -z "$parameter_name" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_MISSING} (${_BL64_CHECK_TXT_PARAMETER}: ${parameter_name} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "required parameter is missing (parameter: ${parameter_name} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_EMPTY
   fi
 
   if [[ ! -v "$parameter_name" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_NOT_SET} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "required shell variable is not set (${description} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_MISSING
   fi
 
   parameter_ref="${!parameter_name}"
   if [[ -z "$parameter_ref" || "$parameter_ref" == "${BL64_VAR_NULL}" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_MISSING} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "required parameter is missing (${description} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_EMPTY
   fi
 
   if [[ "$parameter_ref" == "${BL64_VAR_DEFAULT}" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_PARAMETER_DEFAULT} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "required parameter value must be other than default (${description} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_INVALID
   fi
   return 0
@@ -252,14 +252,14 @@ function bl64_check_export() {
   bl64_check_parameter 'export_name' || return $?
 
   if [[ ! -v "$export_name" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_EXPORT_SET} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_EXPORT_SET} (${description} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_EXPORT_SET
   fi
 
   export_ref="${!export_name}"
   if [[ -z "$export_ref" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_EXPORT_EMPTY} (${description} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_EXPORT_EMPTY} (${description} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_EXPORT_EMPTY
   fi
@@ -290,7 +290,7 @@ function bl64_check_path_relative() {
 
   bl64_check_parameter 'path' || return $?
   if [[ "$path" == '/' || "$path" == /* ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_PATH_NOT_RELATIVE} (${_BL64_CHECK_TXT_PATH}: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_PATH_NOT_RELATIVE} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PATH_NOT_RELATIVE
   fi
@@ -320,7 +320,7 @@ function bl64_check_path_not_present() {
 
   bl64_check_parameter 'path' || return $?
   if [[ -e "$path" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_PATH_PRESENT} (${_BL64_CHECK_TXT_PATH}: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_PATH_PRESENT} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PATH_PRESENT
   fi
@@ -351,7 +351,7 @@ function bl64_check_path_absolute() {
 
   bl64_check_parameter 'path' || return $?
   if [[ "$path" != '/' && "$path" != /* ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_PATH_NOT_ABSOLUTE} (${_BL64_CHECK_TXT_PATH}: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_PATH_NOT_ABSOLUTE} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
   fi
@@ -373,7 +373,7 @@ function bl64_check_path_absolute() {
 function bl64_check_privilege_root() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function
   if [[ "$EUID" != '0' ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT} (current id: $EUID ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_PRIVILEGE_IS_NOT_ROOT} (current id: $EUID ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT
   fi
@@ -396,7 +396,7 @@ function bl64_check_privilege_not_root() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function
 
   if [[ "$EUID" == '0' ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_PRIVILEGE_IS_ROOT} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${_BL64_CHECK_TXT_PRIVILEGE_IS_ROOT} (caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_PRIVILEGE_IS_ROOT
   fi
@@ -431,7 +431,7 @@ function bl64_check_overwrite() {
 
   if [[ "$overwrite" == "$BL64_VAR_OFF" || "$overwrite" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -e "$path" ]]; then
-      bl64_msg_show_error "${message:-$_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED} (${_BL64_CHECK_TXT_PATH}: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+      bl64_msg_show_error "${message:-$_BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
       return $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
     fi
   fi
@@ -467,7 +467,7 @@ function bl64_check_overwrite_skip() {
 
   if [[ "$overwrite" == "$BL64_VAR_OFF" || "$overwrite" == "$BL64_VAR_DEFAULT" ]]; then
     if [[ -e "$path" ]]; then
-      bl64_msg_show_warning "${message:-$_BL64_CHECK_TXT_OVERWRITE_SKIP_EXISTING} (${_BL64_CHECK_TXT_PATH}: ${path} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+      bl64_msg_show_warning "${message:-$_BL64_CHECK_TXT_OVERWRITE_SKIP_EXISTING} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
       return 0
     fi
   fi
@@ -495,10 +495,10 @@ function bl64_check_overwrite_skip() {
 function bl64_check_alert_parameter_invalid() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local parameter="${1:-${BL64_VAR_DEFAULT}}"
-  local message="${2:-${_BL64_CHECK_TXT_PARAMETER_INVALID}}"
+  local message="${2:-the requested operation was provided with an invalid parameter value}"
 
   [[ "$parameter" == "$BL64_VAR_DEFAULT" ]] && parameter=''
-  bl64_msg_show_error "${message} (${parameter:+${_BL64_CHECK_TXT_PARAMETER}: ${parameter} ${BL64_MSG_COSMETIC_PIPE} }${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+  bl64_msg_show_error "${message} (${parameter:+parameter: ${parameter} ${BL64_MSG_COSMETIC_PIPE} }caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
   return $BL64_LIB_ERROR_PARAMETER_INVALID
 }
 
@@ -517,7 +517,7 @@ function bl64_check_alert_unsupported() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local extra="${1:-}"
 
-  bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+  bl64_msg_show_error "${_BL64_CHECK_TXT_INCOMPATIBLE} (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
   return $BL64_LIB_ERROR_OS_INCOMPATIBLE
 }
 
@@ -541,7 +541,7 @@ function bl64_check_compatibility_mode() {
   local extra="${1:-}"
 
   if bl64_lib_mode_compability_is_enabled; then
-    bl64_msg_show_warning "${_BL64_CHECK_TXT_COMPATIBILITY_MODE} (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_warning "using generic compatibility mode for untested command version (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
   else
     bl64_check_alert_unsupported "$extra"
     return $?
@@ -566,7 +566,7 @@ function bl64_check_alert_resource_not_found() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local resource="${1:-}"
 
-  bl64_msg_show_error "${_BL64_CHECK_TXT_RESOURCE_NOT_FOUND} (${resource:+resource: ${resource} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+  bl64_msg_show_error "required resource was not found on the system (${resource:+resource: ${resource} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
   return $BL64_LIB_ERROR_APP_MISSING
 }
 
@@ -588,7 +588,7 @@ function bl64_check_alert_undefined() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local target="${1:-}"
 
-  bl64_msg_show_error "${_BL64_CHECK_TXT_UNDEFINED} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE}${target:+ ${BL64_MSG_COSMETIC_PIPE} command: ${target}})"
+  bl64_msg_show_error "${_BL64_CHECK_TXT_UNDEFINED} (caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE}${target:+ ${BL64_MSG_COSMETIC_PIPE} command: ${target}})"
   return $BL64_LIB_ERROR_TASK_UNDEFINED
 }
 
@@ -615,7 +615,7 @@ function bl64_check_alert_module_setup() {
   bl64_check_parameter 'module' || return $?
 
   if [[ "$last_status" != '0' ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_SETUP_FAILED} (${_BL64_CHECK_TXT_MODULE}: ${module} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "failed to setup the requested BashLib64 module (module: ${module} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $last_status
   else
     return 0
@@ -643,7 +643,7 @@ function bl64_check_parameters_none() {
   bl64_check_parameter 'count' || return $?
 
   if [[ "$count" == '0' ]]; then
-    bl64_msg_show_error "${message} (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${message} (caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_PARAMETER_MISSING
   else
     return 0
@@ -675,7 +675,7 @@ function bl64_check_module() {
 
   setup_status="${!module}"
   if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
-    bl64_msg_show_error "${_BL64_CHECK_TXT_MODULE_NOT_SETUP} (${_BL64_CHECK_TXT_MODULE}: ${module} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module (module: ${module} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
   fi
 
@@ -700,12 +700,12 @@ function bl64_check_module() {
 function bl64_check_status() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
   local status="${1:-}"
-  local message="${2:-${_BL64_CHECK_TXT_STATUS_ERROR}}"
+  local message="${2:-task execution failed}"
 
   bl64_check_parameter 'status' || return $?
 
   if [[ "$status" != '0' ]]; then
-    bl64_msg_show_error "${message} (status: ${status} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${message} (status: ${status} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return "$status"
   else
@@ -730,8 +730,8 @@ function bl64_check_status() {
 function bl64_check_home() {
   bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function
 
-  bl64_check_export 'HOME' "$_BL64_CHECK_TXT_HOME_MISSING" &&
-    bl64_check_directory "$HOME" "$_BL64_CHECK_TXT_HOME_DIR_MISSING"
+  bl64_check_export 'HOME' 'standard shell variable HOME is not defined' &&
+    bl64_check_directory "$HOME" "unable to find user's HOME directory"
 }
 
 #######################################
@@ -762,7 +762,7 @@ function bl64_check_command_search_path() {
   full_path="$(type -p "${file}")"
   # shellcheck disable=SC2181
   if (($? != 0)); then
-    bl64_msg_show_error "${message} (command: ${file} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${message} (command: ${file} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_FOUND
   fi

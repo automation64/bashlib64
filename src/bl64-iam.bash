@@ -36,11 +36,11 @@ function bl64_iam_user_add() {
     return $?
 
   if bl64_iam_user_is_created "$login"; then
-    bl64_msg_show_warning "${_BL64_IAM_TXT_EXISTING_USER} ($login)"
+    bl64_msg_show_warning "user already created, re-using existing one ($login)"
     return 0
   fi
 
-  bl64_msg_show_lib_subtask "$_BL64_IAM_TXT_ADD_USER ($login)"
+  bl64_msg_show_lib_subtask "create local user account ($login)"
   [[ "$home" == "$BL64_VAR_DEFAULT" ]] && home=''
   [[ "$group" == "$BL64_VAR_DEFAULT" ]] && group=''
   [[ "$shell" == "$BL64_VAR_DEFAULT" ]] && shell=''
@@ -132,11 +132,11 @@ function bl64_iam_group_add() {
     return $?
 
   if bl64_iam_group_is_created "$group_name"; then
-    bl64_msg_show_warning "${_BL64_IAM_TXT_EXISTING_GROUP} ($group_name)"
+    bl64_msg_show_warning "group already created, re-using existing one ($group_name)"
     return 0
   fi
 
-  bl64_msg_show_lib_subtask "$_BL64_IAM_TXT_ADD_GROUP ($group_name)"
+  bl64_msg_show_lib_subtask "create local user group ($group_name)"
   [[ "$group_id" == "$BL64_VAR_DEFAULT" ]] && group_id=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
@@ -282,12 +282,12 @@ function bl64_iam_user_get_current() {
 function bl64_iam_check_user() {
   bl64_dbg_lib_show_function "$@"
   local user="${1:-}"
-  local message="${2:-${_BL64_IAM_TXT_USER_NOT_FOUND}}"
+  local message="${2:-required user is not present in the operating system}"
 
   bl64_check_parameter 'user' || return $?
 
   if ! bl64_iam_user_is_created "$user"; then
-    bl64_msg_show_error "${message} (user: ${user} ${BL64_MSG_COSMETIC_PIPE} ${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${message} (user: ${user} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     return $BL64_LIB_ERROR_USER_NOT_FOUND
   else
     return 0
@@ -577,7 +577,7 @@ function bl64_iam_xdg_create() {
   bl64_check_parameter 'home_path' ||
     return $?
 
-  bl64_msg_show_lib_task "${_BL64_IAM_TXT_XDG_CREATE} (${home_path})"
+  bl64_msg_show_lib_task "create user XDG directories (${home_path})"
   [[ "$dir_mode" == "$BL64_VAR_DEFAULT" ]] && dir_mode='0750'
   bl64_fs_dir_create "$dir_mode" "$dir_user" "$dir_group" \
     "$xdg_config" \
@@ -618,7 +618,7 @@ function bl64_iam_user_modify() {
   bl64_check_parameter 'login' ||
     return $?
 
-  bl64_msg_show_lib_subtask "$_BL64_IAM_TXT_MOD_USER ($login)"
+  bl64_msg_show_lib_subtask "modify local user account ($login)"
   [[ "$group" == "$BL64_VAR_DEFAULT" ]] && group=''
   [[ "$shell" == "$BL64_VAR_DEFAULT" ]] && shell=''
   [[ "$gecos" == "$BL64_VAR_DEFAULT" ]] && gecos=''

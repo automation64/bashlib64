@@ -75,28 +75,4 @@
   declare BL64_FS_SAFEGUARD_POSTFIX='.bl64_fs_safeguard'
 
   declare BL64_FS_TMP_PREFIX='bl64tmp'
-
-  declare _BL64_FS_TXT_CLEANUP_CACHES='clean up OS cache contents'
-  declare _BL64_FS_TXT_CLEANUP_LOGS='clean up OS logs'
-  declare _BL64_FS_TXT_CLEANUP_TEMP='clean up OS temporary files'
-  declare _BL64_FS_TXT_CREATE_DIR_PATH='create directory'
-  declare _BL64_FS_TXT_MERGE_ADD_SOURCE='merge content from source'
-  declare _BL64_FS_TXT_MERGE_DIRS='merge directories content'
-  declare _BL64_FS_TXT_RESTORE_OBJECT='restore original file from backup'
-  declare _BL64_FS_TXT_SAFEGUARD_FAILED='unable to safeguard requested path'
-  declare _BL64_FS_TXT_SAFEGUARD_OBJECT='backup original file'
-  declare _BL64_FS_TXT_SYMLINK_CREATE='create symbolick link'
-  declare _BL64_FS_TXT_SYMLINK_EXISTING='target symbolick link is already present. No further action taken'
-  declare _BL64_FS_TXT_CREATE_FILE='create empty regular file'
-  declare _BL64_FS_TXT_UMASK_SET='temporary change current script umask'
-
-  declare _BL64_FS_TXT_WARN_EXISTING_FILE='target file is already created'
-  declare _BL64_FS_TXT_ERROR_NOT_TMPDIR='provided directory was not created by bl64_fs_create_tmpdir'
-  declare _BL64_FS_TXT_ERROR_NOT_TMPFILE='provided directory was not created by bl64_fs_create_tmpfile'
-  declare _BL64_FS_TXT_ERROR_INVALID_FILE_TARGET='invalid file destination. Provided path exists and is a directory'
-  declare _BL64_FS_TXT_ERROR_INVALID_DIR_TARGET='invalid directory destination. Provided path exists and is a file'
-
-  declare _BL64_FS_TXT_SET_MODE='set new file permissions'
-  declare _BL64_FS_TXT_SET_OWNER='set new file owner'
-  declare _BL64_FS_TXT_SET_GROUP='set new file group'
 }

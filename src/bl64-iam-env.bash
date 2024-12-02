@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_IAM_VERSION='5.1.1'
+  declare BL64_IAM_VERSION='5.1.2'
 
   declare BL64_IAM_MODULE='0'
 
@@ -24,12 +24,4 @@
   declare BL64_IAM_SET_USERADD_UID=''
 
   declare BL64_IAM_ALIAS_USERADD=''
-
-  declare _BL64_IAM_TXT_MOD_USER='modify local user account'
-  declare _BL64_IAM_TXT_ADD_USER='create local user account'
-  declare _BL64_IAM_TXT_ADD_GROUP='create local user group'
-  declare _BL64_IAM_TXT_XDG_CREATE='create user XDG directories'
-  declare _BL64_IAM_TXT_EXISTING_USER='user already created, re-using existing one'
-  declare _BL64_IAM_TXT_EXISTING_GROUP='group already created, re-using existing one'
-  declare _BL64_IAM_TXT_USER_NOT_FOUND='required user is not present in the operating system'
 }

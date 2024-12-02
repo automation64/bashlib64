@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TF_VERSION='2.0.0'
+  declare BL64_TF_VERSION='2.0.1'
 
   declare BL64_TF_MODULE='0'
 
@@ -29,6 +29,4 @@
 
   declare BL64_TF_DEF_PATH_LOCK=''
   declare BL64_TF_DEF_PATH_RUNTIME=''
-
-  declare _BL64_TF_TXT_ERROR_GET_VERSION='failed to get terraform CLI version'
 }

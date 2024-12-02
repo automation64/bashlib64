@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CNT_VERSION='3.4.1'
+  declare BL64_CNT_VERSION='3.4.2'
 
   declare BL64_CNT_MODULE='0'
 
@@ -41,6 +41,4 @@
   declare BL64_CNT_SET_STATUS_RUNNING=''
 
   declare BL64_CNT_PATH_DOCKER_SOCKET=''
-
-  declare _BL64_CNT_TXT_LOGIN_REGISTRY='loging to container registry'
 }
