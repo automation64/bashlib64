@@ -278,7 +278,7 @@ function bl64_k8s_secret_copy() {
     status=$?
   fi
 
-  [[ -f "$resource" ]] && bl64_fs_rm_file "$resource"
+  [[ -f "$resource" ]] && bl64_fs_file_remove "$resource"
   return $status
 }
 

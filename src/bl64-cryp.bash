@@ -185,7 +185,7 @@ function bl64_cryp_gpg_key_dearmor() {
   if ((replace == 1)); then
     bl64_dbg_lib_show_info "replacing key (${target_key_file} -> ${source_key_file})"
     "$BL64_OS_CMD_CAT" "$target_key_file" >"$source_key_file" &&
-      bl64_fs_rm_file "$target_key_file"
+      bl64_fs_file_remove "$target_key_file"
   else
     bl64_fs_path_permission_set "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" "$target_key_file"
   fi

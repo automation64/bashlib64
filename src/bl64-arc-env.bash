@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ARC_VERSION='3.3.0'
+  declare BL64_ARC_VERSION='3.3.1'
 
   declare BL64_ARC_MODULE='0'
 

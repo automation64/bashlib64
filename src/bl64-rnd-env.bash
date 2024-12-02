@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034,SC2155
 {
-  declare BL64_RND_VERSION='2.0.0'
+  declare BL64_RND_VERSION='2.0.1'
 
   declare BL64_RND_MODULE='0'
 
@@ -22,7 +22,4 @@
   declare BL64_RND_POOL_DIGITS_MAX_IDX="$((${#BL64_RND_POOL_DIGITS} - 1))"
   declare BL64_RND_POOL_ALPHANUMERIC="${BL64_RND_POOL_UPPERCASE}${BL64_RND_POOL_LOWERCASE}${BL64_RND_POOL_DIGITS}"
   declare BL64_RND_POOL_ALPHANUMERIC_MAX_IDX="$((${#BL64_RND_POOL_ALPHANUMERIC} - 1))"
-
-  declare _BL64_RND_TXT_LENGHT_MIN='length can not be less than'
-  declare _BL64_RND_TXT_LENGHT_MAX='length can not be greater than'
 }

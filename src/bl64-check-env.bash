@@ -4,14 +4,9 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CHECK_VERSION='6.1.1'
+  declare BL64_CHECK_VERSION='6.1.2'
 
   declare BL64_CHECK_MODULE='0'
-
-  declare _BL64_CHECK_TXT_PARAMETER_MISSING='required parameter is missing'
-  declare _BL64_CHECK_TXT_PARAMETER_NOT_SET='required shell variable is not set'
-  declare _BL64_CHECK_TXT_PARAMETER_DEFAULT='required parameter value must be other than default'
-  declare _BL64_CHECK_TXT_PARAMETER_INVALID='the requested operation was provided with an invalid parameter value'
 
   declare _BL64_CHECK_TXT_COMMAND_NOT_FOUND='required command is not present'
   declare _BL64_CHECK_TXT_COMMAND_NOT_EXECUTABLE='required command is present but has no execution permission'
@@ -44,21 +39,4 @@
   declare _BL64_CHECK_TXT_UNDEFINED='requested command is not defined or implemented'
   declare _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one parameter and none was provided'
   declare _BL64_CHECK_TXT_FAILED='task execution failed'
-
-  declare _BL64_CHECK_TXT_MODULE_SETUP_FAILED='failed to setup the requested BashLib64 module'
-  declare _BL64_CHECK_TXT_MODULE_NOT_SETUP='required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module'
-
-  declare _BL64_CHECK_TXT_HOME_MISSING='standard shell variable HOME is not defined'
-  declare _BL64_CHECK_TXT_HOME_DIR_MISSING="unable to find user's HOME directory"
-
-  declare _BL64_CHECK_TXT_RESOURCE_NOT_FOUND='required resource was not found on the system'
-  declare _BL64_CHECK_TXT_STATUS_ERROR='task execution failed'
-  declare _BL64_CHECK_TXT_COMPATIBILITY_MODE='using generic compatibility mode for untested command version'
-
-  declare _BL64_CHECK_TXT_COMMAND='command'
-  declare _BL64_CHECK_TXT_FILE='file'
-  declare _BL64_CHECK_TXT_PATH='path'
-  declare _BL64_CHECK_TXT_FUNCTION='caller'
-  declare _BL64_CHECK_TXT_MODULE='module'
-  declare _BL64_CHECK_TXT_PARAMETER='parameter'
 }

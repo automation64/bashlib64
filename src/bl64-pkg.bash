@@ -373,7 +373,7 @@ function bl64_pkg_cleanup() {
     bl64_pkg_run_apk 'cache' 'clean'
     target='/var/cache/apk'
     if [[ -d "$target" ]]; then
-      bl64_fs_rm_full ${target}/[[:alpha:]]*
+      bl64_fs_path_remove ${target}/[[:alpha:]]*
     fi
     ;;
   ${BL64_OS_MCOS}-*)

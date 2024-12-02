@@ -105,7 +105,7 @@ function bl64_vcs_git_clone() {
     return $?
 
   bl64_msg_show_lib_subtask "clone single branch (${source}/${branch} -> ${destination})"
-  bl64_fs_create_dir "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" &&
+  bl64_fs_dir_create "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" &&
     bl64_bsh_run_pushd "$destination" ||
     return $?
 
@@ -160,7 +160,7 @@ function bl64_vcs_git_sparse() {
     bl64_check_parameter 'destination' &&
     bl64_check_parameter 'search_pattern' || return $?
 
-  bl64_fs_create_dir "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" &&
+  bl64_fs_dir_create "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" &&
     bl64_bsh_run_pushd "$destination" ||
     return $?
 
