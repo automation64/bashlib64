@@ -579,7 +579,7 @@ function bl64_iam_xdg_create() {
 
   bl64_msg_show_lib_task "${_BL64_IAM_TXT_XDG_CREATE} (${home_path})"
   [[ "$dir_mode" == "$BL64_VAR_DEFAULT" ]] && dir_mode='0750'
-  bl64_fs_create_dir "$dir_mode" "$dir_user" "$dir_group" \
+  bl64_fs_dir_create "$dir_mode" "$dir_user" "$dir_group" \
     "$xdg_config" \
     "$xdg_local" \
     "$xdg_cache" \

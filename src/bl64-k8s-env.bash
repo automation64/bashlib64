@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_K8S_VERSION='3.1.1'
+  declare BL64_K8S_VERSION='3.1.2'
 
   declare BL64_K8S_MODULE='0'
 

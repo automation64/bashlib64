@@ -361,7 +361,7 @@ function bl64_fs_merge_files() {
     status=$?
   else
     bl64_dbg_lib_show_comments "merge failed, removing incomplete file (${destination})"
-    [[ -f "$destination" ]] && bl64_fs_rm_file "$destination"
+    [[ -f "$destination" ]] && bl64_fs_file_remove "$destination"
   fi
 
   return $status
@@ -396,23 +396,23 @@ function bl64_fs_merge_dir() {
   bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_DIRS} (${source} ${BL64_MSG_COSMETIC_ARROW2} ${target})"
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_fs_cp_dir --no-target-directory "$source" "$target"
+    bl64_fs_run_cp --no-target-directory "$source" "$target"
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    bl64_fs_cp_dir --no-target-directory "$source" "$target"
+    bl64_fs_run_cp --no-target-directory "$source" "$target"
     ;;
   ${BL64_OS_SLES}-*)
-    bl64_fs_cp_dir --no-target-directory "$source" "$target"
+    bl64_fs_run_cp --no-target-directory "$source" "$target"
     ;;
   ${BL64_OS_ALP}-*)
     # shellcheck disable=SC2086
     shopt -sq dotglob &&
-      bl64_fs_cp_dir ${source}/* -t "$target" &&
+      bl64_fs_run_cp ${source}/* -t "$target" &&
       shopt -uq dotglob
     ;;
   ${BL64_OS_MCOS}-*)
     # shellcheck disable=SC2086
-    bl64_fs_cp_dir ${source}/ "$target"
+    bl64_fs_run_cp ${source}/ "$target"
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -631,11 +631,11 @@ function bl64_fs_cleanup_tmps() {
 
   target='/tmp'
   bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CLEANUP_TEMP} (${target})"
-  bl64_fs_rm_full -- ${target}/[[:alnum:]]*
+  bl64_fs_path_remove -- ${target}/[[:alnum:]]*
 
   target='/var/tmp'
   bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CLEANUP_TEMP} (${target})"
-  bl64_fs_rm_full -- ${target}/[[:alnum:]]*
+  bl64_fs_path_remove -- ${target}/[[:alnum:]]*
   return 0
 }
 
@@ -658,7 +658,7 @@ function bl64_fs_cleanup_logs() {
 
   if [[ -d "$target" ]]; then
     bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CLEANUP_LOGS} (${target})"
-    bl64_fs_rm_full ${target}/[[:alnum:]]*
+    bl64_fs_path_remove ${target}/[[:alnum:]]*
   fi
   return 0
 }
@@ -682,7 +682,7 @@ function bl64_fs_cleanup_caches() {
 
   if [[ -d "$target" ]]; then
     bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CLEANUP_CACHES} (${target})"
-    bl64_fs_rm_full ${target}/[[:alnum:]]*
+    bl64_fs_path_remove ${target}/[[:alnum:]]*
   fi
   return 0
 }
@@ -864,13 +864,13 @@ function bl64_fs_restore() {
   # Check if restore is needed based on the operation result
   if ((result == 0)); then
     bl64_dbg_lib_show_comments 'operation was ok, backup no longer needed, remove it'
-    [[ -e "$backup" ]] && bl64_fs_rm_full "$backup"
+    [[ -e "$backup" ]] && bl64_fs_path_remove "$backup"
 
     # shellcheck disable=SC2086
     return 0
   else
     bl64_dbg_lib_show_comments 'operation was NOT ok, remove invalid content'
-    [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
+    [[ -e "$destination" ]] && bl64_fs_path_remove "$destination"
 
     bl64_msg_show_lib_subtask "${_BL64_FS_TXT_RESTORE_OBJECT} ([${backup}]->[${destination}])"
     # shellcheck disable=SC2086
@@ -1165,13 +1165,13 @@ function bl64_fs_set_ephemeral() {
   local group="${5:-${BL64_VAR_DEFAULT}}"
 
   if [[ "$temporal" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_fs_create_dir "$mode" "$user" "$group" "$temporal" &&
+    bl64_fs_dir_create "$mode" "$user" "$group" "$temporal" &&
       BL64_FS_PATH_TEMPORAL="$temporal" ||
       return $?
   fi
 
   if [[ "$cache" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_fs_create_dir "$mode" "$user" "$group" "$cache" &&
+    bl64_fs_dir_create "$mode" "$user" "$group" "$cache" &&
       BL64_FS_PATH_CACHE="$cache" ||
       return $?
   fi
@@ -1251,7 +1251,7 @@ function bl64_fs_rm_tmpdir() {
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
 
-  bl64_fs_rm_full "$tmpdir"
+  bl64_fs_path_remove "$tmpdir"
 }
 
 #######################################
@@ -1279,7 +1279,7 @@ function bl64_fs_rm_tmpfile() {
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
 
-  bl64_fs_rm_file "$tmpfile"
+  bl64_fs_file_remove "$tmpfile"
 }
 
 #######################################
@@ -1372,7 +1372,7 @@ function bl64_fs_create_symlink() {
 
   if [[ -e "$destination" ]]; then
     if [[ "$overwrite" == "$BL64_VAR_ON" ]]; then
-      bl64_fs_rm_file "$destination" ||
+      bl64_fs_file_remove "$destination" ||
         return $?
     else
       bl64_msg_show_warning "${_BL64_FS_TXT_SYMLINK_EXISTING} (${destination})"

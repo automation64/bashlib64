@@ -127,7 +127,7 @@ function bl64_rxtx_git_get_dir() {
     bl64_msg_show_lib_subtask "remove git metadata (${destination}/.git)"
     # shellcheck disable=SC2164
     bl64_bsh_run_pushd "$destination" || return $?
-    bl64_fs_rm_full '.git' >/dev/null
+    bl64_fs_path_remove '.git' >/dev/null
     bl64_bsh_run_popd
   fi
 
@@ -225,7 +225,7 @@ function _bl64_rxtx_git_get_dir_root() {
     bl64_fs_run_mv "$transition" "$destination"
   status=$?
 
-  [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
+  [[ -d "$repo" ]] && bl64_fs_path_remove "$repo" >/dev/null
   return $status
 }
 
@@ -260,7 +260,7 @@ function _bl64_rxtx_git_get_dir_sub() {
     bl64_fs_run_mv "${transition}" "$destination" >/dev/null
   status=$?
 
-  [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
+  [[ -d "$repo" ]] && bl64_fs_path_remove "$repo" >/dev/null
   return $status
 }
 

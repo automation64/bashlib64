@@ -179,7 +179,7 @@ function bl64_arc_open_tar() {
   status=$?
 
   if ((status == 0)); then
-    bl64_fs_rm_file "$source"
+    bl64_fs_file_remove "$source"
     bl64_bsh_run_popd
   fi
   return $status
@@ -222,7 +222,7 @@ function bl64_arc_open_zip() {
     "$source"
   status=$?
 
-  ((status == 0)) && bl64_fs_rm_file "$source"
+  ((status == 0)) && bl64_fs_file_remove "$source"
 
   return $status
 }

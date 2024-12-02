@@ -32,7 +32,7 @@ function bl64_rbac_add_root() {
 
   if [[ -s "$BL64_RBAC_FILE_SUDOERS" ]]; then
     bl64_dbg_lib_show_info "backup original sudoers (${BL64_RBAC_FILE_SUDOERS} -> ${old_sudoers})"
-    bl64_fs_cp_file "${BL64_RBAC_FILE_SUDOERS}" "$old_sudoers"
+    bl64_fs_run_cp "${BL64_RBAC_FILE_SUDOERS}" "$old_sudoers"
     status=$?
     ((status != 0)) && bl64_msg_show_error "unable to backup sudoers file (${BL64_RBAC_FILE_SUDOERS})" && return $status
 
