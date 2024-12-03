@@ -124,11 +124,11 @@ function bl64_k8s_namespace_create() {
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_NS" "$namespace"; then
-    bl64_msg_show_lib_info "${_BL64_K8S_TXT_RESOURCE_EXISTING} (${_BL64_K8S_TXT_CREATE_NS}:${namespace})"
+    bl64_msg_show_lib_info "the resource is already created. No further actions are needed (namespace:${namespace})"
     return 0
   fi
 
-  bl64_msg_show_lib_task "${_BL64_K8S_TXT_CREATE_NS} (${namespace})"
+  bl64_msg_show_lib_task "create namespace (${namespace})"
   # shellcheck disable=SC2086
   bl64_k8s_run_kubectl "$kubeconfig" \
     'create' $verbosity "$BL64_K8S_RESOURCE_NS" "$namespace"
@@ -164,11 +164,11 @@ function bl64_k8s_sa_create() {
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_SA" "$sa" "$namespace"; then
-    bl64_msg_show_lib_info "${_BL64_K8S_TXT_RESOURCE_EXISTING} (${_BL64_K8S_TXT_CREATE_SA}:${sa})"
+    bl64_msg_show_lib_info "the resource is already created. No further actions are needed (${_BL64_K8S_TXT_CREATE_SA}:${sa})"
     return 0
   fi
 
-  bl64_msg_show_lib_task "${_BL64_K8S_TXT_CREATE_SA} (${namespace}/${sa})"
+  bl64_msg_show_lib_task "create service account (${namespace}/${sa})"
   # shellcheck disable=SC2086
   bl64_k8s_run_kubectl "$kubeconfig" \
     'create' $verbosity --namespace="$namespace" "$BL64_K8S_RESOURCE_SA" "$sa"
@@ -211,7 +211,7 @@ function bl64_k8s_secret_create() {
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_SECRET" "$secret" "$namespace"; then
-    bl64_msg_show_lib_info "${_BL64_K8S_TXT_RESOURCE_EXISTING} (${BL64_K8S_RESOURCE_SECRET}:${secret})"
+    bl64_msg_show_lib_info "the resource is already created. No further actions are needed (${BL64_K8S_RESOURCE_SECRET}:${secret})"
     return 0
   fi
 
@@ -256,7 +256,7 @@ function bl64_k8s_secret_copy() {
     return $?
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_SECRET" "$secret" "$namespace_dst"; then
-    bl64_msg_show_lib_info "${_BL64_K8S_TXT_RESOURCE_EXISTING} (${BL64_K8S_RESOURCE_SECRET}:${secret})"
+    bl64_msg_show_lib_info "the resource is already created. No further actions are needed (${BL64_K8S_RESOURCE_SECRET}:${secret})"
     return 0
   fi
 
@@ -388,13 +388,13 @@ function bl64_k8s_run_kubectl() {
     bl64_check_module 'BL64_K8S_MODULE' ||
     return $?
   shift
-  bl64_check_parameters_none "$#" "$_BL64_K8S_TXT_ERROR_MISSING_COMMAND" ||
+  bl64_check_parameters_none "$#" 'missing kubectl command' ||
     return $?
 
   if [[ "$kubeconfig" == "$BL64_VAR_DEFAULT" ]]; then
     kubeconfig=''
   else
-    bl64_check_file "$kubeconfig" "$_BL64_K8S_TXT_ERROR_INVALID_KUBECONF" ||
+    bl64_check_file "$kubeconfig" 'kubectl config file not found' ||
       return $?
     kubeconfig="--kubeconfig=${kubeconfig}"
   fi
@@ -436,12 +436,12 @@ function bl64_k8s_run_kubectl_plugin() {
     bl64_check_module 'BL64_K8S_MODULE' ||
     return $?
   shift
-  bl64_check_parameters_none "$#" "$_BL64_K8S_TXT_ERROR_MISSING_COMMAND" ||
+  bl64_check_parameters_none "$#" 'missing kubectl command' ||
     return $?
 
   bl64_k8s_blank_kubectl
   if [[ "$kubeconfig" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_check_file "$kubeconfig" "$_BL64_K8S_TXT_ERROR_INVALID_KUBECONF" ||
+    bl64_check_file "$kubeconfig" 'kubectl config file not found' ||
       return $?
     export KUBECONFIG="$kubeconfig"
   fi

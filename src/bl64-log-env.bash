@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_LOG_VERSION='2.1.1'
+  declare BL64_LOG_VERSION='2.1.2'
 
   declare BL64_LOG_MODULE='0'
 
@@ -29,8 +29,4 @@
   declare BL64_LOG_REPOSITORY=''
   declare BL64_LOG_DESTINATION=''
   declare BL64_LOG_RUNTIME=''
-
-  declare _BL64_LOG_TXT_INVALID_TYPE='invalid log type. Please use any of BL64_LOG_TYPE_*'
-  declare _BL64_LOG_TXT_SET_TARGET_FAILED='failed to set log target'
-  declare _BL64_LOG_TXT_CREATE_REPOSITORY='create log repository'
 }

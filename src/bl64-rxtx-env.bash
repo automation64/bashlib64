@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_RXTX_VERSION='2.4.1'
+  declare BL64_RXTX_VERSION='2.4.2'
 
   declare BL64_RXTX_MODULE='0'
 
@@ -33,11 +33,4 @@
 
   # Public server
   declare BL64_RXTX_GITHUB_URL='https://github.com'
-
-  declare _BL64_RXTX_TXT_MISSING_COMMAND='no web transfer command was found on the system'
-  declare _BL64_RXTX_TXT_EXISTING_DESTINATION='destination path is not empty. No action taken.'
-  declare _BL64_RXTX_TXT_CREATION_PROBLEM='unable to create temporary git repo'
-  declare _BL64_RXTX_TXT_DOWNLOAD_FILE='download file'
-  declare _BL64_RXTX_TXT_ERROR_DOWNLOAD_FILE='file download failed'
-  declare _BL64_RXTX_TXT_ERROR_DOWNLOAD_DIR='directory download failed'
 }

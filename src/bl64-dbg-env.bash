@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_DBG_VERSION='3.1.2'
+  declare BL64_DBG_VERSION='3.1.3'
 
   declare BL64_DBG_MODULE='0'
 
@@ -59,7 +59,6 @@
   declare _BL64_DBG_TXT_INFO='dev-info'
 
   declare _BL64_DBG_TXT_LABEL_BASH_RUNTIME='[bash-runtime]'
-  declare _BL64_DBG_TXT_LABEL_BL64_RUNTIME='[bl64-runtime]'
   declare _BL64_DBG_TXT_LABEL_BASH_VARIABLE='[bash-variable]'
   declare _BL64_DBG_TXT_LABEL_FUNCTION='>>>'
   declare _BL64_DBG_TXT_LABEL_INFO='==='

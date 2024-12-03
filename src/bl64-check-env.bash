@@ -33,10 +33,4 @@
   declare _BL64_CHECK_TXT_PRIVILEGE_IS_ROOT='the task should not be run with root privilege. Please run the script as a regular user and not using SUDO'
 
   declare _BL64_CHECK_TXT_OVERWRITE_NOT_PERMITED='target is already present and overwrite is not permitted. Unable to continue'
-  declare _BL64_CHECK_TXT_OVERWRITE_SKIP_EXISTING='target is already present and overwrite is not requested. Target is left as is'
-
-  declare _BL64_CHECK_TXT_INCOMPATIBLE='the requested operation is not supported on the current OS'
-  declare _BL64_CHECK_TXT_UNDEFINED='requested command is not defined or implemented'
-  declare _BL64_CHECK_TXT_NOARGS='the requested operation requires at least one parameter and none was provided'
-  declare _BL64_CHECK_TXT_FAILED='task execution failed'
 }
