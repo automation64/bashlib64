@@ -32,7 +32,8 @@ function bl64_rbac_add_root() {
 
   if [[ -s "$BL64_RBAC_FILE_SUDOERS" ]]; then
     bl64_dbg_lib_show_info "backup original sudoers (${BL64_RBAC_FILE_SUDOERS} -> ${old_sudoers})"
-    bl64_fs_run_cp "${BL64_RBAC_FILE_SUDOERS}" "$old_sudoers"
+    bl64_fs_path_copy "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+      "$old_sudoers" "${BL64_RBAC_FILE_SUDOERS}"
     status=$?
     ((status != 0)) && bl64_msg_show_error "unable to backup sudoers file (${BL64_RBAC_FILE_SUDOERS})" && return $status
 
@@ -59,7 +60,7 @@ function bl64_rbac_add_root() {
     status=$?
     ((status != 0)) && bl64_msg_show_error "unable to promote new sudoers file (${new_sudoers}->${BL64_RBAC_FILE_SUDOERS})" && return $status
   else
-    printf '%s ALL=(ALL) NOPASSWD: ALL\n' "$user" > "$BL64_RBAC_FILE_SUDOERS"
+    printf '%s ALL=(ALL) NOPASSWD: ALL\n' "$user" >"$BL64_RBAC_FILE_SUDOERS"
     status=$?
     ((status != 0)) && bl64_msg_show_error "unable to create new sudoers file (${BL64_RBAC_FILE_SUDOERS})" && return $status
   fi
