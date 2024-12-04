@@ -47,6 +47,4 @@
   declare BL64_PKG_DEF_SUFIX_APT_REPOSITORY='list'
   declare BL64_PKG_DEF_SUFIX_GPG_FILE='gpg'
   declare BL64_PKG_DEF_SUFIX_YUM_REPOSITORY='repo'
-
-  declare _BL64_PKG_TXT_REPOSITORY_EXISTING='requested repository is already present. Continue using existing one.'
 }

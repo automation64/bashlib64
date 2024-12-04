@@ -164,7 +164,7 @@ function bl64_k8s_sa_create() {
   bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_SA" "$sa" "$namespace"; then
-    bl64_msg_show_lib_info "the resource is already created. No further actions are needed (${_BL64_K8S_TXT_CREATE_SA}:${sa})"
+    bl64_msg_show_lib_info "the resource is already created. No further actions are needed (service-account:${sa})"
     return 0
   fi
 

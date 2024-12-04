@@ -73,7 +73,7 @@ function _bl64_pkg_repository_add_yum() {
 
   definition="${BL64_PKG_PATH_YUM_REPOS_D}/${name}.${BL64_PKG_DEF_SUFIX_YUM_REPOSITORY}"
   [[ -f "$definition" ]] &&
-    bl64_msg_show_warning "${_BL64_PKG_TXT_REPOSITORY_EXISTING} (${definition})" &&
+    bl64_msg_show_warning "requested repository is already present. Continue using existing one. (${definition})" &&
     return 0
 
   bl64_msg_show_lib_subtask "create YUM repository definition (${definition})"
@@ -121,7 +121,7 @@ function _bl64_pkg_repository_add_apt() {
 
   definition="${BL64_PKG_PATH_APT_SOURCES_LIST_D}/${name}.${BL64_PKG_DEF_SUFIX_APT_REPOSITORY}"
   [[ -f "$definition" ]] &&
-    bl64_msg_show_warning "${_BL64_PKG_TXT_REPOSITORY_EXISTING} (${definition})" &&
+    bl64_msg_show_warning "requested repository is already present. Continue using existing one. (${definition})" &&
     return 0
 
   bl64_msg_show_lib_subtask "create APT repository definition (${definition})"
