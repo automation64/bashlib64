@@ -16,26 +16,6 @@ function bl64_fs_ln_symbolic() { bl64_msg_show_deprecated 'bl64_fs_ln_symbolic' 
 function bl64_fs_rm_file() { bl64_msg_show_deprecated 'bl64_fs_rm_file' 'bl64_fs_file_remove'; bl64_fs_file_remove "$@"; }
 function bl64_fs_rm_full() { bl64_msg_show_deprecated 'bl64_fs_rm_full' 'bl64_fs_path_remove'; bl64_fs_path_remove "$@"; }
 
-#######################################
-# Set object permissions and ownership
-#
-# * DEPRECATED: to be removed in future versions. Migrate to bl64_fs_path_permission_set
-# * work on individual files
-# * no recurse option
-# * all files get the same permissions, user, group
-#
-# Arguments:
-#   $1: permissions. Format: chown format. Default: use current umask
-#   $2: user name. Default: none
-#   $3: group name. Default: current
-#   $@: list of objects. Must use full path for each
-# Outputs:
-#   STDOUT: command stdin
-#   STDERR: command stderr
-# Returns:
-#   0: operation completed ok
-#   >0: operation failed
-#######################################
 function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
   bl64_msg_show_deprecated 'bl64_fs_set_permissions' 'bl64_fs_path_permission_set'
@@ -44,7 +24,6 @@ function bl64_fs_set_permissions() {
   local group="${3:-${BL64_VAR_DEFAULT}}"
   local path=''
 
-  # Remove consumed parameters
   shift
   shift
   shift
@@ -58,24 +37,6 @@ function bl64_fs_set_permissions() {
     "$@"
 }
 
-#######################################
-# Fix path permissions
-#
-# * DEPRECATED: to be removed in future versions. Migrate to bl64_fs_path_permission_set
-# * allow different permissions for files and directories
-# * recursive
-#
-# Arguments:
-#   $1: file permissions. Format: chown format. Default: no action
-#   $2: directory permissions. Format: chown format. Default: no action
-#   $@: list of paths. Must use full path for each
-# Outputs:
-#   STDOUT: command stdin
-#   STDERR: command stderr
-# Returns:
-#   0: operation completed ok
-#   >0: operation failed
-#######################################
 function bl64_fs_fix_permissions() {
   bl64_dbg_lib_show_function "$@"
   bl64_msg_show_deprecated 'bl64_fs_fix_permissions' 'bl64_fs_path_permission_set'
@@ -83,7 +44,6 @@ function bl64_fs_fix_permissions() {
   local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
   local path=''
 
-  # Remove consumed parameters
   shift
   shift
 
@@ -96,29 +56,6 @@ function bl64_fs_fix_permissions() {
     "$@"
 }
 
-#######################################
-# Copy one ore more files to a single destination, then set owner and permissions
-#
-# * DEPRECATED: to be removed in future versions. Migrate to bl64_fs_path_copy
-#
-# Requirements:
-#   * Destination path should be present
-#   * root privilege (sudo) if paths are restricted or change owner is requested
-# Limitations:
-#   * No rollback in case of errors. The process will not remove already copied files
-# Arguments:
-#   $1: permissions. Format: chown format. Default: use current umask
-#   $2: user name. Default: current
-#   $3: group name. Default: current
-#   $4: destination path
-#   $@: full file paths
-# Outputs:
-#   STDOUT: verbose operation
-#   STDOUT: command errors
-# Returns:
-#   0: Operation completed ok
-#   >0: Operation failed
-#######################################
 function bl64_fs_copy_files() {
   bl64_dbg_lib_show_function "$@"
   bl64_msg_show_deprecated 'bl64_fs_copy_files' 'bl64_fs_path_copy'
@@ -127,7 +64,6 @@ function bl64_fs_copy_files() {
   local group="${3:-${BL64_VAR_DEFAULT}}"
   local destination="${4:-${BL64_VAR_DEFAULT}}"
 
-  # Remove consumed parameters
   shift
   shift
   shift
@@ -140,6 +76,86 @@ function bl64_fs_copy_files() {
     "$group" \
     "$destination" \
     "$@"
+}
+
+#
+# Private functions
+#
+
+function _bl64_fs_path_permission_set_file() {
+  bl64_dbg_lib_show_function "$@"
+  local mode="$1"
+  local recursive="$2"
+  local path="$3"
+
+  [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_msg_show_lib_subtask "set file permissions (${file_mode} ${BL64_MSG_COSMETIC_ARROW} ${path})"
+  if bl64_lib_flag_is_enabled "$recursive"; then
+    # shellcheck disable=SC2086
+    bl64_fs_run_find \
+      "$path" \
+      ${BL64_FS_SET_FIND_STAY} \
+      ${BL64_FS_SET_FIND_TYPE_FILE} \
+      ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$file_mode" "{}" \;
+  else
+    [[ ! -f "$path" ]] && return 0
+    bl64_fs_run_chmod "$mode" "$path"
+  fi
+}
+
+function _bl64_fs_path_permission_set_dir() {
+  bl64_dbg_lib_show_function "$@"
+  local mode="$1"
+  local recursive="$2"
+  local path="$3"
+
+  [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_msg_show_lib_subtask "set directory permissions (${dir_mode} ${BL64_MSG_COSMETIC_ARROW} ${path})"
+  if bl64_lib_flag_is_enabled "$recursive"; then
+    # shellcheck disable=SC2086
+    bl64_fs_run_find \
+      "$path" \
+      ${BL64_FS_SET_FIND_STAY} \
+      ${BL64_FS_SET_FIND_TYPE_DIR} \
+      ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$dir_mode" "{}" \;
+  else
+    [[ ! -d "$path" ]] && return 0
+    bl64_fs_run_chmod "$mode" "$path"
+  fi
+}
+
+function _bl64_fs_path_permission_set_user() {
+  bl64_dbg_lib_show_function "$@"
+  local user="$1"
+  local recursive="$2"
+  local path="$3"
+  local cli_options=' '
+
+  [[ "$user" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_lib_flag_is_enabled "$recursive" && cli_options="$BL64_FS_SET_CHOWN_RECURSIVE"
+  bl64_msg_show_lib_subtask "set new file owner (${user} ${BL64_MSG_COSMETIC_ARROW2} ${path})"
+  # shellcheck disable=SC2086
+  bl64_fs_run_chown \
+    $cli_options \
+    "${user}" \
+    "$path"
+}
+
+function _bl64_fs_path_permission_set_group() {
+  bl64_dbg_lib_show_function "$@"
+  local group="$1"
+  local recursive="$2"
+  local path="$3"
+  local cli_options=' '
+
+  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_lib_flag_is_enabled "$recursive" && cli_options="$BL64_FS_SET_CHOWN_RECURSIVE"
+  bl64_msg_show_lib_subtask "set new file group (${group} ${BL64_MSG_COSMETIC_ARROW2} ${path})"
+  # shellcheck disable=SC2086
+  bl64_fs_run_chown \
+    $cli_options \
+    ":${group}" \
+    "$path"
 }
 
 #
@@ -184,7 +200,7 @@ function bl64_fs_dir_create() {
   for path in "$@"; do
     bl64_check_path_absolute "$path" || return $?
     [[ -d "$path" ]] && continue
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CREATE_DIR_PATH} (${path})"
+    bl64_msg_show_lib_subtask "create directory (${path})"
     bl64_fs_run_mkdir "$path" &&
       bl64_fs_path_permission_set "$BL64_VAR_DEFAULT" "$mode" "$user" "$group" "$BL64_VAR_OFF" "$path" ||
       return $?
@@ -227,7 +243,7 @@ function bl64_fs_path_remove() {
 }
 
 #######################################
-# Copy one ore more paths to a single destination. Optinally set owner and permissions
+# Copy one ore more paths to a single destination. Optionally set owner and permissions
 #
 # * Wildcards are not allowed. Use run_cp instead if needed
 # * Path can be directory and/or file only
@@ -341,7 +357,7 @@ function bl64_fs_merge_files() {
   bl64_dbg_lib_show_info "source files:[${*}]"
 
   for path in "$@"; do
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_ADD_SOURCE} (${path} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
+    bl64_msg_show_lib_subtask "merge content from source (${path} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
     if ((first == 1)); then
       first=0
       bl64_check_path_absolute "$path" &&
@@ -361,7 +377,7 @@ function bl64_fs_merge_files() {
     status=$?
   else
     bl64_dbg_lib_show_comments "merge failed, removing incomplete file (${destination})"
-    [[ -f "$destination" ]] && bl64_fs_rm_file "$destination"
+    [[ -f "$destination" ]] && bl64_fs_file_remove "$destination"
   fi
 
   return $status
@@ -393,26 +409,26 @@ function bl64_fs_merge_dir() {
     bl64_check_directory "$target" ||
     return $?
 
-  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_MERGE_DIRS} (${source} ${BL64_MSG_COSMETIC_ARROW2} ${target})"
+  bl64_msg_show_lib_subtask "merge directories content (${source} ${BL64_MSG_COSMETIC_ARROW2} ${target})"
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_fs_cp_dir --no-target-directory "$source" "$target"
+    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    bl64_fs_cp_dir --no-target-directory "$source" "$target"
+    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
     ;;
   ${BL64_OS_SLES}-*)
-    bl64_fs_cp_dir --no-target-directory "$source" "$target"
+    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
     ;;
   ${BL64_OS_ALP}-*)
     # shellcheck disable=SC2086
     shopt -sq dotglob &&
-      bl64_fs_cp_dir ${source}/* -t "$target" &&
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" ${source}/* -t "$target" &&
       shopt -uq dotglob
     ;;
   ${BL64_OS_MCOS}-*)
     # shellcheck disable=SC2086
-    bl64_fs_cp_dir ${source}/ "$target"
+    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" ${source}/ "$target"
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -630,12 +646,12 @@ function bl64_fs_cleanup_tmps() {
   local target=''
 
   target='/tmp'
-  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CLEANUP_TEMP} (${target})"
-  bl64_fs_rm_full -- ${target}/[[:alnum:]]*
+  bl64_msg_show_lib_subtask "clean up OS temporary files (${target})"
+  bl64_fs_path_remove -- ${target}/[[:alnum:]]*
 
   target='/var/tmp'
-  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CLEANUP_TEMP} (${target})"
-  bl64_fs_rm_full -- ${target}/[[:alnum:]]*
+  bl64_msg_show_lib_subtask "clean up OS temporary files (${target})"
+  bl64_fs_path_remove -- ${target}/[[:alnum:]]*
   return 0
 }
 
@@ -657,8 +673,8 @@ function bl64_fs_cleanup_logs() {
   local target='/var/log'
 
   if [[ -d "$target" ]]; then
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CLEANUP_LOGS} (${target})"
-    bl64_fs_rm_full ${target}/[[:alnum:]]*
+    bl64_msg_show_lib_subtask "clean up OS logs (${target})"
+    bl64_fs_path_remove ${target}/[[:alnum:]]*
   fi
   return 0
 }
@@ -681,8 +697,8 @@ function bl64_fs_cleanup_caches() {
   local target='/var/cache/man'
 
   if [[ -d "$target" ]]; then
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CLEANUP_CACHES} (${target})"
-    bl64_fs_rm_full ${target}/[[:alnum:]]*
+    bl64_msg_show_lib_subtask "clean up OS cache contents (${target})"
+    bl64_fs_path_remove ${target}/[[:alnum:]]*
   fi
   return 0
 }
@@ -819,9 +835,9 @@ function bl64_fs_safeguard() {
     return 0
   fi
 
-  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SAFEGUARD_OBJECT} ([${destination}]->[${backup}])"
+  bl64_msg_show_lib_subtask "backup original file ([${destination}]->[${backup}])"
   if ! bl64_fs_run_mv "$destination" "$backup"; then
-    bl64_msg_show_error "$_BL64_FS_TXT_SAFEGUARD_FAILED ($destination)"
+    bl64_msg_show_error "unable to safeguard requested path ($destination)"
     return $BL64_LIB_ERROR_TASK_BACKUP
   fi
 
@@ -864,15 +880,15 @@ function bl64_fs_restore() {
   # Check if restore is needed based on the operation result
   if ((result == 0)); then
     bl64_dbg_lib_show_comments 'operation was ok, backup no longer needed, remove it'
-    [[ -e "$backup" ]] && bl64_fs_rm_full "$backup"
+    [[ -e "$backup" ]] && bl64_fs_path_remove "$backup"
 
     # shellcheck disable=SC2086
     return 0
   else
     bl64_dbg_lib_show_comments 'operation was NOT ok, remove invalid content'
-    [[ -e "$destination" ]] && bl64_fs_rm_full "$destination"
+    [[ -e "$destination" ]] && bl64_fs_path_remove "$destination"
 
-    bl64_msg_show_lib_subtask "${_BL64_FS_TXT_RESTORE_OBJECT} ([${backup}]->[${destination}])"
+    bl64_msg_show_lib_subtask "restore original file from backup ([${backup}]->[${destination}])"
     # shellcheck disable=SC2086
     bl64_fs_run_mv "$backup" "$destination" ||
       return $BL64_LIB_ERROR_TASK_RESTORE
@@ -930,82 +946,6 @@ function bl64_fs_path_permission_set() {
       _bl64_fs_path_permission_set_group "$group" "$recursive" "$target_path" ||
       return $?
   done
-}
-
-function _bl64_fs_path_permission_set_file() {
-  bl64_dbg_lib_show_function "$@"
-  local mode="$1"
-  local recursive="$2"
-  local path="$3"
-
-  [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && return 0
-  bl64_msg_show_lib_subtask "set file permissions (${file_mode} ${BL64_MSG_COSMETIC_ARROW} ${path})"
-  if bl64_lib_flag_is_enabled "$recursive"; then
-    # shellcheck disable=SC2086
-    bl64_fs_run_find \
-      "$path" \
-      ${BL64_FS_SET_FIND_STAY} \
-      ${BL64_FS_SET_FIND_TYPE_FILE} \
-      ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$file_mode" "{}" \;
-  else
-    [[ ! -f "$path" ]] && return 0
-    bl64_fs_run_chmod "$mode" "$path"
-  fi
-}
-
-function _bl64_fs_path_permission_set_dir() {
-  bl64_dbg_lib_show_function "$@"
-  local mode="$1"
-  local recursive="$2"
-  local path="$3"
-
-  [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && return 0
-  bl64_msg_show_lib_subtask "set directory permissions (${dir_mode} ${BL64_MSG_COSMETIC_ARROW} ${path})"
-  if bl64_lib_flag_is_enabled "$recursive"; then
-    # shellcheck disable=SC2086
-    bl64_fs_run_find \
-      "$path" \
-      ${BL64_FS_SET_FIND_STAY} \
-      ${BL64_FS_SET_FIND_TYPE_DIR} \
-      ${BL64_FS_SET_FIND_RUN} "$BL64_FS_CMD_CHMOD" "$dir_mode" "{}" \;
-  else
-    [[ ! -d "$path" ]] && return 0
-    bl64_fs_run_chmod "$mode" "$path"
-  fi
-}
-
-function _bl64_fs_path_permission_set_user() {
-  bl64_dbg_lib_show_function "$@"
-  local user="$1"
-  local recursive="$2"
-  local path="$3"
-  local cli_options=' '
-
-  [[ "$user" == "$BL64_VAR_DEFAULT" ]] && return 0
-  bl64_lib_flag_is_enabled "$recursive" && cli_options="$BL64_FS_SET_CHOWN_RECURSIVE"
-  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SET_OWNER} (${user} ${BL64_MSG_COSMETIC_ARROW2} ${path})"
-  # shellcheck disable=SC2086
-  bl64_fs_run_chown \
-    $cli_options \
-    "${user}" \
-    "$path"
-}
-
-function _bl64_fs_path_permission_set_group() {
-  bl64_dbg_lib_show_function "$@"
-  local group="$1"
-  local recursive="$2"
-  local path="$3"
-  local cli_options=' '
-
-  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && return 0
-  bl64_lib_flag_is_enabled "$recursive" && cli_options="$BL64_FS_SET_CHOWN_RECURSIVE"
-  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SET_GROUP} (${group} ${BL64_MSG_COSMETIC_ARROW2} ${path})"
-  # shellcheck disable=SC2086
-  bl64_fs_run_chown \
-    $cli_options \
-    ":${group}" \
-    "$path"
 }
 
 #######################################
@@ -1133,7 +1073,7 @@ function bl64_fs_set_umask() {
   bl64_dbg_lib_show_function "$@"
   local permissions="${1:-${BL64_FS_UMASK_RW_USER}}"
 
-  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_UMASK_SET} (${permissions})"
+  bl64_msg_show_lib_subtask "temporary change current script umask (${permissions})"
   umask -S "$permissions" >/dev/null
 }
 
@@ -1165,13 +1105,13 @@ function bl64_fs_set_ephemeral() {
   local group="${5:-${BL64_VAR_DEFAULT}}"
 
   if [[ "$temporal" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_fs_create_dir "$mode" "$user" "$group" "$temporal" &&
+    bl64_fs_dir_create "$mode" "$user" "$group" "$temporal" &&
       BL64_FS_PATH_TEMPORAL="$temporal" ||
       return $?
   fi
 
   if [[ "$cache" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_fs_create_dir "$mode" "$user" "$group" "$cache" &&
+    bl64_fs_dir_create "$mode" "$user" "$group" "$cache" &&
       BL64_FS_PATH_CACHE="$cache" ||
       return $?
   fi
@@ -1247,11 +1187,11 @@ function bl64_fs_rm_tmpdir() {
     return $?
 
   if [[ "$tmpdir" != ${BL64_FS_PATH_TMP}/${BL64_FS_TMP_PREFIX}-*.* ]]; then
-    bl64_msg_show_error "${_BL64_FS_TXT_ERROR_NOT_TMPDIR} (${tmpdir})"
+    bl64_msg_show_error "provided directory was not created by bl64_fs_create_tmpdir (${tmpdir})"
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
 
-  bl64_fs_rm_full "$tmpdir"
+  bl64_fs_path_remove "$tmpdir"
 }
 
 #######################################
@@ -1275,11 +1215,11 @@ function bl64_fs_rm_tmpfile() {
     return $?
 
   if [[ "$tmpfile" != ${BL64_FS_PATH_TMP}/${BL64_FS_TMP_PREFIX}-*.* ]]; then
-    bl64_msg_show_error "${_BL64_FS_TXT_ERROR_NOT_TMPFILE} (${tmpfile})"
+    bl64_msg_show_error "provided directory was not created by bl64_fs_create_tmpfile (${tmpfile})"
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
 
-  bl64_fs_rm_file "$tmpfile"
+  bl64_fs_file_remove "$tmpfile"
 }
 
 #######################################
@@ -1305,7 +1245,7 @@ function bl64_fs_check_new_file() {
     return $?
 
   if [[ -d "$file" ]]; then
-    bl64_msg_show_error "${_BL64_FS_TXT_ERROR_INVALID_FILE_TARGET} (${file})"
+    bl64_msg_show_error "invalid file destination. Provided path exists and is a directory (${file})"
     return $BL64_LIB_ERROR_PARAMETER_INVALID
   fi
 
@@ -1335,7 +1275,7 @@ function bl64_fs_check_new_dir() {
     return $?
 
   if [[ -f "$directory" ]]; then
-    bl64_msg_show_error "${_BL64_FS_TXT_ERROR_INVALID_DIR_TARGET} (${directory})"
+    bl64_msg_show_error "invalid directory destination. Provided path exists and is a file (${directory})"
     return $BL64_LIB_ERROR_PARAMETER_INVALID
   fi
 
@@ -1372,14 +1312,14 @@ function bl64_fs_create_symlink() {
 
   if [[ -e "$destination" ]]; then
     if [[ "$overwrite" == "$BL64_VAR_ON" ]]; then
-      bl64_fs_rm_file "$destination" ||
+      bl64_fs_file_remove "$destination" ||
         return $?
     else
-      bl64_msg_show_warning "${_BL64_FS_TXT_SYMLINK_EXISTING} (${destination})"
+      bl64_msg_show_warning "target symbolick link is already present. No further action taken (${destination})"
       return 0
     fi
   fi
-  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_SYMLINK_CREATE} (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
+  bl64_msg_show_lib_subtask "create symbolick link (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
   bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination"
 }
 
@@ -1411,9 +1351,9 @@ function bl64_fs_create_file() {
   bl64_check_parameter 'file_path' ||
     return $?
 
-  bl64_msg_show_lib_subtask "${_BL64_FS_TXT_CREATE_FILE} (${file_path})"
+  bl64_msg_show_lib_subtask "create empty regular file (${file_path})"
   [[ -f "$file_path" ]] &&
-    bl64_msg_show_warning "$_BL64_FS_TXT_WARN_EXISTING_FILE" &&
+    bl64_msg_show_warning 'target file is already created' &&
     return 0
 
   "$BL64_FS_CMD_TOUCH" "$file_path" &&

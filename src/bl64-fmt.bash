@@ -240,9 +240,9 @@ function bl64_fmt_check_value_in_list() {
   shift
   shift
   bl64_check_parameter 'target_value' &&
-    bl64_check_parameters_none $# "$_BL64_FMT_TXT_ERROR_VALUE_LIST_EMPTY" ||
+    bl64_check_parameters_none $# 'please provide at least one value to check against' ||
     return $?
-  [[ "$error_message" == "$BL64_VAR_DEFAULT" ]] && error_message="$_BL64_FMT_TXT_ERROR_VALUE_LIST_WRONG"
+  [[ "$error_message" == "$BL64_VAR_DEFAULT" ]] && error_message='invalid value'
 
   for valid_value in "$@"; do
     [[ "$target_value" == "$valid_value" ]] &&
@@ -250,7 +250,7 @@ function bl64_fmt_check_value_in_list() {
       break
   done
   ((is_valid != 0)) &&
-    bl64_msg_show_error "${error_message}. ${_BL64_FMT_TXT_VALUE_LIST_VALID}: [${*}] (${_BL64_CHECK_TXT_FUNCTION}: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_error "${error_message}. Value must be one of: [${*}] (caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
 
   return $is_valid
 }

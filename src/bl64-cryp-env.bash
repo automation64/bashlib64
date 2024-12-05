@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CRYP_VERSION='2.3.0'
+  declare BL64_CRYP_VERSION='2.3.1'
 
   declare BL64_CRYP_MODULE='0'
 

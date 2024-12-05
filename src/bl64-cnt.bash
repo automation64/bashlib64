@@ -65,7 +65,7 @@ function bl64_cnt_login_stdin() {
     bl64_check_parameter 'registry' ||
     return $?
 
-  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
+  bl64_msg_show_lib_subtask "login to container registry (${user}@${registry})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$BL64_VAR_DEFAULT" "$BL64_CNT_FLAG_STDIN" "$registry"
 }
 
@@ -96,7 +96,7 @@ function bl64_cnt_login_file() {
     bl64_check_file "$file" ||
     return $?
 
-  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
+  bl64_msg_show_lib_subtask "login to container registry (${user}@${registry})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$BL64_VAR_DEFAULT" "$file" "$registry"
 }
 
@@ -126,7 +126,7 @@ function bl64_cnt_login() {
     bl64_check_parameter 'registry' ||
     return $?
 
-  bl64_msg_show_lib_subtask "${_BL64_CNT_TXT_LOGIN_REGISTRY} (${user}@${registry})"
+  bl64_msg_show_lib_subtask "login to container registry (${user}@${registry})"
   "_bl64_cnt_${BL64_CNT_DRIVER}_login" "$user" "$password" "$BL64_VAR_DEFAULT" "$registry"
 }
 

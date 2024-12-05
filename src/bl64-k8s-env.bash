@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_K8S_VERSION='3.1.1'
+  declare BL64_K8S_VERSION='3.1.3'
 
   declare BL64_K8S_MODULE='0'
 
@@ -29,10 +29,4 @@
   declare BL64_K8S_RESOURCE_NS='namespace'
   declare BL64_K8S_RESOURCE_SA='serviceaccount'
   declare BL64_K8S_RESOURCE_SECRET='secret'
-
-  declare _BL64_K8S_TXT_CREATE_NS='create namespace'
-  declare _BL64_K8S_TXT_CREATE_SA='create service account'
-  declare _BL64_K8S_TXT_RESOURCE_EXISTING='the resource is already created. No further actions are needed'
-  declare _BL64_K8S_TXT_ERROR_INVALID_KUBECONF='kubectl config file not found'
-  declare _BL64_K8S_TXT_ERROR_MISSING_COMMAND='kubectl command not provided'
 }

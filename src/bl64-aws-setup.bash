@@ -195,7 +195,7 @@ function bl64_aws_set_home() {
     aws_home="${HOME}/${BL64_AWS_DEF_SUFFIX_HOME}"
   fi
   bl64_msg_show_lib_subtask "prepare AWS CLI home (${aws_home})"
-  bl64_fs_create_dir "$BL64_AWS_CLI_MODE" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$aws_home" &&
+  bl64_fs_dir_create "$BL64_AWS_CLI_MODE" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$aws_home" &&
     BL64_AWS_CLI_HOME="$aws_home"
 }
 

@@ -179,7 +179,7 @@ function _bl64_tf_set_version() {
     # shellcheck disable=SC2034
     BL64_TF_VERSION_CLI="$cli_version"
   else
-    bl64_msg_show_error "${_BL64_TF_TXT_ERROR_GET_VERSION} (${BL64_TF_CMD_TERRAFORM} --version)"
+    bl64_msg_show_error "failed to get terraform CLI version (${BL64_TF_CMD_TERRAFORM} --version)"
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
 

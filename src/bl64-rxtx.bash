@@ -41,7 +41,7 @@ function bl64_rxtx_web_get_file() {
 
   bl64_fs_safeguard "$destination" >/dev/null || return $?
 
-  bl64_msg_show_lib_subtask "$_BL64_RXTX_TXT_DOWNLOAD_FILE (${source})"
+  bl64_msg_show_lib_subtask "download file (${source})"
   # shellcheck disable=SC2086
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
     bl64_rxtx_run_curl \
@@ -56,12 +56,12 @@ function bl64_rxtx_web_get_file() {
       "$source"
     status=$?
   else
-    bl64_msg_show_error "$_BL64_RXTX_TXT_MISSING_COMMAND (wget or curl)" &&
+    bl64_msg_show_error "no web transfer command was found on the system (wget or curl)" &&
       return $BL64_LIB_ERROR_APP_MISSING
   fi
 
   if (( status != 0 )); then
-    bl64_msg_show_error "$_BL64_RXTX_TXT_ERROR_DOWNLOAD_FILE"
+    bl64_msg_show_error 'file download failed'
   else
     bl64_fs_path_permission_set "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" "$destination"
     status=$?
@@ -121,13 +121,13 @@ function bl64_rxtx_git_get_dir() {
     _bl64_rxtx_git_get_dir_sub "$source_url" "$source_path" "$destination" "$branch"
   fi
   status=$?
-  (( status != 0 )) && bl64_msg_show_error "$_BL64_RXTX_TXT_ERROR_DOWNLOAD_DIR"
+  (( status != 0 )) && bl64_msg_show_error 'directory download failed'
 
   if [[ "$status" == '0' && -d "${destination}/.git" ]]; then
     bl64_msg_show_lib_subtask "remove git metadata (${destination}/.git)"
     # shellcheck disable=SC2164
     bl64_bsh_run_pushd "$destination" || return $?
-    bl64_fs_rm_full '.git' >/dev/null
+    bl64_fs_path_remove '.git' >/dev/null
     bl64_bsh_run_popd
   fi
 
@@ -212,7 +212,7 @@ function _bl64_rxtx_git_get_dir_root() {
   bl64_check_module 'BL64_RXTX_MODULE' || return $?
 
   repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
-  bl64_check_directory "$repo" "$_BL64_RXTX_TXT_CREATION_PROBLEM" || return $BL64_LIB_ERROR_TASK_TEMP
+  bl64_check_directory "$repo" 'unable to create temporary git repo' || return $BL64_LIB_ERROR_TASK_TEMP
 
   git_name="$(bl64_fmt_basename "$source_url")"
   git_name="${git_name/.git/}"
@@ -225,7 +225,7 @@ function _bl64_rxtx_git_get_dir_root() {
     bl64_fs_run_mv "$transition" "$destination"
   status=$?
 
-  [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
+  [[ -d "$repo" ]] && bl64_fs_path_remove "$repo" >/dev/null
   return $status
 }
 
@@ -245,7 +245,7 @@ function _bl64_rxtx_git_get_dir_sub() {
 
   repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
   # shellcheck disable=SC2086
-  bl64_check_directory "$repo" "$_BL64_RXTX_TXT_CREATION_PROBLEM" || return $BL64_LIB_ERROR_TASK_TEMP
+  bl64_check_directory "$repo" 'unable to create temporary git repo' || return $BL64_LIB_ERROR_TASK_TEMP
 
   bl64_dbg_lib_show_comments 'Use transition path to get to the final target path'
   source="${repo}/${source_path}"
@@ -260,7 +260,7 @@ function _bl64_rxtx_git_get_dir_sub() {
     bl64_fs_run_mv "${transition}" "$destination" >/dev/null
   status=$?
 
-  [[ -d "$repo" ]] && bl64_fs_rm_full "$repo" >/dev/null
+  [[ -d "$repo" ]] && bl64_fs_path_remove "$repo" >/dev/null
   return $status
 }
 
