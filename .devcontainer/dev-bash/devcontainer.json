@@ -51,7 +51,23 @@
 				"timonwong.shellcheck",
 				"mads-hartmann.bash-ide-vscode",
 				"rogalmic.bash-debug",
-				"shakram02.bash-beautify"
+				"shakram02.bash-beautify",
+				//
+				// VSCode / Extensions / Doc
+				//
+				// Settings Template Version: 20MAY24
+				// VSCode Version: >= 1.66
+				//
+				"bierner.markdown-checkbox",
+				"bierner.markdown-emoji",
+				"bierner.markdown-mermaid",
+				"bpruitt-goddard.mermaid-markdown-syntax-highlighting",
+				"darkriszty.markdown-table-prettify",
+				"davidanson.vscode-markdownlint",
+				"mdickin.markdown-shortcuts",
+				"phoihos.markdown-markmap",
+				"yzhang.markdown-all-in-one",
+				"hediet.vscode-drawio"
 			]
 		}
 	}
