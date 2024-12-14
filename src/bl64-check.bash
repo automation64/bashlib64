@@ -9,7 +9,7 @@
 # * Needed to maintain compatibility up to N-2 versions
 #
 
-function bl64_check_module_imported() { bl64_msg_show_deprecated 'bl64_check_module_imported' 'bl64_lib_module_imported'; bl64_lib_module_imported "$@"; }
+function bl64_check_module_imported() { bl64_msg_show_deprecated 'bl64_check_module_imported' '_bl64_lib_module_is_imported'; _bl64_lib_module_is_imported "$@"; }
 
 #
 # Public functions
@@ -670,7 +670,7 @@ function bl64_check_module() {
   local setup_status=''
 
   bl64_check_parameter 'module' &&
-    bl64_lib_module_imported "$module" ||
+    _bl64_lib_module_is_imported "$module" ||
     return $?
 
   setup_status="${!module}"

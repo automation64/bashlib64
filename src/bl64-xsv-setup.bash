@@ -21,11 +21,11 @@ function bl64_xsv_setup() {
   local search_paths=("${@:-}")
 
   # shellcheck disable=SC2034
-  bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
-    bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
-    bl64_lib_module_imported 'BL64_BSH_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
     _bl64_xsv_set_command "${search_paths[@]}" &&
     BL64_XSV_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'xsv'

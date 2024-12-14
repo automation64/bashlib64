@@ -22,14 +22,14 @@ function bl64_rbac_setup() {
     return 21
 
   # shellcheck disable=SC2034
-  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
-    bl64_lib_module_imported 'BL64_OS_MODULE' &&
-    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
-    bl64_lib_module_imported 'BL64_FS_MODULE' &&
-    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
-    bl64_lib_module_imported 'BL64_IAM_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_IAM_MODULE' &&
     _bl64_rbac_set_command &&
     _bl64_rbac_set_options &&
     _bl64_rbac_set_alias &&

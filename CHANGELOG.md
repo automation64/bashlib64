@@ -15,8 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - core
-  - bl64_lib_alert_parameter_invalid: migrated to msg internal
-  - bl64_lib_module_is_setup: migrated to msg internal
+  - bl64_lib_alert_parameter_invalid: migrated to msg internal function
+  - bl64_lib_module_is_setup: migrated to msg internal function
+  - bl64_lib_module_imported: demoted to internal function
 
 ## [20.6.1]
 
@@ -298,12 +299,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - check
-  - **Breaking change**: bl64_check_module_imported: migrated to core module: bl64_lib_module_imported
+  - **Breaking change**: bl64_check_module_imported: migrated to core module: _bl64_lib_module_is_imported
 
 ### Added
 
 - core
-  - bl64_lib_module_imported: migrated from check (bl64_lib_module_imported)
+  - _bl64_lib_module_is_imported: migrated from check (_bl64_lib_module_is_imported)
 - bsh
   - bl64_bsh_env_import_yaml: import and load shell environment variables from YAML file
 - check
@@ -418,7 +419,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - bl64_iam_check_user: migrated from bl64_check_user
 - check
-  - bl64_lib_module_imported: check that the bl64 module is imported (sourced)
+  - _bl64_lib_module_is_imported: check that the bl64 module is imported (sourced)
 
 ### Changed
 

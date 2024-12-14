@@ -10,7 +10,7 @@ function _bl64_msg_module_check_setup() {
   local module="${1:-}"
   local setup_status=''
   [[ -z "$module" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
-  bl64_lib_module_imported "$module" || return $?
+  _bl64_lib_module_is_imported "$module" || return $?
 
   setup_status="${!module}"
   if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
