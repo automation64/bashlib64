@@ -18,7 +18,7 @@
 #######################################
 function bl64_os_setup() {
   [[ -z "$BL64_VERSION" ]] &&
-    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    echo 'Error: bashlib64-module-core.bash should the last sourced module' &&
     return 21
 
   [[ "${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5' ]] &&

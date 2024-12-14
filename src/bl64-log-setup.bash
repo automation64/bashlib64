@@ -20,7 +20,7 @@
 #######################################
 function bl64_log_setup() {
   [[ -z "$BL64_VERSION" ]] &&
-    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    echo 'Error: bashlib64-module-core.bash should the last sourced module' &&
     return 21
   bl64_dbg_lib_log_enabled && bl64_dbg_lib_show_function "$@"
   local repository="${1:-}"

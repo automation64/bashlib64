@@ -18,7 +18,7 @@
 #######################################
 function bl64_msg_setup() {
   [[ -z "$BL64_VERSION" ]] &&
-    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    echo 'Error: bashlib64-module-core.bash should the last sourced module' &&
     return 21
   bl64_dbg_lib_msg_enabled && bl64_dbg_lib_show_function
 

@@ -18,7 +18,7 @@
 #######################################
 function bl64_fmt_setup() {
   [[ -z "$BL64_VERSION" ]] &&
-    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    echo 'Error: bashlib64-module-core.bash should the last sourced module' &&
     return 21
 
   # shellcheck disable=SC2034
