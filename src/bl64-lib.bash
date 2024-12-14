@@ -172,3 +172,22 @@ function bl64_lib_script_set_identity() {
     BL64_SCRIPT_NAME="$(_bl64_lib_script_get_name)" &&
     bl64_lib_script_set_id "$BL64_SCRIPT_NAME"
 }
+
+#######################################
+# Define current script version
+#
+# Arguments:
+#   $1: semver
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0: seted ok
+#   >0: failed to set
+#######################################
+function bl64_lib_script_set_version() {
+  local script_version="$1"
+  # shellcheck disable=SC2086
+  [[ -z "$script_version" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  BL64_SCRIPT_VERSION="$script_version"
+}
