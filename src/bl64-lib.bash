@@ -185,7 +185,7 @@ function bl64_lib_script_set_identity() {
 #   0: seted ok
 #   >0: failed to set
 #######################################
-function bl64_lib_script_set_version() {
+function bl64_lib_script_version_set() {
   local script_version="$1"
   # shellcheck disable=SC2086
   [[ -z "$script_version" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
