@@ -21,5 +21,5 @@ teardown() {
   run bl64_fs_file_backup "$test_file"
   assert_success
   assert_exists "${test_file}"
-  assert_exists "${test_file}${BL64_FS_SAFEGUARD_POSTFIX}"
+  assert_exists "${test_file}${BL64_FS_BACKUP_POSTFIX}"
 }

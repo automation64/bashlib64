@@ -16,7 +16,7 @@ teardown() {
   # Create original file
   original_file_path="${TEST_SANDBOX}/original_file"
   sample="${TESTMANSH_TEST_SAMPLES}/text_01.txt"
-  saved_file="${original_file_path}${BL64_FS_SAFEGUARD_POSTFIX}"
+  saved_file="${original_file_path}${BL64_FS_BACKUP_POSTFIX}"
   cat "$sample" > "$saved_file"
 
   # Create updated file

@@ -22,6 +22,6 @@ teardown() {
   assert_success
 
   assert_not_exists "$test_file"
-  assert_exists "${test_file}${BL64_FS_SAFEGUARD_POSTFIX}"
+  assert_exists "${test_file}${BL64_FS_ARCHIVE_POSTFIX}"
 
 }
