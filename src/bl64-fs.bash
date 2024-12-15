@@ -1371,9 +1371,9 @@ function bl64_fs_file_create() {
   bl64_check_parameter 'file_path' ||
     return $?
 
-  bl64_msg_show_lib_subtask "create empty regular file (${file_path})"
   [[ -f "$file_path" ]] && return 0
 
+  bl64_msg_show_lib_subtask "create empty regular file (${file_path})"
   bl64_fs_run_touch "$file_path" &&
     bl64_fs_path_permission_set "$mode" "$BL64_VAR_DEFAULT" "$user" "$group" "$BL64_VAR_OFF" "$file_path"
 }
