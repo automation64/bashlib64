@@ -7,6 +7,7 @@ setup() {
 }
 
 @test "bl64_rbac_add_root: run ok" {
+  . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run $BL64_RBAC_ALIAS_SUDO_ENV /usr/bin/env bash -c "source $DEV_TEST_BASHLIB64; bl64_rbac_add_root $_TEST_USER"
   assert_success
 }
