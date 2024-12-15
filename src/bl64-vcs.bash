@@ -27,7 +27,7 @@ function bl64_vcs_run_git() {
   bl64_vcs_blank_git
 
   bl64_dbg_lib_show_info "current path: $(pwd)"
-  if bl64_dbg_lib_command_enabled; then
+  if bl64_dbg_lib_command_is_enabled; then
     debug=''
     export GIT_TRACE='2'
   else

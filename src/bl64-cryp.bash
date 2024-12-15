@@ -24,7 +24,7 @@ function bl64_cryp_run_gpg() {
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_CRYP_CMD_GPG" || return $?
 
-  bl64_msg_lib_verbose_enabled && verbosity='--verbose'
+  bl64_msg_lib_verbose_is_enabled && verbosity='--verbose'
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086

@@ -34,7 +34,7 @@ function bl64_check_module_imported() { bl64_msg_show_deprecated 'bl64_check_mod
 #   $BL64_LIB_ERROR_FILE_NOT_EXECUTE
 #######################################
 function bl64_check_command() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-$BL64_VAR_DEFAULT}"
   local command_name="${3:-}"
@@ -85,7 +85,7 @@ function bl64_check_command() {
 #   $BL64_LIB_ERROR_FILE_NOT_READ
 #######################################
 function bl64_check_file() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-required file is not present}"
 
@@ -124,7 +124,7 @@ function bl64_check_file() {
 #   $BL64_LIB_ERROR_DIRECTORY_NOT_READ
 #######################################
 function bl64_check_directory() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-required directory is not present}"
 
@@ -164,7 +164,7 @@ function bl64_check_directory() {
 #   $BL64_LIB_ERROR_PATH_NOT_FOUND
 #######################################
 function bl64_check_path() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-required path is not present}"
 
@@ -198,7 +198,7 @@ function bl64_check_path() {
 #   $BL64_LIB_ERROR_PARAMETER_EMPTY
 #######################################
 function bl64_check_parameter() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local parameter_name="${1:-}"
   local description="${2:-parameter: ${parameter_name}}"
   local parameter_ref=''
@@ -244,7 +244,7 @@ function bl64_check_parameter() {
 #   $BL64_LIB_ERROR_EXPORT_SET
 #######################################
 function bl64_check_export() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local export_name="${1:-}"
   local description="${2:-export: $export_name}"
   local export_ref=''
@@ -284,7 +284,7 @@ function bl64_check_export() {
 #   $BL64_LIB_ERROR_PATH_NOT_RELATIVE
 #######################################
 function bl64_check_path_relative() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-required path must be relative}"
 
@@ -314,7 +314,7 @@ function bl64_check_path_relative() {
 #   $BL64_LIB_ERROR_PATH_PRESENT
 #######################################
 function bl64_check_path_not_present() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-requested path is already present}"
 
@@ -345,7 +345,7 @@ function bl64_check_path_not_present() {
 #   $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
 #######################################
 function bl64_check_path_absolute() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local message="${2:-required path must be absolute}"
 
@@ -371,7 +371,7 @@ function bl64_check_path_absolute() {
 #   $BL64_LIB_ERROR_PRIVILEGE_IS_ROOT
 #######################################
 function bl64_check_privilege_root() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function
   if [[ "$EUID" != '0' ]]; then
     bl64_msg_show_error "the task requires root privilege. Please run the script as root or with SUDO (current id: $EUID ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
     # shellcheck disable=SC2086
@@ -393,7 +393,7 @@ function bl64_check_privilege_root() {
 #   $BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT
 #######################################
 function bl64_check_privilege_not_root() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function
 
   if [[ "$EUID" == '0' ]]; then
     bl64_msg_show_error "the task should not be run with root privilege. Please run the script as a regular user and not using SUDO (caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
@@ -422,7 +422,7 @@ function bl64_check_privilege_not_root() {
 #   $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
 #######################################
 function bl64_check_overwrite() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local overwrite="${2:-$BL64_VAR_OFF}"
   local message="${3:-target is already present and overwrite is not permitted. Unable to continue}"
@@ -458,7 +458,7 @@ function bl64_check_overwrite() {
 #   1: no previous file/dir present or overwrite is requested
 #######################################
 function bl64_check_overwrite_skip() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local path="${1:-}"
   local overwrite="${2:-$BL64_VAR_OFF}"
   local message="${3:-}"
@@ -493,7 +493,7 @@ function bl64_check_overwrite_skip() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_check_alert_parameter_invalid() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local parameter="${1:-${BL64_VAR_DEFAULT}}"
   local message="${2:-the requested operation was provided with an invalid parameter value}"
 
@@ -514,7 +514,7 @@ function bl64_check_alert_parameter_invalid() {
 #   BL64_LIB_ERROR_OS_INCOMPATIBLE
 #######################################
 function bl64_check_alert_unsupported() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local extra="${1:-}"
 
   bl64_msg_show_error "the requested operation is not supported on the current OS (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
@@ -537,7 +537,7 @@ function bl64_check_alert_unsupported() {
 #   >0: command is incompatible and compatibility mode is disabled
 #######################################
 function bl64_check_compatibility_mode() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local extra="${1:-}"
 
   if bl64_lib_mode_compability_is_enabled; then
@@ -563,7 +563,7 @@ function bl64_check_compatibility_mode() {
 #   BL64_LIB_ERROR_APP_MISSING
 #######################################
 function bl64_check_alert_resource_not_found() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local resource="${1:-}"
 
   bl64_msg_show_error "required resource was not found on the system (${resource:+resource: ${resource} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
@@ -585,7 +585,7 @@ function bl64_check_alert_resource_not_found() {
 #######################################
 # shellcheck disable=SC2119,SC2120
 function bl64_check_alert_undefined() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local target="${1:-}"
 
   bl64_msg_show_error "requested command is not defined or implemented (caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE}${target:+ ${BL64_MSG_COSMETIC_PIPE} command: ${target}})"
@@ -609,7 +609,7 @@ function bl64_check_alert_undefined() {
 #######################################
 function bl64_check_alert_module_setup() {
   local -i last_status=$? # must be first line to catch $?
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local module="${1:-}"
 
   bl64_check_parameter 'module' || return $?
@@ -636,7 +636,7 @@ function bl64_check_alert_module_setup() {
 #   BL64_LIB_ERROR_TASK_UNDEFINED
 #######################################
 function bl64_check_parameters_none() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local count="$1"
   local message="${2:-the requested operation requires at least one parameter and none was provided}"
 
@@ -665,7 +665,7 @@ function bl64_check_parameters_none() {
 #   BL64_LIB_ERROR_MODULE_SETUP_MISSING
 #######################################
 function bl64_check_module() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local module="${1:-}"
   local setup_status=''
 
@@ -698,7 +698,7 @@ function bl64_check_module() {
 #   $status
 #######################################
 function bl64_check_status() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local status="${1:-}"
   local message="${2:-task execution failed}"
 
@@ -728,7 +728,7 @@ function bl64_check_status() {
 #   >0: home is not valid
 #######################################
 function bl64_check_home() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function
 
   bl64_check_export 'HOME' 'standard shell variable HOME is not defined' &&
     bl64_check_directory "$HOME" "unable to find user's HOME directory"
@@ -752,7 +752,7 @@ function bl64_check_home() {
 #   BL64_LIB_ERROR_FILE_NOT_FOUND
 #######################################
 function bl64_check_command_search_path() {
-  bl64_dbg_lib_check_enabled && bl64_dbg_lib_show_function "$@"
+  bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local file="${1:-}"
   local message="${2:-required command is not found in any of the search paths}"
   local full_path=''

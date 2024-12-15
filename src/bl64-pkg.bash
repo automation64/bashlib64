@@ -407,7 +407,7 @@ function bl64_pkg_run_dnf() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_msg_lib_verbose_enabled; then
+  if bl64_msg_lib_verbose_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -442,7 +442,7 @@ function bl64_pkg_run_yum() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_msg_lib_verbose_enabled; then
+  if bl64_msg_lib_verbose_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -480,7 +480,7 @@ function bl64_pkg_run_apt() {
   bl64_pkg_blank_apt
 
   # Verbose is only available for a subset of commands
-  if bl64_dbg_lib_command_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
+  if bl64_dbg_lib_command_is_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     export DEBCONF_NOWARNINGS='yes'
@@ -544,7 +544,7 @@ function bl64_pkg_run_apk() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_msg_lib_verbose_enabled; then
+  if bl64_msg_lib_verbose_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -579,7 +579,7 @@ function bl64_pkg_run_brew() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_msg_lib_verbose_enabled; then
+  if bl64_msg_lib_verbose_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -614,7 +614,7 @@ function bl64_pkg_run_zypper() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  if bl64_msg_lib_verbose_enabled; then
+  if bl64_msg_lib_verbose_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"

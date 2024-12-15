@@ -113,7 +113,7 @@ function bl64_hlm_run_helm() {
     bl64_check_module 'BL64_HLM_MODULE' ||
     return $?
 
-  bl64_dbg_lib_command_enabled && verbosity="$BL64_HLM_SET_DEBUG"
+  bl64_dbg_lib_command_is_enabled && verbosity="$BL64_HLM_SET_DEBUG"
   bl64_hlm_blank_helm
 
   bl64_dbg_lib_trace_start

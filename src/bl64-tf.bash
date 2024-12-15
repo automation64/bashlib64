@@ -58,7 +58,7 @@ function bl64_tf_run_terraform() {
 
   bl64_tf_blank_terraform
 
-  if bl64_dbg_lib_command_enabled; then
+  if bl64_dbg_lib_command_is_enabled; then
     export TF_LOG="$BL64_TF_SET_LOG_TRACE"
   else
     export TF_LOG="$BL64_TF_LOG_LEVEL"

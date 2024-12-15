@@ -162,8 +162,8 @@ function bl64_aws_run_aws() {
     bl64_check_module 'BL64_AWS_MODULE' ||
     return $?
   
-  bl64_msg_lib_verbose_enabled && verbosity=' '
-  bl64_dbg_lib_command_enabled && verbosity="$BL64_AWS_SET_DEBUG"
+  bl64_msg_lib_verbose_is_enabled && verbosity=' '
+  bl64_dbg_lib_command_is_enabled && verbosity="$BL64_AWS_SET_DEBUG"
 
   bl64_aws_blank_aws &&
     _bl64_aws_run_aws_prepare ||

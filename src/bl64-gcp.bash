@@ -25,7 +25,7 @@ function bl64_gcp_run_gcloud() {
     bl64_check_module 'BL64_GCP_MODULE' ||
     return $?
 
-  if bl64_dbg_lib_command_enabled; then
+  if bl64_dbg_lib_command_is_enabled; then
     debug='--verbosity debug --log-http'
   else
     debug='--verbosity none --quiet'

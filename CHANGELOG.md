@@ -36,11 +36,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+- msg
+  - bl64_msg_app_verbose_enabled: replaced by bl64_msg_app_verbose_is_enabled
+  - bl64_msg_lib_verbose_enabled: replaced by bl64_msg_lib_verbose_is_enabled
 - fs
   - bl64_fs_create_file: replaced by bl64_fs_file_create
   - bl64_fs_create_symlink: replaced by bl64_fs_symlink_create
 - log
   - bl64_log_set_runtime: replaced by bl64_log_set_target
+- dbg
+  - bl64_dbg_app_task_enabled: replaced by bl64_dbg_app_task_is_enabled
+  - bl64_dbg_lib_task_enabled: replaced by bl64_dbg_lib_task_is_enabled
+  - bl64_dbg_app_command_enabled: replaced by 4_dbg_app_command_is_enabled
+  - bl64_dbg_lib_command_enabled: replaced by 4_dbg_lib_command_is_enabled
+  - bl64_dbg_app_trace_enabled: replaced by l64_dbg_app_trace_is_enabled
+  - bl64_dbg_lib_trace_enabled: replaced by l64_dbg_lib_trace_is_enabled
+  - bl64_dbg_app_custom_1_enabled: replaced by _dbg_app_custom_1_is_enabled
+  - bl64_dbg_app_custom_2_enabled: replaced by _dbg_app_custom_2_is_enabled
+  - bl64_dbg_app_custom_3_enabled: replaced by _dbg_app_custom_3_is_enabled
+  - bl64_dbg_lib_check_enabled: replaced by l64_dbg_lib_check_is_enabled
+  - bl64_dbg_lib_log_enabled: replaced by  bl64_dbg_lib_log_is_enabled
+  - bl64_dbg_lib_msg_enabled: replaced by  bl64_dbg_lib_msg_is_enabled
 
 ### Changed
 

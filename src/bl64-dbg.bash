@@ -11,6 +11,18 @@
 
 function bl64_dbg_app_show_variables() { bl64_msg_show_deprecated 'bl64_dbg_app_show_variables' 'bl64_dbg_app_show_globals'; bl64_dbg_app_show_globals "$@"; }
 function bl64_dbg_lib_show_variables() { bl64_msg_show_deprecated 'bl64_dbg_lib_show_variables' 'bl64_dbg_lib_show_globals'; bl64_dbg_lib_show_globals "$@"; }
+function bl64_dbg_app_task_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_task_enabled' 'bl64_dbg_app_task_is_enabled'; bl64_dbg_app_task_is_enabled; }
+function bl64_dbg_lib_task_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_task_enabled' 'bl64_dbg_lib_task_is_enabled'; bl64_dbg_lib_task_is_enabled; }
+function bl64_dbg_app_command_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_command_enabled' 'bl64_dbg_app_command_is_enabled'; bl64_dbg_app_command_is_enabled; }
+function bl64_dbg_lib_command_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_command_enabled' 'bl64_dbg_lib_command_is_enabled'; bl64_dbg_lib_command_is_enabled; }
+function bl64_dbg_app_trace_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_trace_enabled' 'bl64_dbg_app_trace_is_enabled'; bl64_dbg_app_trace_is_enabled; }
+function bl64_dbg_lib_trace_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_trace_enabled' 'bl64_dbg_lib_trace_is_enabled'; bl64_dbg_lib_trace_is_enabled; }
+function bl64_dbg_app_custom_1_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_custom_1_enabled' 'bl64_dbg_app_custom_1_is_enabled'; bl64_dbg_app_custom_1_is_enabled; }
+function bl64_dbg_app_custom_2_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_custom_2_enabled' 'bl64_dbg_app_custom_2_is_enabled'; bl64_dbg_app_custom_2_is_enabled; }
+function bl64_dbg_app_custom_3_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_custom_3_enabled' 'bl64_dbg_app_custom_3_is_enabled'; bl64_dbg_app_custom_3_is_enabled; }
+function bl64_dbg_lib_check_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_check_enabled' 'bl64_dbg_lib_check_is_enabled'; bl64_dbg_lib_check_is_enabled; }
+function bl64_dbg_lib_log_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_log_enabled' 'bl64_dbg_lib_log_is_enabled'; bl64_dbg_lib_log_is_enabled; }
+function bl64_dbg_lib_msg_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_msg_enabled' 'bl64_dbg_lib_msg_is_enabled'; bl64_dbg_lib_msg_is_enabled; }
 
 #
 # Internal functions
@@ -18,7 +30,6 @@ function bl64_dbg_lib_show_variables() { bl64_msg_show_deprecated 'bl64_dbg_lib_
 
 function _bl64_dbg_show() {
   local message="$1"
-
   printf '%s: %s\n' 'Debug' "$message" >&2
 }
 
@@ -42,7 +53,7 @@ function _bl64_dbg_show() {
 function bl64_dbg_runtime_show() {
   local -i last_status=$?
   local label="${_BL64_DBG_TXT_LABEL_BASH_RUNTIME}"
-  bl64_dbg_app_command_enabled || return $last_status
+  bl64_dbg_app_command_is_enabled || return $last_status
 
   _bl64_dbg_show "${label} Bash / Interpreter path: [${BASH}]"
   _bl64_dbg_show "${label} Bash / ShOpt Options: [${BASHOPTS:-NONE}]"
@@ -78,7 +89,7 @@ function bl64_dbg_runtime_show() {
 #######################################
 function bl64_dbg_runtime_show_bashlib64() {
   local label='[bl64-runtime]'
-  bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
+  bl64_dbg_app_task_is_enabled || bl64_dbg_lib_task_is_enabled || return 0
   _bl64_dbg_show "${label} BL64_SCRIPT_NAME: [${BL64_SCRIPT_NAME:-NOTSET}]"
   _bl64_dbg_show "${label} BL64_SCRIPT_SID: [${BL64_SCRIPT_SID:-NOTSET}]"
   _bl64_dbg_show "${label} BL64_SCRIPT_ID: [${BL64_SCRIPT_ID:-NOTSET}]"
@@ -100,7 +111,7 @@ function bl64_dbg_runtime_show_bashlib64() {
 #######################################
 function bl64_dbg_runtime_show_callstack() {
   local label="${_BL64_DBG_TXT_LABEL_BASH_RUNTIME}"
-  bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
+  bl64_dbg_app_task_is_enabled || bl64_dbg_lib_task_is_enabled || return 0
   _bl64_dbg_show "${label} ${_BL64_DBG_TXT_CALLSTACK}(2): [${BASH_SOURCE[1]:-NONE}:${FUNCNAME[2]:-NONE}:${BASH_LINENO[2]:-0}]"
   _bl64_dbg_show "${label} ${_BL64_DBG_TXT_CALLSTACK}(3): [${BASH_SOURCE[2]:-NONE}:${FUNCNAME[3]:-NONE}:${BASH_LINENO[3]:-0}]"
   _bl64_dbg_show "${label} ${_BL64_DBG_TXT_CALLSTACK}(4): [${BASH_SOURCE[3]:-NONE}:${FUNCNAME[4]:-NONE}:${BASH_LINENO[4]:-0}]"
@@ -120,7 +131,7 @@ function bl64_dbg_runtime_show_callstack() {
 #######################################
 function bl64_dbg_runtime_show_paths() {
   local label="${_BL64_DBG_TXT_LABEL_BASH_RUNTIME}"
-  bl64_dbg_app_task_enabled || bl64_dbg_lib_task_enabled || return 0
+  bl64_dbg_app_task_is_enabled || bl64_dbg_lib_task_is_enabled || return 0
   _bl64_dbg_show "${label} Initial script path (BL64_SCRIPT_PATH): [${BL64_SCRIPT_PATH:-EMPTY}]"
   _bl64_dbg_show "${label} Home directory (HOME): [${HOME:-EMPTY}]"
   _bl64_dbg_show "${label} Search path (PATH): [${PATH:-EMPTY}]"
@@ -145,7 +156,7 @@ function bl64_dbg_runtime_show_paths() {
 #######################################
 function bl64_dbg_app_trace_stop() {
   local -i state=$?
-  bl64_dbg_app_trace_enabled || return $state
+  bl64_dbg_app_trace_is_enabled || return $state
   set +x
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
   return $state
@@ -163,7 +174,7 @@ function bl64_dbg_app_trace_stop() {
 #   0: always ok
 #######################################
 function bl64_dbg_app_trace_start() {
-  bl64_dbg_app_trace_enabled || return 0
+  bl64_dbg_app_trace_is_enabled || return 0
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_START}"
   set -x
   return 0
@@ -184,7 +195,7 @@ function bl64_dbg_app_trace_start() {
 #######################################
 function bl64_dbg_lib_trace_stop() {
   local -i state=$?
-  bl64_dbg_lib_trace_enabled || return $state
+  bl64_dbg_lib_trace_is_enabled || return $state
 
   set +x
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
@@ -204,7 +215,7 @@ function bl64_dbg_lib_trace_stop() {
 #   0: always ok
 #######################################
 function bl64_dbg_lib_trace_start() {
-  bl64_dbg_lib_trace_enabled || return 0
+  bl64_dbg_lib_trace_is_enabled || return 0
 
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_START}"
   set -x
@@ -224,7 +235,7 @@ function bl64_dbg_lib_trace_start() {
 #   0: always ok
 #######################################
 function bl64_dbg_lib_show_info() {
-  bl64_dbg_lib_task_enabled || return 0
+  bl64_dbg_lib_task_is_enabled || return 0
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_INFO}: ${*}"
   return 0
 }
@@ -241,7 +252,7 @@ function bl64_dbg_lib_show_info() {
 #   0: always ok
 #######################################
 function bl64_dbg_app_show_info() {
-  bl64_dbg_app_task_enabled || return 0
+  bl64_dbg_app_task_is_enabled || return 0
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_INFO}: ${*}"
   return 0
 }
@@ -259,7 +270,7 @@ function bl64_dbg_app_show_info() {
 #######################################
 function bl64_dbg_lib_show_vars() {
   local variable=''
-  bl64_dbg_lib_task_enabled || return 0
+  bl64_dbg_lib_task_is_enabled || return 0
 
   for variable in "$@"; do
     eval "_bl64_dbg_show \"${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=\$${variable}]\""
@@ -281,7 +292,7 @@ function bl64_dbg_lib_show_vars() {
 #######################################
 function bl64_dbg_app_show_vars() {
   local variable=''
-  bl64_dbg_app_task_enabled || return 0
+  bl64_dbg_app_task_is_enabled || return 0
 
   for variable in "$@"; do
     eval "_bl64_dbg_show \"${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=\$${variable}]\""
@@ -303,7 +314,7 @@ function bl64_dbg_app_show_vars() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_dbg_lib_show_function() {
-  bl64_dbg_lib_task_enabled || return 0
+  bl64_dbg_lib_task_is_enabled || return 0
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_FUNCTION} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] run bashlib64 function. Parameters: ${*}"
   return 0
 }
@@ -321,7 +332,7 @@ function bl64_dbg_lib_show_function() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_dbg_app_show_function() {
-  bl64_dbg_app_task_enabled || return 0
+  bl64_dbg_app_task_is_enabled || return 0
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_FUNCTION} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] run app function. Parameters: (${*})"
   return 0
 }
@@ -341,7 +352,7 @@ function bl64_dbg_app_show_function() {
 #######################################
 function bl64_dbg_lib_command_trace_stop() {
   local -i state=$?
-  bl64_dbg_lib_task_enabled || return $state
+  bl64_dbg_lib_task_is_enabled || return $state
 
   set +x
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
@@ -363,7 +374,7 @@ function bl64_dbg_lib_command_trace_stop() {
 #   0: always ok
 #######################################
 function bl64_dbg_lib_command_trace_start() {
-  bl64_dbg_lib_task_enabled || return 0
+  bl64_dbg_lib_task_is_enabled || return 0
 
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_START}"
   set -x
@@ -383,7 +394,7 @@ function bl64_dbg_lib_command_trace_start() {
 #   0: always ok
 #######################################
 function bl64_dbg_lib_show_comments() {
-  bl64_dbg_lib_task_enabled || return 0
+  bl64_dbg_lib_task_is_enabled || return 0
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_COMMENTS}: ${*}"
   return 0
 }
@@ -400,7 +411,7 @@ function bl64_dbg_lib_show_comments() {
 #   0: always ok
 #######################################
 function bl64_dbg_app_show_comments() {
-  bl64_dbg_app_task_enabled || return 0
+  bl64_dbg_app_task_is_enabled || return 0
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_COMMENTS}: ${*}"
   return 0
 }
@@ -417,7 +428,7 @@ function bl64_dbg_app_show_comments() {
 #   0: always ok
 #######################################
 function bl64_dbg_app_show_globals() {
-  bl64_dbg_app_task_enabled || return 0
+  bl64_dbg_app_task_is_enabled || return 0
   local filter='^declare .*BL64_.*=.*'
 
   IFS=$'\n'
@@ -441,7 +452,7 @@ function bl64_dbg_app_show_globals() {
 #   0: always ok
 #######################################
 function bl64_dbg_lib_show_globals() {
-  bl64_dbg_lib_task_enabled || return 0
+  bl64_dbg_lib_task_is_enabled || return 0
   local filter='^declare .*BL64_.*=.*'
 
   IFS=$'\n'
