@@ -881,11 +881,11 @@ function bl64_fs_find_files() {
 }
 
 #######################################
-# Safeguard path to a temporary location
+# Archive path to a temporary location
 #
 # * Use for file/dir operations that will alter or replace the content and requires a quick rollback mechanism
 # * The original path is renamed until bl64_fs_path_recover is called to either remove or restore it
-# * If the destination is not present nothing is done. Return with no error. This is to cover for first time path creation
+# * If the source is not present nothing is done. Return with no error. This is to cover for first time path creation
 #
 # Arguments:
 #   $1: safeguard path (produced by bl64_fs_path_archive)
@@ -899,21 +899,21 @@ function bl64_fs_find_files() {
 #######################################
 function bl64_fs_path_archive() {
   bl64_dbg_lib_show_function "$@"
-  local destination="${1:-}"
-  local backup="${destination}${BL64_FS_ARCHIVE_POSTFIX}"
+  local source="${1:-}"
+  local backup="${source}${BL64_FS_ARCHIVE_POSTFIX}"
 
-  bl64_check_parameter 'destination' ||
+  bl64_check_parameter 'source' ||
     return $?
 
   # Return if not present
-  if [[ ! -e "$destination" ]]; then
-    bl64_dbg_lib_show_comments "path is not yet created, nothing to do (${destination})"
+  if [[ ! -e "$source" ]]; then
+    bl64_dbg_lib_show_comments "path is not yet created, nothing to do (${source})"
     return 0
   fi
 
-  bl64_msg_show_lib_subtask "backup original path ([${destination}]->[${backup}])"
-  if ! bl64_fs_run_mv "$destination" "$backup"; then
-    bl64_msg_show_error "unable to safeguard requested path ($destination)"
+  bl64_msg_show_lib_subtask "backup source path ([${source}]->[${backup}])"
+  if ! bl64_fs_run_mv "$source" "$backup"; then
+    bl64_msg_show_error "unable to archive source path ($source)"
     return $BL64_LIB_ERROR_TASK_BACKUP
   fi
 
@@ -921,7 +921,7 @@ function bl64_fs_path_archive() {
 }
 
 #######################################
-# Restore path from safeguard if operation failed or remove if operation was ok
+# Recover path from safeguard if operation failed or remove if operation was ok
 #
 # * Use as a quick rollback for file/dir operations
 # * Called after bl64_fs_path_archive creates the backup
@@ -939,11 +939,11 @@ function bl64_fs_path_archive() {
 #######################################
 function bl64_fs_path_recover() {
   bl64_dbg_lib_show_function "$@"
-  local destination="${1:-}"
+  local source="${1:-}"
   local -i result=$2
-  local backup="${destination}${BL64_FS_ARCHIVE_POSTFIX}"
+  local backup="${source}${BL64_FS_ARCHIVE_POSTFIX}"
 
-  bl64_check_parameter 'destination' &&
+  bl64_check_parameter 'source' &&
     bl64_check_parameter 'result' ||
     return $?
 
@@ -955,16 +955,13 @@ function bl64_fs_path_recover() {
 
   # Check if restore is needed based on the operation result
   if ((result == 0)); then
-    bl64_dbg_lib_show_comments 'operation was ok, backup no longer needed, remove it'
-    [[ -e "$backup" ]] && bl64_fs_path_remove "$backup"
-
-    # shellcheck disable=SC2086
+    bl64_msg_show_lib_subtask "remove obsolete backup (${backup})"
+    bl64_fs_path_remove "$backup"
     return 0
   else
-    bl64_msg_show_lib_subtask "restore original path from backup ([${backup}]->[${destination}])"
-    bl64_fs_path_remove "$destination"
+    bl64_msg_show_lib_subtask "restore original path from backup ([${backup}]->[${source}])"
     # shellcheck disable=SC2086
-    bl64_fs_run_mv "$backup" "$destination" ||
+    bl64_fs_run_mv "$backup" "$source" ||
       return $BL64_LIB_ERROR_TASK_RESTORE
   fi
 }
@@ -1597,8 +1594,8 @@ function bl64_fs_file_restore() {
   else
     bl64_msg_show_lib_subtask "restore original file from backup ([${backup}]->[${source}])"
     # shellcheck disable=SC2086
-    bl64_os_run_cat "$backup" > "$source" &&
-    bl64_fs_file_remove "$backup" ||
+    bl64_os_run_cat "$backup" >"$source" &&
+      bl64_fs_file_remove "$backup" ||
       return $BL64_LIB_ERROR_TASK_RESTORE
   fi
 }
