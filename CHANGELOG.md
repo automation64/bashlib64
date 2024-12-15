@@ -14,9 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_lib_script_version_set: setter for SCRIPT_VERSION
 - os
   - bl64_os_run_date
+  - bl64_os_run_cat
 - fs
   - bl64_fs_run_touch
   - bl64_fs_file_copy
+  - bl64_fs_file_backup
+  - bl64_fs_file_restore
 - log
   - bl64_log_set_target: added supports for multiple target type
 - dbg
@@ -51,6 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fs
   - bl64_fs_create_file: replaced by bl64_fs_file_create
   - bl64_fs_create_symlink: replaced by bl64_fs_symlink_create
+  - bl64_fs_safeguard: replaced by bl64_fs_path_archive
+  - bl64_fs_restore: replaced by bl64_fs_path_recover
 - log
   - bl64_log_set_runtime: replaced by bl64_log_set_target
 - dbg
