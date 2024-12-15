@@ -911,7 +911,7 @@ function bl64_fs_path_archive() {
     return 0
   fi
 
-  bl64_msg_show_lib_subtask "backup original file ([${destination}]->[${backup}])"
+  bl64_msg_show_lib_subtask "backup original path ([${destination}]->[${backup}])"
   if ! bl64_fs_run_mv "$destination" "$backup"; then
     bl64_msg_show_error "unable to safeguard requested path ($destination)"
     return $BL64_LIB_ERROR_TASK_BACKUP
@@ -961,10 +961,8 @@ function bl64_fs_path_restore() {
     # shellcheck disable=SC2086
     return 0
   else
-    bl64_dbg_lib_show_comments 'operation was NOT ok, remove invalid content'
-    [[ -e "$destination" ]] && bl64_fs_path_remove "$destination"
-
-    bl64_msg_show_lib_subtask "restore original file from backup ([${backup}]->[${destination}])"
+    bl64_msg_show_lib_subtask "restore original path from backup ([${backup}]->[${destination}])"
+    bl64_fs_path_remove "$destination"
     # shellcheck disable=SC2086
     bl64_fs_run_mv "$backup" "$destination" ||
       return $BL64_LIB_ERROR_TASK_RESTORE
