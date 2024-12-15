@@ -2,25 +2,48 @@
 
 - [BashLib64 - Naming Conventions](#bashlib64---naming-conventions)
   - [Function Names](#function-names)
-    - [Actions](#actions)
-    - [Getter / setter](#getter--setter)
-    - [Library flag](#library-flag)
+    - [Internal](#internal)
+    - [Generic Action](#generic-action)
+    - [Attribute Getter / Setter](#attribute-getter--setter)
+    - [Flag](#flag)
+    - [Command Runner](#command-runner)
+  - [Variable Names](#variable-names)
+    - [Global Internal](#global-internal)
+    - [Global Generic](#global-generic)
 
 ## Function Names
 
-### Actions
+### Internal
 
-- `MODULE_OBJECT_ACTION`
+- `_<FUNCTION>`
 
-### Getter / setter
+### Generic Action
 
-- `MODULE_[OBJECT]_VAR_get`
-- `MODULE_[OBJECT]_VAR_set`
+- `<MODULE>[_OBJECT]_<ACTION>[_PARAMETER]`
 
-### Library flag
+### Attribute Getter / Setter
 
-- `MODULE_[OBJECT]_FLAG_is_set`
-- `MODULE_[OBJECT]_FLAG_is_enabled`
-- `MODULE_[OBJECT]_FLAG_is_disabled`
-- `MODULE_[OBJECT]_FLAG_enable`
-- `MODULE_[OBJECT]_FLAG_disable`
+- `<MODULE>[_OBJECT]_<ATTRIBUTE>_get`
+- `<MODULE>[_OBJECT]_<ATTRIBUTE>_set`
+
+### Flag
+
+- `<MODULE>[_OBJECT]_<FLAG>_is_set`
+- `<MODULE>[_OBJECT]_<FLAG>_is_enabled`
+- `<MODULE>[_OBJECT]_<FLAG>_is_disabled`
+- `<MODULE>[_OBJECT]_<FLAG>_enable`
+- `<MODULE>[_OBJECT]_<FLAG>_disable`
+
+### Command Runner
+
+- `<MODULE>_run_<COMMAND>`
+
+## Variable Names
+
+### Global Internal
+
+- `_<VARIABLE>`
+
+### Global Generic
+
+- `<MODULE>[_OBJECT]_<ATTRIBUTE>`
