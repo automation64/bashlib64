@@ -6,6 +6,6 @@
 
 @test "bl64_fs_run_rm: run ok" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  run bl64_fs_run_touch /etc/passwd
+  run bl64_fs_run_touch /tmp/1
   assert_success
 }
