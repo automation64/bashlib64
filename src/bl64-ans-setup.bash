@@ -22,7 +22,7 @@
 # shellcheck disable=SC2120
 function bl64_ans_setup() {
   [[ -z "$BL64_VERSION" ]] &&
-    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    echo 'Error: bashlib64-module-core.bash should the last sourced module' &&
     return 21
   bl64_dbg_lib_show_function "$@"
   local ansible_bin="${1:-${BL64_VAR_DEFAULT}}"
@@ -30,12 +30,12 @@ function bl64_ans_setup() {
   local env_ignore="${3:-${BL64_VAR_ON}}"
 
   # shellcheck disable=SC2034
-  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
-    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
-    bl64_lib_module_imported 'BL64_TXT_MODULE' &&
-    bl64_lib_module_imported 'BL64_PY_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_PY_MODULE' &&
     _bl64_ans_set_command "$ansible_bin" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE" &&
     bl64_check_command "$BL64_ANS_CMD_ANSIBLE_GALAXY" &&

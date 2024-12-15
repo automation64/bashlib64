@@ -280,8 +280,8 @@ function bl64_py_run_pip() {
   local debug="$BL64_PY_SET_PIP_QUIET"
   local cache=' '
 
-  bl64_msg_lib_verbose_enabled && debug=' '
-  bl64_dbg_lib_command_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
+  bl64_msg_lib_verbose_is_enabled && debug=' '
+  bl64_dbg_lib_command_is_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
   [[ -n "$BL64_FS_PATH_CACHE" ]] && cache="--cache-dir=${BL64_FS_PATH_CACHE}"
 

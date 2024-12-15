@@ -16,7 +16,7 @@
 #   date exit status
 #######################################
 function bl64_tm_create_timestamp() {
-  "$BL64_OS_CMD_DATE" '+%d%m%Y%H%M%S'
+  bl64_os_run_date '+%d%m%Y%H%M%S'
 }
 
 #######################################
@@ -33,5 +33,5 @@ function bl64_tm_create_timestamp() {
 #   date exit status
 #######################################
 function bl64_tm_create_timestamp_file() {
-  "$BL64_OS_CMD_DATE" '+%d:%m:%Y-%H:%M:%S-UTC%z'
+  bl64_os_run_date '+%d:%m:%Y-%H:%M:%S-UTC%z'
 }

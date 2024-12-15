@@ -19,7 +19,7 @@
 # shellcheck disable=SC2120
 function bl64_py_setup() {
   [[ -z "$BL64_VERSION" ]] &&
-    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    echo 'Error: bashlib64-module-core.bash should the last sourced module' &&
     return 21
   bl64_dbg_lib_show_function "$@"
   local venv_path="${1:-${BL64_VAR_DEFAULT}}"
@@ -53,11 +53,11 @@ function _bl64_py_setup() {
   fi
 
   # shellcheck disable=SC2034
-  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
-    bl64_lib_module_imported 'BL64_OS_MODULE' &&
-    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_py_set_command "$venv_path" &&
     bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
     _bl64_py_set_options &&

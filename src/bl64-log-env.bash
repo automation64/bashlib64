@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_LOG_VERSION='2.1.2'
+  declare BL64_LOG_VERSION='3.0.0'
 
   declare BL64_LOG_MODULE='0'
 
@@ -21,6 +21,10 @@
   # Parameters
   declare BL64_LOG_REPOSITORY_MODE='0755'
   declare BL64_LOG_TARGET_MODE='0644'
+
+  # Log Target Type
+  declare BL64_LOG_TYPE_SINGLE='S'
+  declare BL64_LOG_TYPE_MULTIPLE='M'
 
   # Module variables
   declare BL64_LOG_FS=''

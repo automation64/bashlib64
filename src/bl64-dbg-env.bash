@@ -4,12 +4,15 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_DBG_VERSION='3.1.3'
+  declare BL64_DBG_VERSION='3.2.0'
 
   declare BL64_DBG_MODULE='0'
 
   # Debug target
   declare BL64_DBG_TARGET=''
+
+  # Dry-Run Flag
+  declare BL64_DBG_DRYRUN=''
 
   #
   # Debug targets. Use to select what to debug and how
@@ -41,9 +44,9 @@
   declare BL64_DBG_TARGET_ALL='ALL'
 
   #
-  # Debugging exclussions
+  # Debugging exclusions
   #
-  # * Used to excluded non-esential debugging information from general output
+  # * Used to excluded non-essential debugging information from general output
   # * Each variable represents a module
   # * Default is to exclude declared modules
   #
@@ -51,6 +54,14 @@
   declare BL64_DBG_EXCLUDE_CHECK="$BL64_VAR_ON"
   declare BL64_DBG_EXCLUDE_MSG="$BL64_VAR_ON"
   declare BL64_DBG_EXCLUDE_LOG="$BL64_VAR_ON"
+
+  #
+  # Dry-Run options
+  #
+  declare BL64_DBG_DRYRUN_NONE='NONE'
+  declare BL64_DBG_DRYRUN_APP='APP'
+  declare BL64_DBG_DRYRUN_LIB='LIB'
+  declare BL64_DBG_DRYRUN_ALL='ALL'
 
   declare _BL64_DBG_TXT_FUNCTION_START='start-function-tracing'
   declare _BL64_DBG_TXT_FUNCTION_STOP='stop-function-tracing'

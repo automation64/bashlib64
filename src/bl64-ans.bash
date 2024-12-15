@@ -52,8 +52,8 @@ function bl64_ans_run_ansible() {
     bl64_check_module 'BL64_ANS_MODULE' ||
     return $?
 
-  bl64_msg_lib_verbose_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
-  bl64_dbg_lib_command_enabled && debug="$BL64_ANS_SET_DEBUG"
+  bl64_msg_lib_verbose_is_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
+  bl64_dbg_lib_command_is_enabled && debug="$BL64_ANS_SET_DEBUG"
 
   bl64_ans_blank_ansible
 
@@ -92,7 +92,7 @@ function bl64_ans_run_ansible_galaxy() {
     bl64_check_parameter 'subcommand' ||
     return $?
 
-  bl64_msg_lib_verbose_enabled && debug="$BL64_ANS_SET_VERBOSE"
+  bl64_msg_lib_verbose_is_enabled && debug="$BL64_ANS_SET_VERBOSE"
 
   bl64_ans_blank_ansible
 
@@ -130,8 +130,8 @@ function bl64_ans_run_ansible_playbook() {
     bl64_check_module 'BL64_ANS_MODULE' ||
     return $?
 
-  bl64_msg_lib_verbose_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
-  bl64_dbg_lib_command_enabled && debug="$BL64_ANS_SET_DEBUG"
+  bl64_msg_lib_verbose_is_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
+  bl64_dbg_lib_command_is_enabled && debug="$BL64_ANS_SET_DEBUG"
 
   bl64_ans_blank_ansible
 

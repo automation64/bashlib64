@@ -35,7 +35,7 @@ function bl64_k8s_label_set() {
     bl64_check_parameter 'value' ||
     return $?
 
-  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
+  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   bl64_msg_show_lib_task "set or update label (${resource}/${name}/${key})"
   # shellcheck disable=SC2086
@@ -83,7 +83,7 @@ function bl64_k8s_annotation_set() {
   shift
   shift
 
-  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
+  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
   [[ "$namespace" == "$BL64_VAR_NONE" ]] && namespace='' || namespace="--namespace ${namespace}"
 
   bl64_msg_show_lib_task "set or update annotation (${resource}/${name})"
@@ -121,7 +121,7 @@ function bl64_k8s_namespace_create() {
   bl64_check_parameter 'namespace' ||
     return $?
 
-  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
+  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_NS" "$namespace"; then
     bl64_msg_show_lib_info "the resource is already created. No further actions are needed (namespace:${namespace})"
@@ -161,7 +161,7 @@ function bl64_k8s_sa_create() {
     bl64_check_parameter 'sa' ||
     return $?
 
-  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
+  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_SA" "$sa" "$namespace"; then
     bl64_msg_show_lib_info "the resource is already created. No further actions are needed (service-account:${sa})"
@@ -208,7 +208,7 @@ function bl64_k8s_secret_create() {
     bl64_check_file "$file" ||
     return $?
 
-  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
+  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_SECRET" "$secret" "$namespace"; then
     bl64_msg_show_lib_info "the resource is already created. No further actions are needed (${BL64_K8S_RESOURCE_SECRET}:${secret})"
@@ -310,7 +310,7 @@ function bl64_k8s_resource_update() {
     bl64_check_file "$definition" ||
     return $?
 
-  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
+  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   bl64_msg_show_lib_task "create or update resource definition (${definition} -> ${namespace})"
   # shellcheck disable=SC2086
@@ -399,8 +399,8 @@ function bl64_k8s_run_kubectl() {
     kubeconfig="--kubeconfig=${kubeconfig}"
   fi
 
-  bl64_msg_lib_verbose_enabled && verbosity="$BL64_K8S_SET_VERBOSE_NORMAL"
-  bl64_dbg_lib_command_enabled && verbosity="$BL64_K8S_SET_VERBOSE_TRACE"
+  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_SET_VERBOSE_NORMAL"
+  bl64_dbg_lib_command_is_enabled && verbosity="$BL64_K8S_SET_VERBOSE_TRACE"
 
   bl64_k8s_blank_kubectl
   bl64_dbg_lib_command_trace_start
@@ -505,7 +505,7 @@ function bl64_k8s_resource_is_created() {
   [[ -n "$namespace" ]] && namespace="--namespace ${namespace}"
 
   # shellcheck disable=SC2086
-  if bl64_dbg_lib_task_enabled; then
+  if bl64_dbg_lib_task_is_enabled; then
     bl64_k8s_run_kubectl "$kubeconfig" \
       'get' "$type" "$name" \
       $BL64_K8S_SET_OUTPUT_NAME $namespace || return $BL64_LIB_ERROR_IS_NOT

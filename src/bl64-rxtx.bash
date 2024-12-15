@@ -39,7 +39,7 @@ function bl64_rxtx_web_get_file() {
 
   bl64_check_overwrite_skip "$destination" "$replace" && return
 
-  bl64_fs_safeguard "$destination" >/dev/null || return $?
+  bl64_fs_path_archive "$destination" >/dev/null || return $?
 
   bl64_msg_show_lib_subtask "download file (${source})"
   # shellcheck disable=SC2086
@@ -67,7 +67,7 @@ function bl64_rxtx_web_get_file() {
     status=$?
   fi
 
-  bl64_fs_restore "$destination" "$status" || return $?
+  bl64_fs_path_recover "$destination" "$status" || return $?
   return $status
 }
 
@@ -112,7 +112,7 @@ function bl64_rxtx_git_get_dir() {
 
   # shellcheck disable=SC2086
   bl64_check_overwrite_skip "$destination" "$replace" && return $?
-  bl64_fs_safeguard "$destination" || return $?
+  bl64_fs_path_archive "$destination" || return $?
 
   bl64_msg_show_lib_subtask "clone source repository (${source_url})"
   if [[ "$source_path" == '.' || "$source_path" == './' ]]; then
@@ -131,7 +131,7 @@ function bl64_rxtx_git_get_dir() {
     bl64_bsh_run_popd
   fi
 
-  bl64_fs_restore "$destination" "$status" || return $?
+  bl64_fs_path_recover "$destination" "$status" || return $?
   return $status
 }
 
@@ -157,8 +157,8 @@ function bl64_rxtx_run_curl() {
     bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
 
-  bl64_msg_lib_verbose_enabled && debug=''
-  bl64_dbg_lib_command_enabled && debug="$BL64_RXTX_SET_CURL_VERBOSE"
+  bl64_msg_lib_verbose_is_enabled && debug=''
+  bl64_dbg_lib_command_is_enabled && debug="$BL64_RXTX_SET_CURL_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -189,7 +189,7 @@ function bl64_rxtx_run_wget() {
     bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_WGET" || return $?
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
+  bl64_dbg_lib_command_is_enabled && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086

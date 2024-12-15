@@ -536,7 +536,7 @@ function bl64_cnt_run_docker() {
     bl64_check_command "$BL64_CNT_CMD_DOCKER" ||
     return $?
 
-  if bl64_dbg_lib_command_enabled; then
+  if bl64_dbg_lib_command_is_enabled; then
     verbose="$BL64_CNT_SET_LOG_LEVEL_DEBUG"
     debug="$BL64_CNT_SET_DEBUG"
   fi
@@ -851,7 +851,7 @@ function bl64_cnt_run_podman() {
     bl64_check_command "$BL64_CNT_CMD_PODMAN" ||
     return $?
 
-  bl64_dbg_lib_command_enabled && verbose="$BL64_CNT_SET_LOG_LEVEL_DEBUG"
+  bl64_dbg_lib_command_is_enabled && verbose="$BL64_CNT_SET_LOG_LEVEL_DEBUG"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086

@@ -2,6 +2,22 @@
 # BashLib64 / Module / Functions / Write messages to logs
 #######################################
 
+#
+# Deprecation aliases
+#
+# * Aliases to deprecated functions
+# * Needed to maintain compatibility up to N-2 versions
+#
+
+function bl64_log_set_runtime() {
+  bl64_msg_show_deprecated 'bl64_log_set_runtime' 'bl64_log_set_target'
+  bl64_log_set_target "$1" "$BL64_LOG_TYPE_MULTIPLE"
+}
+
+#
+# Private functions
+#
+
 #######################################
 # Save a log record to the logs repository
 #
@@ -19,7 +35,7 @@
 #   BL64_LIB_ERROR_MODULE_SETUP_INVALID
 #######################################
 function _bl64_log_register() {
-  bl64_dbg_lib_log_enabled && bl64_dbg_lib_show_function "$@"
+  _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
   local source="$1"
   local category="$2"
   local payload="$3"
@@ -48,6 +64,10 @@ function _bl64_log_register() {
   esac
 }
 
+#
+# Public functions
+#
+
 #######################################
 # Save a single log record of type 'info' to the logs repository.
 #
@@ -62,7 +82,7 @@ function _bl64_log_register() {
 #   >0: failed to save the log record
 #######################################
 function bl64_log_info() {
-  bl64_dbg_lib_log_enabled && bl64_dbg_lib_show_function "$@"
+  _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
   local source="$1"
   local payload="$2"
 
@@ -91,7 +111,7 @@ function bl64_log_info() {
 #   >0: failed to save the log record
 #######################################
 function bl64_log_error() {
-  bl64_dbg_lib_log_enabled && bl64_dbg_lib_show_function "$@"
+  _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
   local source="$1"
   local payload="$2"
 
@@ -117,7 +137,7 @@ function bl64_log_error() {
 #   >0: failed to save the log record
 #######################################
 function bl64_log_warning() {
-  bl64_dbg_lib_log_enabled && bl64_dbg_lib_show_function "$@"
+  _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
   local source="$1"
   local payload="$2"
 

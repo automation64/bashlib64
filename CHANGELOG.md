@@ -5,6 +5,78 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [20.7.0]
+
+### Added
+
+- core
+  - SCRIPT_VERSION to register caller version
+  - bl64_lib_script_version_set: setter for SCRIPT_VERSION
+- os
+  - bl64_os_run_date
+  - bl64_os_run_cat
+- fs
+  - bl64_fs_run_touch
+  - bl64_fs_file_copy
+  - bl64_fs_file_backup
+  - bl64_fs_file_restore
+- log
+  - bl64_log_set_target: added supports for multiple target type
+- dbg
+  - bl64_dbg_app_dryrun_show
+  - bl64_dbg_lib_dryrun_show 
+  - bl64_dbg_app_dryrun_is_enabled
+  - bl64_dbg_lib_dryrun_is_enabled
+  - bl64_dbg_all_dryrun_disable
+  - bl64_dbg_all_dryrun_enable
+  - bl64_dbg_app_dryrun_enable
+  - bl64_dbg_lib_dryrun_enable
+
+### Removed
+
+- core
+  - bl64_lib_alert_parameter_invalid: migrated to msg internal function
+  - bl64_lib_module_is_setup: migrated to msg internal function
+  - bl64_lib_module_imported: demoted to internal function
+
+### Fixed
+
+- tm
+  - added missing OS module dependency
+- rbac
+  - bl64_rbac_add_root: fixed wrong deprecation replacement
+
+### Deprecated
+
+- msg
+  - bl64_msg_app_verbose_enabled: replaced by bl64_msg_app_verbose_is_enabled
+  - bl64_msg_lib_verbose_enabled: replaced by bl64_msg_lib_verbose_is_enabled
+- fs
+  - bl64_fs_create_file: replaced by bl64_fs_file_create
+  - bl64_fs_create_symlink: replaced by bl64_fs_symlink_create
+  - bl64_fs_safeguard: replaced by bl64_fs_path_archive
+  - bl64_fs_restore: replaced by bl64_fs_path_recover
+- log
+  - bl64_log_set_runtime: replaced by bl64_log_set_target
+- dbg
+  - bl64_dbg_app_task_enabled: replaced by bl64_dbg_app_task_is_enabled
+  - bl64_dbg_lib_task_enabled: replaced by bl64_dbg_lib_task_is_enabled
+  - bl64_dbg_app_command_enabled: replaced by 4_dbg_app_command_is_enabled
+  - bl64_dbg_lib_command_enabled: replaced by 4_dbg_lib_command_is_enabled
+  - bl64_dbg_app_trace_enabled: replaced by l64_dbg_app_trace_is_enabled
+  - bl64_dbg_lib_trace_enabled: replaced by l64_dbg_lib_trace_is_enabled
+  - bl64_dbg_app_custom_1_enabled: replaced by _dbg_app_custom_1_is_enabled
+  - bl64_dbg_app_custom_2_enabled: replaced by _dbg_app_custom_2_is_enabled
+  - bl64_dbg_app_custom_3_enabled: replaced by _dbg_app_custom_3_is_enabled
+  - bl64_dbg_lib_check_enabled: replaced by l64_dbg_lib_check_is_enabled
+  - bl64_dbg_lib_log_enabled: replaced by  _bl64_dbg_lib_log_is_enabled
+  - bl64_dbg_lib_msg_enabled: replaced by  _bl64_dbg_lib_msg_is_enabled
+
+### Changed
+
+- fs
+  - bl64_fs_file_create: no longer shows warning if file already exists
+
 ## [20.6.1]
 
 ### Added
@@ -285,12 +357,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - check
-  - **Breaking change**: bl64_check_module_imported: migrated to core module: bl64_lib_module_imported
+  - **Breaking change**: bl64_check_module_imported: migrated to core module: _bl64_lib_module_is_imported
 
 ### Added
 
 - core
-  - bl64_lib_module_imported: migrated from check (bl64_lib_module_imported)
+  - _bl64_lib_module_is_imported: migrated from check (_bl64_lib_module_is_imported)
 - bsh
   - bl64_bsh_env_import_yaml: import and load shell environment variables from YAML file
 - check
@@ -405,7 +477,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - bl64_iam_check_user: migrated from bl64_check_user
 - check
-  - bl64_lib_module_imported: check that the bl64 module is imported (sourced)
+  - _bl64_lib_module_is_imported: check that the bl64 module is imported (sourced)
 
 ### Changed
 

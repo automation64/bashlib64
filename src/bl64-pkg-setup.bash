@@ -16,18 +16,18 @@
 #######################################
 function bl64_pkg_setup() {
   [[ -z "$BL64_VERSION" ]] &&
-    echo 'Error: bashlib64-module-core.bash should the last module to be sourced' &&
+    echo 'Error: bashlib64-module-core.bash should the last sourced module' &&
     return 21
 
   # shellcheck disable=SC2249
-  bl64_lib_module_imported 'BL64_CHECK_MODULE' &&
-    bl64_lib_module_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
-    bl64_lib_module_imported 'BL64_OS_MODULE' &&
-    bl64_lib_module_imported 'BL64_MSG_MODULE' &&
-    bl64_lib_module_imported 'BL64_FS_MODULE' &&
-    bl64_lib_module_imported 'BL64_RXTX_MODULE' &&
-    bl64_lib_module_imported 'BL64_CRYP_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_RXTX_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_CRYP_MODULE' &&
     _bl64_pkg_set_command &&
     _bl64_pkg_set_runtime &&
     _bl64_pkg_set_options &&
