@@ -45,6 +45,14 @@ function bl64_fs_copy_files() {
   bl64_msg_show_deprecated 'bl64_fs_copy_files' 'bl64_fs_file_copy'
   bl64_fs_file_copy "$@"
 }
+function bl64_fs_safeguard() {
+  bl64_msg_show_deprecated 'bl64_fs_safeguard' 'bl64_fs_path_archive'
+  bl64_fs_path_archive "$@"
+}
+function bl64_fs_restore() {
+  bl64_msg_show_deprecated 'bl64_fs_restore' 'bl64_fs_path_recover'
+  bl64_fs_path_recover "$@"
+}
 function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
   bl64_msg_show_deprecated 'bl64_fs_set_permissions' 'bl64_fs_path_permission_set'
@@ -876,11 +884,11 @@ function bl64_fs_find_files() {
 # Safeguard path to a temporary location
 #
 # * Use for file/dir operations that will alter or replace the content and requires a quick rollback mechanism
-# * The original path is renamed until bl64_fs_restore is called to either remove or restore it
+# * The original path is renamed until bl64_fs_path_restore is called to either remove or restore it
 # * If the destination is not present nothing is done. Return with no error. This is to cover for first time path creation
 #
 # Arguments:
-#   $1: safeguard path (produced by bl64_fs_safeguard)
+#   $1: safeguard path (produced by bl64_fs_path_archive)
 #   $2: task status (exit status from last operation)
 # Outputs:
 #   STDOUT: Task progress
@@ -889,10 +897,10 @@ function bl64_fs_find_files() {
 #   0: task executed ok
 #   >0: task failed
 #######################################
-function bl64_fs_safeguard() {
+function bl64_fs_path_archive() {
   bl64_dbg_lib_show_function "$@"
   local destination="${1:-}"
-  local backup="${destination}${BL64_FS_SAFEGUARD_POSTFIX}"
+  local backup="${destination}${BL64_FS_ARCHIVE_POSTFIX}"
 
   bl64_check_parameter 'destination' ||
     return $?
@@ -916,11 +924,11 @@ function bl64_fs_safeguard() {
 # Restore path from safeguard if operation failed or remove if operation was ok
 #
 # * Use as a quick rollback for file/dir operations
-# * Called after bl64_fs_safeguard creates the backup
+# * Called after bl64_fs_path_archive creates the backup
 # * If the backup is not there nothing is done, no error returned. This is to cover for first time path creation
 #
 # Arguments:
-#   $1: safeguard path (produced by bl64_fs_safeguard)
+#   $1: safeguard path (produced by bl64_fs_path_archive)
 #   $2: task status (exit status from last operation)
 # Outputs:
 #   STDOUT: Task progress
@@ -929,11 +937,11 @@ function bl64_fs_safeguard() {
 #   0: task executed ok
 #   >0: task failed
 #######################################
-function bl64_fs_restore() {
+function bl64_fs_path_restore() {
   bl64_dbg_lib_show_function "$@"
   local destination="${1:-}"
   local -i result=$2
-  local backup="${destination}${BL64_FS_SAFEGUARD_POSTFIX}"
+  local backup="${destination}${BL64_FS_ARCHIVE_POSTFIX}"
 
   bl64_check_parameter 'destination' &&
     bl64_check_parameter 'result' ||
@@ -1515,4 +1523,84 @@ function bl64_fs_run_touch() {
   "$BL64_FS_CMD_TOUCH" \
     "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Backup path
+#
+# * Use for file  operations that will alter or replace the content and requires a quick rollback mechanism
+# * The original file is copied until bl64_fs_file_restore is called to either remove or restore it
+# * If the source is not present nothing is done. Return with no error. This is to cover for first time path creation
+#
+# Arguments:
+#   $1: file path
+# Outputs:
+#   STDOUT: Task progress
+#   STDERR: Task errors
+# Returns:
+#   0: task executed ok
+#   >0: task failed
+#######################################
+function bl64_fs_file_backup() {
+  bl64_dbg_lib_show_function "$@"
+  local source="${1:-}"
+  local backup="${source}${BL64_FS_BACKUP_POSTFIX}"
+
+  bl64_check_parameter 'source' || return $?
+  [[ ! -f "$source" ]] && bl64_dbg_lib_show_comments "file is not yet created, nothing to do (${source})" && return 0
+
+  bl64_msg_show_lib_subtask "backup original file ([${source}]->[${backup}])"
+  if ! bl64_fs_run_cp "$source" "$backup"; then
+    bl64_msg_show_error 'failed to create file backup'
+    return $BL64_LIB_ERROR_TASK_BACKUP
+  fi
+
+  return 0
+}
+
+#######################################
+# Restore path from safeguard if operation failed or remove if operation was ok
+#
+# * Use as a quick rollback for file/dir operations
+# * Called after bl64_fs_file_archive creates the backup
+# * If the backup is not there nothing is done, no error returned. This is to cover for first time path creation
+#
+# Arguments:
+#   $1: safeguard path (produced by bl64_fs_file_backup)
+#   $2: task status (exit status from last operation)
+# Outputs:
+#   STDOUT: Task progress
+#   STDERR: Task errors
+# Returns:
+#   0: task executed ok
+#   >0: task failed
+#######################################
+function bl64_fs_file_restore() {
+  bl64_dbg_lib_show_function "$@"
+  local source="${1:-}"
+  local -i result=$2
+  local backup="${source}${BL64_FS_BACKUP_POSTFIX}"
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'result' ||
+    return $?
+
+  bl64_dbg_lib_show_comments 'Return if not present'
+  if [[ ! -f "$backup" ]]; then
+    bl64_dbg_lib_show_info "backup was not created, nothing to do (${backup})"
+    return 0
+  fi
+
+  bl64_dbg_lib_show_comments 'Check if restore is needed based on the operation result'
+  if ((result == 0)); then
+    bl64_msg_show_lib_subtask 'discard obsolete backup'
+    bl64_fs_file_remove "$backup"
+    return 0
+  else
+    bl64_msg_show_lib_subtask "restore original file from backup ([${backup}]->[${source}])"
+    # shellcheck disable=SC2086
+    bl64_os_run_cat "$backup" > "$source" &&
+    bl64_fs_file_remove "$backup" ||
+      return $BL64_LIB_ERROR_TASK_RESTORE
+  fi
 }
