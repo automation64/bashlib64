@@ -3,7 +3,7 @@
 #######################################
 
 function _bl64_log_set_target_single() {
-  bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
+  _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
   local target="$1"
   local destination="${BL64_LOG_REPOSITORY}/${target}.log"
 
@@ -13,7 +13,7 @@ function _bl64_log_set_target_single() {
 }
 
 function _bl64_log_set_target_multiple() {
-  bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
+  _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
   local target="$1"
   local destination="${BL64_LOG_REPOSITORY}/${target}_"
 
@@ -45,7 +45,7 @@ function bl64_log_setup() {
   [[ -z "$BL64_VERSION" ]] &&
     echo 'Error: bashlib64-module-core.bash should the last sourced module' &&
     return 21
-  bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
+  _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
   local log_repository="${1:-}"
   local log_target="${2:-${BL64_VAR_DEFAULT}}"
   local log_type="${3:-${BL64_VAR_DEFAULT}}"
@@ -89,7 +89,7 @@ function bl64_log_setup() {
 #   >0: unable to set
 #######################################
 function bl64_log_set_repository() {
-  bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
+  _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
   local log_repository="$1"
 
   bl64_check_parameter 'log_repository' || return $?
@@ -116,7 +116,7 @@ function bl64_log_set_repository() {
 #   >0: unable to set
 #######################################
 function bl64_log_set_level() {
-  bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
+  _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
   local log_level="$1"
 
   case "$log_level" in
@@ -142,7 +142,7 @@ function bl64_log_set_level() {
 #   >0: unable to set
 #######################################
 function bl64_log_set_format() {
-  bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
+  _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
   local log_format="$1"
 
   case "$log_format" in
@@ -170,7 +170,7 @@ function bl64_log_set_format() {
 #   >0: unable to set
 #######################################
 function bl64_log_set_target() {
-  bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
+  _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
   local log_target="$1"
   local log_type="$2"
 
