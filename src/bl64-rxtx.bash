@@ -39,7 +39,7 @@ function bl64_rxtx_web_get_file() {
 
   bl64_check_overwrite_skip "$destination" "$replace" && return
 
-  bl64_fs_safeguard "$destination" >/dev/null || return $?
+  bl64_fs_path_archive "$destination" >/dev/null || return $?
 
   bl64_msg_show_lib_subtask "download file (${source})"
   # shellcheck disable=SC2086
@@ -67,7 +67,7 @@ function bl64_rxtx_web_get_file() {
     status=$?
   fi
 
-  bl64_fs_restore "$destination" "$status" || return $?
+  bl64_fs_path_restore "$destination" "$status" || return $?
   return $status
 }
 
@@ -112,7 +112,7 @@ function bl64_rxtx_git_get_dir() {
 
   # shellcheck disable=SC2086
   bl64_check_overwrite_skip "$destination" "$replace" && return $?
-  bl64_fs_safeguard "$destination" || return $?
+  bl64_fs_path_archive "$destination" || return $?
 
   bl64_msg_show_lib_subtask "clone source repository (${source_url})"
   if [[ "$source_path" == '.' || "$source_path" == './' ]]; then
@@ -131,7 +131,7 @@ function bl64_rxtx_git_get_dir() {
     bl64_bsh_run_popd
   fi
 
-  bl64_fs_restore "$destination" "$status" || return $?
+  bl64_fs_path_restore "$destination" "$status" || return $?
   return $status
 }
 
