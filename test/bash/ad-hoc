@@ -32,3 +32,5 @@ export TESTMANSH_TEST_SAMPLES
 #
 # * Do not commit from this section below
 #
+
+bl64_cnt_is_inside_container || { bl64_msg_show_error 'test must be run inside a container'; exit 1; }
