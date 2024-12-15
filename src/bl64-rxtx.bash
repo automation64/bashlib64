@@ -67,7 +67,7 @@ function bl64_rxtx_web_get_file() {
     status=$?
   fi
 
-  bl64_fs_path_restore "$destination" "$status" || return $?
+  bl64_fs_path_recover "$destination" "$status" || return $?
   return $status
 }
 
@@ -131,7 +131,7 @@ function bl64_rxtx_git_get_dir() {
     bl64_bsh_run_popd
   fi
 
-  bl64_fs_path_restore "$destination" "$status" || return $?
+  bl64_fs_path_recover "$destination" "$status" || return $?
   return $status
 }
 

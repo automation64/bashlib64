@@ -884,7 +884,7 @@ function bl64_fs_find_files() {
 # Safeguard path to a temporary location
 #
 # * Use for file/dir operations that will alter or replace the content and requires a quick rollback mechanism
-# * The original path is renamed until bl64_fs_path_restore is called to either remove or restore it
+# * The original path is renamed until bl64_fs_path_recover is called to either remove or restore it
 # * If the destination is not present nothing is done. Return with no error. This is to cover for first time path creation
 #
 # Arguments:
@@ -937,7 +937,7 @@ function bl64_fs_path_archive() {
 #   0: task executed ok
 #   >0: task failed
 #######################################
-function bl64_fs_path_restore() {
+function bl64_fs_path_recover() {
   bl64_dbg_lib_show_function "$@"
   local destination="${1:-}"
   local -i result=$2
