@@ -1,0 +1,11 @@
+setup() {
+  # SETUP_PLACEHOLDER
+}
+
+@test "bl64_X_MODULE_X_X_TASK_X: X_TEST_DESCRIPTION_X" {
+  # TEST_PLACEHOLDER
+}
+
+teardown() {
+  # TEARDOWN_PLACEHOLDER
+}
