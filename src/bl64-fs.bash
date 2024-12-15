@@ -25,8 +25,8 @@ function bl64_fs_ln_symbolic() {
   bl64_msg_show_deprecated 'bl64_fs_ln_symbolic' 'bl64_fs_symlink_create'
   bl64_fs_symlink_create "$@"
 }
-function bl64_fs_symlink_create() {
-  bl64_msg_show_deprecated 'bl64_fs_symlink_create' 'bl64_fs_symlink_create'
+function bl64_fs_create_symlink() {
+  bl64_msg_show_deprecated 'bl64_fs_create_symlink' 'bl64_fs_symlink_create'
   bl64_fs_symlink_create "$@"
 }
 function bl64_fs_rm_file() {
