@@ -15,9 +15,11 @@ function _bl64_log_set_target_single() {
 function _bl64_log_set_target_multiple() {
   bl64_dbg_lib_log_enabled && bl64_dbg_lib_show_function "$@"
   local target="$1"
-  local destination="${BL64_LOG_REPOSITORY}/${target}_$(printf '%(%FT%TZ%z)T' '-1').log"
+  local destination="${BL64_LOG_REPOSITORY}/${target}_"
 
+  destination+="$(printf '%(%FT%TZ%z)T' '-1').log" || return $?
   [[ "$BL64_LOG_DESTINATION" == "$destination" ]] && return 0
+
   bl64_fs_file_create "$destination" "$BL64_LOG_TARGET_MODE" &&
     BL64_LOG_DESTINATION="$destination"
 }
