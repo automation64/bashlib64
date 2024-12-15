@@ -14,7 +14,7 @@ function bl64_fs_create_dir() {
   bl64_fs_dir_create "$@"
 }
 function bl64_fs_cp_file() {
-  bl64_msg_show_deprecated 'bl64_fs_cp_file' 'bl64_fs_path_copy'
+  bl64_msg_show_deprecated 'bl64_fs_cp_file' 'bl64_fs_file_copy'
   bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$@"
 }
 function bl64_fs_cp_dir() {
@@ -36,6 +36,11 @@ function bl64_fs_rm_full() {
 function bl64_fs_create_file() {
   bl64_msg_show_deprecated 'bl64_fs_create_file' 'bl64_fs_file_create'
   bl64_fs_file_create "$@"
+}
+
+function bl64_fs_copy_files() {
+  bl64_msg_show_deprecated 'bl64_fs_copy_files' 'bl64_fs_file_copy'
+  bl64_fs_file_copy "$@"
 }
 
 function bl64_fs_set_permissions() {
@@ -75,28 +80,6 @@ function bl64_fs_fix_permissions() {
     "$BL64_VAR_DEFAULT" \
     "$BL64_VAR_DEFAULT" \
     "$BL64_VAR_ON" \
-    "$@"
-}
-
-function bl64_fs_copy_files() {
-  bl64_dbg_lib_show_function "$@"
-  bl64_msg_show_deprecated 'bl64_fs_copy_files' 'bl64_fs_path_copy'
-  local mode="${1:-${BL64_VAR_DEFAULT}}"
-  local user="${2:-${BL64_VAR_DEFAULT}}"
-  local group="${3:-${BL64_VAR_DEFAULT}}"
-  local destination="${4:-${BL64_VAR_DEFAULT}}"
-
-  shift
-  shift
-  shift
-  shift
-
-  bl64_fs_path_copy \
-    "$mode" \
-    "$BL64_VAR_DEFAULT" \
-    "$user" \
-    "$group" \
-    "$destination" \
     "$@"
 }
 
@@ -326,6 +309,67 @@ function bl64_fs_path_copy() {
       "$user" \
       "$group" \
       "$BL64_VAR_ON" \
+      "${destination}/${path_base}" ||
+      return $?
+  done
+}
+
+#######################################
+# Copy one ore more files to a single destination. Optionally set owner and permissions
+#
+# * Wildcards are not allowed. Use run_cp instead if needed
+# * Destination path should be present
+# * Root privilege (sudo) needed if paths are restricted or change owner is requested
+# * No rollback in case of errors. The process will not remove already copied files
+#
+# Arguments:
+#   $1: file permissions. Format: chown format. Default: use current umask
+#   $2: user name. Default: current
+#   $3: group name. Default: current
+#   $4: destination path
+#   $@: full file paths. No wildcards allowed
+# Outputs:
+#   STDOUT: verbose operation
+#   STDERR: command errors
+# Returns:
+#   0: Operation completed ok
+#   >0: Operation failed
+#######################################
+function bl64_fs_file_copy() {
+  bl64_dbg_lib_show_function "$@"
+  local file_mode="${1:-${BL64_VAR_DEFAULT}}"
+  local user="${2:-${BL64_VAR_DEFAULT}}"
+  local group="${3:-${BL64_VAR_DEFAULT}}"
+  local destination="${4:-${BL64_VAR_DEFAULT}}"
+  local path_current=''
+  local path_base=
+
+  bl64_check_directory "$destination" || return $?
+
+  # Remove consumed parameters
+  shift
+  shift
+  shift
+  shift
+
+  # shellcheck disable=SC2086
+  bl64_check_parameters_none "$#" || return $?
+  bl64_msg_show_lib_subtask "copy files (${*} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
+  # shellcheck disable=SC2086
+  bl64_fs_run_cp \
+    $BL64_FS_SET_CP_FORCE \
+    "$@" \
+    "$destination" ||
+    return $?
+
+  for path_current in "$@"; do
+    path_base="$(bl64_fmt_basename "$path_current")"
+    bl64_fs_path_permission_set \
+      "$file_mode" \
+      "$BL64_VAR_DEFAULT" \
+      "$user" \
+      "$group" \
+      "$BL64_VAR_OFF" \
       "${destination}/${path_base}" ||
       return $?
   done
