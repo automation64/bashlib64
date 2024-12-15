@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_os_run_date
 - fs
   - bl64_fs_run_touch
+  - bl64_fs_file_copy
 - log
   - bl64_log_set_target: added supports for multiple target type
 
@@ -30,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - tm
   - added missing OS module dependency
+- rbac
+  - bl64_rbac_add_root: fixed wrong deprecation replacement
 
 ### Deprecated
 
