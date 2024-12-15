@@ -19,6 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_fs_file_copy
 - log
   - bl64_log_set_target: added supports for multiple target type
+- dbg
+  - bl64_dbg_app_dryrun_show
+  - bl64_dbg_lib_dryrun_show 
+  - bl64_dbg_app_dryrun_is_enabled
+  - bl64_dbg_lib_dryrun_is_enabled
+  - bl64_dbg_all_dryrun_disable
+  - bl64_dbg_all_dryrun_enable
+  - bl64_dbg_app_dryrun_enable
+  - bl64_dbg_lib_dryrun_enable
 
 ### Removed
 
@@ -55,8 +64,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_dbg_app_custom_2_enabled: replaced by _dbg_app_custom_2_is_enabled
   - bl64_dbg_app_custom_3_enabled: replaced by _dbg_app_custom_3_is_enabled
   - bl64_dbg_lib_check_enabled: replaced by l64_dbg_lib_check_is_enabled
-  - bl64_dbg_lib_log_enabled: replaced by  bl64_dbg_lib_log_is_enabled
-  - bl64_dbg_lib_msg_enabled: replaced by  bl64_dbg_lib_msg_is_enabled
+  - bl64_dbg_lib_log_enabled: replaced by  _bl64_dbg_lib_log_is_enabled
+  - bl64_dbg_lib_msg_enabled: replaced by  _bl64_dbg_lib_msg_is_enabled
 
 ### Changed
 

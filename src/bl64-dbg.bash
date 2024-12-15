@@ -20,9 +20,9 @@ function bl64_dbg_lib_trace_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_tra
 function bl64_dbg_app_custom_1_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_custom_1_enabled' 'bl64_dbg_app_custom_1_is_enabled'; bl64_dbg_app_custom_1_is_enabled; }
 function bl64_dbg_app_custom_2_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_custom_2_enabled' 'bl64_dbg_app_custom_2_is_enabled'; bl64_dbg_app_custom_2_is_enabled; }
 function bl64_dbg_app_custom_3_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_custom_3_enabled' 'bl64_dbg_app_custom_3_is_enabled'; bl64_dbg_app_custom_3_is_enabled; }
-function bl64_dbg_lib_check_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_check_enabled' 'bl64_dbg_lib_check_is_enabled'; bl64_dbg_lib_check_is_enabled; }
-function bl64_dbg_lib_log_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_log_enabled' 'bl64_dbg_lib_log_is_enabled'; bl64_dbg_lib_log_is_enabled; }
-function bl64_dbg_lib_msg_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_msg_enabled' 'bl64_dbg_lib_msg_is_enabled'; bl64_dbg_lib_msg_is_enabled; }
+function bl64_dbg_lib_check_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_check_enabled' '_bl64_dbg_lib_check_is_enabled'; _bl64_dbg_lib_check_is_enabled; }
+function bl64_dbg_lib_log_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_log_enabled' '_bl64_dbg_lib_log_is_enabled'; _bl64_dbg_lib_log_is_enabled; }
+function bl64_dbg_lib_msg_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_msg_enabled' '_bl64_dbg_lib_msg_is_enabled'; _bl64_dbg_lib_msg_is_enabled; }
 
 #
 # Internal functions
@@ -30,7 +30,12 @@ function bl64_dbg_lib_msg_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_msg_e
 
 function _bl64_dbg_show() {
   local message="$1"
-  printf '%s: %s\n' 'Debug' "$message" >&2
+  printf '%s: %s\n' '[Debug]' "$message" >&2
+}
+
+function _bl64_dbg_dryrun_show() {
+  local message="$1"
+  printf '%s: %s\n' '[Dry-Run]' "$message"
 }
 
 #
@@ -461,5 +466,39 @@ function bl64_dbg_lib_show_globals() {
     [[ ! "$variable" =~ $filter || "$variable" =~ "declare -- filter=" ]] && continue
     _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BASH_VARIABLE} ${variable}"
   done
+  return 0
+}
+
+#######################################
+# Show app level dryrun information
+#
+# Arguments:
+#   $@: messages
+# Outputs:
+#   STDOUT: Dryrun message
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_dbg_app_dryrun_show() {
+  bl64_dbg_app_dryrun_is_enabled || return 0
+  _bl64_dbg_dryrun_show "$@"
+  return 0
+}
+
+#######################################
+# Show lib level dryrun information
+#
+# Arguments:
+#   $@: messages
+# Outputs:
+#   STDOUT: Dryrun message
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_dbg_lib_dryrun_show() {
+  bl64_dbg_lib_dryrun_is_enabled || return 0
+  _bl64_dbg_dryrun_show "$@"
   return 0
 }
