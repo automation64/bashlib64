@@ -22,8 +22,12 @@ function bl64_fs_cp_dir() {
   bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" "$@"
 }
 function bl64_fs_ln_symbolic() {
-  bl64_msg_show_deprecated 'bl64_fs_ln_symbolic' 'bl64_fs_create_symlink'
-  bl64_fs_create_symlink "$1" "$2"
+  bl64_msg_show_deprecated 'bl64_fs_ln_symbolic' 'bl64_fs_symlink_create'
+  bl64_fs_symlink_create "$@"
+}
+function bl64_fs_symlink_create() {
+  bl64_msg_show_deprecated 'bl64_fs_symlink_create' 'bl64_fs_symlink_create'
+  bl64_fs_symlink_create "$@"
 }
 function bl64_fs_rm_file() {
   bl64_msg_show_deprecated 'bl64_fs_rm_file' 'bl64_fs_file_remove'
@@ -37,12 +41,10 @@ function bl64_fs_create_file() {
   bl64_msg_show_deprecated 'bl64_fs_create_file' 'bl64_fs_file_create'
   bl64_fs_file_create "$@"
 }
-
 function bl64_fs_copy_files() {
   bl64_msg_show_deprecated 'bl64_fs_copy_files' 'bl64_fs_file_copy'
   bl64_fs_file_copy "$@"
 }
-
 function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
   bl64_msg_show_deprecated 'bl64_fs_set_permissions' 'bl64_fs_path_permission_set'
@@ -1364,7 +1366,7 @@ function bl64_fs_check_new_dir() {
 #   0: operation completed ok
 #   >0: operation failed
 #######################################
-function bl64_fs_create_symlink() {
+function bl64_fs_symlink_create() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-}"
   local destination="${2:-}"
@@ -1380,11 +1382,11 @@ function bl64_fs_create_symlink() {
       bl64_fs_file_remove "$destination" ||
         return $?
     else
-      bl64_msg_show_warning "target symbolick link is already present. No further action taken (${destination})"
+      bl64_msg_show_warning "target symbolic link is already present. No further action taken (${destination})"
       return 0
     fi
   fi
-  bl64_msg_show_lib_subtask "create symbolick link (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
+  bl64_msg_show_lib_subtask "create symbolic link (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
   bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination"
 }
 

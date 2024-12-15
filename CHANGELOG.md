@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - fs
   - bl64_fs_create_file: replaced by bl64_fs_file_create
+  - bl64_fs_create_symlink: replaced by bl64_fs_symlink_create
 - log
   - bl64_log_set_runtime: replaced by bl64_log_set_target
 
