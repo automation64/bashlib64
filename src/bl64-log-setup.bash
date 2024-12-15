@@ -2,14 +2,35 @@
 # BashLib64 / Module / Setup / Write messages to logs
 #######################################
 
+function _bl64_log_set_target_single() {
+  bl64_dbg_lib_log_enabled && bl64_dbg_lib_show_function "$@"
+  local target="$1"
+  local destination="${BL64_LOG_REPOSITORY}/${target}.log"
+
+  [[ "$BL64_LOG_DESTINATION" == "$destination" ]] && return 0
+  bl64_fs_file_create "$destination" "$BL64_LOG_TARGET_MODE" &&
+    BL64_LOG_DESTINATION="$destination"
+}
+
+function _bl64_log_set_target_multiple() {
+  bl64_dbg_lib_log_enabled && bl64_dbg_lib_show_function "$@"
+  local target="$1"
+  local destination="${BL64_LOG_REPOSITORY}/${target}_$(printf '%(%FT%TZ%z)T' '-1').log"
+
+  [[ "$BL64_LOG_DESTINATION" == "$destination" ]] && return 0
+  bl64_fs_file_create "$destination" "$BL64_LOG_TARGET_MODE" &&
+    BL64_LOG_DESTINATION="$destination"
+}
+
 #######################################
 # Setup the bashlib64 module
 #
 # Arguments:
 #   $1: log repository. Full path
 #   $2: log target. Default: BL64_SCRIPT_ID
-#   $2: level. One of BL64_LOG_CATEGORY_*
-#   $3: format. One of BL64_LOG_FORMAT_*
+#   $3: target type. One of BL64_LOG_TYPE_*
+#   $4: level. One of BL64_LOG_CATEGORY_*
+#   $5: format. One of BL64_LOG_FORMAT_*
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -23,21 +44,30 @@ function bl64_log_setup() {
     echo 'Error: bashlib64-module-core.bash should the last sourced module' &&
     return 21
   bl64_dbg_lib_log_enabled && bl64_dbg_lib_show_function "$@"
-  local repository="${1:-}"
-  local target="${2:-${BL64_SCRIPT_ID}}"
-  local level="${3:-${BL64_LOG_CATEGORY_NONE}}"
-  local format="${4:-${BL64_LOG_FORMAT_CSV}}"
+  local log_repository="${1:-}"
+  local log_target="${2:-${BL64_VAR_DEFAULT}}"
+  local log_type="${3:-${BL64_VAR_DEFAULT}}"
+  local log_level="${4:-${BL64_VAR_DEFAULT}}"
+  local log_format="${5:-${BL64_VAR_DEFAULT}}"
 
-  [[ -z "$repository" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  bl64_check_parameter 'log_repository' ||
+    return $?
+
+  [[ "$log_target" == "$BL64_VAR_DEFAULT" ]] && log_target="$BL64_SCRIPT_ID"
+  [[ "$log_type" == "$BL64_VAR_DEFAULT" ]] && log_type="$BL64_LOG_TYPE_SINGLE"
+  [[ "$log_level" == "$BL64_VAR_DEFAULT" ]] && log_level="$BL64_LOG_CATEGORY_NONE"
+  [[ "$log_format" == "$BL64_VAR_DEFAULT" ]] && log_format="$BL64_LOG_FORMAT_CSV"
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     bl64_dbg_lib_show_function &&
     _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    bl64_log_set_repository "$repository" &&
-    bl64_log_set_target "$target" &&
-    bl64_log_set_level "$level" &&
-    bl64_log_set_format "$format" &&
+    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    bl64_log_set_repository "$log_repository" &&
+    bl64_log_set_target "$log_target" "$log_type" &&
+    bl64_log_set_level "$log_level" &&
+    bl64_log_set_format "$log_format" &&
     BL64_LOG_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'log'
 }
@@ -58,18 +88,17 @@ function bl64_log_setup() {
 #######################################
 function bl64_log_set_repository() {
   bl64_dbg_lib_log_enabled && bl64_dbg_lib_show_function "$@"
-  local repository="$1"
+  local log_repository="$1"
 
-  if [[ ! -d "$repository" ]]; then
-    "$BL64_FS_CMD_MKDIR" "$repository" &&
-      "$BL64_FS_CMD_CHMOD" "$BL64_LOG_REPOSITORY_MODE" "$repository" ||
-      return $BL64_LIB_ERROR_TASK_FAILED
-  else
-    [[ -w "$repository" ]] || return $BL64_LIB_ERROR_TASK_FAILED
-  fi
+  bl64_check_parameter 'log_repository' || return $?
+  [[ "$BL64_LOG_REPOSITORY" == "$log_repository" ]] && return 0
 
-  BL64_LOG_REPOSITORY="$repository"
-  return 0
+  bl64_fs_dir_create \
+    "$BL64_LOG_REPOSITORY_MODE" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+    "$log_repository" ||
+    return $?
+
+  BL64_LOG_REPOSITORY="$log_repository"
 }
 
 #######################################
@@ -86,15 +115,15 @@ function bl64_log_set_repository() {
 #######################################
 function bl64_log_set_level() {
   bl64_dbg_lib_log_enabled && bl64_dbg_lib_show_function "$@"
-  local level="$1"
+  local log_level="$1"
 
-  case "$level" in
+  case "$log_level" in
   "$BL64_LOG_CATEGORY_NONE") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_NONE" ;;
   "$BL64_LOG_CATEGORY_INFO") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_INFO" ;;
   "$BL64_LOG_CATEGORY_DEBUG") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_DEBUG" ;;
   "$BL64_LOG_CATEGORY_WARNING") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_WARNING" ;;
   "$BL64_LOG_CATEGORY_ERROR") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_ERROR" ;;
-  *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
+  *) bl64_check_alert_parameter_invalid 'log_level' ;;
   esac
 }
 
@@ -112,25 +141,25 @@ function bl64_log_set_level() {
 #######################################
 function bl64_log_set_format() {
   bl64_dbg_lib_log_enabled && bl64_dbg_lib_show_function "$@"
-  local format="$1"
+  local log_format="$1"
 
-  case "$format" in
+  case "$log_format" in
   "$BL64_LOG_FORMAT_CSV")
     BL64_LOG_FORMAT="$BL64_LOG_FORMAT_CSV"
     BL64_LOG_FS=':'
     ;;
-  *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
+  *) bl64_check_alert_parameter_invalid 'log_format' ;;
   esac
 }
 
 #######################################
 # Set log target
 #
-# * Log target is the file where logs will be written to
-# * File is created or appended in the log repository
+# * Target is created or appended on the log repository
 #
 # Arguments:
 #   $1: log target. Format: file name
+#   $2: target type
 # Outputs:
 #   STDOUT: None
 #   STDERR: commands stderr
@@ -140,59 +169,23 @@ function bl64_log_set_format() {
 #######################################
 function bl64_log_set_target() {
   bl64_dbg_lib_log_enabled && bl64_dbg_lib_show_function "$@"
-  local target="$1"
-  local destination="${BL64_LOG_REPOSITORY}/${target}"
+  local log_target="$1"
+  local log_type="$2"
 
-  # Check if there is a new target to set
-  [[ "$BL64_LOG_DESTINATION" == "$destination" ]] && return 0
+  bl64_check_parameter 'log_target' &&
+    bl64_check_parameter 'log_type' ||
+    return $?
 
-  if [[ ! -w "$destination" ]]; then
-    "$BL64_FS_CMD_TOUCH" "$destination" &&
-      "$BL64_FS_CMD_CHMOD" "$BL64_LOG_TARGET_MODE" "$destination" ||
-      return $BL64_LIB_ERROR_TASK_FAILED
-  fi
-
-  BL64_LOG_DESTINATION="$destination"
-  return 0
-}
-
-#######################################
-# Set runtime log target
-#
-# * Use to save output from commands using one file per execution
-# * The target name is used as the directory for each execution
-# * The target directory is created in the log repository
-# * The calling script is responsible for redirecting the command's output to the target path BL64_LOG_RUNTIME
-#
-# Arguments:
-#   $1: runtime log target. Format: directory name
-# Outputs:
-#   STDOUT: None
-#   STDERR: commands stderr
-# Returns:
-#   0: set ok
-#   >0: unable to set
-#######################################
-function bl64_log_set_runtime() {
-  bl64_dbg_lib_log_enabled && bl64_dbg_lib_show_function "$@"
-  local target="$1"
-  local destination="${BL64_LOG_REPOSITORY}/${target}"
-  local log=''
-
-  # Check if there is a new target to set
-  [[ "$BL64_LOG_RUNTIME" == "$destination" ]] && return 0
-
-  if [[ ! -d "$destination" ]]; then
-    "$BL64_FS_CMD_MKDIR" "$destination" &&
-      "$BL64_FS_CMD_CHMOD" "$BL64_LOG_REPOSITORY_MODE" "$destination" ||
-      return $BL64_LIB_ERROR_TASK_FAILED
-  fi
-
-  [[ ! -w "$destination" ]] && return $BL64_LIB_ERROR_TASK_FAILED
-
-  log="$(printf '%(%FT%TZ%z)T' '-1')" &&
-    BL64_LOG_RUNTIME="${destination}/${log}.log" ||
-    return 0
-
-  return 0
+  case "$log_type" in
+  "$BL64_LOG_TYPE_SINGLE")
+    _bl64_log_set_target_single "$log_target"
+    ;;
+  "$BL64_LOG_TYPE_MULTIPLE")
+    _bl64_log_set_target_multiple "$log_target"
+    ;;
+  *)
+    bl64_check_alert_parameter_invalid 'log_type'
+    return $?
+    ;;
+  esac
 }

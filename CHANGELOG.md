@@ -10,7 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - core
-  - Added SCRIPT_VERSION variable and bl64_lib_script_version_set setter to register caller version
+  - SCRIPT_VERSION to register caller version
+  - bl64_lib_script_version_set: setter for SCRIPT_VERSION
+- os
+  - bl64_os_run_date
+- fs
+  - bl64_fs_run_touch
+- log
+  - bl64_log_set_target: added supports for multiple target type
 
 ### Removed
 
@@ -18,6 +25,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_lib_alert_parameter_invalid: migrated to msg internal function
   - bl64_lib_module_is_setup: migrated to msg internal function
   - bl64_lib_module_imported: demoted to internal function
+
+### Fixed
+
+- tm
+  - added missing OS module dependency
+
+### Deprecated
+
+- fs
+  - bl64_fs_create_file: replaced by bl64_fs_file_create
+- log
+  - bl64_log_set_runtime: replaced by bl64_log_set_target
+
+### Changed
+
+- fs
+  - bl64_fs_file_create: no longer shows warning if file already exists
 
 ## [20.6.1]
 

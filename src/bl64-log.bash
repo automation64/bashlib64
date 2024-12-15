@@ -2,6 +2,22 @@
 # BashLib64 / Module / Functions / Write messages to logs
 #######################################
 
+#
+# Deprecation aliases
+#
+# * Aliases to deprecated functions
+# * Needed to maintain compatibility up to N-2 versions
+#
+
+function bl64_log_set_runtime() {
+  bl64_msg_show_deprecated 'bl64_log_set_runtime' 'bl64_log_set_target'
+  bl64_log_set_target "$1" "$BL64_LOG_TYPE_MULTIPLE"
+}
+
+#
+# Private functions
+#
+
 #######################################
 # Save a log record to the logs repository
 #
@@ -47,6 +63,10 @@ function _bl64_log_register() {
   *) return $BL64_LIB_ERROR_MODULE_SETUP_INVALID ;;
   esac
 }
+
+#
+# Public functions
+#
 
 #######################################
 # Save a single log record of type 'info' to the logs repository.
