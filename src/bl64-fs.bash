@@ -5,16 +5,38 @@
 #
 # Deprecation aliases
 #
-# * Aliases to deprecated functions 
+# * Aliases to deprecated functions
 # * Needed to maintain compatibility up to N-2 versions
 #
 
-function bl64_fs_create_dir() { bl64_msg_show_deprecated 'bl64_fs_create_dir' 'bl64_fs_dir_create'; bl64_fs_dir_create "$@"; }
-function bl64_fs_cp_file() { bl64_msg_show_deprecated 'bl64_fs_cp_file' 'bl64_fs_path_copy'; bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$@"; }
-function bl64_fs_cp_dir() { bl64_msg_show_deprecated 'bl64_fs_cp_dir' 'bl64_fs_path_copy'; bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" "$@"; }
-function bl64_fs_ln_symbolic() { bl64_msg_show_deprecated 'bl64_fs_ln_symbolic' 'bl64_fs_create_symlink'; bl64_fs_create_symlink "$1" "$2"; }
-function bl64_fs_rm_file() { bl64_msg_show_deprecated 'bl64_fs_rm_file' 'bl64_fs_file_remove'; bl64_fs_file_remove "$@"; }
-function bl64_fs_rm_full() { bl64_msg_show_deprecated 'bl64_fs_rm_full' 'bl64_fs_path_remove'; bl64_fs_path_remove "$@"; }
+function bl64_fs_create_dir() {
+  bl64_msg_show_deprecated 'bl64_fs_create_dir' 'bl64_fs_dir_create'
+  bl64_fs_dir_create "$@"
+}
+function bl64_fs_cp_file() {
+  bl64_msg_show_deprecated 'bl64_fs_cp_file' 'bl64_fs_path_copy'
+  bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$@"
+}
+function bl64_fs_cp_dir() {
+  bl64_msg_show_deprecated 'bl64_fs_cp_dir' 'bl64_fs_path_copy'
+  bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" "$@"
+}
+function bl64_fs_ln_symbolic() {
+  bl64_msg_show_deprecated 'bl64_fs_ln_symbolic' 'bl64_fs_create_symlink'
+  bl64_fs_create_symlink "$1" "$2"
+}
+function bl64_fs_rm_file() {
+  bl64_msg_show_deprecated 'bl64_fs_rm_file' 'bl64_fs_file_remove'
+  bl64_fs_file_remove "$@"
+}
+function bl64_fs_rm_full() {
+  bl64_msg_show_deprecated 'bl64_fs_rm_full' 'bl64_fs_path_remove'
+  bl64_fs_path_remove "$@"
+}
+function bl64_fs_create_file() {
+  bl64_msg_show_deprecated 'bl64_fs_create_file' 'bl64_fs_file_create'
+  bl64_fs_file_create "$@"
+}
 
 function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
@@ -895,7 +917,6 @@ function bl64_fs_restore() {
   fi
 }
 
-
 #######################################
 # Set path permissions and ownership
 #
@@ -1327,7 +1348,6 @@ function bl64_fs_create_symlink() {
 # Creates an empty regular file
 #
 # * Creates file if not existing only
-# * If existing, warn and return with no error
 #
 # Arguments:
 #   $1: full path to the file
@@ -1341,7 +1361,7 @@ function bl64_fs_create_symlink() {
 #   0: task executed ok
 #   >0: task failed
 #######################################
-function bl64_fs_create_file() {
+function bl64_fs_file_create() {
   bl64_dbg_lib_show_function "$@"
   local file_path="$1"
   local mode="${2:-${BL64_VAR_DEFAULT}}"
@@ -1352,11 +1372,9 @@ function bl64_fs_create_file() {
     return $?
 
   bl64_msg_show_lib_subtask "create empty regular file (${file_path})"
-  [[ -f "$file_path" ]] &&
-    bl64_msg_show_warning 'target file is already created' &&
-    return 0
+  [[ -f "$file_path" ]] && return 0
 
-  "$BL64_FS_CMD_TOUCH" "$file_path" &&
+  bl64_fs_run_touch "$file_path" &&
     bl64_fs_path_permission_set "$mode" "$BL64_VAR_DEFAULT" "$user" "$group" "$BL64_VAR_OFF" "$file_path"
 }
 
@@ -1424,4 +1442,31 @@ function bl64_fs_dir_reset() {
 
   bl64_fs_path_remove "$@" &&
     bl64_fs_dir_create "$mode" "$user" "$group" "$@"
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_fs_run_touch() {
+  bl64_dbg_lib_show_function "$@"
+  local debug=''
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_MODULE' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_FS_CMD_TOUCH" \
+    "$@"
+  bl64_dbg_lib_trace_stop
 }
