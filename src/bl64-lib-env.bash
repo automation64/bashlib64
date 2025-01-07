@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.7.0'
+  declare BL64_VERSION='20.8.0'
 
   #
   # Imported shell standard variables
@@ -145,7 +145,7 @@
   declare BL64_SCRIPT_NAME=''
   declare BL64_SCRIPT_SID=''
   declare BL64_SCRIPT_ID=''
-  declare BL64_SCRIPT_VERSION=''
+  declare BL64_SCRIPT_VERSION='1.0.0'
 
   #
   # Set Signal traps

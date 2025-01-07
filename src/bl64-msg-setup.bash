@@ -222,3 +222,31 @@ function bl64_msg_app_enable_verbose {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_APP"
 }
+
+#
+# Help attributes
+#
+
+function bl64_msg_help_usage_set(){
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
+  local content="${1:-$BL64_VAR_DEFAULT}"
+  BL64_MSG_HELP_USAGE="$content"
+}
+
+function bl64_msg_help_about_set(){
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
+  local content="${1:-$BL64_VAR_DEFAULT}"
+  BL64_MSG_HELP_ABOUT="$content"
+}
+
+function bl64_msg_help_description_set(){
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
+  local content="${1:-$BL64_VAR_DEFAULT}"
+  BL64_MSG_HELP_DESCRIPTION="$content"
+}
+
+function bl64_msg_help_parameters_set(){
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
+  local content="${1:-$BL64_VAR_DEFAULT}"
+  BL64_MSG_HELP_PARAMETERS="$content"
+}

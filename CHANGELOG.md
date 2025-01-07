@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [20.8.0]
+
+### Added
+
+- msg
+  - bl64_msg_help_show: new help function
+  - bl64_msg_show_about: show about msg
+
+### Fixed
+
+- txt
+  - bl64_txt_setup: wrong debugging func name
+
+### Deprecated
+
+- msg
+  - bl64_msg_show_usage: replaced by bl64_msg_help_show
+
 ## [20.7.0]
 
 ### Added
