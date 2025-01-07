@@ -115,7 +115,7 @@ function _bl64_txt_set_command() {
     if [[ -x '/usr/bin/gawk' ]]; then
       BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
     else
-      bl64_dbg_show_comment 'no GAWK present. AWK bundled with busybox is not posix compliant'
+      bl64_dbg_lib_show_comments 'no GAWK present. AWK bundled with busybox is not posix compliant'
     fi
     ;;
   ${BL64_OS_MCOS}-*)

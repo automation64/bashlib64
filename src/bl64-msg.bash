@@ -5,12 +5,28 @@
 #
 # Deprecation aliases
 #
-# * Aliases to deprecated functions 
+# * Aliases to deprecated functions
 # * Needed to maintain compatibility up to N-2 versions
 #
 
 function bl64_msg_app_verbose_enabled { bl64_msg_show_deprecated 'bl64_msg_app_verbose_enabled' 'bl64_msg_app_verbose_is_enabled'; bl64_msg_app_verbose_is_enabled; }
 function bl64_msg_lib_verbose_enabled { bl64_msg_show_deprecated 'bl64_msg_lib_verbose_enabled' 'bl64_msg_lib_verbose_is_enabled'; bl64_msg_lib_verbose_is_enabled; }
+function bl64_msg_show_usage() {
+  bl64_msg_show_deprecated 'bl64_msg_show_usage' 'bl64_msg_help_show'
+  local usage="${1:-${BL64_VAR_NULL}}"
+  local description="${2:-${BL64_VAR_DEFAULT}}"
+  local commands="${3:-}"
+  local flags="${4:-}"
+  local parameters="${5:-}"
+
+  bl64_msg_help_usage_set "$usage"
+  bl64_msg_help_description_set "$description"
+  bl64_msg_help_parameters_set \
+"${commands}
+${flags}
+${parameters}"
+  bl64_msg_help_show
+}
 
 #
 # Internal functions
@@ -56,7 +72,7 @@ function _bl64_msg_alert_show_parameter() {
 # Arguments:
 #   $1: stetic attribute
 #   $2: type of message
-#   $2: message to show
+#   $3: message to show
 # Outputs:
 #   STDOUT: message
 #   STDERR: message when type is error or warning
@@ -71,7 +87,7 @@ function _bl64_msg_print() {
   local message="${3:-}"
 
   _bl64_msg_module_check_setup 'BL64_MSG_MODULE' || return $?
-  [[ -n "$attribute" && -n "$type" && -n "$message" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -n "$attribute" && -n "$type" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
 
   case "$BL64_MSG_OUTPUT" in
   "$BL64_MSG_OUTPUT_ASCII") _bl64_msg_format_ascii "$attribute" "$type" "$message" ;;
@@ -91,7 +107,6 @@ function _bl64_msg_format_ansi() {
   local style_fmtcaller="${BL64_MSG_THEME}_FMTCALLER"
   local linefeed='\n'
 
-  [[ -n "$attribute" && -n "$type" && -n "$message" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
   style="${BL64_MSG_THEME}_${attribute}"
   [[ "$attribute" == "$BL64_MSG_TYPE_INPUT" ]] && linefeed=''
 
@@ -142,7 +157,6 @@ function _bl64_msg_format_ascii() {
   local style_fmtcaller="${BL64_MSG_THEME}_FMTCALLER"
   local linefeed='\n'
 
-  [[ -n "$attribute" && -n "$type" && -n "$message" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
   style="${BL64_MSG_THEME}_${attribute}"
   [[ "$attribute" == "$BL64_MSG_TYPE_INPUT" ]] && linefeed=''
 
@@ -185,53 +199,6 @@ function _bl64_msg_format_ascii() {
 #
 # Public functions
 #
-
-#######################################
-# Show script usage information
-#
-# Arguments:
-#   $1: script command line. Include all required and optional components
-#   $2: full script usage description
-#   $3: list of script commands
-#   $4: list of script flags
-#   $5: list of script parameters
-# Outputs:
-#   STDOUT: usage info
-#   STDERR: None
-# Returns:
-#   0: successfull execution
-#   >0: printf error
-#######################################
-function bl64_msg_show_usage() {
-  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local usage="${1:-${BL64_VAR_NULL}}"
-  local description="${2:-${BL64_VAR_DEFAULT}}"
-  local commands="${3:-${BL64_VAR_DEFAULT}}"
-  local flags="${4:-${BL64_VAR_DEFAULT}}"
-  local parameters="${5:-${BL64_VAR_DEFAULT}}"
-
-  bl64_check_parameter 'usage' || return $?
-
-  printf '\n%s: %s %s\n\n' 'Usage' "$BL64_SCRIPT_ID" "$usage"
-
-  if [[ "$description" != "$BL64_VAR_DEFAULT" ]]; then
-    printf '%s\n\n' "$description"
-  fi
-
-  if [[ "$commands" != "$BL64_VAR_DEFAULT" ]]; then
-    printf '%s\n%s\n' 'Commands' "$commands"
-  fi
-
-  if [[ "$flags" != "$BL64_VAR_DEFAULT" ]]; then
-    printf '%s\n%s\n' 'Flags' "$flags"
-  fi
-
-  if [[ "$parameters" != "$BL64_VAR_DEFAULT" ]]; then
-    printf '%s\n%s\n' 'Parameters' "$parameters"
-  fi
-
-  return 0
-}
 
 #######################################
 # Display error message
@@ -635,4 +602,64 @@ function bl64_msg_show_setup() {
   for variable in "$@"; do
     eval "bl64_msg_show_info \"${BL64_MSG_COSMETIC_TAB2}${variable}=\$${variable}\""
   done
+}
+
+#######################################
+# Show help message
+#
+# Arguments:
+#   NONE
+# Outputs:
+#   STDOUT: help message
+#   STDERR: NONE
+# Returns:
+#   0: Always OK
+#######################################
+function bl64_msg_help_show(){
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
+  local current_format="$BL64_MSG_FORMAT"
+  bl64_msg_set_format "$BL64_MSG_FORMAT_PLAIN"
+  if [[ "$BL64_MSG_HELP_USAGE" != "$BL64_VAR_DEFAULT" ]]; then
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
+  fi
+
+  if [[ "$BL64_MSG_HELP_ABOUT" != "$BL64_VAR_DEFAULT" ]]; then
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'About' "$BL64_MSG_HELP_ABOUT"
+  fi
+
+  if [[ "$BL64_MSG_HELP_DESCRIPTION" != "$BL64_VAR_DEFAULT" ]]; then
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Description'
+    printf '\n%s\n\n' "$BL64_MSG_HELP_DESCRIPTION"
+  fi
+
+  if [[ "$BL64_MSG_HELP_PARAMETERS" != "$BL64_VAR_DEFAULT" ]]; then
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Parameters'
+    printf '\n%s\n' "$BL64_MSG_HELP_PARAMETERS"
+  fi
+  bl64_msg_set_format "$current_format"
+  return 0
+}
+
+#######################################
+# Display about the script message
+#
+# * bl64_msg_help_about_set must be run before
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: Always ok
+#######################################
+function bl64_msg_show_about() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
+
+  bl64_msg_app_verbose_is_enabled || return 0
+
+  if [[ "$BL64_MSG_HELP_ABOUT" != "$BL64_VAR_DEFAULT" ]]; then
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'About' "$BL64_MSG_HELP_ABOUT"
+  fi
+  return 0
 }

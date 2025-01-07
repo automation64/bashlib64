@@ -2,7 +2,7 @@
 #
 # Dev / Build / Project / Build application
 #
-# * Version: 4.0.0
+# * Version: 4.0.1
 # * Template: 2.0.0
 #
 
@@ -110,8 +110,8 @@ function dev_build_create_header() {
   bl64_msg_show_task 'creating library header'
   # shellcheck disable=SC2119
   dev_build_merge_core >"$_BUILD_SA" &&
-    bl64_fs_cp_file "$_BUILD_SA" "$_BUILD_CORE" &&
-    bl64_fs_cp_file "$_BUILD_SA" "$_BUILD_MODULE_CORE" ||
+    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$_BUILD_SA" "$_BUILD_CORE" &&
+    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$_BUILD_SA" "$_BUILD_MODULE_CORE" ||
     return $?
   # shellcheck disable=SC2119
   {

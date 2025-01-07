@@ -34,4 +34,4 @@ bl64_msg_all_enable_verbose
 #
 
 # Enable for containers
-bl64_cnt_is_inside_container || { bl64_msg_show_error 'test must be run inside a container'; exit 1; }
+# bl64_cnt_is_inside_container || { bl64_msg_show_error 'test must be run inside a container'; exit 1; }
