@@ -1,11 +1,11 @@
-@test "bl64_fs_create_symlink: missing parameter: all" {
+@test "bl64_fs_symlink_create: missing parameter: all" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  run bl64_fs_create_symlink
+  run bl64_fs_symlink_create
   assert_failure
 }
 
-@test "bl64_fs_create_symlink: missing parameter: 2nd" {
+@test "bl64_fs_symlink_create: missing parameter: 2nd" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  run bl64_fs_create_symlink '/fake/file'
+  run bl64_fs_symlink_create '/fake/file'
   assert_failure
 }
