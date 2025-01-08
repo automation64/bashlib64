@@ -453,7 +453,7 @@ function bl64_fs_merge_files() {
     status=$?
   else
     bl64_dbg_lib_show_comments "merge failed, removing incomplete file (${destination})"
-    [[ -f "$destination" ]] && bl64_fs_file_remove "$destination"
+    bl64_fs_file_remove "$destination"
   fi
 
   return $status
@@ -1432,6 +1432,7 @@ function bl64_fs_file_create() {
 #
 # * No error if the path is not present
 # * No backup previous to removal
+# * Will only remove files and links
 #
 # Arguments:
 #   $@: list of full file paths
@@ -1450,7 +1451,7 @@ function bl64_fs_file_remove() {
     return $?
 
   for path_current in "$@"; do
-    [[ ! -f "$path_current" ]] && continue
+    [[ ! -f "$path_current" || ! -h "$path_current" ]] && continue
     bl64_msg_show_lib_subtask "remove file (${path_current})"
     bl64_fs_run_rm \
       "$BL64_FS_SET_RM_FORCE" \
