@@ -1451,8 +1451,17 @@ function bl64_fs_file_remove() {
     return $?
 
   for path_current in "$@"; do
-    [[ ! -f "$path_current" || ! -h "$path_current" ]] && continue
     bl64_msg_show_lib_subtask "remove file (${path_current})"
+    if [[ ! -e "$path_current" ]]; then
+      bl64_msg_show_warning 'file already removed, no further action taken'
+      continue
+    fi
+
+    if [[ ! -f "$path_current" && ! -L "$path_current" ]]; then
+      bl64_msg_show_error 'invalid file type. Must be regular file or link. No further action taken.'
+      return $BL64_LIB_ERROR_TASK_FAILED
+    fi
+
     bl64_fs_run_rm \
       "$BL64_FS_SET_RM_FORCE" \
       "$path_current" ||
