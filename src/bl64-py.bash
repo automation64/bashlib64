@@ -96,7 +96,12 @@ function bl64_py_pip_usr_prepare() {
   local modules_setup='setuptools wheel stevedore'
   local flag_user="$BL64_PY_SET_PIP_USER"
 
-  [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    # If venv is in use no need to flag usr install
+    flag_user=' '
+  else
+    bl64_os_check_not_version "${BL64_OS_KL}-2024" || return $?
+  fi
 
   bl64_msg_show_lib_task 'upgrade pip module'
   # shellcheck disable=SC2086
@@ -140,8 +145,12 @@ function bl64_py_pip_usr_install() {
 
   bl64_check_parameters_none $# || return $?
 
-  # If venv is in use no need to flag usr install
-  [[ -n "$VIRTUAL_ENV" ]] && flag_user=' '
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    # If venv is in use no need to flag usr install
+    flag_user=' '
+  else
+    bl64_os_check_not_version "${BL64_OS_KL}-2024" || return $?
+  fi
 
   bl64_msg_show_lib_task "install modules ($*)"
   # shellcheck disable=SC2086
@@ -288,6 +297,33 @@ function bl64_py_run_pip() {
   # shellcheck disable=SC2086
   TMPDIR="${BL64_FS_PATH_TEMPORAL:-}" bl64_py_run_python \
     -m 'pip' \
+    $debug \
+    $cache \
+    "$@"
+}
+
+#######################################
+# Python PIPX wrapper
+#
+# Arguments:
+#   $@: arguments are passes as-is
+# Outputs:
+#   STDOUT: PIPX output
+#   STDERR: PIPX error
+# Returns:
+#   PIP exit status
+#######################################
+function bl64_py_run_pipx() {
+  bl64_dbg_lib_show_function "$@"
+  local debug="$BL64_PY_SET_PIP_QUIET"
+  local cache=' '
+
+  bl64_msg_lib_verbose_is_enabled && debug=' '
+  bl64_dbg_lib_command_is_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
+
+  # shellcheck disable=SC2086
+  bl64_py_run_python \
+    -m 'pipx' \
     $debug \
     $cache \
     "$@"
