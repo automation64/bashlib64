@@ -33,9 +33,7 @@ function bl64_aws_get_cli_credentials() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_aws_setup() {
-  [[ -z "$BL64_VERSION" ]] &&
-    echo 'Error: bashlib64-module-core.bash should the last sourced module' &&
-    return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
   local aws_home="${2:-${BL64_VAR_DEFAULT}}"

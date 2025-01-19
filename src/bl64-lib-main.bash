@@ -2,6 +2,16 @@
 # Library Main
 #
 
+# Normalize terminal settings
+TERM="${TERM:-vt100}"
+
+# Normalize paths
+TMPDIR='/tmp'
+
+# Normalize common shell variables
+PS1="${PS1:-BL64 \u@\H:\w$ }"
+PS2="${PS2:-BL64 > }"
+
 # Normalize locales to C until a better locale is found in bl64_os_setup
 if bl64_lib_lang_is_enabled; then
   LANG='C'
@@ -15,14 +25,14 @@ if bl64_lib_mode_strict_is_enabled; then
   set -o 'privileged'
 fi
 
-# Initialize optional modules that do not require setup parameters. Not OS bound
+# Initialize modules that do not require setup parameters. Not OS bound
 [[ -n "${BL64_DBG_MODULE:-}" ]] && { bl64_dbg_setup || exit $?; }
 [[ -n "${BL64_CHECK_MODULE:-}" ]] && { bl64_check_setup || exit $?; }
 [[ -n "${BL64_MSG_MODULE:-}" ]] && { bl64_msg_setup || exit $?; }
 [[ -n "${BL64_BSH_MODULE:-}" ]] && { bl64_bsh_setup || exit $?; }
 [[ -n "${BL64_RND_MODULE:-}" ]] && { bl64_rnd_setup || exit $?; }
 [[ -n "${BL64_UI_MODULE:-}" ]] && { bl64_ui_setup || exit $?; }
-# Initialize optional modules that do not require setup parameters. OS bound
+# Initialize modules that do not require setup parameters. OS bound
 [[ -n "${BL64_OS_MODULE:-}" ]] && { bl64_os_setup || exit $?; }
 [[ -n "${BL64_TXT_MODULE:-}" ]] && { bl64_txt_setup || exit $?; }
 [[ -n "${BL64_FMT_MODULE:-}" ]] && { bl64_fmt_setup || exit $?; }

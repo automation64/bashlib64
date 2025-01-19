@@ -15,9 +15,7 @@
 #   >0: setup failed
 #######################################
 function bl64_pkg_setup() {
-  [[ -z "$BL64_VERSION" ]] &&
-    echo 'Error: bashlib64-module-core.bash should the last sourced module' &&
-    return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
 
   # shellcheck disable=SC2249
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&

@@ -618,14 +618,15 @@ function bl64_msg_show_setup() {
 function bl64_msg_help_show(){
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   local current_format="$BL64_MSG_FORMAT"
+
   bl64_msg_set_format "$BL64_MSG_FORMAT_PLAIN"
+
+  _bl64_msg_show_script
   if [[ "$BL64_MSG_HELP_USAGE" != "$BL64_VAR_DEFAULT" ]]; then
     _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
   fi
 
-  if [[ "$BL64_MSG_HELP_ABOUT" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'About' "$BL64_MSG_HELP_ABOUT"
-  fi
+  _bl64_msg_show_about
 
   if [[ "$BL64_MSG_HELP_DESCRIPTION" != "$BL64_VAR_DEFAULT" ]]; then
     _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Description'
@@ -655,11 +656,19 @@ function bl64_msg_help_show(){
 #######################################
 function bl64_msg_show_about() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-
   bl64_msg_app_verbose_is_enabled || return 0
+  _bl64_msg_show_script &&
+  _bl64_msg_show_about
+}
 
+function _bl64_msg_show_script() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
+  _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Script:' "${BL64_SCRIPT_ID} v${BL64_SCRIPT_VERSION}"
+}
+
+function _bl64_msg_show_about() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   if [[ "$BL64_MSG_HELP_ABOUT" != "$BL64_VAR_DEFAULT" ]]; then
     _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'About' "$BL64_MSG_HELP_ABOUT"
   fi
-  return 0
 }

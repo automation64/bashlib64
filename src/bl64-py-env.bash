@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='3.1.0'
+  declare BL64_PY_VERSION='3.2.0'
 
   declare BL64_PY_MODULE='0'
 
@@ -27,4 +27,7 @@
   declare BL64_PY_SET_PIP_NO_WARN_SCRIPT=''
 
   declare BL64_PY_DEF_VENV_CFG='pyvenv.cfg'
+
+  # Variables used by Python
+  declare VIRTUAL_ENV="${VIRTUAL_ENV:-}"
 }
