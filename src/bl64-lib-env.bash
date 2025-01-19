@@ -18,6 +18,7 @@
   export PS1
   export PS2
   export TERM
+  export TMPDIR
 
   #
   # Common constants

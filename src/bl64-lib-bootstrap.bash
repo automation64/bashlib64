@@ -60,4 +60,3 @@ builtin unset ENV
 builtin unset IFS
 builtin unset MAIL
 builtin unset MAILPATH
-builtin unset TMPDIR

@@ -5,6 +5,9 @@
 # Normalize terminal settings
 TERM="${TERM:-vt100}"
 
+# Normalize paths
+TMPDIR='/tmp'
+
 # Normalize common shell variables
 PS1="${PS1:-BL64 \u@\H:\w$ }"
 PS2="${PS2:-BL64 > }"
