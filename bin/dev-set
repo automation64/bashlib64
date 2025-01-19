@@ -5,7 +5,7 @@
 # * Loads DevBin64 environment variables
 # * To be used by DevBin64 scripts
 # * Warning: Bash is the only supported shell. Other shells may work as long as they are compatible with Bash syntax
-# * Version: 8.2.1
+# * Version: 8.3.1
 #
 #######################################
 # Copyright [2023] [serdigital64@gmail.com]
@@ -29,6 +29,7 @@
 
 # Main / Debug flag for bin/ scripts
 export DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-}"
+[[ -n "$DEV_CICD_DEBUG" ]] && set -x
 # Main / Increase verbosity? Set to YES to increase
 export DEV_SET_VERBOSE="${DEV_SET_VERBOSE:-}"
 # Main / Bootstrap files. Must be the same as defined in .env
@@ -39,6 +40,8 @@ export DEV_BASE_ENV='.env'
 export DEV_PATH_ROOT="${DEV_PATH_ROOT:-}"
 # Main / List of modules to load
 export DEV_MODULE_LOAD="${DEV_MODULE_LOAD:-}"
+# Main / Profile
+export DEV_PROFILE="${DEV_PROFILE:-}"
 
 # From CICD products
 export GITHUB_WORKSPACE="${GITHUB_WORKSPACE:-}"
@@ -177,8 +180,6 @@ function dev_set_initialize() {
 #
 # Main
 #
-
-[[ -n "$DEV_CICD_DEBUG" ]] && set -x
 
 # shellcheck disable=SC2015
 dev_set_initialize &&
