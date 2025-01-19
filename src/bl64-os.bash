@@ -438,7 +438,7 @@ function bl64_os_check_version() {
   bl64_os_is_distro "$@" && return 0
 
   bl64_msg_show_error \
-    "task not supported on the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}) ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    "task not supported by the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}) ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }
 
@@ -462,7 +462,7 @@ function bl64_os_check_compatibility() {
   bl64_os_is_compatible "$@" && return 0
 
   bl64_msg_show_error \
-    "task not supported on the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}) ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    "task not supported by the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}) ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }
 
@@ -574,4 +574,28 @@ function bl64_os_run_cat() {
   "$BL64_OS_CMD_CAT" \
     "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Check the current OS version is not in the unsupported list
+#
+# * Same as bl64_os_check_version, but for the opposite purpose
+#
+# Arguments:
+#   $@: list of OS versions to check against. Format: same as bl64_os_is_distro
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: check ok
+#   $BL64_LIB_ERROR_APP_INCOMPATIBLE
+#######################################
+function bl64_os_check_not_version() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_os_is_distro "$@" || return 0
+
+  bl64_msg_show_error \
+    "task not supported by the current OS version (${BL64_OS_DISTRO})"
+  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }
