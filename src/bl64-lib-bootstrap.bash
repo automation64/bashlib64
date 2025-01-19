@@ -55,10 +55,9 @@ builtin set +o 'posix'
 # set -o 'noexec'
 
 # Do not inherit sensitive environment variables
-builtin unset MAIL
+builtin unset CDPATH
 builtin unset ENV
 builtin unset IFS
+builtin unset MAIL
+builtin unset MAILPATH
 builtin unset TMPDIR
-
-# Normalize terminal settings
-TERM="${TERM:-vt100}"
