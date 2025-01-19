@@ -17,9 +17,7 @@
 #   >0: setup failed
 #######################################
 function bl64_os_setup() {
-  [[ -z "$BL64_VERSION" ]] &&
-    echo 'Error: bashlib64-module-core.bash should the last sourced module' &&
-    return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
 
   [[ "${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5' ]] &&
     bl64_msg_show_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&

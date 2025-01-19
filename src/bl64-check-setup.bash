@@ -17,9 +17,7 @@
 #   >0: setup failed
 #######################################
 function bl64_check_setup() {
-  [[ -z "$BL64_VERSION" ]] &&
-    echo 'Error: bashlib64-module-core.bash should the last sourced module' &&
-    return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
   _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2034
