@@ -92,4 +92,4 @@ jobs:
         run: |
           source ./bin/dev-set &&
           source ./bin/dev-env-bash &&
-          ./bin/dev-test-bash ${DEV_TEST_BASH_CASES}/UNX
+          ./bin/dev-test-bash-host ${DEV_TEST_BASH_CASES}/UNX
