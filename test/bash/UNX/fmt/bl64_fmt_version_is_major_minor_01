@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+source "${DEV_PATH_BUILD_PREPARE}/bashlib64.bash"
+
+bl64_fmt_version_is_semver '20.30'
