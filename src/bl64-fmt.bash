@@ -254,3 +254,60 @@ function bl64_fmt_check_value_in_list() {
 
   return $is_valid
 }
+
+#######################################
+# Determine if the version is in semver format
+#
+# Arguments:
+#   $1: Version
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: Yes
+#   >0: No
+#######################################
+function bl64_fmt_version_is_semver() {
+  bl64_dbg_lib_show_function "$@"
+  local version="$1"
+  local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
+  [[ "$version" =~ $version_pattern_semver ]]
+}
+
+#######################################
+# Determine if the version is in major.minor format
+#
+# Arguments:
+#   $1: Version
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: Yes
+#   >0: No
+#######################################
+function bl64_fmt_version_is_major_minor() {
+  bl64_dbg_lib_show_function "$@"
+  local version="$1"
+  local version_pattern='^[0-9]+\.[0-9]+$'
+  [[ "$version" =~ $version_pattern ]]
+}
+
+#######################################
+# Determine if the version is in major format
+#
+# Arguments:
+#   $1: Version
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: Yes
+#   >0: No
+#######################################
+function bl64_fmt_version_is_major() {
+  bl64_dbg_lib_show_function "$@"
+  local version="$1"
+  local version_pattern='^[0-9]+$'
+  [[ "$version" =~ $version_pattern ]]
+}
