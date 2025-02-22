@@ -175,7 +175,7 @@ function _bl64_os_get_distro_from_os_release() {
   else
     version_normalized="$VERSION_ID"
   fi
-  if [[ "$version_normalized" != +([[:digit:]]).+([[:digit:]]) ]]; then
+  if [[ ! "$version_normalized" =~ $version_pattern_major_minor ]]; then
     bl64_msg_show_error "unable to normalize OS version (${VERSION_ID} != Major.Minor != ${version_normalized})"
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
