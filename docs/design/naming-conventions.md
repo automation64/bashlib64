@@ -23,16 +23,16 @@
 
 ### Attribute Getter / Setter
 
-- `<MODULE>[_OBJECT]_<ATTRIBUTE>_get`
-- `<MODULE>[_OBJECT]_<ATTRIBUTE>_set`
+- `<MODULE>[_OBJECT]_get_<ATTRIBUTE>`
+- `<MODULE>[_OBJECT]_set_<ATTRIBUTE>`
 
 ### Flag
 
-- `<MODULE>[_OBJECT]_<FLAG>_is_set`
-- `<MODULE>[_OBJECT]_<FLAG>_is_enabled`
-- `<MODULE>[_OBJECT]_<FLAG>_is_disabled`
-- `<MODULE>[_OBJECT]_<FLAG>_enable`
-- `<MODULE>[_OBJECT]_<FLAG>_disable`
+- `<MODULE>[_OBJECT]_is_set_<FLAG>`
+- `<MODULE>[_OBJECT]_is_enabled_<FLAG>`
+- `<MODULE>[_OBJECT]_is_disabled_<FLAG>`
+- `<MODULE>[_OBJECT]_enable_<FLAG>`
+- `<MODULE>[_OBJECT]_disable_<FLAG>`
 
 ### Command Runner
 
