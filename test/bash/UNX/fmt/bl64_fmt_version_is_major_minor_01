@@ -2,4 +2,6 @@
 
 source "${DEV_PATH_BUILD_PREPARE}/bashlib64.bash"
 
-bl64_fmt_version_is_semver '20.30'
+bl64_fmt_version_is_major_minor '20.30' &&
+! bl64_fmt_version_is_major_minor '20.30.4' &&
+! bl64_fmt_version_is_major_minor '4'
