@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_fmt_version_is_major
   - bl64_fmt_version_is_semver
 
+### Changed
+
+- msg
+  - bl64_msg_show_batch_start: default msg is now BL64_SCRIPT_ID
+  - bl64_msg_show_batch_stop: default msg is now BL64_SCRIPT_ID
+
 ## [20.10.0]
 
 ### Added

@@ -454,7 +454,7 @@ function bl64_msg_show_text() {
 #######################################
 function bl64_msg_show_batch_start() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-$BL64_SCRIPT_ID}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${message}" &&
     bl64_msg_app_verbose_is_enabled || return 0
@@ -469,8 +469,8 @@ function bl64_msg_show_batch_start() {
 # * Can be used as last command in shell script to both show result and return exit status
 #
 # Arguments:
-#   $1: process exit status
-#   $2: batch short description
+#   $1: process exit status.
+#   $2: batch short description. Default: BL64_SCRIPT_ID
 # Outputs:
 #   STDOUT: message
 #   STDERR: None
@@ -481,7 +481,7 @@ function bl64_msg_show_batch_start() {
 function bl64_msg_show_batch_finish() {
   local -i status=$1
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="${2-}"
+  local message="${2:-$BL64_SCRIPT_ID}"
 
   # shellcheck disable=SC2086
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${status}:${message}" &&
