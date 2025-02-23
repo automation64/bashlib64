@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+source "${DEV_PATH_BUILD_PREPARE}/bashlib64-core.bash" &&
+  source "${DEV_PATH_BUILD_PREPARE}/bashlib64-opt.bash"
