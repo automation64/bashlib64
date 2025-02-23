@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_msg_show_batch_start: default msg is now BL64_SCRIPT_ID
   - bl64_msg_show_batch_stop: default msg is now BL64_SCRIPT_ID
 
+### Fixed
+- core
+  - Missing OS in compatibility list
+
 ## [20.10.0]
 
 ### Added
