@@ -24,7 +24,7 @@ function bl64_ui_ask_confirmation() {
   local input=''
 
   bl64_msg_show_input "${question} [${confirmation}]: "
-  read -r -t "$BL64_UI_READ_TIMEOUT" input
+  read -r -t "$BL64_UI_CONFIRMATION_TIMEOUT" input
 
   if [[ "$input" != "$confirmation" ]]; then
     bl64_msg_show_error 'confirmation verification failed'

@@ -8,5 +8,5 @@
 
   declare BL64_UI_MODULE='0'
 
-  declare BL64_UI_READ_TIMEOUT='60'
+  declare BL64_UI_CONFIRMATION_TIMEOUT='60'
 }
