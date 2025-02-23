@@ -1,18 +1,11 @@
 #!/usr/bin/env bash
+# * Version: 1.6.0
 #######################################
-# Dev / Env / Bash / Shared environment variables
-#
-# * Version: 1.4.0
-#
-#######################################
-# Copyright [2023] [serdigital64@gmail.com]
+# Copyright SerDigital64 - https://github.com/serdigital64
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
+# You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,12 +37,28 @@
     export DEV_BUILD_BASH_MODULES="${DEV_BUILD_BASH_MODULES:-/dev/null}"
     # Lab / Bash / Default image
     export DEV_LAB_BASH_CONTAINER="${DEV_LAB_BASH_CONTAINER:-bash-test/alpine-3-bash-test}"
-    # Test / Bash / Container where the test will run
-    export DEV_TEST_BASH_CONTAINER="${DEV_TEST_BASH_CONTAINER:-bash-test/alpine-3-bash-test}"
     # Test / Bash / Path to test cases. Relative to DEV_PATH_ROOT
     export DEV_TEST_BASH_CASES="${DEV_BASE_TEST}/bash"
     # Test / Bash / Flag for marking container environment
     export DEV_TEST_BASH_CONTAINER_ENVIRONMENT='OFF'
+    # Test / Bash / Flag for marking CICD runner  environment
+    export DEV_TEST_BASH_RUNNER_ENVIRONMENT='OFF'
+    # Test / Bash / Flag for disabling container test, and run on local OS
+    export DEV_TEST_BASH_CONTAINER_DISABLED='YES'
+    # Test / Bash / Default test containers
+    export DEV_TEST_BASH_CONTAINER="${DEV_TEST_BASH_CONTAINER:-bash-test/alpine-3-bash-test}"
+    export DEV_TEST_BASH_CONTAINER_ALM="${DEV_TEST_BASH_CONTAINER_ALM:-bash-test/almalinux-9-bash-test}"
+    export DEV_TEST_BASH_CONTAINER_ALP="${DEV_TEST_BASH_CONTAINER_ALP:-bash-test/alpine-3-bash-test}"
+    export DEV_TEST_BASH_CONTAINER_AMZ="${DEV_TEST_BASH_CONTAINER_AMZ:-bash-test/amazonlinux-2023-bash-test}"
+    export DEV_TEST_BASH_CONTAINER_CNT="${DEV_TEST_BASH_CONTAINER_CNT:-bash-test/centos-9-bash-test}"
+    export DEV_TEST_BASH_CONTAINER_DEB="${DEV_TEST_BASH_CONTAINER_DEB:-bash-test/debian-11-bash-test}"
+    export DEV_TEST_BASH_CONTAINER_FD="${DEV_TEST_BASH_CONTAINER_FD:-bash-test/fedora-39-bash-test}"
+    export DEV_TEST_BASH_CONTAINER_KL="${DEV_TEST_BASH_CONTAINER_KL:-bash-test/kalilinux-2024.3-bash-test}"
+    export DEV_TEST_BASH_CONTAINER_OEL="${DEV_TEST_BASH_CONTAINER_OEL:-bash-test/oraclelinux-9-bash-test}"
+    export DEV_TEST_BASH_CONTAINER_RCK="${DEV_TEST_BASH_CONTAINER_RCK:-bash-test/rockylinux-9-bash-test}"
+    export DEV_TEST_BASH_CONTAINER_RHEL="${DEV_TEST_BASH_CONTAINER_RHEL:-bash-test/rhel-9-bash-test}"
+    export DEV_TEST_BASH_CONTAINER_SLES="${DEV_TEST_BASH_CONTAINER_SLES:-bash-test/sles-15-bash-test}"
+    export DEV_TEST_BASH_CONTAINER_UB="${DEV_TEST_BASH_CONTAINER_UB:-bash-test/ubuntu-22.4-bash-test}"
 }
 
 #

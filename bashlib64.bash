@@ -90,7 +90,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.10.0'
+  declare BL64_VERSION='20.11.0'
 
   #
   # Imported generic shell standard variables
@@ -576,7 +576,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.6.0'
+  declare BL64_MSG_VERSION='5.7.0'
 
   declare BL64_MSG_MODULE='0'
 
@@ -768,7 +768,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_OS_VERSION='5.6.0'
+  declare BL64_OS_VERSION='5.6.1'
 
   declare BL64_OS_MODULE='0'
 
@@ -1015,7 +1015,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FMT_VERSION='3.0.1'
+  declare BL64_FMT_VERSION='4.0.0'
 
   declare BL64_FMT_MODULE='0'
 }
@@ -1481,11 +1481,11 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_UI_VERSION='2.0.1'
+  declare BL64_UI_VERSION='2.0.2'
 
   declare BL64_UI_MODULE='0'
 
-  declare BL64_UI_READ_TIMEOUT='60'
+  declare BL64_UI_CONFIRMATION_TIMEOUT='60'
 }
 
 #######################################
@@ -4015,7 +4015,7 @@ function bl64_msg_show_text() {
 #######################################
 function bl64_msg_show_batch_start() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-$BL64_SCRIPT_ID}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${message}" &&
     bl64_msg_app_verbose_is_enabled || return 0
@@ -4030,8 +4030,8 @@ function bl64_msg_show_batch_start() {
 # * Can be used as last command in shell script to both show result and return exit status
 #
 # Arguments:
-#   $1: process exit status
-#   $2: batch short description
+#   $1: process exit status.
+#   $2: batch short description. Default: BL64_SCRIPT_ID
 # Outputs:
 #   STDOUT: message
 #   STDERR: None
@@ -4042,7 +4042,7 @@ function bl64_msg_show_batch_start() {
 function bl64_msg_show_batch_finish() {
   local -i status=$1
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="${2-}"
+  local message="${2:-$BL64_SCRIPT_ID}"
 
   # shellcheck disable=SC2086
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${status}:${message}" &&
@@ -4224,7 +4224,7 @@ function bl64_msg_show_about() {
 
 function _bl64_msg_show_script() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-  _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Script:' "${BL64_SCRIPT_ID} v${BL64_SCRIPT_VERSION}"
+  _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Script' "${BL64_SCRIPT_ID} v${BL64_SCRIPT_VERSION}"
 }
 
 function _bl64_msg_show_about() {
@@ -4609,8 +4609,8 @@ function _bl64_os_get_distro_from_uname() {
 function _bl64_os_get_distro_from_os_release() {
   bl64_dbg_lib_show_function
   local version_pattern_single='^[0-9]+$'
-  local version_pattern_major_minor='^[0-9]+.[0-9]+$'
-  local version_pattern_semver='^[0-9]+.[0-9]+.[0-9]+$'
+  local version_pattern_major_minor='^[0-9]+\.[0-9]+$'
+  local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
   local version_normalized=''
 
   # shellcheck disable=SC1091
@@ -4631,7 +4631,7 @@ function _bl64_os_get_distro_from_os_release() {
   else
     version_normalized="$VERSION_ID"
   fi
-  if [[ "$version_normalized" != +([[:digit:]]).+([[:digit:]]) ]]; then
+  if [[ ! "$version_normalized" =~ $version_pattern_major_minor ]]; then
     bl64_msg_show_error "unable to normalize OS version (${VERSION_ID} != Major.Minor != ${version_normalized})"
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
@@ -9115,6 +9115,63 @@ function bl64_fmt_check_value_in_list() {
     bl64_msg_show_error "${error_message}. Value must be one of: [${*}] (caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
 
   return $is_valid
+}
+
+#######################################
+# Determine if the version is in semver format
+#
+# Arguments:
+#   $1: Version
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: Yes
+#   >0: No
+#######################################
+function bl64_fmt_version_is_semver() {
+  bl64_dbg_lib_show_function "$@"
+  local version="$1"
+  local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
+  [[ "$version" =~ $version_pattern_semver ]]
+}
+
+#######################################
+# Determine if the version is in major.minor format
+#
+# Arguments:
+#   $1: Version
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: Yes
+#   >0: No
+#######################################
+function bl64_fmt_version_is_major_minor() {
+  bl64_dbg_lib_show_function "$@"
+  local version="$1"
+  local version_pattern='^[0-9]+\.[0-9]+$'
+  [[ "$version" =~ $version_pattern ]]
+}
+
+#######################################
+# Determine if the version is in major format
+#
+# Arguments:
+#   $1: Version
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: Yes
+#   >0: No
+#######################################
+function bl64_fmt_version_is_major() {
+  bl64_dbg_lib_show_function "$@"
+  local version="$1"
+  local version_pattern='^[0-9]+$'
+  [[ "$version" =~ $version_pattern ]]
 }
 
 #######################################
@@ -17031,12 +17088,12 @@ function bl64_ui_setup() {
 #######################################
 function bl64_ui_ask_confirmation() {
   bl64_dbg_lib_show_function "$@"
-  local question="${1:-Please confirm the operation by writting the message}"
+  local question="${1:-Please type in the confirmation message to proceed}"
   local confirmation="${2:-confirm-operation}"
   local input=''
 
   bl64_msg_show_input "${question} [${confirmation}]: "
-  read -r -t "$BL64_UI_READ_TIMEOUT" input
+  read -r -t "$BL64_UI_CONFIRMATION_TIMEOUT" input
 
   if [[ "$input" != "$confirmation" ]]; then
     bl64_msg_show_error 'confirmation verification failed'
@@ -17796,6 +17853,7 @@ if [[ "${BL64_OS_MODULE:-$BL64_VAR_OFF}" == "$BL64_VAR_ON" ]]; then
     "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_DEB}-11" "${BL64_OS_DEB}-12" \
     "${BL64_OS_FD}-33" "${BL64_OS_FD}-34" "${BL64_OS_FD}-35" "${BL64_OS_FD}-36" "${BL64_OS_FD}-37" "${BL64_OS_FD}-38" "${BL64_OS_FD}-39" "${BL64_OS_FD}-40" "${BL64_OS_FD}-41" \
     "${BL64_OS_KL}-2024" \
+    "${BL64_OS_MCOS}-12" "${BL64_OS_MCOS}-13" "${BL64_OS_MCOS}-14" "${BL64_OS_MCOS}-15" \
     "${BL64_OS_OL}-7" "${BL64_OS_OL}-8" "${BL64_OS_OL}-9" \
     "${BL64_OS_RCK}-8" "${BL64_OS_RCK}-9" \
     "${BL64_OS_RHEL}-8" "${BL64_OS_RHEL}-9" \

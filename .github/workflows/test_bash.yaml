@@ -1,0 +1,102 @@
+---
+# Template: 2.1.0
+name: "Test / Bash"
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+env:
+  DEV_CICD_DEBUG: "${{ vars.DEV_CICD_DEBUG }}"
+  DEV_TEST_BASH_RUNNER_ENVIRONMENT: "ON"
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - "main"
+  push:
+    branches:
+      - "feature/**"
+    paths:
+      - "src/**"
+      - "test/bash/**"
+
+jobs:
+  test-bash-linux:
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - "ALM"
+          - "ALP"
+          - "AMZ"
+          - "CNT"
+          - "DEB"
+          - "FD"
+          - "KL"
+          - "OEL"
+          - "RCK"
+          - "RHEL"
+          - "SLES"
+          - "UB"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare environment"
+        run: |
+          ./bin/dev-lib-base &&
+          ./bin/dev-prep-project
+
+      - name: "Build app"
+        run: "./bin/dev-build-project"
+
+      - name: "Run OS specific tests"
+        run: |
+          source ./bin/dev-set &&
+          source ./bin/dev-env-bash &&
+          ./bin/dev-test-bash $DEV_TEST_BASH_CONTAINER_${{matrix.target}} ${DEV_TEST_BASH_CASES}/${{matrix.target}}
+
+      - name: "Run Linux generic tests"
+        run: |
+          source ./bin/dev-set &&
+          source ./bin/dev-env-bash &&
+          ./bin/dev-test-bash $DEV_TEST_BASH_CONTAINER_${{matrix.target}} ${DEV_TEST_BASH_CASES}/LNX
+
+      - name: "Run Unix generic tests"
+        run: |
+          source ./bin/dev-set &&
+          source ./bin/dev-env-bash &&
+          ./bin/dev-test-bash $DEV_TEST_BASH_CONTAINER_${{matrix.target}} ${DEV_TEST_BASH_CASES}/UNX
+
+  test-bash-macos:
+    runs-on: "macos-latest"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Upgrade Bash version"
+        run: |
+          ./bin/dev-lib-bash
+
+      - name: "Prepare environment"
+        run: |
+          ./bin/dev-lib-base &&
+          ./bin/dev-prep-project
+
+      - name: "Build app"
+        run: "./bin/dev-build-project"
+
+      - name: "Run OS specific tests"
+        run: |
+          source ./bin/dev-set &&
+          source ./bin/dev-env-bash &&
+          ./bin/dev-test-bash-host ${DEV_TEST_BASH_CASES}/MCOS
+
+      - name: "Run Unix generic tests"
+        run: |
+          source ./bin/dev-set &&
+          source ./bin/dev-env-bash &&
+          ./bin/dev-test-bash-host ${DEV_TEST_BASH_CASES}/UNX

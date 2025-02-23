@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+BL64_LIB_CMD='1' ./build/prepare/bashlib64.bash

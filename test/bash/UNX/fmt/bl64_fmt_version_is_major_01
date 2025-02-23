@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+source './build/prepare/bashlib64.bash' || exit $?
+
+bl64_fmt_version_is_major '20' &&
+! bl64_fmt_version_is_major '20.20'
