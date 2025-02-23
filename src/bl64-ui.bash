@@ -19,7 +19,7 @@
 #######################################
 function bl64_ui_ask_confirmation() {
   bl64_dbg_lib_show_function "$@"
-  local question="${1:-Please confirm the operation by writting the message}"
+  local question="${1:-Please type in the confirmation message to proceed}"
   local confirmation="${2:-confirm-operation}"
   local input=''
 
