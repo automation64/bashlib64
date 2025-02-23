@@ -1,5 +1,5 @@
 ---
-# Template: 2.0.0
+# Template: 2.1.0
 name: "Test / Bash"
 
 concurrency:
@@ -8,6 +8,7 @@ concurrency:
 
 env:
   DEV_CICD_DEBUG: ""
+  DEV_TEST_BASH_RUNNER_ENVIRONMENT: "ON"
 
 on:
   workflow_dispatch:

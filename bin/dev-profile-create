@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# * Template: 1.6.1
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -48,7 +49,12 @@ function dev_profile_create() {
 
 function dev_profile_initialize() {
   bl64_dbg_app_show_function
-  bl64_check_export 'DEV_PROFILE'
+  bl64_check_export 'DEV_PROFILE' ||
+  return $?
+  if [[ "$DEV_PROFILE" == 'none' ]]; then
+    bl64_msg_show_error 'Please set the global variable DEV_PROFILE before creation. Current value is set to "none".'
+    return $BL64_LIB_ERROR_PARAMETER_INVALID
+  fi
 }
 
 #
@@ -56,7 +62,7 @@ function dev_profile_initialize() {
 #
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '1.0.3'
+bl64_lib_script_version_set '2.0.0'
 bl64_msg_all_enable_verbose
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
