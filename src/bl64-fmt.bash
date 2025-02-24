@@ -2,6 +2,56 @@
 # BashLib64 / Module / Functions / Format text data
 #######################################
 
+#
+# Deprecation aliases
+#
+# * Aliases to deprecated functions
+# * Needed to maintain compatibility up to N-2 versions
+#
+
+function bl64_fmt_strip_starting_slash() {
+  bl64_msg_show_deprecated 'bl64_fmt_strip_starting_slash' 'bl64_fmt_path_starting_slash'
+  bl64_fmt_path_strip_root "$@"
+}
+
+function bl64_fmt_strip_ending_slash() {
+  bl64_msg_show_deprecated 'bl64_fmt_strip_ending_slash' 'bl64_fmt_path_strip_ending_slash'
+  bl64_fmt_path_strip_root "$@"
+}
+
+function bl64_fmt_basename() {
+  bl64_msg_show_deprecated 'bl64_fmt_basename' 'bl64_fmt_path_get_basename'
+  bl64_fmt_path_strip_root "$@"
+}
+
+function bl64_fmt_dirname() {
+  bl64_msg_show_deprecated 'bl64_fmt_dirname' 'bl64_fmt_path_get_dirname'
+  bl64_fmt_path_strip_root "$@"
+}
+
+function bl64_fmt_list_to_string() {
+  bl64_msg_show_deprecated 'bl64_fmt_list_to_string' 'bl64_fmt_list_convert_to_string'
+  bl64_fmt_path_strip_root "$@"
+}
+
+function bl64_fmt_separator_line() {
+  bl64_msg_show_deprecated 'bl64_fmt_separator_line' 'bl64_ui_separator_show'
+  bl64_fmt_path_strip_root "$@"
+}
+
+function bl64_fmt_check_value_in_list() {
+  bl64_msg_show_deprecated 'bl64_fmt_check_value_in_list' 'bl64_fmt_list_check_membership'
+  bl64_fmt_path_strip_root "$@"
+}
+
+#
+# Private functions
+#
+
+#
+# Public functions
+#
+
 #######################################
 # Removes starting slash from path
 #
@@ -16,7 +66,7 @@
 #   0: successfull execution
 #   >0: printf error
 #######################################
-function bl64_fmt_strip_starting_slash() {
+function bl64_fmt_path_starting_slash() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
 
@@ -46,7 +96,7 @@ function bl64_fmt_strip_starting_slash() {
 #   0: successfull execution
 #   >0: printf error
 #######################################
-function bl64_fmt_strip_ending_slash() {
+function bl64_fmt_path_strip_ending_slash() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
 
@@ -73,13 +123,13 @@ function bl64_fmt_strip_ending_slash() {
 #
 # Examples:
 #
-#   bl64_fmt_basename '/full/path/to/file' -> 'file'
-#   bl64_fmt_basename '/full/path/to/file/' -> ''
-#   bl64_fmt_basename 'path/to/file' -> 'file'
-#   bl64_fmt_basename 'path/to/file/' -> ''
-#   bl64_fmt_basename '/file' -> 'file'
-#   bl64_fmt_basename '/' -> ''
-#   bl64_fmt_basename 'file' -> 'file'
+#   bl64_fmt_path_get_basename '/full/path/to/file' -> 'file'
+#   bl64_fmt_path_get_basename '/full/path/to/file/' -> ''
+#   bl64_fmt_path_get_basename 'path/to/file' -> 'file'
+#   bl64_fmt_path_get_basename 'path/to/file/' -> ''
+#   bl64_fmt_path_get_basename '/file' -> 'file'
+#   bl64_fmt_path_get_basename '/' -> ''
+#   bl64_fmt_path_get_basename 'file' -> 'file'
 #
 # Arguments:
 #   $1: Path
@@ -90,7 +140,7 @@ function bl64_fmt_strip_ending_slash() {
 #   0: successfull execution
 #   >0: printf error
 #######################################
-function bl64_fmt_basename() {
+function bl64_fmt_path_get_basename() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
   local base=''
@@ -117,11 +167,11 @@ function bl64_fmt_basename() {
 #
 # Examples:
 #
-#   bl64_fmt_dirname '/full/path/to/file' -> '/full/path/to'
-#   bl64_fmt_dirname '/full/path/to/file/' -> '/full/path/to/file'
-#   bl64_fmt_dirname '/file' -> '/'
-#   bl64_fmt_dirname '/' -> '/'
-#   bl64_fmt_dirname 'dir' -> 'dir'
+#   bl64_fmt_path_get_dirname '/full/path/to/file' -> '/full/path/to'
+#   bl64_fmt_path_get_dirname '/full/path/to/file/' -> '/full/path/to/file'
+#   bl64_fmt_path_get_dirname '/file' -> '/'
+#   bl64_fmt_path_get_dirname '/' -> '/'
+#   bl64_fmt_path_get_dirname 'dir' -> 'dir'
 #
 # Arguments:
 #   $1: Path
@@ -132,7 +182,7 @@ function bl64_fmt_basename() {
 #   0: successfull execution
 #   >0: printf error
 #######################################
-function bl64_fmt_dirname() {
+function bl64_fmt_path_get_dirname() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
 
@@ -170,7 +220,7 @@ function bl64_fmt_dirname() {
 # Returns:
 #   always ok
 #######################################
-function bl64_fmt_list_to_string() {
+function bl64_fmt_list_convert_to_string() {
   bl64_dbg_lib_show_function
   local field_separator="${1:-${BL64_VAR_DEFAULT}}"
   local prefix="${2:-${BL64_VAR_DEFAULT}}"
@@ -197,26 +247,6 @@ function bl64_fmt_list_to_string() {
 }
 
 #######################################
-# Build a separator line with optional payload
-#
-# * Separator format: payload + \n
-#
-# Arguments:
-#   $1: Separator payload. Format: string
-# Outputs:
-#   STDOUT: separator line
-#   STDERR: grep Error message
-# Returns:
-#   printf exit status
-#######################################
-function bl64_fmt_separator_line() {
-  bl64_dbg_lib_show_function "$@"
-  local payload="${1:-}"
-
-  printf '%s\n' "$payload"
-}
-
-#######################################
 # Check that the value is part of a list
 #
 # Arguments:
@@ -230,7 +260,7 @@ function bl64_fmt_separator_line() {
 #   0: check ok
 #   BL64_LIB_ERROR_CHECK_FAILED
 #######################################
-function bl64_fmt_check_value_in_list() {
+function bl64_fmt_list_check_membership() {
   bl64_dbg_lib_show_function "$@"
   local error_message="${1:-$BL64_VAR_DEFAULT}"
   local target_value="${2:-}"

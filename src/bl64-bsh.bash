@@ -61,7 +61,7 @@ function bl64_bsh_script_get_name() {
 
   ((main > 0)) && main=$((main - 1))
 
-  bl64_fmt_basename "${BASH_SOURCE[${main}]}"
+  bl64_fmt_path_get_basename "${BASH_SOURCE[${main}]}"
 }
 
 #######################################
@@ -283,7 +283,7 @@ function bl64_bsh_env_store_publish() {
     bl64_check_directory "${home}/${BL64_BSH_ENV_STORE}" ||
     return $?
 
-  target="${home}/${BL64_BSH_ENV_STORE}/${priority}_$(bl64_fmt_basename "$source_env")" &&
+  target="${home}/${BL64_BSH_ENV_STORE}/${priority}_$(bl64_fmt_path_get_basename "$source_env")" &&
     bl64_fs_create_symlink \
       "$source_env" \
       "$target" \
