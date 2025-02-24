@@ -10,7 +10,7 @@
 #
 
 function bl64_fmt_strip_starting_slash() {
-  bl64_msg_show_deprecated 'bl64_fmt_strip_starting_slash' 'bl64_fmt_path_starting_slash'
+  bl64_msg_show_deprecated 'bl64_fmt_strip_starting_slash' 'bl64_fmt_path_strip_starting_slash'
   bl64_fmt_path_strip_root "$@"
 }
 
@@ -66,7 +66,7 @@ function bl64_fmt_check_value_in_list() {
 #   0: successfull execution
 #   >0: printf error
 #######################################
-function bl64_fmt_path_starting_slash() {
+function bl64_fmt_path_strip_starting_slash() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
 

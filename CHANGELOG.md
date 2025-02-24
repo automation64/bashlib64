@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 
 - fmt
-  - bl64_fmt_strip_starting_slash -> 'bl64_fmt_path_starting_slash'
+  - bl64_fmt_strip_starting_slash -> 'bl64_fmt_path_strip_starting_slash'
   - bl64_fmt_strip_ending_slash -> 'bl64_fmt_path_strip_ending_slash'
   - bl64_fmt_basename ->' 'bl64_fmt_path_get_basename'
   - bl64_fmt_dirname ->' 'bl64_fmt_path_get_dirname'
