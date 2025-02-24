@@ -341,3 +341,43 @@ function bl64_fmt_version_is_major() {
   local version_pattern='^[0-9]+$'
   [[ "$version" =~ $version_pattern ]]
 }
+
+#######################################
+# Convert a version to major.minor
+#
+# Arguments:
+#   $1: Version
+# Outputs:
+#   STDOUT: Major.Minor
+#   STDERR: message
+# Returns:
+#   0: Converted
+#   >0: Failed
+#######################################
+function bl64_fmt_version_convert_to_major_minor() {
+  bl64_dbg_lib_show_function "$@"
+  local version="$1"
+  local version_pattern_single='^[0-9]+$'
+  local version_pattern_major_minor='^[0-9]+\.[0-9]+$'
+  local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
+  local version_normalized=''
+
+  bl64_check_parameter 'version' || return $?
+  if [[ "$version" =~ $version_pattern_single ]]; then
+    version_normalized="${version}.0"
+  elif [[ "$version" =~ $version_pattern_major_minor ]]; then
+    version_normalized="${version}"
+  elif [[ "$version" =~ $version_pattern_semver ]]; then
+    version_normalized="${version%.*}"
+  else
+    version_normalized="$version"
+  fi
+  bl64_dbg_lib_show_vars 'version' 'version_normalized'
+
+  if [[ "$version_normalized" =~ $version_pattern_major_minor ]]; then
+    echo "$version_normalized"
+    return 0
+  fi
+  bl64_msg_show_error "unable to convert version to major.minor (${version})"
+  return $BL64_LIB_ERROR_TASK_FAILED
+}
