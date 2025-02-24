@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [20.12.0]
 
+### Fixed
+
+- os
+  - _bl64_os_get_distro_from_uname: add missing version normalizer
+
 ### Added
 
 - fmt
