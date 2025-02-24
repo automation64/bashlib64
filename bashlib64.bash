@@ -90,7 +90,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.11.0'
+  declare BL64_VERSION='20.12.0'
 
   #
   # Imported generic shell standard variables
@@ -768,7 +768,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_OS_VERSION='5.6.1'
+  declare BL64_OS_VERSION='5.6.2'
 
   declare BL64_OS_MODULE='0'
 
@@ -1015,7 +1015,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FMT_VERSION='4.0.0'
+  declare BL64_FMT_VERSION='5.0.0'
 
   declare BL64_FMT_MODULE='0'
 }
@@ -1481,7 +1481,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_UI_VERSION='2.0.2'
+  declare BL64_UI_VERSION='3.0.0'
 
   declare BL64_UI_MODULE='0'
 
@@ -4120,8 +4120,8 @@ function bl64_msg_show_separator() {
 # Display deprecation message
 #
 # Arguments:
-#   $1: feature
-#   $2: replacement
+#   $1: function_name
+#   $2: function_replacement
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
@@ -4131,11 +4131,11 @@ function bl64_msg_show_separator() {
 #######################################
 function bl64_msg_show_deprecated() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local feature="${1:-}"
-  local replacement="${2:-non-available}"
+  local function_name="${1:-}"
+  local function_replacement="${2:-non-available}"
 
-  bl64_log_warning "${FUNCNAME[1]:-MAIN}" "deprecated: ${feature}" &&
-    _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Deprecated' "Feature to be removed from future versions: ${feature}. Replace with: ${replacement}" >&2
+  bl64_log_warning "${FUNCNAME[1]:-MAIN}" "deprecated: ${function_name}" &&
+    _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Deprecated' "Function to be removed from future versions: ${function_name}. Replace with: ${function_replacement}" >&2
 }
 
 #######################################
@@ -4461,12 +4461,18 @@ function bl64_os_set_lang() {
 #
 # Deprecation aliases
 #
-# * Aliases to deprecated functions 
+# * Aliases to deprecated functions
 # * Needed to maintain compatibility up to N-2 versions
 #
 
-function bl64_os_match() { bl64_msg_show_deprecated 'bl64_os_match' 'bl64_os_is_distro'; bl64_os_is_distro "$@"; }
-function bl64_os_match_compatible() { bl64_msg_show_deprecated 'bl64_os_match_compatible' 'bl64_os_is_compatible'; bl64_os_is_compatible "$@"; }
+function bl64_os_match() {
+  bl64_msg_show_deprecated 'bl64_os_match' 'bl64_os_is_distro'
+  bl64_os_is_distro "$@"
+}
+function bl64_os_match_compatible() {
+  bl64_msg_show_deprecated 'bl64_os_match_compatible' 'bl64_os_is_compatible'
+  bl64_os_is_compatible "$@"
+}
 
 #
 # Internal functions
@@ -4571,9 +4577,13 @@ function _bl64_os_get_distro_from_uname() {
   os_type="$(uname)"
   case "$os_type" in
   'Darwin')
-    os_version="$("$cmd_sw_vers" -productVersion)"
-    BL64_OS_DISTRO="DARWIN-${os_version}"
+    os_version="$("$cmd_sw_vers" -productVersion)" &&
+      BL64_OS_DISTRO="$(_bl64_os_release_normalize "$os_version")" ||
+      return $?
+
+    BL64_OS_DISTRO="DARWIN-${BL64_OS_DISTRO}"
     BL64_OS_FLAVOR="$BL64_OS_FLAVOR_MACOS"
+    bl64_dbg_lib_show_vars 'BL64_OS_DISTRO'
     ;;
   *)
     BL64_OS_DISTRO="$BL64_OS_UNK"
@@ -4582,8 +4592,6 @@ function _bl64_os_get_distro_from_uname() {
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
     ;;
   esac
-  bl64_dbg_lib_show_vars 'BL64_OS_DISTRO'
-
   return 0
 }
 
@@ -4608,33 +4616,11 @@ function _bl64_os_get_distro_from_uname() {
 #######################################
 function _bl64_os_get_distro_from_os_release() {
   bl64_dbg_lib_show_function
-  local version_pattern_single='^[0-9]+$'
-  local version_pattern_major_minor='^[0-9]+\.[0-9]+$'
-  local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
   local version_normalized=''
 
-  # shellcheck disable=SC1091
-  bl64_dbg_lib_show_info 'parse /etc/os-release'
-  if ! source '/etc/os-release' || [[ -z "$ID" || -z "$VERSION_ID" ]]; then
-    bl64_msg_show_error 'failed to load OS information from /etc/os-release file'
-    return $BL64_LIB_ERROR_TASK_FAILED
-  fi
-  bl64_dbg_lib_show_vars 'ID' 'VERSION_ID'
-
-  bl64_dbg_lib_show_info 'normalize OS version to match X.Y'
-  if [[ "$VERSION_ID" =~ $version_pattern_single ]]; then
-    version_normalized="${VERSION_ID}.0"
-  elif [[ "$VERSION_ID" =~ $version_pattern_major_minor ]]; then
-    version_normalized="${VERSION_ID}"
-  elif [[ "$VERSION_ID" =~ $version_pattern_semver ]]; then
-    version_normalized="${VERSION_ID%.*}"
-  else
-    version_normalized="$VERSION_ID"
-  fi
-  if [[ ! "$version_normalized" =~ $version_pattern_major_minor ]]; then
-    bl64_msg_show_error "unable to normalize OS version (${VERSION_ID} != Major.Minor != ${version_normalized})"
-    return $BL64_LIB_ERROR_TASK_FAILED
-  fi
+  _bl64_os_release_load &&
+    version_normalized="$(_bl64_os_release_normalize "$VERSION_ID")" ||
+    return $?
 
   bl64_dbg_lib_show_info 'set BL_OS_DISTRO'
   case "${ID^^}" in
@@ -4698,6 +4684,43 @@ function _bl64_os_get_distro_from_os_release() {
   esac
   bl64_dbg_lib_show_vars 'BL64_OS_DISTRO' 'BL64_OS_FLAVOR'
   return 0
+}
+
+function _bl64_os_release_load() {
+  bl64_dbg_lib_show_function
+  # shellcheck disable=SC1091
+  bl64_dbg_lib_show_info 'parse /etc/os-release'
+  if ! source '/etc/os-release' || [[ -z "$ID" || -z "$VERSION_ID" ]]; then
+    bl64_msg_show_error 'failed to load OS information from /etc/os-release file'
+    return $BL64_LIB_ERROR_TASK_FAILED
+  fi
+  bl64_dbg_lib_show_vars 'ID' 'VERSION_ID'
+}
+
+function _bl64_os_release_normalize() {
+  bl64_dbg_lib_show_function "$@"
+  local version_raw="$1"
+  local version_normalized=''
+  local version_pattern_single='^[0-9]+$'
+  local version_pattern_major_minor='^[0-9]+\.[0-9]+$'
+  local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
+
+  bl64_dbg_lib_show_info 'normalize OS version to match X.Y'
+  if [[ "$version_raw" =~ $version_pattern_single ]]; then
+    version_normalized="${version_raw}.0"
+  elif [[ "$version_raw" =~ $version_pattern_major_minor ]]; then
+    version_normalized="${version_raw}"
+  elif [[ "$version_raw" =~ $version_pattern_semver ]]; then
+    version_normalized="${version_raw%.*}"
+  else
+    version_normalized="$version_raw"bl64_os_is_compatible
+  fi
+  if [[ "$version_normalized" =~ $version_pattern_major_minor ]]; then
+    echo "$version_normalized"
+    return 0
+  fi
+  bl64_msg_show_error "unable to normalize OS version (${version_raw} != Major.Minor != ${version_normalized})"
+  return $BL64_LIB_ERROR_TASK_FAILED
 }
 
 #
@@ -6755,7 +6778,7 @@ function bl64_bsh_script_get_name() {
 
   ((main > 0)) && main=$((main - 1))
 
-  bl64_fmt_basename "${BASH_SOURCE[${main}]}"
+  bl64_fmt_path_get_basename "${BASH_SOURCE[${main}]}"
 }
 
 #######################################
@@ -6977,7 +7000,7 @@ function bl64_bsh_env_store_publish() {
     bl64_check_directory "${home}/${BL64_BSH_ENV_STORE}" ||
     return $?
 
-  target="${home}/${BL64_BSH_ENV_STORE}/${priority}_$(bl64_fmt_basename "$source_env")" &&
+  target="${home}/${BL64_BSH_ENV_STORE}/${priority}_$(bl64_fmt_path_get_basename "$source_env")" &&
     bl64_fs_create_symlink \
       "$source_env" \
       "$target" \
@@ -8864,6 +8887,56 @@ function bl64_fmt_setup() {
 # BashLib64 / Module / Functions / Format text data
 #######################################
 
+#
+# Deprecation aliases
+#
+# * Aliases to deprecated functions
+# * Needed to maintain compatibility up to N-2 versions
+#
+
+function bl64_fmt_strip_starting_slash() {
+  bl64_msg_show_deprecated 'bl64_fmt_strip_starting_slash' 'bl64_fmt_path_strip_starting_slash'
+  bl64_fmt_path_strip_root "$@"
+}
+
+function bl64_fmt_strip_ending_slash() {
+  bl64_msg_show_deprecated 'bl64_fmt_strip_ending_slash' 'bl64_fmt_path_strip_ending_slash'
+  bl64_fmt_path_strip_root "$@"
+}
+
+function bl64_fmt_basename() {
+  bl64_msg_show_deprecated 'bl64_fmt_basename' 'bl64_fmt_path_get_basename'
+  bl64_fmt_path_strip_root "$@"
+}
+
+function bl64_fmt_dirname() {
+  bl64_msg_show_deprecated 'bl64_fmt_dirname' 'bl64_fmt_path_get_dirname'
+  bl64_fmt_path_strip_root "$@"
+}
+
+function bl64_fmt_list_to_string() {
+  bl64_msg_show_deprecated 'bl64_fmt_list_to_string' 'bl64_fmt_list_convert_to_string'
+  bl64_fmt_path_strip_root "$@"
+}
+
+function bl64_fmt_separator_line() {
+  bl64_msg_show_deprecated 'bl64_fmt_separator_line' 'bl64_ui_separator_show'
+  bl64_fmt_path_strip_root "$@"
+}
+
+function bl64_fmt_check_value_in_list() {
+  bl64_msg_show_deprecated 'bl64_fmt_check_value_in_list' 'bl64_fmt_list_check_membership'
+  bl64_fmt_path_strip_root "$@"
+}
+
+#
+# Private functions
+#
+
+#
+# Public functions
+#
+
 #######################################
 # Removes starting slash from path
 #
@@ -8878,7 +8951,7 @@ function bl64_fmt_setup() {
 #   0: successfull execution
 #   >0: printf error
 #######################################
-function bl64_fmt_strip_starting_slash() {
+function bl64_fmt_path_strip_starting_slash() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
 
@@ -8908,7 +8981,7 @@ function bl64_fmt_strip_starting_slash() {
 #   0: successfull execution
 #   >0: printf error
 #######################################
-function bl64_fmt_strip_ending_slash() {
+function bl64_fmt_path_strip_ending_slash() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
 
@@ -8935,13 +9008,13 @@ function bl64_fmt_strip_ending_slash() {
 #
 # Examples:
 #
-#   bl64_fmt_basename '/full/path/to/file' -> 'file'
-#   bl64_fmt_basename '/full/path/to/file/' -> ''
-#   bl64_fmt_basename 'path/to/file' -> 'file'
-#   bl64_fmt_basename 'path/to/file/' -> ''
-#   bl64_fmt_basename '/file' -> 'file'
-#   bl64_fmt_basename '/' -> ''
-#   bl64_fmt_basename 'file' -> 'file'
+#   bl64_fmt_path_get_basename '/full/path/to/file' -> 'file'
+#   bl64_fmt_path_get_basename '/full/path/to/file/' -> ''
+#   bl64_fmt_path_get_basename 'path/to/file' -> 'file'
+#   bl64_fmt_path_get_basename 'path/to/file/' -> ''
+#   bl64_fmt_path_get_basename '/file' -> 'file'
+#   bl64_fmt_path_get_basename '/' -> ''
+#   bl64_fmt_path_get_basename 'file' -> 'file'
 #
 # Arguments:
 #   $1: Path
@@ -8952,7 +9025,7 @@ function bl64_fmt_strip_ending_slash() {
 #   0: successfull execution
 #   >0: printf error
 #######################################
-function bl64_fmt_basename() {
+function bl64_fmt_path_get_basename() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
   local base=''
@@ -8979,11 +9052,11 @@ function bl64_fmt_basename() {
 #
 # Examples:
 #
-#   bl64_fmt_dirname '/full/path/to/file' -> '/full/path/to'
-#   bl64_fmt_dirname '/full/path/to/file/' -> '/full/path/to/file'
-#   bl64_fmt_dirname '/file' -> '/'
-#   bl64_fmt_dirname '/' -> '/'
-#   bl64_fmt_dirname 'dir' -> 'dir'
+#   bl64_fmt_path_get_dirname '/full/path/to/file' -> '/full/path/to'
+#   bl64_fmt_path_get_dirname '/full/path/to/file/' -> '/full/path/to/file'
+#   bl64_fmt_path_get_dirname '/file' -> '/'
+#   bl64_fmt_path_get_dirname '/' -> '/'
+#   bl64_fmt_path_get_dirname 'dir' -> 'dir'
 #
 # Arguments:
 #   $1: Path
@@ -8994,7 +9067,7 @@ function bl64_fmt_basename() {
 #   0: successfull execution
 #   >0: printf error
 #######################################
-function bl64_fmt_dirname() {
+function bl64_fmt_path_get_dirname() {
   bl64_dbg_lib_show_function "$@"
   local path="$1"
 
@@ -9032,7 +9105,7 @@ function bl64_fmt_dirname() {
 # Returns:
 #   always ok
 #######################################
-function bl64_fmt_list_to_string() {
+function bl64_fmt_list_convert_to_string() {
   bl64_dbg_lib_show_function
   local field_separator="${1:-${BL64_VAR_DEFAULT}}"
   local prefix="${2:-${BL64_VAR_DEFAULT}}"
@@ -9059,26 +9132,6 @@ function bl64_fmt_list_to_string() {
 }
 
 #######################################
-# Build a separator line with optional payload
-#
-# * Separator format: payload + \n
-#
-# Arguments:
-#   $1: Separator payload. Format: string
-# Outputs:
-#   STDOUT: separator line
-#   STDERR: grep Error message
-# Returns:
-#   printf exit status
-#######################################
-function bl64_fmt_separator_line() {
-  bl64_dbg_lib_show_function "$@"
-  local payload="${1:-}"
-
-  printf '%s\n' "$payload"
-}
-
-#######################################
 # Check that the value is part of a list
 #
 # Arguments:
@@ -9092,7 +9145,7 @@ function bl64_fmt_separator_line() {
 #   0: check ok
 #   BL64_LIB_ERROR_CHECK_FAILED
 #######################################
-function bl64_fmt_check_value_in_list() {
+function bl64_fmt_list_check_membership() {
   bl64_dbg_lib_show_function "$@"
   local error_message="${1:-$BL64_VAR_DEFAULT}"
   local target_value="${2:-}"
@@ -9172,6 +9225,46 @@ function bl64_fmt_version_is_major() {
   local version="$1"
   local version_pattern='^[0-9]+$'
   [[ "$version" =~ $version_pattern ]]
+}
+
+#######################################
+# Convert a version to major.minor
+#
+# Arguments:
+#   $1: Version
+# Outputs:
+#   STDOUT: Major.Minor
+#   STDERR: message
+# Returns:
+#   0: Converted
+#   >0: Failed
+#######################################
+function bl64_fmt_version_convert_to_major_minor() {
+  bl64_dbg_lib_show_function "$@"
+  local version="$1"
+  local version_pattern_single='^[0-9]+$'
+  local version_pattern_major_minor='^[0-9]+\.[0-9]+$'
+  local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
+  local version_normalized=''
+
+  bl64_check_parameter 'version' || return $?
+  if [[ "$version" =~ $version_pattern_single ]]; then
+    version_normalized="${version}.0"
+  elif [[ "$version" =~ $version_pattern_major_minor ]]; then
+    version_normalized="${version}"
+  elif [[ "$version" =~ $version_pattern_semver ]]; then
+    version_normalized="${version%.*}"
+  else
+    version_normalized="$version"
+  fi
+  bl64_dbg_lib_show_vars 'version' 'version_normalized'
+
+  if [[ "$version_normalized" =~ $version_pattern_major_minor ]]; then
+    echo "$version_normalized"
+    return 0
+  fi
+  bl64_msg_show_error "unable to convert version to major.minor (${version})"
+  return $BL64_LIB_ERROR_TASK_FAILED
 }
 
 #######################################
@@ -9812,7 +9905,7 @@ function bl64_fs_path_copy() {
     return $?
 
   for path_current in "$@"; do
-    path_base="$(bl64_fmt_basename "$path_current")"
+    path_base="$(bl64_fmt_path_get_basename "$path_current")"
     bl64_fs_path_permission_set \
       "$file_mode" \
       "$dir_mode" \
@@ -9873,7 +9966,7 @@ function bl64_fs_file_copy() {
     return $?
 
   for path_current in "$@"; do
-    path_base="$(bl64_fmt_basename "$path_current")"
+    path_base="$(bl64_fmt_path_get_basename "$path_current")"
     bl64_fs_path_permission_set \
       "$file_mode" \
       "$BL64_VAR_DEFAULT" \
@@ -16026,7 +16119,7 @@ function _bl64_rxtx_git_get_dir_root() {
   repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
   bl64_check_directory "$repo" 'unable to create temporary git repo' || return $BL64_LIB_ERROR_TASK_TEMP
 
-  git_name="$(bl64_fmt_basename "$source_url")"
+  git_name="$(bl64_fmt_path_get_basename "$source_url")"
   git_name="${git_name/.git/}"
   transition="${repo}/${git_name}"
   bl64_dbg_lib_show_vars 'git_name' 'transition'
@@ -16061,7 +16154,7 @@ function _bl64_rxtx_git_get_dir_sub() {
 
   bl64_dbg_lib_show_comments 'Use transition path to get to the final target path'
   source="${repo}/${source_path}"
-  target="$(bl64_fmt_basename "$destination")"
+  target="$(bl64_fmt_path_get_basename "$destination")"
   transition="${repo}/transition/${target}"
   bl64_dbg_lib_show_vars 'source' 'target' 'transition'
 
@@ -17071,6 +17164,26 @@ function bl64_ui_setup() {
 # BashLib64 / Module / Functions / User Interface
 #######################################
 
+#
+# Deprecation aliases
+#
+# * Aliases to deprecated functions
+# * Needed to maintain compatibility up to N-2 versions
+#
+
+function bl64_ui_ask_confirmation() {
+  bl64_msg_show_deprecated 'bl64_ui_ask_confirmation' 'bl64_ui_confirmation_ask'
+  bl64_ui_confirmation_ask "$@"
+}
+
+#
+# Private functions
+#
+
+#
+# Public functions
+#
+
 #######################################
 # Ask for confirmation
 #
@@ -17086,7 +17199,7 @@ function bl64_ui_setup() {
 #   0: confirmed
 #   >0: not confirmed
 #######################################
-function bl64_ui_ask_confirmation() {
+function bl64_ui_confirmation_ask() {
   bl64_dbg_lib_show_function "$@"
   local question="${1:-Please type in the confirmation message to proceed}"
   local confirmation="${2:-confirm-operation}"
@@ -17101,6 +17214,26 @@ function bl64_ui_ask_confirmation() {
   fi
 
   return 0
+}
+
+#######################################
+# Build a separator line with optional payload
+#
+# * Separator format: payload + \n
+#
+# Arguments:
+#   $1: Separator payload. Format: string
+# Outputs:
+#   STDOUT: separator line
+#   STDERR: grep Error message
+# Returns:
+#   printf exit status
+#######################################
+function bl64_ui_separator_show() {
+  bl64_dbg_lib_show_function "$@"
+  local payload="${1:-}"
+
+  printf '%s\n' "$payload"
 }
 
 #######################################
