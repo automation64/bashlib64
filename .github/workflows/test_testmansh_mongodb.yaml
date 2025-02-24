@@ -1,0 +1,51 @@
+---
+# Template: 3.4.0
+name: "Test / TestManSH / MongoDB"
+
+env:
+  DEV_CICD_DEBUG: ""
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches:
+      - "main"
+  push:
+    branches:
+      - "feature/**"
+    paths:
+      - "src/*-mdb-*"
+      - "test/batscore/mongodb/**"
+
+jobs:
+  test-testmansh-mongodb:
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - "MONGODB"
+    steps:
+
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
+
+      - name: "Prepare environment"
+        run: "./bin/dev-lib-base"
+
+      - name: "Download tools"
+        run: "./bin/dev-lib-testmansh"
+
+      - name: "Build app"
+        run: "./bin/dev-build-project"
+
+      - name: "Run tests"
+        shell: 'script -q -e -c "bash {0}"'
+        run: |
+          source ./bin/dev-set &&
+          source ./bin/dev-env-project &&
+          ./bin/dev-test-testmansh "$DEV_TEST_TESTMANSH_CONTAINER_${{matrix.target}}" "$DEV_TEST_TESTMANSH_CASES_MONGODB"
+...

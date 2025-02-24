@@ -23,53 +23,53 @@ on:
       - "test/bash/**"
 
 jobs:
-  # test-bash-linux:
-  #   runs-on: "ubuntu-latest"
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       target:
-  #         - "ALM"
-  #         - "ALP"
-  #         - "AMZ"
-  #         - "CNT"
-  #         - "DEB"
-  #         - "FD"
-  #         - "KL"
-  #         - "OEL"
-  #         - "RCK"
-  #         - "RHEL"
-  #         - "SLES"
-  #         - "UB"
-  #   steps:
-  #     - name: "Check out repository code"
-  #       uses: "actions/checkout@main"
+  test-bash-linux:
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - "ALM"
+          - "ALP"
+          - "AMZ"
+          - "CNT"
+          - "DEB"
+          - "FD"
+          - "KL"
+          - "OEL"
+          - "RCK"
+          - "RHEL"
+          - "SLES"
+          - "UB"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@main"
 
-  #     - name: "Prepare environment"
-  #       run: |
-  #         ./bin/dev-lib-base &&
-  #         ./bin/dev-prep-project
+      - name: "Prepare environment"
+        run: |
+          ./bin/dev-lib-base &&
+          ./bin/dev-prep-project
 
-  #     - name: "Build app"
-  #       run: "./bin/dev-build-project"
+      - name: "Build app"
+        run: "./bin/dev-build-project"
 
-  #     - name: "Run OS specific tests"
-  #       run: |
-  #         source ./bin/dev-set &&
-  #         source ./bin/dev-env-bash &&
-  #         ./bin/dev-test-bash $DEV_TEST_BASH_CONTAINER_${{matrix.target}} ${DEV_TEST_BASH_CASES}/${{matrix.target}}
+      - name: "Run OS specific tests"
+        run: |
+          source ./bin/dev-set &&
+          source ./bin/dev-env-bash &&
+          ./bin/dev-test-bash $DEV_TEST_BASH_CONTAINER_${{matrix.target}} ${DEV_TEST_BASH_CASES}/${{matrix.target}}
 
-  #     - name: "Run Linux generic tests"
-  #       run: |
-  #         source ./bin/dev-set &&
-  #         source ./bin/dev-env-bash &&
-  #         ./bin/dev-test-bash $DEV_TEST_BASH_CONTAINER_${{matrix.target}} ${DEV_TEST_BASH_CASES}/LNX
+      - name: "Run Linux generic tests"
+        run: |
+          source ./bin/dev-set &&
+          source ./bin/dev-env-bash &&
+          ./bin/dev-test-bash $DEV_TEST_BASH_CONTAINER_${{matrix.target}} ${DEV_TEST_BASH_CASES}/LNX
 
-  #     - name: "Run Unix generic tests"
-  #       run: |
-  #         source ./bin/dev-set &&
-  #         source ./bin/dev-env-bash &&
-  #         ./bin/dev-test-bash $DEV_TEST_BASH_CONTAINER_${{matrix.target}} ${DEV_TEST_BASH_CASES}/UNX
+      - name: "Run Unix generic tests"
+        run: |
+          source ./bin/dev-set &&
+          source ./bin/dev-env-bash &&
+          ./bin/dev-test-bash $DEV_TEST_BASH_CONTAINER_${{matrix.target}} ${DEV_TEST_BASH_CASES}/UNX
 
   test-bash-macos:
     runs-on: "macos-latest"
