@@ -22,6 +22,32 @@ function bl64_os_match_compatible() {
 # Internal functions
 #
 
+#######################################
+# Identify and normalize Linux OS distribution name and version
+#
+# * Warning: bootstrap function
+# * OS name format: OOO-V.V
+#   * OOO: OS short name (tag)
+#   * V.V: Version (Major, Minor)
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok, even when the OS is not supported
+#######################################
+# Warning: bootstrap function
+function _bl64_os_set_distro() {
+  bl64_dbg_lib_show_function
+  if [[ -r '/etc/os-release' ]]; then
+    _bl64_os_get_distro_from_os_release
+  else
+    _bl64_os_get_distro_from_uname
+  fi
+}
+
 function _bl64_os_is_distro() {
   bl64_dbg_lib_show_function "$@"
   local check_compatibility="$1"
@@ -378,31 +404,7 @@ function bl64_os_is_compatible() {
   return $status
 }
 
-#######################################
-# Identify and normalize Linux OS distribution name and version
-#
-# * Warning: bootstrap function
-# * OS name format: OOO-V.V
-#   * OOO: OS short name (tag)
-#   * V.V: Version (Major, Minor)
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok, even when the OS is not supported
-#######################################
-# Warning: bootstrap function
-function _bl64_os_set_distro() {
-  bl64_dbg_lib_show_function
-  if [[ -r '/etc/os-release' ]]; then
-    _bl64_os_get_distro_from_os_release
-  else
-    _bl64_os_get_distro_from_uname
-  fi
-}
+
 
 #######################################
 # Determine if locale resources for language are installed in the OS
