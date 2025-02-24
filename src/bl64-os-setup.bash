@@ -32,6 +32,8 @@ function bl64_os_setup() {
     _bl64_os_set_runtime &&
     _bl64_os_set_command &&
     _bl64_os_set_options &&
+    _bl64_os_set_type &&
+    _bl64_os_set_machine &&
     BL64_OS_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'os'
 }
@@ -216,4 +218,38 @@ function bl64_os_set_lang() {
   bl64_dbg_lib_show_vars 'LANG' 'LC_ALL' 'LANGUAGE'
 
   return 0
+}
+
+#######################################
+# Obtain OS type
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: OS Type
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function _bl64_os_set_type() {
+  bl64_dbg_lib_show_function
+  BL64_OS_TYPE="$(bl64_os_run_uname -o)"
+}
+
+#######################################
+# Obtain Machine type
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: OS Type
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function _bl64_os_set_machine() {
+  bl64_dbg_lib_show_function
+  BL64_OS_MACHINE="$(bl64_os_run_uname -m)"
 }

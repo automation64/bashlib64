@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_OS_VERSION='5.6.2'
+  declare BL64_OS_VERSION='5.7.0'
 
   declare BL64_OS_MODULE='0'
 
@@ -13,6 +13,12 @@
 
   # Current OS Flavor ID
   declare BL64_OS_FLAVOR=''
+
+  # OS Type, from uname
+  declare -u BL64_OS_TYPE=''
+
+  # Machine ID, from uname
+  declare -u BL64_OS_MACHINE=''
 
   declare BL64_OS_CMD_BASH=''
   declare BL64_OS_CMD_CAT=''

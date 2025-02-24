@@ -22,6 +22,32 @@ function bl64_os_match_compatible() {
 # Internal functions
 #
 
+#######################################
+# Identify and normalize Linux OS distribution name and version
+#
+# * Warning: bootstrap function
+# * OS name format: OOO-V.V
+#   * OOO: OS short name (tag)
+#   * V.V: Version (Major, Minor)
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok, even when the OS is not supported
+#######################################
+# Warning: bootstrap function
+function _bl64_os_set_distro() {
+  bl64_dbg_lib_show_function
+  if [[ -r '/etc/os-release' ]]; then
+    _bl64_os_get_distro_from_os_release
+  else
+    _bl64_os_get_distro_from_uname
+  fi
+}
+
 function _bl64_os_is_distro() {
   bl64_dbg_lib_show_function "$@"
   local check_compatibility="$1"
@@ -118,7 +144,7 @@ function _bl64_os_get_distro_from_uname() {
   local os_version=''
   local cmd_sw_vers='/usr/bin/sw_vers'
 
-  os_type="$(uname)"
+  os_type="$(bl64_os_get_type)"
   case "$os_type" in
   'Darwin')
     os_version="$("$cmd_sw_vers" -productVersion)" &&
@@ -379,32 +405,6 @@ function bl64_os_is_compatible() {
 }
 
 #######################################
-# Identify and normalize Linux OS distribution name and version
-#
-# * Warning: bootstrap function
-# * OS name format: OOO-V.V
-#   * OOO: OS short name (tag)
-#   * V.V: Version (Major, Minor)
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok, even when the OS is not supported
-#######################################
-# Warning: bootstrap function
-function _bl64_os_set_distro() {
-  bl64_dbg_lib_show_function
-  if [[ -r '/etc/os-release' ]]; then
-    _bl64_os_get_distro_from_os_release
-  else
-    _bl64_os_get_distro_from_uname
-  fi
-}
-
-#######################################
 # Determine if locale resources for language are installed in the OS
 #
 # Arguments:
@@ -621,4 +621,32 @@ function bl64_os_check_not_version() {
   bl64_msg_show_error \
     "task not supported by the current OS version (${BL64_OS_DISTRO})"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_os_run_uname() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_command "$BL64_OS_CMD_CAT" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_OS_CMD_UNAME" \
+    "$@"
+  bl64_dbg_lib_trace_stop
 }

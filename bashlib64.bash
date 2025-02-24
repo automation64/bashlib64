@@ -90,7 +90,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.12.0'
+  declare BL64_VERSION='20.12.1'
 
   #
   # Imported generic shell standard variables
@@ -768,7 +768,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_OS_VERSION='5.6.2'
+  declare BL64_OS_VERSION='5.7.0'
 
   declare BL64_OS_MODULE='0'
 
@@ -777,6 +777,12 @@ function bl64_lib_script_version_set() {
 
   # Current OS Flavor ID
   declare BL64_OS_FLAVOR=''
+
+  # OS Type, from uname
+  declare -u BL64_OS_TYPE=''
+
+  # Machine ID, from uname
+  declare -u BL64_OS_MACHINE=''
 
   declare BL64_OS_CMD_BASH=''
   declare BL64_OS_CMD_CAT=''
@@ -880,7 +886,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ARC_VERSION='3.3.1'
+  declare BL64_ARC_VERSION='3.3.2'
 
   declare BL64_ARC_MODULE='0'
 
@@ -4268,6 +4274,8 @@ function bl64_os_setup() {
     _bl64_os_set_runtime &&
     _bl64_os_set_command &&
     _bl64_os_set_options &&
+    _bl64_os_set_type &&
+    _bl64_os_set_machine &&
     BL64_OS_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'os'
 }
@@ -4455,6 +4463,40 @@ function bl64_os_set_lang() {
 }
 
 #######################################
+# Obtain OS type
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: OS Type
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function _bl64_os_set_type() {
+  bl64_dbg_lib_show_function
+  BL64_OS_TYPE="$(bl64_os_run_uname -o)"
+}
+
+#######################################
+# Obtain Machine type
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: OS Type
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function _bl64_os_set_machine() {
+  bl64_dbg_lib_show_function
+  BL64_OS_MACHINE="$(bl64_os_run_uname -m)"
+}
+
+#######################################
 # BashLib64 / Module / Functions / OS / Identify OS attributes and provide command aliases
 #######################################
 
@@ -4477,6 +4519,32 @@ function bl64_os_match_compatible() {
 #
 # Internal functions
 #
+
+#######################################
+# Identify and normalize Linux OS distribution name and version
+#
+# * Warning: bootstrap function
+# * OS name format: OOO-V.V
+#   * OOO: OS short name (tag)
+#   * V.V: Version (Major, Minor)
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok, even when the OS is not supported
+#######################################
+# Warning: bootstrap function
+function _bl64_os_set_distro() {
+  bl64_dbg_lib_show_function
+  if [[ -r '/etc/os-release' ]]; then
+    _bl64_os_get_distro_from_os_release
+  else
+    _bl64_os_get_distro_from_uname
+  fi
+}
 
 function _bl64_os_is_distro() {
   bl64_dbg_lib_show_function "$@"
@@ -4574,7 +4642,7 @@ function _bl64_os_get_distro_from_uname() {
   local os_version=''
   local cmd_sw_vers='/usr/bin/sw_vers'
 
-  os_type="$(uname)"
+  os_type="$(bl64_os_get_type)"
   case "$os_type" in
   'Darwin')
     os_version="$("$cmd_sw_vers" -productVersion)" &&
@@ -4835,32 +4903,6 @@ function bl64_os_is_compatible() {
 }
 
 #######################################
-# Identify and normalize Linux OS distribution name and version
-#
-# * Warning: bootstrap function
-# * OS name format: OOO-V.V
-#   * OOO: OS short name (tag)
-#   * V.V: Version (Major, Minor)
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok, even when the OS is not supported
-#######################################
-# Warning: bootstrap function
-function _bl64_os_set_distro() {
-  bl64_dbg_lib_show_function
-  if [[ -r '/etc/os-release' ]]; then
-    _bl64_os_get_distro_from_os_release
-  else
-    _bl64_os_get_distro_from_uname
-  fi
-}
-
-#######################################
 # Determine if locale resources for language are installed in the OS
 #
 # Arguments:
@@ -5077,6 +5119,34 @@ function bl64_os_check_not_version() {
   bl64_msg_show_error \
     "task not supported by the current OS version (${BL64_OS_DISTRO})"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_os_run_uname() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_command "$BL64_OS_CMD_CAT" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_OS_CMD_UNAME" \
+    "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -5925,7 +5995,6 @@ function bl64_arc_open_tar() {
       --no-same-owner \
       --preserve-permissions \
       --no-acls \
-      --auto-compress \
       --file="$source"
     ;;
   *) bl64_check_alert_unsupported ;;

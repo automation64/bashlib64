@@ -5,10 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [20.12.0]
+## [20.12.1]
 
 ### Fixed
 
+- arc
+  - bl64_arc_open_tar: wrong param for MCOS
 - os
   - _bl64_os_get_distro_from_uname: add missing version normalizer
 
@@ -16,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - fmt
   - bl64_fmt_version_convert_to_major_minor
+- os
+  - bl64_os_run_uname
+  - BL64_OS_TYPE
+  - BL64_OS_MACHINE
 
 ### Deprecated
 
