@@ -144,7 +144,7 @@ function _bl64_os_get_distro_from_uname() {
   local os_version=''
   local cmd_sw_vers='/usr/bin/sw_vers'
 
-  os_type="$(uname)"
+  os_type="$(bl64_os_get_type)"
   case "$os_type" in
   'Darwin')
     os_version="$("$cmd_sw_vers" -productVersion)" &&
@@ -403,8 +403,6 @@ function bl64_os_is_compatible() {
   fi
   return $status
 }
-
-
 
 #######################################
 # Determine if locale resources for language are installed in the OS
