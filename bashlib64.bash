@@ -90,7 +90,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.12.1'
+  declare BL64_VERSION='20.12.2'
 
   #
   # Imported generic shell standard variables
@@ -4476,7 +4476,7 @@ function bl64_os_set_lang() {
 #######################################
 function _bl64_os_set_type() {
   bl64_dbg_lib_show_function
-  BL64_OS_TYPE="$(bl64_os_run_uname -o)"
+  BL64_OS_TYPE="$("$BL64_OS_CMD_UNAME" -o)"
 }
 
 #######################################
@@ -4493,7 +4493,7 @@ function _bl64_os_set_type() {
 #######################################
 function _bl64_os_set_machine() {
   bl64_dbg_lib_show_function
-  BL64_OS_MACHINE="$(bl64_os_run_uname -m)"
+  BL64_OS_MACHINE="$("$BL64_OS_CMD_UNAME" -m)"
 }
 
 #######################################
