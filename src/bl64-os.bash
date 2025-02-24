@@ -127,6 +127,7 @@ function _bl64_os_get_distro_from_uname() {
 
     BL64_OS_DISTRO="DARWIN-${BL64_OS_DISTRO}"
     BL64_OS_FLAVOR="$BL64_OS_FLAVOR_MACOS"
+    bl64_dbg_lib_show_vars 'BL64_OS_DISTRO'
     ;;
   *)
     BL64_OS_DISTRO="$BL64_OS_UNK"
@@ -135,8 +136,6 @@ function _bl64_os_get_distro_from_uname() {
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
     ;;
   esac
-  bl64_dbg_lib_show_vars 'BL64_OS_DISTRO'
-
   return 0
 }
 
