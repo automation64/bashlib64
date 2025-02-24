@@ -624,3 +624,31 @@ function bl64_os_check_not_version() {
     "task not supported by the current OS version (${BL64_OS_DISTRO})"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_os_run_uname() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_command "$BL64_OS_CMD_CAT" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_OS_CMD_UNAME" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}

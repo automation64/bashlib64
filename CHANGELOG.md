@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - fmt
   - bl64_fmt_version_convert_to_major_minor
+- os
+  - bl64_os_run_uname
 
 ### Deprecated
 
