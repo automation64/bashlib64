@@ -2,7 +2,7 @@
 #
 # Dev / Build / Project / Build application
 #
-# * Version: 4.0.1
+# * Version: 4.0.2
 # * Template: 2.0.0
 #
 
@@ -36,9 +36,9 @@ declare _BUILD_MODULE_CORE="${DEV_PATH_BUILD_PREPARE}/${DEV_PACK_PROJECT_ASSETS_
 function dev_build_merge_main() {
   bl64_msg_show_task 'adding main'
   # shellcheck disable=SC2119
-  { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$_BUILD_SA" &&
-    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$_BUILD_CORE" &&
-    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && bl64_fmt_separator_line; } >>"$_BUILD_MODULE_CORE" &&
+  { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && echo; } >>"$_BUILD_SA" &&
+    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && echo; } >>"$_BUILD_CORE" &&
+    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && echo; } >>"$_BUILD_MODULE_CORE" &&
     bl64_fs_run_chmod '0755' \
       "$_BUILD_SA" \
       "$_BUILD_MODULE_CORE" \
@@ -56,15 +56,15 @@ function dev_build_merge_module() {
   # shellcheck disable=SC2119
   for file in $modules; do
     [[ ! -f "bl64-${file}-env.bash" ]] && continue
-    { "$BL64_OS_CMD_CAT" "bl64-${file}-env.bash" && bl64_fmt_separator_line; } >>"$destination" ||
+    { "$BL64_OS_CMD_CAT" "bl64-${file}-env.bash" && echo; } >>"$destination" ||
       return $?
   done
 
   # shellcheck disable=SC2119
   for file in $modules; do
     {
-      [[ -f "bl64-${file}-setup.bash" ]] && "$BL64_OS_CMD_CAT" "bl64-${file}-setup.bash" && bl64_fmt_separator_line
-      "$BL64_OS_CMD_CAT" "bl64-${file}.bash" && bl64_fmt_separator_line
+      [[ -f "bl64-${file}-setup.bash" ]] && "$BL64_OS_CMD_CAT" "bl64-${file}-setup.bash" && echo
+      "$BL64_OS_CMD_CAT" "bl64-${file}.bash" && echo
     } >>"$destination" ||
       return $?
   done
@@ -86,7 +86,7 @@ function dev_build_create_modules() {
     dev_build_merge_module "${build_module}.tmp" "$module_name"
     {
       "$BL64_OS_CMD_CAT" 'bl64-lib-header.bash' &&
-        bl64_fmt_separator_line &&
+        echo &&
         "$BL64_OS_CMD_CAT" "${build_module}.tmp"
     } >"$build_module" &&
       bl64_fs_run_chmod '0755' "$build_module" ||
@@ -98,9 +98,9 @@ function dev_build_create_modules() {
 function dev_build_merge_core() {
   bl64_dbg_lib_show_function
   "$BL64_OS_CMD_CAT" "bl64-lib-header.bash" &&
-    bl64_fmt_separator_line &&
+    echo &&
     "$BL64_OS_CMD_CAT" "bl64-lib-bootstrap.bash" &&
-    bl64_fmt_separator_line &&
+    echo &&
     "$BL64_OS_CMD_CAT" "bl64-lib-env.bash" &&
     "$BL64_OS_CMD_CAT" "bl64-lib.bash"
 }
@@ -115,7 +115,7 @@ function dev_build_create_header() {
     return $?
   # shellcheck disable=SC2119
   {
-    "$BL64_OS_CMD_CAT" "bl64-lib-header.bash" && bl64_fmt_separator_line
+    "$BL64_OS_CMD_CAT" "bl64-lib-header.bash" && echo
   } >"$_BUILD_OPT" || return 1
 }
 

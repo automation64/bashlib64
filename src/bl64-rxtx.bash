@@ -214,7 +214,7 @@ function _bl64_rxtx_git_get_dir_root() {
   repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
   bl64_check_directory "$repo" 'unable to create temporary git repo' || return $BL64_LIB_ERROR_TASK_TEMP
 
-  git_name="$(bl64_fmt_basename "$source_url")"
+  git_name="$(bl64_fmt_path_get_basename "$source_url")"
   git_name="${git_name/.git/}"
   transition="${repo}/${git_name}"
   bl64_dbg_lib_show_vars 'git_name' 'transition'
@@ -249,7 +249,7 @@ function _bl64_rxtx_git_get_dir_sub() {
 
   bl64_dbg_lib_show_comments 'Use transition path to get to the final target path'
   source="${repo}/${source_path}"
-  target="$(bl64_fmt_basename "$destination")"
+  target="$(bl64_fmt_path_get_basename "$destination")"
   transition="${repo}/transition/${target}"
   bl64_dbg_lib_show_vars 'source' 'target' 'transition'
 

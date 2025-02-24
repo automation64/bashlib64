@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FMT_VERSION='4.0.0'
+  declare BL64_FMT_VERSION='5.0.0'
 
   declare BL64_FMT_MODULE='0'
 }

@@ -312,7 +312,7 @@ function bl64_fs_path_copy() {
     return $?
 
   for path_current in "$@"; do
-    path_base="$(bl64_fmt_basename "$path_current")"
+    path_base="$(bl64_fmt_path_get_basename "$path_current")"
     bl64_fs_path_permission_set \
       "$file_mode" \
       "$dir_mode" \
@@ -373,7 +373,7 @@ function bl64_fs_file_copy() {
     return $?
 
   for path_current in "$@"; do
-    path_base="$(bl64_fmt_basename "$path_current")"
+    path_base="$(bl64_fmt_path_get_basename "$path_current")"
     bl64_fs_path_permission_set \
       "$file_mode" \
       "$BL64_VAR_DEFAULT" \

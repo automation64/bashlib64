@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [20.12.0]
+
+### Fixed
+
+- os
+  - _bl64_os_get_distro_from_uname: add missing version normalizer
+
+### Added
+
+- fmt
+  - bl64_fmt_version_convert_to_major_minor
+
+### Deprecated
+
+- fmt
+  - bl64_fmt_strip_starting_slash -> 'bl64_fmt_path_strip_starting_slash'
+  - bl64_fmt_strip_ending_slash -> 'bl64_fmt_path_strip_ending_slash'
+  - bl64_fmt_basename ->' 'bl64_fmt_path_get_basename'
+  - bl64_fmt_dirname ->' 'bl64_fmt_path_get_dirname'
+  - bl64_fmt_list_to_string ->' 'bl64_fmt_list_convert_to_string'
+  - bl64_fmt_separator_line ->' 'bl64_ui_separator_show'
+  - bl64_fmt_check_value_in_list -> 'bl64_fmt_list_check_membership'
+- ui
+  - bl64_ui_ask_confirmation -> bl64_ui_confirmation_ask
+
 ## [20.11.0]
 
 ### Added

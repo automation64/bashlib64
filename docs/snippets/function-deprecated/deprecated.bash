@@ -1,0 +1,4 @@
+function bl64_X_MODULE_X_X_OLD_FUNCTION_X() {
+  bl64_msg_show_deprecated 'bl64_X_MODULE_X_X_OLD_FUNCTION_X' 'bl64_X_MODULE_X_X_NEW_FUNCTION_X'
+  bl64_X_MODULE_X_X_NEW_FUNCTION_X "$@"
+}

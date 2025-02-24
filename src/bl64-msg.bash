@@ -559,8 +559,8 @@ function bl64_msg_show_separator() {
 # Display deprecation message
 #
 # Arguments:
-#   $1: feature
-#   $2: replacement
+#   $1: function_name
+#   $2: function_replacement
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
@@ -570,11 +570,11 @@ function bl64_msg_show_separator() {
 #######################################
 function bl64_msg_show_deprecated() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local feature="${1:-}"
-  local replacement="${2:-non-available}"
+  local function_name="${1:-}"
+  local function_replacement="${2:-non-available}"
 
-  bl64_log_warning "${FUNCNAME[1]:-MAIN}" "deprecated: ${feature}" &&
-    _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Deprecated' "Feature to be removed from future versions: ${feature}. Replace with: ${replacement}" >&2
+  bl64_log_warning "${FUNCNAME[1]:-MAIN}" "deprecated: ${function_name}" &&
+    _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Deprecated' "Function to be removed from future versions: ${function_name}. Replace with: ${function_replacement}" >&2
 }
 
 #######################################
