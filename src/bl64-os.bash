@@ -5,12 +5,18 @@
 #
 # Deprecation aliases
 #
-# * Aliases to deprecated functions 
+# * Aliases to deprecated functions
 # * Needed to maintain compatibility up to N-2 versions
 #
 
-function bl64_os_match() { bl64_msg_show_deprecated 'bl64_os_match' 'bl64_os_is_distro'; bl64_os_is_distro "$@"; }
-function bl64_os_match_compatible() { bl64_msg_show_deprecated 'bl64_os_match_compatible' 'bl64_os_is_compatible'; bl64_os_is_compatible "$@"; }
+function bl64_os_match() {
+  bl64_msg_show_deprecated 'bl64_os_match' 'bl64_os_is_distro'
+  bl64_os_is_distro "$@"
+}
+function bl64_os_match_compatible() {
+  bl64_msg_show_deprecated 'bl64_os_match_compatible' 'bl64_os_is_compatible'
+  bl64_os_is_compatible "$@"
+}
 
 #
 # Internal functions
@@ -152,33 +158,11 @@ function _bl64_os_get_distro_from_uname() {
 #######################################
 function _bl64_os_get_distro_from_os_release() {
   bl64_dbg_lib_show_function
-  local version_pattern_single='^[0-9]+$'
-  local version_pattern_major_minor='^[0-9]+\.[0-9]+$'
-  local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
   local version_normalized=''
 
-  # shellcheck disable=SC1091
-  bl64_dbg_lib_show_info 'parse /etc/os-release'
-  if ! source '/etc/os-release' || [[ -z "$ID" || -z "$VERSION_ID" ]]; then
-    bl64_msg_show_error 'failed to load OS information from /etc/os-release file'
-    return $BL64_LIB_ERROR_TASK_FAILED
-  fi
-  bl64_dbg_lib_show_vars 'ID' 'VERSION_ID'
-
-  bl64_dbg_lib_show_info 'normalize OS version to match X.Y'
-  if [[ "$VERSION_ID" =~ $version_pattern_single ]]; then
-    version_normalized="${VERSION_ID}.0"
-  elif [[ "$VERSION_ID" =~ $version_pattern_major_minor ]]; then
-    version_normalized="${VERSION_ID}"
-  elif [[ "$VERSION_ID" =~ $version_pattern_semver ]]; then
-    version_normalized="${VERSION_ID%.*}"
-  else
-    version_normalized="$VERSION_ID"
-  fi
-  if [[ ! "$version_normalized" =~ $version_pattern_major_minor ]]; then
-    bl64_msg_show_error "unable to normalize OS version (${VERSION_ID} != Major.Minor != ${version_normalized})"
-    return $BL64_LIB_ERROR_TASK_FAILED
-  fi
+  _bl64_os_release_load &&
+    version_normalized="$(_bl64_os_release_normalize)" ||
+    return $?
 
   bl64_dbg_lib_show_info 'set BL_OS_DISTRO'
   case "${ID^^}" in
@@ -242,6 +226,42 @@ function _bl64_os_get_distro_from_os_release() {
   esac
   bl64_dbg_lib_show_vars 'BL64_OS_DISTRO' 'BL64_OS_FLAVOR'
   return 0
+}
+
+function _bl64_os_release_load() {
+  bl64_dbg_lib_show_function
+  # shellcheck disable=SC1091
+  bl64_dbg_lib_show_info 'parse /etc/os-release'
+  if ! source '/etc/os-release' || [[ -z "$ID" || -z "$VERSION_ID" ]]; then
+    bl64_msg_show_error 'failed to load OS information from /etc/os-release file'
+    return $BL64_LIB_ERROR_TASK_FAILED
+  fi
+  bl64_dbg_lib_show_vars 'ID' 'VERSION_ID'
+}
+
+function _bl64_os_release_normalize() {
+  bl64_dbg_lib_show_function
+  local version_normalized=''
+  local version_pattern_single='^[0-9]+$'
+  local version_pattern_major_minor='^[0-9]+\.[0-9]+$'
+  local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
+
+  bl64_dbg_lib_show_info 'normalize OS version to match X.Y'
+  if [[ "$VERSION_ID" =~ $version_pattern_single ]]; then
+    version_normalized="${VERSION_ID}.0"
+  elif [[ "$VERSION_ID" =~ $version_pattern_major_minor ]]; then
+    version_normalized="${VERSION_ID}"
+  elif [[ "$VERSION_ID" =~ $version_pattern_semver ]]; then
+    version_normalized="${VERSION_ID%.*}"
+  else
+    version_normalized="$VERSION_ID"bl64_os_is_compatible
+  fi
+  if [[ "$version_normalized" =~ $version_pattern_major_minor ]]; then
+    echo "$version_normalized"
+    return 0
+  fi
+  bl64_msg_show_error "unable to normalize OS version (${VERSION_ID} != Major.Minor != ${version_normalized})"
+  return $BL64_LIB_ERROR_TASK_FAILED
 }
 
 #
