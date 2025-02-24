@@ -171,7 +171,6 @@ function bl64_arc_open_tar() {
       --no-same-owner \
       --preserve-permissions \
       --no-acls \
-      --auto-compress \
       --file="$source"
     ;;
   *) bl64_check_alert_unsupported ;;
