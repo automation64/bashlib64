@@ -209,6 +209,7 @@ function _bl64_os_set_type() {
 #######################################
 function _bl64_os_set_machine() {
   bl64_dbg_lib_show_function
+  # shellcheck disable=SC2034
   BL64_OS_MACHINE="$("$BL64_OS_CMD_UNAME" -m)"
 }
 
