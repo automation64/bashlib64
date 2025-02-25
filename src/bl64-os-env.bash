@@ -15,7 +15,7 @@
   declare BL64_OS_FLAVOR=''
 
   # OS Type, from uname
-  declare -u BL64_OS_TYPE=''
+  declare BL64_OS_TYPE=''
 
   # Machine ID, from uname
   declare -u BL64_OS_MACHINE=''
@@ -67,4 +67,10 @@
   declare BL64_OS_FLAVOR_MACOS='MACOS'
   declare BL64_OS_FLAVOR_REDHAT='REDHAT'
   declare BL64_OS_FLAVOR_SUSE='SUSE'
+
+  #
+  # OS type tags
+  #
+  declare BL64_OS_TYPE_LINUX='LINUX'
+  declare BL64_OS_TYPE_DARWIN='DARWIN'
 }
