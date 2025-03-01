@@ -159,6 +159,7 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
+    BL64_TXT_SET_SED_INLINE='-i'
 
     if [[ -x '/usr/bin/gawk' ]]; then
       BL64_TXT_SET_AWK_POSIX='--posix'
@@ -174,6 +175,7 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
+    BL64_TXT_SET_SED_INLINE='-i'
     ;;
   ${BL64_OS_SLES}-*)
     BL64_TXT_SET_AWK_POSIX='--posix'
@@ -185,6 +187,7 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
+    BL64_TXT_SET_SED_INLINE='-i'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_TXT_SET_AWK_POSIX=''
@@ -196,6 +199,7 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
+    BL64_TXT_SET_SED_INLINE='-i'
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_TXT_SET_AWK_POSIX=''
@@ -207,6 +211,7 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
+    BL64_TXT_SET_SED_INLINE='-i' # Warning: requires backup suffix
     ;;
   *) bl64_check_alert_unsupported ;;
   esac

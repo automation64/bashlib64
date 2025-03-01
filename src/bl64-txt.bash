@@ -75,6 +75,29 @@ function bl64_txt_search_line() {
 }
 
 #######################################
+# Replace text directly in file using sed
+#
+# * Uses sed -i inline editing command
+# * Helper to avoid platform specific implementation details
+#
+# Arguments:
+#   $1: sed expression 
+# Outputs:
+#   STDOUT: none
+#   STDERR: Error messages
+# Returns:
+#   0: operation ok
+#   >0: operation failed
+#######################################
+function bl64_txt_line_replace_sed() {
+  bl64_dbg_lib_show_function "$@"
+  local sed_expression="${1:-}"
+  bl64_check_parameter 'sed_expression' || return $?
+
+  bl64_txt_run_sed -i "$BL64_LIB_SUFFIX_BACKUP" "$sed_expression"
+}
+
+#######################################
 # OS command wrapper: awk
 #
 # * Run AWS with POSIX compatibility and traditional regexp

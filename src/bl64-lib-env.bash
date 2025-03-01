@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.12.3'
+  declare BL64_VERSION='20.13.0'
 
   #
   # Imported generic shell standard variables
@@ -162,4 +162,9 @@
   declare BL64_LIB_SIGNAL_DEBUG='-'
   declare BL64_LIB_SIGNAL_ERR='-'
   declare BL64_LIB_SIGNAL_EXIT='bl64_dbg_runtime_show'
+
+  #
+  # Common suffixes
+  #
+  declare BL64_LIB_SUFFIX_BACKUP='.bl64bkp'
 }
