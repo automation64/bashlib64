@@ -79,6 +79,7 @@ function bl64_txt_search_line() {
 #
 # * Uses sed -i inline editing command
 # * Helper to avoid platform specific implementation details
+# * Warning: sed regexp is not consistent across versions and vendors. Caller is responsible for testing to ensure compatibility
 #
 # Arguments:
 #   $1: sed expression 
