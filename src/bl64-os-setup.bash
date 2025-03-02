@@ -221,6 +221,7 @@ function _bl64_os_set_machine() {
   *)
     bl64_msg_show_warning \
       "BashLib64 was unable to identify the current machine type (${machine})"
+    # shellcheck disable=SC2034
     BL64_OS_MACHINE="$BL64_OS_MACHINE_UNK"
     ;;
   esac
