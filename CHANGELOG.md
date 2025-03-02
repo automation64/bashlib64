@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- core
+  - Check bash compatibility at bootstrap
 - txt
   - bl64_txt_line_replace_sed
 - msg
