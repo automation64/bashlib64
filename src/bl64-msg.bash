@@ -221,6 +221,27 @@ function bl64_msg_show_error() {
 }
 
 #######################################
+# Display fatal error message
+#
+# * Use before halting the script with exit
+# Arguments:
+#   $1: error message
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_fatal() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
+  local message="$1"
+
+  bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
+    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Fatal' "$message" >&2
+}
+
+#######################################
 # Display warning message
 #
 # Arguments:
@@ -552,7 +573,7 @@ function bl64_msg_show_separator() {
     done
   )"
 
-  _bl64_msg_print "$BL64_MSG_TYPE_SEPARATOR" "$BL64_MSG_COSMETIC_ARROW3" "${message}${output}"
+  _bl64_msg_print "$BL64_MSG_TYPE_SEPARATOR" "$BL64_MSG_COSMETIC_ARROW3" "${separator}${separator}${separator}[${message}]${output}"
 }
 
 #######################################
@@ -635,7 +656,7 @@ function bl64_msg_help_show(){
 
   if [[ "$BL64_MSG_HELP_PARAMETERS" != "$BL64_VAR_DEFAULT" ]]; then
     _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Parameters'
-    printf '\n%s\n' "$BL64_MSG_HELP_PARAMETERS"
+    printf '\n%s\n\n' "$BL64_MSG_HELP_PARAMETERS"
   fi
   bl64_msg_set_format "$current_format"
   return 0

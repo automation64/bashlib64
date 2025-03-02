@@ -2,6 +2,15 @@
 # Library Bootstrap
 #
 
+# Verify that the current shell is supported
+if [ -z "$BASH_VERSION" ]; then
+  echo "Fatal: BashLib64 is not supported in the current shell (shell: $SHELL)"
+  exit 1
+elif [ "${BASH_VERSINFO[0]}" -lt 4 ]; then
+  echo "Fatal: BashLib64 requires Bash V4 or greater (current-version: ${BASH_VERSION})"
+  exit 1
+fi
+
 # Do not inherit aliases and commands
 builtin unset -f unalias
 builtin unalias -a

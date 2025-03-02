@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [20.13.0]
+
+### Added
+
+- os
+  - _bl64_os_set_machine: normalized machine types
+- core
+  - Check bash compatibility at bootstrap
+- txt
+  - bl64_txt_line_replace_sed
+- msg
+  - bl64_msg_show_fatal
+
 ## [20.12.3]
 
 ### Fixed

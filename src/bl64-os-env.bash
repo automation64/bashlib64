@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_OS_VERSION='5.7.0'
+  declare BL64_OS_VERSION='5.8.0'
 
   declare BL64_OS_MODULE='0'
 
@@ -18,7 +18,7 @@
   declare BL64_OS_TYPE=''
 
   # Machine ID, from uname
-  declare -u BL64_OS_MACHINE=''
+  declare BL64_OS_MACHINE=''
 
   declare BL64_OS_CMD_BASH=''
   declare BL64_OS_CMD_CAT=''
@@ -73,4 +73,12 @@
   #
   declare BL64_OS_TYPE_LINUX='LINUX'
   declare BL64_OS_TYPE_DARWIN='DARWIN'
+  declare BL64_OS_TYPE_UNK='UNKNOWN'
+
+  #
+  # Machine type tags
+  #
+  declare BL64_OS_MACHINE_AMD64='AMD64'
+  declare BL64_OS_MACHINE_ARM64='ARM64'
+  declare BL64_OS_MACHINE_UNK='UNKNOWN'
 }
