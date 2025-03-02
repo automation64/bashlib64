@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - txt
   - bl64_txt_line_replace_sed
+- msg
+  - bl64_msg_show_fatal
 
 ## [20.12.3]
 
