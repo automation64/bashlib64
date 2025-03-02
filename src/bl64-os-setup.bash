@@ -186,9 +186,9 @@ function _bl64_os_set_type() {
   'Darwin') BL64_OS_TYPE="$BL64_OS_TYPE_DARWIN" ;;
   'GNU/Linux' | 'Linux') BL64_OS_TYPE="$BL64_OS_TYPE_LINUX" ;;
   *)
-    bl64_msg_show_error \
-      "BashLib64 not supported on the current OS. Please check the OS compatibility matrix (OS: ${BL64_OS_TYPE})"
-    return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+    bl64_msg_show_warning \
+      "BashLib64 was unable to identify the current OS type (${BL64_OS_TYPE})"
+    BL64_OS_TYPE="$BL64_OS_TYPE_UNK"
     ;;
   esac
 }
@@ -209,8 +209,21 @@ function _bl64_os_set_type() {
 #######################################
 function _bl64_os_set_machine() {
   bl64_dbg_lib_show_function
-  # shellcheck disable=SC2034
-  BL64_OS_MACHINE="$("$BL64_OS_CMD_UNAME" -m)"
+  local machine=''
+  machine="$("$BL64_OS_CMD_UNAME" -m)"
+  if [[ -z "$machine" ]]; then
+    bl64_msg_show_error 'failed to get machine type from uname'
+    return $BL64_LIB_ERROR_TASK_FAILED
+  fi
+  case "$machine" in
+  'x86_64' | 'amd64') BL64_OS_MACHINE="$BL64_OS_MACHINE_AMD64" ;;
+  'aarch64' | 'arm64') BL64_OS_MACHINE="$BL64_OS_MACHINE_ARM64" ;;
+  *)
+    bl64_msg_show_warning \
+      "BashLib64 was unable to identify the current machine type (${machine})"
+    BL64_OS_MACHINE="$BL64_OS_MACHINE_UNK"
+    ;;
+  esac
 }
 
 #######################################

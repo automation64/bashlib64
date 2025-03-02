@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- os
+  - _bl64_os_set_machine: normalized machine types
 - core
   - Check bash compatibility at bootstrap
 - txt
