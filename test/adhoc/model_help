@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+. test/lib/bash-setup.bash ||
+  { echo 'test:Error: unable to load test environment' 2>&1 && exit 1; }
+
+bl64_msg_help_usage_set '-a -b'
+bl64_msg_help_about_set 'test script'
+bl64_msg_help_description_set 'this is the description'
+bl64_msg_help_parameters_set '-a: a parameter
+-b: b parameter'
+
+echo "------------------"
+bl64_msg_help_show
+echo "------------------"
