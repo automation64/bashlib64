@@ -71,7 +71,12 @@ function bl64_txt_search_line() {
   local line="${2:-}"
 
   [[ "$source" == "$BL64_TXT_FLAG_STDIN" ]] && source="$BL64_TXT_SET_GREP_STDIN"
-  bl64_txt_run_egrep "$BL64_TXT_SET_GREP_QUIET" "^${line}$" "$source"
+  bl64_txt_run_egrep \
+    "$BL64_TXT_SET_GREP_QUIET" \
+    "$BL64_TXT_SET_GREP_STRING" \
+    "$BL64_TXT_SET_GREP_LINE" \
+    "$line" \
+    "$source"
 }
 
 #######################################
