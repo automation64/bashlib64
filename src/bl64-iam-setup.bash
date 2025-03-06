@@ -149,6 +149,9 @@ function _bl64_iam_set_options() {
     BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
     BL64_IAM_SET_USERADD_SHELL='--shell'
     BL64_IAM_SET_USERADD_UID='--uid'
+
+    BL64_IAM_SYSTEM_USER='root'
+    BL64_IAM_SYSTEM_GROUP='root'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
@@ -157,6 +160,9 @@ function _bl64_iam_set_options() {
     BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
     BL64_IAM_SET_USERADD_SHELL='--shell'
     BL64_IAM_SET_USERADD_UID='--uid'
+
+    BL64_IAM_SYSTEM_USER='root'
+    BL64_IAM_SYSTEM_GROUP='root'
     ;;
   ${BL64_OS_SLES}-*)
     BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
@@ -165,6 +171,9 @@ function _bl64_iam_set_options() {
     BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
     BL64_IAM_SET_USERADD_SHELL='--shell'
     BL64_IAM_SET_USERADD_UID='--uid'
+
+    BL64_IAM_SYSTEM_USER='root'
+    BL64_IAM_SYSTEM_GROUP='root'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_IAM_SET_USERADD_CREATE_HOME=' '
@@ -173,6 +182,9 @@ function _bl64_iam_set_options() {
     BL64_IAM_SET_USERADD_HOME_PATH='-h'
     BL64_IAM_SET_USERADD_SHELL='-s'
     BL64_IAM_SET_USERADD_UID='-u'
+
+    BL64_IAM_SYSTEM_USER='root'
+    BL64_IAM_SYSTEM_GROUP='root'
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_IAM_SET_USERADD_CREATE_HOME=' '
@@ -181,6 +193,9 @@ function _bl64_iam_set_options() {
     BL64_IAM_SET_USERADD_HOME_PATH='-home'
     BL64_IAM_SET_USERADD_SHELL='-shell'
     BL64_IAM_SET_USERADD_UID='-UID'
+
+    BL64_IAM_SYSTEM_USER='root'
+    BL64_IAM_SYSTEM_GROUP='wheel'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
