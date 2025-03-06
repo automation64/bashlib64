@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - txt
   - bl64_txt_search_line: now uses grep -Fx instead of regexp
 
+### Added
+
+- txt
+  - bl64_txt_line_replace_sed: supports stdin and file
+
 ## [20.13.0]
 
 ### Added
