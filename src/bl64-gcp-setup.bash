@@ -17,13 +17,12 @@
 # shellcheck disable=SC2120
 function bl64_gcp_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
-  bl64_dbg_lib_show_function "$@"
   local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
-    bl64_dbg_lib_show_function &&
+    bl64_dbg_lib_show_function "$@" &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_gcp_set_command "$gcloud_bin" &&
     _bl64_gcp_set_options &&

@@ -43,15 +43,11 @@ function _bl64_log_set_target_multiple() {
 #######################################
 function bl64_log_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
-  _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
   local log_repository="${1:-}"
   local log_target="${2:-${BL64_VAR_DEFAULT}}"
   local log_type="${3:-${BL64_VAR_DEFAULT}}"
   local log_level="${4:-${BL64_VAR_DEFAULT}}"
   local log_format="${5:-${BL64_VAR_DEFAULT}}"
-
-  bl64_check_parameter 'log_repository' ||
-    return $?
 
   [[ "$log_target" == "$BL64_VAR_DEFAULT" ]] && log_target="$BL64_SCRIPT_ID"
   [[ "$log_type" == "$BL64_VAR_DEFAULT" ]] && log_type="$BL64_LOG_TYPE_SINGLE"
@@ -61,9 +57,10 @@ function bl64_log_setup() {
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    bl64_dbg_lib_show_function &&
+    bl64_dbg_lib_show_function "$@" &&
     _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    bl64_check_parameter 'log_repository' &&
     bl64_log_set_repository "$log_repository" &&
     bl64_log_set_target "$log_target" "$log_type" &&
     bl64_log_set_level "$log_level" &&

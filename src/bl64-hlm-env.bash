@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_HLM_VERSION='2.1.0'
+  declare BL64_HLM_VERSION='2.1.1'
 
   declare BL64_HLM_MODULE='0'
 
