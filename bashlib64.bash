@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.13.0'
+  declare BL64_VERSION='20.14.0'
 
   #
   # Imported generic shell standard variables
@@ -553,7 +553,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_LOG_VERSION='3.0.0'
+  declare BL64_LOG_VERSION='3.0.1'
 
   declare BL64_LOG_MODULE='0'
 
@@ -867,7 +867,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ANS_VERSION='2.1.0'
+  declare BL64_ANS_VERSION='2.1.1'
 
   declare BL64_ANS_MODULE='0'
 
@@ -932,7 +932,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_AWS_VERSION='3.1.0'
+  declare BL64_AWS_VERSION='3.1.1'
 
   declare BL64_AWS_MODULE='0'
 
@@ -990,7 +990,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CNT_VERSION='3.4.2'
+  declare BL64_CNT_VERSION='3.5.0'
 
   declare BL64_CNT_MODULE='0'
 
@@ -1140,7 +1140,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_GCP_VERSION='2.1.0'
+  declare BL64_GCP_VERSION='2.1.1'
 
   declare BL64_GCP_MODULE='0'
 
@@ -1163,7 +1163,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_HLM_VERSION='2.1.0'
+  declare BL64_HLM_VERSION='2.1.1'
 
   declare BL64_HLM_MODULE='0'
 
@@ -1183,7 +1183,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_IAM_VERSION='5.1.2'
+  declare BL64_IAM_VERSION='5.2.0'
 
   declare BL64_IAM_MODULE='0'
 
@@ -1203,6 +1203,9 @@ function bl64_lib_script_version_set() {
   declare BL64_IAM_SET_USERADD_UID=''
 
   declare BL64_IAM_ALIAS_USERADD=''
+
+  declare BL64_IAM_SYSTEM_USER=''
+  declare BL64_IAM_SYSTEM_GROUP=''
 }
 
 #######################################
@@ -1211,7 +1214,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_K8S_VERSION='3.1.3'
+  declare BL64_K8S_VERSION='3.1.4'
 
   declare BL64_K8S_MODULE='0'
 
@@ -1244,7 +1247,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MDB_VERSION='2.0.0'
+  declare BL64_MDB_VERSION='2.0.1'
 
   declare BL64_MDB_MODULE='0'
 
@@ -1317,7 +1320,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='3.2.0'
+  declare BL64_PY_VERSION='3.2.1'
 
   declare BL64_PY_MODULE='0'
 
@@ -1435,7 +1438,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TF_VERSION='2.0.1'
+  declare BL64_TF_VERSION='2.0.2'
 
   declare BL64_TF_MODULE='0'
 
@@ -1479,7 +1482,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TXT_VERSION='2.3.0'
+  declare BL64_TXT_VERSION='2.4.0'
 
   declare BL64_TXT_MODULE='0'
 
@@ -1496,15 +1499,16 @@ function bl64_lib_script_version_set() {
   declare BL64_TXT_CMD_UNIQ="$BL64_VAR_UNAVAILABLE"
 
   declare BL64_TXT_SET_AWK_POSIX=''
+  declare BL64_TXT_SET_AWS_FS="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_GREP_ERE="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_GREP_INVERT="$BL64_VAR_UNAVAILABLE"
+  declare BL64_TXT_SET_GREP_LINE="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_GREP_NO_CASE="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_GREP_QUIET="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_GREP_SHOW_FILE_ONLY="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_GREP_STDIN="$BL64_VAR_UNAVAILABLE"
+  declare BL64_TXT_SET_GREP_STRING="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_SED_EXPRESSION="$BL64_VAR_UNAVAILABLE"
-
-  declare BL64_TXT_SET_AWS_FS="$BL64_VAR_UNAVAILABLE"
 
   declare BL64_TXT_FLAG_STDIN='STDIN'
 }
@@ -3042,15 +3046,11 @@ function _bl64_log_set_target_multiple() {
 #######################################
 function bl64_log_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
-  _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
   local log_repository="${1:-}"
   local log_target="${2:-${BL64_VAR_DEFAULT}}"
   local log_type="${3:-${BL64_VAR_DEFAULT}}"
   local log_level="${4:-${BL64_VAR_DEFAULT}}"
   local log_format="${5:-${BL64_VAR_DEFAULT}}"
-
-  bl64_check_parameter 'log_repository' ||
-    return $?
 
   [[ "$log_target" == "$BL64_VAR_DEFAULT" ]] && log_target="$BL64_SCRIPT_ID"
   [[ "$log_type" == "$BL64_VAR_DEFAULT" ]] && log_type="$BL64_LOG_TYPE_SINGLE"
@@ -3060,9 +3060,10 @@ function bl64_log_setup() {
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    bl64_dbg_lib_show_function &&
+    bl64_dbg_lib_show_function "$@" &&
     _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    bl64_check_parameter 'log_repository' &&
     bl64_log_set_repository "$log_repository" &&
     bl64_log_set_target "$log_target" "$log_type" &&
     bl64_log_set_level "$log_level" &&
@@ -5257,7 +5258,6 @@ function bl64_os_run_uname() {
 # shellcheck disable=SC2120
 function bl64_ans_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
-  bl64_dbg_lib_show_function "$@"
   local ansible_bin="${1:-${BL64_VAR_DEFAULT}}"
   local ansible_config="${2:-${BL64_VAR_DEFAULT}}"
   local env_ignore="${3:-${BL64_VAR_ON}}"
@@ -5265,7 +5265,7 @@ function bl64_ans_setup() {
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
-    bl64_dbg_lib_show_function &&
+    bl64_dbg_lib_show_function "$@" &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_PY_MODULE' &&
@@ -6170,14 +6170,13 @@ function bl64_aws_get_cli_credentials() {
 # shellcheck disable=SC2120
 function bl64_aws_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
-  bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
   local aws_home="${2:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
-    bl64_dbg_lib_show_function &&
+    bl64_dbg_lib_show_function "$@" &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
     _bl64_aws_set_command "$aws_bin" &&
@@ -7396,7 +7395,7 @@ function bl64_bsh_command_locate() {
 # * Check for core commands, fail if not available
 #
 # Arguments:
-#   None
+#   $1: (optional) Full path where commands are
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -7406,6 +7405,7 @@ function bl64_bsh_command_locate() {
 #######################################
 function bl64_cnt_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  local command_location="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -7414,7 +7414,7 @@ function bl64_cnt_setup() {
     _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
-    _bl64_cnt_set_command &&
+    _bl64_cnt_set_command "$command_location" &&
     bl64_cnt_set_paths &&
     _bl64_cnt_set_options &&
     BL64_CNT_MODULE="$BL64_VAR_ON"
@@ -7436,36 +7436,12 @@ function bl64_cnt_setup() {
 #   0: always ok
 #######################################
 function _bl64_cnt_set_command() {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_show_function "$@"
+  local command_location="$1"
 
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_CNT_CMD_PODMAN='/usr/bin/podman'
-    BL64_CNT_CMD_DOCKER='/usr/bin/docker'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_CNT_CMD_PODMAN='/usr/bin/podman'
-    BL64_CNT_CMD_DOCKER='/usr/bin/docker'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_CNT_CMD_PODMAN='/usr/bin/podman'
-    BL64_CNT_CMD_DOCKER='/usr/bin/docker'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_CNT_CMD_PODMAN='/usr/bin/podman'
-    BL64_CNT_CMD_DOCKER='/usr/bin/docker'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    # Podman is not available for MacOS
-    BL64_CNT_CMD_PODMAN="$BL64_VAR_INCOMPATIBLE"
-    # Docker is available using docker-desktop
-    BL64_CNT_CMD_DOCKER='/usr/local/bin/docker'
-    ;;
-  *)
-    bl64_check_alert_unsupported
+  _bl64_cnt_set_command_podman "$command_location" &&
+    _bl64_cnt_set_command_docker "$command_location" ||
     return $?
-    ;;
-  esac
 
   bl64_dbg_lib_show_comments 'detect and set current container driver'
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
@@ -7478,6 +7454,51 @@ function _bl64_cnt_set_command() {
   fi
   bl64_dbg_lib_show_vars 'BL64_CNT_DRIVER'
 
+  return 0
+}
+
+function _bl64_cnt_set_command_docker() {
+  bl64_dbg_lib_show_function "$@"
+  local command_location="$1"
+
+  if [[ "$command_location" == "$BL64_VAR_DEFAULT" ]]; then
+    if [[ -x '/home/linuxbrew/.linuxbrew/bin/docker' ]]; then
+      command_location='/home/linuxbrew/.linuxbrew/bin'
+    elif [[ -x '/opt/homebrew/bin/docker' ]]; then
+      command_location='/opt/homebrew/bin'
+    elif [[ -x '/usr/local/bin/docker' ]]; then
+      command_location='/usr/local/bin'
+    elif [[ -x '/usr/bin/docker' ]]; then
+      command_location='/usr/bin'
+    elif [[ -x "${HOME}/.rd/bin/docker" ]]; then
+      # Rancher Desktop using docker
+      command_location="${HOME}/.rd/bin"
+    fi
+  fi
+
+  bl64_check_directory "$command_location" || return $?
+  [[ -x "${command_location}/docker" ]] && BL64_CNT_CMD_DOCKER="${command_location}/docker"
+  return 0
+}
+
+function _bl64_cnt_set_command_podman() {
+  bl64_dbg_lib_show_function "$@"
+  local command_location="$1"
+
+  if [[ "$command_location" == "$BL64_VAR_DEFAULT" ]]; then
+    if [[ -x '/home/linuxbrew/.linuxbrew/bin/podman' ]]; then
+      command_location='/home/linuxbrew/.linuxbrew/bin'
+    elif [[ -x '/opt/homebrew/bin/podman' ]]; then
+      command_location='/opt/homebrew/bin'
+    elif [[ -x '/usr/local/bin/podman' ]]; then
+      command_location='/usr/local/bin'
+    elif [[ -x '/usr/bin/podman' ]]; then
+      command_location='/usr/bin'
+    fi
+  fi
+
+  bl64_check_directory "$command_location" || return $?
+  [[ -x "${command_location}/podman" ]] && BL64_CNT_CMD_PODMAN="${command_location}/podman"
   return 0
 }
 
@@ -11375,13 +11396,12 @@ function bl64_fs_file_restore() {
 # shellcheck disable=SC2120
 function bl64_gcp_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
-  bl64_dbg_lib_show_function "$@"
   local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
-    bl64_dbg_lib_show_function &&
+    bl64_dbg_lib_show_function "$@" &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_gcp_set_command "$gcloud_bin" &&
     _bl64_gcp_set_options &&
@@ -11701,18 +11721,12 @@ function bl64_gcp_secret_get() {
 # shellcheck disable=SC2120
 function bl64_hlm_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
-  bl64_dbg_lib_show_function "$@"
   local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
-
-  if [[ "$helm_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_check_directory "$helm_bin" ||
-      return $?
-  fi
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
-    bl64_dbg_lib_show_function &&
+    bl64_dbg_lib_show_function "$@" &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_hlm_set_command "$helm_bin" &&
     bl64_check_command "$BL64_HLM_CMD_HELM" &&
@@ -12139,6 +12153,9 @@ function _bl64_iam_set_options() {
     BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
     BL64_IAM_SET_USERADD_SHELL='--shell'
     BL64_IAM_SET_USERADD_UID='--uid'
+
+    BL64_IAM_SYSTEM_USER='root'
+    BL64_IAM_SYSTEM_GROUP='root'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
@@ -12147,6 +12164,9 @@ function _bl64_iam_set_options() {
     BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
     BL64_IAM_SET_USERADD_SHELL='--shell'
     BL64_IAM_SET_USERADD_UID='--uid'
+
+    BL64_IAM_SYSTEM_USER='root'
+    BL64_IAM_SYSTEM_GROUP='root'
     ;;
   ${BL64_OS_SLES}-*)
     BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
@@ -12155,6 +12175,9 @@ function _bl64_iam_set_options() {
     BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
     BL64_IAM_SET_USERADD_SHELL='--shell'
     BL64_IAM_SET_USERADD_UID='--uid'
+
+    BL64_IAM_SYSTEM_USER='root'
+    BL64_IAM_SYSTEM_GROUP='root'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_IAM_SET_USERADD_CREATE_HOME=' '
@@ -12163,6 +12186,9 @@ function _bl64_iam_set_options() {
     BL64_IAM_SET_USERADD_HOME_PATH='-h'
     BL64_IAM_SET_USERADD_SHELL='-s'
     BL64_IAM_SET_USERADD_UID='-u'
+
+    BL64_IAM_SYSTEM_USER='root'
+    BL64_IAM_SYSTEM_GROUP='root'
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_IAM_SET_USERADD_CREATE_HOME=' '
@@ -12171,6 +12197,9 @@ function _bl64_iam_set_options() {
     BL64_IAM_SET_USERADD_HOME_PATH='-home'
     BL64_IAM_SET_USERADD_SHELL='-shell'
     BL64_IAM_SET_USERADD_UID='-UID'
+
+    BL64_IAM_SYSTEM_USER='root'
+    BL64_IAM_SYSTEM_GROUP='wheel'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -12851,18 +12880,12 @@ function bl64_iam_user_modify() {
 # shellcheck disable=SC2120
 function bl64_k8s_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
-  bl64_dbg_lib_show_function "$@"
   local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
-
-  if [[ "$kubectl_bin" != "$BL64_VAR_DEFAULT" ]]; then
-    bl64_check_directory "$kubectl_bin" ||
-      return $?
-  fi
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
-    bl64_dbg_lib_show_function &&
+    bl64_dbg_lib_show_function "$@" &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_k8s_set_command "$kubectl_bin" &&
@@ -13590,13 +13613,12 @@ function bl64_k8s_resource_is_created() {
 # shellcheck disable=SC2120
 function bl64_mdb_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
-  bl64_dbg_lib_show_function "$@"
   local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
-    bl64_dbg_lib_show_function &&
+    bl64_dbg_lib_show_function "$@" &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_mdb_set_command "$mdb_bin" &&
     bl64_check_command "$BL64_MDB_CMD_MONGOSH" &&
@@ -14868,7 +14890,6 @@ function bl64_py_setup() {
 }
 
 function _bl64_py_setup() {
-  bl64_dbg_lib_show_function "$@"
   local venv_path="$1"
 
   if [[ "$venv_path" != "$BL64_VAR_DEFAULT" ]]; then
@@ -16387,12 +16408,11 @@ function bl64_rxtx_github_get_asset() {
 # shellcheck disable=SC2120
 function bl64_tf_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
-  bl64_dbg_lib_show_function "$@"
   local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
-    bl64_dbg_lib_show_function &&
+    bl64_dbg_lib_show_function "$@" &&
     _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
@@ -16888,7 +16908,9 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_INVERT='-v'
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='--quiet'
+    BL64_TXT_SET_GREP_LINE='-x'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STRING='-F'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
     BL64_TXT_SET_SED_INLINE='-i'
@@ -16904,7 +16926,9 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_INVERT='-v'
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='--quiet'
+    BL64_TXT_SET_GREP_LINE='-x'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STRING='-F'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
     BL64_TXT_SET_SED_INLINE='-i'
@@ -16916,7 +16940,9 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_INVERT='-v'
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='-q'
+    BL64_TXT_SET_GREP_LINE='-x'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STRING='-F'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
     BL64_TXT_SET_SED_INLINE='-i'
@@ -16928,7 +16954,9 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_INVERT='-v'
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='-q'
+    BL64_TXT_SET_GREP_LINE='-x'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STRING='-F'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
     BL64_TXT_SET_SED_INLINE='-i'
@@ -16940,7 +16968,9 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_INVERT='-v'
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='-q'
+    BL64_TXT_SET_GREP_LINE='-x'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+    BL64_TXT_SET_GREP_STRING='-F'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
     BL64_TXT_SET_SED_INLINE='-i' # Warning: requires backup suffix
@@ -17023,7 +17053,12 @@ function bl64_txt_search_line() {
   local line="${2:-}"
 
   [[ "$source" == "$BL64_TXT_FLAG_STDIN" ]] && source="$BL64_TXT_SET_GREP_STDIN"
-  bl64_txt_run_egrep "$BL64_TXT_SET_GREP_QUIET" "^${line}$" "$source"
+  bl64_txt_run_grep \
+    "$BL64_TXT_SET_GREP_QUIET" \
+    "$BL64_TXT_SET_GREP_STRING" \
+    "$BL64_TXT_SET_GREP_LINE" \
+    "$line" \
+    "$source"
 }
 
 #######################################
@@ -17044,10 +17079,19 @@ function bl64_txt_search_line() {
 #######################################
 function bl64_txt_line_replace_sed() {
   bl64_dbg_lib_show_function "$@"
-  local sed_expression="${1:-}"
+  local source="${1:-${BL64_TXT_FLAG_STDIN}}"
+  local sed_expression="${2:-}"
+  local -i exit_status=0
+
   bl64_check_parameter 'sed_expression' || return $?
 
-  bl64_txt_run_sed -i "$BL64_LIB_SUFFIX_BACKUP" "$sed_expression"
+  [[ "$source" == "$BL64_TXT_FLAG_STDIN" ]] && source=''
+
+  # shellcheck disable=SC2086
+  bl64_txt_run_sed -i "$BL64_LIB_SUFFIX_BACKUP" "$sed_expression" $source
+  exit_status=$?
+  bl64_fs_path_remove "${source}${BL64_LIB_SUFFIX_BACKUP}"
+  return $exit_status
 }
 
 #######################################
