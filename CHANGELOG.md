@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- cnt
+  - Added rancher desktop support
 - iam
   - _bl64_iam_set_command: system group and user definition
 - txt
