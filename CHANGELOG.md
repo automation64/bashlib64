@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - txt
+  - Module now depends on module-fs
   - bl64_txt_search_line: now uses grep -Fx instead of regexp
 
 ### Added
