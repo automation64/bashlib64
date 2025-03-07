@@ -71,7 +71,12 @@ function bl64_txt_search_line() {
   local line="${2:-}"
 
   [[ "$source" == "$BL64_TXT_FLAG_STDIN" ]] && source="$BL64_TXT_SET_GREP_STDIN"
-  bl64_txt_run_egrep "$BL64_TXT_SET_GREP_QUIET" "^${line}$" "$source"
+  bl64_txt_run_grep \
+    "$BL64_TXT_SET_GREP_QUIET" \
+    "$BL64_TXT_SET_GREP_STRING" \
+    "$BL64_TXT_SET_GREP_LINE" \
+    "$line" \
+    "$source"
 }
 
 #######################################
@@ -92,10 +97,19 @@ function bl64_txt_search_line() {
 #######################################
 function bl64_txt_line_replace_sed() {
   bl64_dbg_lib_show_function "$@"
-  local sed_expression="${1:-}"
+  local source="${1:-${BL64_TXT_FLAG_STDIN}}"
+  local sed_expression="${2:-}"
+  local -i exit_status=0
+
   bl64_check_parameter 'sed_expression' || return $?
 
-  bl64_txt_run_sed -i "$BL64_LIB_SUFFIX_BACKUP" "$sed_expression"
+  [[ "$source" == "$BL64_TXT_FLAG_STDIN" ]] && source=''
+
+  # shellcheck disable=SC2086
+  bl64_txt_run_sed -i "$BL64_LIB_SUFFIX_BACKUP" "$sed_expression" $source
+  exit_status=$?
+  bl64_fs_path_remove "${source}${BL64_LIB_SUFFIX_BACKUP}"
+  return $exit_status
 }
 
 #######################################

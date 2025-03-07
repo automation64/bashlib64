@@ -9,7 +9,7 @@
 # * Check for core commands, fail if not available
 #
 # Arguments:
-#   None
+#   $1: (optional) Full path where commands are
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -19,6 +19,7 @@
 #######################################
 function bl64_cnt_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  local command_location="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -27,7 +28,7 @@ function bl64_cnt_setup() {
     _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
-    _bl64_cnt_set_command &&
+    _bl64_cnt_set_command "$command_location" &&
     bl64_cnt_set_paths &&
     _bl64_cnt_set_options &&
     BL64_CNT_MODULE="$BL64_VAR_ON"
@@ -49,36 +50,12 @@ function bl64_cnt_setup() {
 #   0: always ok
 #######################################
 function _bl64_cnt_set_command() {
-  bl64_dbg_lib_show_function
+  bl64_dbg_lib_show_function "$@"
+  local command_location="$1"
 
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_CNT_CMD_PODMAN='/usr/bin/podman'
-    BL64_CNT_CMD_DOCKER='/usr/bin/docker'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_CNT_CMD_PODMAN='/usr/bin/podman'
-    BL64_CNT_CMD_DOCKER='/usr/bin/docker'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_CNT_CMD_PODMAN='/usr/bin/podman'
-    BL64_CNT_CMD_DOCKER='/usr/bin/docker'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_CNT_CMD_PODMAN='/usr/bin/podman'
-    BL64_CNT_CMD_DOCKER='/usr/bin/docker'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    # Podman is not available for MacOS
-    BL64_CNT_CMD_PODMAN="$BL64_VAR_INCOMPATIBLE"
-    # Docker is available using docker-desktop
-    BL64_CNT_CMD_DOCKER='/usr/local/bin/docker'
-    ;;
-  *)
-    bl64_check_alert_unsupported
+  _bl64_cnt_set_command_podman "$command_location" &&
+    _bl64_cnt_set_command_docker "$command_location" ||
     return $?
-    ;;
-  esac
 
   bl64_dbg_lib_show_comments 'detect and set current container driver'
   if [[ -x "$BL64_CNT_CMD_DOCKER" ]]; then
@@ -91,6 +68,51 @@ function _bl64_cnt_set_command() {
   fi
   bl64_dbg_lib_show_vars 'BL64_CNT_DRIVER'
 
+  return 0
+}
+
+function _bl64_cnt_set_command_docker() {
+  bl64_dbg_lib_show_function "$@"
+  local command_location="$1"
+
+  if [[ "$command_location" == "$BL64_VAR_DEFAULT" ]]; then
+    if [[ -x '/home/linuxbrew/.linuxbrew/bin/docker' ]]; then
+      command_location='/home/linuxbrew/.linuxbrew/bin'
+    elif [[ -x '/opt/homebrew/bin/docker' ]]; then
+      command_location='/opt/homebrew/bin'
+    elif [[ -x '/usr/local/bin/docker' ]]; then
+      command_location='/usr/local/bin'
+    elif [[ -x '/usr/bin/docker' ]]; then
+      command_location='/usr/bin'
+    elif [[ -x "${HOME}/.rd/bin/docker" ]]; then
+      # Rancher Desktop using docker
+      command_location="${HOME}/.rd/bin"
+    fi
+  fi
+
+  bl64_check_directory "$command_location" || return $?
+  [[ -x "${command_location}/docker" ]] && BL64_CNT_CMD_DOCKER="${command_location}/docker"
+  return 0
+}
+
+function _bl64_cnt_set_command_podman() {
+  bl64_dbg_lib_show_function "$@"
+  local command_location="$1"
+
+  if [[ "$command_location" == "$BL64_VAR_DEFAULT" ]]; then
+    if [[ -x '/home/linuxbrew/.linuxbrew/bin/podman' ]]; then
+      command_location='/home/linuxbrew/.linuxbrew/bin'
+    elif [[ -x '/opt/homebrew/bin/podman' ]]; then
+      command_location='/opt/homebrew/bin'
+    elif [[ -x '/usr/local/bin/podman' ]]; then
+      command_location='/usr/local/bin'
+    elif [[ -x '/usr/bin/podman' ]]; then
+      command_location='/usr/bin'
+    fi
+  fi
+
+  bl64_check_directory "$command_location" || return $?
+  [[ -x "${command_location}/podman" ]] && BL64_CNT_CMD_PODMAN="${command_location}/podman"
   return 0
 }
 

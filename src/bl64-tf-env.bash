@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TF_VERSION='2.0.1'
+  declare BL64_TF_VERSION='2.0.2'
 
   declare BL64_TF_MODULE='0'
 

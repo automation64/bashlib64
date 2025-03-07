@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_IAM_VERSION='5.1.2'
+  declare BL64_IAM_VERSION='5.2.0'
 
   declare BL64_IAM_MODULE='0'
 
@@ -24,4 +24,7 @@
   declare BL64_IAM_SET_USERADD_UID=''
 
   declare BL64_IAM_ALIAS_USERADD=''
+
+  declare BL64_IAM_SYSTEM_USER=''
+  declare BL64_IAM_SYSTEM_GROUP=''
 }

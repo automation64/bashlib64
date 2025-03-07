@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [20.14.0]
+
+### Changed
+
+- txt
+  - Module now depends on module-fs
+  - bl64_txt_search_line: now uses grep -Fx instead of regexp
+
+### Added
+
+- cnt
+  - Added rancher desktop support
+- iam
+  - _bl64_iam_set_command: system group and user definition
+- txt
+  - bl64_txt_line_replace_sed: supports stdin and file
+
 ## [20.13.0]
 
 ### Added

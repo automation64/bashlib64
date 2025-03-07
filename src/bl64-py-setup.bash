@@ -42,7 +42,6 @@ function bl64_py_setup() {
 }
 
 function _bl64_py_setup() {
-  bl64_dbg_lib_show_function "$@"
   local venv_path="$1"
 
   if [[ "$venv_path" != "$BL64_VAR_DEFAULT" ]]; then
