@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - core
   - BL64_LIB_CICD: flag to indicate non-interactive mode (e.g. CICD pipeline, etc.). Default: OFF
+- py
+  - KaliLinux 2025 support
 
 ### Fixed
 
