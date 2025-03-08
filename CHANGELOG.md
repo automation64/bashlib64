@@ -5,11 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [20.15.0]
+## [20.15.1]
+
+### Added
+
+- core
+  - BL64_LIB_CICD: flag to indicate non-interactive mode (e.g. CICD pipeline, etc.). Default: OFF
+- py
+  - KaliLinux 2025 support
+
+### Fixed
+
+- cnt
+  - missing check when no CLI is available
 
 ### Changed
 
-- bl64_msg_set_output: now accepts default value for output. Default will be ASCII for non-interactive shell, and ANSI for interactive
+- bl64_msg_set_output: now accepts default value for output. Default will be ASCII for non-interactive mode, and ANSI for interactive
 
 ## [20.14.0]
 

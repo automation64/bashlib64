@@ -63,6 +63,7 @@ The library has been tested on the following operating systems:
 - CentOS: 7,8,9
 - Debian: 9,10,11
 - Fedora: 33,34,35,36,37,38,39,40,41
+- KaliLinux: 2024,2025
 - MacOS (*): 12,13,14,15
 - OracleLinux; 7,8,9
 - RedHatEnterpriseLinux: 8,9

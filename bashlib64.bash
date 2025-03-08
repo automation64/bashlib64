@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.15.0'
+  declare BL64_VERSION='20.15.1'
 
   #
   # Imported generic shell standard variables
@@ -162,6 +162,9 @@ builtin unset MAILPATH
 
   # Enable lib shell traps? (On/Off)
   declare BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
+
+  # Assume shell non-interactive mode? (On/Off)
+  declare BL64_LIB_CICD="${BL64_LIB_CICD:-$BL64_VAR_OFF}"
 
   #
   # Shared exit codes
@@ -270,7 +273,7 @@ builtin unset MAILPATH
 #
 # Deprecation aliases
 #
-# * Aliases to deprecated functions 
+# * Aliases to deprecated functions
 # * Needed to maintain compatibility up to N-2 versions
 #
 
@@ -281,7 +284,10 @@ function bl64_lib_mode_strict_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_S
 function bl64_lib_lang_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_LANG"; }
 function bl64_lib_trap_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_TRAPS"; }
 
-function bl64_lib_var_is_default { local value="${1:-}"; [[ "$value" == "$BL64_VAR_DEFAULT" || "$value" == "$BL64_VAR_DEFAULT_LEGACY" ]]; }
+function bl64_lib_var_is_default {
+  local value="${1:-}"
+  [[ "$value" == "$BL64_VAR_DEFAULT" || "$value" == "$BL64_VAR_DEFAULT_LEGACY" ]]
+}
 
 #
 # Private functions
@@ -381,15 +387,11 @@ function _bl64_lib_module_is_imported() {
 #######################################
 function bl64_lib_flag_is_enabled {
   local -u flag="${1:-}"
-
-  # shellcheck disable=SC2086
-  [[ -z "$flag" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
-
-  # shellcheck disable=SC2086
-  [[ "$flag" == "$BL64_VAR_ON" ||
-    "$flag" == 'ON' ||
-    "$flag" == 'YES' ]] ||
-    return $BL64_LIB_ERROR_IS_NOT
+  case "$flag" in
+  "$BL64_VAR_ON" | 'ON' | 'YES' | '1') return 0 ;;
+  "$BL64_VAR_OFF" | 'OFF' | 'NO' | '0') return 1 ;;
+  *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
+  esac
 }
 
 #######################################
@@ -990,7 +992,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CNT_VERSION='3.5.0'
+  declare BL64_CNT_VERSION='3.5.1'
 
   declare BL64_CNT_MODULE='0'
 
@@ -2044,7 +2046,7 @@ function bl64_check_overwrite() {
 
   bl64_check_parameter 'path' || return $?
 
-  if bl64_lib_var_is_default "$overwrite" == "$BL64_VAR_OFF" || "$overwrite"; then
+  if ! bl64_lib_flag_is_enabled "$overwrite" || bl64_lib_var_is_default "$overwrite"; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_error "${message} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
       return $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
@@ -2080,7 +2082,7 @@ function bl64_check_overwrite_skip() {
 
   bl64_check_parameter 'path'
 
-  if bl64_lib_var_is_default "$overwrite" == "$BL64_VAR_OFF" || "$overwrite"; then
+  if ! bl64_lib_flag_is_enabled "$overwrite" || bl64_lib_var_is_default "$overwrite"; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_warning "${message:-target is already present and overwrite is not requested. Target is left as is} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
       return 0
@@ -3518,10 +3520,10 @@ function bl64_msg_set_output() {
   local theme="${2:-${BL64_VAR_DEFAULT}}"
 
   if bl64_lib_var_is_default "$output"; then
-    if [[ "$-" == *i* ]]; then
-      output="$BL64_MSG_OUTPUT_ANSI"
-    else
+    if bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
       output="$BL64_MSG_OUTPUT_ASCII"
+    else
+      output="$BL64_MSG_OUTPUT_ANSI"
     fi
   fi
 
@@ -7457,7 +7459,7 @@ function _bl64_cnt_set_command() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     BL64_CNT_DRIVER="$BL64_CNT_DRIVER_PODMAN"
   else
-    bl64_msg_show_error "unable to find a container manager (${BL64_CNT_CMD_DOCKER}, ${BL64_CNT_CMD_PODMAN})"
+    bl64_msg_show_error "unable to find a container manager CLI location (${BL64_CNT_CMD_DOCKER}, ${BL64_CNT_CMD_PODMAN})"
     return $BL64_LIB_ERROR_APP_MISSING
   fi
   bl64_dbg_lib_show_vars 'BL64_CNT_DRIVER'
@@ -7482,10 +7484,11 @@ function _bl64_cnt_set_command_docker() {
       # Rancher Desktop using docker
       command_location="${HOME}/.rd/bin"
     fi
+  else
+    bl64_check_directory "$command_location" || return $?
   fi
 
-  bl64_check_directory "$command_location" || return $?
-  [[ -x "${command_location}/docker" ]] && BL64_CNT_CMD_DOCKER="${command_location}/docker"
+  BL64_CNT_CMD_DOCKER="${command_location}/docker"
   return 0
 }
 
@@ -7503,10 +7506,11 @@ function _bl64_cnt_set_command_podman() {
     elif [[ -x '/usr/bin/podman' ]]; then
       command_location='/usr/bin'
     fi
+  else
+    bl64_check_directory "$command_location" || return $?
   fi
 
-  bl64_check_directory "$command_location" || return $?
-  [[ -x "${command_location}/podman" ]] && BL64_CNT_CMD_PODMAN="${command_location}/podman"
+  BL64_CNT_CMD_PODMAN="${command_location}/podman"
   return 0
 }
 
@@ -7987,7 +7991,7 @@ function bl64_cnt_container_is_running() {
   local id="${2:-${BL64_VAR_DEFAULT}}"
   local result=''
 
-  if bl64_lib_var_is_default "$name" == "$BL64_VAR_DEFAULT" && "$id"; then
+  if bl64_lib_var_is_default "$name" && bl64_lib_var_is_default "$id"; then
     bl64_check_alert_parameter_invalid "$BL64_VAR_DEFAULT" "no filter was selected. Task requires one of them (ID, Name)"
     return $?
   fi
@@ -12153,6 +12157,7 @@ function _bl64_iam_set_alias() {
 function _bl64_iam_set_options() {
   bl64_dbg_lib_show_function
 
+  # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
@@ -15140,7 +15145,7 @@ function bl64_py_pip_usr_prepare() {
     # If venv is in use no need to flag usr install
     flag_user=' '
   else
-    bl64_os_check_not_version "${BL64_OS_KL}-2024" || return $?
+    bl64_os_check_not_version "${BL64_OS_KL}-2024" "${BL64_OS_KL}-2025" || return $?
   fi
 
   bl64_msg_show_lib_task 'upgrade pip module'
@@ -15189,7 +15194,7 @@ function bl64_py_pip_usr_install() {
     # If venv is in use no need to flag usr install
     flag_user=' '
   else
-    bl64_os_check_not_version "${BL64_OS_KL}-2024" || return $?
+    bl64_os_check_not_version "${BL64_OS_KL}-2024" "${BL64_OS_KL}-2025" || return $?
   fi
 
   bl64_msg_show_lib_task "install modules ($*)"
@@ -18219,7 +18224,7 @@ if [[ "${BL64_OS_MODULE:-$BL64_VAR_OFF}" == "$BL64_VAR_ON" ]]; then
     "${BL64_OS_CNT}-7" "${BL64_OS_CNT}-8" "${BL64_OS_CNT}-9" \
     "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_DEB}-11" "${BL64_OS_DEB}-12" \
     "${BL64_OS_FD}-33" "${BL64_OS_FD}-34" "${BL64_OS_FD}-35" "${BL64_OS_FD}-36" "${BL64_OS_FD}-37" "${BL64_OS_FD}-38" "${BL64_OS_FD}-39" "${BL64_OS_FD}-40" "${BL64_OS_FD}-41" \
-    "${BL64_OS_KL}-2024" \
+    "${BL64_OS_KL}-2024" "${BL64_OS_KL}-2025" \
     "${BL64_OS_MCOS}-12" "${BL64_OS_MCOS}-13" "${BL64_OS_MCOS}-14" "${BL64_OS_MCOS}-15" \
     "${BL64_OS_OL}-7" "${BL64_OS_OL}-8" "${BL64_OS_OL}-9" \
     "${BL64_OS_RCK}-8" "${BL64_OS_RCK}-9" \

@@ -100,7 +100,7 @@ function bl64_py_pip_usr_prepare() {
     # If venv is in use no need to flag usr install
     flag_user=' '
   else
-    bl64_os_check_not_version "${BL64_OS_KL}-2024" || return $?
+    bl64_os_check_not_version "${BL64_OS_KL}-2024" "${BL64_OS_KL}-2025" || return $?
   fi
 
   bl64_msg_show_lib_task 'upgrade pip module'
@@ -149,7 +149,7 @@ function bl64_py_pip_usr_install() {
     # If venv is in use no need to flag usr install
     flag_user=' '
   else
-    bl64_os_check_not_version "${BL64_OS_KL}-2024" || return $?
+    bl64_os_check_not_version "${BL64_OS_KL}-2024" "${BL64_OS_KL}-2025" || return $?
   fi
 
   bl64_msg_show_lib_task "install modules ($*)"

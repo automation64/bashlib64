@@ -429,7 +429,7 @@ function bl64_check_overwrite() {
 
   bl64_check_parameter 'path' || return $?
 
-  if bl64_lib_var_is_default "$overwrite" == "$BL64_VAR_OFF" || "$overwrite"; then
+  if ! bl64_lib_flag_is_enabled "$overwrite" || bl64_lib_var_is_default "$overwrite"; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_error "${message} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
       return $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
@@ -465,7 +465,7 @@ function bl64_check_overwrite_skip() {
 
   bl64_check_parameter 'path'
 
-  if bl64_lib_var_is_default "$overwrite" == "$BL64_VAR_OFF" || "$overwrite"; then
+  if ! bl64_lib_flag_is_enabled "$overwrite" || bl64_lib_var_is_default "$overwrite"; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_warning "${message:-target is already present and overwrite is not requested. Target is left as is} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
       return 0
