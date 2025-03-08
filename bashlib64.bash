@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.15.0'
+  declare BL64_VERSION='20.15.1'
 
   #
   # Imported generic shell standard variables
@@ -990,7 +990,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CNT_VERSION='3.5.0'
+  declare BL64_CNT_VERSION='3.5.1'
 
   declare BL64_CNT_MODULE='0'
 
@@ -7457,7 +7457,7 @@ function _bl64_cnt_set_command() {
   elif [[ -x "$BL64_CNT_CMD_PODMAN" ]]; then
     BL64_CNT_DRIVER="$BL64_CNT_DRIVER_PODMAN"
   else
-    bl64_msg_show_error "unable to find a container manager (${BL64_CNT_CMD_DOCKER}, ${BL64_CNT_CMD_PODMAN})"
+    bl64_msg_show_error "unable to find a container manager CLI location (${BL64_CNT_CMD_DOCKER}, ${BL64_CNT_CMD_PODMAN})"
     return $BL64_LIB_ERROR_APP_MISSING
   fi
   bl64_dbg_lib_show_vars 'BL64_CNT_DRIVER'
@@ -7482,10 +7482,11 @@ function _bl64_cnt_set_command_docker() {
       # Rancher Desktop using docker
       command_location="${HOME}/.rd/bin"
     fi
+  else
+    bl64_check_directory "$command_location" || return $?
   fi
 
-  bl64_check_directory "$command_location" || return $?
-  [[ -x "${command_location}/docker" ]] && BL64_CNT_CMD_DOCKER="${command_location}/docker"
+  BL64_CNT_CMD_DOCKER="${command_location}/docker"
   return 0
 }
 
@@ -7503,10 +7504,11 @@ function _bl64_cnt_set_command_podman() {
     elif [[ -x '/usr/bin/podman' ]]; then
       command_location='/usr/bin'
     fi
+  else
+    bl64_check_directory "$command_location" || return $?
   fi
 
-  bl64_check_directory "$command_location" || return $?
-  [[ -x "${command_location}/podman" ]] && BL64_CNT_CMD_PODMAN="${command_location}/podman"
+  BL64_CNT_CMD_PODMAN="${command_location}/podman"
   return 0
 }
 
