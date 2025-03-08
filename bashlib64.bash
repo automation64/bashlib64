@@ -163,6 +163,9 @@ builtin unset MAILPATH
   # Enable lib shell traps? (On/Off)
   declare BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
 
+  # Assume shell non-interactive mode? (On/Off)
+  declare BL64_LIB_CICD="${BL64_LIB_CICD:-$BL64_VAR_OFF}"
+
   #
   # Shared exit codes
   #
@@ -3518,10 +3521,10 @@ function bl64_msg_set_output() {
   local theme="${2:-${BL64_VAR_DEFAULT}}"
 
   if bl64_lib_var_is_default "$output"; then
-    if [[ "$-" == *i* ]]; then
-      output="$BL64_MSG_OUTPUT_ANSI"
-    else
+    if bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
       output="$BL64_MSG_OUTPUT_ASCII"
+    else
+      output="$BL64_MSG_OUTPUT_ANSI"
     fi
   fi
 
