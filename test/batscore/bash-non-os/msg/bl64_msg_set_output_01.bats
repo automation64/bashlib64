@@ -1,11 +1,3 @@
-@test "bl64_msg_set_output: no args" {
-  . "$TESTMANSH_TEST_BATSCORE_SETUP"
-
-  run bl64_msg_set_output
-  assert_failure
-
-}
-
 @test "bl64_msg_set_output: invalid arg" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
 

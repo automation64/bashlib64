@@ -82,7 +82,7 @@ function _bl64_py_set_command() {
   bl64_dbg_lib_show_function "$@"
   local venv_path="$1"
 
-  if [[ "$venv_path" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$venv_path"; then
     # Select best match for default python3
     if [[ -x '/usr/bin/python3.13' ]]; then
       BL64_PY_VERSION_PYTHON3='3.13'

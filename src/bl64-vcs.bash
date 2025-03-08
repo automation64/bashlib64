@@ -98,7 +98,7 @@ function bl64_vcs_git_clone() {
   local branch="${3:-$BL64_VAR_DEFAULT}"
   local name="${4:-$BL64_VAR_DEFAULT}"
 
-  [[ "$branch" == "$BL64_VAR_DEFAULT" ]] && branch=''
+  bl64_lib_var_is_default "$branch" && branch=''
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_check_command "$BL64_VCS_CMD_GIT" ||
@@ -109,7 +109,7 @@ function bl64_vcs_git_clone() {
     bl64_bsh_run_pushd "$destination" ||
     return $?
 
-  if [[ "$name" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$name"; then
     bl64_vcs_run_git \
       clone \
       --depth 1 \

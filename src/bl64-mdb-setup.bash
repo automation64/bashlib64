@@ -52,7 +52,7 @@ function _bl64_mdb_set_command() {
   bl64_dbg_lib_show_function "$@"
   local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$mdb_bin" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$mdb_bin"; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/mongosh' ]]; then
       mdb_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/mongosh' ]]; then

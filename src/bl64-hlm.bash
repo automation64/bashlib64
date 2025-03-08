@@ -68,7 +68,7 @@ function bl64_hlm_chart_upgrade() {
     bl64_check_file "$kubeconfig" ||
     return $?
 
-  [[ "$kubeconfig" == "$BL64_VAR_DEFAULT" ]] && kubeconfig=''
+  bl64_lib_var_is_default "$kubeconfig" && kubeconfig=''
 
   shift
   shift

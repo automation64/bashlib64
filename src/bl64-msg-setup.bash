@@ -25,7 +25,7 @@ function bl64_msg_setup() {
     bl64_dbg_lib_show_function &&
     _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_LOG_MODULE' &&
-    bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI" &&
+    bl64_msg_set_output "$BL64_VAR_DEFAULT" &&
     bl64_msg_app_enable_verbose &&
     BL64_MSG_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'msg'
@@ -154,9 +154,11 @@ function bl64_msg_set_theme() {
 #
 # * Will also setup the theme
 # * If no theme is provided then the STD is used (ansi or ascii)
+# * If no output is provided then the default is used.
+# * Default output is ANSI if the script is interactive, otherwise ASCII
 #
 # Arguments:
-#   $1: output type. One of BL64_MSG_OUTPUT_*
+#   $1: output type. One of BL64_MSG_OUTPUT_*. Default: BL64_MSG_OUTPUT_ANSI
 #   $2: (optional) theme. Default: STD
 # Outputs:
 #   STDOUT: None
@@ -170,15 +172,21 @@ function bl64_msg_set_output() {
   local output="${1:-}"
   local theme="${2:-${BL64_VAR_DEFAULT}}"
 
-  bl64_check_parameter 'output' || return $?
+  if bl64_lib_var_is_default "$output"; then
+    if [[ "$-" == *i* ]]; then
+      output="$BL64_MSG_OUTPUT_ANSI"
+    else
+      output="$BL64_MSG_OUTPUT_ASCII"
+    fi
+  fi
 
   case "$output" in
   "$BL64_MSG_OUTPUT_ASCII")
-    [[ "$theme" == "$BL64_VAR_DEFAULT" ]] && theme="$BL64_MSG_THEME_ID_ASCII_STD"
+    bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ASCII_STD"
     BL64_MSG_OUTPUT="$output"
     ;;
   "$BL64_MSG_OUTPUT_ANSI")
-    [[ "$theme" == "$BL64_VAR_DEFAULT" ]] && theme="$BL64_MSG_THEME_ID_ANSI_STD"
+    bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ANSI_STD"
     BL64_MSG_OUTPUT="$output"
     ;;
   *)

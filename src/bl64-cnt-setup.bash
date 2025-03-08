@@ -75,7 +75,7 @@ function _bl64_cnt_set_command_docker() {
   bl64_dbg_lib_show_function "$@"
   local command_location="$1"
 
-  if [[ "$command_location" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$command_location"; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/docker' ]]; then
       command_location='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/docker' ]]; then
@@ -99,7 +99,7 @@ function _bl64_cnt_set_command_podman() {
   bl64_dbg_lib_show_function "$@"
   local command_location="$1"
 
-  if [[ "$command_location" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$command_location"; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/podman' ]]; then
       command_location='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/podman' ]]; then

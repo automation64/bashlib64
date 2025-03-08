@@ -226,9 +226,9 @@ function bl64_fmt_list_convert_to_string() {
   local prefix="${2:-${BL64_VAR_DEFAULT}}"
   local postfix="${3:-${BL64_VAR_DEFAULT}}"
 
-  [[ "$field_separator" == "$BL64_VAR_DEFAULT" ]] && field_separator=' '
-  [[ "$prefix" == "$BL64_VAR_DEFAULT" ]] && prefix=''
-  [[ "$postfix" == "$BL64_VAR_DEFAULT" ]] && postfix=''
+  bl64_lib_var_is_default "$field_separator" && field_separator=' '
+  bl64_lib_var_is_default "$prefix" && prefix=''
+  bl64_lib_var_is_default "$postfix" && postfix=''
 
   bl64_txt_run_awk \
     -v field_separator="$field_separator" \
@@ -272,7 +272,7 @@ function bl64_fmt_list_check_membership() {
   bl64_check_parameter 'target_value' &&
     bl64_check_parameters_none $# 'please provide at least one value to check against' ||
     return $?
-  [[ "$error_message" == "$BL64_VAR_DEFAULT" ]] && error_message='invalid value'
+  bl64_lib_var_is_default "$error_message" && error_message='invalid value'
 
   for valid_value in "$@"; do
     [[ "$target_value" == "$valid_value" ]] &&

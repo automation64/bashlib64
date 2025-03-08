@@ -40,7 +40,7 @@ function bl64_check_command() {
   local command_name="${3:-}"
 
   bl64_check_parameter 'path' || return $?
-  [[ "$message" == "$BL64_VAR_DEFAULT" ]] && message='required command is not present'
+  bl64_lib_var_is_default "$message" && message='required command is not present'
 
   if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
     bl64_msg_show_error "the requested operation is not supported on the current OS (OS: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
@@ -429,7 +429,7 @@ function bl64_check_overwrite() {
 
   bl64_check_parameter 'path' || return $?
 
-  if [[ "$overwrite" == "$BL64_VAR_OFF" || "$overwrite" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$overwrite" == "$BL64_VAR_OFF" || "$overwrite"; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_error "${message} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
       return $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
@@ -465,7 +465,7 @@ function bl64_check_overwrite_skip() {
 
   bl64_check_parameter 'path'
 
-  if [[ "$overwrite" == "$BL64_VAR_OFF" || "$overwrite" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$overwrite" == "$BL64_VAR_OFF" || "$overwrite"; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_warning "${message:-target is already present and overwrite is not requested. Target is left as is} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
       return 0
@@ -497,7 +497,7 @@ function bl64_check_alert_parameter_invalid() {
   local parameter="${1:-${BL64_VAR_DEFAULT}}"
   local message="${2:-the requested operation was provided with an invalid parameter value}"
 
-  [[ "$parameter" == "$BL64_VAR_DEFAULT" ]] && parameter=''
+  bl64_lib_var_is_default "$parameter" && parameter=''
   bl64_msg_show_error "${message} (${parameter:+parameter: ${parameter} ${BL64_MSG_COSMETIC_PIPE} }caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
   return $BL64_LIB_ERROR_PARAMETER_INVALID
 }
