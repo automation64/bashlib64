@@ -54,9 +54,9 @@ function _bl64_msg_alert_show_parameter() {
   local message="${2:-${BL64_VAR_DEFAULT}}"
   local value="${3:-${BL64_VAR_DEFAULT}}"
 
-  [[ "$parameter" == "$BL64_VAR_DEFAULT" ]] && parameter=''
-  [[ "$message" == "$BL64_VAR_DEFAULT" ]] && message='Error: the requested operation was provided with an invalid parameter value'
-  [[ "$value" == "$BL64_VAR_DEFAULT" ]] && value=''
+  bl64_lib_var_is_default "$parameter" && parameter=''
+  bl64_lib_var_is_default "$message" && message='Error: the requested operation was provided with an invalid parameter value'
+  bl64_lib_var_is_default "$value" && value=''
   printf '%s (%s%scaller: %s)\n' \
     "$message" \
     "${parameter:+parameter: ${parameter} | }" \
@@ -561,9 +561,9 @@ function bl64_msg_show_separator() {
   local -i counter=0
   local output=''
 
-  [[ "$message" == "$BL64_VAR_DEFAULT" ]] && message=''
-  [[ "$separator" == "$BL64_VAR_DEFAULT" ]] && separator='='
-  [[ "$length" == "$BL64_VAR_DEFAULT" ]] && length=60
+  bl64_lib_var_is_default "$message" && message=''
+  bl64_lib_var_is_default "$separator" && separator='='
+  bl64_lib_var_is_default "$length" && length=60
 
   output="$(
     while true; do
@@ -616,7 +616,7 @@ function bl64_msg_show_setup() {
   local message="${1:-$BL64_VAR_DEFAULT}"
   local variable=''
 
-  [[ "$message" == "$BL64_VAR_DEFAULT" ]] && message='Task to be executed with the following parameters'
+  bl64_lib_var_is_default "$message" && message='Task to be executed with the following parameters'
   shift
 
   bl64_msg_show_info "$message"

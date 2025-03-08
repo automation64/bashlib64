@@ -52,7 +52,7 @@ function _bl64_k8s_set_command() {
   bl64_dbg_lib_show_function "$@"
   local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$kubectl_bin" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$kubectl_bin"; then
     bl64_dbg_lib_show_info 'no custom path provided. Using known locations to detect ansible'
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/kubectl' ]]; then
       kubectl_bin='/home/linuxbrew/.linuxbrew/bin'

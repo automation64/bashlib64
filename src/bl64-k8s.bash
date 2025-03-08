@@ -391,7 +391,7 @@ function bl64_k8s_run_kubectl() {
   bl64_check_parameters_none "$#" 'missing kubectl command' ||
     return $?
 
-  if [[ "$kubeconfig" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$kubeconfig"; then
     kubeconfig=''
   else
     bl64_check_file "$kubeconfig" 'kubectl config file not found' ||

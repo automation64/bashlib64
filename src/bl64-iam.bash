@@ -41,11 +41,11 @@ function bl64_iam_user_add() {
   fi
 
   bl64_msg_show_lib_subtask "create local user account ($login)"
-  [[ "$home" == "$BL64_VAR_DEFAULT" ]] && home=''
-  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && group=''
-  [[ "$shell" == "$BL64_VAR_DEFAULT" ]] && shell=''
-  [[ "$gecos" == "$BL64_VAR_DEFAULT" ]] && gecos=''
-  [[ "$uid" == "$BL64_VAR_DEFAULT" ]] && uid=''
+  bl64_lib_var_is_default "$home" && home=''
+  bl64_lib_var_is_default "$group" && group=''
+  bl64_lib_var_is_default "$shell" && shell=''
+  bl64_lib_var_is_default "$gecos" && gecos=''
+  bl64_lib_var_is_default "$uid" && uid=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -137,7 +137,7 @@ function bl64_iam_group_add() {
   fi
 
   bl64_msg_show_lib_subtask "create local user group ($group_name)"
-  [[ "$group_id" == "$BL64_VAR_DEFAULT" ]] && group_id=''
+  bl64_lib_var_is_default "$group_id" && group_id=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -578,7 +578,7 @@ function bl64_iam_xdg_create() {
     return $?
 
   bl64_msg_show_lib_task "create user XDG directories (${home_path})"
-  [[ "$dir_mode" == "$BL64_VAR_DEFAULT" ]] && dir_mode='0750'
+  bl64_lib_var_is_default "$dir_mode" && dir_mode='0750'
   bl64_fs_dir_create "$dir_mode" "$dir_user" "$dir_group" \
     "$xdg_config" \
     "$xdg_local" \
@@ -619,10 +619,10 @@ function bl64_iam_user_modify() {
     return $?
 
   bl64_msg_show_lib_subtask "modify local user account ($login)"
-  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && group=''
-  [[ "$shell" == "$BL64_VAR_DEFAULT" ]] && shell=''
-  [[ "$gecos" == "$BL64_VAR_DEFAULT" ]] && gecos=''
-  [[ "$uid" == "$BL64_VAR_DEFAULT" ]] && uid=''
+  bl64_lib_var_is_default "$group" && group=''
+  bl64_lib_var_is_default "$shell" && shell=''
+  bl64_lib_var_is_default "$gecos" && gecos=''
+  bl64_lib_var_is_default "$uid" && uid=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)

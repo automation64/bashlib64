@@ -63,7 +63,7 @@ function _bl64_ans_set_command() {
   bl64_dbg_lib_show_function "$@"
   local ansible_bin="$1"
 
-  if [[ "$ansible_bin" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$ansible_bin"; then
     bl64_dbg_lib_show_info 'no custom path provided. Using known locations to detect ansible'
     if [[ -n "$BL64_PY_VENV_PATH" && -x "${BL64_PY_VENV_PATH}/bin/ansible" ]]; then
       ansible_bin="${BL64_PY_VENV_PATH}/bin"
@@ -155,21 +155,21 @@ function bl64_ans_set_paths() {
   local collections="${2:-${BL64_VAR_DEFAULT}}"
   local ansible="${3:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$config" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$config"; then
     BL64_ANS_PATH_USR_CONFIG=''
   else
     bl64_check_file "$config" || return $?
     BL64_ANS_PATH_USR_CONFIG="$config"
   fi
 
-  if [[ "$ansible" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$ansible"; then
     BL64_ANS_PATH_USR_ANSIBLE="${HOME}/.ansible"
   else
     BL64_ANS_PATH_USR_ANSIBLE="$ansible"
   fi
 
   # shellcheck disable=SC2034
-    if [[ "$collections" == "$BL64_VAR_DEFAULT" ]]; then
+    if bl64_lib_var_is_default "$collections"; then
     BL64_ANS_PATH_USR_COLLECTIONS="${BL64_ANS_PATH_USR_ANSIBLE}/collections/ansible_collections"
   else
     bl64_check_directory "$collections" || return $?

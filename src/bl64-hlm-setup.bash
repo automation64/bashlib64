@@ -50,7 +50,7 @@ function _bl64_hlm_set_command() {
   bl64_dbg_lib_show_function "$@"
   local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$helm_bin" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$helm_bin"; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/helm' ]]; then
       helm_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/helm' ]]; then

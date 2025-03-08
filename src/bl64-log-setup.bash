@@ -49,10 +49,10 @@ function bl64_log_setup() {
   local log_level="${4:-${BL64_VAR_DEFAULT}}"
   local log_format="${5:-${BL64_VAR_DEFAULT}}"
 
-  [[ "$log_target" == "$BL64_VAR_DEFAULT" ]] && log_target="$BL64_SCRIPT_ID"
-  [[ "$log_type" == "$BL64_VAR_DEFAULT" ]] && log_type="$BL64_LOG_TYPE_SINGLE"
-  [[ "$log_level" == "$BL64_VAR_DEFAULT" ]] && log_level="$BL64_LOG_CATEGORY_NONE"
-  [[ "$log_format" == "$BL64_VAR_DEFAULT" ]] && log_format="$BL64_LOG_FORMAT_CSV"
+  bl64_lib_var_is_default "$log_target" && log_target="$BL64_SCRIPT_ID"
+  bl64_lib_var_is_default "$log_type" && log_type="$BL64_LOG_TYPE_SINGLE"
+  bl64_lib_var_is_default "$log_level" && log_level="$BL64_LOG_CATEGORY_NONE"
+  bl64_lib_var_is_default "$log_format" && log_format="$BL64_LOG_FORMAT_CSV"
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&

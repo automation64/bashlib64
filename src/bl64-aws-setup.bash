@@ -70,7 +70,7 @@ function _bl64_aws_set_command() {
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$aws_bin" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$aws_bin"; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/aws' ]]; then
       aws_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/aws' ]]; then
@@ -187,7 +187,7 @@ function bl64_aws_set_home() {
   bl64_dbg_lib_show_function "$@"
   local aws_home="${1:-$BL64_VAR_DEFAULT}"
 
-  if [[ "$aws_home" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$aws_home"; then
     bl64_check_home || return $?
     aws_home="${HOME}/${BL64_AWS_DEF_SUFFIX_HOME}"
   fi

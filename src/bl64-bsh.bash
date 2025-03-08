@@ -227,7 +227,7 @@ function bl64_bsh_env_store_create() {
   local group="${4:-$BL64_VAR_DEFAULT}"
   local mode='0750'
 
-  [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && mode='0750'
+  bl64_lib_var_is_default "$mode" && mode='0750'
   bl64_fs_dir_create "$mode" "$user" "$group" \
     "${home}/${BL64_BSH_ENV_STORE}"
 }

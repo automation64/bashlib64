@@ -53,7 +53,7 @@ function _bl64_tf_set_command() {
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="$1"
 
-  if [[ "$terraform_bin" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$terraform_bin"; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/terraform' ]]; then
       terraform_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/terraform' ]]; then

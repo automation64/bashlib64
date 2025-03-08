@@ -103,7 +103,7 @@ function _bl64_fs_path_permission_set_file() {
   local recursive="$2"
   local path="$3"
 
-  [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_lib_var_is_default "$mode" && return 0
   bl64_msg_show_lib_subtask "set file permissions (${file_mode} ${BL64_MSG_COSMETIC_ARROW} ${path})"
   if bl64_lib_flag_is_enabled "$recursive"; then
     # shellcheck disable=SC2086
@@ -124,7 +124,7 @@ function _bl64_fs_path_permission_set_dir() {
   local recursive="$2"
   local path="$3"
 
-  [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_lib_var_is_default "$mode" && return 0
   bl64_msg_show_lib_subtask "set directory permissions (${dir_mode} ${BL64_MSG_COSMETIC_ARROW} ${path})"
   if bl64_lib_flag_is_enabled "$recursive"; then
     # shellcheck disable=SC2086
@@ -146,7 +146,7 @@ function _bl64_fs_path_permission_set_user() {
   local path="$3"
   local cli_options=' '
 
-  [[ "$user" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_lib_var_is_default "$user" && return 0
   bl64_lib_flag_is_enabled "$recursive" && cli_options="$BL64_FS_SET_CHOWN_RECURSIVE"
   bl64_msg_show_lib_subtask "set new file owner (${user} ${BL64_MSG_COSMETIC_ARROW2} ${path})"
   # shellcheck disable=SC2086
@@ -163,7 +163,7 @@ function _bl64_fs_path_permission_set_group() {
   local path="$3"
   local cli_options=' '
 
-  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_lib_var_is_default "$group" && return 0
   bl64_lib_flag_is_enabled "$recursive" && cli_options="$BL64_FS_SET_CHOWN_RECURSIVE"
   bl64_msg_show_lib_subtask "set new file group (${group} ${BL64_MSG_COSMETIC_ARROW2} ${path})"
   # shellcheck disable=SC2086
@@ -855,11 +855,11 @@ function bl64_fs_find_files() {
   bl64_check_command "$BL64_FS_CMD_FIND" &&
     bl64_check_directory "$path" || return $?
 
-  [[ "$pattern" == "$BL64_VAR_DEFAULT" ]] && pattern=''
+  bl64_lib_var_is_default "$pattern" && pattern=''
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  if [[ "$content" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$content"; then
     "$BL64_FS_CMD_FIND" \
       "$path" \
       -type 'f' \
@@ -998,7 +998,7 @@ function bl64_fs_path_permission_set() {
   local recursive="${5:-${BL64_VAR_DEFAULT}}"
   local target_path=''
 
-  [[ "$recursive" == "$BL64_VAR_DEFAULT" ]] && recursive="$BL64_VAR_OFF"
+  bl64_lib_var_is_default "$recursive" && recursive="$BL64_VAR_OFF"
   # Remove consumed parameters
   shift
   shift
