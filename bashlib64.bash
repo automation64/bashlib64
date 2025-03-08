@@ -273,7 +273,7 @@ builtin unset MAILPATH
 #
 # Deprecation aliases
 #
-# * Aliases to deprecated functions 
+# * Aliases to deprecated functions
 # * Needed to maintain compatibility up to N-2 versions
 #
 
@@ -284,7 +284,10 @@ function bl64_lib_mode_strict_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_S
 function bl64_lib_lang_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_LANG"; }
 function bl64_lib_trap_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_TRAPS"; }
 
-function bl64_lib_var_is_default { local value="${1:-}"; [[ "$value" == "$BL64_VAR_DEFAULT" || "$value" == "$BL64_VAR_DEFAULT_LEGACY" ]]; }
+function bl64_lib_var_is_default {
+  local value="${1:-}"
+  [[ "$value" == "$BL64_VAR_DEFAULT" || "$value" == "$BL64_VAR_DEFAULT_LEGACY" ]]
+}
 
 #
 # Private functions
@@ -384,15 +387,11 @@ function _bl64_lib_module_is_imported() {
 #######################################
 function bl64_lib_flag_is_enabled {
   local -u flag="${1:-}"
-
-  # shellcheck disable=SC2086
-  [[ -z "$flag" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
-
-  # shellcheck disable=SC2086
-  [[ "$flag" == "$BL64_VAR_ON" ||
-    "$flag" == 'ON' ||
-    "$flag" == 'YES' ]] ||
-    return $BL64_LIB_ERROR_IS_NOT
+  case "$flag" in
+  "$BL64_VAR_ON" | 'ON' | 'YES' | '1') return 0 ;;
+  "$BL64_VAR_OFF" | 'OFF' | 'NO' | '0') return 1 ;;
+  *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
+  esac
 }
 
 #######################################
@@ -2047,7 +2046,7 @@ function bl64_check_overwrite() {
 
   bl64_check_parameter 'path' || return $?
 
-  if bl64_lib_var_is_default "$overwrite" == "$BL64_VAR_OFF" || "$overwrite"; then
+  if ! bl64_lib_flag_is_enabled "$overwrite" || bl64_lib_var_is_default "$overwrite"; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_error "${message} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
       return $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
@@ -2083,7 +2082,7 @@ function bl64_check_overwrite_skip() {
 
   bl64_check_parameter 'path'
 
-  if bl64_lib_var_is_default "$overwrite" == "$BL64_VAR_OFF" || "$overwrite"; then
+  if ! bl64_lib_flag_is_enabled "$overwrite" || bl64_lib_var_is_default "$overwrite"; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_warning "${message:-target is already present and overwrite is not requested. Target is left as is} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
       return 0
@@ -7992,7 +7991,7 @@ function bl64_cnt_container_is_running() {
   local id="${2:-${BL64_VAR_DEFAULT}}"
   local result=''
 
-  if bl64_lib_var_is_default "$name" == "$BL64_VAR_DEFAULT" && "$id"; then
+  if bl64_lib_var_is_default "$name" && bl64_lib_var_is_default "$id"; then
     bl64_check_alert_parameter_invalid "$BL64_VAR_DEFAULT" "no filter was selected. Task requires one of them (ID, Name)"
     return $?
   fi
