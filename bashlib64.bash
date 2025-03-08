@@ -15145,7 +15145,7 @@ function bl64_py_pip_usr_prepare() {
     # If venv is in use no need to flag usr install
     flag_user=' '
   else
-    bl64_os_check_not_version "${BL64_OS_KL}-2024" || return $?
+    bl64_os_check_not_version "${BL64_OS_KL}-2024" "${BL64_OS_KL}-2025" || return $?
   fi
 
   bl64_msg_show_lib_task 'upgrade pip module'
@@ -15194,7 +15194,7 @@ function bl64_py_pip_usr_install() {
     # If venv is in use no need to flag usr install
     flag_user=' '
   else
-    bl64_os_check_not_version "${BL64_OS_KL}-2024" || return $?
+    bl64_os_check_not_version "${BL64_OS_KL}-2024" "${BL64_OS_KL}-2025" || return $?
   fi
 
   bl64_msg_show_lib_task "install modules ($*)"
@@ -18224,7 +18224,7 @@ if [[ "${BL64_OS_MODULE:-$BL64_VAR_OFF}" == "$BL64_VAR_ON" ]]; then
     "${BL64_OS_CNT}-7" "${BL64_OS_CNT}-8" "${BL64_OS_CNT}-9" \
     "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_DEB}-11" "${BL64_OS_DEB}-12" \
     "${BL64_OS_FD}-33" "${BL64_OS_FD}-34" "${BL64_OS_FD}-35" "${BL64_OS_FD}-36" "${BL64_OS_FD}-37" "${BL64_OS_FD}-38" "${BL64_OS_FD}-39" "${BL64_OS_FD}-40" "${BL64_OS_FD}-41" \
-    "${BL64_OS_KL}-2024" \
+    "${BL64_OS_KL}-2024" "${BL64_OS_KL}-2025" \
     "${BL64_OS_MCOS}-12" "${BL64_OS_MCOS}-13" "${BL64_OS_MCOS}-14" "${BL64_OS_MCOS}-15" \
     "${BL64_OS_OL}-7" "${BL64_OS_OL}-8" "${BL64_OS_OL}-9" \
     "${BL64_OS_RCK}-8" "${BL64_OS_RCK}-9" \
