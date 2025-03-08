@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.7.0'
+  declare BL64_MSG_VERSION='5.8.0'
 
   declare BL64_MSG_MODULE='0'
 
