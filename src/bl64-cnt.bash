@@ -377,7 +377,7 @@ function bl64_cnt_container_is_running() {
   local id="${2:-${BL64_VAR_DEFAULT}}"
   local result=''
 
-  if bl64_lib_var_is_default "$name" == "$BL64_VAR_DEFAULT" && "$id"; then
+  if bl64_lib_var_is_default "$name" && bl64_lib_var_is_default "$id"; then
     bl64_check_alert_parameter_invalid "$BL64_VAR_DEFAULT" "no filter was selected. Task requires one of them (ID, Name)"
     return $?
   fi
