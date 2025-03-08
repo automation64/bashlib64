@@ -5,7 +5,7 @@
 #
 # Deprecation aliases
 #
-# * Aliases to deprecated functions 
+# * Aliases to deprecated functions
 # * Needed to maintain compatibility up to N-2 versions
 #
 
@@ -16,7 +16,10 @@ function bl64_lib_mode_strict_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_S
 function bl64_lib_lang_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_LANG"; }
 function bl64_lib_trap_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_TRAPS"; }
 
-function bl64_lib_var_is_default { local value="${1:-}"; [[ "$value" == "$BL64_VAR_DEFAULT" || "$value" == "$BL64_VAR_DEFAULT_LEGACY" ]]; }
+function bl64_lib_var_is_default {
+  local value="${1:-}"
+  [[ "$value" == "$BL64_VAR_DEFAULT" || "$value" == "$BL64_VAR_DEFAULT_LEGACY" ]]
+}
 
 #
 # Private functions
@@ -116,15 +119,11 @@ function _bl64_lib_module_is_imported() {
 #######################################
 function bl64_lib_flag_is_enabled {
   local -u flag="${1:-}"
-
-  # shellcheck disable=SC2086
-  [[ -z "$flag" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
-
-  # shellcheck disable=SC2086
-  [[ "$flag" == "$BL64_VAR_ON" ||
-    "$flag" == 'ON' ||
-    "$flag" == 'YES' ]] ||
-    return $BL64_LIB_ERROR_IS_NOT
+  case "$flag" in
+  "$BL64_VAR_ON" | 'ON' | 'YES' | '1') return 0 ;;
+  "$BL64_VAR_OFF" | 'OFF' | 'NO' | '0') return 1 ;;
+  *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
+  esac
 }
 
 #######################################
