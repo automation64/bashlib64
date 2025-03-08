@@ -68,6 +68,9 @@
   # Enable lib shell traps? (On/Off)
   declare BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
 
+  # Assume shell non-interactive mode? (On/Off)
+  declare BL64_LIB_CICD="${BL64_LIB_CICD:-$BL64_VAR_OFF}"
+
   #
   # Shared exit codes
   #

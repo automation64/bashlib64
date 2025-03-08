@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [20.15.1]
 
+### Added
+
+- core
+  - BL64_LIB_CICD: flag to indicate non-interactive mode (e.g. CICD pipeline, etc.). Default: OFF
+
 ### Fixed
 
 - cnt
@@ -14,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- bl64_msg_set_output: now accepts default value for output. Default will be ASCII for non-interactive shell, and ANSI for interactive
+- bl64_msg_set_output: now accepts default value for output. Default will be ASCII for non-interactive mode, and ANSI for interactive
 
 ## [20.14.0]
 
