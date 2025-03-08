@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.14.0'
+  declare BL64_VERSION='20.15.0'
 
   #
   # Imported generic shell standard variables
@@ -590,7 +590,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.7.0'
+  declare BL64_MSG_VERSION='5.8.0'
 
   declare BL64_MSG_MODULE='0'
 
@@ -1655,7 +1655,7 @@ function bl64_check_command() {
   local command_name="${3:-}"
 
   bl64_check_parameter 'path' || return $?
-  [[ "$message" == "$BL64_VAR_DEFAULT" ]] && message='required command is not present'
+  bl64_lib_var_is_default "$message" && message='required command is not present'
 
   if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
     bl64_msg_show_error "the requested operation is not supported on the current OS (OS: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
@@ -2044,7 +2044,7 @@ function bl64_check_overwrite() {
 
   bl64_check_parameter 'path' || return $?
 
-  if [[ "$overwrite" == "$BL64_VAR_OFF" || "$overwrite" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$overwrite" == "$BL64_VAR_OFF" || "$overwrite"; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_error "${message} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
       return $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
@@ -2080,7 +2080,7 @@ function bl64_check_overwrite_skip() {
 
   bl64_check_parameter 'path'
 
-  if [[ "$overwrite" == "$BL64_VAR_OFF" || "$overwrite" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$overwrite" == "$BL64_VAR_OFF" || "$overwrite"; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_warning "${message:-target is already present and overwrite is not requested. Target is left as is} (path: ${path} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
       return 0
@@ -2112,7 +2112,7 @@ function bl64_check_alert_parameter_invalid() {
   local parameter="${1:-${BL64_VAR_DEFAULT}}"
   local message="${2:-the requested operation was provided with an invalid parameter value}"
 
-  [[ "$parameter" == "$BL64_VAR_DEFAULT" ]] && parameter=''
+  bl64_lib_var_is_default "$parameter" && parameter=''
   bl64_msg_show_error "${message} (${parameter:+parameter: ${parameter} ${BL64_MSG_COSMETIC_PIPE} }caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
   return $BL64_LIB_ERROR_PARAMETER_INVALID
 }
@@ -3052,10 +3052,10 @@ function bl64_log_setup() {
   local log_level="${4:-${BL64_VAR_DEFAULT}}"
   local log_format="${5:-${BL64_VAR_DEFAULT}}"
 
-  [[ "$log_target" == "$BL64_VAR_DEFAULT" ]] && log_target="$BL64_SCRIPT_ID"
-  [[ "$log_type" == "$BL64_VAR_DEFAULT" ]] && log_type="$BL64_LOG_TYPE_SINGLE"
-  [[ "$log_level" == "$BL64_VAR_DEFAULT" ]] && log_level="$BL64_LOG_CATEGORY_NONE"
-  [[ "$log_format" == "$BL64_VAR_DEFAULT" ]] && log_format="$BL64_LOG_FORMAT_CSV"
+  bl64_lib_var_is_default "$log_target" && log_target="$BL64_SCRIPT_ID"
+  bl64_lib_var_is_default "$log_type" && log_type="$BL64_LOG_TYPE_SINGLE"
+  bl64_lib_var_is_default "$log_level" && log_level="$BL64_LOG_CATEGORY_NONE"
+  bl64_lib_var_is_default "$log_format" && log_format="$BL64_LOG_FORMAT_CSV"
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
@@ -3370,7 +3370,7 @@ function bl64_msg_setup() {
     bl64_dbg_lib_show_function &&
     _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_LOG_MODULE' &&
-    bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI" &&
+    bl64_msg_set_output "$BL64_VAR_DEFAULT" &&
     bl64_msg_app_enable_verbose &&
     BL64_MSG_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'msg'
@@ -3499,9 +3499,11 @@ function bl64_msg_set_theme() {
 #
 # * Will also setup the theme
 # * If no theme is provided then the STD is used (ansi or ascii)
+# * If no output is provided then the default is used.
+# * Default output is ANSI if the script is interactive, otherwise ASCII
 #
 # Arguments:
-#   $1: output type. One of BL64_MSG_OUTPUT_*
+#   $1: output type. One of BL64_MSG_OUTPUT_*. Default: BL64_MSG_OUTPUT_ANSI
 #   $2: (optional) theme. Default: STD
 # Outputs:
 #   STDOUT: None
@@ -3515,15 +3517,21 @@ function bl64_msg_set_output() {
   local output="${1:-}"
   local theme="${2:-${BL64_VAR_DEFAULT}}"
 
-  bl64_check_parameter 'output' || return $?
+  if bl64_lib_var_is_default "$output"; then
+    if [[ "$-" == *i* ]]; then
+      output="$BL64_MSG_OUTPUT_ANSI"
+    else
+      output="$BL64_MSG_OUTPUT_ASCII"
+    fi
+  fi
 
   case "$output" in
   "$BL64_MSG_OUTPUT_ASCII")
-    [[ "$theme" == "$BL64_VAR_DEFAULT" ]] && theme="$BL64_MSG_THEME_ID_ASCII_STD"
+    bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ASCII_STD"
     BL64_MSG_OUTPUT="$output"
     ;;
   "$BL64_MSG_OUTPUT_ANSI")
-    [[ "$theme" == "$BL64_VAR_DEFAULT" ]] && theme="$BL64_MSG_THEME_ID_ANSI_STD"
+    bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ANSI_STD"
     BL64_MSG_OUTPUT="$output"
     ;;
   *)
@@ -3650,9 +3658,9 @@ function _bl64_msg_alert_show_parameter() {
   local message="${2:-${BL64_VAR_DEFAULT}}"
   local value="${3:-${BL64_VAR_DEFAULT}}"
 
-  [[ "$parameter" == "$BL64_VAR_DEFAULT" ]] && parameter=''
-  [[ "$message" == "$BL64_VAR_DEFAULT" ]] && message='Error: the requested operation was provided with an invalid parameter value'
-  [[ "$value" == "$BL64_VAR_DEFAULT" ]] && value=''
+  bl64_lib_var_is_default "$parameter" && parameter=''
+  bl64_lib_var_is_default "$message" && message='Error: the requested operation was provided with an invalid parameter value'
+  bl64_lib_var_is_default "$value" && value=''
   printf '%s (%s%scaller: %s)\n' \
     "$message" \
     "${parameter:+parameter: ${parameter} | }" \
@@ -4157,9 +4165,9 @@ function bl64_msg_show_separator() {
   local -i counter=0
   local output=''
 
-  [[ "$message" == "$BL64_VAR_DEFAULT" ]] && message=''
-  [[ "$separator" == "$BL64_VAR_DEFAULT" ]] && separator='='
-  [[ "$length" == "$BL64_VAR_DEFAULT" ]] && length=60
+  bl64_lib_var_is_default "$message" && message=''
+  bl64_lib_var_is_default "$separator" && separator='='
+  bl64_lib_var_is_default "$length" && length=60
 
   output="$(
     while true; do
@@ -4212,7 +4220,7 @@ function bl64_msg_show_setup() {
   local message="${1:-$BL64_VAR_DEFAULT}"
   local variable=''
 
-  [[ "$message" == "$BL64_VAR_DEFAULT" ]] && message='Task to be executed with the following parameters'
+  bl64_lib_var_is_default "$message" && message='Task to be executed with the following parameters'
   shift
 
   bl64_msg_show_info "$message"
@@ -5299,7 +5307,7 @@ function _bl64_ans_set_command() {
   bl64_dbg_lib_show_function "$@"
   local ansible_bin="$1"
 
-  if [[ "$ansible_bin" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$ansible_bin"; then
     bl64_dbg_lib_show_info 'no custom path provided. Using known locations to detect ansible'
     if [[ -n "$BL64_PY_VENV_PATH" && -x "${BL64_PY_VENV_PATH}/bin/ansible" ]]; then
       ansible_bin="${BL64_PY_VENV_PATH}/bin"
@@ -5391,21 +5399,21 @@ function bl64_ans_set_paths() {
   local collections="${2:-${BL64_VAR_DEFAULT}}"
   local ansible="${3:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$config" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$config"; then
     BL64_ANS_PATH_USR_CONFIG=''
   else
     bl64_check_file "$config" || return $?
     BL64_ANS_PATH_USR_CONFIG="$config"
   fi
 
-  if [[ "$ansible" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$ansible"; then
     BL64_ANS_PATH_USR_ANSIBLE="${HOME}/.ansible"
   else
     BL64_ANS_PATH_USR_ANSIBLE="$ansible"
   fi
 
   # shellcheck disable=SC2034
-    if [[ "$collections" == "$BL64_VAR_DEFAULT" ]]; then
+    if bl64_lib_var_is_default "$collections"; then
     BL64_ANS_PATH_USR_COLLECTIONS="${BL64_ANS_PATH_USR_ANSIBLE}/collections/ansible_collections"
   else
     bl64_check_directory "$collections" || return $?
@@ -6206,7 +6214,7 @@ function _bl64_aws_set_command() {
   bl64_dbg_lib_show_function "$@"
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$aws_bin" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$aws_bin"; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/aws' ]]; then
       aws_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/aws' ]]; then
@@ -6323,7 +6331,7 @@ function bl64_aws_set_home() {
   bl64_dbg_lib_show_function "$@"
   local aws_home="${1:-$BL64_VAR_DEFAULT}"
 
-  if [[ "$aws_home" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$aws_home"; then
     bl64_check_home || return $?
     aws_home="${HOME}/${BL64_AWS_DEF_SUFFIX_HOME}"
   fi
@@ -7096,7 +7104,7 @@ function bl64_bsh_env_store_create() {
   local group="${4:-$BL64_VAR_DEFAULT}"
   local mode='0750'
 
-  [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && mode='0750'
+  bl64_lib_var_is_default "$mode" && mode='0750'
   bl64_fs_dir_create "$mode" "$user" "$group" \
     "${home}/${BL64_BSH_ENV_STORE}"
 }
@@ -7461,7 +7469,7 @@ function _bl64_cnt_set_command_docker() {
   bl64_dbg_lib_show_function "$@"
   local command_location="$1"
 
-  if [[ "$command_location" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$command_location"; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/docker' ]]; then
       command_location='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/docker' ]]; then
@@ -7485,7 +7493,7 @@ function _bl64_cnt_set_command_podman() {
   bl64_dbg_lib_show_function "$@"
   local command_location="$1"
 
-  if [[ "$command_location" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$command_location"; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/podman' ]]; then
       command_location='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/podman' ]]; then
@@ -7979,7 +7987,7 @@ function bl64_cnt_container_is_running() {
   local id="${2:-${BL64_VAR_DEFAULT}}"
   local result=''
 
-  if [[ "$name" == "$BL64_VAR_DEFAULT" && "$id" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$name" == "$BL64_VAR_DEFAULT" && "$id"; then
     bl64_check_alert_parameter_invalid "$BL64_VAR_DEFAULT" "no filter was selected. Task requires one of them (ID, Name)"
     return $?
   fi
@@ -7993,7 +8001,7 @@ function bl64_cnt_container_is_running() {
 
   if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
     [[ "$result" == "$name" ]] || return $BL64_LIB_ERROR_IS_NOT
-  elif [[ "$id" == "$BL64_VAR_DEFAULT" ]]; then
+  elif bl64_lib_var_is_default "$id"; then
     [[ "$result" != "$id" ]] || return $BL64_LIB_ERROR_IS_NOT
   fi
 }
@@ -9285,9 +9293,9 @@ function bl64_fmt_list_convert_to_string() {
   local prefix="${2:-${BL64_VAR_DEFAULT}}"
   local postfix="${3:-${BL64_VAR_DEFAULT}}"
 
-  [[ "$field_separator" == "$BL64_VAR_DEFAULT" ]] && field_separator=' '
-  [[ "$prefix" == "$BL64_VAR_DEFAULT" ]] && prefix=''
-  [[ "$postfix" == "$BL64_VAR_DEFAULT" ]] && postfix=''
+  bl64_lib_var_is_default "$field_separator" && field_separator=' '
+  bl64_lib_var_is_default "$prefix" && prefix=''
+  bl64_lib_var_is_default "$postfix" && postfix=''
 
   bl64_txt_run_awk \
     -v field_separator="$field_separator" \
@@ -9331,7 +9339,7 @@ function bl64_fmt_list_check_membership() {
   bl64_check_parameter 'target_value' &&
     bl64_check_parameters_none $# 'please provide at least one value to check against' ||
     return $?
-  [[ "$error_message" == "$BL64_VAR_DEFAULT" ]] && error_message='invalid value'
+  bl64_lib_var_is_default "$error_message" && error_message='invalid value'
 
   for valid_value in "$@"; do
     [[ "$target_value" == "$valid_value" ]] &&
@@ -9870,7 +9878,7 @@ function _bl64_fs_path_permission_set_file() {
   local recursive="$2"
   local path="$3"
 
-  [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_lib_var_is_default "$mode" && return 0
   bl64_msg_show_lib_subtask "set file permissions (${file_mode} ${BL64_MSG_COSMETIC_ARROW} ${path})"
   if bl64_lib_flag_is_enabled "$recursive"; then
     # shellcheck disable=SC2086
@@ -9891,7 +9899,7 @@ function _bl64_fs_path_permission_set_dir() {
   local recursive="$2"
   local path="$3"
 
-  [[ "$mode" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_lib_var_is_default "$mode" && return 0
   bl64_msg_show_lib_subtask "set directory permissions (${dir_mode} ${BL64_MSG_COSMETIC_ARROW} ${path})"
   if bl64_lib_flag_is_enabled "$recursive"; then
     # shellcheck disable=SC2086
@@ -9913,7 +9921,7 @@ function _bl64_fs_path_permission_set_user() {
   local path="$3"
   local cli_options=' '
 
-  [[ "$user" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_lib_var_is_default "$user" && return 0
   bl64_lib_flag_is_enabled "$recursive" && cli_options="$BL64_FS_SET_CHOWN_RECURSIVE"
   bl64_msg_show_lib_subtask "set new file owner (${user} ${BL64_MSG_COSMETIC_ARROW2} ${path})"
   # shellcheck disable=SC2086
@@ -9930,7 +9938,7 @@ function _bl64_fs_path_permission_set_group() {
   local path="$3"
   local cli_options=' '
 
-  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && return 0
+  bl64_lib_var_is_default "$group" && return 0
   bl64_lib_flag_is_enabled "$recursive" && cli_options="$BL64_FS_SET_CHOWN_RECURSIVE"
   bl64_msg_show_lib_subtask "set new file group (${group} ${BL64_MSG_COSMETIC_ARROW2} ${path})"
   # shellcheck disable=SC2086
@@ -10622,11 +10630,11 @@ function bl64_fs_find_files() {
   bl64_check_command "$BL64_FS_CMD_FIND" &&
     bl64_check_directory "$path" || return $?
 
-  [[ "$pattern" == "$BL64_VAR_DEFAULT" ]] && pattern=''
+  bl64_lib_var_is_default "$pattern" && pattern=''
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  if [[ "$content" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$content"; then
     "$BL64_FS_CMD_FIND" \
       "$path" \
       -type 'f' \
@@ -10765,7 +10773,7 @@ function bl64_fs_path_permission_set() {
   local recursive="${5:-${BL64_VAR_DEFAULT}}"
   local target_path=''
 
-  [[ "$recursive" == "$BL64_VAR_DEFAULT" ]] && recursive="$BL64_VAR_OFF"
+  bl64_lib_var_is_default "$recursive" && recursive="$BL64_VAR_OFF"
   # Remove consumed parameters
   shift
   shift
@@ -11428,7 +11436,7 @@ function _bl64_gcp_set_command() {
   bl64_dbg_lib_show_function "$@"
   local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$gcloud_bin" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$gcloud_bin"; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/gcloud' ]]; then
       gcloud_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/gcloud' ]]; then
@@ -11754,7 +11762,7 @@ function _bl64_hlm_set_command() {
   bl64_dbg_lib_show_function "$@"
   local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$helm_bin" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$helm_bin"; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/helm' ]]; then
       helm_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/helm' ]]; then
@@ -11906,7 +11914,7 @@ function bl64_hlm_chart_upgrade() {
     bl64_check_file "$kubeconfig" ||
     return $?
 
-  [[ "$kubeconfig" == "$BL64_VAR_DEFAULT" ]] && kubeconfig=''
+  bl64_lib_var_is_default "$kubeconfig" && kubeconfig=''
 
   shift
   shift
@@ -12248,11 +12256,11 @@ function bl64_iam_user_add() {
   fi
 
   bl64_msg_show_lib_subtask "create local user account ($login)"
-  [[ "$home" == "$BL64_VAR_DEFAULT" ]] && home=''
-  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && group=''
-  [[ "$shell" == "$BL64_VAR_DEFAULT" ]] && shell=''
-  [[ "$gecos" == "$BL64_VAR_DEFAULT" ]] && gecos=''
-  [[ "$uid" == "$BL64_VAR_DEFAULT" ]] && uid=''
+  bl64_lib_var_is_default "$home" && home=''
+  bl64_lib_var_is_default "$group" && group=''
+  bl64_lib_var_is_default "$shell" && shell=''
+  bl64_lib_var_is_default "$gecos" && gecos=''
+  bl64_lib_var_is_default "$uid" && uid=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -12344,7 +12352,7 @@ function bl64_iam_group_add() {
   fi
 
   bl64_msg_show_lib_subtask "create local user group ($group_name)"
-  [[ "$group_id" == "$BL64_VAR_DEFAULT" ]] && group_id=''
+  bl64_lib_var_is_default "$group_id" && group_id=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -12785,7 +12793,7 @@ function bl64_iam_xdg_create() {
     return $?
 
   bl64_msg_show_lib_task "create user XDG directories (${home_path})"
-  [[ "$dir_mode" == "$BL64_VAR_DEFAULT" ]] && dir_mode='0750'
+  bl64_lib_var_is_default "$dir_mode" && dir_mode='0750'
   bl64_fs_dir_create "$dir_mode" "$dir_user" "$dir_group" \
     "$xdg_config" \
     "$xdg_local" \
@@ -12826,10 +12834,10 @@ function bl64_iam_user_modify() {
     return $?
 
   bl64_msg_show_lib_subtask "modify local user account ($login)"
-  [[ "$group" == "$BL64_VAR_DEFAULT" ]] && group=''
-  [[ "$shell" == "$BL64_VAR_DEFAULT" ]] && shell=''
-  [[ "$gecos" == "$BL64_VAR_DEFAULT" ]] && gecos=''
-  [[ "$uid" == "$BL64_VAR_DEFAULT" ]] && uid=''
+  bl64_lib_var_is_default "$group" && group=''
+  bl64_lib_var_is_default "$shell" && shell=''
+  bl64_lib_var_is_default "$gecos" && gecos=''
+  bl64_lib_var_is_default "$uid" && uid=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -12915,7 +12923,7 @@ function _bl64_k8s_set_command() {
   bl64_dbg_lib_show_function "$@"
   local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$kubectl_bin" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$kubectl_bin"; then
     bl64_dbg_lib_show_info 'no custom path provided. Using known locations to detect ansible'
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/kubectl' ]]; then
       kubectl_bin='/home/linuxbrew/.linuxbrew/bin'
@@ -13469,7 +13477,7 @@ function bl64_k8s_run_kubectl() {
   bl64_check_parameters_none "$#" 'missing kubectl command' ||
     return $?
 
-  if [[ "$kubeconfig" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$kubeconfig"; then
     kubeconfig=''
   else
     bl64_check_file "$kubeconfig" 'kubectl config file not found' ||
@@ -13648,7 +13656,7 @@ function _bl64_mdb_set_command() {
   bl64_dbg_lib_show_function "$@"
   local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$mdb_bin" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$mdb_bin"; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/mongosh' ]]; then
       mdb_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/mongosh' ]]; then
@@ -14930,7 +14938,7 @@ function _bl64_py_set_command() {
   bl64_dbg_lib_show_function "$@"
   local venv_path="$1"
 
-  if [[ "$venv_path" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$venv_path"; then
     # Select best match for default python3
     if [[ -x '/usr/bin/python3.13' ]]; then
       BL64_PY_VERSION_PYTHON3='3.13'
@@ -16444,7 +16452,7 @@ function _bl64_tf_set_command() {
   bl64_dbg_lib_show_function "$@"
   local terraform_bin="$1"
 
-  if [[ "$terraform_bin" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$terraform_bin"; then
     if [[ -x '/home/linuxbrew/.linuxbrew/bin/terraform' ]]; then
       terraform_bin='/home/linuxbrew/.linuxbrew/bin'
     elif [[ -x '/opt/homebrew/bin/terraform' ]]; then
@@ -17657,7 +17665,7 @@ function bl64_vcs_git_clone() {
   local branch="${3:-$BL64_VAR_DEFAULT}"
   local name="${4:-$BL64_VAR_DEFAULT}"
 
-  [[ "$branch" == "$BL64_VAR_DEFAULT" ]] && branch=''
+  bl64_lib_var_is_default "$branch" && branch=''
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_check_command "$BL64_VCS_CMD_GIT" ||
@@ -17668,7 +17676,7 @@ function bl64_vcs_git_clone() {
     bl64_bsh_run_pushd "$destination" ||
     return $?
 
-  if [[ "$name" == "$BL64_VAR_DEFAULT" ]]; then
+  if bl64_lib_var_is_default "$name"; then
     bl64_vcs_run_git \
       clone \
       --depth 1 \
