@@ -5,12 +5,18 @@
 #
 # Deprecation aliases
 #
-# * Aliases to deprecated functions 
+# * Aliases to deprecated functions
 # * Needed to maintain compatibility up to N-2 versions
 #
 
-function bl64_bsh_script_set_id() { bl64_msg_show_deprecated 'bl64_bsh_script_set_id' 'bl64_lib_script_set_id'; bl64_lib_script_set_id "$@"; }
-function bl64_bsh_script_set_identity() { bl64_msg_show_deprecated 'bl64_bsh_script_set_identity' 'bl64_lib_script_set_identity'; bl64_lib_script_set_identity "$@"; }
+function bl64_bsh_script_set_id() {
+  bl64_msg_show_deprecated 'bl64_bsh_script_set_id' 'bl64_lib_script_set_id'
+  bl64_lib_script_set_id "$@"
+}
+function bl64_bsh_script_set_identity() {
+  bl64_msg_show_deprecated 'bl64_bsh_script_set_identity' 'bl64_lib_script_set_identity'
+  bl64_lib_script_set_identity "$@"
+}
 
 #
 # Public functions
@@ -227,6 +233,8 @@ function bl64_bsh_env_store_create() {
   local group="${4:-$BL64_VAR_DEFAULT}"
   local mode='0750'
 
+  bl64_check_home || return $?
+
   bl64_lib_var_is_default "$mode" && mode='0750'
   bl64_fs_dir_create "$mode" "$user" "$group" \
     "${home}/${BL64_BSH_ENV_STORE}"
@@ -251,6 +259,7 @@ function bl64_bsh_env_store_is_present() {
   bl64_dbg_lib_show_function
   local home="${1:-$HOME}"
 
+  bl64_check_home || return $?
   [[ -d "${home}/${BL64_BSH_ENV_STORE}" ]]
 }
 
@@ -278,7 +287,8 @@ function bl64_bsh_env_store_publish() {
   local home="${3:-$HOME}"
   local target=''
 
-  bl64_check_parameter 'source_env' &&
+  bl64_check_home &&
+    bl64_check_parameter 'source_env' &&
     bl64_check_file "$source_env" &&
     bl64_check_directory "${home}/${BL64_BSH_ENV_STORE}" ||
     return $?

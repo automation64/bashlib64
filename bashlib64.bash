@@ -99,21 +99,21 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.16.0'
+  declare BL64_VERSION='20.16.1'
 
   #
   # Imported generic shell standard variables
   #
 
-  export HOME
-  export LANG
-  export LANGUAGE
-  export LC_ALL
-  export PATH
-  export PS1
-  export PS2
-  export TERM
-  export TMPDIR
+  export HOME="${HOME:-}"
+  export LANG="${LANG:-}"
+  export LANGUAGE="${LANGUAGE:-}"
+  export LC_ALL="${LC_ALL:-}"
+  export PATH="${PATH:-}"
+  export PS1="${PS1:-}"
+  export PS2="${PS2:-}"
+  export TERM="${TERM:-}"
+  export TMPDIR="${TMPDIR:-}"
 
   #
   # Common constants
@@ -978,7 +978,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_BSH_VERSION='3.5.0'
+  declare BL64_BSH_VERSION='3.5.1'
 
   declare BL64_BSH_MODULE='0'
 
@@ -6900,6 +6900,8 @@ function _bl64_bsh_set_version() {
 function _bl64_bsh_set_options() {
   bl64_dbg_lib_show_function
 
+  bl64_check_home || return $?
+
   # Default XDG paths. Paths may not exist
   # shellcheck disable=SC2034
   {
@@ -6917,12 +6919,18 @@ function _bl64_bsh_set_options() {
 #
 # Deprecation aliases
 #
-# * Aliases to deprecated functions 
+# * Aliases to deprecated functions
 # * Needed to maintain compatibility up to N-2 versions
 #
 
-function bl64_bsh_script_set_id() { bl64_msg_show_deprecated 'bl64_bsh_script_set_id' 'bl64_lib_script_set_id'; bl64_lib_script_set_id "$@"; }
-function bl64_bsh_script_set_identity() { bl64_msg_show_deprecated 'bl64_bsh_script_set_identity' 'bl64_lib_script_set_identity'; bl64_lib_script_set_identity "$@"; }
+function bl64_bsh_script_set_id() {
+  bl64_msg_show_deprecated 'bl64_bsh_script_set_id' 'bl64_lib_script_set_id'
+  bl64_lib_script_set_id "$@"
+}
+function bl64_bsh_script_set_identity() {
+  bl64_msg_show_deprecated 'bl64_bsh_script_set_identity' 'bl64_lib_script_set_identity'
+  bl64_lib_script_set_identity "$@"
+}
 
 #
 # Public functions
@@ -7139,6 +7147,8 @@ function bl64_bsh_env_store_create() {
   local group="${4:-$BL64_VAR_DEFAULT}"
   local mode='0750'
 
+  bl64_check_home || return $?
+
   bl64_lib_var_is_default "$mode" && mode='0750'
   bl64_fs_dir_create "$mode" "$user" "$group" \
     "${home}/${BL64_BSH_ENV_STORE}"
@@ -7163,6 +7173,7 @@ function bl64_bsh_env_store_is_present() {
   bl64_dbg_lib_show_function
   local home="${1:-$HOME}"
 
+  bl64_check_home || return $?
   [[ -d "${home}/${BL64_BSH_ENV_STORE}" ]]
 }
 
@@ -7190,7 +7201,8 @@ function bl64_bsh_env_store_publish() {
   local home="${3:-$HOME}"
   local target=''
 
-  bl64_check_parameter 'source_env' &&
+  bl64_check_home &&
+    bl64_check_parameter 'source_env' &&
     bl64_check_file "$source_env" &&
     bl64_check_directory "${home}/${BL64_BSH_ENV_STORE}" ||
     return $?
@@ -7466,6 +7478,7 @@ function bl64_bsh_xdg_create() {
     "${xdg_local}/share" \
     "${xdg_local}/state"
 }
+
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #######################################
