@@ -79,8 +79,11 @@ function _bl64_bsh_set_options() {
   bl64_dbg_lib_show_function
 
   # Default XDG paths. Paths may not exist
-  BL64_BSH_XDG_PATH_CONFIG="${HOME}/.config"
-  BL64_BSH_XDG_PATH_CACHE="${HOME}/.cache"
-  BL64_BSH_XDG_PATH_LOCAL="${HOME}/.local"
-  BL64_BSH_XDG_PATH_BIN="${BL64_BSH_XDG_PATH_LOCAL}/bin"
+  # shellcheck disable=SC2034
+  {
+    BL64_BSH_XDG_PATH_CONFIG="${HOME}/.config"
+    BL64_BSH_XDG_PATH_CACHE="${HOME}/.cache"
+    BL64_BSH_XDG_PATH_LOCAL="${HOME}/.local"
+    BL64_BSH_XDG_PATH_BIN="${BL64_BSH_XDG_PATH_LOCAL}/bin"
+  }
 }
