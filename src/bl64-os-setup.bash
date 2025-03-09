@@ -183,7 +183,7 @@ function _bl64_os_set_type() {
   bl64_dbg_lib_show_function
   BL64_OS_TYPE="$(uname -o)"
   case "$BL64_OS_TYPE" in
-  'Darwin') BL64_OS_TYPE="$BL64_OS_TYPE_DARWIN" ;;
+  'Darwin') BL64_OS_TYPE="$BL64_OS_TYPE_MACOS" ;;
   'GNU/Linux' | 'Linux') BL64_OS_TYPE="$BL64_OS_TYPE_LINUX" ;;
   *)
     bl64_msg_show_warning \
@@ -249,7 +249,7 @@ function _bl64_os_get_distro_from_uname() {
   local cmd_sw_vers='/usr/bin/sw_vers'
 
   case "$BL64_OS_TYPE" in
-  "$BL64_OS_TYPE_DARWIN")
+  "$BL64_OS_TYPE_MACOS")
     os_version="$("$cmd_sw_vers" -productVersion)" &&
       BL64_OS_DISTRO="$(_bl64_os_release_normalize "$os_version")" ||
       return $?

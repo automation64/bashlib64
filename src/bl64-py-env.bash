@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='3.2.1'
+  declare BL64_PY_VERSION='3.3.0'
 
   declare BL64_PY_MODULE='0'
 
@@ -12,7 +12,10 @@
   declare BL64_PY_CMD_PYTHON3="$BL64_VAR_UNAVAILABLE"
 
   # Full path to the python venv activated by bl64_py_setup
-  declare BL64_PY_VENV_PATH=''
+  declare BL64_PY_PATH_VENV=''
+
+  # Location of PIP installed commands, user-wide
+  declare BL64_PY_PATH_PIP_USR_BIN=''
 
   # Version info
   declare BL64_PY_VERSION_PYTHON3=''

@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [20.16.0]
+
+### Changed
+
+- os
+  - **breaking-change**: renamed BL64_OS_TYPE_DARWIN -> BL64_OS_TYPE_MACOS
+
+### Added
+
+- bsh
+  - XDG paths variables
+  - bl64_bsh_xdg_create
+- py:
+  - BL64_PY_PATH_PIP_USR_BIN
+  - Autodetect python version
+
+### Deprecated
+
+- iam
+  bl64_iam_xdg_create -> bl64_bsh_xdg_create
+
 ## [20.15.1]
 
 ### Added

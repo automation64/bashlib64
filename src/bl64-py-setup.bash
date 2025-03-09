@@ -83,76 +83,106 @@ function _bl64_py_set_command() {
   local venv_path="$1"
 
   if bl64_lib_var_is_default "$venv_path"; then
-    # Select best match for default python3
-    if [[ -x '/usr/bin/python3.13' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.13'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.12' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.12'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.11' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.11'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.10' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.10'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.9' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.9'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.8' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.8'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.7' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.7'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.6' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.6'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.5' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.5'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.4' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.4'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.3' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.3'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.2' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.2'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.1' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.1'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.0' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.0'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    else
-      if bl64_check_compatibility_mode; then
-        BL64_PY_CMD_PYTHON3='/usr/bin/python3'
-      else
-        bl64_check_alert_unsupported
-        return $?
-      fi
+    if [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_MACOS" ]]; then
+      _bl64_py_set_command_macos || return $?
+    elif [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_LINUX" ]]; then
+      _bl64_py_set_command_linux || return $?
     fi
-
-    # Ignore VENV. Use detected python
+    bl64_dbg_lib_show_comments 'Ignore VENV. Use detected python'
     export VIRTUAL_ENV=''
-
   else
     bl64_dbg_lib_show_comments 'use python3 from virtual environment'
     BL64_PY_CMD_PYTHON3="${venv_path}/bin/python3"
 
-    # Emulate bin/activate
+    bl64_dbg_lib_show_comments 'Emulate bin/activate'
     export VIRTUAL_ENV="$venv_path"
     export PATH="${VIRTUAL_ENV}:${PATH}"
     unset PYTHONHOME
 
-    # Let other basthlib64 functions know about this venv
-    BL64_PY_VENV_PATH="$venv_path"
+    bl64_dbg_lib_show_comments 'Let other basthlib64 functions know about this venv'
+    BL64_PY_PATH_VENV="$venv_path"
   fi
+  _bl64_py_set_command_version || return $?
 
-  bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3' 'BL64_PY_VENV_PATH' 'VIRTUAL_ENV' 'PATH'
+  bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3' 'BL64_PY_VERSION_PYTHON3' 'BL64_PY_PATH_VENV' 'VIRTUAL_ENV' 'PATH'
   return 0
+}
+
+function _bl64_py_set_command_macos() {
+  bl64_dbg_lib_show_function
+  if [[ -x '/usr/bin/python3' ]]; then
+    BL64_PY_CMD_PYTHON3='/usr/bin/python3'
+  else
+    bl64_check_alert_unsupported
+    return $?
+  fi
+}
+
+function _bl64_py_set_command_version() {
+  bl64_dbg_lib_show_function
+  if [[ -z "$BL64_PY_VERSION_PYTHON3" ]]; then
+    bl64_dbg_lib_show_comments 'Detect python version'
+    BL64_PY_VERSION_PYTHON3="$("${BL64_PY_CMD_PYTHON3}" -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')"
+  fi
+  if [[ -z "$BL64_PY_VERSION_PYTHON3" ]]; then
+    bl64_msg_show_error "Unable to determine current Python version (${BL64_PY_CMD_PYTHON3})"
+    return $BL64_LIB_ERROR_TASK_FAILED
+  fi
+}
+
+function _bl64_py_set_command_linux() {
+  bl64_dbg_lib_show_function
+  # Select best match for default python3
+  if [[ -x '/usr/bin/python3.13' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.13'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.12' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.12'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.11' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.11'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.10' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.10'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.9' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.9'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.8' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.8'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.7' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.7'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.6' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.6'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.5' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.5'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.4' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.4'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.3' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.3'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.2' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.2'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.1' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.1'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.0' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.0'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  else
+    if bl64_check_compatibility_mode; then
+      BL64_PY_CMD_PYTHON3='/usr/bin/python3'
+    else
+      bl64_check_alert_unsupported
+      return $?
+    fi
+  fi
 }
 
 #######################################
@@ -178,6 +208,13 @@ function _bl64_py_set_options() {
     BL64_PY_SET_PIP_QUIET='--quiet' &&
     BL64_PY_SET_PIP_SITE='--system-site-packages' &&
     BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
+
+  # shellcheck disable=SC2034
+  if [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_MACOS" ]]; then
+    BL64_PY_PATH_PIP_USR_BIN="${HOME}/Library/Python/${BL64_PY_VERSION_PYTHON3}/bin"
+  else
+    BL64_PY_PATH_PIP_USR_BIN="${HOME}/.local/bin"
+  fi
 
   return 0
 }
