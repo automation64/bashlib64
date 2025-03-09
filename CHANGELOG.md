@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [20.16.0]
+
+### Added
+
+- bsh
+  - XDG paths variables
+  - bl64_bsh_xdg_create:
+
+### Deprecated
+
+- iam
+  bl64_iam_xdg_create -> bl64_bsh_xdg_create
+
 ## [20.15.1]
 
 ### Added

@@ -2,6 +2,19 @@
 # BashLib64 / Module / Functions / Manage OS identity and access service
 #######################################
 
+#
+# Deprecation aliases
+#
+# * Aliases to deprecated functions 
+# * Needed to maintain compatibility up to N-2 versions
+#
+
+function bl64_iam_xdg_create() { bl64_msg_show_deprecated 'bl64_iam_xdg_create' 'bl64_bsh_xdg_create'; bl64_bsh_xdg_create "$@"; }
+
+#
+# Public functions
+#
+
 #######################################
 # Create local OS user
 #
@@ -547,46 +560,6 @@ function bl64_iam_run_sysadminctl() {
     $verbosity \
     "$@"
   bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Create XDG directories in user's home
-#
-# Arguments:
-#   $1: full path to the user's home directory
-#   $2: permissions. Default: 0750
-#   $3: user name. Default: current
-#   $4: group name. Default: current
-# Outputs:
-#   STDOUT: progress
-#   STDERR: execution errors
-# Returns:
-#   0: operation completed ok
-#   >0: operation failed
-#######################################
-function bl64_iam_xdg_create() {
-  bl64_dbg_lib_show_function "$@"
-  local home_path="${1:-}"
-  local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
-  local dir_user="${3:-${BL64_VAR_DEFAULT}}"
-  local dir_group="${4:-${BL64_VAR_DEFAULT}}"
-  local xdg_config="${home_path}/.config"
-  local xdg_cache="${home_path}/.cache"
-  local xdg_local="${home_path}/.local"
-
-  bl64_check_parameter 'home_path' ||
-    return $?
-
-  bl64_msg_show_lib_task "create user XDG directories (${home_path})"
-  bl64_lib_var_is_default "$dir_mode" && dir_mode='0750'
-  bl64_fs_dir_create "$dir_mode" "$dir_user" "$dir_group" \
-    "$xdg_config" \
-    "$xdg_local" \
-    "$xdg_cache" \
-    "${xdg_local}/bin" \
-    "${xdg_local}/lib" \
-    "${xdg_local}/share" \
-    "${xdg_local}/state"
 }
 
 #######################################
