@@ -78,6 +78,8 @@ function _bl64_bsh_set_version() {
 function _bl64_bsh_set_options() {
   bl64_dbg_lib_show_function
 
+  bl64_check_home || return $?
+
   # Default XDG paths. Paths may not exist
   # shellcheck disable=SC2034
   {

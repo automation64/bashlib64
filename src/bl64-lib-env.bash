@@ -4,21 +4,21 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.16.0'
+  declare BL64_VERSION='20.16.1'
 
   #
   # Imported generic shell standard variables
   #
 
-  export HOME
-  export LANG
-  export LANGUAGE
-  export LC_ALL
-  export PATH
-  export PS1
-  export PS2
-  export TERM
-  export TMPDIR
+  export HOME="${HOME:-}"
+  export LANG="${LANG:-}"
+  export LANGUAGE="${LANGUAGE:-}"
+  export LC_ALL="${LC_ALL:-}"
+  export PATH="${PATH:-}"
+  export PS1="${PS1:-}"
+  export PS2="${PS2:-}"
+  export TERM="${TERM:-}"
+  export TMPDIR="${TMPDIR:-}"
 
   #
   # Common constants
