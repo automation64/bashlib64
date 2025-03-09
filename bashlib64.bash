@@ -15115,6 +15115,7 @@ function _bl64_py_set_options() {
     BL64_PY_SET_PIP_SITE='--system-site-packages' &&
     BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
 
+  # shellcheck disable=SC2034
   if [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_MACOS" ]]; then
     BL64_PY_PATH_PIP_USR_BIN="${HOME}/Library/Python/${BL64_PY_VERSION_PYTHON3}/bin"
   else
