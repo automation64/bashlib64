@@ -65,8 +65,8 @@ function _bl64_ans_set_command() {
 
   if bl64_lib_var_is_default "$ansible_bin"; then
     bl64_dbg_lib_show_info 'no custom path provided. Using known locations to detect ansible'
-    if [[ -n "$BL64_PY_VENV_PATH" && -x "${BL64_PY_VENV_PATH}/bin/ansible" ]]; then
-      ansible_bin="${BL64_PY_VENV_PATH}/bin"
+    if [[ -n "$BL64_PY_PATH_VENV" && -x "${BL64_PY_PATH_VENV}/bin/ansible" ]]; then
+      ansible_bin="${BL64_PY_PATH_VENV}/bin"
     elif [[ -n "$HOME" && -x "${HOME}/.local/bin/ansible" ]]; then
       ansible_bin="${HOME}/.local/bin"
     elif [[ -x '/usr/local/bin/ansible' ]]; then
