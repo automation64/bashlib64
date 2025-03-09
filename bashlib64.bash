@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.15.1'
+  declare BL64_VERSION='20.16.0'
 
   #
   # Imported generic shell standard variables
@@ -852,7 +852,7 @@ function bl64_lib_script_version_set() {
   # OS type tags
   #
   declare BL64_OS_TYPE_LINUX='LINUX'
-  declare BL64_OS_TYPE_DARWIN='DARWIN'
+  declare BL64_OS_TYPE_MACOS='MACOS'
   declare BL64_OS_TYPE_UNK='UNKNOWN'
 
   #
@@ -978,12 +978,17 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_BSH_VERSION='3.4.0'
+  declare BL64_BSH_VERSION='3.5.0'
 
   declare BL64_BSH_MODULE='0'
 
   declare BL64_BSH_VERSION_BASH=''
   declare BL64_BSH_ENV_STORE='.env.d'
+
+  declare BL64_BSH_XDG_PATH_BIN=''
+  declare BL64_BSH_XDG_PATH_CONFIG=''
+  declare BL64_BSH_XDG_PATH_CACHE=''
+  declare BL64_BSH_XDG_PATH_LOCAL=''
 }
 
 #######################################
@@ -1185,7 +1190,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_IAM_VERSION='5.2.0'
+  declare BL64_IAM_VERSION='5.3.0'
 
   declare BL64_IAM_MODULE='0'
 
@@ -1322,7 +1327,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='3.2.1'
+  declare BL64_PY_VERSION='3.3.0'
 
   declare BL64_PY_MODULE='0'
 
@@ -1330,7 +1335,10 @@ function bl64_lib_script_version_set() {
   declare BL64_PY_CMD_PYTHON3="$BL64_VAR_UNAVAILABLE"
 
   # Full path to the python venv activated by bl64_py_setup
-  declare BL64_PY_VENV_PATH=''
+  declare BL64_PY_PATH_VENV=''
+
+  # Location of PIP installed commands, user-wide
+  declare BL64_PY_PATH_PIP_USR_BIN=''
 
   # Version info
   declare BL64_PY_VERSION_PYTHON3=''
@@ -4485,7 +4493,7 @@ function _bl64_os_set_type() {
   bl64_dbg_lib_show_function
   BL64_OS_TYPE="$(uname -o)"
   case "$BL64_OS_TYPE" in
-  'Darwin') BL64_OS_TYPE="$BL64_OS_TYPE_DARWIN" ;;
+  'Darwin') BL64_OS_TYPE="$BL64_OS_TYPE_MACOS" ;;
   'GNU/Linux' | 'Linux') BL64_OS_TYPE="$BL64_OS_TYPE_LINUX" ;;
   *)
     bl64_msg_show_warning \
@@ -4551,7 +4559,7 @@ function _bl64_os_get_distro_from_uname() {
   local cmd_sw_vers='/usr/bin/sw_vers'
 
   case "$BL64_OS_TYPE" in
-  "$BL64_OS_TYPE_DARWIN")
+  "$BL64_OS_TYPE_MACOS")
     os_version="$("$cmd_sw_vers" -productVersion)" &&
       BL64_OS_DISTRO="$(_bl64_os_release_normalize "$os_version")" ||
       return $?
@@ -5311,8 +5319,8 @@ function _bl64_ans_set_command() {
 
   if bl64_lib_var_is_default "$ansible_bin"; then
     bl64_dbg_lib_show_info 'no custom path provided. Using known locations to detect ansible'
-    if [[ -n "$BL64_PY_VENV_PATH" && -x "${BL64_PY_VENV_PATH}/bin/ansible" ]]; then
-      ansible_bin="${BL64_PY_VENV_PATH}/bin"
+    if [[ -n "$BL64_PY_PATH_VENV" && -x "${BL64_PY_PATH_VENV}/bin/ansible" ]]; then
+      ansible_bin="${BL64_PY_PATH_VENV}/bin"
     elif [[ -n "$HOME" && -x "${HOME}/.local/bin/ansible" ]]; then
       ansible_bin="${HOME}/.local/bin"
     elif [[ -x '/usr/local/bin/ansible' ]]; then
@@ -6834,13 +6842,14 @@ function bl64_bsh_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_XSV_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    _bl64_bsh_set_options &&
     _bl64_bsh_set_version &&
     BL64_BSH_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'bsh'
@@ -6875,6 +6884,27 @@ function _bl64_bsh_set_version() {
   bl64_dbg_lib_show_vars 'BL64_BSH_VERSION_BASH'
 
   return 0
+}
+
+#######################################
+# Create command sets for common options
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_bsh_set_options() {
+  bl64_dbg_lib_show_function
+
+  # Default XDG paths. Paths may not exist
+  BL64_BSH_XDG_PATH_CONFIG="${HOME}/.config"
+  BL64_BSH_XDG_PATH_CACHE="${HOME}/.cache"
+  BL64_BSH_XDG_PATH_LOCAL="${HOME}/.local"
+  BL64_BSH_XDG_PATH_BIN="${BL64_BSH_XDG_PATH_LOCAL}/bin"
 }
 
 #######################################
@@ -7394,6 +7424,45 @@ function bl64_bsh_command_locate() {
   bl64_check_alert_resource_not_found "$command"
 }
 
+#######################################
+# Create XDG directories in user's home
+#
+# Arguments:
+#   $1: full path to the user's home directory
+#   $2: permissions. Default: 0750
+#   $3: user name. Default: current
+#   $4: group name. Default: current
+# Outputs:
+#   STDOUT: progress
+#   STDERR: execution errors
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_bsh_xdg_create() {
+  bl64_dbg_lib_show_function "$@"
+  local home_path="${1:-}"
+  local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
+  local dir_user="${3:-${BL64_VAR_DEFAULT}}"
+  local dir_group="${4:-${BL64_VAR_DEFAULT}}"
+  local xdg_config="${home_path}/.config"
+  local xdg_cache="${home_path}/.cache"
+  local xdg_local="${home_path}/.local"
+
+  bl64_check_parameter 'home_path' ||
+    return $?
+
+  bl64_msg_show_lib_task "create user XDG directories (${home_path})"
+  bl64_lib_var_is_default "$dir_mode" && dir_mode='0750'
+  bl64_fs_dir_create "$dir_mode" "$dir_user" "$dir_group" \
+    "$xdg_config" \
+    "$xdg_local" \
+    "$xdg_cache" \
+    "${xdg_local}/bin" \
+    "${xdg_local}/lib" \
+    "${xdg_local}/share" \
+    "${xdg_local}/state"
+}
 #######################################
 # BashLib64 / Module / Setup / Interact with container engines
 #######################################
@@ -12222,6 +12291,19 @@ function _bl64_iam_set_options() {
 # BashLib64 / Module / Functions / Manage OS identity and access service
 #######################################
 
+#
+# Deprecation aliases
+#
+# * Aliases to deprecated functions 
+# * Needed to maintain compatibility up to N-2 versions
+#
+
+function bl64_iam_xdg_create() { bl64_msg_show_deprecated 'bl64_iam_xdg_create' 'bl64_bsh_xdg_create'; bl64_bsh_xdg_create "$@"; }
+
+#
+# Public functions
+#
+
 #######################################
 # Create local OS user
 #
@@ -12767,46 +12849,6 @@ function bl64_iam_run_sysadminctl() {
     $verbosity \
     "$@"
   bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Create XDG directories in user's home
-#
-# Arguments:
-#   $1: full path to the user's home directory
-#   $2: permissions. Default: 0750
-#   $3: user name. Default: current
-#   $4: group name. Default: current
-# Outputs:
-#   STDOUT: progress
-#   STDERR: execution errors
-# Returns:
-#   0: operation completed ok
-#   >0: operation failed
-#######################################
-function bl64_iam_xdg_create() {
-  bl64_dbg_lib_show_function "$@"
-  local home_path="${1:-}"
-  local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
-  local dir_user="${3:-${BL64_VAR_DEFAULT}}"
-  local dir_group="${4:-${BL64_VAR_DEFAULT}}"
-  local xdg_config="${home_path}/.config"
-  local xdg_cache="${home_path}/.cache"
-  local xdg_local="${home_path}/.local"
-
-  bl64_check_parameter 'home_path' ||
-    return $?
-
-  bl64_msg_show_lib_task "create user XDG directories (${home_path})"
-  bl64_lib_var_is_default "$dir_mode" && dir_mode='0750'
-  bl64_fs_dir_create "$dir_mode" "$dir_user" "$dir_group" \
-    "$xdg_config" \
-    "$xdg_local" \
-    "$xdg_cache" \
-    "${xdg_local}/bin" \
-    "${xdg_local}/lib" \
-    "${xdg_local}/share" \
-    "${xdg_local}/state"
 }
 
 #######################################
@@ -14944,76 +14986,106 @@ function _bl64_py_set_command() {
   local venv_path="$1"
 
   if bl64_lib_var_is_default "$venv_path"; then
-    # Select best match for default python3
-    if [[ -x '/usr/bin/python3.13' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.13'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.12' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.12'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.11' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.11'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.10' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.10'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.9' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.9'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.8' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.8'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.7' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.7'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.6' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.6'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.5' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.5'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.4' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.4'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.3' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.3'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.2' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.2'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.1' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.1'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    elif [[ -x '/usr/bin/python3.0' ]]; then
-      BL64_PY_VERSION_PYTHON3='3.0'
-      BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
-    else
-      if bl64_check_compatibility_mode; then
-        BL64_PY_CMD_PYTHON3='/usr/bin/python3'
-      else
-        bl64_check_alert_unsupported
-        return $?
-      fi
+    if [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_MACOS" ]]; then
+      _bl64_py_set_command_macos || return $?
+    elif [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_LINUX" ]]; then
+      _bl64_py_set_command_linux || return $?
     fi
-
-    # Ignore VENV. Use detected python
+    bl64_dbg_lib_show_comments 'Ignore VENV. Use detected python'
     export VIRTUAL_ENV=''
-
   else
     bl64_dbg_lib_show_comments 'use python3 from virtual environment'
     BL64_PY_CMD_PYTHON3="${venv_path}/bin/python3"
 
-    # Emulate bin/activate
+    bl64_dbg_lib_show_comments 'Emulate bin/activate'
     export VIRTUAL_ENV="$venv_path"
     export PATH="${VIRTUAL_ENV}:${PATH}"
     unset PYTHONHOME
 
-    # Let other basthlib64 functions know about this venv
-    BL64_PY_VENV_PATH="$venv_path"
+    bl64_dbg_lib_show_comments 'Let other basthlib64 functions know about this venv'
+    BL64_PY_PATH_VENV="$venv_path"
   fi
+  _bl64_py_set_command_version || return $?
 
-  bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3' 'BL64_PY_VENV_PATH' 'VIRTUAL_ENV' 'PATH'
+  bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3' 'BL64_PY_VERSION_PYTHON3' 'BL64_PY_PATH_VENV' 'VIRTUAL_ENV' 'PATH'
   return 0
+}
+
+function _bl64_py_set_command_macos() {
+  bl64_dbg_lib_show_function
+  if [[ -x '/usr/bin/python3' ]]; then
+    BL64_PY_CMD_PYTHON3='/usr/bin/python3'
+  else
+    bl64_check_alert_unsupported
+    return $?
+  fi
+}
+
+function _bl64_py_set_command_version() {
+  bl64_dbg_lib_show_function
+  if [[ -z "$BL64_PY_VERSION_PYTHON3" ]]; then
+    bl64_dbg_lib_show_comments 'Detect python version'
+    BL64_PY_VERSION_PYTHON3="$("${BL64_PY_CMD_PYTHON3}" -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')"
+  fi
+  if [[ -z "$BL64_PY_VERSION_PYTHON3" ]]; then
+    bl64_msg_show_error "Unable to determine current Python version (${BL64_PY_CMD_PYTHON3})"
+    return $BL64_LIB_ERROR_TASK_FAILED
+  fi
+}
+
+function _bl64_py_set_command_linux() {
+  bl64_dbg_lib_show_function
+  # Select best match for default python3
+  if [[ -x '/usr/bin/python3.13' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.13'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.12' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.12'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.11' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.11'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.10' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.10'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.9' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.9'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.8' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.8'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.7' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.7'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.6' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.6'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.5' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.5'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.4' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.4'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.3' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.3'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.2' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.2'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.1' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.1'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  elif [[ -x '/usr/bin/python3.0' ]]; then
+    BL64_PY_VERSION_PYTHON3='3.0'
+    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+  else
+    if bl64_check_compatibility_mode; then
+      BL64_PY_CMD_PYTHON3='/usr/bin/python3'
+    else
+      bl64_check_alert_unsupported
+      return $?
+    fi
+  fi
 }
 
 #######################################
@@ -15039,6 +15111,12 @@ function _bl64_py_set_options() {
     BL64_PY_SET_PIP_QUIET='--quiet' &&
     BL64_PY_SET_PIP_SITE='--system-site-packages' &&
     BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
+
+  if [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_MACOS" ]]; then
+    BL64_PY_PATH_PIP_USR_BIN="${HOME}/Library/Python/${BL64_PY_VERSION_PYTHON3}/bin"
+  else
+    BL64_PY_PATH_PIP_USR_BIN="${HOME}/.local/bin"
+  fi
 
   return 0
 }
