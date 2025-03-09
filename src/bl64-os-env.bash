@@ -72,7 +72,7 @@
   # OS type tags
   #
   declare BL64_OS_TYPE_LINUX='LINUX'
-  declare BL64_OS_TYPE_DARWIN='DARWIN'
+  declare BL64_OS_TYPE_MACOS='MACOS'
   declare BL64_OS_TYPE_UNK='UNKNOWN'
 
   #
