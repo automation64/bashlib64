@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.16.1'
+  declare BL64_VERSION='20.16.2'
 
   #
   # Imported generic shell standard variables
@@ -978,7 +978,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_BSH_VERSION='3.5.1'
+  declare BL64_BSH_VERSION='3.5.2'
 
   declare BL64_BSH_MODULE='0'
 
@@ -7436,7 +7436,7 @@ function bl64_bsh_command_locate() {
       return 0
     fi
   done
-  bl64_check_alert_resource_not_found "$command"
+  return $BL64_LIB_ERROR_APP_MISSING
 }
 
 #######################################
