@@ -522,7 +522,7 @@ function bl64_bsh_command_locate() {
       return 0
     fi
   done
-  bl64_check_alert_resource_not_found "$command"
+  return $BL64_LIB_ERROR_APP_MISSING
 }
 
 #######################################
