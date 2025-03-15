@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [20.17.0]
+
+### Changed
+
+- All
+  - *_run_*: disable progress display if CICD is on
+
+### Fixed
+
+- txt
+  - bl64_txt_line_replace_sed: typo
+
 ## [20.16.2]
 
 ### Changed
