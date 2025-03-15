@@ -8,6 +8,7 @@ concurrency:
 
 env:
   DEV_CICD_DEBUG: ""
+  BL64_LIB_CICD: "YES"
   DEV_LIB_GITHUB_BIN: "gh"
 
 on:

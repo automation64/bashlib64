@@ -4,6 +4,7 @@ name: "Test / TestManSH / Bash OS"
 
 env:
   DEV_CICD_DEBUG: ""
+  BL64_LIB_CICD: "YES"
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.ref }}"

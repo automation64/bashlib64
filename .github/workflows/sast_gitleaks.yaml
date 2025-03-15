@@ -1,6 +1,11 @@
 ---
-# Template: 1.0.0
+# Template: 1.1.0
 name: "SAST / GitLeaks"
+
+env:
+  DEV_CICD_DEBUG: ""
+  BL64_LIB_CICD: "YES"
+  DEV_TEST_BASH_RUNNER_ENVIRONMENT: "ON"
 
 on:
   pull_request:
@@ -11,7 +16,7 @@ on:
       - "feature/**"
 
 jobs:
-  sast-GitLeaks:
+  sast-gitleaks:
     runs-on: "ubuntu-latest"
     steps:
 
