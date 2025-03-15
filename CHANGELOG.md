@@ -9,8 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- All
-  - *_run_*: disable progress display if CICD is on
+- arc
+  - bl64_arc_run_unzip, bl64_arc_run_tar: disable progress display if CICD is on
+- aws
+  - bl64_aws_run_aws: disable progress display if CICD is on
+- rxtx
+  - bl64_rxtx_run_curl: disable progress display if CICD is on
 
 ### Fixed
 
