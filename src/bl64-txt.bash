@@ -106,7 +106,7 @@ function bl64_txt_line_replace_sed() {
   [[ "$source" == "$BL64_TXT_FLAG_STDIN" ]] && source=''
 
   # shellcheck disable=SC2086
-  bl64_txt_run_sed -i "$BL64_LIB_SUFFIX_BACKUP" "$sed_expression" $source
+  bl64_txt_run_sed -i"$BL64_LIB_SUFFIX_BACKUP" "$sed_expression" $source
   exit_status=$?
   bl64_fs_path_remove "${source}${BL64_LIB_SUFFIX_BACKUP}"
   return $exit_status

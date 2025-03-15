@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.16.2'
+  declare BL64_VERSION='20.17.0'
 
   #
   # Imported generic shell standard variables
@@ -916,7 +916,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ARC_VERSION='3.3.2'
+  declare BL64_ARC_VERSION='3.4.0'
 
   declare BL64_ARC_MODULE='0'
 
@@ -934,7 +934,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_AWS_VERSION='3.1.1'
+  declare BL64_AWS_VERSION='3.2.0'
 
   declare BL64_AWS_MODULE='0'
 
@@ -1411,7 +1411,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_RXTX_VERSION='2.4.3'
+  declare BL64_RXTX_VERSION='2.5.0'
 
   declare BL64_RXTX_MODULE='0'
 
@@ -1492,7 +1492,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TXT_VERSION='2.4.0'
+  declare BL64_TXT_VERSION='2.4.1'
 
   declare BL64_TXT_MODULE='0'
 
@@ -5950,7 +5950,7 @@ function bl64_arc_run_unzip() {
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity=' '
+  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
 
   bl64_arc_blank_unzip
 
@@ -6005,7 +6005,7 @@ function bl64_arc_run_tar() {
     bl64_check_command "$BL64_ARC_CMD_TAR" ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && debug="$BL64_ARC_SET_TAR_VERBOSE"
+  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && debug="$BL64_ARC_SET_TAR_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -6568,7 +6568,7 @@ function bl64_aws_run_aws() {
     bl64_check_module 'BL64_AWS_MODULE' ||
     return $?
   
-  bl64_msg_lib_verbose_is_enabled && verbosity=' '
+  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_AWS_SET_DEBUG"
 
   bl64_aws_blank_aws &&
@@ -16344,7 +16344,7 @@ function bl64_rxtx_run_curl() {
     bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
 
-  bl64_msg_lib_verbose_is_enabled && debug=''
+  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && debug=''
   bl64_dbg_lib_command_is_enabled && debug="$BL64_RXTX_SET_CURL_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -17196,7 +17196,7 @@ function bl64_txt_line_replace_sed() {
   [[ "$source" == "$BL64_TXT_FLAG_STDIN" ]] && source=''
 
   # shellcheck disable=SC2086
-  bl64_txt_run_sed -i "$BL64_LIB_SUFFIX_BACKUP" "$sed_expression" $source
+  bl64_txt_run_sed -i"$BL64_LIB_SUFFIX_BACKUP" "$sed_expression" $source
   exit_status=$?
   bl64_fs_path_remove "${source}${BL64_LIB_SUFFIX_BACKUP}"
   return $exit_status
