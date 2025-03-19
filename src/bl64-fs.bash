@@ -1390,7 +1390,12 @@ function bl64_fs_symlink_create() {
     fi
   fi
   bl64_msg_show_lib_subtask "create symbolic link (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
-  bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination"
+  bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination" ||
+    return $?
+  if [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_MACOS" ]]; then
+    bl64_dbg_lib_show_comments 'emulating Linux behaviour for symbolic link permissions'
+    bl64_fs_run_chmod "$BL64_FS_SET_CHMOD_SYMLINK" '0777' "$destination"
+  fi
 }
 
 #######################################
