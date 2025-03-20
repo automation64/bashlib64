@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.18.1'
+  declare BL64_VERSION='20.18.2'
 
   #
   # Imported generic shell standard variables
@@ -1067,7 +1067,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.0.0'
+  declare BL64_FS_VERSION='6.0.1'
 
   declare BL64_FS_MODULE='0'
 
@@ -9775,7 +9775,7 @@ function _bl64_fs_set_options() {
   ${BL64_OS_ALP}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='-R'
     BL64_FS_SET_CHMOD_VERBOSE='-v'
-    BL64_FS_SET_CHMOD_SYMLINK='h'
+    BL64_FS_SET_CHMOD_SYMLINK='-h'
     BL64_FS_SET_CHOWN_RECURSIVE='-R'
     BL64_FS_SET_CHOWN_VERBOSE='-v'
     BL64_FS_SET_CP_FORCE='-f'
@@ -9805,7 +9805,7 @@ function _bl64_fs_set_options() {
   ${BL64_OS_MCOS}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='-R'
     BL64_FS_SET_CHMOD_VERBOSE='-v'
-    BL64_FS_SET_CHMOD_SYMLINK='h'
+    BL64_FS_SET_CHMOD_SYMLINK='-h'
     BL64_FS_SET_CHOWN_RECURSIVE='-R'
     BL64_FS_SET_CHOWN_VERBOSE='-v'
     BL64_FS_SET_CP_FORCE='-f'
