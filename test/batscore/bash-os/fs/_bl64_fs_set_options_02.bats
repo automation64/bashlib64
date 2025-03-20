@@ -3,6 +3,7 @@
 
     assert_not_equal "$BL64_FS_SET_CHMOD_RECURSIVE" ''
     assert_not_equal "$BL64_FS_SET_CHMOD_VERBOSE" ''
+    assert_not_equal "$BL64_FS_SET_CHMOD_SYMLINK" ''
     assert_not_equal "$BL64_FS_SET_CHOWN_RECURSIVE" ''
     assert_not_equal "$BL64_FS_SET_CHOWN_VERBOSE" ''
     assert_not_equal "$BL64_FS_SET_CP_FORCE" ''
@@ -17,12 +18,15 @@
     assert_not_equal "$BL64_FS_SET_LN_FORCE" ''
     assert_not_equal "$BL64_FS_SET_LN_SYMBOLIC" ''
     assert_not_equal "$BL64_FS_SET_LN_VERBOSE" ''
+    assert_not_equal "$BL64_FS_SET_LS_NOCOLOR" ''
     assert_not_equal "$BL64_FS_SET_MKDIR_PARENTS" ''
     assert_not_equal "$BL64_FS_SET_MKDIR_VERBOSE" ''
+    assert_not_equal "$BL64_FS_SET_MKTEMP_DIRECTORY" ''
+    assert_not_equal "$BL64_FS_SET_MKTEMP_QUIET" ''
+    assert_not_equal "$BL64_FS_SET_MKTEMP_TMPDIR" ''
     assert_not_equal "$BL64_FS_SET_MV_FORCE" ''
     assert_not_equal "$BL64_FS_SET_MV_VERBOSE" ''
     assert_not_equal "$BL64_FS_SET_RM_FORCE" ''
     assert_not_equal "$BL64_FS_SET_RM_RECURSIVE" ''
     assert_not_equal "$BL64_FS_SET_RM_VERBOSE" ''
-
 }
