@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.17.0'
+  declare BL64_VERSION='20.18.1'
 
   #
   # Imported generic shell standard variables
