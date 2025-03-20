@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [20.18.0]
 
+### Added
+
+- txt
+  - bl64_txt_run_tail
+
 ### Changed
 
 - fs
