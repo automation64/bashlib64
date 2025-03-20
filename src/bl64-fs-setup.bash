@@ -140,6 +140,7 @@ function _bl64_fs_set_options() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
     BL64_FS_SET_CHMOD_VERBOSE='--verbose'
+    BL64_FS_SET_CHMOD_SYMLINK='-h'
     BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
     BL64_FS_SET_CHOWN_VERBOSE='--verbose'
     BL64_FS_SET_CP_FORCE='--force'
@@ -169,6 +170,7 @@ function _bl64_fs_set_options() {
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
     BL64_FS_SET_CHMOD_VERBOSE='--verbose'
+    BL64_FS_SET_CHMOD_SYMLINK='-h'
     BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
     BL64_FS_SET_CHOWN_VERBOSE='--verbose'
     BL64_FS_SET_CP_FORCE='--force'
@@ -198,6 +200,7 @@ function _bl64_fs_set_options() {
   ${BL64_OS_SLES}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
     BL64_FS_SET_CHMOD_VERBOSE='--verbose'
+    BL64_FS_SET_CHMOD_SYMLINK='-h'
     BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
     BL64_FS_SET_CHOWN_VERBOSE='--verbose'
     BL64_FS_SET_CP_FORCE='--force'
@@ -227,6 +230,7 @@ function _bl64_fs_set_options() {
   ${BL64_OS_ALP}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='-R'
     BL64_FS_SET_CHMOD_VERBOSE='-v'
+    BL64_FS_SET_CHMODSYMLINKE='h'
     BL64_FS_SET_CHOWN_RECURSIVE='-R'
     BL64_FS_SET_CHOWN_VERBOSE='-v'
     BL64_FS_SET_CP_FORCE='-f'
@@ -256,6 +260,7 @@ function _bl64_fs_set_options() {
   ${BL64_OS_MCOS}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='-R'
     BL64_FS_SET_CHMOD_VERBOSE='-v'
+    BL64_FS_SET_CHMODSYMLINKE='h'
     BL64_FS_SET_CHOWN_RECURSIVE='-R'
     BL64_FS_SET_CHOWN_VERBOSE='-v'
     BL64_FS_SET_CP_FORCE='-f'

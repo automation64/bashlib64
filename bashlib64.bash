@@ -1067,7 +1067,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='5.9.1'
+  declare BL64_FS_VERSION='6.0.0'
 
   declare BL64_FS_MODULE='0'
 
@@ -1492,7 +1492,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TXT_VERSION='2.4.1'
+  declare BL64_TXT_VERSION='2.5.0'
 
   declare BL64_TXT_MODULE='0'
 
@@ -1505,20 +1505,25 @@ function bl64_lib_script_version_set() {
   declare BL64_TXT_CMD_GREP="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_SED="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_SORT="$BL64_VAR_UNAVAILABLE"
+  declare BL64_TXT_CMD_TAIL="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_TR="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_UNIQ="$BL64_VAR_UNAVAILABLE"
 
-  declare BL64_TXT_SET_AWK_POSIX=''
+  declare BL64_TXT_SET_AWK_POSIX="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_AWS_FS="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_GREP_ERE="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_GREP_INVERT="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_GREP_LINE="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_GREP_NO_CASE="$BL64_VAR_UNAVAILABLE"
+  declare BL64_TXT_SET_GREP_ONLY_MATCHING="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_GREP_QUIET="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_GREP_SHOW_FILE_ONLY="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_GREP_STDIN="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_GREP_STRING="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_SET_SED_EXPRESSION="$BL64_VAR_UNAVAILABLE"
+  declare BL64_TXT_SET_SED_INLINE="$BL64_VAR_UNAVAILABLE"
+  declare BL64_TXT_SET_SORT_NATURAL="$BL64_VAR_UNAVAILABLE"
+  declare BL64_TXT_SET_TAIL_LINES="$BL64_VAR_UNAVAILABLE"
 
   declare BL64_TXT_FLAG_STDIN='STDIN'
 }
@@ -1542,7 +1547,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VCS_VERSION='2.5.2'
+  declare BL64_VCS_VERSION='2.5.3'
 
   declare BL64_VCS_MODULE='0'
 
@@ -9680,6 +9685,7 @@ function _bl64_fs_set_options() {
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
     BL64_FS_SET_CHMOD_VERBOSE='--verbose'
+    BL64_FS_SET_CHMOD_SYMLINK='-h'
     BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
     BL64_FS_SET_CHOWN_VERBOSE='--verbose'
     BL64_FS_SET_CP_FORCE='--force'
@@ -9709,6 +9715,7 @@ function _bl64_fs_set_options() {
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
     BL64_FS_SET_CHMOD_VERBOSE='--verbose'
+    BL64_FS_SET_CHMOD_SYMLINK='-h'
     BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
     BL64_FS_SET_CHOWN_VERBOSE='--verbose'
     BL64_FS_SET_CP_FORCE='--force'
@@ -9738,6 +9745,7 @@ function _bl64_fs_set_options() {
   ${BL64_OS_SLES}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
     BL64_FS_SET_CHMOD_VERBOSE='--verbose'
+    BL64_FS_SET_CHMOD_SYMLINK='-h'
     BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
     BL64_FS_SET_CHOWN_VERBOSE='--verbose'
     BL64_FS_SET_CP_FORCE='--force'
@@ -9767,6 +9775,7 @@ function _bl64_fs_set_options() {
   ${BL64_OS_ALP}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='-R'
     BL64_FS_SET_CHMOD_VERBOSE='-v'
+    BL64_FS_SET_CHMODSYMLINKE='h'
     BL64_FS_SET_CHOWN_RECURSIVE='-R'
     BL64_FS_SET_CHOWN_VERBOSE='-v'
     BL64_FS_SET_CP_FORCE='-f'
@@ -9796,6 +9805,7 @@ function _bl64_fs_set_options() {
   ${BL64_OS_MCOS}-*)
     BL64_FS_SET_CHMOD_RECURSIVE='-R'
     BL64_FS_SET_CHMOD_VERBOSE='-v'
+    BL64_FS_SET_CHMODSYMLINKE='h'
     BL64_FS_SET_CHOWN_RECURSIVE='-R'
     BL64_FS_SET_CHOWN_VERBOSE='-v'
     BL64_FS_SET_CP_FORCE='-f'
@@ -11254,7 +11264,12 @@ function bl64_fs_symlink_create() {
     fi
   fi
   bl64_msg_show_lib_subtask "create symbolic link (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
-  bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination"
+  bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination" ||
+    return $?
+  if [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_MACOS" ]]; then
+    bl64_dbg_lib_show_comments 'emulating Linux behaviour for symbolic link permissions'
+    bl64_fs_run_chmod "$BL64_FS_SET_CHMOD_SYMLINK" '0777' "$destination"
+  fi
 }
 
 #######################################
@@ -16921,6 +16936,7 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_GREP='/bin/grep'
     BL64_TXT_CMD_SED='/bin/sed'
     BL64_TXT_CMD_SORT='/usr/bin/sort'
+    BL64_TXT_CMD_TAIL='/usr/bin/tail'
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
@@ -16939,6 +16955,7 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_GREP='/usr/bin/grep'
     BL64_TXT_CMD_SED='/usr/bin/sed'
     BL64_TXT_CMD_SORT='/usr/bin/sort'
+    BL64_TXT_CMD_TAIL='/usr/bin/tail'
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
@@ -16953,6 +16970,7 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_GREP='/usr/bin/grep'
     BL64_TXT_CMD_SED='/usr/bin/sed'
     BL64_TXT_CMD_SORT='/usr/bin/sort'
+    BL64_TXT_CMD_TAIL='/usr/bin/tail'
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
@@ -16967,6 +16985,7 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_GREP='/bin/grep'
     BL64_TXT_CMD_SED='/bin/sed'
     BL64_TXT_CMD_SORT='/usr/bin/sort'
+    BL64_TXT_CMD_TAIL='/usr/bin/tail'
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
@@ -16985,6 +17004,7 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_GREP='/usr/bin/grep'
     BL64_TXT_CMD_SED='/usr/bin/sed'
     BL64_TXT_CMD_SORT='/usr/bin/sort'
+    BL64_TXT_CMD_TAIL='/usr/bin/tail'
     BL64_TXT_CMD_TR='/usr/bin/tr'
     BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
@@ -17017,11 +17037,14 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='--quiet'
     BL64_TXT_SET_GREP_LINE='-x'
+    BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
     BL64_TXT_SET_GREP_STRING='-F'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
     BL64_TXT_SET_SED_INLINE='-i'
+    BL64_TXT_SET_SORT_NATURAL='-V'
+    BL64_TXT_SET_TAIL_LINES='-n'
 
     if [[ -x '/usr/bin/gawk' ]]; then
       BL64_TXT_SET_AWK_POSIX='--posix'
@@ -17035,11 +17058,14 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='--quiet'
     BL64_TXT_SET_GREP_LINE='-x'
+    BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
     BL64_TXT_SET_GREP_STRING='-F'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
     BL64_TXT_SET_SED_INLINE='-i'
+    BL64_TXT_SET_SORT_NATURAL='-V'
+    BL64_TXT_SET_TAIL_LINES='-n'
     ;;
   ${BL64_OS_SLES}-*)
     BL64_TXT_SET_AWK_POSIX='--posix'
@@ -17049,11 +17075,14 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='-q'
     BL64_TXT_SET_GREP_LINE='-x'
+    BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
     BL64_TXT_SET_GREP_STRING='-F'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
     BL64_TXT_SET_SED_INLINE='-i'
+    BL64_TXT_SET_SORT_NATURAL='-V'
+    BL64_TXT_SET_TAIL_LINES='-n'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_TXT_SET_AWK_POSIX=''
@@ -17063,11 +17092,14 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='-q'
     BL64_TXT_SET_GREP_LINE='-x'
+    BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
     BL64_TXT_SET_GREP_STRING='-F'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
     BL64_TXT_SET_SED_INLINE='-i'
+    BL64_TXT_SET_SORT_NATURAL='-V'
+    BL64_TXT_SET_TAIL_LINES='-n'
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_TXT_SET_AWK_POSIX=''
@@ -17077,11 +17109,14 @@ function _bl64_txt_set_options() {
     BL64_TXT_SET_GREP_NO_CASE='-i'
     BL64_TXT_SET_GREP_QUIET='-q'
     BL64_TXT_SET_GREP_LINE='-x'
+    BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
     BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
     BL64_TXT_SET_GREP_STRING='-F'
     BL64_TXT_SET_GREP_STDIN='-'
     BL64_TXT_SET_SED_EXPRESSION='-e'
     BL64_TXT_SET_SED_INLINE='-i' # Warning: requires backup suffix
+    BL64_TXT_SET_SORT_NATURAL='-V'
+    BL64_TXT_SET_TAIL_LINES='-n'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -17465,6 +17500,33 @@ function bl64_txt_run_sort() {
 }
 
 #######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_txt_run_tail() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_command "$BL64_TXT_CMD_TAIL" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_TXT_CMD_TAIL" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
 # BashLib64 / Module / Setup / User Interface
 #######################################
 
@@ -17697,13 +17759,7 @@ function bl64_vcs_run_git() {
   if bl64_dbg_lib_command_is_enabled; then
     debug=''
     export GIT_TRACE='2'
-  else
-    export GIT_TRACE='0'
   fi
-
-  export GIT_CONFIG_NOSYSTEM='0'
-  export GIT_AUTHOR_EMAIL='nouser@nodomain'
-  export GIT_AUTHOR_NAME='bl64_vcs_run_git'
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -17728,12 +17784,14 @@ function bl64_vcs_run_git() {
 function bl64_vcs_blank_git() {
   bl64_dbg_lib_show_function
 
-  bl64_dbg_lib_show_info 'unset inherited GIT_* shell variables'
+  bl64_dbg_lib_show_info 'normalize GIT_* shell variables'
   bl64_dbg_lib_trace_start
-  unset GIT_TRACE
-  unset GIT_CONFIG_NOSYSTEM
-  unset GIT_AUTHOR_EMAIL
-  unset GIT_AUTHOR_NAME
+  export GIT_TRACE='0'
+  export GIT_PROGRESS_DELAY='60'
+  export GIT_TERMINAL_PROMPT='0'
+  export GIT_CONFIG_NOSYSTEM='0'
+  export GIT_AUTHOR_EMAIL='nouser@nodomain'
+  export GIT_AUTHOR_NAME='bl64_vcs_run_git'
   bl64_dbg_lib_trace_stop
 
   return 0

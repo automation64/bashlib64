@@ -30,13 +30,7 @@ function bl64_vcs_run_git() {
   if bl64_dbg_lib_command_is_enabled; then
     debug=''
     export GIT_TRACE='2'
-  else
-    export GIT_TRACE='0'
   fi
-
-  export GIT_CONFIG_NOSYSTEM='0'
-  export GIT_AUTHOR_EMAIL='nouser@nodomain'
-  export GIT_AUTHOR_NAME='bl64_vcs_run_git'
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -61,12 +55,14 @@ function bl64_vcs_run_git() {
 function bl64_vcs_blank_git() {
   bl64_dbg_lib_show_function
 
-  bl64_dbg_lib_show_info 'unset inherited GIT_* shell variables'
+  bl64_dbg_lib_show_info 'normalize GIT_* shell variables'
   bl64_dbg_lib_trace_start
-  unset GIT_TRACE
-  unset GIT_CONFIG_NOSYSTEM
-  unset GIT_AUTHOR_EMAIL
-  unset GIT_AUTHOR_NAME
+  export GIT_TRACE='0'
+  export GIT_PROGRESS_DELAY='60'
+  export GIT_TERMINAL_PROMPT='0'
+  export GIT_CONFIG_NOSYSTEM='0'
+  export GIT_AUTHOR_EMAIL='nouser@nodomain'
+  export GIT_AUTHOR_NAME='bl64_vcs_run_git'
   bl64_dbg_lib_trace_stop
 
   return 0
