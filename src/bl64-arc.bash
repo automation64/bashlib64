@@ -3,7 +3,7 @@
 #######################################
 
 #######################################
-# Unzip wrapper debug and common options
+# Command wrapper with verbose, debug and common options
 #
 # * Trust no one. Ignore env args
 #
@@ -26,7 +26,7 @@ function bl64_arc_run_unzip() {
 
   bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
 
-  bl64_arc_blank_unzip
+  _bl64_arc_harden_unzip
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -47,7 +47,7 @@ function bl64_arc_run_unzip() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_arc_blank_unzip() {
+function _bl64_arc_harden_unzip() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited UNZIP* shell variables'
@@ -59,7 +59,7 @@ function bl64_arc_blank_unzip() {
 }
 
 #######################################
-# Tar wrapper debug and common options
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -224,4 +224,74 @@ function bl64_arc_open_zip() {
   ((status == 0)) && bl64_fs_file_remove "$source"
 
   return $status
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_arc_run_unxz() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity=' '
+
+  bl64_check_module 'BL64_ARC_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_ARC_CMD_UNXZ" || return $?
+
+  bl64_msg_lib_verbose_is_enabled && verbosity='-v'
+  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+
+  _bl64_arc_harden_unxz
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_ARC_CMD_UNXZ" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_arc_run_bunzip2() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity=' '
+
+  bl64_check_module 'BL64_ARC_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_ARC_CMD_BUNZIP2" || return $?
+
+  bl64_msg_lib_verbose_is_enabled && verbosity='-v'
+  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+
+  _bl64_arc_harden_bunzip2
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_ARC_CMD_BUNZIP2" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
 }

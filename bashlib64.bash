@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='20.18.2'
+  declare BL64_VERSION='21.0.0'
 
   #
   # Imported generic shell standard variables
@@ -869,7 +869,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ANS_VERSION='2.1.1'
+  declare BL64_ANS_VERSION='3.0.0'
 
   declare BL64_ANS_MODULE='0'
 
@@ -916,12 +916,14 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ARC_VERSION='3.4.0'
+  declare BL64_ARC_VERSION='4.0.0'
 
   declare BL64_ARC_MODULE='0'
 
-  declare BL64_ARC_CMD_TAR=''
-  declare BL64_ARC_CMD_UNZIP=''
+  declare BL64_ARC_CMD_BUNZIP2="$BL64_VAR_UNAVAILABLE"
+  declare BL64_ARC_CMD_TAR="$BL64_VAR_UNAVAILABLE"
+  declare BL64_ARC_CMD_UNXZ="$BL64_VAR_UNAVAILABLE"
+  declare BL64_ARC_CMD_UNZIP="$BL64_VAR_UNAVAILABLE"
 
   declare BL64_ARC_SET_TAR_VERBOSE=''
 
@@ -934,7 +936,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_AWS_VERSION='3.2.0'
+  declare BL64_AWS_VERSION='4.0.0'
 
   declare BL64_AWS_MODULE='0'
 
@@ -1147,7 +1149,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_GCP_VERSION='2.1.1'
+  declare BL64_GCP_VERSION='3.0.0'
 
   declare BL64_GCP_MODULE='0'
 
@@ -1170,7 +1172,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_HLM_VERSION='2.1.1'
+  declare BL64_HLM_VERSION='3.0.0'
 
   declare BL64_HLM_MODULE='0'
 
@@ -1276,13 +1278,13 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PKG_VERSION='5.3.1'
+  declare BL64_PKG_VERSION='6.0.0'
 
   declare BL64_PKG_MODULE='0'
 
   declare BL64_PKG_CMD_APK=''
   declare BL64_PKG_CMD_APT=''
-  declare BL64_PKG_CMD_BRW=''
+  declare BL64_PKG_CMD_BREW=''
   declare BL64_PKG_CMD_DNF=''
   declare BL64_PKG_CMD_YUM=''
   declare BL64_PKG_CMD_ZYPPER=''
@@ -1313,6 +1315,7 @@ function bl64_lib_script_version_set() {
   #
 
   declare BL64_PKG_PATH_APT_SOURCES_LIST_D=''
+  declare BL64_PKG_PATH_BREW_HOME=''
   declare BL64_PKG_PATH_GPG_KEYRINGS=''
   declare BL64_PKG_PATH_YUM_REPOS_D=''
 
@@ -1327,7 +1330,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='3.3.0'
+  declare BL64_PY_VERSION='4.0.0'
 
   declare BL64_PY_MODULE='0'
 
@@ -1448,7 +1451,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TF_VERSION='2.0.2'
+  declare BL64_TF_VERSION='3.0.0'
 
   declare BL64_TF_MODULE='0'
 
@@ -1547,7 +1550,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VCS_VERSION='2.5.3'
+  declare BL64_VCS_VERSION='3.0.0'
 
   declare BL64_VCS_MODULE='0'
 
@@ -4777,80 +4780,6 @@ function _bl64_os_set_distro() {
   fi
 }
 
-function _bl64_os_is_distro() {
-  bl64_dbg_lib_show_function "$@"
-  local check_compatibility="$1"
-  local target="$2"
-  local target_os=''
-  local target_major=''
-  local target_minor=''
-  local current_major=''
-  local current_minor=''
-
-  if [[ "$target" == +([[:alpha:]])-+([[:digit:]]).+([[:digit:]]) ]]; then
-    bl64_dbg_lib_show_info 'Analyze Pattern: match OS, Major and Minor'
-    target_os="${target%%-*}"
-    target_major="${target##*-}"
-    target_minor="${target_major##*\.}"
-    target_major="${target_major%%\.*}"
-    current_major="${BL64_OS_DISTRO##*-}"
-    current_minor="${current_major##*\.}"
-    current_major="${current_major%%\.*}"
-    bl64_dbg_lib_show_vars 'target_os' 'target_major' 'target_minor' 'current_major' 'current_minor'
-
-    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}-${target_major}.${target_minor}]"
-    if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
-      ((current_major == target_major && current_minor == target_minor)); then
-      :
-    else
-      if bl64_lib_flag_is_enabled "$check_compatibility" &&
-        bl64_lib_mode_compability_is_enabled &&
-        [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
-        return 1
-      else
-        return $BL64_LIB_ERROR_OS_NOT_MATCH
-      fi
-    fi
-
-  elif [[ "$target" == +([[:alpha:]])-+([[:digit:]]) ]]; then
-    bl64_dbg_lib_show_info 'Pattern: match OS and Major'
-    target_os="${target%%-*}"
-    target_major="${target##*-}"
-    target_major="${target_major%%\.*}"
-    current_major="${BL64_OS_DISTRO##*-}"
-    current_major="${current_major%%\.*}"
-    bl64_dbg_lib_show_vars 'target_os' 'target_major' 'current_major'
-
-    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}-${target_major}]"
-    if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
-      ((current_major == target_major)); then
-      :
-    else
-      if bl64_lib_flag_is_enabled "$check_compatibility" &&
-        bl64_lib_mode_compability_is_enabled &&
-        [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
-        return 1
-      else
-        return $BL64_LIB_ERROR_OS_NOT_MATCH
-      fi
-    fi
-
-  elif [[ "$target" == +([[:alpha:]]) ]]; then
-    bl64_dbg_lib_show_info 'Pattern: match OS ID'
-    target_os="$target"
-
-    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}]"
-    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] ||
-      return $BL64_LIB_ERROR_OS_NOT_MATCH
-
-  else
-    bl64_msg_show_error "invalid OS pattern (${target})"
-    return $BL64_LIB_ERROR_OS_TAG_INVALID
-  fi
-
-  return 0
-}
-
 #######################################
 # Set locale related shell variables
 #
@@ -5257,6 +5186,109 @@ function bl64_os_run_uname() {
   bl64_dbg_lib_trace_stop
 }
 
+function _bl64_os_is_distro() {
+  bl64_dbg_lib_show_function "$@"
+  local check_compatibility="$1"
+  local target="$2"
+  local target_os=''
+  local target_major=''
+  local target_minor=''
+  local current_major=''
+  local current_minor=''
+
+  if [[ "$target" == +([[:alpha:]])-+([[:digit:]]).+([[:digit:]]) ]]; then
+    bl64_dbg_lib_show_info 'Analyze Pattern: match OS, Major and Minor'
+    target_os="${target%%-*}"
+    target_major="${target##*-}"
+    target_minor="${target_major##*\.}"
+    target_major="${target_major%%\.*}"
+    current_major="${BL64_OS_DISTRO##*-}"
+    current_minor="${current_major##*\.}"
+    current_major="${current_major%%\.*}"
+    bl64_dbg_lib_show_vars 'target_os' 'target_major' 'target_minor' 'current_major' 'current_minor'
+
+    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}-${target_major}.${target_minor}]"
+    if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
+      ((current_major == target_major && current_minor == target_minor)); then
+      :
+    else
+      if bl64_lib_flag_is_enabled "$check_compatibility" &&
+        bl64_lib_mode_compability_is_enabled &&
+        [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
+        return 1
+      else
+        return $BL64_LIB_ERROR_OS_NOT_MATCH
+      fi
+    fi
+
+  elif [[ "$target" == +([[:alpha:]])-+([[:digit:]]) ]]; then
+    bl64_dbg_lib_show_info 'Pattern: match OS and Major'
+    target_os="${target%%-*}"
+    target_major="${target##*-}"
+    target_major="${target_major%%\.*}"
+    current_major="${BL64_OS_DISTRO##*-}"
+    current_major="${current_major%%\.*}"
+    bl64_dbg_lib_show_vars 'target_os' 'target_major' 'current_major'
+
+    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}-${target_major}]"
+    if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
+      ((current_major == target_major)); then
+      :
+    else
+      if bl64_lib_flag_is_enabled "$check_compatibility" &&
+        bl64_lib_mode_compability_is_enabled &&
+        [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
+        return 1
+      else
+        return $BL64_LIB_ERROR_OS_NOT_MATCH
+      fi
+    fi
+
+  elif [[ "$target" == +([[:alpha:]]) ]]; then
+    bl64_dbg_lib_show_info 'Pattern: match OS ID'
+    target_os="$target"
+
+    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}]"
+    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] ||
+      return $BL64_LIB_ERROR_OS_NOT_MATCH
+
+  else
+    bl64_msg_show_error "invalid OS pattern (${target})"
+    return $BL64_LIB_ERROR_OS_TAG_INVALID
+  fi
+
+  return 0
+}
+
+#######################################
+# Check the current OS version is compatible against the supported flavor list
+#
+# Arguments:
+#   $@: list of OS flavors to check against. Format: BL64_OS_FLAVOR_*
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: check ok
+#   $BL64_LIB_ERROR_APP_INCOMPATIBLE
+#######################################
+function bl64_os_check_flavor() {
+  bl64_dbg_lib_show_function "$@"
+  local flavor=''
+
+  bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_parameters_none $# ||
+    return $?
+
+  for flavor in "$@"; do
+    [[ "$BL64_OS_FLAVOR" == "$flavor" ]] && return 0
+  done
+
+  bl64_msg_show_error \
+    "task not supported by the current OS flavor (current-flavor: ${BL64_OS_FLAVOR} ${BL64_MSG_COSMETIC_PIPE} supported-flavor: ${*}) ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+}
+
 #######################################
 # BashLib64 / Module / Setup / Interact with Ansible CLI
 #######################################
@@ -5531,7 +5563,7 @@ function bl64_ans_run_ansible() {
   bl64_msg_lib_verbose_is_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
   bl64_dbg_lib_command_is_enabled && debug="$BL64_ANS_SET_DEBUG"
 
-  bl64_ans_blank_ansible
+  _bl64_ans_harden_ansible
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -5570,7 +5602,7 @@ function bl64_ans_run_ansible_galaxy() {
 
   bl64_msg_lib_verbose_is_enabled && debug="$BL64_ANS_SET_VERBOSE"
 
-  bl64_ans_blank_ansible
+  _bl64_ans_harden_ansible
 
   shift
   shift
@@ -5609,7 +5641,7 @@ function bl64_ans_run_ansible_playbook() {
   bl64_msg_lib_verbose_is_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
   bl64_dbg_lib_command_is_enabled && debug="$BL64_ANS_SET_DEBUG"
 
-  bl64_ans_blank_ansible
+  _bl64_ans_harden_ansible
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -5630,7 +5662,7 @@ function bl64_ans_run_ansible_playbook() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_ans_blank_ansible() {
+function _bl64_ans_harden_ansible() {
   bl64_dbg_lib_show_function
 
   if [[ "$BL64_ANS_ENV_IGNORE" == "$BL64_VAR_ON" ]]; then
@@ -5864,6 +5896,10 @@ function bl64_arc_setup() {
 #######################################
 # Warning: bootstrap function
 function _bl64_arc_set_command() {
+  bl64_dbg_lib_show_comments 'detect optional commands. No error if not found'
+  BL64_ARC_CMD_BUNZIP2="$(bl64_bsh_command_locate 'bunzip2')"
+  BL64_ARC_CMD_UNXZ="$(bl64_bsh_command_locate 'unxz')"
+
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -5934,7 +5970,7 @@ function _bl64_arc_set_options() {
 #######################################
 
 #######################################
-# Unzip wrapper debug and common options
+# Command wrapper with verbose, debug and common options
 #
 # * Trust no one. Ignore env args
 #
@@ -5957,7 +5993,7 @@ function bl64_arc_run_unzip() {
 
   bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
 
-  bl64_arc_blank_unzip
+  _bl64_arc_harden_unzip
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -5978,7 +6014,7 @@ function bl64_arc_run_unzip() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_arc_blank_unzip() {
+function _bl64_arc_harden_unzip() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited UNZIP* shell variables'
@@ -5990,7 +6026,7 @@ function bl64_arc_blank_unzip() {
 }
 
 #######################################
-# Tar wrapper debug and common options
+# Command wrapper with verbose, debug and common options
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
@@ -6155,6 +6191,76 @@ function bl64_arc_open_zip() {
   ((status == 0)) && bl64_fs_file_remove "$source"
 
   return $status
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_arc_run_unxz() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity=' '
+
+  bl64_check_module 'BL64_ARC_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_ARC_CMD_UNXZ" || return $?
+
+  bl64_msg_lib_verbose_is_enabled && verbosity='-v'
+  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+
+  _bl64_arc_harden_unxz
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_ARC_CMD_UNXZ" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_arc_run_bunzip2() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity=' '
+
+  bl64_check_module 'BL64_ARC_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_ARC_CMD_BUNZIP2" || return $?
+
+  bl64_msg_lib_verbose_is_enabled && verbosity='-v'
+  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+
+  _bl64_arc_harden_bunzip2
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_ARC_CMD_BUNZIP2" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -6576,7 +6682,7 @@ function bl64_aws_run_aws() {
   bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_AWS_SET_DEBUG"
 
-  bl64_aws_blank_aws &&
+  _bl64_aws_harden_aws &&
     _bl64_aws_run_aws_prepare ||
     return $?
 
@@ -6658,7 +6764,7 @@ function _bl64_aws_run_aws_prepare() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_aws_blank_aws() {
+function _bl64_aws_harden_aws() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited AWS_* shell variables'
@@ -11666,7 +11772,7 @@ function bl64_gcp_run_gcloud() {
     debug='--verbosity none --quiet'
   fi
 
-  bl64_gcp_blank_gcloud
+  _bl64_gcp_harden_gcloud
   [[ -n "$BL64_GCP_CLI_PROJECT" ]] && project="--project=${BL64_GCP_CLI_PROJECT}"
   [[ -n "$BL64_GCP_CLI_IMPERSONATE_SA" ]] && impersonate_sa="--impersonate-service-account=${BL64_GCP_CLI_IMPERSONATE_SA}"
   [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_VAR_TRUE" ]] && config="--configuration $BL64_GCP_CONFIGURATION_NAME"
@@ -11746,7 +11852,7 @@ function _bl64_gcp_configure() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_gcp_blank_gcloud() {
+function _bl64_gcp_harden_gcloud() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited _* shell variables'
@@ -12064,7 +12170,7 @@ function bl64_hlm_run_helm() {
     return $?
 
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_HLM_SET_DEBUG"
-  bl64_hlm_blank_helm
+  _bl64_hlm_harden_helm
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -12085,7 +12191,7 @@ function bl64_hlm_run_helm() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_hlm_blank_helm() {
+function _bl64_hlm_harden_helm() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited HELM_* shell variables'
@@ -14109,7 +14215,8 @@ function _bl64_pkg_set_command() {
     BL64_PKG_CMD_APK='/sbin/apk'
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_PKG_CMD_BRW='/opt/homebrew/bin/brew'
+    BL64_PKG_PATH_BREW_HOME='/opt/homebrew'
+    BL64_PKG_CMD_BREW="${BL64_PKG_PATH_BREW_HOME}/bin/brew"
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -14233,9 +14340,9 @@ function _bl64_pkg_set_alias() {
     BL64_PKG_ALIAS_APK_CLEAN="$BL64_PKG_CMD_APK cache clean ${BL64_PKG_SET_VERBOSE}"
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_PKG_ALIAS_BRW_CACHE="$BL64_PKG_CMD_BRW update ${BL64_PKG_SET_VERBOSE}"
-    BL64_PKG_ALIAS_BRW_INSTALL="$BL64_PKG_CMD_BRW install ${BL64_PKG_SET_VERBOSE}"
-    BL64_PKG_ALIAS_BRW_CLEAN="$BL64_PKG_CMD_BRW cleanup ${BL64_PKG_SET_VERBOSE} --prune=all -s"
+    BL64_PKG_ALIAS_BRW_CACHE="$BL64_PKG_CMD_BREW update ${BL64_PKG_SET_VERBOSE}"
+    BL64_PKG_ALIAS_BRW_INSTALL="$BL64_PKG_CMD_BREW install ${BL64_PKG_SET_VERBOSE}"
+    BL64_PKG_ALIAS_BRW_CLEAN="$BL64_PKG_CMD_BREW cleanup ${BL64_PKG_SET_VERBOSE} --prune=all -s"
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -14583,7 +14690,7 @@ function bl64_pkg_install() {
     bl64_pkg_run_apk 'add' -- "$@"
     ;;
   ${BL64_OS_MCOS}-*)
-    "$BL64_PKG_CMD_BRW" 'install' "$@"
+    "$BL64_PKG_CMD_BREW" 'install' "$@"
     ;;
   *) bl64_check_alert_unsupported ;;
 
@@ -14631,7 +14738,7 @@ function bl64_pkg_upgrade() {
     bl64_pkg_run_apk 'upgrade' "$@"
     ;;
   ${BL64_OS_MCOS}-*)
-    "$BL64_PKG_CMD_BRW" 'upgrade' "$@"
+    "$BL64_PKG_CMD_BREW" 'upgrade' "$@"
     ;;
   *) bl64_check_alert_unsupported ;;
 
@@ -14708,9 +14815,9 @@ function bl64_pkg_run_dnf() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -14743,9 +14850,9 @@ function bl64_pkg_run_yum() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -14778,12 +14885,12 @@ function bl64_pkg_run_apt() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root ||
     return $?
 
-  bl64_pkg_blank_apt
+  _bl64_pkg_harden_apt
 
   # Verbose is only available for a subset of commands
   if bl64_dbg_lib_command_is_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
@@ -14814,7 +14921,7 @@ function bl64_pkg_run_apt() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_pkg_blank_apt() {
+function _bl64_pkg_harden_apt() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited DEB* shell variables'
@@ -14845,9 +14952,9 @@ function bl64_pkg_run_apk() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -14880,9 +14987,10 @@ function bl64_pkg_run_brew() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_command "$BL64_PKG_CMD_BREW" &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_not_root ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -14891,9 +14999,13 @@ function bl64_pkg_run_brew() {
     verbose="$BL64_PKG_SET_QUIET"
   fi
 
+  export HOMEBREW_PREFIX="$BL64_PKG_PATH_BREW_HOME"
+  export HOMEBREW_CELLAR="${BL64_PKG_PATH_BREW_HOME}/Cellar"
+  export HOMEBREW_REPOSITORY="${BL64_PKG_PATH_BREW_HOME}/Homebrew"
+
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_PKG_CMD_BRW" $verbose "$@"
+  "$BL64_PKG_CMD_BREW" $verbose "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -14915,9 +15027,9 @@ function bl64_pkg_run_zypper() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -15178,7 +15290,7 @@ function bl64_py_venv_create() {
     bl64_check_path_not_present "$venv_path" ||
     return $?
 
-  bl64_msg_show_lib_task "create python virtual environment (${venv_path})"
+  bl64_msg_show_lib_subtask "create python virtual environment (${venv_path})"
   bl64_py_run_python -m 'venv' "$venv_path"
 }
 
@@ -15258,7 +15370,7 @@ function bl64_py_pip_usr_prepare() {
     bl64_os_check_not_version "${BL64_OS_KL}-2024" "${BL64_OS_KL}-2025" || return $?
   fi
 
-  bl64_msg_show_lib_task 'upgrade pip module'
+  bl64_msg_show_lib_subtask 'upgrade pip module'
   # shellcheck disable=SC2086
   bl64_py_run_pip \
     'install' \
@@ -15267,7 +15379,7 @@ function bl64_py_pip_usr_prepare() {
     $modules_pip ||
     return $?
 
-  bl64_msg_show_lib_task 'install and upgrade setuptools modules'
+  bl64_msg_show_lib_subtask 'install and upgrade setuptools modules'
   # shellcheck disable=SC2086
   bl64_py_run_pip \
     'install' \
@@ -15297,6 +15409,7 @@ function bl64_py_pip_usr_prepare() {
 function bl64_py_pip_usr_install() {
   bl64_dbg_lib_show_function "$@"
   local flag_user="$BL64_PY_SET_PIP_USER"
+  local verbose=' '
 
   bl64_check_parameters_none $# || return $?
 
@@ -15307,13 +15420,15 @@ function bl64_py_pip_usr_install() {
     bl64_os_check_not_version "${BL64_OS_KL}-2024" "${BL64_OS_KL}-2025" || return $?
   fi
 
-  bl64_msg_show_lib_task "install modules ($*)"
+  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbose='--progress-bar=off'
+
+  bl64_msg_show_lib_subtask "install modules ($*)"
   # shellcheck disable=SC2086
   bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_UPGRADE \
-    $BL64_PY_SET_PIP_NO_WARN_SCRIPT \
     $flag_user \
+    $verbose \
     "$@"
 }
 
@@ -15362,7 +15477,7 @@ function bl64_py_pip_usr_deploy() {
 function bl64_py_pip_usr_cleanup() {
   bl64_dbg_lib_show_function
 
-  bl64_msg_show_lib_task 'cleanup pip cache'
+  bl64_msg_show_lib_subtask 'cleanup pip cache'
   bl64_py_run_pip \
     'cache' \
     'purge'
@@ -15391,7 +15506,7 @@ function bl64_py_run_python() {
     bl64_check_module 'BL64_PY_MODULE' ||
     return $?
 
-  bl64_py_blank_python
+  _bl64_py_harden_python
 
   bl64_dbg_lib_trace_start
   "$BL64_PY_CMD_PYTHON3" "$@"
@@ -15409,7 +15524,7 @@ function bl64_py_run_python() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_py_blank_python() {
+function _bl64_py_harden_python() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited PYTHON* shell variables'
@@ -15441,20 +15556,64 @@ function bl64_py_blank_python() {
 #######################################
 function bl64_py_run_pip() {
   bl64_dbg_lib_show_function "$@"
-  local debug="$BL64_PY_SET_PIP_QUIET"
+  local verbose=' '
   local cache=' '
 
-  bl64_msg_lib_verbose_is_enabled && debug=' '
-  bl64_dbg_lib_command_is_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
+  if bl64_dbg_lib_command_is_enabled; then
+    verbose="$BL64_PY_SET_PIP_DEBUG"
+  else
+    if bl64_msg_lib_verbose_is_enabled; then
+      if bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+        export PIP_NO_COLOR='on'
+      fi
+    else
+      verbose="$BL64_PY_SET_PIP_QUIET"
+    fi
+  fi
 
   [[ -n "$BL64_FS_PATH_CACHE" ]] && cache="--cache-dir=${BL64_FS_PATH_CACHE}"
 
+  _bl64_py_harden_pip
   # shellcheck disable=SC2086
   TMPDIR="${BL64_FS_PATH_TEMPORAL:-}" bl64_py_run_python \
     -m 'pip' \
-    $debug \
+    $verbose \
     $cache \
+    --no-color \
     "$@"
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_py_harden_pip() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited PIP* shell variables'
+  bl64_dbg_lib_trace_start
+  unset PIP_GLOBAL
+  unset PIP_USER
+  unset PIP_SITE
+  bl64_dbg_lib_trace_stop
+
+  bl64_dbg_lib_show_info 'normalize PIP_* shell variables'
+  bl64_dbg_lib_trace_start
+  export PIP_CONFIG_FILE='os.devnull'
+  export PIP_DISABLE_PIP_VERSION_CHECK='yes'
+  export PIP_NO_INPUT='yes'
+  export PIP_NO_PYTHON_VERSION_WARNING='yes'
+  export PIP_NO_WARN_SCRIPT_LOCATION='yes'
+  export PIP_YES='yes'
+  bl64_dbg_lib_trace_stop
+  return 0
 }
 
 #######################################
@@ -15474,14 +15633,43 @@ function bl64_py_run_pipx() {
   local cache=' '
 
   bl64_msg_lib_verbose_is_enabled && debug=' '
+  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && export USE_EMOJI='no'
   bl64_dbg_lib_command_is_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
+  _bl64_py_harden_pipx
   # shellcheck disable=SC2086
   bl64_py_run_python \
     -m 'pipx' \
     $debug \
     $cache \
     "$@"
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_py_harden_pipx() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited PIPX* shell variables'
+  bl64_dbg_lib_trace_start
+  bl64_dbg_lib_trace_stop
+  unset PIPX_HOME
+  unset PIPX_GLOBAL_HOME
+  unset PIPX_BIN_DIR
+  unset PIPX_GLOBAL_BIN_DIR
+  unset PIPX_MAN_DIR
+  unset PIPX_GLOBAL_MAN_DIR
+  unset PIPX_DEFAULT_PYTHON
+  return 0
 }
 
 #######################################
@@ -16756,7 +16944,7 @@ function bl64_tf_run_terraform() {
     bl64_check_module 'BL64_TF_MODULE' ||
     return $?
 
-  bl64_tf_blank_terraform
+  _bl64_tf_harden_terraform
 
   if bl64_dbg_lib_command_is_enabled; then
     export TF_LOG="$BL64_TF_SET_LOG_TRACE"
@@ -16784,7 +16972,7 @@ function bl64_tf_run_terraform() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_tf_blank_terraform() {
+function _bl64_tf_harden_terraform() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited TF_* shell variables'
@@ -17747,24 +17935,32 @@ function _bl64_vcs_set_options() {
 #######################################
 function bl64_vcs_run_git() {
   bl64_dbg_lib_show_function "$@"
-  local debug="$BL64_VCS_SET_GIT_QUIET"
+  local verbose=' '
 
   bl64_check_module 'BL64_VCS_MODULE' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_VCS_CMD_GIT" || return $?
 
-  bl64_vcs_blank_git
+  _bl64_vcs_harden_git
 
   bl64_dbg_lib_show_info "current path: $(pwd)"
   if bl64_dbg_lib_command_is_enabled; then
-    debug=''
+    verbose=''
     export GIT_TRACE='2'
+  else
+    if bl64_msg_lib_verbose_is_enabled; then
+      if bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+        export GIT_PROGRESS_DELAY='60'
+      fi
+    else
+      verbose="$BL64_VCS_SET_GIT_QUIET"
+    fi
   fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_VCS_CMD_GIT" \
-    $debug \
+    $verbose \
     $BL64_VCS_SET_GIT_NO_PAGER \
     "$@"
   bl64_dbg_lib_trace_stop
@@ -17781,13 +17977,12 @@ function bl64_vcs_run_git() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_vcs_blank_git() {
+function _bl64_vcs_harden_git() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'normalize GIT_* shell variables'
   bl64_dbg_lib_trace_start
   export GIT_TRACE='0'
-  export GIT_PROGRESS_DELAY='60'
   export GIT_TERMINAL_PROMPT='0'
   export GIT_CONFIG_NOSYSTEM='0'
   export GIT_AUTHOR_EMAIL='nouser@nodomain'
@@ -17822,8 +18017,10 @@ function bl64_vcs_git_clone() {
   local destination="${2}"
   local branch="${3:-$BL64_VAR_DEFAULT}"
   local name="${4:-$BL64_VAR_DEFAULT}"
+  local verbose=' '
 
   bl64_lib_var_is_default "$branch" && branch=''
+  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbose='--no-progress'
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_check_command "$BL64_VCS_CMD_GIT" ||
@@ -17837,6 +18034,7 @@ function bl64_vcs_git_clone() {
   if bl64_lib_var_is_default "$name"; then
     bl64_vcs_run_git \
       clone \
+      $verbose \
       --depth 1 \
       --single-branch \
       ${branch:+--branch $branch} \
@@ -17845,6 +18043,7 @@ function bl64_vcs_git_clone() {
   else
     bl64_vcs_run_git \
       clone \
+      $verbose \
       --depth 1 \
       --single-branch \
       ${branch:+--branch $branch} \

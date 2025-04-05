@@ -277,7 +277,7 @@ function bl64_pkg_install() {
     bl64_pkg_run_apk 'add' -- "$@"
     ;;
   ${BL64_OS_MCOS}-*)
-    "$BL64_PKG_CMD_BRW" 'install' "$@"
+    "$BL64_PKG_CMD_BREW" 'install' "$@"
     ;;
   *) bl64_check_alert_unsupported ;;
 
@@ -325,7 +325,7 @@ function bl64_pkg_upgrade() {
     bl64_pkg_run_apk 'upgrade' "$@"
     ;;
   ${BL64_OS_MCOS}-*)
-    "$BL64_PKG_CMD_BRW" 'upgrade' "$@"
+    "$BL64_PKG_CMD_BREW" 'upgrade' "$@"
     ;;
   *) bl64_check_alert_unsupported ;;
 
@@ -402,9 +402,9 @@ function bl64_pkg_run_dnf() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -437,9 +437,9 @@ function bl64_pkg_run_yum() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -472,12 +472,12 @@ function bl64_pkg_run_apt() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root ||
     return $?
 
-  bl64_pkg_blank_apt
+  _bl64_pkg_harden_apt
 
   # Verbose is only available for a subset of commands
   if bl64_dbg_lib_command_is_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
@@ -508,7 +508,7 @@ function bl64_pkg_run_apt() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_pkg_blank_apt() {
+function _bl64_pkg_harden_apt() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited DEB* shell variables'
@@ -539,9 +539,9 @@ function bl64_pkg_run_apk() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -574,9 +574,10 @@ function bl64_pkg_run_brew() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_command "$BL64_PKG_CMD_BREW" &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_not_root ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -585,9 +586,13 @@ function bl64_pkg_run_brew() {
     verbose="$BL64_PKG_SET_QUIET"
   fi
 
+  export HOMEBREW_PREFIX="$BL64_PKG_PATH_BREW_HOME"
+  export HOMEBREW_CELLAR="${BL64_PKG_PATH_BREW_HOME}/Cellar"
+  export HOMEBREW_REPOSITORY="${BL64_PKG_PATH_BREW_HOME}/Homebrew"
+
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_PKG_CMD_BRW" $verbose "$@"
+  "$BL64_PKG_CMD_BREW" $verbose "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -609,9 +614,9 @@ function bl64_pkg_run_zypper() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root &&
-    bl64_check_module 'BL64_PKG_MODULE' ||
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_privilege_root ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then

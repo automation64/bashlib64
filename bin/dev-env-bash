@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# * Version: 1.6.0
+# * Version: 1.7.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -40,9 +40,9 @@
     # Test / Bash / Path to test cases. Relative to DEV_PATH_ROOT
     export DEV_TEST_BASH_CASES="${DEV_BASE_TEST}/bash"
     # Test / Bash / Flag for marking container environment
-    export DEV_TEST_BASH_CONTAINER_ENVIRONMENT='OFF'
+    export DEV_TEST_BASH_CONTAINER_ENVIRONMENT="${DEV_TEST_BASH_CONTAINER_ENVIRONMENT:-OFF}"
     # Test / Bash / Flag for marking CICD runner  environment
-    export DEV_TEST_BASH_RUNNER_ENVIRONMENT='OFF'
+    export DEV_TEST_BASH_RUNNER_ENVIRONMENT="${DEV_TEST_BASH_RUNNER_ENVIRONMENT:-OFF}"
     # Test / Bash / Flag for disabling container test, and run on local OS
     export DEV_TEST_BASH_CONTAINER_DISABLED='YES'
     # Test / Bash / Default test containers

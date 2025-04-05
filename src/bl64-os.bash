@@ -375,3 +375,106 @@ function bl64_os_run_uname() {
     "$@"
   bl64_dbg_lib_trace_stop
 }
+
+function _bl64_os_is_distro() {
+  bl64_dbg_lib_show_function "$@"
+  local check_compatibility="$1"
+  local target="$2"
+  local target_os=''
+  local target_major=''
+  local target_minor=''
+  local current_major=''
+  local current_minor=''
+
+  if [[ "$target" == +([[:alpha:]])-+([[:digit:]]).+([[:digit:]]) ]]; then
+    bl64_dbg_lib_show_info 'Analyze Pattern: match OS, Major and Minor'
+    target_os="${target%%-*}"
+    target_major="${target##*-}"
+    target_minor="${target_major##*\.}"
+    target_major="${target_major%%\.*}"
+    current_major="${BL64_OS_DISTRO##*-}"
+    current_minor="${current_major##*\.}"
+    current_major="${current_major%%\.*}"
+    bl64_dbg_lib_show_vars 'target_os' 'target_major' 'target_minor' 'current_major' 'current_minor'
+
+    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}-${target_major}.${target_minor}]"
+    if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
+      ((current_major == target_major && current_minor == target_minor)); then
+      :
+    else
+      if bl64_lib_flag_is_enabled "$check_compatibility" &&
+        bl64_lib_mode_compability_is_enabled &&
+        [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
+        return 1
+      else
+        return $BL64_LIB_ERROR_OS_NOT_MATCH
+      fi
+    fi
+
+  elif [[ "$target" == +([[:alpha:]])-+([[:digit:]]) ]]; then
+    bl64_dbg_lib_show_info 'Pattern: match OS and Major'
+    target_os="${target%%-*}"
+    target_major="${target##*-}"
+    target_major="${target_major%%\.*}"
+    current_major="${BL64_OS_DISTRO##*-}"
+    current_major="${current_major%%\.*}"
+    bl64_dbg_lib_show_vars 'target_os' 'target_major' 'current_major'
+
+    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}-${target_major}]"
+    if [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] &&
+      ((current_major == target_major)); then
+      :
+    else
+      if bl64_lib_flag_is_enabled "$check_compatibility" &&
+        bl64_lib_mode_compability_is_enabled &&
+        [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
+        return 1
+      else
+        return $BL64_LIB_ERROR_OS_NOT_MATCH
+      fi
+    fi
+
+  elif [[ "$target" == +([[:alpha:]]) ]]; then
+    bl64_dbg_lib_show_info 'Pattern: match OS ID'
+    target_os="$target"
+
+    bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}]"
+    [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] ||
+      return $BL64_LIB_ERROR_OS_NOT_MATCH
+
+  else
+    bl64_msg_show_error "invalid OS pattern (${target})"
+    return $BL64_LIB_ERROR_OS_TAG_INVALID
+  fi
+
+  return 0
+}
+
+#######################################
+# Check the current OS version is compatible against the supported flavor list
+#
+# Arguments:
+#   $@: list of OS flavors to check against. Format: BL64_OS_FLAVOR_*
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error message
+# Returns:
+#   0: check ok
+#   $BL64_LIB_ERROR_APP_INCOMPATIBLE
+#######################################
+function bl64_os_check_flavor() {
+  bl64_dbg_lib_show_function "$@"
+  local flavor=''
+
+  bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_parameters_none $# ||
+    return $?
+
+  for flavor in "$@"; do
+    [[ "$BL64_OS_FLAVOR" == "$flavor" ]] && return 0
+  done
+
+  bl64_msg_show_error \
+    "task not supported by the current OS flavor (current-flavor: ${BL64_OS_FLAVOR} ${BL64_MSG_COSMETIC_PIPE} supported-flavor: ${*}) ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+}

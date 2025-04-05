@@ -4,12 +4,14 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ARC_VERSION='3.4.0'
+  declare BL64_ARC_VERSION='4.0.0'
 
   declare BL64_ARC_MODULE='0'
 
-  declare BL64_ARC_CMD_TAR=''
-  declare BL64_ARC_CMD_UNZIP=''
+  declare BL64_ARC_CMD_BUNZIP2="$BL64_VAR_UNAVAILABLE"
+  declare BL64_ARC_CMD_TAR="$BL64_VAR_UNAVAILABLE"
+  declare BL64_ARC_CMD_UNXZ="$BL64_VAR_UNAVAILABLE"
+  declare BL64_ARC_CMD_UNZIP="$BL64_VAR_UNAVAILABLE"
 
   declare BL64_ARC_SET_TAR_VERBOSE=''
 
