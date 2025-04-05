@@ -36,12 +36,12 @@ function dev_init_profile() {
 
 function dev_init_show() {
   bl64_dbg_app_show_function
-  bl64_msg_show_info "Development environment initialized:
-  Profile          : ${DEV_PROFILE}
-  Project Path     : ${DEV_PATH_ROOT}
-  Source Code Path : ${DEV_PATH_SRC}
-  Staging area Path: ${DEV_PATH_BUILD}
-  Tools Path       : ${DEV_PATH_BIN}"
+  bl64_msg_show_setup 'Development environment initialized' \
+  'DEV_PROFILE' \
+  'DEV_PATH_ROOT' \
+  'DEV_PATH_SRC' \
+  'DEV_PATH_BUILD' \
+  'DEV_PATH_BIN'
 }
 
 function dev_init_initialize() {
@@ -53,7 +53,7 @@ function dev_init_initialize() {
 #
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '1.0.1'
+bl64_lib_script_version_set '1.0.2'
 bl64_msg_all_enable_verbose
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"

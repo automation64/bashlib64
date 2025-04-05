@@ -7,15 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [21.0.0]
 
+### Added
+
+- os
+  - bl64_os_check_flavor
+- arc
+  - bl64_arc_run_unxz
+  - bl64_arc_run_bunzip2
+
 ### Changed
 
+- all
+  - **breaking-change**: demoted `*_blank_*` functions to private
 - py
   - bl64_py_run_pip, bl64_py_run_pipx: disable progress display if CICD is on
   - bl64_py_run_pip, bl64_py_run_pipx: add security harden
 - vcs
   - bl64_vcs_git_clone, bl64_vcs_run_git: disable progress display if CICD is on
-- all
-  - **breaking-change**: demoted `*_blank_*` functions to private
+- pkg
+  - bl64_pkg_run_brew: ensure key vars are set
 
 ## [20.18.2]
 
