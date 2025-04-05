@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_AWS_VERSION='3.2.0'
+  declare BL64_AWS_VERSION='4.0.0'
 
   declare BL64_AWS_MODULE='0'
 
