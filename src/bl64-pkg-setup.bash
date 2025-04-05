@@ -71,7 +71,8 @@ function _bl64_pkg_set_command() {
     BL64_PKG_CMD_APK='/sbin/apk'
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_PKG_CMD_BRW='/opt/homebrew/bin/brew'
+    BL64_PKG_PATH_BREW_HOME='/opt/homebrew'
+    BL64_PKG_CMD_BREW="${BL64_PKG_PATH_BREW_HOME}/bin/brew"
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -195,9 +196,9 @@ function _bl64_pkg_set_alias() {
     BL64_PKG_ALIAS_APK_CLEAN="$BL64_PKG_CMD_APK cache clean ${BL64_PKG_SET_VERBOSE}"
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_PKG_ALIAS_BRW_CACHE="$BL64_PKG_CMD_BRW update ${BL64_PKG_SET_VERBOSE}"
-    BL64_PKG_ALIAS_BRW_INSTALL="$BL64_PKG_CMD_BRW install ${BL64_PKG_SET_VERBOSE}"
-    BL64_PKG_ALIAS_BRW_CLEAN="$BL64_PKG_CMD_BRW cleanup ${BL64_PKG_SET_VERBOSE} --prune=all -s"
+    BL64_PKG_ALIAS_BRW_CACHE="$BL64_PKG_CMD_BREW update ${BL64_PKG_SET_VERBOSE}"
+    BL64_PKG_ALIAS_BRW_INSTALL="$BL64_PKG_CMD_BREW install ${BL64_PKG_SET_VERBOSE}"
+    BL64_PKG_ALIAS_BRW_CLEAN="$BL64_PKG_CMD_BREW cleanup ${BL64_PKG_SET_VERBOSE} --prune=all -s"
     ;;
   *) bl64_check_alert_unsupported ;;
   esac

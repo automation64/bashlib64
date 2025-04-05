@@ -10,7 +10,7 @@
 
   declare BL64_PKG_CMD_APK=''
   declare BL64_PKG_CMD_APT=''
-  declare BL64_PKG_CMD_BRW=''
+  declare BL64_PKG_CMD_BREW=''
   declare BL64_PKG_CMD_DNF=''
   declare BL64_PKG_CMD_YUM=''
   declare BL64_PKG_CMD_ZYPPER=''
@@ -41,6 +41,7 @@
   #
 
   declare BL64_PKG_PATH_APT_SOURCES_LIST_D=''
+  declare BL64_PKG_PATH_BREW_HOME=''
   declare BL64_PKG_PATH_GPG_KEYRINGS=''
   declare BL64_PKG_PATH_YUM_REPOS_D=''
 
