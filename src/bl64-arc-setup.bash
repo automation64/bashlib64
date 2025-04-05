@@ -49,6 +49,10 @@ function bl64_arc_setup() {
 #######################################
 # Warning: bootstrap function
 function _bl64_arc_set_command() {
+  bl64_dbg_lib_show_comments 'detect optional commands. No error if not found'
+  BL64_ARC_CMD_BUNZIP2="$(bl64_bsh_command_locate 'bunzip2')"
+  BL64_ARC_CMD_UNXZ="$(bl64_bsh_command_locate 'unxz')"
+
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
