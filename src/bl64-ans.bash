@@ -55,7 +55,7 @@ function bl64_ans_run_ansible() {
   bl64_msg_lib_verbose_is_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
   bl64_dbg_lib_command_is_enabled && debug="$BL64_ANS_SET_DEBUG"
 
-  _bl64_ans_blank_ansible
+  _bl64_ans_harden_ansible
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -94,7 +94,7 @@ function bl64_ans_run_ansible_galaxy() {
 
   bl64_msg_lib_verbose_is_enabled && debug="$BL64_ANS_SET_VERBOSE"
 
-  _bl64_ans_blank_ansible
+  _bl64_ans_harden_ansible
 
   shift
   shift
@@ -133,7 +133,7 @@ function bl64_ans_run_ansible_playbook() {
   bl64_msg_lib_verbose_is_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
   bl64_dbg_lib_command_is_enabled && debug="$BL64_ANS_SET_DEBUG"
 
-  _bl64_ans_blank_ansible
+  _bl64_ans_harden_ansible
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -154,7 +154,7 @@ function bl64_ans_run_ansible_playbook() {
 # Returns:
 #   0: always ok
 #######################################
-function _bl64_ans_blank_ansible() {
+function _bl64_ans_harden_ansible() {
   bl64_dbg_lib_show_function
 
   if [[ "$BL64_ANS_ENV_IGNORE" == "$BL64_VAR_ON" ]]; then

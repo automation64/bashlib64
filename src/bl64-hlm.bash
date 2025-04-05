@@ -114,7 +114,7 @@ function bl64_hlm_run_helm() {
     return $?
 
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_HLM_SET_DEBUG"
-  _bl64_hlm_blank_helm
+  _bl64_hlm_harden_helm
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -135,7 +135,7 @@ function bl64_hlm_run_helm() {
 # Returns:
 #   0: always ok
 #######################################
-function _bl64_hlm_blank_helm() {
+function _bl64_hlm_harden_helm() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited HELM_* shell variables'

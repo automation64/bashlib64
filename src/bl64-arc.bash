@@ -26,7 +26,7 @@ function bl64_arc_run_unzip() {
 
   bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
 
-  _bl64_arc_blank_unzip
+  _bl64_arc_harden_unzip
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -47,7 +47,7 @@ function bl64_arc_run_unzip() {
 # Returns:
 #   0: always ok
 #######################################
-function _bl64_arc_blank_unzip() {
+function _bl64_arc_harden_unzip() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited UNZIP* shell variables'

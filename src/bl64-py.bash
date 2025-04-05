@@ -239,7 +239,7 @@ function bl64_py_run_python() {
     bl64_check_module 'BL64_PY_MODULE' ||
     return $?
 
-  _bl64_py_blank_python
+  _bl64_py_harden_python
 
   bl64_dbg_lib_trace_start
   "$BL64_PY_CMD_PYTHON3" "$@"
@@ -257,7 +257,7 @@ function bl64_py_run_python() {
 # Returns:
 #   0: always ok
 #######################################
-function _bl64_py_blank_python() {
+function _bl64_py_harden_python() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited PYTHON* shell variables'
@@ -306,7 +306,7 @@ function bl64_py_run_pip() {
 
   [[ -n "$BL64_FS_PATH_CACHE" ]] && cache="--cache-dir=${BL64_FS_PATH_CACHE}"
 
-  _bl64_py_blank_pip
+  _bl64_py_harden_pip
   # shellcheck disable=SC2086
   TMPDIR="${BL64_FS_PATH_TEMPORAL:-}" bl64_py_run_python \
     -m 'pip' \
@@ -327,7 +327,7 @@ function bl64_py_run_pip() {
 # Returns:
 #   0: always ok
 #######################################
-function _bl64_py_blank_pip() {
+function _bl64_py_harden_pip() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited PIP* shell variables'
