@@ -142,6 +142,7 @@ function bl64_py_pip_usr_prepare() {
 function bl64_py_pip_usr_install() {
   bl64_dbg_lib_show_function "$@"
   local flag_user="$BL64_PY_SET_PIP_USER"
+  local verbose=' '
 
   bl64_check_parameters_none $# || return $?
 
@@ -152,13 +153,15 @@ function bl64_py_pip_usr_install() {
     bl64_os_check_not_version "${BL64_OS_KL}-2024" "${BL64_OS_KL}-2025" || return $?
   fi
 
+  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbose='--progress-bar=off'
+
   bl64_msg_show_lib_task "install modules ($*)"
   # shellcheck disable=SC2086
   bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_UPGRADE \
-    $BL64_PY_SET_PIP_NO_WARN_SCRIPT \
     $flag_user \
+    $verbose \
     "$@"
 }
 
@@ -286,20 +289,64 @@ function bl64_py_blank_python() {
 #######################################
 function bl64_py_run_pip() {
   bl64_dbg_lib_show_function "$@"
-  local debug="$BL64_PY_SET_PIP_QUIET"
+  local verbose=' '
   local cache=' '
 
-  bl64_msg_lib_verbose_is_enabled && debug=' '
-  bl64_dbg_lib_command_is_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
+  if bl64_dbg_lib_command_is_enabled; then
+    verbose="$BL64_PY_SET_PIP_DEBUG"
+  else
+    if bl64_msg_lib_verbose_is_enabled; then
+      if bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+        export PIP_NO_COLOR='on'
+      fi
+    else
+      verbose="$BL64_PY_SET_PIP_QUIET"
+    fi
+  fi
 
   [[ -n "$BL64_FS_PATH_CACHE" ]] && cache="--cache-dir=${BL64_FS_PATH_CACHE}"
 
+  bl64_py_blank_pip
   # shellcheck disable=SC2086
   TMPDIR="${BL64_FS_PATH_TEMPORAL:-}" bl64_py_run_python \
     -m 'pip' \
-    $debug \
+    $verbose \
     $cache \
+    --no-color \
     "$@"
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_py_blank_pip() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited PIP* shell variables'
+  bl64_dbg_lib_trace_start
+  unset PIP_GLOBAL
+  unset PIP_USER
+  unset PIP_SITE
+  bl64_dbg_lib_trace_stop
+
+  bl64_dbg_lib_show_info 'normalize PIP_* shell variables'
+  bl64_dbg_lib_trace_start
+  export PIP_CONFIG_FILE='os.devnull'
+  export PIP_DISABLE_PIP_VERSION_CHECK='yes'
+  export PIP_NO_INPUT='yes'
+  export PIP_NO_PYTHON_VERSION_WARNING='yes'
+  export PIP_NO_WARN_SCRIPT_LOCATION='yes'
+  export PIP_YES='yes'
+  bl64_dbg_lib_trace_stop
+  return 0
 }
 
 #######################################
