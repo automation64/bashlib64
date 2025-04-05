@@ -366,12 +366,41 @@ function bl64_py_run_pipx() {
   local cache=' '
 
   bl64_msg_lib_verbose_is_enabled && debug=' '
+  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && export USE_EMOJI='no'
   bl64_dbg_lib_command_is_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
+  _bl64_py_harden_pipx
   # shellcheck disable=SC2086
   bl64_py_run_python \
     -m 'pipx' \
     $debug \
     $cache \
     "$@"
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_py_harden_pipx() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited PIPX* shell variables'
+  bl64_dbg_lib_trace_start
+  bl64_dbg_lib_trace_stop
+  unset PIPX_HOME
+  unset PIPX_GLOBAL_HOME
+  unset PIPX_BIN_DIR
+  unset PIPX_GLOBAL_BIN_DIR
+  unset PIPX_MAN_DIR
+  unset PIPX_GLOBAL_MAN_DIR
+  unset PIPX_DEFAULT_PYTHON
+  return 0
 }
