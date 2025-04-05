@@ -31,7 +31,7 @@ function bl64_gcp_run_gcloud() {
     debug='--verbosity none --quiet'
   fi
 
-  bl64_gcp_blank_gcloud
+  _bl64_gcp_blank_gcloud
   [[ -n "$BL64_GCP_CLI_PROJECT" ]] && project="--project=${BL64_GCP_CLI_PROJECT}"
   [[ -n "$BL64_GCP_CLI_IMPERSONATE_SA" ]] && impersonate_sa="--impersonate-service-account=${BL64_GCP_CLI_IMPERSONATE_SA}"
   [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_VAR_TRUE" ]] && config="--configuration $BL64_GCP_CONFIGURATION_NAME"
@@ -111,7 +111,7 @@ function _bl64_gcp_configure() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_gcp_blank_gcloud() {
+function _bl64_gcp_blank_gcloud() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited _* shell variables'

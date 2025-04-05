@@ -477,7 +477,7 @@ function bl64_pkg_run_apt() {
     bl64_check_module 'BL64_PKG_MODULE' ||
     return $?
 
-  bl64_pkg_blank_apt
+  _bl64_pkg_blank_apt
 
   # Verbose is only available for a subset of commands
   if bl64_dbg_lib_command_is_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
@@ -508,7 +508,7 @@ function bl64_pkg_run_apt() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_pkg_blank_apt() {
+function _bl64_pkg_blank_apt() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited DEB* shell variables'

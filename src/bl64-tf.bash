@@ -56,7 +56,7 @@ function bl64_tf_run_terraform() {
     bl64_check_module 'BL64_TF_MODULE' ||
     return $?
 
-  bl64_tf_blank_terraform
+  _bl64_tf_blank_terraform
 
   if bl64_dbg_lib_command_is_enabled; then
     export TF_LOG="$BL64_TF_SET_LOG_TRACE"
@@ -84,7 +84,7 @@ function bl64_tf_run_terraform() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_tf_blank_terraform() {
+function _bl64_tf_blank_terraform() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited TF_* shell variables'

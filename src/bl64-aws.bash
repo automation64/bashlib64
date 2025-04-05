@@ -165,7 +165,7 @@ function bl64_aws_run_aws() {
   bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_AWS_SET_DEBUG"
 
-  bl64_aws_blank_aws &&
+  _bl64_aws_blank_aws &&
     _bl64_aws_run_aws_prepare ||
     return $?
 
@@ -247,7 +247,7 @@ function _bl64_aws_run_aws_prepare() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_aws_blank_aws() {
+function _bl64_aws_blank_aws() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'unset inherited AWS_* shell variables'

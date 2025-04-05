@@ -24,7 +24,7 @@ function bl64_vcs_run_git() {
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_VCS_CMD_GIT" || return $?
 
-  bl64_vcs_blank_git
+  _bl64_vcs_blank_git
 
   bl64_dbg_lib_show_info "current path: $(pwd)"
   if bl64_dbg_lib_command_is_enabled; then
@@ -52,7 +52,7 @@ function bl64_vcs_run_git() {
 # Returns:
 #   0: always ok
 #######################################
-function bl64_vcs_blank_git() {
+function _bl64_vcs_blank_git() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info 'normalize GIT_* shell variables'
