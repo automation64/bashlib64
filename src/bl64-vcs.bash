@@ -18,7 +18,7 @@
 #######################################
 function bl64_vcs_run_git() {
   bl64_dbg_lib_show_function "$@"
-  local debug="$BL64_VCS_SET_GIT_QUIET"
+  local verbose=' '
 
   bl64_check_module 'BL64_VCS_MODULE' &&
     bl64_check_parameters_none "$#" &&
@@ -28,14 +28,22 @@ function bl64_vcs_run_git() {
 
   bl64_dbg_lib_show_info "current path: $(pwd)"
   if bl64_dbg_lib_command_is_enabled; then
-    debug=''
+    verbose=''
     export GIT_TRACE='2'
+  else
+    if bl64_msg_lib_verbose_is_enabled; then
+      if bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+        export GIT_PROGRESS_DELAY='60'
+      fi
+    else
+      verbose="$BL64_VCS_SET_GIT_QUIET"
+    fi
   fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_VCS_CMD_GIT" \
-    $debug \
+    $verbose \
     $BL64_VCS_SET_GIT_NO_PAGER \
     "$@"
   bl64_dbg_lib_trace_stop
@@ -58,7 +66,6 @@ function _bl64_vcs_harden_git() {
   bl64_dbg_lib_show_info 'normalize GIT_* shell variables'
   bl64_dbg_lib_trace_start
   export GIT_TRACE='0'
-  export GIT_PROGRESS_DELAY='60'
   export GIT_TERMINAL_PROMPT='0'
   export GIT_CONFIG_NOSYSTEM='0'
   export GIT_AUTHOR_EMAIL='nouser@nodomain'
@@ -93,8 +100,10 @@ function bl64_vcs_git_clone() {
   local destination="${2}"
   local branch="${3:-$BL64_VAR_DEFAULT}"
   local name="${4:-$BL64_VAR_DEFAULT}"
+  local verbose=' '
 
   bl64_lib_var_is_default "$branch" && branch=''
+  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbose='--no-progress'
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_check_command "$BL64_VCS_CMD_GIT" ||
@@ -108,6 +117,7 @@ function bl64_vcs_git_clone() {
   if bl64_lib_var_is_default "$name"; then
     bl64_vcs_run_git \
       clone \
+      $verbose \
       --depth 1 \
       --single-branch \
       ${branch:+--branch $branch} \
@@ -116,6 +126,7 @@ function bl64_vcs_git_clone() {
   else
     bl64_vcs_run_git \
       clone \
+      $verbose \
       --depth 1 \
       --single-branch \
       ${branch:+--branch $branch} \

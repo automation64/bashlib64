@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - py
   - bl64_py_run_pip, bl64_py_run_pipx: disable progress display if CICD is on
   - bl64_py_run_pip, bl64_py_run_pipx: add security harden
+- vcs
+  - bl64_vcs_git_clone, bl64_vcs_run_git: disable progress display if CICD is on
 - all
   - **breaking-change**: demoted `*_blank_*` functions to private
 
