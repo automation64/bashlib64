@@ -115,6 +115,7 @@ function bl64_vcs_git_clone() {
     return $?
 
   if bl64_lib_var_is_default "$name"; then
+    # shellcheck disable=SC2086
     bl64_vcs_run_git \
       clone \
       $verbose \
@@ -124,6 +125,7 @@ function bl64_vcs_git_clone() {
       "$source" ||
       return $?
   else
+    # shellcheck disable=SC2086
     bl64_vcs_run_git \
       clone \
       $verbose \
