@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='21.0.0'
+  declare BL64_VERSION='21.1.0'
 
   #
   # Imported generic shell standard variables
@@ -592,7 +592,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.8.0'
+  declare BL64_MSG_VERSION='5.9.0'
 
   declare BL64_MSG_MODULE='0'
 
@@ -694,12 +694,12 @@ function bl64_lib_script_version_set() {
   declare BL64_MSG_THEME_ANSI_STD_INIT='36'
   declare BL64_MSG_THEME_ANSI_STD_INPUT='5;30;47'
   declare BL64_MSG_THEME_ANSI_STD_LIBINFO='1;32'
-  declare BL64_MSG_THEME_ANSI_STD_LIBSUBTASK='1;36'
+  declare BL64_MSG_THEME_ANSI_STD_LIBSUBTASK='37'
   declare BL64_MSG_THEME_ANSI_STD_LIBTASK='1;35'
   declare BL64_MSG_THEME_ANSI_STD_PHASE='7;1;36'
   declare BL64_MSG_THEME_ANSI_STD_SEPARATOR='30;44'
   declare BL64_MSG_THEME_ANSI_STD_SUBTASK='37'
-  declare BL64_MSG_THEME_ANSI_STD_TASK='1;37'
+  declare BL64_MSG_THEME_ANSI_STD_TASK='1;35'
   declare BL64_MSG_THEME_ANSI_STD_WARNING='5;37;43'
 
   # Selected message theme
@@ -1069,7 +1069,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.0.1'
+  declare BL64_FS_VERSION='6.1.0'
 
   declare BL64_FS_MODULE='0'
 
@@ -1330,7 +1330,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='4.0.0'
+  declare BL64_PY_VERSION='4.1.0'
 
   declare BL64_PY_MODULE='0'
 
@@ -1345,15 +1345,17 @@ function bl64_lib_script_version_set() {
 
   # Version info
   declare BL64_PY_VERSION_PYTHON3=''
+  declare BL64_PY_VERSION_PIP3=''
 
-  declare BL64_PY_SET_PIP_VERBOSE=''
-  declare BL64_PY_SET_PIP_VERSION=''
-  declare BL64_PY_SET_PIP_UPGRADE=''
-  declare BL64_PY_SET_PIP_USER=''
   declare BL64_PY_SET_PIP_DEBUG=''
+  declare BL64_PY_SET_PIP_NO_COLOR
+  declare BL64_PY_SET_PIP_NO_WARN_SCRIPT=''
   declare BL64_PY_SET_PIP_QUIET=''
   declare BL64_PY_SET_PIP_SITE=''
-  declare BL64_PY_SET_PIP_NO_WARN_SCRIPT=''
+  declare BL64_PY_SET_PIP_UPGRADE=''
+  declare BL64_PY_SET_PIP_USER=''
+  declare BL64_PY_SET_PIP_VERBOSE=''
+  declare BL64_PY_SET_PIP_VERSION=''
 
   declare BL64_PY_DEF_VENV_CFG='pyvenv.cfg'
 
@@ -1537,7 +1539,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_UI_VERSION='3.0.0'
+  declare BL64_UI_VERSION='3.1.0'
 
   declare BL64_UI_MODULE='0'
 
@@ -3839,7 +3841,7 @@ function bl64_msg_show_error() {
   local message="$1"
 
   bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
-    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error' "$message" >&2
+    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message" >&2
 }
 
 #######################################
@@ -3860,7 +3862,7 @@ function bl64_msg_show_fatal() {
   local message="$1"
 
   bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
-    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Fatal' "$message" >&2
+    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Fatal  ' "$message" >&2
 }
 
 #######################################
@@ -3902,7 +3904,7 @@ function bl64_msg_show_init() {
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
     bl64_msg_app_verbose_is_enabled || return 0
 
-  _bl64_msg_print "$BL64_MSG_TYPE_INIT" 'Init' "$message"
+  _bl64_msg_print "$BL64_MSG_TYPE_INIT" 'Init   ' "$message"
 }
 
 #######################################
@@ -3924,7 +3926,7 @@ function bl64_msg_show_info() {
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
     bl64_msg_app_verbose_is_enabled || return 0
 
-  _bl64_msg_print "$BL64_MSG_TYPE_INFO" 'Info' "$message"
+  _bl64_msg_print "$BL64_MSG_TYPE_INFO" 'Info   ' "$message"
 }
 
 #######################################
@@ -3946,7 +3948,7 @@ function bl64_msg_show_phase() {
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_PHASE}:${message}" &&
     bl64_msg_app_verbose_is_enabled || return 0
 
-  _bl64_msg_print "$BL64_MSG_TYPE_PHASE" 'Phase' "${BL64_MSG_COSMETIC_PHASE_PREFIX} ${message} ${BL64_MSG_COSMETIC_PHASE_SUFIX}"
+  _bl64_msg_print "$BL64_MSG_TYPE_PHASE" 'Phase  ' "${BL64_MSG_COSMETIC_PHASE_PREFIX} ${message} ${BL64_MSG_COSMETIC_PHASE_SUFIX}"
 }
 
 #######################################
@@ -3968,7 +3970,7 @@ function bl64_msg_show_task() {
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_TASK}:${message}" &&
     bl64_msg_app_verbose_is_enabled || return 0
 
-  _bl64_msg_print "$BL64_MSG_TYPE_TASK" 'Task' "$message"
+  _bl64_msg_print "$BL64_MSG_TYPE_TASK" 'Task   ' "$message"
 }
 
 #######################################
@@ -4012,7 +4014,7 @@ function bl64_msg_show_lib_task() {
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBTASK}:${message}" &&
     bl64_msg_lib_verbose_is_enabled || return 0
 
-  _bl64_msg_print "$BL64_MSG_TYPE_LIBTASK" 'Task' "$message"
+  _bl64_msg_print "$BL64_MSG_TYPE_LIBTASK" 'Task   ' "$message"
 }
 
 #######################################
@@ -4056,7 +4058,7 @@ function bl64_msg_show_lib_info() {
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBINFO}:${message}" &&
     bl64_msg_lib_verbose_is_enabled || return 0
 
-  _bl64_msg_print "$BL64_MSG_TYPE_LIBINFO" 'Info' "$message"
+  _bl64_msg_print "$BL64_MSG_TYPE_LIBINFO" 'Info   ' "$message"
 }
 
 #######################################
@@ -4158,7 +4160,7 @@ function bl64_msg_show_input() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local message="$1"
 
-  _bl64_msg_print "$BL64_MSG_TYPE_INPUT" 'Input' "$message"
+  _bl64_msg_print "$BL64_MSG_TYPE_INPUT" 'Input  ' "$message"
 }
 
 #######################################
@@ -4195,7 +4197,7 @@ function bl64_msg_show_separator() {
     done
   )"
 
-  _bl64_msg_print "$BL64_MSG_TYPE_SEPARATOR" "$BL64_MSG_COSMETIC_ARROW3" "${separator}${separator}${separator}[${message}]${output}"
+  _bl64_msg_print "$BL64_MSG_TYPE_SEPARATOR" "${BL64_MSG_COSMETIC_ARROW3}    " "${separator}${separator}${separator}[${message}]${output}"
 }
 
 #######################################
@@ -4266,7 +4268,7 @@ function bl64_msg_help_show(){
 
   _bl64_msg_show_script
   if [[ "$BL64_MSG_HELP_USAGE" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage      ' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
   fi
 
   _bl64_msg_show_about
@@ -4277,7 +4279,7 @@ function bl64_msg_help_show(){
   fi
 
   if [[ "$BL64_MSG_HELP_PARAMETERS" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Parameters'
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Parameters '
     printf '\n%s\n\n' "$BL64_MSG_HELP_PARAMETERS"
   fi
   bl64_msg_set_format "$current_format"
@@ -11596,6 +11598,70 @@ function bl64_fs_file_restore() {
 }
 
 #######################################
+# Move one ore more paths to a single destination. Optionally set owner and permissions
+#
+# * Wildcards are not allowed. Use run_mv instead if needed
+# * Destination path should be present
+# * Root privilege (sudo) needed if paths are restricted or change owner is requested
+# * No rollback in case of errors. The process will not remove already copied files
+#
+# Arguments:
+#   $1: file permissions. Format: chown format. Default: use current umask
+#   $2: directory permissions. Format: chown format. Default: use current umask
+#   $3: user name. Default: current
+#   $4: group name. Default: current
+#   $5: destination path
+#   $@: full source paths. No wildcards allowed
+# Outputs:
+#   STDOUT: verbose operation
+#   STDERR: command errors
+# Returns:
+#   0: Operation completed ok
+#   >0: Operation failed
+#######################################
+function bl64_fs_path_move() {
+  bl64_dbg_lib_show_function "$@"
+  local file_mode="${1:-${BL64_VAR_DEFAULT}}"
+  local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
+  local user="${3:-${BL64_VAR_DEFAULT}}"
+  local group="${4:-${BL64_VAR_DEFAULT}}"
+  local destination="${5:-${BL64_VAR_DEFAULT}}"
+  local path_current=''
+  local path_base=
+
+  bl64_check_directory "$destination" || return $?
+
+  # Remove consumed parameters
+  shift
+  shift
+  shift
+  shift
+  shift
+
+  # shellcheck disable=SC2086
+  bl64_check_parameters_none "$#" || return $?
+  bl64_msg_show_lib_subtask "move paths (${*} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
+  # shellcheck disable=SC2086
+  bl64_fs_run_mv \
+    $BL64_FS_SET_MV_FORCE \
+    "$@" \
+    "$destination" ||
+    return $?
+
+  for path_current in "$@"; do
+    path_base="$(bl64_fmt_path_get_basename "$path_current")"
+    bl64_fs_path_permission_set \
+      "$file_mode" \
+      "$dir_mode" \
+      "$user" \
+      "$group" \
+      "$BL64_VAR_ON" \
+      "${destination}/${path_base}" ||
+      return $?
+  done
+}
+
+#######################################
 # BashLib64 / Module / Setup / Interact with GCP
 #######################################
 
@@ -15103,6 +15169,7 @@ function _bl64_py_setup() {
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_py_set_command "$venv_path" &&
     bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
+    _bl64_py_set_version &&
     _bl64_py_set_options &&
     BL64_PY_MODULE="$BL64_VAR_ON"
 }
@@ -15180,46 +15247,32 @@ function _bl64_py_set_command_linux() {
   bl64_dbg_lib_show_function
   # Select best match for default python3
   if [[ -x '/usr/bin/python3.13' ]]; then
-    BL64_PY_VERSION_PYTHON3='3.13'
     BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
   elif [[ -x '/usr/bin/python3.12' ]]; then
-    BL64_PY_VERSION_PYTHON3='3.12'
     BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
   elif [[ -x '/usr/bin/python3.11' ]]; then
-    BL64_PY_VERSION_PYTHON3='3.11'
     BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
   elif [[ -x '/usr/bin/python3.10' ]]; then
-    BL64_PY_VERSION_PYTHON3='3.10'
     BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
   elif [[ -x '/usr/bin/python3.9' ]]; then
-    BL64_PY_VERSION_PYTHON3='3.9'
     BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
   elif [[ -x '/usr/bin/python3.8' ]]; then
-    BL64_PY_VERSION_PYTHON3='3.8'
     BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
   elif [[ -x '/usr/bin/python3.7' ]]; then
-    BL64_PY_VERSION_PYTHON3='3.7'
     BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
   elif [[ -x '/usr/bin/python3.6' ]]; then
-    BL64_PY_VERSION_PYTHON3='3.6'
     BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
   elif [[ -x '/usr/bin/python3.5' ]]; then
-    BL64_PY_VERSION_PYTHON3='3.5'
     BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
   elif [[ -x '/usr/bin/python3.4' ]]; then
-    BL64_PY_VERSION_PYTHON3='3.4'
     BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
   elif [[ -x '/usr/bin/python3.3' ]]; then
-    BL64_PY_VERSION_PYTHON3='3.3'
     BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
   elif [[ -x '/usr/bin/python3.2' ]]; then
-    BL64_PY_VERSION_PYTHON3='3.2'
     BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
   elif [[ -x '/usr/bin/python3.1' ]]; then
-    BL64_PY_VERSION_PYTHON3='3.1'
     BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
   elif [[ -x '/usr/bin/python3.0' ]]; then
-    BL64_PY_VERSION_PYTHON3='3.0'
     BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
   else
     if bl64_check_compatibility_mode; then
@@ -15246,14 +15299,22 @@ function _bl64_py_set_options() {
   bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2034
-  BL64_PY_SET_PIP_VERBOSE='--verbose' &&
-    BL64_PY_SET_PIP_DEBUG='-vvv' &&
-    BL64_PY_SET_PIP_VERSION='--version' &&
-    BL64_PY_SET_PIP_UPGRADE='--upgrade' &&
-    BL64_PY_SET_PIP_USER='--user' &&
-    BL64_PY_SET_PIP_QUIET='--quiet' &&
-    BL64_PY_SET_PIP_SITE='--system-site-packages' &&
+  {
+    BL64_PY_SET_PIP_DEBUG='-vvv'
     BL64_PY_SET_PIP_NO_WARN_SCRIPT='--no-warn-script-location'
+    BL64_PY_SET_PIP_QUIET='--quiet'
+    BL64_PY_SET_PIP_SITE='--system-site-packages'
+    BL64_PY_SET_PIP_UPGRADE='--upgrade'
+    BL64_PY_SET_PIP_USER='--user'
+    BL64_PY_SET_PIP_VERBOSE='--verbose'
+    BL64_PY_SET_PIP_VERSION='--version'
+  }
+
+  if [[ "${BL64_PY_VERSION_PIP3%%.*}" -ge 10 ]]; then
+      BL64_PY_SET_PIP_NO_COLOR="--no-color"
+  else
+      BL64_PY_SET_PIP_NO_COLOR=' '
+  fi
 
   # shellcheck disable=SC2034
   if [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_MACOS" ]]; then
@@ -15263,6 +15324,31 @@ function _bl64_py_set_options() {
   fi
 
   return 0
+}
+
+#######################################
+# Identify and set module components versions
+#
+# * Version information is stored in module global variables
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: command errors
+# Returns:
+#   0: version set ok
+#   >0: command error
+#######################################
+function _bl64_py_set_version() {
+  bl64_dbg_lib_show_function
+  BL64_PY_VERSION_PYTHON3="$(
+    python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
+  )"
+  BL64_PY_VERSION_PIP3="$(
+    python3 -c "import pip; print(pip.__version__)"
+  )"
+  [[ -n "$BL64_PY_VERSION_PYTHON3" && -n "$BL64_PY_VERSION_PIP3" ]]
 }
 
 #######################################
@@ -15579,7 +15665,7 @@ function bl64_py_run_pip() {
     -m 'pip' \
     $verbose \
     $cache \
-    --no-color \
+    $BL64_PY_SET_PIP_NO_COLOR \
     "$@"
 }
 
@@ -17755,9 +17841,9 @@ function bl64_ui_setup() {
 # * Needed to maintain compatibility up to N-2 versions
 #
 
-function bl64_ui_ask_confirmation() {
-  bl64_msg_show_deprecated 'bl64_ui_ask_confirmation' 'bl64_ui_confirmation_ask'
-  bl64_ui_confirmation_ask "$@"
+function bl64_ui_confirmation_ask() {
+  bl64_msg_show_deprecated 'bl64_ui_confirmation_ask' 'bl64_ui_ask_confirmation'
+  bl64_ui_ask_confirmation "$@"
 }
 
 #
@@ -17771,11 +17857,10 @@ function bl64_ui_ask_confirmation() {
 #######################################
 # Ask for confirmation
 #
-# * Use to confirm dangerous operations
-#
 # Arguments:
 #   $1: confirmation question
 #   $2: confirmation value that needs to be match
+#   $3: number of retries
 # Outputs:
 #   STDOUT: user interaction
 #   STDERR: command stderr
@@ -17783,21 +17868,28 @@ function bl64_ui_ask_confirmation() {
 #   0: confirmed
 #   >0: not confirmed
 #######################################
-function bl64_ui_confirmation_ask() {
+function bl64_ui_ask_confirmation() {
   bl64_dbg_lib_show_function "$@"
   local question="${1:-Please type in the confirmation message to proceed}"
   local confirmation="${2:-confirm-operation}"
+  local retries="${3:-3}"
   local input=''
+  local attempt=0
 
-  bl64_msg_show_input "${question} [${confirmation}]: "
-  read -r -t "$BL64_UI_CONFIRMATION_TIMEOUT" input
+  while ((attempt < retries)); do
+    bl64_msg_show_input "${question} [${confirmation}]: "
+    read -r -t "$BL64_UI_CONFIRMATION_TIMEOUT" input
 
-  if [[ "$input" != "$confirmation" ]]; then
-    bl64_msg_show_error 'confirmation verification failed'
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
-  fi
+    input="${input#"${input%%[![:space:]]*}"}"
+    input="${input%"${input##*[![:space:]]}"}"
+    [[ "$input" == "$confirmation" ]] && return 0
 
-  return 0
+    bl64_msg_show_error "Confirmation verification failed. Please try again."
+    ((attempt++))
+  done
+
+  bl64_msg_show_error "Maximum retries reached. Operation aborted."
+  return $BL64_LIB_ERROR_PARAMETER_INVALID
 }
 
 #######################################
@@ -17818,6 +17910,212 @@ function bl64_ui_separator_show() {
   local payload="${1:-}"
 
   printf '%s\n' "$payload"
+}
+
+#######################################
+# Ask a yes/no question
+#
+# Arguments:
+#   $1: question to ask
+# Outputs:
+#   STDOUT: user interaction
+# Returns:
+#   0: user answered yes
+#   1: user answered no
+#######################################
+function bl64_ui_ask_yesno() {
+  local question="${1:-Are you sure?}"
+  local input=''
+
+  while true; do
+    bl64_msg_show_input "${question} [y/n]: "
+    read -r input
+    case "$input" in
+    [Yy]*) return 0 ;;
+    [Nn]*) return 1 ;;
+    *) bl64_msg_show_error "Invalid input. Please answer y or n." ;;
+    esac
+  done
+}
+
+#######################################
+# Ask for general input (any type)
+#
+# Arguments:
+#   $1: prompt message
+# Outputs:
+#   STDOUT: user interaction
+# Returns:
+#   0: success
+#######################################
+function bl64_ui_ask_input_free() {
+  local prompt="${1:-Enter input:}"
+  local input=''
+
+  bl64_msg_show_input "${prompt} "
+  read -r input
+  echo "$input"
+}
+
+#######################################
+# Ask for integer input
+#
+# Arguments:
+#   $1: prompt message
+# Outputs:
+#   STDOUT: user interaction
+# Returns:
+#   0: valid integer
+#   1: invalid input
+#######################################
+function bl64_ui_ask_input_integer() {
+  local prompt="${1:-Enter an integer:}"
+  local input=''
+
+  while true; do
+    bl64_msg_show_input "${prompt} "
+    read -r input
+    if [[ "$input" =~ ^-?[0-9]+$ ]]; then
+      echo "$input"
+      return 0
+    else
+      bl64_msg_show_error "Invalid input. Please enter a valid integer."
+    fi
+  done
+}
+
+#######################################
+# Ask for float input
+#
+# Arguments:
+#   $1: prompt message
+# Outputs:
+#   STDOUT: user interaction
+# Returns:
+#   0: valid float
+#   1: invalid input
+#######################################
+function bl64_ui_ask_input_decimal() {
+  local prompt="${1:-Enter a float (e.g., 9.9):}"
+  local input=''
+
+  while true; do
+    bl64_msg_show_input "${prompt} "
+    read -r input
+    if [[ "$input" =~ ^-?[0-9]+(\.[0-9]+)?$ ]]; then
+      echo "$input"
+      return 0
+    else
+      bl64_msg_show_error "Invalid input. Please enter a valid decimal."
+    fi
+  done
+}
+
+#######################################
+# Ask for string input
+#
+# Arguments:
+#   $1: prompt message
+# Outputs:
+#   STDOUT: user interaction
+# Returns:
+#   0: valid string
+#######################################
+function bl64_ui_ask_input_string() {
+  local prompt="${1:-Enter a string:}"
+  local input=''
+
+  while true; do
+    bl64_msg_show_input "${prompt} "
+    read -r input
+    if [[ -n "$input" ]]; then
+      echo "$input"
+      return 0
+    else
+      bl64_msg_show_error "Invalid input. Please enter a non-empty string."
+    fi
+  done
+}
+
+#######################################
+# Ask for semantic version input
+#
+# Arguments:
+#   $1: prompt message
+# Outputs:
+#   STDOUT: user interaction
+# Returns:
+#   0: valid semantic version
+#   1: invalid input
+#######################################
+function bl64_ui_ask_input_semver() {
+  local prompt="${1:-Enter a semantic version (e.g., 1.0.0):}"
+  local input=''
+
+  while true; do
+    bl64_msg_show_input "${prompt} "
+    read -r input
+    if [[ "$input" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+      echo "$input"
+      return 0
+    else
+      bl64_msg_show_error "Invalid input. Please enter a valid semantic version (e.g., 1.0.0)."
+    fi
+  done
+}
+
+#######################################
+# Ask for time input (HH:MM format)
+#
+# Arguments:
+#   $1: prompt message
+# Outputs:
+#   STDOUT: user interaction
+# Returns:
+#   0: valid time
+#   1: invalid input
+#######################################
+function bl64_ui_ask_input_time() {
+  local prompt="${1:-Enter time (HH:MM):}"
+  local input=''
+
+  while true; do
+    bl64_msg_show_input "${prompt} "
+    read -r input
+    if [[ "$input" =~ ^([01]?[0-9]|2[0-3]):[0-5][0-9]$ ]]; then
+      echo "$input"
+      return 0
+    else
+      bl64_msg_show_error "Invalid input. Please enter a valid time (HH:MM)."
+    fi
+  done
+}
+
+#######################################
+# Ask for date input (DD-MM-YYYY format)
+#
+# Arguments:
+#   $1: prompt message
+# Outputs:
+#   STDOUT: user interaction
+# Returns:
+#   0: valid date
+#   1: invalid input
+#######################################
+function bl64_ui_ask_input_date() {
+  local prompt="${1:-Enter date (DD-MM-YYYY):}"
+  local input=''
+
+  while true; do
+    bl64_msg_show_input "${prompt} "
+    read -r input
+    if [[ "$input" =~ ^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-[0-9]{4}$ ]]; then
+      echo "$input"
+      return 0
+    else
+      bl64_msg_show_error "Invalid input. Please enter a valid date (DD-MM-YYYY)."
+    fi
+  done
 }
 
 #######################################
@@ -18032,6 +18330,7 @@ function bl64_vcs_git_clone() {
     return $?
 
   if bl64_lib_var_is_default "$name"; then
+    # shellcheck disable=SC2086
     bl64_vcs_run_git \
       clone \
       $verbose \
@@ -18041,6 +18340,7 @@ function bl64_vcs_git_clone() {
       "$source" ||
       return $?
   else
+    # shellcheck disable=SC2086
     bl64_vcs_run_git \
       clone \
       $verbose \
