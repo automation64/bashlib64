@@ -39,7 +39,7 @@ function bl64_check_command() {
   local message="${2:-$BL64_VAR_DEFAULT}"
   local command_name="${3:-}"
 
-  bl64_check_parameter 'path' || return $?
+  bl64_check_parameter 'path' 'command definition is missing' || return $?
   bl64_lib_var_is_default "$message" && message='required command is not present'
 
   if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
