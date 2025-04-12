@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.1.0]
+
+### Deprecated
+
+- ui
+  - bl64_ui_confirmation_ask -> bl64_ui_ask_confirmation
+
+### Added
+
+- fs
+  - bl64_fs_path_move
+- ui
+  - bl64_ui_ask_input_date
+  - bl64_ui_ask_input_time
+  - bl64_ui_ask_input_semver
+  - bl64_ui_ask_input_string
+  - bl64_ui_ask_input_decimal
+  - bl64_ui_ask_input_integer
+  - bl64_ui_ask_input_free
+  - bl64_ui_ask_yesno
+
 ## [21.0.0]
 
 ### Added
@@ -74,7 +95,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 
 - iam
-  bl64_iam_xdg_create -> bl64_bsh_xdg_create
+  - bl64_iam_xdg_create -> bl64_bsh_xdg_create
 
 ## [20.15.1]
 
