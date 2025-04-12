@@ -1614,3 +1614,67 @@ function bl64_fs_file_restore() {
       return $BL64_LIB_ERROR_TASK_RESTORE
   fi
 }
+
+#######################################
+# Move one ore more paths to a single destination. Optionally set owner and permissions
+#
+# * Wildcards are not allowed. Use run_mv instead if needed
+# * Destination path should be present
+# * Root privilege (sudo) needed if paths are restricted or change owner is requested
+# * No rollback in case of errors. The process will not remove already copied files
+#
+# Arguments:
+#   $1: file permissions. Format: chown format. Default: use current umask
+#   $2: directory permissions. Format: chown format. Default: use current umask
+#   $3: user name. Default: current
+#   $4: group name. Default: current
+#   $5: destination path
+#   $@: full source paths. No wildcards allowed
+# Outputs:
+#   STDOUT: verbose operation
+#   STDERR: command errors
+# Returns:
+#   0: Operation completed ok
+#   >0: Operation failed
+#######################################
+function bl64_fs_path_move() {
+  bl64_dbg_lib_show_function "$@"
+  local file_mode="${1:-${BL64_VAR_DEFAULT}}"
+  local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
+  local user="${3:-${BL64_VAR_DEFAULT}}"
+  local group="${4:-${BL64_VAR_DEFAULT}}"
+  local destination="${5:-${BL64_VAR_DEFAULT}}"
+  local path_current=''
+  local path_base=
+
+  bl64_check_directory "$destination" || return $?
+
+  # Remove consumed parameters
+  shift
+  shift
+  shift
+  shift
+  shift
+
+  # shellcheck disable=SC2086
+  bl64_check_parameters_none "$#" || return $?
+  bl64_msg_show_lib_subtask "move paths (${*} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
+  # shellcheck disable=SC2086
+  bl64_fs_run_mv \
+    $BL64_FS_SET_MV_FORCE \
+    "$@" \
+    "$destination" ||
+    return $?
+
+  for path_current in "$@"; do
+    path_base="$(bl64_fmt_path_get_basename "$path_current")"
+    bl64_fs_path_permission_set \
+      "$file_mode" \
+      "$dir_mode" \
+      "$user" \
+      "$group" \
+      "$BL64_VAR_ON" \
+      "${destination}/${path_base}" ||
+      return $?
+  done
+}
