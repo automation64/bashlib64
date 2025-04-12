@@ -217,7 +217,7 @@ function bl64_msg_show_error() {
   local message="$1"
 
   bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
-    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error' "$message" >&2
+    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message" >&2
 }
 
 #######################################
@@ -238,7 +238,7 @@ function bl64_msg_show_fatal() {
   local message="$1"
 
   bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
-    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Fatal' "$message" >&2
+    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Fatal  ' "$message" >&2
 }
 
 #######################################
@@ -280,7 +280,7 @@ function bl64_msg_show_init() {
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
     bl64_msg_app_verbose_is_enabled || return 0
 
-  _bl64_msg_print "$BL64_MSG_TYPE_INIT" 'Init' "$message"
+  _bl64_msg_print "$BL64_MSG_TYPE_INIT" 'Init   ' "$message"
 }
 
 #######################################
@@ -302,7 +302,7 @@ function bl64_msg_show_info() {
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
     bl64_msg_app_verbose_is_enabled || return 0
 
-  _bl64_msg_print "$BL64_MSG_TYPE_INFO" 'Info' "$message"
+  _bl64_msg_print "$BL64_MSG_TYPE_INFO" 'Info   ' "$message"
 }
 
 #######################################
@@ -324,7 +324,7 @@ function bl64_msg_show_phase() {
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_PHASE}:${message}" &&
     bl64_msg_app_verbose_is_enabled || return 0
 
-  _bl64_msg_print "$BL64_MSG_TYPE_PHASE" 'Phase' "${BL64_MSG_COSMETIC_PHASE_PREFIX} ${message} ${BL64_MSG_COSMETIC_PHASE_SUFIX}"
+  _bl64_msg_print "$BL64_MSG_TYPE_PHASE" 'Phase  ' "${BL64_MSG_COSMETIC_PHASE_PREFIX} ${message} ${BL64_MSG_COSMETIC_PHASE_SUFIX}"
 }
 
 #######################################
@@ -346,7 +346,7 @@ function bl64_msg_show_task() {
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_TASK}:${message}" &&
     bl64_msg_app_verbose_is_enabled || return 0
 
-  _bl64_msg_print "$BL64_MSG_TYPE_TASK" 'Task' "$message"
+  _bl64_msg_print "$BL64_MSG_TYPE_TASK" 'Task   ' "$message"
 }
 
 #######################################
@@ -390,7 +390,7 @@ function bl64_msg_show_lib_task() {
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBTASK}:${message}" &&
     bl64_msg_lib_verbose_is_enabled || return 0
 
-  _bl64_msg_print "$BL64_MSG_TYPE_LIBTASK" 'Task' "$message"
+  _bl64_msg_print "$BL64_MSG_TYPE_LIBTASK" 'Task   ' "$message"
 }
 
 #######################################
@@ -434,7 +434,7 @@ function bl64_msg_show_lib_info() {
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBINFO}:${message}" &&
     bl64_msg_lib_verbose_is_enabled || return 0
 
-  _bl64_msg_print "$BL64_MSG_TYPE_LIBINFO" 'Info' "$message"
+  _bl64_msg_print "$BL64_MSG_TYPE_LIBINFO" 'Info   ' "$message"
 }
 
 #######################################
@@ -536,7 +536,7 @@ function bl64_msg_show_input() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local message="$1"
 
-  _bl64_msg_print "$BL64_MSG_TYPE_INPUT" 'Input' "$message"
+  _bl64_msg_print "$BL64_MSG_TYPE_INPUT" 'Input  ' "$message"
 }
 
 #######################################
@@ -573,7 +573,7 @@ function bl64_msg_show_separator() {
     done
   )"
 
-  _bl64_msg_print "$BL64_MSG_TYPE_SEPARATOR" "$BL64_MSG_COSMETIC_ARROW3" "${separator}${separator}${separator}[${message}]${output}"
+  _bl64_msg_print "$BL64_MSG_TYPE_SEPARATOR" "${BL64_MSG_COSMETIC_ARROW3}    " "${separator}${separator}${separator}[${message}]${output}"
 }
 
 #######################################
@@ -644,7 +644,7 @@ function bl64_msg_help_show(){
 
   _bl64_msg_show_script
   if [[ "$BL64_MSG_HELP_USAGE" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage      ' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
   fi
 
   _bl64_msg_show_about
@@ -655,7 +655,7 @@ function bl64_msg_help_show(){
   fi
 
   if [[ "$BL64_MSG_HELP_PARAMETERS" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Parameters'
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Parameters '
     printf '\n%s\n\n' "$BL64_MSG_HELP_PARAMETERS"
   fi
   bl64_msg_set_format "$current_format"

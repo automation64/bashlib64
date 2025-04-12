@@ -4,3 +4,11 @@
   { echo 'test:Error: unable to load test environment' 2>&1 && exit 1; }
 
 bl64_ui_ask_confirmation
+bl64_ui_ask_input_date
+bl64_ui_ask_input_time
+bl64_ui_ask_input_semver
+bl64_ui_ask_input_string
+bl64_ui_ask_input_decimal
+bl64_ui_ask_input_integer
+bl64_ui_ask_input_free
+bl64_ui_ask_yesno
