@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='4.0.0'
+  declare BL64_PY_VERSION='4.1.0'
 
   declare BL64_PY_MODULE='0'
 
@@ -19,15 +19,17 @@
 
   # Version info
   declare BL64_PY_VERSION_PYTHON3=''
+  declare BL64_PY_VERSION_PIP3=''
 
-  declare BL64_PY_SET_PIP_VERBOSE=''
-  declare BL64_PY_SET_PIP_VERSION=''
-  declare BL64_PY_SET_PIP_UPGRADE=''
-  declare BL64_PY_SET_PIP_USER=''
   declare BL64_PY_SET_PIP_DEBUG=''
+  declare BL64_PY_SET_PIP_NO_COLOR
+  declare BL64_PY_SET_PIP_NO_WARN_SCRIPT=''
   declare BL64_PY_SET_PIP_QUIET=''
   declare BL64_PY_SET_PIP_SITE=''
-  declare BL64_PY_SET_PIP_NO_WARN_SCRIPT=''
+  declare BL64_PY_SET_PIP_UPGRADE=''
+  declare BL64_PY_SET_PIP_USER=''
+  declare BL64_PY_SET_PIP_VERBOSE=''
+  declare BL64_PY_SET_PIP_VERSION=''
 
   declare BL64_PY_DEF_VENV_CFG='pyvenv.cfg'
 

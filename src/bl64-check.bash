@@ -39,8 +39,13 @@ function bl64_check_command() {
   local message="${2:-$BL64_VAR_DEFAULT}"
   local command_name="${3:-}"
 
-  bl64_check_parameter 'path' || return $?
   bl64_lib_var_is_default "$message" && message='required command is not present'
+
+  if [[ -z "$path" || "$path" == "$BL64_VAR_DEFAULT" ]]; then
+    bl64_msg_show_error "missing command path definition (${command_name:+command: ${command_name} ${BL64_MSG_COSMETIC_PIPE} }caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_PARAMETER_EMPTY
+  fi
 
   if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
     bl64_msg_show_error "the requested operation is not supported on the current OS (OS: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
