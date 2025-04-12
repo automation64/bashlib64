@@ -26,6 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_ui_ask_input_free
   - bl64_ui_ask_yesno
 
+### Fixed
+
+- py
+  - pip version dependent options
+
 ## [21.0.0]
 
 ### Added
