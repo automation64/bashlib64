@@ -231,10 +231,10 @@ function _bl64_py_set_options() {
 function _bl64_py_set_version() {
   bl64_dbg_lib_show_function
   BL64_PY_VERSION_PYTHON3="$(
-    python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
+    "$BL64_PY_CMD_PYTHON3" -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
   )"
   BL64_PY_VERSION_PIP3="$(
-    python3 -c "import pip; print(pip.__version__)"
+    "$BL64_PY_CMD_PYTHON3" -c "import pip; print(pip.__version__)"
   )"
   [[ -n "$BL64_PY_VERSION_PYTHON3" && -n "$BL64_PY_VERSION_PIP3" ]]
 }
