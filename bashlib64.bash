@@ -15215,9 +15215,7 @@ function _bl64_py_set_command() {
     bl64_dbg_lib_show_comments 'Let other basthlib64 functions know about this venv'
     BL64_PY_PATH_VENV="$venv_path"
   fi
-  _bl64_py_set_command_version || return $?
-
-  bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3' 'BL64_PY_VERSION_PYTHON3' 'BL64_PY_PATH_VENV' 'VIRTUAL_ENV' 'PATH'
+  bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3' 'BL64_PY_PATH_VENV' 'VIRTUAL_ENV' 'PATH'
   return 0
 }
 
@@ -15231,49 +15229,37 @@ function _bl64_py_set_command_macos() {
   fi
 }
 
-function _bl64_py_set_command_version() {
-  bl64_dbg_lib_show_function
-  if [[ -z "$BL64_PY_VERSION_PYTHON3" ]]; then
-    bl64_dbg_lib_show_comments 'Detect python version'
-    BL64_PY_VERSION_PYTHON3="$("${BL64_PY_CMD_PYTHON3}" -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')"
-  fi
-  if [[ -z "$BL64_PY_VERSION_PYTHON3" ]]; then
-    bl64_msg_show_error "Unable to determine current Python version (${BL64_PY_CMD_PYTHON3})"
-    return $BL64_LIB_ERROR_TASK_FAILED
-  fi
-}
-
 function _bl64_py_set_command_linux() {
   bl64_dbg_lib_show_function
   # Select best match for default python3
   if [[ -x '/usr/bin/python3.13' ]]; then
-    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+    BL64_PY_CMD_PYTHON3="/usr/bin/python3.13"
   elif [[ -x '/usr/bin/python3.12' ]]; then
-    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+    BL64_PY_CMD_PYTHON3="/usr/bin/python3.12"
   elif [[ -x '/usr/bin/python3.11' ]]; then
-    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+    BL64_PY_CMD_PYTHON3="/usr/bin/python3.11"
   elif [[ -x '/usr/bin/python3.10' ]]; then
-    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+    BL64_PY_CMD_PYTHON3="/usr/bin/python3.10"
   elif [[ -x '/usr/bin/python3.9' ]]; then
-    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+    BL64_PY_CMD_PYTHON3="/usr/bin/python3.9"
   elif [[ -x '/usr/bin/python3.8' ]]; then
-    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+    BL64_PY_CMD_PYTHON3="/usr/bin/python3.8"
   elif [[ -x '/usr/bin/python3.7' ]]; then
-    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+    BL64_PY_CMD_PYTHON3="/usr/bin/python3.7"
   elif [[ -x '/usr/bin/python3.6' ]]; then
-    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+    BL64_PY_CMD_PYTHON3="/usr/bin/python3.6"
   elif [[ -x '/usr/bin/python3.5' ]]; then
-    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+    BL64_PY_CMD_PYTHON3="/usr/bin/python3.5"
   elif [[ -x '/usr/bin/python3.4' ]]; then
-    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+    BL64_PY_CMD_PYTHON3="/usr/bin/python3.4"
   elif [[ -x '/usr/bin/python3.3' ]]; then
-    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+    BL64_PY_CMD_PYTHON3="/usr/bin/python3.3"
   elif [[ -x '/usr/bin/python3.2' ]]; then
-    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+    BL64_PY_CMD_PYTHON3="/usr/bin/python3.2"
   elif [[ -x '/usr/bin/python3.1' ]]; then
-    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+    BL64_PY_CMD_PYTHON3="/usr/bin/python3.1"
   elif [[ -x '/usr/bin/python3.0' ]]; then
-    BL64_PY_CMD_PYTHON3="/usr/bin/python${BL64_PY_VERSION_PYTHON3}"
+    BL64_PY_CMD_PYTHON3="/usr/bin/python3.0"
   else
     if bl64_check_compatibility_mode; then
       BL64_PY_CMD_PYTHON3='/usr/bin/python3'
@@ -15311,9 +15297,9 @@ function _bl64_py_set_options() {
   }
 
   if [[ "${BL64_PY_VERSION_PIP3%%.*}" -ge 10 ]]; then
-      BL64_PY_SET_PIP_NO_COLOR="--no-color"
+    BL64_PY_SET_PIP_NO_COLOR="--no-color"
   else
-      BL64_PY_SET_PIP_NO_COLOR=' '
+    BL64_PY_SET_PIP_NO_COLOR=' '
   fi
 
   # shellcheck disable=SC2034
@@ -15343,12 +15329,20 @@ function _bl64_py_set_options() {
 function _bl64_py_set_version() {
   bl64_dbg_lib_show_function
   BL64_PY_VERSION_PYTHON3="$(
-    python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
+    "$BL64_PY_CMD_PYTHON3" -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
   )"
+  [[ -z "$BL64_PY_VERSION_PYTHON3" ]] &&
+    bl64_msg_show_error "Unable to determine Python version (${BL64_PY_CMD_PYTHON3})" &&
+    return $BL64_LIB_ERROR_TASK_FAILED
+
   BL64_PY_VERSION_PIP3="$(
-    python3 -c "import pip; print(pip.__version__)"
+    "$BL64_PY_CMD_PYTHON3" -c "import pip; print(pip.__version__)"
   )"
-  [[ -n "$BL64_PY_VERSION_PYTHON3" && -n "$BL64_PY_VERSION_PIP3" ]]
+  [[ -z "$BL64_PY_VERSION_PIP3" ]] &&
+    bl64_msg_show_error "Unable to determine PIP version (${BL64_PY_CMD_PYTHON3})" &&
+    return $BL64_LIB_ERROR_TASK_FAILED
+
+  return 0
 }
 
 #######################################
