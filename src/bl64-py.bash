@@ -312,7 +312,7 @@ function bl64_py_run_pip() {
     -m 'pip' \
     $verbose \
     $cache \
-    --no-color \
+    $BL64_PY_SET_PIP_NO_COLOR \
     "$@"
 }
 
