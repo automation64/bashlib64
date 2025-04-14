@@ -3,100 +3,37 @@
 . test/lib/bash-setup.bash ||
   { echo 'test:Error: unable to load test environment' 2>&1 && exit 1; }
 
+function show() {
+  bl64_msg_show_error 'bl64_msg_show_error'
+  bl64_msg_show_fatal 'bl64_msg_show_fatal'
+  bl64_msg_show_warning 'bl64_msg_show_warning'
+  bl64_msg_show_deprecated 'bl64_msg_show_deprecated'
+  bl64_msg_show_info 'bl64_msg_show_info'
+  bl64_msg_show_setup 'bl64_msg_show_setup' 'BL64_VAR_DEFAULT'
+  bl64_msg_show_input 'bl64_msg_show_input'
+  printf '%s\n' "[USER INPUT HERE]"
+  bl64_msg_show_phase 'bl64_msg_show_phase'
+  bl64_msg_show_task 'bl64_msg_show_task'
+  bl64_msg_show_subtask 'bl64_msg_show_subtask'
+  bl64_msg_show_separator
+  bl64_msg_show_lib_task 'bl64_msg_show_lib_task'
+  bl64_msg_show_lib_subtask 'bl64_msg_show_lib_subtask'
+  bl64_msg_show_lib_info 'bl64_msg_show_lib_info'
+  bl64_msg_show_batch_start 'bl64_msg_show_batch_start'
+  bl64_msg_show_batch_finish 0 'bl64_msg_show_batch_finish'
+  bl64_msg_show_batch_finish 1 'bl64_msg_show_batch_finish'
+}
+
 bl64_msg_all_enable_verbose
 bl64_msg_set_output "$BL64_MSG_OUTPUT_ANSI"
 
 bl64_msg_set_format "$BL64_MSG_FORMAT_FULL"
-bl64_msg_show_error 'bl64_msg_show_error'
-bl64_msg_show_fatal 'bl64_msg_show_fatal'
-bl64_msg_show_warning 'bl64_msg_show_warning'
-bl64_msg_show_deprecated 'bl64_msg_show_deprecated'
-bl64_msg_show_info 'bl64_msg_show_info'
-bl64_msg_show_setup 'bl64_msg_show_setup' 'BL64_VAR_DEFAULT'
-bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
-bl64_msg_show_phase 'bl64_msg_show_phase'
-bl64_msg_show_task 'bl64_msg_show_task'
-bl64_msg_show_subtask 'bl64_msg_show_subtask'
-bl64_msg_show_separator
-bl64_msg_show_lib_task 'bl64_msg_show_lib_task'
-bl64_msg_show_lib_subtask 'bl64_msg_show_lib_subtask'
-bl64_msg_show_lib_info 'bl64_msg_show_lib_info'
-bl64_msg_show_batch_start 'bl64_msg_show_batch_start'
-bl64_msg_show_batch_finish 0 'bl64_msg_show_batch_finish'
-bl64_msg_show_batch_finish 1 'bl64_msg_show_batch_finish'
-
+show
 bl64_msg_set_format "$BL64_MSG_FORMAT_PLAIN"
-bl64_msg_show_error 'bl64_msg_show_error'
-bl64_msg_show_fatal 'bl64_msg_show_fatal'
-bl64_msg_show_warning 'bl64_msg_show_warning'
-bl64_msg_show_deprecated 'bl64_msg_show_deprecated'
-bl64_msg_show_info 'bl64_msg_show_info'
-bl64_msg_show_setup 'bl64_msg_show_setup' 'BL64_VAR_DEFAULT'
-bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
-bl64_msg_show_phase 'bl64_msg_show_phase'
-bl64_msg_show_task 'bl64_msg_show_task'
-bl64_msg_show_subtask 'bl64_msg_show_subtask'
-bl64_msg_show_separator
-bl64_msg_show_lib_task 'bl64_msg_show_lib_task'
-bl64_msg_show_lib_subtask 'bl64_msg_show_lib_subtask'
-bl64_msg_show_lib_info 'bl64_msg_show_lib_info'
-bl64_msg_show_batch_start 'bl64_msg_show_batch_start'
-bl64_msg_show_batch_finish 0 'bl64_msg_show_batch_finish'
-bl64_msg_show_batch_finish 1 'bl64_msg_show_batch_finish'
-
+show
 bl64_msg_set_format "$BL64_MSG_FORMAT_HOST"
-bl64_msg_show_error 'bl64_msg_show_error'
-bl64_msg_show_fatal 'bl64_msg_show_fatal'
-bl64_msg_show_warning 'bl64_msg_show_warning'
-bl64_msg_show_deprecated 'bl64_msg_show_deprecated'
-bl64_msg_show_info 'bl64_msg_show_info'
-bl64_msg_show_setup 'bl64_msg_show_setup' 'BL64_VAR_DEFAULT'
-bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
-bl64_msg_show_phase 'bl64_msg_show_phase'
-bl64_msg_show_task 'bl64_msg_show_task'
-bl64_msg_show_subtask 'bl64_msg_show_subtask'
-bl64_msg_show_separator
-bl64_msg_show_lib_task 'bl64_msg_show_lib_task'
-bl64_msg_show_lib_subtask 'bl64_msg_show_lib_subtask'
-bl64_msg_show_lib_info 'bl64_msg_show_lib_info'
-bl64_msg_show_batch_start 'bl64_msg_show_batch_start'
-bl64_msg_show_batch_finish 0 'bl64_msg_show_batch_finish'
-bl64_msg_show_batch_finish 1 'bl64_msg_show_batch_finish'
-
+show
 bl64_msg_set_format "$BL64_MSG_FORMAT_TIME"
-bl64_msg_show_error 'bl64_msg_show_error'
-bl64_msg_show_fatal 'bl64_msg_show_fatal'
-bl64_msg_show_warning 'bl64_msg_show_warning'
-bl64_msg_show_deprecated 'bl64_msg_show_deprecated'
-bl64_msg_show_info 'bl64_msg_show_info'
-bl64_msg_show_setup 'bl64_msg_show_setup' 'BL64_VAR_DEFAULT'
-bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
-bl64_msg_show_phase 'bl64_msg_show_phase'
-bl64_msg_show_task 'bl64_msg_show_task'
-bl64_msg_show_subtask 'bl64_msg_show_subtask'
-bl64_msg_show_separator
-bl64_msg_show_lib_task 'bl64_msg_show_lib_task'
-bl64_msg_show_lib_subtask 'bl64_msg_show_lib_subtask'
-bl64_msg_show_lib_info 'bl64_msg_show_lib_info'
-bl64_msg_show_batch_start 'bl64_msg_show_batch_start'
-bl64_msg_show_batch_finish 0 'bl64_msg_show_batch_finish'
-bl64_msg_show_batch_finish 1 'bl64_msg_show_batch_finish'
-
+show
 bl64_msg_set_format "$BL64_MSG_FORMAT_CALLER"
-bl64_msg_show_error 'bl64_msg_show_error'
-bl64_msg_show_fatal 'bl64_msg_show_fatal'
-bl64_msg_show_warning 'bl64_msg_show_warning'
-bl64_msg_show_deprecated 'bl64_msg_show_deprecated'
-bl64_msg_show_info 'bl64_msg_show_info'
-bl64_msg_show_setup 'bl64_msg_show_setup' 'BL64_VAR_DEFAULT'
-bl64_msg_show_input 'bl64_msg_show_input'; printf '%s\n' "[USER INPUT HERE]"
-bl64_msg_show_phase 'bl64_msg_show_phase'
-bl64_msg_show_task 'bl64_msg_show_task'
-bl64_msg_show_subtask 'bl64_msg_show_subtask'
-bl64_msg_show_separator
-bl64_msg_show_lib_task 'bl64_msg_show_lib_task'
-bl64_msg_show_lib_subtask 'bl64_msg_show_lib_subtask'
-bl64_msg_show_lib_info 'bl64_msg_show_lib_info'
-bl64_msg_show_batch_start 'bl64_msg_show_batch_start'
-bl64_msg_show_batch_finish 0 'bl64_msg_show_batch_finish'
-bl64_msg_show_batch_finish 1 'bl64_msg_show_batch_finish'
+show
