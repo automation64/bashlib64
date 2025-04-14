@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='21.1.1'
+  declare BL64_VERSION='21.1.2'
 
   #
   # Imported generic shell standard variables
@@ -1069,7 +1069,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.1.0'
+  declare BL64_FS_VERSION='6.1.1'
 
   declare BL64_FS_MODULE='0'
 
@@ -1552,7 +1552,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VCS_VERSION='3.0.0'
+  declare BL64_VCS_VERSION='3.0.1'
 
   declare BL64_VCS_MODULE='0'
 
@@ -11509,7 +11509,6 @@ function bl64_fs_dir_reset() {
 #######################################
 function bl64_fs_run_touch() {
   bl64_dbg_lib_show_function "$@"
-  local debug=''
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_FS_MODULE' ||
@@ -18314,9 +18313,10 @@ function bl64_vcs_git_clone() {
   local destination="${2}"
   local branch="${3:-$BL64_VAR_DEFAULT}"
   local name="${4:-$BL64_VAR_DEFAULT}"
-  local verbose=' '
+  local verbose='--quiet'
 
   bl64_lib_var_is_default "$branch" && branch=''
+  bl64_msg_lib_verbose_is_enabled && verbose=' '
   bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbose='--no-progress'
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&

@@ -100,9 +100,10 @@ function bl64_vcs_git_clone() {
   local destination="${2}"
   local branch="${3:-$BL64_VAR_DEFAULT}"
   local name="${4:-$BL64_VAR_DEFAULT}"
-  local verbose=' '
+  local verbose='--quiet'
 
   bl64_lib_var_is_default "$branch" && branch=''
+  bl64_msg_lib_verbose_is_enabled && verbose=' '
   bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbose='--no-progress'
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
