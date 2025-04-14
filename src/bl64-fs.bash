@@ -1522,7 +1522,6 @@ function bl64_fs_dir_reset() {
 #######################################
 function bl64_fs_run_touch() {
   bl64_dbg_lib_show_function "$@"
-  local debug=''
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_FS_MODULE' ||
