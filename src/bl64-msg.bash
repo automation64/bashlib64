@@ -410,7 +410,7 @@ function bl64_msg_show_lib_subtask() {
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBSUBTASK}:${message}" &&
-    bl64_msg_app_verbose_is_enabled || return 0
+    bl64_msg_lib_verbose_is_enabled || return 0
 
   _bl64_msg_print "$BL64_MSG_TYPE_LIBSUBTASK" 'Subtask' "${BL64_MSG_COSMETIC_ARROW2} ${message}"
 }
