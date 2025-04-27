@@ -644,18 +644,18 @@ function bl64_msg_help_show(){
 
   _bl64_msg_show_script
   if [[ "$BL64_MSG_HELP_USAGE" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage      ' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage  ' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
   fi
 
   _bl64_msg_show_about
 
   if [[ "$BL64_MSG_HELP_DESCRIPTION" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Description'
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Info   '
     printf '\n%s\n\n' "$BL64_MSG_HELP_DESCRIPTION"
   fi
 
   if [[ "$BL64_MSG_HELP_PARAMETERS" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Parameters '
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Help   '
     printf '\n%s\n\n' "$BL64_MSG_HELP_PARAMETERS"
   fi
   bl64_msg_set_format "$current_format"
@@ -684,12 +684,12 @@ function bl64_msg_show_about() {
 
 function _bl64_msg_show_script() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-  _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Script' "${BL64_SCRIPT_ID} v${BL64_SCRIPT_VERSION}"
+  _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Script ' "${BL64_SCRIPT_ID} v${BL64_SCRIPT_VERSION}"
 }
 
 function _bl64_msg_show_about() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   if [[ "$BL64_MSG_HELP_ABOUT" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'About' "$BL64_MSG_HELP_ABOUT"
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'About  ' "$BL64_MSG_HELP_ABOUT"
   fi
 }

@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='21.1.2'
+  declare BL64_VERSION='21.1.3'
 
   #
   # Imported generic shell standard variables
@@ -592,7 +592,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.9.1'
+  declare BL64_MSG_VERSION='5.9.2'
 
   declare BL64_MSG_MODULE='0'
 
@@ -1223,7 +1223,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_K8S_VERSION='3.1.4'
+  declare BL64_K8S_VERSION='3.1.5'
 
   declare BL64_K8S_MODULE='0'
 
@@ -1497,7 +1497,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TXT_VERSION='2.5.0'
+  declare BL64_TXT_VERSION='2.5.1'
 
   declare BL64_TXT_MODULE='0'
 
@@ -1579,7 +1579,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_XSV_VERSION='2.1.0'
+  declare BL64_XSV_VERSION='2.1.1'
 
   declare BL64_XSV_MODULE='0'
 
@@ -4273,18 +4273,18 @@ function bl64_msg_help_show(){
 
   _bl64_msg_show_script
   if [[ "$BL64_MSG_HELP_USAGE" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage      ' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage  ' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
   fi
 
   _bl64_msg_show_about
 
   if [[ "$BL64_MSG_HELP_DESCRIPTION" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Description'
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Info   '
     printf '\n%s\n\n' "$BL64_MSG_HELP_DESCRIPTION"
   fi
 
   if [[ "$BL64_MSG_HELP_PARAMETERS" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Parameters '
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Help   '
     printf '\n%s\n\n' "$BL64_MSG_HELP_PARAMETERS"
   fi
   bl64_msg_set_format "$current_format"
@@ -4313,13 +4313,13 @@ function bl64_msg_show_about() {
 
 function _bl64_msg_show_script() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-  _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Script' "${BL64_SCRIPT_ID} v${BL64_SCRIPT_VERSION}"
+  _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Script ' "${BL64_SCRIPT_ID} v${BL64_SCRIPT_VERSION}"
 }
 
 function _bl64_msg_show_about() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   if [[ "$BL64_MSG_HELP_ABOUT" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'About' "$BL64_MSG_HELP_ABOUT"
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'About  ' "$BL64_MSG_HELP_ABOUT"
   fi
 }
 
@@ -13739,7 +13739,6 @@ function bl64_k8s_run_kubectl() {
     kubeconfig="--kubeconfig=${kubeconfig}"
   fi
 
-  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_SET_VERBOSE_NORMAL"
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_K8S_SET_VERBOSE_TRACE"
 
   bl64_k8s_blank_kubectl
@@ -17484,7 +17483,7 @@ function bl64_txt_search_line() {
 # * Warning: sed regexp is not consistent across versions and vendors. Caller is responsible for testing to ensure compatibility
 #
 # Arguments:
-#   $1: sed expression 
+#   $1: sed expression
 # Outputs:
 #   STDOUT: none
 #   STDERR: Error messages
@@ -17734,8 +17733,7 @@ function bl64_txt_run_cut() {
 function bl64_txt_run_uniq() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MODULE' &&
     bl64_check_command "$BL64_TXT_CMD_UNIQ" ||
     return $?
 
@@ -17761,8 +17759,7 @@ function bl64_txt_run_uniq() {
 function bl64_txt_run_sort() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MODULE' &&
     bl64_check_command "$BL64_TXT_CMD_SORT" ||
     return $?
 
@@ -17788,8 +17785,7 @@ function bl64_txt_run_sort() {
 function bl64_txt_run_tail() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MODULE' &&
     bl64_check_command "$BL64_TXT_CMD_TAIL" ||
     return $?
 
@@ -18632,8 +18628,9 @@ function bl64_xsv_setup() {
 #######################################
 function _bl64_xsv_set_command() {
   bl64_dbg_lib_show_function "$@"
-  BL64_XSV_CMD_JQ="$(bl64_bsh_command_locate 'jq' "$@")" &&
-    BL64_XSV_CMD_YQ="$(bl64_bsh_command_locate 'yq' "$@")"
+  BL64_XSV_CMD_JQ="$(bl64_bsh_command_locate 'jq' "$@")"
+  BL64_XSV_CMD_YQ="$(bl64_bsh_command_locate 'yq' "$@")"
+  return 0
 }
 
 #######################################
@@ -18764,7 +18761,7 @@ function bl64_xsv_run_jq() {
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_XSV_MODULE' &&
-    bl64_check_command "$BL64_XSV_CMD_JQ" ||
+    bl64_check_command "$BL64_XSV_CMD_JQ" "$BL64_VAR_DEFAULT" 'jq' ||
     return $?
 
   bl64_dbg_lib_trace_start

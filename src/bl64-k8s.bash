@@ -399,7 +399,6 @@ function bl64_k8s_run_kubectl() {
     kubeconfig="--kubeconfig=${kubeconfig}"
   fi
 
-  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_SET_VERBOSE_NORMAL"
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_K8S_SET_VERBOSE_TRACE"
 
   bl64_k8s_blank_kubectl
