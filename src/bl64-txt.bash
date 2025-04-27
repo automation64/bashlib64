@@ -87,7 +87,7 @@ function bl64_txt_search_line() {
 # * Warning: sed regexp is not consistent across versions and vendors. Caller is responsible for testing to ensure compatibility
 #
 # Arguments:
-#   $1: sed expression 
+#   $1: sed expression
 # Outputs:
 #   STDOUT: none
 #   STDERR: Error messages
@@ -337,8 +337,7 @@ function bl64_txt_run_cut() {
 function bl64_txt_run_uniq() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MODULE' &&
     bl64_check_command "$BL64_TXT_CMD_UNIQ" ||
     return $?
 
@@ -364,8 +363,7 @@ function bl64_txt_run_uniq() {
 function bl64_txt_run_sort() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MODULE' &&
     bl64_check_command "$BL64_TXT_CMD_SORT" ||
     return $?
 
@@ -391,8 +389,7 @@ function bl64_txt_run_sort() {
 function bl64_txt_run_tail() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MODULE' &&
     bl64_check_command "$BL64_TXT_CMD_TAIL" ||
     return $?
 
