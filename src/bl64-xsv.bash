@@ -126,7 +126,7 @@ function bl64_xsv_run_jq() {
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_XSV_MODULE' &&
-    bl64_check_command "$BL64_XSV_CMD_JQ" ||
+    bl64_check_command "$BL64_XSV_CMD_JQ" "$BL64_VAR_DEFAULT" 'jq' ||
     return $?
 
   bl64_dbg_lib_trace_start

@@ -46,6 +46,7 @@ function bl64_xsv_setup() {
 #######################################
 function _bl64_xsv_set_command() {
   bl64_dbg_lib_show_function "$@"
-  BL64_XSV_CMD_JQ="$(bl64_bsh_command_locate 'jq' "$@")" &&
-    BL64_XSV_CMD_YQ="$(bl64_bsh_command_locate 'yq' "$@")"
+  BL64_XSV_CMD_JQ="$(bl64_bsh_command_locate 'jq' "$@")"
+  BL64_XSV_CMD_YQ="$(bl64_bsh_command_locate 'yq' "$@")"
+  return 0
 }
