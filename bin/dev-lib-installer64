@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# * Version: 3.2.1
+# * Version: 4.0.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -21,15 +21,6 @@
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
 # shellcheck source=bin/dev-env-installer64
 source ./bin/dev-env-installer64 || exit 1
-
-#
-# Globals
-#
-
-# Lib / Installer64 / Installer64 parameters
-export INST64_INSTALLER64_TARGET="$DEV_LIB_INSTALLER64_TARGET"
-# Lib / BashLib64 / Installer64 parameters
-export INST64_BASHLIB64_TARGET="$DEV_LIB_BASHLIB64_TARGET"
 
 #
 # Main
