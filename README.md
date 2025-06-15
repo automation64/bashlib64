@@ -57,19 +57,19 @@ BashLib64 is a **Bash** library that provides a simple abstraction layer for dev
 
 The library has been tested on the following operating systems:
 
-- AlmaLinux: 8,9
-- Alpine: 3
+- AlmaLinux: 8,9,10
+- Alpine: 3.17,3.18,3.19,3.20,3.21,3.22
 - AmazonLinux: 2023
-- CentOS: 7,8,9
-- Debian: 9,10,11
+- CentOS: 7,8,9,10
+- Debian: 9,10,11,12
 - Fedora: 33,34,35,36,37,38,39,40,41,42
 - KaliLinux: 2024,2025
 - MacOS (*): 12,13,14,15
 - OracleLinux; 7,8,9
-- RedHatEnterpriseLinux: 8,9
+- RedHatEnterpriseLinux: 8,9,10
 - RockyLinux: 8,9
 - SuSELinuxEnterpriseServer: 15
-- Ubuntu: 18,20,21,22,23,24
+- Ubuntu: 18,20,21,22,23,24,25
 
 (*) Requires Bash4 (e.g. homebrew install bash)
 
