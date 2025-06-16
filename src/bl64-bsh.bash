@@ -582,19 +582,23 @@ function bl64_bsh_xdg_create() {
 function bl64_bsh_job_try() {
   bl64_dbg_lib_show_function "$@"
   local max_retries="${1:-$BL64_VAR_DEFAULT}"
-  local wait_time="${1:-$BL64_VAR_DEFAULT}"
+  local wait_time="${2:-$BL64_VAR_DEFAULT}"
+  local job_command="${3:-}"
   local attempt=1
 
+  bl64_check_parameter 'job_command' &&
+    bl64_check_parameters_none "$#" || return $?
   [[ "$max_retries" == "$BL64_VAR_DEFAULT" ]] && max_retries="$BL64_BSH_JOB_SET_MAX_RETRIES"
   [[ "$wait_time" == "$BL64_VAR_DEFAULT" ]] && wait_time="$BL64_BSH_JOB_SET_WAIT"
-  bl64_check_parameters_none || return $?
 
-  shift 2
+  shift
+  shift
+  shift
   while :; do
-    "$@" && return 0
+    "$job_command" "$@" && return 0
     ((attempt++))
     if ((attempt > max_retries)); then
-      bl64_msg_show_error "command failed after ${max_retries} attempts"
+      bl64_msg_show_error "command failed after ${max_retries} attempts (${job_command})"
       return 1
     fi
     if ((attempt == 2)); then
