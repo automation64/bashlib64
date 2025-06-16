@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='21.2.0'
+  declare BL64_VERSION='21.3.0'
 
   #
   # Imported generic shell standard variables
@@ -464,7 +464,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CHECK_VERSION='6.1.3'
+  declare BL64_CHECK_VERSION='6.1.4'
 
   declare BL64_CHECK_MODULE='0'
 }
@@ -896,9 +896,12 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_API_VERSION='2.1.0'
+  declare BL64_API_VERSION='2.2.0'
 
   declare BL64_API_MODULE='0'
+
+  declare BL64_API_CALL_SET_MAX_RETRIES='5'
+  declare BL64_API_CALL_SET_WAIT='5'
 
   #
   # Common constants
@@ -980,7 +983,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_BSH_VERSION='3.5.2'
+  declare BL64_BSH_VERSION='3.6.0'
 
   declare BL64_BSH_MODULE='0'
 
@@ -991,6 +994,9 @@ function bl64_lib_script_version_set() {
   declare BL64_BSH_XDG_PATH_CONFIG=''
   declare BL64_BSH_XDG_PATH_CACHE=''
   declare BL64_BSH_XDG_PATH_LOCAL=''
+
+  declare BL64_BSH_JOB_SET_MAX_RETRIES='5'
+  declare BL64_BSH_JOB_SET_WAIT='5'
 }
 
 #######################################
@@ -1278,16 +1284,18 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PKG_VERSION='6.1.0'
+  declare BL64_PKG_VERSION='6.2.0'
 
   declare BL64_PKG_MODULE='0'
 
-  declare BL64_PKG_CMD_APK=''
-  declare BL64_PKG_CMD_APT=''
-  declare BL64_PKG_CMD_BREW=''
-  declare BL64_PKG_CMD_DNF=''
-  declare BL64_PKG_CMD_YUM=''
-  declare BL64_PKG_CMD_ZYPPER=''
+  declare BL64_PKG_CMD_APK="$BL64_VAR_INCOMPATIBLE"
+  declare BL64_PKG_CMD_APT="$BL64_VAR_INCOMPATIBLE"
+  declare BL64_PKG_CMD_DPKG="$BL64_VAR_INCOMPATIBLE"
+  declare BL64_PKG_CMD_BREW="$BL64_VAR_INCOMPATIBLE"
+  declare BL64_PKG_CMD_DNF="$BL64_VAR_INCOMPATIBLE"
+  declare BL64_PKG_CMD_RPM="$BL64_VAR_INCOMPATIBLE"
+  declare BL64_PKG_CMD_YUM="$BL64_VAR_INCOMPATIBLE"
+  declare BL64_PKG_CMD_ZYPPER="$BL64_VAR_INCOMPATIBLE"
 
   declare BL64_PKG_ALIAS_APK_CLEAN=''
   declare BL64_PKG_ALIAS_APK_INSTALL=''
@@ -1497,7 +1505,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TXT_VERSION='2.5.1'
+  declare BL64_TXT_VERSION='2.6.0'
 
   declare BL64_TXT_MODULE='0'
 
@@ -1506,6 +1514,7 @@ function bl64_lib_script_version_set() {
   declare BL64_TXT_CMD_BASE64="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_CUT="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_ENVSUBST="$BL64_VAR_UNAVAILABLE"
+  declare BL64_TXT_CMD_FMT="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_GAWK="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_GREP="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_SED="$BL64_VAR_UNAVAILABLE"
@@ -1539,7 +1548,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_UI_VERSION='3.1.0'
+  declare BL64_UI_VERSION='3.2.0'
 
   declare BL64_UI_MODULE='0'
 
@@ -2277,7 +2286,7 @@ function bl64_check_alert_module_setup() {
 #######################################
 function bl64_check_parameters_none() {
   _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
-  local count="$1"
+  local count="${1:-}"
   local message="${2:-the requested operation requires at least one parameter and none was provided}"
 
   bl64_check_parameter 'count' || return $?
@@ -5723,6 +5732,7 @@ function bl64_api_setup() {
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_RXTX_MODULE' &&
     BL64_API_MODULE="$BL64_VAR_ON"
@@ -5777,11 +5787,12 @@ function bl64_api_call() {
   bl64_dbg_lib_command_is_enabled && debug="${BL64_RXTX_SET_CURL_VERBOSE} ${BL64_RXTX_SET_CURL_INCLUDE}"
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_RXTX_CMD_CURL" \
-    $BL64_RXTX_SET_CURL_FAIL \
-    $BL64_RXTX_SET_CURL_REDIRECT \
-    $BL64_RXTX_SET_CURL_SECURE \
-    $BL64_RXTX_SET_CURL_REQUEST ${api_method} \
+  bl64_bsh_job_try "$BL64_API_CALL_SET_MAX_RETRIES" "$BL64_API_CALL_SET_WAIT" \
+    "$BL64_RXTX_CMD_CURL" \
+    "$BL64_RXTX_SET_CURL_FAIL" \
+    "$BL64_RXTX_SET_CURL_REDIRECT" \
+    "$BL64_RXTX_SET_CURL_SECURE" \
+    "$BL64_RXTX_SET_CURL_REQUEST" ${api_method} \
     $debug \
     "${api_url}${api_path}${api_query}" \
     "$@"
@@ -7595,6 +7606,49 @@ function bl64_bsh_xdg_create() {
     "${xdg_local}/lib" \
     "${xdg_local}/share" \
     "${xdg_local}/state"
+}
+
+#######################################
+# Retry a command until it succeeds or the maximum number of retries is reached
+#
+# Arguments:
+#   $1: maximum number of retries. Default: BL64_BSH_JOB_SET_MAX_RETRIES
+#   $2: wait time between retries in seconds. Default: BL64_BSH_JOB_SET_WAIT
+#   $@: command to execute
+# Outputs:
+#   STDOUT: progress
+#   STDERR: execution errors
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_bsh_job_try() {
+  bl64_dbg_lib_show_function "$@"
+  local max_retries="${1:-$BL64_VAR_DEFAULT}"
+  local wait_time="${2:-$BL64_VAR_DEFAULT}"
+  local job_command="${3:-}"
+  local attempt=1
+
+  bl64_check_parameter 'job_command' &&
+    bl64_check_parameters_none "$#" || return $?
+  [[ "$max_retries" == "$BL64_VAR_DEFAULT" ]] && max_retries="$BL64_BSH_JOB_SET_MAX_RETRIES"
+  [[ "$wait_time" == "$BL64_VAR_DEFAULT" ]] && wait_time="$BL64_BSH_JOB_SET_WAIT"
+
+  shift
+  shift
+  shift
+  while :; do
+    "$job_command" "$@" && return 0
+    ((attempt++))
+    if ((attempt > max_retries)); then
+      bl64_msg_show_error "command failed after ${max_retries} attempts (${job_command})"
+      return 1
+    fi
+    if ((attempt == 2)); then
+      bl64_msg_show_warning "command failed. Retrying in ${wait_time} seconds... (attempt ${attempt}/${max_retries})"
+    fi
+    sleep "$wait_time"
+  done
 }
 
 #######################################
@@ -14267,18 +14321,23 @@ function _bl64_pkg_set_command() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_PKG_CMD_APT='/usr/bin/apt'
+    BL64_PKG_CMD_DPKG='/usr/bin/dpkg'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    BL64_PKG_CMD_RPM='/usr/bin/rpm'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     BL64_PKG_CMD_YUM='/usr/bin/yum'
+    BL64_PKG_CMD_RPM='/usr/bin/rpm'
     ;;
   ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    BL64_PKG_CMD_RPM='/usr/bin/rpm'
     ;;
   ${BL64_OS_SLES}-*)
     BL64_PKG_CMD_ZYPPER='/usr/bin/zypper'
+    BL64_PKG_CMD_RPM='/usr/bin/rpm'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_PKG_CMD_APK='/sbin/apk'
@@ -14643,6 +14702,8 @@ function _bl64_pkg_repository_add_apt() {
 function bl64_pkg_repository_refresh() {
   bl64_dbg_lib_show_function
 
+  bl64_check_privilege_root || return $?
+
   bl64_msg_show_lib_subtask 'refresh package repository content'
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
@@ -14735,7 +14796,8 @@ function bl64_pkg_prepare() {
 function bl64_pkg_install() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none $# || return $?
+  bl64_check_privilege_root &&
+    bl64_check_parameters_none $# || return $?
 
   bl64_msg_show_lib_subtask "install packages (${*})"
   # shellcheck disable=SC2086
@@ -14785,7 +14847,10 @@ function bl64_pkg_install() {
 function bl64_pkg_upgrade() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_msg_show_lib_subtask "upgrade packages (${*})"
+  bl64_check_privilege_root || return $?
+
+  bl64_msg_show_lib_subtask "upgrade packages${*:+ (${*})}"
+
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -14832,6 +14897,8 @@ function bl64_pkg_upgrade() {
 function bl64_pkg_cleanup() {
   bl64_dbg_lib_show_function
   local target=''
+
+  bl64_check_privilege_root || return $?
 
   bl64_msg_show_lib_subtask 'clean up package manager run-time environment'
   # shellcheck disable=SC2086
@@ -14885,8 +14952,7 @@ function bl64_pkg_run_dnf() {
   local verbose=''
 
   bl64_check_module 'BL64_PKG_MODULE' &&
-    bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_parameters_none "$#" ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -14920,8 +14986,7 @@ function bl64_pkg_run_yum() {
   local verbose=''
 
   bl64_check_module 'BL64_PKG_MODULE' &&
-    bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_parameters_none "$#" ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -14955,8 +15020,7 @@ function bl64_pkg_run_apt() {
   local verbose=''
 
   bl64_check_module 'BL64_PKG_MODULE' &&
-    bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_parameters_none "$#" ||
     return $?
 
   _bl64_pkg_harden_apt
@@ -15022,8 +15086,7 @@ function bl64_pkg_run_apk() {
   local verbose=''
 
   bl64_check_module 'BL64_PKG_MODULE' &&
-    bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_parameters_none "$#" ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -15097,8 +15160,7 @@ function bl64_pkg_run_zypper() {
   local verbose=''
 
   bl64_check_module 'BL64_PKG_MODULE' &&
-    bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_parameters_none "$#" ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -15110,6 +15172,66 @@ function bl64_pkg_run_zypper() {
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_PKG_CMD_ZYPPER" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_pkg_run_rpm() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" ||
+    return $?
+
+  if bl64_msg_lib_verbose_is_enabled; then
+    verbose='--verbose'
+  else
+    verbose='--quiet'
+  fi
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_PKG_CMD_RPM" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_pkg_run_dpkg() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_PKG_CMD_DPKG" "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -17205,6 +17327,7 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
     BL64_TXT_CMD_GAWK='/usr/bin/gawk'
     BL64_TXT_CMD_GREP='/bin/grep'
+    BL64_TXT_CMD_FMT='/bin/fmt'
     BL64_TXT_CMD_SED='/bin/sed'
     BL64_TXT_CMD_SORT='/usr/bin/sort'
     BL64_TXT_CMD_TAIL='/usr/bin/tail'
@@ -17224,6 +17347,7 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
     BL64_TXT_CMD_GAWK='/usr/bin/gawk'
     BL64_TXT_CMD_GREP='/usr/bin/grep'
+    BL64_TXT_CMD_FMT='/usr/bin/fmt'
     BL64_TXT_CMD_SED='/usr/bin/sed'
     BL64_TXT_CMD_SORT='/usr/bin/sort'
     BL64_TXT_CMD_TAIL='/usr/bin/tail'
@@ -17239,6 +17363,7 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
     BL64_TXT_CMD_GAWK='/usr/bin/gawk'
     BL64_TXT_CMD_GREP='/usr/bin/grep'
+    BL64_TXT_CMD_FMT='/usr/bin/fmt'
     BL64_TXT_CMD_SED='/usr/bin/sed'
     BL64_TXT_CMD_SORT='/usr/bin/sort'
     BL64_TXT_CMD_TAIL='/usr/bin/tail'
@@ -17254,6 +17379,7 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
     BL64_TXT_CMD_GAWK='/usr/bin/gawk'
     BL64_TXT_CMD_GREP='/bin/grep'
+    BL64_TXT_CMD_FMT='/bin/fmt'
     BL64_TXT_CMD_SED='/bin/sed'
     BL64_TXT_CMD_SORT='/usr/bin/sort'
     BL64_TXT_CMD_TAIL='/usr/bin/tail'
@@ -17273,6 +17399,7 @@ function _bl64_txt_set_command() {
     BL64_TXT_CMD_ENVSUBST='/opt/homebrew/bin/envsubst'
     BL64_TXT_CMD_GAWK="$BL64_VAR_UNAVAILABLE"
     BL64_TXT_CMD_GREP='/usr/bin/grep'
+    BL64_TXT_CMD_FMT='/usr/bin/fmt'
     BL64_TXT_CMD_SED='/usr/bin/sed'
     BL64_TXT_CMD_SORT='/usr/bin/sort'
     BL64_TXT_CMD_TAIL='/usr/bin/tail'
@@ -17795,6 +17922,33 @@ function bl64_txt_run_tail() {
 }
 
 #######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_txt_run_fmt() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_command "$BL64_TXT_CMD_FMT" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_TXT_CMD_FMT" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
 # BashLib64 / Module / Setup / User Interface
 #######################################
 
@@ -17854,7 +18008,6 @@ function bl64_ui_confirmation_ask() {
 # Arguments:
 #   $1: confirmation question
 #   $2: confirmation value that needs to be match
-#   $3: number of retries
 # Outputs:
 #   STDOUT: user interaction
 #   STDERR: command stderr
@@ -17864,26 +18017,45 @@ function bl64_ui_confirmation_ask() {
 #######################################
 function bl64_ui_ask_confirmation() {
   bl64_dbg_lib_show_function "$@"
-  local question="${1:-Please type in the confirmation message to proceed}"
-  local confirmation="${2:-confirm-operation}"
-  local retries="${3:-3}"
+  local question="${1:-please type in the confirmation message to proceed}"
+  local confirmation="${2:-confirm}"
   local input=''
-  local attempt=0
 
-  while ((attempt < retries)); do
-    bl64_msg_show_input "${question} [${confirmation}]: "
-    read -r -t "$BL64_UI_CONFIRMATION_TIMEOUT" input
+  bl64_msg_show_input "${question} [${confirmation}]: "
+  read -r -t "$BL64_UI_CONFIRMATION_TIMEOUT" input
 
-    input="${input#"${input%%[![:space:]]*}"}"
-    input="${input%"${input##*[![:space:]]}"}"
-    [[ "$input" == "$confirmation" ]] && return 0
+  input="${input#"${input%%[![:space:]]*}"}"
+  input="${input%"${input##*[![:space:]]}"}"
+  [[ "$input" == "$confirmation" ]] && return 0
 
-    bl64_msg_show_error "Confirmation verification failed. Please try again."
-    ((attempt++))
-  done
-
-  bl64_msg_show_error "Maximum retries reached. Operation aborted."
+  bl64_msg_show_warning 'Confirmation verification failed. The operation will be cancelled.'
   return $BL64_LIB_ERROR_PARAMETER_INVALID
+}
+
+#######################################
+# Ask configuration to proceed, in a yes/no format
+#
+# Arguments:
+#   $1: question to ask
+# Outputs:
+#   STDOUT: user interaction
+# Returns:
+#   0: user answered yes
+#   1: user answered no
+#######################################
+function bl64_ui_ask_proceed() {
+  local question="${1:-Do you want to proceed?}"
+  local input=''
+
+  while true; do
+    bl64_msg_show_input "${question} [y/n]: "
+    read -r input
+    case "$input" in
+    [Yy]*) return 0 ;;
+    [Nn]*) bl64_msg_show_warning 'User requested not to proceed. No further action will be taken.' && return 1 ;;
+    *) bl64_msg_show_error "Invalid input. Please answer y or n." ;;
+    esac
+  done
 }
 
 #######################################
@@ -17918,7 +18090,7 @@ function bl64_ui_separator_show() {
 #   1: user answered no
 #######################################
 function bl64_ui_ask_yesno() {
-  local question="${1:-Are you sure?}"
+  local question="${1:-are you sure?}"
   local input=''
 
   while true; do
@@ -17943,7 +18115,7 @@ function bl64_ui_ask_yesno() {
 #   0: success
 #######################################
 function bl64_ui_ask_input_free() {
-  local prompt="${1:-Enter input:}"
+  local prompt="${1:-enter input:}"
   local input=''
 
   bl64_msg_show_input "${prompt} "
@@ -17963,7 +18135,7 @@ function bl64_ui_ask_input_free() {
 #   1: invalid input
 #######################################
 function bl64_ui_ask_input_integer() {
-  local prompt="${1:-Enter an integer:}"
+  local prompt="${1:-enter an integer:}"
   local input=''
 
   while true; do
@@ -17990,7 +18162,7 @@ function bl64_ui_ask_input_integer() {
 #   1: invalid input
 #######################################
 function bl64_ui_ask_input_decimal() {
-  local prompt="${1:-Enter a float (e.g., 9.9):}"
+  local prompt="${1:-enter a float (e.g., 9.9):}"
   local input=''
 
   while true; do
@@ -18016,7 +18188,7 @@ function bl64_ui_ask_input_decimal() {
 #   0: valid string
 #######################################
 function bl64_ui_ask_input_string() {
-  local prompt="${1:-Enter a string:}"
+  local prompt="${1:-enter a string:}"
   local input=''
 
   while true; do
@@ -18043,7 +18215,7 @@ function bl64_ui_ask_input_string() {
 #   1: invalid input
 #######################################
 function bl64_ui_ask_input_semver() {
-  local prompt="${1:-Enter a semantic version (e.g., 1.0.0):}"
+  local prompt="${1:-enter a semantic version (e.g., 1.0.0):}"
   local input=''
 
   while true; do
@@ -18070,7 +18242,7 @@ function bl64_ui_ask_input_semver() {
 #   1: invalid input
 #######################################
 function bl64_ui_ask_input_time() {
-  local prompt="${1:-Enter time (HH:MM):}"
+  local prompt="${1:-enter time (HH:MM):}"
   local input=''
 
   while true; do
@@ -18097,7 +18269,7 @@ function bl64_ui_ask_input_time() {
 #   1: invalid input
 #######################################
 function bl64_ui_ask_input_date() {
-  local prompt="${1:-Enter date (DD-MM-YYYY):}"
+  local prompt="${1:-enter date (DD-MM-YYYY):}"
   local input=''
 
   while true; do
@@ -18866,8 +19038,8 @@ bl64_lib_script_set_identity
 # Check OS compatibility
 if [[ "${BL64_OS_MODULE:-$BL64_VAR_OFF}" == "$BL64_VAR_ON" ]]; then
   bl64_os_check_compatibility \
-    "${BL64_OS_ALM}-8" "${BL64_OS_ALM}-9" \
-    "${BL64_OS_ALP}-3" \
+    "${BL64_OS_ALM}-8" "${BL64_OS_ALM}-9" "${BL64_OS_ALM}-10" \
+    "${BL64_OS_ALP}-3.17" "${BL64_OS_ALP}-3.18" "${BL64_OS_ALP}-3.19" "${BL64_OS_ALP}-3.20" "${BL64_OS_ALP}-3.21" "${BL64_OS_ALP}-3.22"\
     "${BL64_OS_AMZ}-2023" \
     "${BL64_OS_CNT}-7" "${BL64_OS_CNT}-8" "${BL64_OS_CNT}-9" \
     "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_DEB}-11" "${BL64_OS_DEB}-12" \
