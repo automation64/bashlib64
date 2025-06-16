@@ -16,11 +16,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - WIP Ubuntu 25 support
 - bsh
   - bl64_bsh_job_try
+- ui
+  - bl64_ui_ask_proceed
+- pkg
+  - bl64_pkg_run_rpm
+  - bl64_pkg_run_dpkg
 
 ### Changed
 
 - pkg
   - *_run_*: removed root check, moved to specific commands that need it
+- ui
+  - bl64_ui_ask_confirmation: removed retry routine
 
 ## [21.2.0]
 
