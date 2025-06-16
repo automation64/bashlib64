@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - pkg
   - bl64_pkg_run_rpm
   - bl64_pkg_run_dpkg
+- txt
+  - bl64_txt_run_fmt
 
 ### Changed
 
