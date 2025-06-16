@@ -642,7 +642,7 @@ function bl64_check_alert_module_setup() {
 #######################################
 function bl64_check_parameters_none() {
   _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
-  local count="$1"
+  local count="${1:-}"
   local message="${2:-the requested operation requires at least one parameter and none was provided}"
 
   bl64_check_parameter 'count' || return $?
