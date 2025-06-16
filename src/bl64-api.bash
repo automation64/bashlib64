@@ -46,11 +46,12 @@ function bl64_api_call() {
   bl64_dbg_lib_command_is_enabled && debug="${BL64_RXTX_SET_CURL_VERBOSE} ${BL64_RXTX_SET_CURL_INCLUDE}"
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_RXTX_CMD_CURL" \
-    $BL64_RXTX_SET_CURL_FAIL \
-    $BL64_RXTX_SET_CURL_REDIRECT \
-    $BL64_RXTX_SET_CURL_SECURE \
-    $BL64_RXTX_SET_CURL_REQUEST ${api_method} \
+  bl64_bsh_job_try "$BL64_API_CALL_SET_MAX_RETRIES" "$BL64_API_CALL_SET_WAIT" \
+    "$BL64_RXTX_CMD_CURL" \
+    "$BL64_RXTX_SET_CURL_FAIL" \
+    "$BL64_RXTX_SET_CURL_REDIRECT" \
+    "$BL64_RXTX_SET_CURL_SECURE" \
+    "$BL64_RXTX_SET_CURL_REQUEST" ${api_method} \
     $debug \
     "${api_url}${api_path}${api_query}" \
     "$@"
