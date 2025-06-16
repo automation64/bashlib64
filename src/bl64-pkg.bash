@@ -633,3 +633,63 @@ function bl64_pkg_run_zypper() {
   "$BL64_PKG_CMD_ZYPPER" $verbose "$@"
   bl64_dbg_lib_trace_stop
 }
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_pkg_run_rpm() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" ||
+    return $?
+
+  if bl64_msg_lib_verbose_is_enabled; then
+    verbose='--verbose'
+  else
+    verbose='--quiet'
+  fi
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_PKG_CMD_RPM" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_pkg_run_dpkg() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_PKG_CMD_DPKG" "$@"
+  bl64_dbg_lib_trace_stop
+}

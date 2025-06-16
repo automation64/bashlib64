@@ -54,18 +54,23 @@ function _bl64_pkg_set_command() {
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_PKG_CMD_APT='/usr/bin/apt'
+    BL64_PKG_CMD_DPKG='/usr/bin/dpkg'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    BL64_PKG_CMD_RPM='/usr/bin/rpm'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
     BL64_PKG_CMD_YUM='/usr/bin/yum'
+    BL64_PKG_CMD_RPM='/usr/bin/rpm'
     ;;
   ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
     BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    BL64_PKG_CMD_RPM='/usr/bin/rpm'
     ;;
   ${BL64_OS_SLES}-*)
     BL64_PKG_CMD_ZYPPER='/usr/bin/zypper'
+    BL64_PKG_CMD_RPM='/usr/bin/rpm'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_PKG_CMD_APK='/sbin/apk'
