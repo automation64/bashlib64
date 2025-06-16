@@ -5789,10 +5789,10 @@ function bl64_api_call() {
   # shellcheck disable=SC2086
   bl64_bsh_job_try "$BL64_API_CALL_SET_MAX_RETRIES" "$BL64_API_CALL_SET_WAIT" \
     "$BL64_RXTX_CMD_CURL" \
-    "$BL64_RXTX_SET_CURL_FAIL" \
-    "$BL64_RXTX_SET_CURL_REDIRECT" \
-    "$BL64_RXTX_SET_CURL_SECURE" \
-    "$BL64_RXTX_SET_CURL_REQUEST" ${api_method} \
+    $BL64_RXTX_SET_CURL_FAIL \
+    $BL64_RXTX_SET_CURL_REDIRECT \
+    $BL64_RXTX_SET_CURL_SECURE \
+    $BL64_RXTX_SET_CURL_REQUEST ${api_method} \
     $debug \
     "${api_url}${api_path}${api_query}" \
     "$@"
