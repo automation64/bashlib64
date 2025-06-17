@@ -378,6 +378,6 @@ function bl64_fmt_version_convert_to_major_minor() {
     echo "$version_normalized"
     return 0
   fi
-  bl64_msg_show_error "unable to convert version to major.minor (${version})"
+  bl64_msg_show_lib_error "unable to convert version to major.minor (${version})"
   return $BL64_LIB_ERROR_TASK_FAILED
 }

@@ -212,7 +212,7 @@ function _bl64_os_set_machine() {
   local machine=''
   machine="$("$BL64_OS_CMD_UNAME" -m)"
   if [[ -z "$machine" ]]; then
-    bl64_msg_show_error 'failed to get machine type from uname'
+    bl64_msg_show_lib_error 'failed to get machine type from uname'
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
   case "$machine" in
@@ -260,7 +260,7 @@ function _bl64_os_get_distro_from_uname() {
     ;;
   *)
     BL64_OS_DISTRO="$BL64_OS_UNK"
-    bl64_msg_show_error \
+    bl64_msg_show_lib_error \
       "BashLib64 not supported on the current OS. Please check the OS compatibility matrix (OS: ${BL64_OS_TYPE})"
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
     ;;
@@ -350,7 +350,7 @@ function _bl64_os_get_distro_from_os_release() {
     BL64_OS_FLAVOR="$BL64_OS_FLAVOR_DEBIAN"
     ;;
   *)
-    bl64_msg_show_error \
+    bl64_msg_show_lib_error \
       "current OS is not supported. Please check the OS compatibility matrix (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE})"
     return $BL64_LIB_ERROR_OS_INCOMPATIBLE
     ;;
@@ -364,7 +364,7 @@ function _bl64_os_release_load() {
   # shellcheck disable=SC1091
   bl64_dbg_lib_show_info 'parse /etc/os-release'
   if ! source '/etc/os-release' || [[ -z "$ID" || -z "$VERSION_ID" ]]; then
-    bl64_msg_show_error 'failed to load OS information from /etc/os-release file'
+    bl64_msg_show_lib_error 'failed to load OS information from /etc/os-release file'
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
   bl64_dbg_lib_show_vars 'ID' 'VERSION_ID'
@@ -392,7 +392,7 @@ function _bl64_os_release_normalize() {
     echo "$version_normalized"
     return 0
   fi
-  bl64_msg_show_error "unable to normalize OS version (${version_raw} != Major.Minor != ${version_normalized})"
+  bl64_msg_show_lib_error "unable to normalize OS version (${version_raw} != Major.Minor != ${version_normalized})"
   return $BL64_LIB_ERROR_TASK_FAILED
 }
 
@@ -418,7 +418,7 @@ function bl64_os_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
 
   [[ "${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5' ]] &&
-    bl64_msg_show_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
+    bl64_msg_show_lib_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
     return $BL64_LIB_ERROR_OS_BASH_VERSION
 
   # shellcheck disable=SC2034

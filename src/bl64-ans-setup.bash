@@ -206,7 +206,7 @@ function _bl64_ans_set_version() {
     # shellcheck disable=SC2034
     BL64_ANS_VERSION_CORE="$cli_version"
   else
-    bl64_msg_show_error "'failed to get CLI version' (${BL64_ANS_CMD_ANSIBLE} --version)"
+    bl64_msg_show_lib_error "'failed to get CLI version' (${BL64_ANS_CMD_ANSIBLE} --version)"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi

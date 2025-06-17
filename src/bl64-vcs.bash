@@ -287,7 +287,7 @@ function bl64_vcs_github_release_get_latest() {
   if [[ -n "$repo_tag" ]]; then
     echo "$repo_tag"
   else
-    bl64_msg_show_error "failed to determine latest release (${repo_owner}/${repo_name})"
+    bl64_msg_show_lib_error "failed to determine latest release (${repo_owner}/${repo_name})"
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
 }

@@ -56,12 +56,12 @@ function bl64_rxtx_web_get_file() {
       "$source"
     status=$?
   else
-    bl64_msg_show_error "no web transfer command was found on the system (wget or curl)" &&
+    bl64_msg_show_lib_error "no web transfer command was found on the system (wget or curl)" &&
       return $BL64_LIB_ERROR_APP_MISSING
   fi
 
   if (( status != 0 )); then
-    bl64_msg_show_error 'file download failed'
+    bl64_msg_show_lib_error 'file download failed'
   else
     bl64_fs_path_permission_set "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" "$destination"
     status=$?
@@ -121,7 +121,7 @@ function bl64_rxtx_git_get_dir() {
     _bl64_rxtx_git_get_dir_sub "$source_url" "$source_path" "$destination" "$branch"
   fi
   status=$?
-  (( status != 0 )) && bl64_msg_show_error 'directory download failed'
+  (( status != 0 )) && bl64_msg_show_lib_error 'directory download failed'
 
   if [[ "$status" == '0' && -d "${destination}/.git" ]]; then
     bl64_msg_show_lib_subtask "remove git metadata (${destination}/.git)"

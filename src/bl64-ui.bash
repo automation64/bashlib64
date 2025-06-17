@@ -73,7 +73,7 @@ function bl64_ui_ask_proceed() {
     case "$input" in
     [Yy]*) return 0 ;;
     [Nn]*) bl64_msg_show_warning 'User requested not to proceed. No further action will be taken.' && return 1 ;;
-    *) bl64_msg_show_error "Invalid input. Please answer y or n." ;;
+    *) bl64_msg_show_lib_error "Invalid input. Please answer y or n." ;;
     esac
   done
 }
@@ -119,7 +119,7 @@ function bl64_ui_ask_yesno() {
     case "$input" in
     [Yy]*) return 0 ;;
     [Nn]*) return 1 ;;
-    *) bl64_msg_show_error "Invalid input. Please answer y or n." ;;
+    *) bl64_msg_show_lib_error "Invalid input. Please answer y or n." ;;
     esac
   done
 }
@@ -165,7 +165,7 @@ function bl64_ui_ask_input_integer() {
       echo "$input"
       return 0
     else
-      bl64_msg_show_error "Invalid input. Please enter a valid integer."
+      bl64_msg_show_lib_error "Invalid input. Please enter a valid integer."
     fi
   done
 }
@@ -192,7 +192,7 @@ function bl64_ui_ask_input_decimal() {
       echo "$input"
       return 0
     else
-      bl64_msg_show_error "Invalid input. Please enter a valid decimal."
+      bl64_msg_show_lib_error "Invalid input. Please enter a valid decimal."
     fi
   done
 }
@@ -218,7 +218,7 @@ function bl64_ui_ask_input_string() {
       echo "$input"
       return 0
     else
-      bl64_msg_show_error "Invalid input. Please enter a non-empty string."
+      bl64_msg_show_lib_error "Invalid input. Please enter a non-empty string."
     fi
   done
 }
@@ -245,7 +245,7 @@ function bl64_ui_ask_input_semver() {
       echo "$input"
       return 0
     else
-      bl64_msg_show_error "Invalid input. Please enter a valid semantic version (e.g., 1.0.0)."
+      bl64_msg_show_lib_error "Invalid input. Please enter a valid semantic version (e.g., 1.0.0)."
     fi
   done
 }
@@ -272,7 +272,7 @@ function bl64_ui_ask_input_time() {
       echo "$input"
       return 0
     else
-      bl64_msg_show_error "Invalid input. Please enter a valid time (HH:MM)."
+      bl64_msg_show_lib_error "Invalid input. Please enter a valid time (HH:MM)."
     fi
   done
 }
@@ -299,7 +299,7 @@ function bl64_ui_ask_input_date() {
       echo "$input"
       return 0
     else
-      bl64_msg_show_error "Invalid input. Please enter a valid date (DD-MM-YYYY)."
+      bl64_msg_show_lib_error "Invalid input. Please enter a valid date (DD-MM-YYYY)."
     fi
   done
 }

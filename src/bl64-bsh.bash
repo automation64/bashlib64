@@ -598,7 +598,7 @@ function bl64_bsh_job_try() {
     "$job_command" "$@" && return 0
     ((attempt++))
     if ((attempt > max_retries)); then
-      bl64_msg_show_error "command failed after ${max_retries} attempts (${job_command})"
+      bl64_msg_show_lib_error "command failed after ${max_retries} attempts (${job_command})"
       return 1
     fi
     if ((attempt == 2)); then

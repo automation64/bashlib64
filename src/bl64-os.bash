@@ -443,7 +443,7 @@ function _bl64_os_is_distro() {
       return $BL64_LIB_ERROR_OS_NOT_MATCH
 
   else
-    bl64_msg_show_error "invalid OS pattern (${target})"
+    bl64_msg_show_lib_error "invalid OS pattern (${target})"
     return $BL64_LIB_ERROR_OS_TAG_INVALID
   fi
 
