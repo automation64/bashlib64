@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_pkg_run_dpkg
 - txt
   - bl64_txt_run_fmt
+- msg
+  - bl64_msg_show_check
 
 ### Changed
 

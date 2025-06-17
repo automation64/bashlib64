@@ -3,4 +3,27 @@
 . test/lib/bash-setup.bash ||
   { echo 'test:Error: unable to load test environment' 2>&1 && exit 1; }
 
+function level3() {
+  bl64_dbg_runtime_show_callstack
+}
+
+function level2() {
+  bl64_dbg_lib_show_info 'bl64_dbg_lib_show_info'
+  bl64_dbg_lib_show_comments 'bl64_dbg_lib_show_comments'
+  level3
+}
+
+function level1() {
+  bl64_dbg_lib_show_info 'bl64_dbg_lib_show_info'
+  bl64_dbg_lib_show_comments 'bl64_dbg_lib_show_comments'
+
+  level2
+}
+
 bl64_dbg_all_enable
+bl64_dbg_lib_show_info 'bl64_dbg_lib_show_info'
+bl64_dbg_lib_show_comments 'bl64_dbg_lib_show_comments'
+
+level1
+
+bl64_dbg_all_disable
