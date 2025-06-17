@@ -1,5 +1,16 @@
-@test "bl64_txt_run_tr: parameters are not present" {
+function _test_bl64_txt_run_tr() {
+
+  input='hello world'
+  echo "$input" | bl64_txt_run_tr 'o' 'x'
+
+}
+
+@test "bl64_txt_run_tr: run ok" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  run bl64_txt_run_tr
-  assert_failure
+  expected='hellx wxrld'
+
+  run _test_bl64_txt_run_tr
+  assert_success
+  assert_output "$expected"
+
 }
