@@ -185,8 +185,8 @@ function bl64_os_check_version() {
 
   bl64_os_is_distro "$@" && return 0
 
-  bl64_msg_show_error \
-    "task not supported by the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}) ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+  bl64_msg_show_check \
+    "task not supported by the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}))"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }
 
@@ -209,8 +209,8 @@ function bl64_os_check_compatibility() {
 
   bl64_os_is_compatible "$@" && return 0
 
-  bl64_msg_show_error \
-    "task not supported by the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}) ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+  bl64_msg_show_check \
+    "task not supported by the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}))"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }
 
@@ -343,7 +343,7 @@ function bl64_os_check_not_version() {
 
   bl64_os_is_distro "$@" || return 0
 
-  bl64_msg_show_error \
+  bl64_msg_show_check \
     "task not supported by the current OS version (${BL64_OS_DISTRO})"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }
@@ -474,7 +474,7 @@ function bl64_os_check_flavor() {
     [[ "$BL64_OS_FLAVOR" == "$flavor" ]] && return 0
   done
 
-  bl64_msg_show_error \
-    "task not supported by the current OS flavor (current-flavor: ${BL64_OS_FLAVOR} ${BL64_MSG_COSMETIC_PIPE} supported-flavor: ${*}) ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+  bl64_msg_show_check \
+    "task not supported by the current OS flavor (current-flavor: ${BL64_OS_FLAVOR} ${BL64_MSG_COSMETIC_PIPE} supported-flavor: ${*}))"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }

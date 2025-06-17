@@ -300,7 +300,7 @@ function bl64_iam_check_user() {
   bl64_check_parameter 'user' || return $?
 
   if ! bl64_iam_user_is_created "$user"; then
-    bl64_msg_show_error "${message} (user: ${user} ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_check "${message} (user: ${user})"
     return $BL64_LIB_ERROR_USER_NOT_FOUND
   else
     return 0

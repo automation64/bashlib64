@@ -101,7 +101,7 @@ function bl64_rbac_check_sudoers() {
   status=$?
 
   if ((status != 0)); then
-    bl64_msg_show_error "the sudoers file is corrupt or invalid ($sudoers)"
+    bl64_msg_show_check "the sudoers file is corrupt or invalid ($sudoers)"
   fi
 
   return $status

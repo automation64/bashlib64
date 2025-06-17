@@ -1315,7 +1315,7 @@ function bl64_fs_check_new_file() {
     return $?
 
   if [[ -d "$file" ]]; then
-    bl64_msg_show_error "invalid file destination. Provided path exists and is a directory (${file})"
+    bl64_msg_show_check "invalid file destination. Provided path exists and is a directory (${file})"
     return $BL64_LIB_ERROR_PARAMETER_INVALID
   fi
 
@@ -1345,7 +1345,7 @@ function bl64_fs_check_new_dir() {
     return $?
 
   if [[ -f "$directory" ]]; then
-    bl64_msg_show_error "invalid directory destination. Provided path exists and is a file (${directory})"
+    bl64_msg_show_check "invalid directory destination. Provided path exists and is a file (${directory})"
     return $BL64_LIB_ERROR_PARAMETER_INVALID
   fi
 

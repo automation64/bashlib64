@@ -1084,7 +1084,7 @@ function _bl64_cnt_podman_ps_filter() {
 function bl64_cnt_check_in_container() {
   bl64_dbg_lib_show_function
   bl64_cnt_is_inside_container && return 0
-  bl64_msg_show_error 'current task must be run inside a container'
+  bl64_msg_show_check 'current task must be run inside a container'
   return $BL64_LIB_ERROR_TASK_REQUIREMENTS
 }
 
@@ -1103,6 +1103,6 @@ function bl64_cnt_check_in_container() {
 function bl64_cnt_check_not_in_container() {
   bl64_dbg_lib_show_function
   bl64_cnt_is_inside_container || return 0
-  bl64_msg_show_error 'current task must not be run inside a container'
+  bl64_msg_show_check 'current task must not be run inside a container'
   return $BL64_LIB_ERROR_TASK_REQUIREMENTS
 }
