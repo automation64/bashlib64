@@ -33,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - *_run_*: removed root check, moved to specific commands that need it
 - ui
   - bl64_ui_ask_confirmation: removed retry routine
+- os
+  - bl64_os_is_compatible: removed compatibility warning
 
 ## [21.2.0]
 

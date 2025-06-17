@@ -119,7 +119,7 @@ function bl64_os_is_compatible() {
       if ((status == 0)); then
         break
       elif ((status == 1)); then
-        bl64_msg_show_warning \
+        bl64_dbg_lib_show_info \
           "current OS version is not supported. Execution will continue since compatibility-mode was requested. (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}) ${BL64_MSG_COSMETIC_PIPE} caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
         status=0
         break
