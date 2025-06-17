@@ -147,7 +147,7 @@ function _bl64_k8s_set_version() {
   if [[ -n "$cli_version" ]]; then
     BL64_K8S_VERSION_KUBECTL="$cli_version"
   else
-    bl64_msg_show_error 'unable to determine kubectl version'
+    bl64_msg_show_lib_error 'unable to determine kubectl version'
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# * Version: 1.2.0
+# * Version: 1.3.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -37,6 +37,14 @@
 {
   # Lib / Installer64 / Local BashLib64 for Installer64
   export INST64_BASHLIB64="$DEV_LIB_BASHLIB64_TARGET"
+  # Lib / Installer64 / Local Installer64 library for BashLib64
+  export INST64_LIB_PATH="$DEV_LIB_INSTALLER64_TARGET"
+  # Lib / Installer64 / Installer64 parameters
+  export INST64_INSTALLER64_TARGET="$DEV_LIB_INSTALLER64_TARGET"
+  # Lib / BashLib64 / Installer64 parameters
+  export INST64_BASHLIB64_TARGET="$DEV_LIB_BASHLIB64_TARGET"
+  # Lib / Installer64 / Force user install type
+  export INST64_SYSTEM_WIDE='NO'
 }
 
 #

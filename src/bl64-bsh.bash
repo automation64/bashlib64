@@ -564,3 +564,46 @@ function bl64_bsh_xdg_create() {
     "${xdg_local}/share" \
     "${xdg_local}/state"
 }
+
+#######################################
+# Retry a command until it succeeds or the maximum number of retries is reached
+#
+# Arguments:
+#   $1: maximum number of retries. Default: BL64_BSH_JOB_SET_MAX_RETRIES
+#   $2: wait time between retries in seconds. Default: BL64_BSH_JOB_SET_WAIT
+#   $@: command to execute
+# Outputs:
+#   STDOUT: progress
+#   STDERR: execution errors
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_bsh_job_try() {
+  bl64_dbg_lib_show_function "$@"
+  local max_retries="${1:-$BL64_VAR_DEFAULT}"
+  local wait_time="${2:-$BL64_VAR_DEFAULT}"
+  local job_command="${3:-}"
+  local attempt=1
+
+  bl64_check_parameter 'job_command' &&
+    bl64_check_parameters_none "$#" || return $?
+  [[ "$max_retries" == "$BL64_VAR_DEFAULT" ]] && max_retries="$BL64_BSH_JOB_SET_MAX_RETRIES"
+  [[ "$wait_time" == "$BL64_VAR_DEFAULT" ]] && wait_time="$BL64_BSH_JOB_SET_WAIT"
+
+  shift
+  shift
+  shift
+  while :; do
+    "$job_command" "$@" && return 0
+    ((attempt++))
+    if ((attempt > max_retries)); then
+      bl64_msg_show_lib_error "command failed after ${max_retries} attempts (${job_command})"
+      return 1
+    fi
+    if ((attempt == 2)); then
+      bl64_msg_show_warning "command failed. Retrying in ${wait_time} seconds... (attempt ${attempt}/${max_retries})"
+    fi
+    sleep "$wait_time"
+  done
+}

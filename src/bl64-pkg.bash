@@ -161,6 +161,8 @@ function _bl64_pkg_repository_add_apt() {
 function bl64_pkg_repository_refresh() {
   bl64_dbg_lib_show_function
 
+  bl64_check_privilege_root || return $?
+
   bl64_msg_show_lib_subtask 'refresh package repository content'
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
@@ -253,7 +255,8 @@ function bl64_pkg_prepare() {
 function bl64_pkg_install() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none $# || return $?
+  bl64_check_privilege_root &&
+    bl64_check_parameters_none $# || return $?
 
   bl64_msg_show_lib_subtask "install packages (${*})"
   # shellcheck disable=SC2086
@@ -303,7 +306,10 @@ function bl64_pkg_install() {
 function bl64_pkg_upgrade() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_msg_show_lib_subtask "upgrade packages (${*})"
+  bl64_check_privilege_root || return $?
+
+  bl64_msg_show_lib_subtask "upgrade packages${*:+ (${*})}"
+
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -350,6 +356,8 @@ function bl64_pkg_upgrade() {
 function bl64_pkg_cleanup() {
   bl64_dbg_lib_show_function
   local target=''
+
+  bl64_check_privilege_root || return $?
 
   bl64_msg_show_lib_subtask 'clean up package manager run-time environment'
   # shellcheck disable=SC2086
@@ -403,8 +411,7 @@ function bl64_pkg_run_dnf() {
   local verbose=''
 
   bl64_check_module 'BL64_PKG_MODULE' &&
-    bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_parameters_none "$#" ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -438,8 +445,7 @@ function bl64_pkg_run_yum() {
   local verbose=''
 
   bl64_check_module 'BL64_PKG_MODULE' &&
-    bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_parameters_none "$#" ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -473,8 +479,7 @@ function bl64_pkg_run_apt() {
   local verbose=''
 
   bl64_check_module 'BL64_PKG_MODULE' &&
-    bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_parameters_none "$#" ||
     return $?
 
   _bl64_pkg_harden_apt
@@ -540,8 +545,7 @@ function bl64_pkg_run_apk() {
   local verbose=''
 
   bl64_check_module 'BL64_PKG_MODULE' &&
-    bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_parameters_none "$#" ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -615,8 +619,7 @@ function bl64_pkg_run_zypper() {
   local verbose=''
 
   bl64_check_module 'BL64_PKG_MODULE' &&
-    bl64_check_parameters_none "$#" &&
-    bl64_check_privilege_root ||
+    bl64_check_parameters_none "$#" ||
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
@@ -628,5 +631,65 @@ function bl64_pkg_run_zypper() {
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_PKG_CMD_ZYPPER" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_pkg_run_rpm() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" ||
+    return $?
+
+  if bl64_msg_lib_verbose_is_enabled; then
+    verbose='--verbose'
+  else
+    verbose='--quiet'
+  fi
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_PKG_CMD_RPM" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_pkg_run_dpkg() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_PKG_CMD_DPKG" "$@"
   bl64_dbg_lib_trace_stop
 }

@@ -220,14 +220,14 @@ function _bl64_py_set_version() {
     "$BL64_PY_CMD_PYTHON3" -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
   )"
   [[ -z "$BL64_PY_VERSION_PYTHON3" ]] &&
-    bl64_msg_show_error "Unable to determine Python version (${BL64_PY_CMD_PYTHON3})" &&
+    bl64_msg_show_lib_error "Unable to determine Python version (${BL64_PY_CMD_PYTHON3})" &&
     return $BL64_LIB_ERROR_TASK_FAILED
 
   BL64_PY_VERSION_PIP3="$(
     "$BL64_PY_CMD_PYTHON3" -c "import pip; print(pip.__version__)"
   )"
   [[ -z "$BL64_PY_VERSION_PIP3" ]] &&
-    bl64_msg_show_error "Unable to determine PIP version (${BL64_PY_CMD_PYTHON3})" &&
+    bl64_msg_show_lib_error "Unable to determine PIP version (${BL64_PY_CMD_PYTHON3})" &&
     return $BL64_LIB_ERROR_TASK_FAILED
 
   return 0

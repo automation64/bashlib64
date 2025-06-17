@@ -201,6 +201,26 @@ function _bl64_msg_format_ascii() {
 #
 
 #######################################
+# Display check error message
+#
+# Arguments:
+#   $1: error message
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_check() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
+  local message="$1"
+
+  bl64_log_error "${FUNCNAME[2]:-MAIN}" "$message" &&
+    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message [task: ${FUNCNAME[2]:-main}.${FUNCNAME[3]:-main}]" >&2
+}
+
+#######################################
 # Display error message
 #
 # Arguments:
@@ -218,6 +238,26 @@ function bl64_msg_show_error() {
 
   bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message" >&2
+}
+
+#######################################
+# Display bashlib64 function error message
+#
+# Arguments:
+#   $1: error message
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_lib_error() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
+  local message="$1"
+
+  bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
+    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message [task: ${FUNCNAME[2]:-main}.${FUNCNAME[3]:-main}]" >&2
 }
 
 #######################################

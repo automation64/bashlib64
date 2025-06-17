@@ -23,6 +23,7 @@ function bl64_api_setup() {
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_RXTX_MODULE' &&
     BL64_API_MODULE="$BL64_VAR_ON"

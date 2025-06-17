@@ -28,7 +28,6 @@ function bl64_ui_confirmation_ask() {
 # Arguments:
 #   $1: confirmation question
 #   $2: confirmation value that needs to be match
-#   $3: number of retries
 # Outputs:
 #   STDOUT: user interaction
 #   STDERR: command stderr
@@ -38,26 +37,45 @@ function bl64_ui_confirmation_ask() {
 #######################################
 function bl64_ui_ask_confirmation() {
   bl64_dbg_lib_show_function "$@"
-  local question="${1:-Please type in the confirmation message to proceed}"
-  local confirmation="${2:-confirm-operation}"
-  local retries="${3:-3}"
+  local question="${1:-please type in the confirmation message to proceed}"
+  local confirmation="${2:-confirm}"
   local input=''
-  local attempt=0
 
-  while ((attempt < retries)); do
-    bl64_msg_show_input "${question} [${confirmation}]: "
-    read -r -t "$BL64_UI_CONFIRMATION_TIMEOUT" input
+  bl64_msg_show_input "${question} [${confirmation}]: "
+  read -r -t "$BL64_UI_CONFIRMATION_TIMEOUT" input
 
-    input="${input#"${input%%[![:space:]]*}"}"
-    input="${input%"${input##*[![:space:]]}"}"
-    [[ "$input" == "$confirmation" ]] && return 0
+  input="${input#"${input%%[![:space:]]*}"}"
+  input="${input%"${input##*[![:space:]]}"}"
+  [[ "$input" == "$confirmation" ]] && return 0
 
-    bl64_msg_show_error "Confirmation verification failed. Please try again."
-    ((attempt++))
-  done
-
-  bl64_msg_show_error "Maximum retries reached. Operation aborted."
+  bl64_msg_show_warning 'Confirmation verification failed. The operation will be cancelled.'
   return $BL64_LIB_ERROR_PARAMETER_INVALID
+}
+
+#######################################
+# Ask configuration to proceed, in a yes/no format
+#
+# Arguments:
+#   $1: question to ask
+# Outputs:
+#   STDOUT: user interaction
+# Returns:
+#   0: user answered yes
+#   1: user answered no
+#######################################
+function bl64_ui_ask_proceed() {
+  local question="${1:-Do you want to proceed?}"
+  local input=''
+
+  while true; do
+    bl64_msg_show_input "${question} [y/n]: "
+    read -r input
+    case "$input" in
+    [Yy]*) return 0 ;;
+    [Nn]*) bl64_msg_show_warning 'User requested not to proceed. No further action will be taken.' && return 1 ;;
+    *) bl64_msg_show_lib_error "Invalid input. Please answer y or n." ;;
+    esac
+  done
 }
 
 #######################################
@@ -92,7 +110,7 @@ function bl64_ui_separator_show() {
 #   1: user answered no
 #######################################
 function bl64_ui_ask_yesno() {
-  local question="${1:-Are you sure?}"
+  local question="${1:-are you sure?}"
   local input=''
 
   while true; do
@@ -101,7 +119,7 @@ function bl64_ui_ask_yesno() {
     case "$input" in
     [Yy]*) return 0 ;;
     [Nn]*) return 1 ;;
-    *) bl64_msg_show_error "Invalid input. Please answer y or n." ;;
+    *) bl64_msg_show_lib_error "Invalid input. Please answer y or n." ;;
     esac
   done
 }
@@ -117,7 +135,7 @@ function bl64_ui_ask_yesno() {
 #   0: success
 #######################################
 function bl64_ui_ask_input_free() {
-  local prompt="${1:-Enter input:}"
+  local prompt="${1:-enter input:}"
   local input=''
 
   bl64_msg_show_input "${prompt} "
@@ -137,7 +155,7 @@ function bl64_ui_ask_input_free() {
 #   1: invalid input
 #######################################
 function bl64_ui_ask_input_integer() {
-  local prompt="${1:-Enter an integer:}"
+  local prompt="${1:-enter an integer:}"
   local input=''
 
   while true; do
@@ -147,7 +165,7 @@ function bl64_ui_ask_input_integer() {
       echo "$input"
       return 0
     else
-      bl64_msg_show_error "Invalid input. Please enter a valid integer."
+      bl64_msg_show_lib_error "Invalid input. Please enter a valid integer."
     fi
   done
 }
@@ -164,7 +182,7 @@ function bl64_ui_ask_input_integer() {
 #   1: invalid input
 #######################################
 function bl64_ui_ask_input_decimal() {
-  local prompt="${1:-Enter a float (e.g., 9.9):}"
+  local prompt="${1:-enter a float (e.g., 9.9):}"
   local input=''
 
   while true; do
@@ -174,7 +192,7 @@ function bl64_ui_ask_input_decimal() {
       echo "$input"
       return 0
     else
-      bl64_msg_show_error "Invalid input. Please enter a valid decimal."
+      bl64_msg_show_lib_error "Invalid input. Please enter a valid decimal."
     fi
   done
 }
@@ -190,7 +208,7 @@ function bl64_ui_ask_input_decimal() {
 #   0: valid string
 #######################################
 function bl64_ui_ask_input_string() {
-  local prompt="${1:-Enter a string:}"
+  local prompt="${1:-enter a string:}"
   local input=''
 
   while true; do
@@ -200,7 +218,7 @@ function bl64_ui_ask_input_string() {
       echo "$input"
       return 0
     else
-      bl64_msg_show_error "Invalid input. Please enter a non-empty string."
+      bl64_msg_show_lib_error "Invalid input. Please enter a non-empty string."
     fi
   done
 }
@@ -217,7 +235,7 @@ function bl64_ui_ask_input_string() {
 #   1: invalid input
 #######################################
 function bl64_ui_ask_input_semver() {
-  local prompt="${1:-Enter a semantic version (e.g., 1.0.0):}"
+  local prompt="${1:-enter a semantic version (e.g., 1.0.0):}"
   local input=''
 
   while true; do
@@ -227,7 +245,7 @@ function bl64_ui_ask_input_semver() {
       echo "$input"
       return 0
     else
-      bl64_msg_show_error "Invalid input. Please enter a valid semantic version (e.g., 1.0.0)."
+      bl64_msg_show_lib_error "Invalid input. Please enter a valid semantic version (e.g., 1.0.0)."
     fi
   done
 }
@@ -244,7 +262,7 @@ function bl64_ui_ask_input_semver() {
 #   1: invalid input
 #######################################
 function bl64_ui_ask_input_time() {
-  local prompt="${1:-Enter time (HH:MM):}"
+  local prompt="${1:-enter time (HH:MM):}"
   local input=''
 
   while true; do
@@ -254,7 +272,7 @@ function bl64_ui_ask_input_time() {
       echo "$input"
       return 0
     else
-      bl64_msg_show_error "Invalid input. Please enter a valid time (HH:MM)."
+      bl64_msg_show_lib_error "Invalid input. Please enter a valid time (HH:MM)."
     fi
   done
 }
@@ -271,7 +289,7 @@ function bl64_ui_ask_input_time() {
 #   1: invalid input
 #######################################
 function bl64_ui_ask_input_date() {
-  local prompt="${1:-Enter date (DD-MM-YYYY):}"
+  local prompt="${1:-enter date (DD-MM-YYYY):}"
   local input=''
 
   while true; do
@@ -281,7 +299,7 @@ function bl64_ui_ask_input_date() {
       echo "$input"
       return 0
     else
-      bl64_msg_show_error "Invalid input. Please enter a valid date (DD-MM-YYYY)."
+      bl64_msg_show_lib_error "Invalid input. Please enter a valid date (DD-MM-YYYY)."
     fi
   done
 }

@@ -913,7 +913,7 @@ function bl64_fs_path_archive() {
 
   bl64_msg_show_lib_subtask "backup source path ([${source}]->[${backup}])"
   if ! bl64_fs_run_mv "$source" "$backup"; then
-    bl64_msg_show_error "unable to archive source path ($source)"
+    bl64_msg_show_lib_error "unable to archive source path ($source)"
     return $BL64_LIB_ERROR_TASK_BACKUP
   fi
 
@@ -1257,7 +1257,7 @@ function bl64_fs_rm_tmpdir() {
     return $?
 
   if [[ "$tmpdir" != ${BL64_FS_PATH_TMP}/${BL64_FS_TMP_PREFIX}-*.* ]]; then
-    bl64_msg_show_error "provided directory was not created by bl64_fs_create_tmpdir (${tmpdir})"
+    bl64_msg_show_lib_error "provided directory was not created by bl64_fs_create_tmpdir (${tmpdir})"
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
 
@@ -1285,7 +1285,7 @@ function bl64_fs_rm_tmpfile() {
     return $?
 
   if [[ "$tmpfile" != ${BL64_FS_PATH_TMP}/${BL64_FS_TMP_PREFIX}-*.* ]]; then
-    bl64_msg_show_error "provided directory was not created by bl64_fs_create_tmpfile (${tmpfile})"
+    bl64_msg_show_lib_error "provided directory was not created by bl64_fs_create_tmpfile (${tmpfile})"
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
 
@@ -1315,7 +1315,7 @@ function bl64_fs_check_new_file() {
     return $?
 
   if [[ -d "$file" ]]; then
-    bl64_msg_show_error "invalid file destination. Provided path exists and is a directory (${file})"
+    bl64_msg_show_check "invalid file destination. Provided path exists and is a directory (${file})"
     return $BL64_LIB_ERROR_PARAMETER_INVALID
   fi
 
@@ -1345,7 +1345,7 @@ function bl64_fs_check_new_dir() {
     return $?
 
   if [[ -f "$directory" ]]; then
-    bl64_msg_show_error "invalid directory destination. Provided path exists and is a file (${directory})"
+    bl64_msg_show_check "invalid directory destination. Provided path exists and is a file (${directory})"
     return $BL64_LIB_ERROR_PARAMETER_INVALID
   fi
 
@@ -1463,7 +1463,7 @@ function bl64_fs_file_remove() {
     fi
 
     if [[ ! -f "$path_current" && ! -L "$path_current" ]]; then
-      bl64_msg_show_error 'invalid file type. Must be regular file or link. No further action taken.'
+      bl64_msg_show_lib_error 'invalid file type. Must be regular file or link. No further action taken.'
       return $BL64_LIB_ERROR_TASK_FAILED
     fi
 
@@ -1560,7 +1560,7 @@ function bl64_fs_file_backup() {
 
   bl64_msg_show_lib_subtask "backup original file ([${source}]->[${backup}])"
   if ! bl64_fs_run_cp "$source" "$backup"; then
-    bl64_msg_show_error 'failed to create file backup'
+    bl64_msg_show_lib_error 'failed to create file backup'
     return $BL64_LIB_ERROR_TASK_BACKUP
   fi
 

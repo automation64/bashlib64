@@ -280,7 +280,7 @@ function bl64_fmt_list_check_membership() {
       break
   done
   ((is_valid != 0)) &&
-    bl64_msg_show_error "${error_message}. Value must be one of: [${*}] (caller: ${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE})"
+    bl64_msg_show_check "${error_message}. Value must be one of: [${*}]"
 
   return $is_valid
 }
@@ -378,6 +378,6 @@ function bl64_fmt_version_convert_to_major_minor() {
     echo "$version_normalized"
     return 0
   fi
-  bl64_msg_show_error "unable to convert version to major.minor (${version})"
+  bl64_msg_show_lib_error "unable to convert version to major.minor (${version})"
   return $BL64_LIB_ERROR_TASK_FAILED
 }

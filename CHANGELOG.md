@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.0.0]
+
+### Added
+
+- all
+  - WIP AlmaLinux 10 support
+  - WIP CentOS 10 support
+  - WIP RHEL 10 support
+  - WIP Ubuntu 25 support
+- bsh
+  - bl64_bsh_job_try
+- ui
+  - bl64_ui_ask_proceed
+- pkg
+  - bl64_pkg_run_rpm
+  - bl64_pkg_run_dpkg
+- txt
+  - bl64_txt_run_fmt
+- msg
+  - bl64_msg_show_check
+  - bl64_msg_show_lib_error
+
+### Changed
+
+- api
+  - bl64_api_setup: **breaking-change**: added BSH dependency for retry command
+  - bl64_api_call: added retry on error
+- pkg
+  - *_run_*: removed root check, moved to specific commands that need it
+- ui
+  - bl64_ui_ask_confirmation: removed retry routine
+- os
+  - bl64_os_is_compatible: removed compatibility warning
+
 ## [21.2.0]
 
 ### Added
