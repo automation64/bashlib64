@@ -23,5 +23,8 @@
 # Project specific exclusions
 #
 
+# Gemini
+GEMINI.md
+
 # Keep placeholder for empty directories
 !/**/.gitkeep
