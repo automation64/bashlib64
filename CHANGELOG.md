@@ -13,6 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - RockyLinux 10 support
 - pkg
   - HomeBrew support for Linux
+- msg
+  - bl64_msg_show_app_error
+- arc
+  - bl64_arc_run_gunzip
+
+### Fixed
+
+- iam
+  - bl64_iam_setup: added missing module dependency: FMT
+- pkg
+  - bl64_pkg_repository_add: fixed parameter check
 
 ## [22.0.0]
 

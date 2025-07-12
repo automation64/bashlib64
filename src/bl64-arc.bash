@@ -284,14 +284,49 @@ function bl64_arc_run_bunzip2() {
     bl64_check_command "$BL64_ARC_CMD_BUNZIP2" || return $?
 
   bl64_msg_lib_verbose_is_enabled && verbosity='-v'
-  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+  bl664_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
 
   _bl64_arc_harden_bunzip2
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_ARC_CMD_BUNZIP2" \
-    $verbosity \
+  "$BL64_ARC_CMD_BUNZIP2" 
+    $verbosity 
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_arc_run_gunzip() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity=' '
+
+  bl64_check_module 'BL64_ARC_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_ARC_CMD_GUNZIP" || return $?
+
+  bl64_msg_lib_verbose_is_enabled && verbosity='-v'
+  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+
+  _bl64_arc_harden_gunzip
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_ARC_CMD_GUNZIP" 
+    $verbosity 
     "$@"
   bl64_dbg_lib_trace_stop
 }
