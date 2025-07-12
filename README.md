@@ -67,7 +67,7 @@ The library has been tested on the following operating systems:
 - MacOS (*): 12,13,14,15
 - OracleLinux; 7,8,9
 - RedHatEnterpriseLinux: 8,9,10
-- RockyLinux: 8,9
+- RockyLinux: 8,9,10
 - SuSELinuxEnterpriseServer: 15
 - Ubuntu: 18,20,21,22,23,24,25
 

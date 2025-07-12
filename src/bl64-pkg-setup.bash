@@ -76,11 +76,18 @@ function _bl64_pkg_set_command() {
     BL64_PKG_CMD_APK='/sbin/apk'
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_PKG_PATH_BREW_HOME='/opt/homebrew'
-    BL64_PKG_CMD_BREW="${BL64_PKG_PATH_BREW_HOME}/bin/brew"
+    BL64_PKG_CMD_INSTALLER='/usr/sbin/installer'
+    BL64_PKG_CMD_SOFTWAREUPDATE='/usr/sbin/softwareupdate'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
+  if [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_MACOS" ]]; then
+    BL64_PKG_PATH_BREW_HOME='/opt/homebrew'
+    BL64_PKG_CMD_BREW="${BL64_PKG_PATH_BREW_HOME}/bin/brew"
+  elif [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_LINUX" ]]; then
+    BL64_PKG_PATH_BREW_HOME='/home/linuxbrew/.linuxbrew'
+    BL64_PKG_CMD_BREW="${BL64_PKG_PATH_BREW_HOME}/bin/brew"
+  fi
 }
 
 #######################################
@@ -144,10 +151,7 @@ function _bl64_pkg_set_options() {
     BL64_PKG_SET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_PKG_SET_ASSUME_YES=' '
-    BL64_PKG_SET_SLIM=' '
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--verbose'
+    :
     ;;
   *) bl64_check_alert_unsupported ;;
   esac

@@ -51,7 +51,8 @@ function bl64_arc_setup() {
 function _bl64_arc_set_command() {
   bl64_dbg_lib_show_comments 'detect optional commands. No error if not found'
   BL64_ARC_CMD_BUNZIP2="$(bl64_bsh_command_locate 'bunzip2')"
-  BL64_ARC_CMD_UNXZ="$(bl64_bsh_command_locate 'unxz')"
+  BL64_ARC_CMD_GUNZIP="$(bl64_bsh_command_locate 'gunzip')"
+  BL64_ARC_CMD_UNXZ="$(bl64_bsh_command_locate 'unxz')"''
 
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
