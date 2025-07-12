@@ -76,7 +76,8 @@ function _bl64_pkg_set_command() {
     BL64_PKG_CMD_APK='/sbin/apk'
     ;;
   ${BL64_OS_MCOS}-*)
-    :
+    BL64_PKG_CMD_INSTALLER='/usr/sbin/installer'
+    BL64_PKG_CMD_SOFTWAREUPDATE='/usr/sbin/softwareupdate'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
