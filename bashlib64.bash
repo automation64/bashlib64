@@ -1294,7 +1294,9 @@ function bl64_lib_script_version_set() {
   declare BL64_PKG_CMD_DPKG="$BL64_VAR_INCOMPATIBLE"
   declare BL64_PKG_CMD_BREW="$BL64_VAR_INCOMPATIBLE"
   declare BL64_PKG_CMD_DNF="$BL64_VAR_INCOMPATIBLE"
+  declare BL64_PKG_CMD_INSTALLER="$BL64_VAR_INCOMPATIBLE"
   declare BL64_PKG_CMD_RPM="$BL64_VAR_INCOMPATIBLE"
+  declare BL64_PKG_CMD_SOFTWAREUPDATE="$BL64_VAR_INCOMPATIBLE"
   declare BL64_PKG_CMD_YUM="$BL64_VAR_INCOMPATIBLE"
   declare BL64_PKG_CMD_ZYPPER="$BL64_VAR_INCOMPATIBLE"
 
@@ -14444,7 +14446,8 @@ function _bl64_pkg_set_command() {
     BL64_PKG_CMD_APK='/sbin/apk'
     ;;
   ${BL64_OS_MCOS}-*)
-    :
+    BL64_PKG_CMD_INSTALLER='/usr/sbin/installer'
+    BL64_PKG_CMD_SOFTWAREUPDATE='/usr/sbin/softwareupdate'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -15102,7 +15105,7 @@ function bl64_pkg_run_dnf() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -15136,7 +15139,7 @@ function bl64_pkg_run_yum() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -15173,7 +15176,7 @@ function bl64_pkg_run_apt() {
   _bl64_pkg_harden_apt
 
   # Verbose is only available for a subset of commands
-  if bl64_dbg_lib_command_is_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && [[ "$*" =~ (install|upgrade|remove) ]]; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     export DEBCONF_NOWARNINGS='yes'
@@ -15236,7 +15239,7 @@ function bl64_pkg_run_apk() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -15272,7 +15275,7 @@ function bl64_pkg_run_brew() {
     bl64_check_privilege_not_root ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
     verbose='--verbose'
   else
     verbose='--quiet'
@@ -15310,7 +15313,7 @@ function bl64_pkg_run_zypper() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -15344,7 +15347,7 @@ function bl64_pkg_run_rpm() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
     verbose='--verbose'
   else
     verbose='--quiet'
@@ -15379,6 +15382,64 @@ function bl64_pkg_run_dpkg() {
 
   bl64_dbg_lib_trace_start
   "$BL64_PKG_CMD_DPKG" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_pkg_run_installer() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" ||
+    return $?
+
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+    verbose='-verbose'
+  fi
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_PKG_CMD_INSTALLER" $verbose "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_pkg_run_softwareupdate() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_PKG_CMD_SOFTWAREUPDATE" "$@"
   bl64_dbg_lib_trace_stop
 }
 

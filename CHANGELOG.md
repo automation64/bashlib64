@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - RockyLinux 10 support
 - pkg
   - HomeBrew support for Linux
+  - bl64_pkg_run_softwareupdate
+  - bl64_pkg_run_installer
 - msg
   - bl64_msg_show_app_error
 - arc
