@@ -26,6 +26,7 @@ function bl64_iam_setup() {
     _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_RND_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
     _bl64_iam_set_command &&
     _bl64_iam_set_alias &&
     _bl64_iam_set_options &&
