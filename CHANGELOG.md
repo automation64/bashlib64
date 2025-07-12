@@ -5,15 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.1.0]
+
+### Added
+
+- all
+  - RockyLinux 10 support
+- pkg
+  - HomeBrew support for Linux
+
 ## [22.0.0]
 
 ### Added
 
 - all
-  - WIP AlmaLinux 10 support
-  - WIP CentOS 10 support
-  - WIP RHEL 10 support
-  - WIP Ubuntu 25 support
+  - AlmaLinux 10 support
+  - CentOS 10 support
+  - RHEL 10 support
+  - Ubuntu 25 support
 - bsh
   - bl64_bsh_job_try
 - ui
