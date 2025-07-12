@@ -35,7 +35,7 @@ function bl64_pkg_repository_add() {
   local extra2="${5:-}"
 
   bl64_check_privilege_root &&
-    bl64_check_parameter 'name' ||
+    bl64_check_parameter 'name' &&
     bl64_check_parameter 'source' ||
     return $?
 
