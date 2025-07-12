@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='21.3.0'
+  declare BL64_VERSION='22.1.0'
 
   #
   # Imported generic shell standard variables
@@ -592,7 +592,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.10.0'
+  declare BL64_MSG_VERSION='5.11.0'
 
   declare BL64_MSG_MODULE='0'
 
@@ -919,12 +919,13 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ARC_VERSION='4.0.0'
+  declare BL64_ARC_VERSION='4.1.0'
 
   declare BL64_ARC_MODULE='0'
 
   declare BL64_ARC_CMD_BUNZIP2="$BL64_VAR_UNAVAILABLE"
-  declare BL64_ARC_CMD_TAR="$BL64_VAR_UNAVAILABLE"
+  declare BL64_ARC_CMD_GUNZIP="$BL64_VAR_UNAVAILABLE"
+  declare BL64_ARC_CMD_TAR="$BL64_VAR_UNAVAILABLE"''
   declare BL64_ARC_CMD_UNXZ="$BL64_VAR_UNAVAILABLE"
   declare BL64_ARC_CMD_UNZIP="$BL64_VAR_UNAVAILABLE"
 
@@ -1198,7 +1199,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_IAM_VERSION='5.3.0'
+  declare BL64_IAM_VERSION='6.0.0'
 
   declare BL64_IAM_MODULE='0'
 
@@ -1284,7 +1285,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PKG_VERSION='6.2.0'
+  declare BL64_PKG_VERSION='6.4.0'
 
   declare BL64_PKG_MODULE='0'
 
@@ -3882,6 +3883,26 @@ function bl64_msg_show_error() {
 }
 
 #######################################
+# Display application function error message
+#
+# Arguments:
+#   $1: error message
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_app_error() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
+  local message="$1"
+
+  bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
+    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message [task: ${FUNCNAME[2]:-main}.${FUNCNAME[3]:-main}]" >&2
+}
+
+#######################################
 # Display bashlib64 function error message
 #
 # Arguments:
@@ -5959,7 +5980,8 @@ function bl64_arc_setup() {
 function _bl64_arc_set_command() {
   bl64_dbg_lib_show_comments 'detect optional commands. No error if not found'
   BL64_ARC_CMD_BUNZIP2="$(bl64_bsh_command_locate 'bunzip2')"
-  BL64_ARC_CMD_UNXZ="$(bl64_bsh_command_locate 'unxz')"
+  BL64_ARC_CMD_GUNZIP="$(bl64_bsh_command_locate 'gunzip')"
+  BL64_ARC_CMD_UNXZ="$(bl64_bsh_command_locate 'unxz')"''
 
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
@@ -6312,14 +6334,49 @@ function bl64_arc_run_bunzip2() {
     bl64_check_command "$BL64_ARC_CMD_BUNZIP2" || return $?
 
   bl64_msg_lib_verbose_is_enabled && verbosity='-v'
-  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+  bl664_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
 
   _bl64_arc_harden_bunzip2
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_ARC_CMD_BUNZIP2" \
-    $verbosity \
+  "$BL64_ARC_CMD_BUNZIP2" 
+    $verbosity 
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_arc_run_gunzip() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity=' '
+
+  bl64_check_module 'BL64_ARC_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_ARC_CMD_GUNZIP" || return $?
+
+  bl64_msg_lib_verbose_is_enabled && verbosity='-v'
+  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+
+  _bl64_arc_harden_gunzip
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_ARC_CMD_GUNZIP" 
+    $verbosity 
     "$@"
   bl64_dbg_lib_trace_stop
 }
@@ -12415,6 +12472,7 @@ function bl64_iam_setup() {
     _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_RND_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
     _bl64_iam_set_command &&
     _bl64_iam_set_alias &&
     _bl64_iam_set_options &&
@@ -14386,11 +14444,17 @@ function _bl64_pkg_set_command() {
     BL64_PKG_CMD_APK='/sbin/apk'
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_PKG_PATH_BREW_HOME='/opt/homebrew'
-    BL64_PKG_CMD_BREW="${BL64_PKG_PATH_BREW_HOME}/bin/brew"
+    :
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
+  if [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_MACOS" ]]; then
+    BL64_PKG_PATH_BREW_HOME='/opt/homebrew'
+    BL64_PKG_CMD_BREW="${BL64_PKG_PATH_BREW_HOME}/bin/brew"
+  elif [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_LINUX" ]]; then
+    BL64_PKG_PATH_BREW_HOME='/home/linuxbrew/.linuxbrew'
+    BL64_PKG_CMD_BREW="${BL64_PKG_PATH_BREW_HOME}/bin/brew"
+  fi
 }
 
 #######################################
@@ -14454,10 +14518,7 @@ function _bl64_pkg_set_options() {
     BL64_PKG_SET_VERBOSE='--verbose'
     ;;
   ${BL64_OS_MCOS}-*)
-    BL64_PKG_SET_ASSUME_YES=' '
-    BL64_PKG_SET_SLIM=' '
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--verbose'
+    :
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -14619,7 +14680,7 @@ function bl64_pkg_repository_add() {
   local extra2="${5:-}"
 
   bl64_check_privilege_root &&
-    bl64_check_parameter 'name' ||
+    bl64_check_parameter 'name' &&
     bl64_check_parameter 'source' ||
     return $?
 
@@ -14629,15 +14690,6 @@ function bl64_pkg_repository_add() {
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     _bl64_pkg_repository_add_yum "$name" "$source" "$gpgkey"
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_check_alert_unsupported
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_check_alert_unsupported
-    ;;
-  ${BL64_OS_MCOS}-*)
-    bl64_check_alert_unsupported
     ;;
   *) bl64_check_alert_unsupported ;;
 
@@ -14745,34 +14797,44 @@ function _bl64_pkg_repository_add_apt() {
 function bl64_pkg_repository_refresh() {
   bl64_dbg_lib_show_function
 
-  bl64_check_privilege_root || return $?
-
   bl64_msg_show_lib_subtask 'refresh package repository content'
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_pkg_run_apt 'update'
+    bl64_check_privilege_root &&
+      bl64_pkg_run_apt 'update'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-    bl64_pkg_run_dnf 'makecache'
+    bl64_check_privilege_root &&
+      bl64_pkg_run_dnf 'makecache'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_pkg_run_yum 'makecache'
+    bl64_check_privilege_root &&
+      bl64_pkg_run_yum 'makecache'
     ;;
   ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
-    bl64_pkg_run_dnf 'makecache'
+    bl64_check_privilege_root &&
+      bl64_pkg_run_dnf 'makecache'
     ;;
   ${BL64_OS_SLES}-*)
-    bl64_pkg_run_zypper 'refresh'
+    bl64_check_privilege_root &&
+      bl64_pkg_run_zypper 'refresh'
     ;;
   ${BL64_OS_ALP}-*)
-    bl64_pkg_run_apk 'update'
+    bl64_check_privilege_root &&
+      bl64_pkg_run_apk 'update'
     ;;
   ${BL64_OS_MCOS}-*)
-    bl64_pkg_run_brew 'update'
+    bl64_pkg_brew_repository_refresh
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
+}
+
+function bl64_pkg_brew_repository_refresh() {
+  bl64_dbg_lib_show_function
+  bl64_msg_show_lib_subtask 'refresh package repository content'
+  bl64_pkg_run_brew 'update'
 }
 
 #######################################
@@ -14791,13 +14853,18 @@ function bl64_pkg_repository_refresh() {
 #######################################
 function bl64_pkg_deploy() {
   bl64_dbg_lib_show_function "$@"
-
-  bl64_check_parameters_none $# || return $?
-
   bl64_pkg_prepare &&
     bl64_pkg_install "$@" &&
-    bl64_pkg_upgrade &&
+    bl64_pkg_upgrade "$@" &&
     bl64_pkg_cleanup
+}
+
+function bl64_pkg_brew_deploy() {
+  bl64_dbg_lib_show_function "$@"
+  bl64_pkg_brew_prepare &&
+    bl64_pkg_brew_install "$@" &&
+    bl64_pkg_brew_upgrade "$@" &&
+    bl64_pkg_brew_cleanup
 }
 
 #######################################
@@ -14820,6 +14887,13 @@ function bl64_pkg_prepare() {
   bl64_pkg_repository_refresh
 }
 
+function bl64_pkg_brew_prepare() {
+  bl64_dbg_lib_show_function
+
+  bl64_msg_show_lib_subtask 'initialize package manager'
+  bl64_pkg_brew_repository_refresh
+}
+
 #######################################
 # Install packages
 #
@@ -14839,36 +14913,46 @@ function bl64_pkg_prepare() {
 function bl64_pkg_install() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_privilege_root &&
-    bl64_check_parameters_none $# || return $?
+  bl64_check_parameters_none $# || return $?
 
   bl64_msg_show_lib_subtask "install packages (${*})"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_pkg_run_apt 'install' $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES -- "$@"
+    bl64_check_privilege_root &&
+      bl64_pkg_run_apt 'install' $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES -- "$@"
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' "$@"
+    bl64_check_privilege_root &&
+      bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' "$@"
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
+    bl64_check_privilege_root &&
+      bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
     ;;
   ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
-    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' "$@"
+    bl64_check_privilege_root &&
+      bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' "$@"
     ;;
   ${BL64_OS_SLES}-*)
-    bl64_pkg_run_zypper 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
+    bl64_check_privilege_root &&
+      bl64_pkg_run_zypper 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
     ;;
   ${BL64_OS_ALP}-*)
-    bl64_pkg_run_apk 'add' -- "$@"
+    bl64_check_privilege_root &&
+      bl64_pkg_run_apk 'add' -- "$@"
     ;;
   ${BL64_OS_MCOS}-*)
-    "$BL64_PKG_CMD_BREW" 'install' "$@"
+    bl64_pkg_brew_install "$@"
     ;;
   *) bl64_check_alert_unsupported ;;
 
   esac
+}
+
+function bl64_pkg_brew_install() {
+  bl64_dbg_lib_show_function "$@"
+  bl64_pkg_run_brew 'install' "$@"
 }
 
 #######################################
@@ -14890,36 +14974,45 @@ function bl64_pkg_install() {
 function bl64_pkg_upgrade() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_privilege_root || return $?
-
   bl64_msg_show_lib_subtask "upgrade packages${*:+ (${*})}"
 
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES "$@"
+    bl64_check_privilege_root &&
+      bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES "$@"
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
+    bl64_check_privilege_root &&
+      bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
+    bl64_check_privilege_root &&
+      bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
     ;;
   ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
-    bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
+    bl64_check_privilege_root &&
+      bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
     ;;
   ${BL64_OS_SLES}-*)
-    bl64_pkg_run_zypper 'update' $BL64_PKG_SET_ASSUME_YES "$@"
+    bl64_check_privilege_root &&
+      bl64_pkg_run_zypper 'update' $BL64_PKG_SET_ASSUME_YES "$@"
     ;;
   ${BL64_OS_ALP}-*)
-    bl64_pkg_run_apk 'upgrade' "$@"
+    bl64_check_privilege_root &&
+      bl64_pkg_run_apk 'upgrade' "$@"
     ;;
   ${BL64_OS_MCOS}-*)
-    "$BL64_PKG_CMD_BREW" 'upgrade' "$@"
+    bl64_pkg_brew_upgrade "$@"
     ;;
   *) bl64_check_alert_unsupported ;;
 
   esac
+}
+
+function bl64_pkg_brew_upgrade() {
+  bl64_dbg_lib_show_function "$@"
+  bl64_pkg_run_brew 'upgrade' "$@"
 }
 
 #######################################
@@ -14941,39 +15034,50 @@ function bl64_pkg_cleanup() {
   bl64_dbg_lib_show_function
   local target=''
 
-  bl64_check_privilege_root || return $?
-
   bl64_msg_show_lib_subtask 'clean up package manager run-time environment'
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_pkg_run_apt 'clean'
+    bl64_check_privilege_root &&
+      bl64_pkg_run_apt 'clean'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-    bl64_pkg_run_dnf 'clean' 'all'
+    bl64_check_privilege_root &&
+      bl64_pkg_run_dnf 'clean' 'all'
     ;;
   ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_pkg_run_yum 'clean' 'all'
+    bl64_check_privilege_root &&
+      bl64_pkg_run_yum 'clean' 'all'
     ;;
   ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
-    BL64_PKG_CMD_DNF='/usr/bin/dnf'
+    bl64_check_privilege_root &&
+      bl64_pkg_run_dnf 'clean' 'all'
     ;;
   ${BL64_OS_SLES}-*)
-    bl64_pkg_run_zypper 'clean' '--all'
+    bl64_check_privilege_root &&
+      bl64_pkg_run_zypper 'clean' '--all'
     ;;
   ${BL64_OS_ALP}-*)
-    bl64_pkg_run_apk 'cache' 'clean'
+    bl64_check_privilege_root &&
+      bl64_pkg_run_apk 'cache' 'clean'
     target='/var/cache/apk'
     if [[ -d "$target" ]]; then
       bl64_fs_path_remove ${target}/[[:alpha:]]*
     fi
     ;;
   ${BL64_OS_MCOS}-*)
-    bl64_pkg_run_brew 'cleanup' --prune=all -s
+    bl64_pkg_brew_cleanup
     ;;
   *) bl64_check_alert_unsupported ;;
 
   esac
+}
+
+function bl64_pkg_brew_cleanup() {
+  bl64_dbg_lib_show_function
+  bl64_pkg_run_brew 'cleanup' \
+    --prune=all \
+    -s
 }
 
 #######################################
@@ -15169,9 +15273,9 @@ function bl64_pkg_run_brew() {
     return $?
 
   if bl64_msg_lib_verbose_is_enabled; then
-    verbose="$BL64_PKG_SET_VERBOSE"
+    verbose='--verbose'
   else
-    verbose="$BL64_PKG_SET_QUIET"
+    verbose='--quiet'
   fi
 
   export HOMEBREW_PREFIX="$BL64_PKG_PATH_BREW_HOME"
@@ -19090,7 +19194,7 @@ if [[ "${BL64_OS_MODULE:-$BL64_VAR_OFF}" == "$BL64_VAR_ON" ]]; then
     "${BL64_OS_KL}-2024" "${BL64_OS_KL}-2025" \
     "${BL64_OS_MCOS}-12" "${BL64_OS_MCOS}-13" "${BL64_OS_MCOS}-14" "${BL64_OS_MCOS}-15" \
     "${BL64_OS_OL}-7" "${BL64_OS_OL}-8" "${BL64_OS_OL}-9" \
-    "${BL64_OS_RCK}-8" "${BL64_OS_RCK}-9" \
+    "${BL64_OS_RCK}-8" "${BL64_OS_RCK}-9" "${BL64_OS_RCK}-10" \
     "${BL64_OS_RHEL}-8" "${BL64_OS_RHEL}-9" "${BL64_OS_RHEL}-10" \
     "${BL64_OS_SLES}-15" \
     "${BL64_OS_UB}-18" "${BL64_OS_UB}-20" "${BL64_OS_UB}-21" "${BL64_OS_UB}-22" "${BL64_OS_UB}-23" "${BL64_OS_UB}-24" "${BL64_OS_UB}-25" ||
