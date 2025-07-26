@@ -4,12 +4,12 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_API_VERSION='2.2.0'
+  declare BL64_API_VERSION='2.2.1'
 
   declare BL64_API_MODULE='0'
 
-  declare BL64_API_CALL_SET_MAX_RETRIES='5'
-  declare BL64_API_CALL_SET_WAIT='5'
+  declare BL64_API_CALL_SET_MAX_RETRIES='3'
+  declare BL64_API_CALL_SET_WAIT='10'
 
   #
   # Common constants

@@ -14,6 +14,11 @@ function bl64_check_module_imported() {
   _bl64_lib_module_is_imported "$@"
 }
 
+function bl64_check_user() {
+  bl64_msg_show_deprecated 'bl64_check_user' 'bl64_iam_check_user'
+  bl64_iam_check_user "$@"
+}
+
 #
 # Public functions
 #
