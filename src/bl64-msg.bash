@@ -710,13 +710,11 @@ function bl64_msg_help_show(){
   _bl64_msg_show_about
 
   if [[ "$BL64_MSG_HELP_DESCRIPTION" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Info   '
-    printf '\n%s\n\n' "$BL64_MSG_HELP_DESCRIPTION"
+    printf '\n%s\n' "$BL64_MSG_HELP_DESCRIPTION"
   fi
 
   if [[ "$BL64_MSG_HELP_PARAMETERS" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Help   '
-    printf '\n%s\n\n' "$BL64_MSG_HELP_PARAMETERS"
+    printf '\n%s\n' "$BL64_MSG_HELP_PARAMETERS"
   fi
   bl64_msg_set_format "$current_format"
   return 0

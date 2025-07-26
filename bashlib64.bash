@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.1.0'
+  declare BL64_VERSION='22.1.1'
 
   #
   # Imported generic shell standard variables
@@ -464,7 +464,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CHECK_VERSION='6.2.0'
+  declare BL64_CHECK_VERSION='6.2.1'
 
   declare BL64_CHECK_MODULE='0'
 }
@@ -592,7 +592,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.11.0'
+  declare BL64_MSG_VERSION='5.11.1'
 
   declare BL64_MSG_MODULE='0'
 
@@ -896,12 +896,12 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_API_VERSION='2.2.0'
+  declare BL64_API_VERSION='2.2.1'
 
   declare BL64_API_MODULE='0'
 
-  declare BL64_API_CALL_SET_MAX_RETRIES='5'
-  declare BL64_API_CALL_SET_WAIT='5'
+  declare BL64_API_CALL_SET_MAX_RETRIES='3'
+  declare BL64_API_CALL_SET_WAIT='10'
 
   #
   # Common constants
@@ -1659,6 +1659,11 @@ function bl64_check_setup() {
 function bl64_check_module_imported() {
   bl64_msg_show_deprecated 'bl64_check_module_imported' '_bl64_lib_module_is_imported'
   _bl64_lib_module_is_imported "$@"
+}
+
+function bl64_check_user() {
+  bl64_msg_show_deprecated 'bl64_check_user' 'bl64_iam_check_user'
+  bl64_iam_check_user "$@"
 }
 
 #
@@ -4354,13 +4359,11 @@ function bl64_msg_help_show(){
   _bl64_msg_show_about
 
   if [[ "$BL64_MSG_HELP_DESCRIPTION" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Info   '
-    printf '\n%s\n\n' "$BL64_MSG_HELP_DESCRIPTION"
+    printf '\n%s\n' "$BL64_MSG_HELP_DESCRIPTION"
   fi
 
   if [[ "$BL64_MSG_HELP_PARAMETERS" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Help   '
-    printf '\n%s\n\n' "$BL64_MSG_HELP_PARAMETERS"
+    printf '\n%s\n' "$BL64_MSG_HELP_PARAMETERS"
   fi
   bl64_msg_set_format "$current_format"
   return 0
