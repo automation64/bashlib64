@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Template: 1.1.1
+# Template: 1.0.1
+# Version: 1.1.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -13,54 +14,38 @@
 # limitations under the License.
 #######################################
 
-#
-# Imports
-#
+export DEV_PROFILE="${DEV_PROFILE:-none}"
+# Set the requested profile before sourcing devbin64
+declare MY_PROFILE="${1:-${DEV_PROFILE}}"
+DEV_PROFILE="${MY_PROFILE}"
 
-DEV_PROFILE="${1:-${DEV_PROFILE}}"
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && return 1; }
-# shellcheck source-path=lib/bl64
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-msg.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || return 1
 
-#
-# Functions
-#
-
-function dev_init_profile() {
-  bl64_dbg_app_show_function
+function dev_create() {
   [[ "${DEV_PROFILE}" == 'none' ]] && return 0
+  [[ -d "${DEV_PATH_ETC}/${DEV_BASE_PROFILE}/${DEV_PROFILE}" ]] && return 0
   ./bin/dev-profile-create
 }
 
-function dev_init_show() {
-  bl64_dbg_app_show_function
-  bl64_msg_show_setup 'Development environment initialized' \
-  'DEV_PROFILE' \
-  'DEV_PATH_ROOT' \
-  'DEV_PATH_SRC' \
-  'DEV_PATH_BUILD' \
-  'DEV_PATH_BIN'
+function dev_show() {
+  echo "Development environment initialized:
+  DEV_PROFILE: ${DEV_PROFILE}
+  DEV_PATH_ROOT: ${DEV_PATH_ROOT}
+  DEV_PATH_SRC: ${DEV_PATH_SRC}
+  DEV_PATH_BUILD: ${DEV_PATH_BUILD}
+  DEV_PATH_BIN: ${DEV_PATH_BIN}"
 }
 
-function dev_init_initialize() {
-  bl64_dbg_app_show_function
+function dev_initialize() {
+  :
 }
 
-#
-# Main
-#
+[[ -n "$DEV_CICD_DEBUG" ]] && set -x
 
-[[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '1.0.2'
-bl64_msg_all_enable_verbose
-
-bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
-dev_init_initialize &&
-  dev_init_profile &&
-  dev_init_show &&
-  unset dev_init_initialize &&
-  unset dev_init_profile &&
-  unset dev_init_show
-bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"
+dev_initialize &&
+  dev_create &&
+  dev_show &&
+  unset dev_initialize &&
+  unset dev_create &&
+  unset dev_show

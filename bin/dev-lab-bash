@@ -38,7 +38,7 @@ function dev_lab_open() {
   local dev_lab_image="$1"
   local dev_lab_entrypoint='bash'
 
-  bl64_msg_show_task "open sanbox environment (${dev_lab_image})"
+  bl64_msg_show_task "open sandbox environment (${dev_lab_image})"
   bl64_cnt_run_interactive \
     --entrypoint="$dev_lab_entrypoint" \
     --workdir="$DEV_ENV_BASH_CONTAINER_PATH_ROOT" \

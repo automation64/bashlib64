@@ -22,38 +22,25 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-ui.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
-declare MY_PROFILE="${1:-}"
-
-function dev_remove() {
+function dev_profile_list() {
   bl64_dbg_app_show_function
-  bl64_fs_path_remove \
-    "${DEV_PATH_BUILD}/${DEV_BASE_PROFILE}/${MY_PROFILE}" \
-    "${DEV_PATH_ETC}/${DEV_BASE_PROFILE}/${MY_PROFILE}" \
-    "${DEV_PATH_LOGS}/${DEV_BASE_PROFILE}/${MY_PROFILE}" \
-    "${DEV_PATH_TMP}/${DEV_BASE_PROFILE}/${MY_PROFILE}" \
-    "${DEV_PATH_VAR}/${DEV_BASE_PROFILE}/${MY_PROFILE}" \
-    "${DEV_PATH_VAULT}/${DEV_BASE_PROFILE}/${MY_PROFILE}"
+  if [[ -d "${DEV_PATH_ETC}/${DEV_BASE_PROFILE}" ]]; then
+    cd "${DEV_PATH_ETC}/${DEV_BASE_PROFILE}" &&
+      echo *
+  else
+    bl64_msg_show_warning 'repository has no profiles created'
+  fi
 }
 
-function dev_initialize() {
+function dev_profile_initialize() {
   bl64_dbg_app_show_function
-  bl64_check_parameter 'MY_PROFILE' &&
-    bl64_ui_ask_confirmation \
-      "Warning: the operation will remove all content from the profile [${MY_PROFILE}]. If not tracked by GIT, it will be permanently lost. Confirm operation? Type:" \
-      'YES' ||
-    return $?
-  if [[ "$MY_PROFILE" == "$DEV_PROFILE" ]]; then
-    bl64_msg_show_error 'Target profile can not be the current one. Please change to a different profile before removing'
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
-  fi
-  bl64_msg_show_about
 }
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '2.1.0'
-bl64_msg_help_about_set 'Remove devbin64 profile'
-bl64_msg_all_enable_verbose && dev_initialize || exit $?
+bl64_lib_script_version_set '1.0.0'
+bl64_msg_help_about_set 'List devbin64 profiles'
+bl64_msg_all_enable_verbose && dev_profile_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
-dev_remove
+dev_profile_list
 bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"
