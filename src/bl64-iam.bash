@@ -583,10 +583,10 @@ function bl64_iam_run_sysadminctl() {
 function bl64_iam_user_modify() {
   bl64_dbg_lib_show_function "$@"
   local login="${1:-}"
-  local group="${3:-$BL64_VAR_DEFAULT}"
-  local shell="${4:-$BL64_VAR_DEFAULT}"
-  local gecos="${5:-$BL64_VAR_DEFAULT}"
-  local uid="${6:-$BL64_VAR_DEFAULT}"
+  local group="${2:-$BL64_VAR_DEFAULT}"
+  local shell="${3:-$BL64_VAR_DEFAULT}"
+  local gecos="${4:-$BL64_VAR_DEFAULT}"
+  local uid="${5:-$BL64_VAR_DEFAULT}"
 
   bl64_check_parameter 'login' ||
     return $?
