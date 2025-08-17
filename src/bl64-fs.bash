@@ -487,26 +487,26 @@ function bl64_fs_merge_dir() {
 
   bl64_msg_show_lib_subtask "merge directories content (${source} ${BL64_MSG_COSMETIC_ARROW2} ${target})"
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
-    ;;
-  ${BL64_OS_ALP}-*)
-    # shellcheck disable=SC2086
-    shopt -sq dotglob &&
-      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" ${source}/* -t "$target" &&
-      shopt -uq dotglob
-    ;;
-  ${BL64_OS_MCOS}-*)
-    # shellcheck disable=SC2086
-    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" ${source}/ "$target"
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
+      ;;
+    ${BL64_OS_SLES}-*)
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
+      ;;
+    ${BL64_OS_ALP}-*)
+      # shellcheck disable=SC2086
+      shopt -sq dotglob &&
+        bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" ${source}/* -t "$target" &&
+        shopt -uq dotglob
+      ;;
+    ${BL64_OS_MCOS}-*)
+      # shellcheck disable=SC2086
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" ${source}/ "$target"
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -1452,20 +1452,19 @@ function bl64_fs_file_remove() {
   bl64_dbg_lib_show_function "$@"
   local path_current=''
 
-  bl64_check_parameters_none "$#" ||
-    return $?
+  [[ "$#" == 0 ]] &&
+    bl64_msg_show_warning 'there are no files to remove. No further action taken' &&
+    return 0
 
   for path_current in "$@"; do
     bl64_msg_show_lib_subtask "remove file (${path_current})"
-    if [[ ! -e "$path_current" ]]; then
-      bl64_msg_show_warning 'file already removed, no further action taken'
+    [[ ! -e "$path_current" ]] &&
+      bl64_msg_show_warning 'file already removed. No further action taken' &&
       continue
-    fi
 
-    if [[ ! -f "$path_current" && ! -L "$path_current" ]]; then
-      bl64_msg_show_lib_error 'invalid file type. Must be regular file or link. No further action taken.'
+    [[ ! -f "$path_current" && ! -L "$path_current" ]] &&
+      bl64_msg_show_lib_error 'invalid file type. It must be a regular file or a symlink. No further action taken.' &&
       return $BL64_LIB_ERROR_TASK_FAILED
-    fi
 
     bl64_fs_run_rm \
       "$BL64_FS_SET_RM_FORCE" \
