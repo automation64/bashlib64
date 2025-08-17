@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - fs
   - bl64_fs_file_remove: accept empty file list
+  - bl64_fs_path_copy: accept empty file list, create destination
+  - bl64_fs_file_copy: accept empty file list
 
 ### Fixed
 
