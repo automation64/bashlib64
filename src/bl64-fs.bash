@@ -260,9 +260,6 @@ function bl64_fs_path_remove() {
 #######################################
 # Copy one ore more paths to a single destination. Optionally set owner and permissions
 #
-# * Wildcards are not allowed. Use run_cp instead if needed
-# * Path can be directory and/or file only
-# * Destination path should be present
 # * Root privilege (sudo) needed if paths are restricted or change owner is requested
 # * No rollback in case of errors. The process will not remove already copied files
 # * Recursive
@@ -272,8 +269,8 @@ function bl64_fs_path_remove() {
 #   $2: directory permissions. Format: chown format. Default: use current umask
 #   $3: user name. Default: current
 #   $4: group name. Default: current
-#   $5: destination path
-#   $@: full source paths. No wildcards allowed
+#   $5: destination path. Created if not present
+#   $@: full source paths. Directory and/or files
 # Outputs:
 #   STDOUT: verbose operation
 #   STDERR: command errors
@@ -291,17 +288,24 @@ function bl64_fs_path_copy() {
   local path_current=''
   local path_base=
 
-  bl64_check_directory "$destination" || return $?
+  shift
+  shift
+  shift
+  shift
+  shift
 
-  # Remove consumed parameters
-  shift
-  shift
-  shift
-  shift
-  shift
+  [[ "$#" == 0 ]] &&
+    bl64_msg_show_warning 'there are no files to copy. No further action taken' &&
+    return 0
+
+  bl64_fs_dir_create \
+    "$dir_mode" \
+    "$user" \
+    "$group" \
+    "$destination" ||
+    return $?
 
   # shellcheck disable=SC2086
-  bl64_check_parameters_none "$#" || return $?
   bl64_msg_show_lib_subtask "copy paths (${*} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
   # shellcheck disable=SC2086
   bl64_fs_run_cp \
@@ -327,8 +331,6 @@ function bl64_fs_path_copy() {
 #######################################
 # Copy one ore more files to a single destination. Optionally set owner and permissions
 #
-# * Wildcards are not allowed. Use run_cp instead if needed
-# * Destination path should be present
 # * Root privilege (sudo) needed if paths are restricted or change owner is requested
 # * No rollback in case of errors. The process will not remove already copied files
 #
@@ -336,7 +338,7 @@ function bl64_fs_path_copy() {
 #   $1: file permissions. Format: chown format. Default: use current umask
 #   $2: user name. Default: current
 #   $3: group name. Default: current
-#   $4: destination path
+#   $4: destination path. Must exist
 #   $@: full file paths. No wildcards allowed
 # Outputs:
 #   STDOUT: verbose operation
@@ -354,16 +356,19 @@ function bl64_fs_file_copy() {
   local path_current=''
   local path_base=
 
-  bl64_check_directory "$destination" || return $?
-
   # Remove consumed parameters
   shift
   shift
   shift
   shift
 
+  [[ "$#" == 0 ]] &&
+    bl64_msg_show_warning 'there are no files to copy. No further action taken' &&
+    return 0
+
+  bl64_check_directory "$destination" || return $?
+
   # shellcheck disable=SC2086
-  bl64_check_parameters_none "$#" || return $?
   bl64_msg_show_lib_subtask "copy files (${*} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
   # shellcheck disable=SC2086
   bl64_fs_run_cp \
