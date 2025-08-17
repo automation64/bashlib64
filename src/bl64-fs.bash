@@ -294,6 +294,8 @@ function bl64_fs_path_copy() {
   shift
   shift
 
+  bl64_check_parameter 'destination' || return $?
+
   [[ "$#" == 0 ]] &&
     bl64_msg_show_warning 'there are no files to copy. No further action taken' &&
     return 0
@@ -362,11 +364,12 @@ function bl64_fs_file_copy() {
   shift
   shift
 
+  bl64_check_parameter 'destination' &&
+    bl64_check_directory "$destination" || return $?
+
   [[ "$#" == 0 ]] &&
     bl64_msg_show_warning 'there are no files to copy. No further action taken' &&
     return 0
-
-  bl64_check_directory "$destination" || return $?
 
   # shellcheck disable=SC2086
   bl64_msg_show_lib_subtask "copy files (${*} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
