@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# * template-task: 1.7.0
+# * template-task: 1.8.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -15,33 +15,44 @@
 
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+# shellcheck source-path=bin
+source ./bin/dev-env-git || exit 1
 # shellcheck source-path=lib/bl64
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-ui.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-rxtx.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-api.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-vcs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
-function dev_list() {
+function my_create() {
   bl64_dbg_app_show_function
-  if [[ -d "${DEV_PATH_ETC}/${DEV_BASE_PROFILE}" ]]; then
-    cd "${DEV_PATH_ETC}/${DEV_BASE_PROFILE}" &&
-      echo *
-  else
-    bl64_msg_show_warning 'repository has no profiles created'
-  fi
+  bl64_vcs_run_git init -b "$DEV_GIT_BRANCH_MAIN" &&
+    bl64_vcs_run_git remote add "$DEV_GIT_REMOTE_UPSTREAM" "$DEV_GIT_REMOTE_UPSTREAM_URL" &&
+    bl64_vcs_run_git add . &&
+    bl64_vcs_run_git commit -m 'dev: create repo' &&
+    bl64_vcs_run_git push upstream "$DEV_GIT_BRANCH_MAIN"
 }
 
-function dev_initialize() {
+function my_initialize() {
   bl64_dbg_app_show_function
-  bl64_msg_show_about
+  bl64_check_export 'DEV_GIT_REMOTE_UPSTREAM_URL' &&
+    bl64_msg_show_about &&
+    bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
+      'DEV_GIT_BRANCH_MAIN' \
+      'DEV_GIT_REMOTE_UPSTREAM' \
+      'DEV_GIT_REMOTE_UPSTREAM_URL' \
+      'DEV_GIT_REMOTE_UPSTREAM_ENABLED'
 }
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
 bl64_lib_script_version_set '1.0.0'
-bl64_msg_help_about_set 'List devbin64 profiles'
-bl64_msg_all_enable_verbose && dev_initialize || exit $?
+bl64_msg_help_about_set 'Create upstream git repository'
+bl64_msg_all_enable_verbose && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
-dev_list
+my_create
 bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

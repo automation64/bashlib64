@@ -21,44 +21,44 @@
 
 # shellcheck disable=SC2154
 {
-    # Env / Bash / Registry for lab and testing containers
-    export DEV_ENV_BASH_REGISTRY="${DEV_ENV_BASH_REGISTRY:-ghcr.io/automation64}"
-    # Env / Bash / Container path for project mounts
-    export DEV_ENV_BASH_CONTAINER_PATH_SRC='/source'
-    export DEV_ENV_BASH_CONTAINER_PATH_ROOT='/project'
-    export DEV_ENV_BASH_CONTAINER_PATH_TEST='/test'
-    # Build / Bash / Target file name
-    export DEV_BUILD_BASH_NAME="${DEV_BUILD_BASH_NAME:-}"
-    # Build / Bash / Source full path
-    export DEV_BUILD_BASH_SOURCE="${DEV_BUILD_BASH_SOURCE:-${DEV_PATH_SRC}}"
-    # Build / Bash / Target file full path
-    export DEV_BUILD_BASH_FILE="${DEV_BUILD_BASH_FILE:-${DEV_PATH_BUILD_PREPARE}/${DEV_BUILD_BASH_NAME}}"
-    # Build / Bash / Libraries
-    export DEV_BUILD_BASH_MODULES="${DEV_BUILD_BASH_MODULES:-/dev/null}"
-    # Lab / Bash / Default image
-    export DEV_LAB_BASH_CONTAINER="${DEV_LAB_BASH_CONTAINER:-bash-test/alpine-3-bash-test}"
-    # Test / Bash / Path to test cases. Relative to DEV_PATH_ROOT
-    export DEV_TEST_BASH_CASES="${DEV_BASE_TEST}/bash"
-    # Test / Bash / Flag for marking container environment
-    export DEV_TEST_BASH_CONTAINER_ENVIRONMENT="${DEV_TEST_BASH_CONTAINER_ENVIRONMENT:-OFF}"
-    # Test / Bash / Flag for marking CICD runner  environment
-    export DEV_TEST_BASH_RUNNER_ENVIRONMENT="${DEV_TEST_BASH_RUNNER_ENVIRONMENT:-OFF}"
-    # Test / Bash / Flag for disabling container test, and run on local OS
-    export DEV_TEST_BASH_CONTAINER_DISABLED='YES'
-    # Test / Bash / Default test containers
-    export DEV_TEST_BASH_CONTAINER="${DEV_TEST_BASH_CONTAINER:-bash-test/alpine-3-bash-test}"
-    export DEV_TEST_BASH_CONTAINER_ALM="${DEV_TEST_BASH_CONTAINER_ALM:-bash-test/almalinux-9-bash-test}"
-    export DEV_TEST_BASH_CONTAINER_ALP="${DEV_TEST_BASH_CONTAINER_ALP:-bash-test/alpine-3-bash-test}"
-    export DEV_TEST_BASH_CONTAINER_AMZ="${DEV_TEST_BASH_CONTAINER_AMZ:-bash-test/amazonlinux-2023-bash-test}"
-    export DEV_TEST_BASH_CONTAINER_CNT="${DEV_TEST_BASH_CONTAINER_CNT:-bash-test/centos-9-bash-test}"
-    export DEV_TEST_BASH_CONTAINER_DEB="${DEV_TEST_BASH_CONTAINER_DEB:-bash-test/debian-11-bash-test}"
-    export DEV_TEST_BASH_CONTAINER_FD="${DEV_TEST_BASH_CONTAINER_FD:-bash-test/fedora-39-bash-test}"
-    export DEV_TEST_BASH_CONTAINER_KL="${DEV_TEST_BASH_CONTAINER_KL:-bash-test/kalilinux-2024.3-bash-test}"
-    export DEV_TEST_BASH_CONTAINER_OEL="${DEV_TEST_BASH_CONTAINER_OEL:-bash-test/oraclelinux-9-bash-test}"
-    export DEV_TEST_BASH_CONTAINER_RCK="${DEV_TEST_BASH_CONTAINER_RCK:-bash-test/rockylinux-9-bash-test}"
-    export DEV_TEST_BASH_CONTAINER_RHEL="${DEV_TEST_BASH_CONTAINER_RHEL:-bash-test/rhel-9-bash-test}"
-    export DEV_TEST_BASH_CONTAINER_SLES="${DEV_TEST_BASH_CONTAINER_SLES:-bash-test/sles-15-bash-test}"
-    export DEV_TEST_BASH_CONTAINER_UB="${DEV_TEST_BASH_CONTAINER_UB:-bash-test/ubuntu-22.4-bash-test}"
+  # Env / Bash / Registry for lab and testing containers
+  export DEV_ENV_BASH_REGISTRY="${DEV_ENV_BASH_REGISTRY:-ghcr.io/automation64}"
+  # Env / Bash / Container path for project mounts
+  export DEV_ENV_BASH_CONTAINER_PATH_SRC='/source'
+  export DEV_ENV_BASH_CONTAINER_PATH_ROOT='/project'
+  export DEV_ENV_BASH_CONTAINER_PATH_TEST='/test'
+  # Build / Bash / Target file name
+  export DEV_BUILD_BASH_NAME="${DEV_BUILD_BASH_NAME:-}"
+  # Build / Bash / Source full path
+  export DEV_BUILD_BASH_SOURCE="${DEV_BUILD_BASH_SOURCE:-${DEV_PATH_SRC}}"
+  # Build / Bash / Target file full path
+  export DEV_BUILD_BASH_FILE="${DEV_BUILD_BASH_FILE:-${DEV_PATH_BUILD_PREPARE}/${DEV_BUILD_BASH_NAME}}"
+  # Build / Bash / Libraries
+  export DEV_BUILD_BASH_MODULES="${DEV_BUILD_BASH_MODULES:-/dev/null}"
+  # Lab / Bash / Default image
+  export DEV_LAB_BASH_CONTAINER="${DEV_LAB_BASH_CONTAINER:-bash-test/alpine-3-bash-test}"
+  # Test / Bash / Path to test cases. Relative to DEV_PATH_ROOT
+  export DEV_TEST_BASH_CASES="${DEV_BASE_TEST}/bash"
+  # Test / Bash / Flag for marking container environment
+  export DEV_TEST_BASH_CONTAINER_ENVIRONMENT="${DEV_TEST_BASH_CONTAINER_ENVIRONMENT:-OFF}"
+  # Test / Bash / Flag for marking CICD runner  environment
+  export DEV_TEST_BASH_RUNNER_ENVIRONMENT="${DEV_TEST_BASH_RUNNER_ENVIRONMENT:-OFF}"
+  # Test / Bash / Flag for disabling container test, and run on local OS
+  export DEV_TEST_BASH_CONTAINER_DISABLED='YES'
+  # Test / Bash / Default test containers
+  export DEV_TEST_BASH_CONTAINER="${DEV_TEST_BASH_CONTAINER:-bash-test/alpine-3-bash-test}"
+  export DEV_TEST_BASH_CONTAINER_ALM="${DEV_TEST_BASH_CONTAINER_ALM:-bash-test/almalinux-9-bash-test}"
+  export DEV_TEST_BASH_CONTAINER_ALP="${DEV_TEST_BASH_CONTAINER_ALP:-bash-test/alpine-3-bash-test}"
+  export DEV_TEST_BASH_CONTAINER_AMZ="${DEV_TEST_BASH_CONTAINER_AMZ:-bash-test/amazonlinux-2023-bash-test}"
+  export DEV_TEST_BASH_CONTAINER_CNT="${DEV_TEST_BASH_CONTAINER_CNT:-bash-test/centos-9-bash-test}"
+  export DEV_TEST_BASH_CONTAINER_DEB="${DEV_TEST_BASH_CONTAINER_DEB:-bash-test/debian-11-bash-test}"
+  export DEV_TEST_BASH_CONTAINER_FD="${DEV_TEST_BASH_CONTAINER_FD:-bash-test/fedora-39-bash-test}"
+  export DEV_TEST_BASH_CONTAINER_KL="${DEV_TEST_BASH_CONTAINER_KL:-bash-test/kalilinux-2024.3-bash-test}"
+  export DEV_TEST_BASH_CONTAINER_OEL="${DEV_TEST_BASH_CONTAINER_OEL:-bash-test/oraclelinux-9-bash-test}"
+  export DEV_TEST_BASH_CONTAINER_RCK="${DEV_TEST_BASH_CONTAINER_RCK:-bash-test/rockylinux-9-bash-test}"
+  export DEV_TEST_BASH_CONTAINER_RHEL="${DEV_TEST_BASH_CONTAINER_RHEL:-bash-test/rhel-9-bash-test}"
+  export DEV_TEST_BASH_CONTAINER_SLES="${DEV_TEST_BASH_CONTAINER_SLES:-bash-test/sles-15-bash-test}"
+  export DEV_TEST_BASH_CONTAINER_UB="${DEV_TEST_BASH_CONTAINER_UB:-bash-test/ubuntu-22.4-bash-test}"
 }
 
 #

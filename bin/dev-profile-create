@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# * Template: 1.7.0
+# * template-task: 1.7.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -21,7 +21,7 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
-declare MY_PROFILE="${1:-$DEV_PROFILE}"
+declare MY_PROFILE="${1:-}"
 
 function dev_create() {
   bl64_dbg_app_show_function
@@ -33,6 +33,9 @@ function dev_create() {
     "${DEV_PATH_VAR}/${DEV_BASE_PROFILE}" \
     "${DEV_PATH_VAULT}/${DEV_BASE_PROFILE}" \
     "${DEV_PATH_BUILD}/${DEV_BASE_PROFILE}/${MY_PROFILE}" \
+    "${DEV_PATH_BUILD}/${DEV_BASE_PROFILE}/${MY_PROFILE}/prepare" \
+    "${DEV_PATH_BUILD}/${DEV_BASE_PROFILE}/${MY_PROFILE}/staging" \
+    "${DEV_PATH_BUILD}/${DEV_BASE_PROFILE}/${MY_PROFILE}/pack" \
     "${DEV_PATH_ETC}/${DEV_BASE_PROFILE}/${MY_PROFILE}" \
     "${DEV_PATH_LOGS}/${DEV_BASE_PROFILE}/${MY_PROFILE}" \
     "${DEV_PATH_TMP}/${DEV_BASE_PROFILE}/${MY_PROFILE}" \
@@ -49,18 +52,13 @@ function dev_create() {
 
 function dev_initialize() {
   bl64_dbg_app_show_function
-  bl64_check_export 'DEV_PROFILE' ||
-    return $?
-  if [[ "$MY_PROFILE" == 'none' ]]; then
-    bl64_msg_show_error 'Please set the global variable DEV_PROFILE before creation. Current value is set to "none".'
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
-  fi
   bl64_msg_show_about
+  bl64_check_parameter 'MY_PROFILE'
 }
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '2.1.0'
-bl64_msg_help_about_set 'Create devbin64 profile'
+bl64_lib_script_version_set '2.1.1'
+bl64_msg_help_about_set 'Create profile directory structure'
 bl64_msg_all_enable_verbose && dev_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"

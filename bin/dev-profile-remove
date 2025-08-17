@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# * Template: 1.7.0
+# * template-task: 1.7.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -37,6 +37,7 @@ function dev_remove() {
 
 function dev_initialize() {
   bl64_dbg_app_show_function
+  bl64_msg_show_about
   bl64_check_parameter 'MY_PROFILE' &&
     bl64_ui_ask_confirmation \
       "Warning: the operation will remove all content from the profile [${MY_PROFILE}]. If not tracked by GIT, it will be permanently lost. Confirm operation? Type:" \
@@ -46,12 +47,11 @@ function dev_initialize() {
     bl64_msg_show_error 'Target profile can not be the current one. Please change to a different profile before removing'
     return $BL64_LIB_ERROR_PARAMETER_INVALID
   fi
-  bl64_msg_show_about
 }
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '2.1.0'
-bl64_msg_help_about_set 'Remove devbin64 profile'
+bl64_lib_script_version_set '2.1.1'
+bl64_msg_help_about_set 'Remove profile directory structure'
 bl64_msg_all_enable_verbose && dev_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
