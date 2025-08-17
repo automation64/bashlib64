@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.2.0]
+
+### Changed
+
+- fs
+  - bl64_fs_file_remove: accept empty file list
+
+### Fixed
+
+- iam
+  - bl64_iam_user_modify: parameter order
+
 ## [22.1.1]
 
 ### Added
