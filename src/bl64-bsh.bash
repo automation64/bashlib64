@@ -52,11 +52,21 @@ function bl64_bsh_pattern_match_file() {
 
   bl64_check_parameters_none $# || return $?
 
-  shopt -q nullglob; current_nullglob=$?
-  shopt -q nocaseglob; current_nocaseglob=$?
-  shopt -q dotglob; current_dotglob=$?
-  shopt -q globstar; current_globstar=$?
-  shopt -q extglob; current_extglob=$?
+  shopt -q nullglob
+  # shellcheck disable=SC2034
+  current_nullglob=$?
+  shopt -q nocaseglob
+  # shellcheck disable=SC2034
+  current_nocaseglob=$?
+  shopt -q dotglob
+  # shellcheck disable=SC2034
+  current_dotglob=$?
+  shopt -q globstar
+  # shellcheck disable=SC2034
+  current_globstar=$?
+  shopt -q extglob
+  # shellcheck disable=SC2034
+  current_extglob=$?
 
   shopt -q -s nullglob
   shopt -q -u nocaseglob
