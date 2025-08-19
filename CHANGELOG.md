@@ -24,6 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - fs
   - bl64_fs_find_files -> bl64_fs_file_search
+  - bl64_fs_chown_dir -> bl64_fs_run_chown
+  - bl64_fs_chmod_dir -> bl64_fs_run_chmod
+  - bl64_fs_mkdir_full -> bl64_fs_run_mkdir
+  - bl64_fs_merge_files -> bl64_fs_file_merge
+  - bl64_fs_merge_dir -> bl64_fs_dir_merge
 
 ## [22.1.1]
 

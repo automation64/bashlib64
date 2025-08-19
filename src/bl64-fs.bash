@@ -57,6 +57,26 @@ function bl64_fs_find_files() {
   bl64_msg_show_deprecated 'bl64_fs_find_files' 'bl64_fs_file_search'
   bl64_fs_file_search "$@"
 }
+function bl64_fs_chown_dir() {
+  bl64_msg_show_deprecated 'bl64_fs_chown_dir' 'bl64_fs_run_chown'
+  bl64_fs_run_chown "$BL64_FS_SET_CHOWN_RECURSIVE" "$@"
+}
+function bl64_fs_chmod_dir() {
+  bl64_msg_show_deprecated 'bl64_fs_chmod_dir' 'bl64_fs_run_chmod'
+  bl64_fs_run_chmod "$BL64_FS_SET_CHMOD_RECURSIVE" "$@"
+}
+function bl64_fs_mkdir_full() {
+  bl64_msg_show_deprecated 'bl64_fs_mkdir_full' 'bl64_fs_run_mkdir'
+  bl64_fs_run_mkdir "$BL64_FS_SET_MKDIR_PARENTS" "$@"
+}
+function bl64_fs_merge_files() {
+  bl64_msg_show_deprecated 'bl64_fs_merge_files' 'bl64_fs_file_merge'
+  bl64_fs_file_merge "$@"
+}
+function bl64_fs_merge_dir() {
+  bl64_msg_show_deprecated 'bl64_fs_merge_dir' 'bl64_fs_dir_merge'
+  bl64_fs_dir_merge "$@"
+}
 function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
   bl64_msg_show_deprecated 'bl64_fs_set_permissions' 'bl64_fs_path_permission_set'
@@ -427,7 +447,7 @@ function bl64_fs_file_copy() {
 #   $BL64_FS_ERROR_EXISTING_FILE
 #   $BL64_LIB_ERROR_TASK_FAILED
 #######################################
-function bl64_fs_merge_files() {
+function bl64_fs_file_merge() {
   bl64_dbg_lib_show_function "$@"
   local mode="${1:-${BL64_VAR_DEFAULT}}"
   local user="${2:-${BL64_VAR_DEFAULT}}"
@@ -494,7 +514,7 @@ function bl64_fs_merge_files() {
 #   0: operation completed ok
 #   >0: operation failed
 #######################################
-function bl64_fs_merge_dir() {
+function bl64_fs_dir_merge() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-${BL64_VAR_DEFAULT}}"
   local target="${2:-${BL64_VAR_DEFAULT}}"
@@ -611,48 +631,6 @@ function bl64_fs_run_chmod() {
 }
 
 #######################################
-# Change directory ownership recursively
-#
-# * Simple command wrapper
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   0: operation completed ok
-#   >0: operation failed
-#######################################
-function bl64_fs_chown_dir() {
-  bl64_dbg_lib_show_function "$@"
-
-  # shellcheck disable=SC2086
-  bl64_fs_run_chown "$BL64_FS_SET_CHOWN_RECURSIVE" "$@"
-}
-
-#######################################
-# Change directory permissions recursively
-#
-# * Simple command wrapper
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   0: operation completed ok
-#   >0: operation failed
-#######################################
-function bl64_fs_chmod_dir() {
-  bl64_dbg_lib_show_function "$@"
-
-  # shellcheck disable=SC2086
-  bl64_fs_run_chmod "$BL64_FS_SET_CHMOD_RECURSIVE" "$@"
-}
-
-#######################################
 # Command wrapper with verbose, debug and common options
 #
 # Arguments:
@@ -677,24 +655,6 @@ function bl64_fs_run_mkdir() {
   # shellcheck disable=SC2086
   "$BL64_FS_CMD_MKDIR" $debug "$@"
   bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Create full path including parents
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   0: operation completed ok
-#   >0: operation failed
-#######################################
-function bl64_fs_mkdir_full() {
-  bl64_dbg_lib_show_function "$@"
-
-  bl64_fs_run_mkdir "$BL64_FS_SET_MKDIR_PARENTS" "$@"
 }
 
 #######################################
