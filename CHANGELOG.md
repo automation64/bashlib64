@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [22.2.0]
 
+### Added
+
+- fs
+  - bl64_fs_path_merge: option for disabling recursive copy
+- bsh:
+  - bl64_bsh_pattern_match_file
+
 ### Changed
 
 - fs
@@ -28,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_fs_chmod_dir -> bl64_fs_run_chmod
   - bl64_fs_mkdir_full -> bl64_fs_run_mkdir
   - bl64_fs_merge_files -> bl64_fs_file_merge
-  - bl64_fs_merge_dir -> bl64_fs_dir_merge
+  - bl64_fs_merge_dir -> bl64_fs_path_merge
 
 ## [22.1.1]
 
