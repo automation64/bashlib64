@@ -74,8 +74,8 @@ function bl64_fs_merge_files() {
   bl64_fs_file_merge "$@"
 }
 function bl64_fs_merge_dir() {
-  bl64_msg_show_deprecated 'bl64_fs_merge_dir' 'bl64_fs_dir_merge'
-  bl64_fs_dir_merge "$@"
+  bl64_msg_show_deprecated 'bl64_fs_merge_dir' 'bl64_fs_path_merge'
+  bl64_fs_path_merge "$@"
 }
 function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
@@ -500,13 +500,17 @@ function bl64_fs_file_merge() {
 }
 
 #######################################
-# Merge contents from source directory to target
+# Merge directory contents from source directory to target
+#
+# * Content includes files and directories
+# * Recursive should not be disabled if the source contains directories, as it will fail
 #
 # Requirements:
 #   * root privilege (sudo) if the files are restricted
 # Arguments:
 #   $1: source path
 #   $2: target path
+#   $3: recursive. Default: ON
 # Outputs:
 #   STDOUT: command output
 #   STDERR: command stderr
@@ -514,10 +518,11 @@ function bl64_fs_file_merge() {
 #   0: operation completed ok
 #   >0: operation failed
 #######################################
-function bl64_fs_dir_merge() {
+function bl64_fs_path_merge() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-${BL64_VAR_DEFAULT}}"
   local target="${2:-${BL64_VAR_DEFAULT}}"
+  local recursive="${3:-${BL64_VAR_ON}}"
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'target' &&
@@ -526,25 +531,30 @@ function bl64_fs_dir_merge() {
     return $?
 
   bl64_msg_show_lib_subtask "merge directories content (${source} ${BL64_MSG_COSMETIC_ARROW2} ${target})"
+  if bl64_lib_flag_is_enabled "$recursive"; then
+    recursive="$BL64_FS_SET_CP_RECURSIVE"
+  else
+    recursive=''
+  fi
   case "$BL64_OS_DISTRO" in
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" --no-target-directory "$source" "$target"
       ;;
     ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" --no-target-directory "$source" "$target"
       ;;
     ${BL64_OS_SLES}-*)
-      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" --no-target-directory "$source" "$target"
       ;;
     ${BL64_OS_ALP}-*)
       # shellcheck disable=SC2086
       shopt -sq dotglob &&
-        bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" ${source}/* -t "$target" &&
+        bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" ${source}/* -t "$target" &&
         shopt -uq dotglob
       ;;
     ${BL64_OS_MCOS}-*)
       # shellcheck disable=SC2086
-      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" ${source}/ "$target"
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" ${source}/ "$target"
       ;;
     *) bl64_check_alert_unsupported ;;
   esac
