@@ -13,11 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_fs_file_remove: accept empty file list
   - bl64_fs_path_copy: accept empty file list, create destination
   - bl64_fs_file_copy: accept empty file list
+  - bl64_fs_dir_create: now create parents if not present
 
 ### Fixed
 
 - iam
   - bl64_iam_user_modify: parameter order
+
+### Deprecated
+
+- fs
+  - bl64_fs_find_files -> bl64_fs_file_search
 
 ## [22.1.1]
 

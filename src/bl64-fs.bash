@@ -53,6 +53,10 @@ function bl64_fs_restore() {
   bl64_msg_show_deprecated 'bl64_fs_restore' 'bl64_fs_path_recover'
   bl64_fs_path_recover "$@"
 }
+function bl64_fs_find_files() {
+  bl64_msg_show_deprecated 'bl64_fs_find_files' 'bl64_fs_file_search'
+  bl64_fs_file_search "$@"
+}
 function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
   bl64_msg_show_deprecated 'bl64_fs_set_permissions' 'bl64_fs_path_permission_set'
@@ -183,8 +187,8 @@ function _bl64_fs_path_permission_set_group() {
 #  Features:
 #   * If the new path is already present nothing is done. No error or warning is presented
 # Limitations:
-#   * Parent directories are not created
 #   * No rollback in case of errors. The process will not remove already created paths
+#   * Parents are created, but permissions and ownership is not changed
 # Arguments:
 #   $1: permissions. Format: chown format. Default: use current umask
 #   $2: user name. Default: current
@@ -216,8 +220,16 @@ function bl64_fs_dir_create() {
     bl64_check_path_absolute "$path" || return $?
     [[ -d "$path" ]] && continue
     bl64_msg_show_lib_subtask "create directory (${path})"
-    bl64_fs_run_mkdir "$path" &&
-      bl64_fs_path_permission_set "$BL64_VAR_DEFAULT" "$mode" "$user" "$group" "$BL64_VAR_OFF" "$path" ||
+    bl64_fs_run_mkdir \
+      "$BL64_FS_SET_MKDIR_PARENTS" \
+      "$path" &&
+      bl64_fs_path_permission_set \
+        "$BL64_VAR_DEFAULT" \
+        "$mode" \
+        "$user" \
+        "$group" \
+        "$BL64_VAR_OFF" \
+        "$path" ||
       return $?
   done
   return 0
@@ -841,7 +853,7 @@ function bl64_fs_run_find() {
 #######################################
 # Find files and report as list
 #
-# * Not using bl64_fs_find to avoid file expansion for -name
+# * Not using bl64_fs_run_find to avoid file expansion for -name
 #
 # Arguments:
 #   $1: search path
@@ -854,7 +866,7 @@ function bl64_fs_run_find() {
 #   0: operation completed ok
 #   >0: operation failed
 #######################################
-function bl64_fs_find_files() {
+function bl64_fs_file_search() {
   bl64_dbg_lib_show_function "$@"
   local path="${1:-.}"
   local pattern="${2:-${BL64_VAR_DEFAULT}}"
@@ -1437,7 +1449,13 @@ function bl64_fs_file_create() {
 
   bl64_msg_show_lib_subtask "create empty regular file (${file_path})"
   bl64_fs_run_touch "$file_path" &&
-    bl64_fs_path_permission_set "$mode" "$BL64_VAR_DEFAULT" "$user" "$group" "$BL64_VAR_OFF" "$file_path"
+    bl64_fs_path_permission_set \
+      "$mode" \
+      "$BL64_VAR_DEFAULT" \
+      "$user" \
+      "$group" \
+      "$BL64_VAR_OFF" \
+      "$file_path"
 }
 
 #######################################
