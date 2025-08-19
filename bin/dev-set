@@ -5,7 +5,7 @@
 # * Loads DevBin64 environment variables
 # * To be used by DevBin64 scripts
 # * Warning: Bash is the only supported shell. Other shells may work as long as they are compatible with Bash syntax
-# * Version: 8.4.0
+# * Version: 8.5.0
 #
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
@@ -24,26 +24,37 @@
 # Globals
 #
 
+#
+# Parameters
+#
+
 # Main / Debug flag for bin/ scripts
 export DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-}"
 [[ -n "$DEV_CICD_DEBUG" ]] && set -x
+
 # Main / Increase verbosity? Set to YES to increase
 export DEV_SET_VERBOSE="${DEV_SET_VERBOSE:-}"
-# Main / Bootstrap files. Must be the same as defined in .env
-export DEV_BASE_LOCAL='.local.env'
-export DEV_BASE_SECRETS='.secrets.env'
-export DEV_BASE_ENV='.env'
+
 # Main / Project root
 export DEV_PATH_ROOT="${DEV_PATH_ROOT:-}"
 # Main / List of modules to load
 export DEV_MODULE_LOAD="${DEV_MODULE_LOAD:-}"
 # Main / Profile
-export DEV_PROFILE="${DEV_PROFILE:-none}"
+export DEV_PROFILE="${DEV_PROFILE:-}"
 
 # From CICD products
 export GITHUB_WORKSPACE="${GITHUB_WORKSPACE:-}"
 export GITLAB_CI="${GITLAB_CI:-}"
 export TESTMANSH_PROJECT_ROOT="${TESTMANSH_PROJECT_ROOT:-}"
+
+#
+# Constants
+#
+
+# Main / Bootstrap files. Must be the same as defined in .env
+export DEV_BASE_LOCAL='.local.env'
+export DEV_BASE_SECRETS='.secrets.env'
+export DEV_BASE_ENV='.env'
 
 #
 # Public Functions
@@ -96,7 +107,9 @@ function db64_msg_show_task() {
 # Internal Functions
 #
 
-function _dev_set_load_profile_none() {
+function _dev_set_load_profile() {
+  local source_name=''
+  local source_file=''
   if ! db64_profile_is_set; then
     db64_msg_show_task 'no profile set. Adjust profile variables to use global values'
     DEV_PATH_PROF_BUILD="${DEV_PATH_BUILD}"
@@ -108,6 +121,16 @@ function _dev_set_load_profile_none() {
     DEV_PATH_PROF_TMP="${DEV_PATH_TMP}"
     DEV_PATH_PROF_VAR="${DEV_PATH_VAR}"
     DEV_PATH_PROF_VAULT="${DEV_PATH_VAULT}"
+  else
+    for source_name in "$DEV_BASE_LOCAL" "$DEV_BASE_SECRETS" "$DEV_BASE_ENV"; do
+      source_file="${DEV_PATH_PROF_ETC}/${source_name}"
+      if [[ -r "$source_file" ]]; then
+        db64_msg_show_task "load profile environment variables (${source_file})"
+        # shellcheck disable=SC1090
+        source "$source_file" ||
+          { db64_msg_show_error "unable to profile source file (${source_file})" && return 1; }
+      fi
+    done
   fi
 }
 
@@ -115,14 +138,14 @@ function _dev_set_load_workstation() {
   db64_msg_show_task 'set project root (DEV_PATH_ROOT)'
   DEV_PATH_ROOT="${DEV_PATH_ROOT:-$(pwd)}"
 
-  if [[ -f "$DEV_BASE_LOCAL" ]]; then
+  if [[ -r "$DEV_BASE_LOCAL" ]]; then
     db64_msg_show_task "load workstation environment variables (${DEV_BASE_LOCAL})"
     # shellcheck source=./.local.env
     source "$DEV_BASE_LOCAL" ||
       { db64_msg_show_error "unable to source file (${DEV_BASE_LOCAL})" && return 1; }
   fi
 
-  if [[ -f "$DEV_BASE_SECRETS" ]]; then
+  if [[ -r "$DEV_BASE_SECRETS" ]]; then
     db64_msg_show_task "load workstation secrets (${DEV_BASE_SECRETS})"
     # shellcheck source=./.secrets.env
     source "${DEV_BASE_SECRETS}" ||
@@ -139,7 +162,7 @@ function _dev_set_load_gitlab() {
 }
 
 function _dev_set_load_local_post() {
-  if [[ -f "$DEV_BASE_POST" ]]; then
+  if [[ -r "$DEV_BASE_POST" ]]; then
     # shellcheck source=./.post.env
     source "${DEV_BASE_POST}" ||
       { db64_msg_show_error "unable to source file (${DEV_BASE_POST})" && return 1; }
@@ -155,7 +178,7 @@ function _dev_set_load_github() {
   DEV_PATH_ROOT="$GITHUB_WORKSPACE"
 
   DEV_BASE_LOCAL="${DEV_PATH_ROOT}/${DEV_BASE_LOCAL}"
-  if [[ -f "$DEV_BASE_LOCAL" ]]; then
+  if [[ -r "$DEV_BASE_LOCAL" ]]; then
     db64_msg_show_task "Load local github automatic environment variables (${DEV_BASE_LOCAL})"
     # shellcheck source=./.local-github.env
     source "${DEV_BASE_LOCAL}" ||
@@ -211,6 +234,9 @@ function _dev_set_load_local() {
     db64_msg_show_error 'unable to identify current repository location. Check that the variable DEV_PATH_ROOT is correctly set' &&
       return 1
   fi
+  if [[ -z "$DEV_PROFILE" ]]; then
+    DEV_PROFILE='none'
+  fi
 }
 
 function _dev_set_initialize() {
@@ -228,7 +254,7 @@ function _dev_set_cleanup() {
     unset _dev_set_initialize &&
     unset _dev_set_load_local &&
     unset _dev_set_load_env &&
-    unset _dev_set_load_profile_none &&
+    unset _dev_set_load_profile &&
     unset _dev_set_load_modules &&
     unset _dev_set_load_local_post
 }
@@ -241,7 +267,7 @@ function _dev_set_cleanup() {
 _dev_set_initialize &&
   _dev_set_load_local &&
   _dev_set_load_env &&
-  _dev_set_load_profile_none &&
+  _dev_set_load_profile &&
   _dev_set_load_modules &&
   _dev_set_load_local_post &&
   _dev_set_cleanup ||

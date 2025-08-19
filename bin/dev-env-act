@@ -27,7 +27,7 @@
   # Lib / Act / Installer
   export DEV_LIB_ACT_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-act"
   # Lib / Act / Target
-  export DEV_LIB_ACT_TARGET="${DEV_LIB_ACT_TARGET:-${DEV_PATH_LIB}/X_DESTINATION_X}"
+  export DEV_LIB_ACT_TARGET="${DEV_LIB_ACT_TARGET:-${DEV_PATH_LIB}/act}"
 
   # Test / Act / List of workflows. Format: job-id, separated by spaces
   export DEV_TEST_ACT_WORKFLOWS="${DEV_TEST_ACT_WORKFLOWS:-}"

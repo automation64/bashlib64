@@ -39,7 +39,9 @@ function my_initialize() {
   bl64_dbg_app_show_function
   bl64_msg_show_about
   bl64_check_command "$DEV_LIB_ACT_BIN" &&
-    bl64_check_export 'DEV_TEST_ACT_WORKFLOWS'
+    bl64_check_export 'DEV_TEST_ACT_WORKFLOWS' &&
+    bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
+      'DEV_TEST_ACT_WORKFLOWS'
 }
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
