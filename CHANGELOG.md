@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - iam
   - bl64_iam_user_modify: parameter order
+- fs
+  - bl64_fs_symlink_create: existing symlink detection
+  - bl64_fs_file_remove: existing symlink detection
 
 ### Deprecated
 

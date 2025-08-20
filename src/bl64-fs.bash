@@ -1351,7 +1351,7 @@ function bl64_fs_check_new_dir() {
 # Arguments:
 #   $1: source path
 #   $2: destination path
-#   $3: overwrite if already present?
+#   $3: overwrite symlink if already present?
 # Outputs:
 #   STDOUT: verbose operation
 #   STDOUT: command errors
@@ -1370,7 +1370,9 @@ function bl64_fs_symlink_create() {
     bl64_check_path "$source" ||
     return $?
 
-  if [[ -e "$destination" ]]; then
+  bl64_msg_show_lib_subtask "create symbolic link (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
+
+  if [[ -h "$destination" ]]; then
     if [[ "$overwrite" == "$BL64_VAR_ON" ]]; then
       bl64_fs_file_remove "$destination" ||
         return $?
@@ -1378,8 +1380,13 @@ function bl64_fs_symlink_create() {
       bl64_msg_show_warning "target symbolic link is already present. No further action taken (${destination})"
       return 0
     fi
+  elif [[ -f "$destination" ]]; then
+    bl64_msg_show_error 'invalid destination. It is already present and it is a regular file'
+    return $BL64_LIB_ERROR_TASK_REQUIREMENTS
+  elif [[ -d "$destination" ]]; then
+    bl64_msg_show_error 'invalid destination. It is already present and it is a directory'
+    return $BL64_LIB_ERROR_TASK_REQUIREMENTS
   fi
-  bl64_msg_show_lib_subtask "create symbolic link (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
   bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination" ||
     return $?
   if [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_MACOS" ]]; then
@@ -1454,7 +1461,7 @@ function bl64_fs_file_remove() {
 
   for path_current in "$@"; do
     bl64_msg_show_lib_subtask "remove file (${path_current})"
-    [[ ! -e "$path_current" ]] &&
+    [[ ! -e "$path_current" && ! -L "$path_current" ]] &&
       bl64_msg_show_warning 'file already removed. No further action taken' &&
       continue
 
