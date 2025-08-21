@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.1.1'
+  declare BL64_VERSION='22.2.0'
 
   #
   # Imported generic shell standard variables
@@ -1076,7 +1076,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.1.1'
+  declare BL64_FS_VERSION='6.2.0'
 
   declare BL64_FS_MODULE='0'
 
@@ -1199,7 +1199,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_IAM_VERSION='6.0.0'
+  declare BL64_IAM_VERSION='6.0.1'
 
   declare BL64_IAM_MODULE='0'
 
@@ -10406,9 +10406,6 @@ function bl64_fs_path_remove() {
 #######################################
 # Copy one ore more paths to a single destination. Optionally set owner and permissions
 #
-# * Wildcards are not allowed. Use run_cp instead if needed
-# * Path can be directory and/or file only
-# * Destination path should be present
 # * Root privilege (sudo) needed if paths are restricted or change owner is requested
 # * No rollback in case of errors. The process will not remove already copied files
 # * Recursive
@@ -10418,8 +10415,8 @@ function bl64_fs_path_remove() {
 #   $2: directory permissions. Format: chown format. Default: use current umask
 #   $3: user name. Default: current
 #   $4: group name. Default: current
-#   $5: destination path
-#   $@: full source paths. No wildcards allowed
+#   $5: destination path. Created if not present
+#   $@: full source paths. Directory and/or files
 # Outputs:
 #   STDOUT: verbose operation
 #   STDERR: command errors
@@ -10437,17 +10434,26 @@ function bl64_fs_path_copy() {
   local path_current=''
   local path_base=
 
-  bl64_check_directory "$destination" || return $?
+  shift
+  shift
+  shift
+  shift
+  shift
 
-  # Remove consumed parameters
-  shift
-  shift
-  shift
-  shift
-  shift
+  bl64_check_parameter 'destination' || return $?
+
+  [[ "$#" == 0 ]] &&
+    bl64_msg_show_warning 'there are no files to copy. No further action taken' &&
+    return 0
+
+  bl64_fs_dir_create \
+    "$dir_mode" \
+    "$user" \
+    "$group" \
+    "$destination" ||
+    return $?
 
   # shellcheck disable=SC2086
-  bl64_check_parameters_none "$#" || return $?
   bl64_msg_show_lib_subtask "copy paths (${*} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
   # shellcheck disable=SC2086
   bl64_fs_run_cp \
@@ -10473,8 +10479,6 @@ function bl64_fs_path_copy() {
 #######################################
 # Copy one ore more files to a single destination. Optionally set owner and permissions
 #
-# * Wildcards are not allowed. Use run_cp instead if needed
-# * Destination path should be present
 # * Root privilege (sudo) needed if paths are restricted or change owner is requested
 # * No rollback in case of errors. The process will not remove already copied files
 #
@@ -10482,7 +10486,7 @@ function bl64_fs_path_copy() {
 #   $1: file permissions. Format: chown format. Default: use current umask
 #   $2: user name. Default: current
 #   $3: group name. Default: current
-#   $4: destination path
+#   $4: destination path. Must exist
 #   $@: full file paths. No wildcards allowed
 # Outputs:
 #   STDOUT: verbose operation
@@ -10500,16 +10504,20 @@ function bl64_fs_file_copy() {
   local path_current=''
   local path_base=
 
-  bl64_check_directory "$destination" || return $?
-
   # Remove consumed parameters
   shift
   shift
   shift
   shift
 
+  bl64_check_parameter 'destination' &&
+    bl64_check_directory "$destination" || return $?
+
+  [[ "$#" == 0 ]] &&
+    bl64_msg_show_warning 'there are no files to copy. No further action taken' &&
+    return 0
+
   # shellcheck disable=SC2086
-  bl64_check_parameters_none "$#" || return $?
   bl64_msg_show_lib_subtask "copy files (${*} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
   # shellcheck disable=SC2086
   bl64_fs_run_cp \
@@ -10633,26 +10641,26 @@ function bl64_fs_merge_dir() {
 
   bl64_msg_show_lib_subtask "merge directories content (${source} ${BL64_MSG_COSMETIC_ARROW2} ${target})"
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
-    ;;
-  ${BL64_OS_ALP}-*)
-    # shellcheck disable=SC2086
-    shopt -sq dotglob &&
-      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" ${source}/* -t "$target" &&
-      shopt -uq dotglob
-    ;;
-  ${BL64_OS_MCOS}-*)
-    # shellcheck disable=SC2086
-    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" ${source}/ "$target"
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
+      ;;
+    ${BL64_OS_SLES}-*)
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" --no-target-directory "$source" "$target"
+      ;;
+    ${BL64_OS_ALP}-*)
+      # shellcheck disable=SC2086
+      shopt -sq dotglob &&
+        bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" ${source}/* -t "$target" &&
+        shopt -uq dotglob
+      ;;
+    ${BL64_OS_MCOS}-*)
+      # shellcheck disable=SC2086
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" ${source}/ "$target"
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -11598,20 +11606,19 @@ function bl64_fs_file_remove() {
   bl64_dbg_lib_show_function "$@"
   local path_current=''
 
-  bl64_check_parameters_none "$#" ||
-    return $?
+  [[ "$#" == 0 ]] &&
+    bl64_msg_show_warning 'there are no files to remove. No further action taken' &&
+    return 0
 
   for path_current in "$@"; do
     bl64_msg_show_lib_subtask "remove file (${path_current})"
-    if [[ ! -e "$path_current" ]]; then
-      bl64_msg_show_warning 'file already removed, no further action taken'
+    [[ ! -e "$path_current" ]] &&
+      bl64_msg_show_warning 'file already removed. No further action taken' &&
       continue
-    fi
 
-    if [[ ! -f "$path_current" && ! -L "$path_current" ]]; then
-      bl64_msg_show_lib_error 'invalid file type. Must be regular file or link. No further action taken.'
+    [[ ! -f "$path_current" && ! -L "$path_current" ]] &&
+      bl64_msg_show_lib_error 'invalid file type. It must be a regular file or a symlink. No further action taken.' &&
       return $BL64_LIB_ERROR_TASK_FAILED
-    fi
 
     bl64_fs_run_rm \
       "$BL64_FS_SET_RM_FORCE" \
@@ -13239,10 +13246,10 @@ function bl64_iam_run_sysadminctl() {
 function bl64_iam_user_modify() {
   bl64_dbg_lib_show_function "$@"
   local login="${1:-}"
-  local group="${3:-$BL64_VAR_DEFAULT}"
-  local shell="${4:-$BL64_VAR_DEFAULT}"
-  local gecos="${5:-$BL64_VAR_DEFAULT}"
-  local uid="${6:-$BL64_VAR_DEFAULT}"
+  local group="${2:-$BL64_VAR_DEFAULT}"
+  local shell="${3:-$BL64_VAR_DEFAULT}"
+  local gecos="${4:-$BL64_VAR_DEFAULT}"
+  local uid="${5:-$BL64_VAR_DEFAULT}"
 
   bl64_check_parameter 'login' ||
     return $?
