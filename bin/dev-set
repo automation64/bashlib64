@@ -5,7 +5,7 @@
 # * Loads DevBin64 environment variables
 # * To be used by DevBin64 scripts
 # * Warning: Bash is the only supported shell. Other shells may work as long as they are compatible with Bash syntax
-# * Version: 8.3.1
+# * Version: 8.5.0
 #
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
@@ -24,15 +24,17 @@
 # Globals
 #
 
+#
+# Parameters
+#
+
 # Main / Debug flag for bin/ scripts
 export DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-}"
 [[ -n "$DEV_CICD_DEBUG" ]] && set -x
+
 # Main / Increase verbosity? Set to YES to increase
 export DEV_SET_VERBOSE="${DEV_SET_VERBOSE:-}"
-# Main / Bootstrap files. Must be the same as defined in .env
-export DEV_BASE_LOCAL='.local.env'
-export DEV_BASE_SECRETS='.secrets.env'
-export DEV_BASE_ENV='.env'
+
 # Main / Project root
 export DEV_PATH_ROOT="${DEV_PATH_ROOT:-}"
 # Main / List of modules to load
@@ -46,132 +48,215 @@ export GITLAB_CI="${GITLAB_CI:-}"
 export TESTMANSH_PROJECT_ROOT="${TESTMANSH_PROJECT_ROOT:-}"
 
 #
-# Functions
+# Constants
 #
 
-function dev_set_show_warning() {
-  local msg="$1"
-  echo "dev-set:Warning: ${msg}" 2>&1
+# Main / Bootstrap files. Must be the same as defined in .env
+export DEV_BASE_LOCAL='.local.env'
+export DEV_BASE_SECRETS='.secrets.env'
+export DEV_BASE_ENV='.env'
+
+#
+# Public Functions
+#
+
+function db64_profile_check_disabled() {
+  ! db64_profile_is_set && ! db64_profile_is_enabled && return 0
+
+  db64_profile_is_set &&
+    db64_msg_show_error 'Profile must be disabled for this task. Set the variable DEV_PROFILE to "none" and retry.'
+
+  db64_profile_is_enabled &&
+    db64_msg_show_error 'Profile is not supported for this task.'
+
+  return 1
 }
 
-function dev_set_show_error() {
-  local msg="$1"
-  echo "dev-set:Error: ${msg}" 2>&1
+function db64_profile_check_set() {
+  db64_profile_is_set && return 0
+
+  db64_msg_show_error 'Profile is not set. Please set the DEV_PROFILE variable to a valid profile name.'
+  return 1
 }
 
-function dev_set_show_task() {
+function db64_profile_is_enabled() {
+  [[ -d "${DEV_PATH_ETC}/${DEV_BASE_PROFILE}" ]]
+}
+
+function db64_profile_is_set() {
+  [[ -n "$DEV_PROFILE" && "$DEV_PROFILE" != 'none' ]]
+}
+
+function db64_msg_show_warning() {
   local msg="$1"
-  [[ -n "$DEV_SET_VERBOSE" ]] && echo "dev-set:Task: ${msg}"
+  echo "db64:Warning: ${msg}" 2>&1
+}
+
+function db64_msg_show_error() {
+  local msg="$1"
+  echo "db64:Error: ${msg}" 2>&1
+}
+
+function db64_msg_show_task() {
+  local msg="$1"
+  [[ -n "$DEV_SET_VERBOSE" ]] && echo "db64:Task: ${msg}"
   return 0
 }
 
-function dev_set_load_workstation() {
-  dev_set_show_task 'set project root (DEV_PATH_ROOT)'
+#
+# Internal Functions
+#
+
+function _dev_set_load_profile() {
+  local source_name=''
+  local source_file=''
+  if ! db64_profile_is_set; then
+    db64_msg_show_task 'no profile set. Adjust profile variables to use global values'
+    DEV_PATH_PROF_BUILD="${DEV_PATH_BUILD}"
+    DEV_PATH_PROF_BUILD_PREPARE="${DEV_PATH_BUILD_PREPARE}"
+    DEV_PATH_PROF_BUILD_STAGING="${DEV_PATH_BUILD_STAGING}"
+    DEV_PATH_PROF_BUILD_PACK="${DEV_PATH_BUILD_PACK}"
+    DEV_PATH_PROF_ETC="${DEV_PATH_ETC}"
+    DEV_PATH_PROF_LOGS="${DEV_PATH_LOGS}"
+    DEV_PATH_PROF_TMP="${DEV_PATH_TMP}"
+    DEV_PATH_PROF_VAR="${DEV_PATH_VAR}"
+    DEV_PATH_PROF_VAULT="${DEV_PATH_VAULT}"
+  else
+    for source_name in "$DEV_BASE_LOCAL" "$DEV_BASE_SECRETS" "$DEV_BASE_ENV"; do
+      source_file="${DEV_PATH_PROF_ETC}/${source_name}"
+      if [[ -r "$source_file" ]]; then
+        db64_msg_show_task "load profile environment variables (${source_file})"
+        # shellcheck disable=SC1090
+        source "$source_file" ||
+          { db64_msg_show_error "unable to profile source file (${source_file})" && return 1; }
+      fi
+    done
+  fi
+}
+
+function _dev_set_load_workstation() {
+  db64_msg_show_task 'set project root (DEV_PATH_ROOT)'
   DEV_PATH_ROOT="${DEV_PATH_ROOT:-$(pwd)}"
 
-  if [[ -f "$DEV_BASE_LOCAL" ]]; then
-    dev_set_show_task "load workstation environment variables (${DEV_BASE_LOCAL})"
+  if [[ -r "$DEV_BASE_LOCAL" ]]; then
+    db64_msg_show_task "load workstation environment variables (${DEV_BASE_LOCAL})"
     # shellcheck source=./.local.env
     source "$DEV_BASE_LOCAL" ||
-      { dev_set_show_error "unable to source file (${DEV_BASE_LOCAL})" && return 1; }
+      { db64_msg_show_error "unable to source file (${DEV_BASE_LOCAL})" && return 1; }
   fi
 
-  if [[ -f "$DEV_BASE_SECRETS" ]]; then
-    dev_set_show_task "load workstation secrets (${DEV_BASE_SECRETS})"
+  if [[ -r "$DEV_BASE_SECRETS" ]]; then
+    db64_msg_show_task "load workstation secrets (${DEV_BASE_SECRETS})"
     # shellcheck source=./.secrets.env
     source "${DEV_BASE_SECRETS}" ||
-      { dev_set_show_error "unable to source file (${DEV_BASE_SECRETS})" && return 1; }
+      { db64_msg_show_error "unable to source file (${DEV_BASE_SECRETS})" && return 1; }
   fi
   return 0
 }
 
-function dev_set_load_gitlab() {
+function _dev_set_load_gitlab() {
   # shellcheck disable=SC2154
-  dev_set_show_task "Info: GitLab detected, setting project root (${CI_PROJECT_DIR})"
+  db64_msg_show_task "Info: GitLab detected, setting project root (${CI_PROJECT_DIR})"
   # shellcheck disable=SC2155
   DEV_PATH_ROOT="$CI_PROJECT_DIR"
 }
 
-function dev_set_load_local_post() {
-  if [[ -f "$DEV_BASE_POST" ]]; then
+function _dev_set_load_local_post() {
+  if [[ -r "$DEV_BASE_POST" ]]; then
     # shellcheck source=./.post.env
     source "${DEV_BASE_POST}" ||
-      { dev_set_show_error "unable to source file (${DEV_BASE_POST})" && return 1; }
+      { db64_msg_show_error "unable to source file (${DEV_BASE_POST})" && return 1; }
   fi
   return 0
 }
 
-function dev_set_load_github() {
+function _dev_set_load_github() {
   local DEV_BASE_LOCAL='.local-github.env'
 
-  dev_set_show_task "Info: GitHub detected, setting project root (${GITHUB_WORKSPACE})"
+  db64_msg_show_task "Info: GitHub detected, setting project root (${GITHUB_WORKSPACE})"
   # shellcheck disable=SC2155
   DEV_PATH_ROOT="$GITHUB_WORKSPACE"
 
   DEV_BASE_LOCAL="${DEV_PATH_ROOT}/${DEV_BASE_LOCAL}"
-  if [[ -f "$DEV_BASE_LOCAL" ]]; then
-    dev_set_show_task "Load local github automatic environment variables (${DEV_BASE_LOCAL})"
+  if [[ -r "$DEV_BASE_LOCAL" ]]; then
+    db64_msg_show_task "Load local github automatic environment variables (${DEV_BASE_LOCAL})"
     # shellcheck source=./.local-github.env
     source "${DEV_BASE_LOCAL}" ||
-      { dev_set_show_error "unable to source file (${DEV_BASE_LOCAL})" && return 1; }
+      { db64_msg_show_error "unable to source file (${DEV_BASE_LOCAL})" && return 1; }
   fi
   return 0
 }
 
-function dev_set_load_testmansh() {
-  dev_set_show_task "Info: testmansh container detected, setting project root (${TESTMANSH_PROJECT_ROOT})"
+function _dev_set_load_testmansh() {
+  db64_msg_show_task "Info: testmansh container detected, setting project root (${TESTMANSH_PROJECT_ROOT})"
   DEV_PATH_ROOT="$TESTMANSH_PROJECT_ROOT"
 }
 
-function dev_set_load_env() {
-  dev_set_show_task "load project environment variables (${DEV_BASE_ENV})"
+function _dev_set_load_env() {
+  db64_msg_show_task "load project environment variables (${DEV_BASE_ENV})"
   # shellcheck source=./.env
   source "$DEV_BASE_ENV" ||
-    { dev_set_show_error "unable to read environment variables (${DEV_BASE_ENV})" && return 1; }
+    { db64_msg_show_error "unable to read environment variables (${DEV_BASE_ENV})" && return 1; }
   return 0
 }
 
 # shellcheck source-path=./bin
-function dev_set_load_modules() {
+function _dev_set_load_modules() {
   local module_name=''
   local module_env=''
 
   # Load mandatory base modules, based on dependency order
   source "${DEV_PATH_BIN}/dev-env-bashlib64" &&
     source "${DEV_PATH_BIN}/dev-env-installer64" ||
-    { dev_set_show_error "unable to load environment core modules" && return 1; }
+    { db64_msg_show_error "unable to load environment core modules" && return 1; }
 
   # Warning: no using direct var expansion to avoid compatibility issues with ZSH
   for module_name in $(echo "$DEV_MODULE_LOAD"); do
     module_env="${DEV_PATH_BIN}/dev-env-${module_name}"
-    dev_set_show_task "load module environment variables (${module_env})"
+    db64_msg_show_task "load module environment variables (${module_env})"
     source "$module_env" ||
-      { dev_set_show_error "unable to load environment variables from file (${module_env})" && return 1; }
+      { db64_msg_show_error "unable to load environment variables from file (${module_env})" && return 1; }
   done
   return 0
 }
 
-function dev_set_load_local() {
+function _dev_set_load_local() {
   if [[ -n "$GITHUB_WORKSPACE" ]]; then
-    dev_set_load_github
+    _dev_set_load_github
   elif [[ -n "$GITLAB_CI" ]]; then
-    dev_set_load_gitlab
+    _dev_set_load_gitlab
   elif [[ -n "$TESTMANSH_PROJECT_ROOT" ]]; then
-    dev_set_load_testmansh
+    _dev_set_load_testmansh
   else
-    dev_set_load_workstation
+    _dev_set_load_workstation
   fi
   if [[ -z "$DEV_PATH_ROOT" ]]; then
-    dev_set_show_error 'unable to identify current repository location. Check that the variable DEV_PATH_ROOT is correctly set' &&
+    db64_msg_show_error 'unable to identify current repository location. Check that the variable DEV_PATH_ROOT is correctly set' &&
       return 1
+  fi
+  if [[ -z "$DEV_PROFILE" ]]; then
+    DEV_PROFILE='none'
   fi
 }
 
-function dev_set_initialize() {
+function _dev_set_initialize() {
   if [[ ! -f '.env' ]]; then
-    dev_set_show_error "script must be run from project's root path"
+    db64_msg_show_error "script must be run from project's root path"
     return 1
   fi
+}
+
+function _dev_set_cleanup() {
+  unset _dev_set_load_github &&
+    unset _dev_set_load_gitlab &&
+    unset _dev_set_load_testmansh &&
+    unset _dev_set_load_workstation &&
+    unset _dev_set_initialize &&
+    unset _dev_set_load_local &&
+    unset _dev_set_load_env &&
+    unset _dev_set_load_profile &&
+    unset _dev_set_load_modules &&
+    unset _dev_set_load_local_post
 }
 
 #
@@ -179,23 +264,13 @@ function dev_set_initialize() {
 #
 
 # shellcheck disable=SC2015
-dev_set_initialize &&
-  dev_set_load_local &&
-  dev_set_load_env &&
-  dev_set_load_modules &&
-  dev_set_load_local_post &&
-  unset dev_set_load_github &&
-  unset dev_set_load_gitlab &&
-  unset dev_set_load_testmansh &&
-  unset dev_set_load_workstation &&
-  unset dev_set_initialize &&
-  unset dev_set_load_local &&
-  unset dev_set_load_env &&
-  unset dev_set_load_modules &&
-  unset dev_set_load_local_post &&
-  unset dev_set_show_warning &&
-  unset dev_set_show_task &&
-  unset dev_set_show_error ||
-  { dev_set_show_error 'failed to load Dev environment variables' && return 1; }
+_dev_set_initialize &&
+  _dev_set_load_local &&
+  _dev_set_load_env &&
+  _dev_set_load_profile &&
+  _dev_set_load_modules &&
+  _dev_set_load_local_post &&
+  _dev_set_cleanup ||
+  { db64_msg_show_error 'failed to load Dev environment variables' && return 1; }
 [[ -n "$DEV_CICD_DEBUG" ]] && set +x
 :

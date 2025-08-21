@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# * Version: 1.1.1
+# template-env: 1.0.2
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -21,14 +21,16 @@
 
 # shellcheck disable=SC2154
 {
-    # GIT / Main branch name
-    export DEV_GIT_BRANCH_MAIN="${DEV_GIT_BRANCH_MAIN:-main}"
-    # GIT / Origin remote name
-    export DEV_GIT_REMOTE_ORIGIN="${DEV_GIT_REMOTE_ORIGIN:-origin}"
-    # GIT / Use upstream repository? (ON|OFF)
-    export DEV_GIT_REMOTE_UPSTREAM_ENABLED="${DEV_GIT_REMOTE_UPSTREAM_ENABLED:-ON}"
-    # GIT / Upstream remote name
-    export DEV_GIT_REMOTE_UPSTREAM="${DEV_GIT_REMOTE_UPSTREAM:-upstream}"
+  # Env / GIT / Main branch name
+  export DEV_GIT_BRANCH_MAIN="${DEV_GIT_BRANCH_MAIN:-main}"
+  # Env / GIT / Origin remote name
+  export DEV_GIT_REMOTE_ORIGIN="${DEV_GIT_REMOTE_ORIGIN:-origin}"
+  # Env / GIT / Use upstream repository? (ON|OFF)
+  export DEV_GIT_REMOTE_UPSTREAM_ENABLED="${DEV_GIT_REMOTE_UPSTREAM_ENABLED:-ON}"
+  # Env / GIT / Upstream remote name
+  export DEV_GIT_REMOTE_UPSTREAM="${DEV_GIT_REMOTE_UPSTREAM:-upstream}"
+  # Env / GIT / Upstream URL
+  export DEV_GIT_REMOTE_UPSTREAM_URL="${DEV_GIT_REMOTE_UPSTREAM_URL:-}"
 }
 
 #
@@ -39,8 +41,8 @@
 
 # shellcheck disable=SC2154
 {
-    # Lib / RSync / Command
-    export DEV_LIB_RSYNC_BIN="${DEV_LIB_RSYNC_BIN:-/usr/bin/rsync}"
+  # Lib / RSync / Command
+  export DEV_LIB_RSYNC_BIN="${DEV_LIB_RSYNC_BIN:-/usr/bin/rsync}"
 }
 
 #

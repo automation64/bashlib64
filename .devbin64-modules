@@ -3,3 +3,5 @@ git
 github
 gitleaks
 testmansh
+act
+shellcheck

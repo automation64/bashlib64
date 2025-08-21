@@ -23,6 +23,72 @@ function bl64_bsh_script_set_identity() {
 #
 
 #######################################
+# Perform safe filename expansion using pattern
+#
+# * If no patch, return empty string
+# * Include hidden files
+# * Allow extended patterns
+# * Case sensitive
+# * Allow ** and */ patterns
+#
+# Arguments:
+#   $*: pattern
+# Outputs:
+#   STDOUT: pattern match. Empty is none
+#   STDERR: Error messages
+# Returns:
+#   0: task completed
+#   >0: validation error
+#######################################
+function bl64_bsh_pattern_match_file() {
+  bl64_dbg_lib_show_function
+  local -i current_nullglob=0
+  local -i current_nocaseglob=0
+  local -i current_dotglob=0
+  local -i current_globstar=0
+  local -i current_extglob=0
+  local flag=''
+  local status=''
+
+  bl64_check_parameters_none $# || return $?
+
+  shopt -q nullglob
+  # shellcheck disable=SC2034
+  current_nullglob=$?
+  shopt -q nocaseglob
+  # shellcheck disable=SC2034
+  current_nocaseglob=$?
+  shopt -q dotglob
+  # shellcheck disable=SC2034
+  current_dotglob=$?
+  shopt -q globstar
+  # shellcheck disable=SC2034
+  current_globstar=$?
+  shopt -q extglob
+  # shellcheck disable=SC2034
+  current_extglob=$?
+
+  shopt -q -s nullglob
+  shopt -q -u nocaseglob
+  shopt -q -s dotglob
+  shopt -q -s globstar
+  shopt -q -s extglob
+
+  # shellcheck disable=SC2086,SC2068
+  echo $@
+
+  for flag in nullglob nocaseglob dotglob globstar extglob; do
+    status="current_${flag}"
+    if ((${!status} == 0)); then
+      shopt -q -s "$flag"
+    else
+      shopt -q -u "$flag"
+    fi
+  done
+  return 0
+}
+
+#######################################
 # Get current script location
 #
 # Arguments:

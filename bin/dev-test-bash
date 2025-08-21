@@ -81,10 +81,16 @@ function dev_test_bash() {
   local current=''
   local tests=''
 
+  bl64_lib_var_is_default "$container" &&
+    container="$DEV_TEST_BASH_CONTAINER"
+
   bl64_dbg_app_show_comments 'define target tests'
   if [[ -z "$target" ]]; then
     target="$DEV_TEST_BASH_CASES"
   fi
+  bl64_dbg_app_show_comments 'add path prefix if not present'
+  [[ ! "$target" =~ ${DEV_TEST_BASH_CASES} ]] &&
+    target="${DEV_TEST_BASH_CASES}/${target}"
   if [[ -d "$target" ]]; then
     bl64_dbg_app_show_comments "look for tests (${target})"
     tests="$(bl64_fs_find_files "$target")" ||
@@ -111,12 +117,12 @@ function dev_test_initialize() {
 # Main
 #
 
-declare dev_test_container="${1:-${DEV_TEST_BASH_CONTAINER}}"
+declare dev_test_container="${1:-${BL64_VAR_DEFAULT}}"
 shift
 declare dev_test_target="${*:-}"
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '1.3.0'
+bl64_lib_script_version_set '1.4.0'
 bl64_msg_all_enable_verbose
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"

@@ -21,8 +21,8 @@
 
 # shellcheck disable=SC2154
 {
-    # Lib / Installer64 / Source
-    export DEV_LIB_INSTALLER64_URL='https://raw.githubusercontent.com/automation64/installer64/main/src/install-installer64'
+  # Lib / Installer64 / Source
+  export DEV_LIB_INSTALLER64_URL='https://raw.githubusercontent.com/automation64/installer64/main/src/install-installer64'
 }
 
 #

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# * Version: 1.1.2
+# template-env: 1.1.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -21,12 +21,16 @@
 
 # shellcheck disable=SC2154
 {
-  # Release / GitHub / Repository Owner
-  export DEV_RELEASE_GITHUB_REPO_OWNER="${DEV_RELEASE_GITHUB_REPO_OWNER:-}"
-  # Release / GitHub / Repository Name
-  export DEV_RELEASE_GITHUB_REPO_NAME="${DEV_RELEASE_GITHUB_REPO_NAME:-}"
-  # Release / GitHub / Artifact path
-  export DEV_RELEASE_GITHUB_ARTIFACT="${DEV_RELEASE_GITHUB_ARTIFACT:-}"
+  # Env / Act / Module environment definition version
+  export DEV_ENV_ACT_VERSION='1.0.0'
+
+  # Lib / Act / Installer
+  export DEV_LIB_ACT_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-act"
+  # Lib / Act / Target
+  export DEV_LIB_ACT_TARGET="${DEV_LIB_ACT_TARGET:-${DEV_PATH_LIB}/act}"
+
+  # Test / Act / List of workflows. Format: job-id, separated by spaces
+  export DEV_TEST_ACT_WORKFLOWS="${DEV_TEST_ACT_WORKFLOWS:-}"
 }
 
 #
@@ -37,12 +41,6 @@
 
 # shellcheck disable=SC2154
 {
-  # Lib / GitHub / Command
-  export DEV_LIB_GITHUB_BIN="${DEV_LIB_GITHUB_BIN:-/usr/bin/gh}"
+  # Lib / Act / Command
+  export DEV_LIB_ACT_BIN="${DEV_LIB_ACT_BIN:-${DEV_LIB_ACT_TARGET}/act}"
 }
-
-#
-# Secrets
-#
-# * Use .secrets.env file or CICD secrets to override values
-#

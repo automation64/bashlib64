@@ -24,6 +24,6 @@
 
 @test "bl64_fs_file_copy: missing parameter: paths" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  run bl64_fs_file_copy '0700' 'test' 'test' 'target'
-  assert_failure
+  run bl64_fs_file_copy '0700' 'test' 'test' '/tmp'
+  assert_success
 }

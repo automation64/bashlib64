@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# * template-lib-inst64: 1.1.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -19,58 +20,36 @@
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
 # shellcheck source-path=bin
-source ./bin/dev-env-testmansh || exit 1
-# shellcheck source=lib/bl64/bashlib64-core.bash
+source ./bin/dev-env-act || exit 1
+# shellcheck source-path=lib/bl64
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
 #
 # Functions
 #
 
-function dev_test_bash() {
-  bl64_dbg_app_show_function "$@"
-  local container="$1"
-  shift
-  local target="$*"
-  local current=''
-
-  bl64_lib_var_is_default "$container" &&
-    container="$DEV_TEST_TESTMANSH_CONTAINER"
-
-  [[ -z "$target" ]] && target="$DEV_TEST_TESTMANSH_CASES"
-  for current in $target; do
-
-    bl64_dbg_app_show_comments 'add path prefix if not present'
-    [[ ! "$current" =~ ${DEV_BASE_TEST}/batscore/ ]] &&
-      current="${DEV_BASE_TEST}/batscore/${current}"
-
-    bl64_msg_show_phase "test target: ${current}"
-    "$DEV_LIB_TESTMANSH_BIN" \
-      -b -a -V 'NONE' \
-      -e "$container" \
-      -c "$current" ||
-      return $?
-  done
+function my_download() {
+  bl64_dbg_app_show_function
+  INST64_ACT_TARGET="$DEV_LIB_ACT_TARGET" \
+    INST64_ACT_SYSTEM_WIDE='NO' \
+    "${DEV_LIB_ACT_INSTALLER}"
 }
 
-function dev_test_initialize() {
+function my_initialize() {
   bl64_dbg_app_show_function
-  bl64_check_command_search_path "$DEV_LIB_TESTMANSH_BIN"
+  bl64_msg_show_about
+  bl64_check_file "$DEV_LIB_ACT_INSTALLER"
 }
 
 #
 # Main
 #
 
-declare dev_test_container="${1:-${BL64_VAR_DEFAULT}}"
-shift
-declare dev_test_target="${*:-}"
-
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '3.1.0'
-bl64_msg_all_enable_verbose
+bl64_lib_script_version_set '1.0.0'
+bl64_msg_help_about_set 'Prepare module resources'
+bl64_msg_all_enable_verbose && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
-dev_test_initialize &&
-  dev_test_bash "$dev_test_container" "$dev_test_target"
+my_download
 bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

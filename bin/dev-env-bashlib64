@@ -21,10 +21,10 @@
 
 # shellcheck disable=SC2154
 {
-    # Lib / Installer64 / Location # required to avoid circular dependency with dev-env-installer64 and dev-set
-    export DEV_LIB_INSTALLER64_TARGET="${DEV_LIB_INSTALLER64_TARGET:-${DEV_PATH_LIB}/inst64}"
-    # Lib / BashLib64 / Location
-    export DEV_LIB_BASHLIB64_TARGET="${DEV_LIB_BASHLIB64_TARGET:-${DEV_PATH_LIB}/bl64}"
+  # Lib / Installer64 / Location # required to avoid circular dependency with dev-env-installer64 and dev-set
+  export DEV_LIB_INSTALLER64_TARGET="${DEV_LIB_INSTALLER64_TARGET:-${DEV_PATH_LIB}/inst64}"
+  # Lib / BashLib64 / Location
+  export DEV_LIB_BASHLIB64_TARGET="${DEV_LIB_BASHLIB64_TARGET:-${DEV_PATH_LIB}/bl64}"
 }
 
 #

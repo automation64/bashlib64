@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
-# Template: 1.0.1
-# Version: 1.1.1
+#######################################
+# Dev / CLI / ShellCheck / Command runner for interactive shell
+#
+# * Use to run the command in an interactive shell
+# * Associated shell environment is loaded before command execution
+# * Any other dev task that needs to use the command should call it directly, not using this wrapper
+# * Version: 1.0.0
+#
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -14,25 +20,17 @@
 # limitations under the License.
 #######################################
 
-export DEV_PROFILE
-declare MY_PROFILE="${1:-}"
+#
+# Imports
+#
 
-function dev_init_profile() {
-  db64_profile_is_set || return 0
-  [[ -d "${DEV_PATH_ETC}/${DEV_BASE_PROFILE}/${DEV_PROFILE}" ]] && return 0
-  ./bin/dev-profile-create
-}
+# shellcheck source=bin/dev-set
+source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+# shellcheck source=bin/dev-env-shellcheck
+source ./bin/dev-env-shellcheck || exit 1
 
-function dev_init_initialize() {
-  [[ -n "$MY_PROFILE" ]] && DEV_PROFILE="$MY_PROFILE"
-  # shellcheck source=bin/dev-set
-  source ./bin/dev-set ||
-    { echo 'dev-set:Error: unable to load dev environment' 2>&1 && return 1; }
-}
+#
+# Main
+#
 
-[[ -n "$DEV_CICD_DEBUG" ]] && set -x
-
-dev_init_initialize &&
-  dev_init_profile &&
-  unset dev_init_initialize &&
-  unset dev_init_profile
+"$DEV_LIB_SHELLCHECK_BIN" "$@"

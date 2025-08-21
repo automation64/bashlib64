@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.2.0]
+
+### Added
+
+- fs
+  - bl64_fs_path_merge: option for disabling recursive copy
+- bsh:
+  - bl64_bsh_pattern_match_file
+
+### Changed
+
+- fs
+  - bl64_fs_file_remove: accept empty file list
+  - bl64_fs_path_copy: accept empty file list, create destination
+  - bl64_fs_file_copy: accept empty file list
+  - bl64_fs_dir_create: now create parents if not present
+
+### Fixed
+
+- iam
+  - bl64_iam_user_modify: parameter order
+- fs
+  - bl64_fs_symlink_create: existing symlink detection
+  - bl64_fs_file_remove: existing symlink detection
+
+### Deprecated
+
+- fs
+  - bl64_fs_find_files -> bl64_fs_file_search
+  - bl64_fs_chown_dir -> bl64_fs_run_chown
+  - bl64_fs_chmod_dir -> bl64_fs_run_chmod
+  - bl64_fs_mkdir_full -> bl64_fs_run_mkdir
+  - bl64_fs_merge_files -> bl64_fs_file_merge
+  - bl64_fs_merge_dir -> bl64_fs_path_merge
+
 ## [22.1.1]
 
 ### Added
