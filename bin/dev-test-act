@@ -34,6 +34,7 @@ function my_test() {
   # shellcheck disable=SC2086
   "$DEV_LIB_ACT_BIN" \
     --env-file=/dev/null \
+    --concurrent-jobs="$DEV_TEST_ACT_JOBS_MAX" \
     $job_list
 }
 
@@ -47,7 +48,7 @@ function my_initialize() {
 }
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '1.1.0'
+bl64_lib_script_version_set '1.1.1'
 bl64_msg_help_about_set 'Test GitHub workflows'
 bl64_msg_all_enable_verbose && my_initialize || exit $?
 
