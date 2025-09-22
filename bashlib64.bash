@@ -940,7 +940,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_AWS_VERSION='4.0.0'
+  declare BL64_AWS_VERSION='4.0.1'
 
   declare BL64_AWS_MODULE='0'
 
@@ -6767,7 +6767,7 @@ function bl64_aws_sso_get_token() {
 
   bl64_dbg_lib_show_info "search for sso login token (${BL64_AWS_CLI_CACHE})"
   bl64_dbg_lib_trace_start
-  token_file="$(bl64_fs_find_files \
+  token_file="$(bl64_fs_file_search \
     "$BL64_AWS_CLI_CACHE" \
     "*.${BL64_AWS_DEF_SUFFIX_TOKEN}" \
     "$start_url")"
