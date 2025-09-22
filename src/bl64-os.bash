@@ -471,6 +471,7 @@ function bl64_os_check_flavor() {
     return $?
 
   for flavor in "$@"; do
+    bl64_dbg_lib_show_info "checking flavor [${BL64_OS_FLAVOR}] == [${flavor}]"
     [[ "$BL64_OS_FLAVOR" == "$flavor" ]] && return 0
   done
 

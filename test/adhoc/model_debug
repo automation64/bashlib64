@@ -3,6 +3,9 @@
 . test/lib/bash-setup.bash ||
   { echo 'test:Error: unable to load test environment' 2>&1 && exit 1; }
 
+declare VARIABLE1='VALUE1'
+declare VARIABLE2='VALUE2'
+
 function level3() {
   bl64_dbg_runtime_show_callstack
 }
@@ -10,12 +13,14 @@ function level3() {
 function level2() {
   bl64_dbg_lib_show_info 'bl64_dbg_lib_show_info'
   bl64_dbg_lib_show_comments 'bl64_dbg_lib_show_comments'
+  bl64_dbg_lib_show_vars 'VARIABLE1' 'VARIABLE2'
   level3
 }
 
 function level1() {
   bl64_dbg_lib_show_info 'bl64_dbg_lib_show_info'
   bl64_dbg_lib_show_comments 'bl64_dbg_lib_show_comments'
+  bl64_dbg_lib_show_vars 'VARIABLE1' 'VARIABLE2'
 
   level2
 }
@@ -23,6 +28,7 @@ function level1() {
 bl64_dbg_all_enable
 bl64_dbg_lib_show_info 'bl64_dbg_lib_show_info'
 bl64_dbg_lib_show_comments 'bl64_dbg_lib_show_comments'
+bl64_dbg_lib_show_vars 'VARIABLE1' 'VARIABLE2'
 
 level1
 

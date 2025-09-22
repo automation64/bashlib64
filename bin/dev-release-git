@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # template-task: 1.8.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
@@ -27,28 +28,45 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-vcs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
-declare MY_BRANCH="${1:-"${DEV_GIT_BRANCH_FEATURE}"}"
+declare MY_VERSION="${1:-}"
 
-function my_close() {
+function my_release() {
   bl64_dbg_app_show_function
-  bl64_msg_show_task "switch to main branch (${DEV_GIT_BRANCH_MAIN})" &&
-    bl64_vcs_run_git checkout "$DEV_GIT_BRANCH_MAIN" &&
-    bl64_msg_show_task "delete local branch (${MY_BRANCH})" &&
-    bl64_vcs_run_git branch -d "$MY_BRANCH"
+
+  if [[ -n "$(bl64_vcs_run_git status --porcelain)" ]]; then
+    bl64_msg_show_error 'Uncommitted changes found, please commit or stash them before creating a release branch.'
+    return $BL64_LIB_ERROR_CHECK_FAILED
+  fi
+
+  bl64_msg_show_task "switch to main branch (${DEV_GIT_BRANCH_MAIN})"
+  bl64_vcs_run_git checkout main &&
+    bl64_msg_show_task "create release branch (${DEV_GIT_BRANCH_RELEASE})" &&
+    bl64_vcs_run_git checkout -b "$DEV_GIT_BRANCH_RELEASE" &&
+    bl64_vcs_run_git push --set-upstream "$DEV_GIT_REMOTE_ORIGIN" "$DEV_GIT_BRANCH_RELEASE" &&
+    bl64_msg_show_task "squash feature branch to release (${DEV_GIT_BRANCH_FEATURE} -> ${DEV_GIT_BRANCH_RELEASE})" &&
+    bl64_vcs_run_git merge --squash "$DEV_GIT_BRANCH_FEATURE" &&
+    bl64_vcs_run_git commit -m "real: promote ${MY_VERSION}" &&
+    bl64_msg_show_task 'push release branch to origin' &&
+    bl64_vcs_run_git push
 }
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  bl64_vcs_setup &&
+  bl64_msg_show_about
+  bl64_check_parameter 'MY_VERSION' &&
     bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
-      'MY_BRANCH'
+      'MY_VERSION' \
+      'DEV_GIT_BRANCH_MAIN' \
+      'DEV_GIT_REMOTE_ORIGIN' \
+      'DEV_GIT_BRANCH_FEATURE' \
+      'DEV_GIT_BRANCH_RELEASE'
 }
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '2.2.0'
-bl64_msg_help_about_set 'Close GIT branch'
+bl64_lib_script_version_set '1.0.0'
+bl64_msg_help_about_set 'Create and push a squashed release branch from feature branch'
 bl64_msg_all_enable_verbose && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
-my_close
+my_release
 bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

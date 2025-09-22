@@ -31,6 +31,7 @@ function dev_lib_shellcheck() {
   bl64_dbg_app_show_function
   INST64_SHELLCHECK_TARGET="$DEV_LIB_SHELLCHECK_TARGET" \
     INST64_SYSTEM_WIDE='NO' \
+    INST64_CLI_PROMOTE='NO' \
     INST64_SHELLCHECK_METHOD='BINARY' \
     "${DEV_LIB_SHELLCHECK_INSTALLER}"
 }
@@ -45,7 +46,7 @@ function dev_lib_initialize() {
 #
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '1.0.1'
+bl64_lib_script_version_set '1.0.2'
 bl64_msg_all_enable_verbose
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"

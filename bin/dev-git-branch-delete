@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # template-task: 1.8.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
@@ -17,7 +18,8 @@ source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2
 # shellcheck source-path=bin
 source ./bin/dev-env-git || exit 1
 # shellcheck source-path=lib/bl64
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-ui.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
@@ -27,28 +29,39 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-vcs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
-declare MY_BRANCH="${1:-"${DEV_GIT_BRANCH_FEATURE}"}"
+declare MY_BRANCH="${1:-}"
 
-function my_close() {
+function my_delete() {
   bl64_dbg_app_show_function
+  bl64_vcs_run_git checkout "$MY_BRANCH" &&
+    if [[ -n "$(bl64_vcs_run_git status --porcelain)" ]]; then
+      bl64_msg_show_error 'Uncommitted changes found, please commit or stash them before creating a release branch.'
+      return $BL64_LIB_ERROR_CHECK_FAILED
+    fi
+
   bl64_msg_show_task "switch to main branch (${DEV_GIT_BRANCH_MAIN})" &&
     bl64_vcs_run_git checkout "$DEV_GIT_BRANCH_MAIN" &&
+    bl64_msg_show_task "force delete local branch (${MY_BRANCH})" &&
+    bl64_vcs_run_git branch -D "$MY_BRANCH" &&
     bl64_msg_show_task "delete local branch (${MY_BRANCH})" &&
-    bl64_vcs_run_git branch -d "$MY_BRANCH"
+    bl64_vcs_run_git push "$DEV_GIT_REMOTE_ORIGIN" --delete "$MY_BRANCH"
 }
 
 function my_initialize() {
   bl64_dbg_app_show_function
   bl64_vcs_setup &&
+    bl64_check_parameter 'MY_BRANCH' &&
     bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
-      'MY_BRANCH'
+      'DEV_GIT_REMOTE_ORIGIN' \
+      'MY_BRANCH' &&
+    bl64_ui_ask_yesno 'The branch will be force deleted. Continue?'
 }
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '2.2.0'
-bl64_msg_help_about_set 'Close GIT branch'
+bl64_lib_script_version_set '1.0.0'
+bl64_msg_help_about_set 'Force delete GIT branch'
 bl64_msg_all_enable_verbose && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
-my_close
+my_delete
 bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# template-lib-inst64: 1.2.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -12,10 +13,6 @@
 # limitations under the License.
 #######################################
 
-#
-# Imports
-#
-
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
 # shellcheck source-path=bin
@@ -23,32 +20,25 @@ source ./bin/dev-env-gitleaks || exit 1
 # shellcheck source-path=lib/bl64
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
-#
-# Functions
-#
-
-function dev_lib_download() {
+function my_download() {
   bl64_dbg_app_show_function
   INST64_GITLEAKS_TARGET="$DEV_LIB_GITLEAKS_TARGET" \
-    INST64_GITLEAKS_VERSION="$DEV_LIB_GITLEAKS_VERSION" \
-    INST64_SYSTEM_WIDE='NO' \
+    INST64_GITLEAKS_SYSTEM_WIDE='NO' \
+    INST64_CLI_PROMOTE='NO' \
     "${DEV_LIB_GITLEAKS_INSTALLER}"
 }
 
-function dev_lib_initialize() {
+function my_initialize() {
   bl64_dbg_app_show_function
+  bl64_msg_show_about
   bl64_check_file "$DEV_LIB_GITLEAKS_INSTALLER"
 }
 
-#
-# Main
-#
-
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '1.0.1'
-bl64_msg_all_enable_verbose
+bl64_lib_script_version_set '2.0.0'
+bl64_msg_help_about_set 'Prepare module resources'
+bl64_msg_all_enable_verbose && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
-dev_lib_initialize &&
-  dev_lib_download
+my_download
 bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"
