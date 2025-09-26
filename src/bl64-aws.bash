@@ -123,7 +123,7 @@ function bl64_aws_sso_get_token() {
 
   bl64_dbg_lib_show_info "search for sso login token (${BL64_AWS_CLI_CACHE})"
   bl64_dbg_lib_trace_start
-  token_file="$(bl64_fs_find_files \
+  token_file="$(bl64_fs_file_search \
     "$BL64_AWS_CLI_CACHE" \
     "*.${BL64_AWS_DEF_SUFFIX_TOKEN}" \
     "$start_url")"

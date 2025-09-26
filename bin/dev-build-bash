@@ -35,7 +35,7 @@ function dev_build_bash() {
   bl64_dbg_app_show_function
   bl64_msg_show_task "Build app (${DEV_BUILD_BASH_FILE})"
   # shellcheck disable=SC2086
-  bl64_fs_merge_files \
+  bl64_fs_file_merge \
     '0755' \
     "$BL64_VAR_DEFAULT" \
     "$BL64_VAR_DEFAULT" \
@@ -61,7 +61,7 @@ function dev_build_initialize() {
 #
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '4.0.3'
+bl64_lib_script_version_set '4.0.4'
 bl64_msg_all_enable_verbose
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"

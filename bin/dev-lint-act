@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# * template-lint: 1.0.0
-# * template-task: 1.8.0
+# template-lint: 1.0.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -38,7 +37,7 @@ function my_initialize() {
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
 bl64_lib_script_version_set '1.0.0'
-bl64_msg_help_about_set 'Lint source code'
+bl64_msg_help_about_set 'Lint GitHub workflows'
 bl64_msg_all_enable_verbose && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"

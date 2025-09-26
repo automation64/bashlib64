@@ -58,7 +58,7 @@ function dev_test_bash() {
   fi
   if [[ -d "$target" ]]; then
     bl64_dbg_app_show_comments "look for tests (${target})"
-    tests="$(bl64_fs_find_files "$target")" ||
+    tests="$(bl64_fs_file_search "$target")" ||
       return $?
   else
     tests="$target"
@@ -83,7 +83,7 @@ function dev_test_initialize() {
 declare dev_test_target="${*:-}"
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '1.0.1'
+bl64_lib_script_version_set '1.0.2'
 bl64_msg_all_enable_verbose
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"

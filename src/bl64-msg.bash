@@ -654,12 +654,14 @@ function bl64_msg_show_deprecated() {
   local function_name="${1:-}"
   local function_replacement="${2:-non-available}"
 
-  bl64_log_warning "${FUNCNAME[1]:-MAIN}" "deprecated: ${function_name}" &&
-    _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Deprecated' "Function to be removed from future versions: ${function_name}. Replace with: ${function_replacement}" >&2
+  bl64_log_warning "${FUNCNAME[1]:-MAIN}" "legacy: ${function_name}" &&
+    _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Legacy ' "Function to be removed from future versions. Please upgrade. (${function_name} :replace-with: ${function_replacement})" >&2
 }
 
 #######################################
 # Display setup information
+#
+# * Skip empty variables
 #
 # Arguments:
 #   $1: (optional) message
@@ -676,12 +678,13 @@ function bl64_msg_show_setup() {
   local message="${1:-$BL64_VAR_DEFAULT}"
   local variable=''
 
-  bl64_lib_var_is_default "$message" && message='Task to be executed with the following parameters'
+  bl64_lib_var_is_default "$message" && message='Executing task with the following parameters'
   shift
 
   bl64_msg_show_info "$message"
   for variable in "$@"; do
-    eval "bl64_msg_show_info \"${BL64_MSG_COSMETIC_TAB2}${variable}=\$${variable}\""
+    [[ -z "${!variable}" ]] && continue
+    bl64_msg_show_info "${BL64_MSG_COSMETIC_TAB2}${variable}=${!variable}"
   done
 }
 

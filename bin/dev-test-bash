@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# template-task: 1.8.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -11,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #######################################
-
-#
-# Imports
-#
 
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
@@ -29,16 +26,16 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-cnt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
-#
-# Functions
-#
+declare MY_CONTAINER="${1:-${BL64_VAR_DEFAULT}}"
+shift
+declare MY_TARGET="${*:-}"
 
-function dev_test_host_run() {
+function my_test_host_run() {
   local test_file="$1"
   "${DEV_PATH_ROOT}/${test_file}"
 }
 
-function dev_test_container_run() {
+function my_test_container_run() {
   local container_path="$1"
   local test_file="$2"
   # shellcheck disable=SC2086
@@ -57,7 +54,7 @@ function dev_test_container_run() {
     "${DEV_ENV_BASH_REGISTRY}/${container_path}"
 }
 
-function dev_test_run() {
+function my_test_run() {
   bl64_dbg_app_show_function "$@"
   local container_path="$1"
   local test_file="$2"
@@ -67,65 +64,58 @@ function dev_test_run() {
 
   bl64_msg_show_phase "run test target: ${test_file}"
   if [[ "$container_path" == "$DEV_TEST_BASH_CONTAINER_DISABLED" ]]; then
-    dev_test_host_run "$test_file"
+    my_test_host_run "$test_file"
   else
-    dev_test_container_run "$container_path" "$test_file"
+    my_test_container_run "$container_path" "$test_file"
   fi
 }
 
-function dev_test_bash() {
-  bl64_dbg_app_show_function "$@"
-  local container="$1"
-  shift
-  local target="$*"
+function my_test() {
+  bl64_dbg_app_show_function
   local current=''
   local tests=''
 
-  bl64_lib_var_is_default "$container" &&
-    container="$DEV_TEST_BASH_CONTAINER"
-
-  bl64_dbg_app_show_comments 'define target tests'
-  if [[ -z "$target" ]]; then
-    target="$DEV_TEST_BASH_CASES"
-  fi
   bl64_dbg_app_show_comments 'add path prefix if not present'
-  [[ ! "$target" =~ ${DEV_TEST_BASH_CASES} ]] &&
-    target="${DEV_TEST_BASH_CASES}/${target}"
-  if [[ -d "$target" ]]; then
-    bl64_dbg_app_show_comments "look for tests (${target})"
-    tests="$(bl64_fs_find_files "$target")" ||
+  [[ ! "$MY_TARGET" =~ ${DEV_TEST_BASH_CASES} ]] &&
+    MY_TARGET="${DEV_TEST_BASH_CASES}/${MY_TARGET}"
+  if [[ -d "$MY_TARGET" ]]; then
+    bl64_dbg_app_show_comments "look for tests (${MY_TARGET})"
+    tests="$(bl64_fs_file_search "$MY_TARGET")" ||
       return $?
   else
-    tests="$target"
+    tests="$MY_TARGET"
   fi
-  bl64_msg_show_info "test container: ${container}"
+
   for current in $tests; do
     bl64_dbg_app_show_comments 'skip git dir holder'
     [[ "$current" == "$DEV_BASE_GITKEEP" ]] && continue
-    dev_test_run "${container}" "$current" ||
+    my_test_run "${MY_CONTAINER}" "$current" ||
       return $?
+    sleep "$DEV_TEST_BASH_COOLDOWN"
   done
 }
 
-function dev_test_initialize() {
+function my_initialize() {
   bl64_dbg_app_show_function
+
+  bl64_lib_var_is_default "$MY_CONTAINER" &&
+    MY_CONTAINER="$DEV_TEST_BASH_CONTAINER"
+  if [[ -z "$MY_TARGET" ]]; then
+    MY_TARGET="$DEV_TEST_BASH_CASES"
+  fi
+
   bl64_cnt_setup &&
-    bl64_check_directory "$DEV_TEST_BASH_CASES"
+    bl64_check_directory "$DEV_TEST_BASH_CASES" &&
+    bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
+      'MY_CONTAINER' \
+      'MY_TARGET'
 }
 
-#
-# Main
-#
-
-declare dev_test_container="${1:-${BL64_VAR_DEFAULT}}"
-shift
-declare dev_test_target="${*:-}"
-
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '1.4.0'
-bl64_msg_all_enable_verbose
+bl64_lib_script_version_set '1.3.1'
+bl64_msg_help_about_set 'Run bash test scripts inside a container or on the host'
+bl64_msg_all_enable_verbose && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
-dev_test_initialize &&
-  dev_test_bash "$dev_test_container" "$dev_test_target"
+my_test
 bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

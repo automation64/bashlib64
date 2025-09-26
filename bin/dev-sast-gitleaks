@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# template-sast: 1.0.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -12,10 +13,6 @@
 # limitations under the License.
 #######################################
 
-#
-# Imports
-#
-
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
 # shellcheck source-path=bin
@@ -23,32 +20,32 @@ source ./bin/dev-env-gitleaks || exit 1
 # shellcheck source-path=lib/bl64
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
-#
-# Functions
-#
+declare MY_TARGET="${1:-$DEV_PATH_ROOT}"
 
-function dev_sast() {
+function my_sast() {
   bl64_dbg_app_show_function
   "$DEV_LIB_GITLEAKS_BIN" \
     detect \
+    --redact \
+    --verbose \
     --exit-code 1 \
     --report-format "$DEV_SAST_GITLEAKS_FORMAT" \
-    "$DEV_PATH_ROOT"
+    "$MY_TARGET"
 }
 
-function dev_initialize() {
+function my_initialize() {
   bl64_dbg_app_show_function
+  bl64_msg_show_about
+  bl64_check_command "$DEV_LIB_GITLEAKS_BIN" &&
+    bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
+      'MY_TARGET'
 }
-
-#
-# Main
-#
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '1.0.1'
-bl64_msg_all_enable_verbose
+bl64_lib_script_version_set '1.0.3'
+bl64_msg_help_about_set 'Static test source code security'
+bl64_msg_all_enable_verbose && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
-dev_initialize &&
-  dev_sast
+my_sast
 bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

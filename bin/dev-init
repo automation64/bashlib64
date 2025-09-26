@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Template: 1.0.1
-# Version: 1.1.1
+# Version: 2.0.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -18,21 +18,34 @@ export DEV_PROFILE
 declare MY_PROFILE="${1:-}"
 
 function dev_init_profile() {
-  db64_profile_is_set || return 0
-  [[ -d "${DEV_PATH_ETC}/${DEV_BASE_PROFILE}/${DEV_PROFILE}" ]] && return 0
-  ./bin/dev-profile-create
+  [[ -d "etc/prof/${MY_PROFILE}" ]] && return 0
+  ./bin/dev-profile-create "$MY_PROFILE"
+}
+
+function dev_init_load() {
+  DEV_PROFILE="$MY_PROFILE"
+  # shellcheck source=bin/dev-set
+  source ./bin/dev-set ||
+    { echo 'dev-init:Error: unable to load dev environment' 2>&1 && return 1; }
+  printenv | sort
 }
 
 function dev_init_initialize() {
-  [[ -n "$MY_PROFILE" ]] && DEV_PROFILE="$MY_PROFILE"
-  # shellcheck source=bin/dev-set
-  source ./bin/dev-set ||
-    { echo 'dev-set:Error: unable to load dev environment' 2>&1 && return 1; }
+  [[ ! -d 'etc/prof' ]] &&
+    echo 'dev-init:Error: repository does not support profiles.' 2>&1 &&
+    return 1
+
+  [[ -z "$MY_PROFILE" ]] && 
+    echo 'dev-init:Error: missing profile name.' 2>&1 &&
+    return 1
+  return 0
 }
 
 [[ -n "$DEV_CICD_DEBUG" ]] && set -x
 
 dev_init_initialize &&
   dev_init_profile &&
+  dev_init_load &&
   unset dev_init_initialize &&
-  unset dev_init_profile
+  unset dev_init_profile &&
+  unset dev_init_load
