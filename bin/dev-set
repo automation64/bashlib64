@@ -5,7 +5,7 @@
 # * Loads DevBin64 environment variables
 # * To be used by DevBin64 scripts
 # * Warning: Bash is the only supported shell. Other shells may work as long as they are compatible with Bash syntax
-# * Version: 10.0.0
+# * Version: 10.0.1
 #
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
@@ -62,6 +62,7 @@ export DEV_BASE_DOT_LOCAL="dot.local.env"
 export DEV_BASE_DOT_SECRETS="dot.secrets.env"
 export DEV_BASE_ENV=".dev.env"
 export DEV_BASE_GITKEEP=".gitkeep"
+export DEV_BASE_LOCAL='.local-github.env'
 export DEV_BASE_LOCAL=".local.env"
 export DEV_BASE_POST=".post.env"
 export DEV_BASE_PROFILE="prof"
@@ -222,14 +223,14 @@ function _dev_set_load_profile() {
 
     source_file="${DEV_PATH_PROF_VAR}/${DEV_BASE_LOCAL}"
     if [[ -r "$source_file" ]]; then
-      db64_msg_show_task "load profile local variables (${source_file})"
+      db64_msg_show_task "load profile local variables (${DEV_BASE_LOCAL})"
       # shellcheck disable=SC1090
       source "$source_file" ||
         { db64_msg_show_error "unable to load source file (${source_file})" && return 1; }
     fi
     source_file="${DEV_PATH_PROF_ETC}/${DEV_BASE_ENV}"
     if [[ -r "$source_file" ]]; then
-      db64_msg_show_task "load profile variables (${source_file})"
+      db64_msg_show_task "load profile variables (${DEV_BASE_ENV})"
       # shellcheck disable=SC1090
       source "$source_file" ||
         { db64_msg_show_error "unable to load source file (${source_file})" && return 1; }
@@ -260,17 +261,18 @@ function _dev_set_load_gitlab() {
 }
 
 function _dev_set_load_local_post() {
-  if [[ -r "$DEV_BASE_POST" ]]; then
+  local file=''
+  file="${DEV_PATH_ROOT}/${DEV_BASE_POST}"
+  if [[ -r "$file" ]]; then
+    db64_msg_show_task "load project environment variables (${DEV_BASE_POST})"
     # shellcheck source=./.post.env
-    source "${DEV_BASE_POST}" ||
-      { db64_msg_show_error "unable to source file (${DEV_BASE_POST})" && return 1; }
+    source "${file}" ||
+      { db64_msg_show_error "unable to source file (${file})" && return 1; }
   fi
   return 0
 }
 
 function _dev_set_load_github() {
-  local DEV_BASE_LOCAL='.local-github.env'
-
   db64_msg_show_task "Info: GitHub detected, setting project root (${GITHUB_WORKSPACE})"
   # shellcheck disable=SC2155
   DEV_PATH_ROOT="$GITHUB_WORKSPACE"
@@ -293,8 +295,8 @@ function _dev_set_load_testmansh() {
 function _dev_set_load_env() {
   db64_msg_show_task "load project environment variables (${DEV_BASE_ENV})"
   # shellcheck source=./.env
-  source "$DEV_BASE_ENV" ||
-    { db64_msg_show_error "unable to read environment variables (${DEV_BASE_ENV})" && return 1; }
+  source "${DEV_PATH_ROOT}/${DEV_BASE_ENV}" ||
+    { db64_msg_show_error "unable to read environment variables (${DEV_PATH_ROOT}/${DEV_BASE_ENV})" && return 1; }
   return 0
 }
 
@@ -378,7 +380,6 @@ function _dev_set_cleanup() {
   unset _dev_set_define_paths
     unset _dev_set_initialize
     unset _dev_set_load_env
-    unset _dev_set_load_gitlab
     unset _dev_set_legacy
     unset _dev_set_load_local
     unset _dev_set_load_local_post
