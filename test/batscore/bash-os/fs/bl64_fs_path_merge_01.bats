@@ -8,12 +8,12 @@ setup() {
   TEST_SANDBOX="$(temp_make)"
 }
 
-@test "bl64_fs_merge_dir: copy dir + simple file names content + no subdirs" {
+@test "bl64_fs_path_merge: copy dir + simple file names content + no subdirs" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
   source="$TESTMANSH_TEST_SAMPLES/dir_01"
   target="$TEST_SANDBOX/target"
   mkdir "$target"
-  run bl64_fs_merge_dir "$source" "$target"
+  run bl64_fs_path_merge "$source" "$target"
   assert_success
   assert_dir_exist "${target}"
   assert_file_exist "${target}/random_01_02.txt"

@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.3.0'
+  declare BL64_VERSION='22.3.1'
 
   #
   # Imported generic shell standard variables
@@ -592,7 +592,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.12.0'
+  declare BL64_MSG_VERSION='5.12.1'
 
   declare BL64_MSG_MODULE='0'
 
@@ -647,11 +647,11 @@ function bl64_lib_script_version_set() {
   # Message formats
   #
 
-  declare BL64_MSG_FORMAT_PLAIN='R'
-  declare BL64_MSG_FORMAT_HOST='H'
-  declare BL64_MSG_FORMAT_TIME='T'
-  declare BL64_MSG_FORMAT_CALLER='C'
-  declare BL64_MSG_FORMAT_FULL='F'
+  declare BL64_MSG_FORMAT_PLAIN='PLAIN'
+  declare BL64_MSG_FORMAT_HOST='HOST'
+  declare BL64_MSG_FORMAT_TIME='TIME'
+  declare BL64_MSG_FORMAT_CALLER='CALLER'
+  declare BL64_MSG_FORMAT_FULL='FULL'
 
   # Selected message format
   declare BL64_MSG_FORMAT="${BL64_MSG_FORMAT:-$BL64_MSG_FORMAT_FULL}"
@@ -1076,7 +1076,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.2.0'
+  declare BL64_FS_VERSION='6.3.0'
 
   declare BL64_FS_MODULE='0'
 
@@ -1110,6 +1110,7 @@ function bl64_lib_script_version_set() {
   declare BL64_FS_SET_CHMOD_VERBOSE=''
   declare BL64_FS_SET_CHOWN_RECURSIVE=''
   declare BL64_FS_SET_CHOWN_VERBOSE=''
+  declare BL64_FS_SET_CP_DEREFERENCE=''
   declare BL64_FS_SET_CP_FORCE=''
   declare BL64_FS_SET_CP_RECURSIVE=''
   declare BL64_FS_SET_CP_VERBOSE=''
@@ -10030,6 +10031,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_CHMOD_SYMLINK='-h'
     BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
     BL64_FS_SET_CHOWN_VERBOSE='--verbose'
+    BL64_FS_SET_CP_DEREFERENCE='--dereference'
     BL64_FS_SET_CP_FORCE='--force'
     BL64_FS_SET_CP_RECURSIVE='--recursive'
     BL64_FS_SET_CP_VERBOSE='--verbose'
@@ -10060,6 +10062,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_CHMOD_SYMLINK='-h'
     BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
     BL64_FS_SET_CHOWN_VERBOSE='--verbose'
+    BL64_FS_SET_CP_DEREFERENCE='--dereference'
     BL64_FS_SET_CP_FORCE='--force'
     BL64_FS_SET_CP_RECURSIVE='--recursive'
     BL64_FS_SET_CP_VERBOSE='--verbose'
@@ -10090,6 +10093,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_CHMOD_SYMLINK='-h'
     BL64_FS_SET_CHOWN_RECURSIVE='--recursive'
     BL64_FS_SET_CHOWN_VERBOSE='--verbose'
+    BL64_FS_SET_CP_DEREFERENCE='--dereference'
     BL64_FS_SET_CP_FORCE='--force'
     BL64_FS_SET_CP_RECURSIVE='--recursive'
     BL64_FS_SET_CP_VERBOSE='--verbose'
@@ -10120,6 +10124,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_CHMOD_SYMLINK='-h'
     BL64_FS_SET_CHOWN_RECURSIVE='-R'
     BL64_FS_SET_CHOWN_VERBOSE='-v'
+    BL64_FS_SET_CP_DEREFERENCE='-L'
     BL64_FS_SET_CP_FORCE='-f'
     BL64_FS_SET_CP_RECURSIVE='-R'
     BL64_FS_SET_CP_VERBOSE='-v'
@@ -10150,6 +10155,7 @@ function _bl64_fs_set_options() {
     BL64_FS_SET_CHMOD_SYMLINK='-h'
     BL64_FS_SET_CHOWN_RECURSIVE='-R'
     BL64_FS_SET_CHOWN_VERBOSE='-v'
+    BL64_FS_SET_CP_DEREFERENCE='-L'
     BL64_FS_SET_CP_FORCE='-f'
     BL64_FS_SET_CP_RECURSIVE='-R'
     BL64_FS_SET_CP_VERBOSE='-v'
@@ -10754,23 +10760,23 @@ function bl64_fs_path_merge() {
   fi
   case "$BL64_OS_DISTRO" in
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" --no-target-directory "$source" "$target"
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" --no-target-directory "$source" "$target"
       ;;
     ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" --no-target-directory "$source" "$target"
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" --no-target-directory "$source" "$target"
       ;;
     ${BL64_OS_SLES}-*)
-      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" --no-target-directory "$source" "$target"
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" --no-target-directory "$source" "$target"
       ;;
     ${BL64_OS_ALP}-*)
       # shellcheck disable=SC2086
       shopt -sq dotglob &&
-        bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" ${source}/* -t "$target" &&
+        bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" ${source}/* -t "$target" &&
         shopt -uq dotglob
       ;;
     ${BL64_OS_MCOS}-*)
       # shellcheck disable=SC2086
-      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" ${source}/ "$target"
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" ${source}/ "$target"
       ;;
     *) bl64_check_alert_unsupported ;;
   esac

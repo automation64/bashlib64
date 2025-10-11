@@ -8,15 +8,17 @@ setup() {
   TEST_SANDBOX="$(temp_make)"
 }
 
-@test "bl64_fs_merge_dir: copy dir + dot names + subdirs" {
+@test "bl64_fs_path_merge: copy dir + complex file names + no subdirs" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  source="$TESTMANSH_TEST_SAMPLES/dir_02"
+  source="$TESTMANSH_TEST_SAMPLES/dir_03"
   target="$TEST_SANDBOX/target"
   mkdir "$target"
-  run bl64_fs_merge_dir "$source" "$target"
+  run bl64_fs_path_merge "$source" "$target"
   assert_success
-  assert_dir_exist "${target}/.dir_02_03"
-  assert_file_exist "${target}/.dir_02_03/random_02_03_01.txt"
+  assert_dir_exist "${target}"
+  assert_file_exist "${target}/...random_03_05.txt"
+  assert_file_exist "${target}/*random_03_14.txt"
+  assert_file_exist "${target}/#random_03_09.txt"
 }
 
 teardown() {

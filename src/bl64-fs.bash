@@ -538,23 +538,23 @@ function bl64_fs_path_merge() {
   fi
   case "$BL64_OS_DISTRO" in
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" --no-target-directory "$source" "$target"
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" --no-target-directory "$source" "$target"
       ;;
     ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" --no-target-directory "$source" "$target"
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" --no-target-directory "$source" "$target"
       ;;
     ${BL64_OS_SLES}-*)
-      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" --no-target-directory "$source" "$target"
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" --no-target-directory "$source" "$target"
       ;;
     ${BL64_OS_ALP}-*)
       # shellcheck disable=SC2086
       shopt -sq dotglob &&
-        bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" ${source}/* -t "$target" &&
+        bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" ${source}/* -t "$target" &&
         shopt -uq dotglob
       ;;
     ${BL64_OS_MCOS}-*)
       # shellcheck disable=SC2086
-      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$recursive" ${source}/ "$target"
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" ${source}/ "$target"
       ;;
     *) bl64_check_alert_unsupported ;;
   esac

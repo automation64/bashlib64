@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.12.0'
+  declare BL64_MSG_VERSION='5.12.1'
 
   declare BL64_MSG_MODULE='0'
 
@@ -59,11 +59,11 @@
   # Message formats
   #
 
-  declare BL64_MSG_FORMAT_PLAIN='R'
-  declare BL64_MSG_FORMAT_HOST='H'
-  declare BL64_MSG_FORMAT_TIME='T'
-  declare BL64_MSG_FORMAT_CALLER='C'
-  declare BL64_MSG_FORMAT_FULL='F'
+  declare BL64_MSG_FORMAT_PLAIN='PLAIN'
+  declare BL64_MSG_FORMAT_HOST='HOST'
+  declare BL64_MSG_FORMAT_TIME='TIME'
+  declare BL64_MSG_FORMAT_CALLER='CALLER'
+  declare BL64_MSG_FORMAT_FULL='FULL'
 
   # Selected message format
   declare BL64_MSG_FORMAT="${BL64_MSG_FORMAT:-$BL64_MSG_FORMAT_FULL}"

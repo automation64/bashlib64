@@ -5,12 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [22.3.0]
+## [22.3.1]
 
 ### Changed
 
 - msg
   - bl64_msg_show_setup: skip empty vars
+  - BL64_MSG_FORMAT_*: values are now human readable
+
+### Fixed
+
+- fs
+  - bl64_fs_path_merge: use cp dereference to avoid link copy issues
 
 ## [22.2.0]
 
