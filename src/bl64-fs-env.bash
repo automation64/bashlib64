@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.2.0'
+  declare BL64_FS_VERSION='6.3.0'
 
   declare BL64_FS_MODULE='0'
 
@@ -38,6 +38,7 @@
   declare BL64_FS_SET_CHMOD_VERBOSE=''
   declare BL64_FS_SET_CHOWN_RECURSIVE=''
   declare BL64_FS_SET_CHOWN_VERBOSE=''
+  declare BL64_FS_SET_CP_DEREFERENCE=''
   declare BL64_FS_SET_CP_FORCE=''
   declare BL64_FS_SET_CP_RECURSIVE=''
   declare BL64_FS_SET_CP_VERBOSE=''

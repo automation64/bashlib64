@@ -12,27 +12,27 @@ setup() {
   mkdir "$target"
 }
 
-@test "bl64_fs_merge_dir: missing source" {
+@test "bl64_fs_path_merge: missing source" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  run bl64_fs_merge_dir
+  run bl64_fs_path_merge
   assert_failure
 }
 
-@test "bl64_fs_merge_dir: missing target" {
+@test "bl64_fs_path_merge: missing target" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  run bl64_fs_merge_dir
+  run bl64_fs_path_merge
   assert_failure "$source"
 }
 
-@test "bl64_fs_merge_dir: missing source directory" {
+@test "bl64_fs_path_merge: missing source directory" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  run bl64_fs_merge_dir
+  run bl64_fs_path_merge
   assert_failure "/fake/dir" "$target"
 }
 
-@test "bl64_fs_merge_dir: missing target directory" {
+@test "bl64_fs_path_merge: missing target directory" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
-  run bl64_fs_merge_dir
+  run bl64_fs_path_merge
   assert_failure "$source" "/fake/dir"
 }
 
