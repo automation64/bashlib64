@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.3.1'
+  declare BL64_VERSION='22.4.0'
 
   #
   # Imported generic shell standard variables
@@ -984,7 +984,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_BSH_VERSION='3.7.0'
+  declare BL64_BSH_VERSION='3.8.0'
 
   declare BL64_BSH_MODULE='0'
 
@@ -7702,7 +7702,32 @@ function bl64_bsh_run_popd() {
 }
 
 #######################################
-# Search for the command in well known locations
+# Search for the command in well known locations, including user paths
+#
+# Arguments:
+#   $1: command name
+#   $@: (optional) list of additional paths where to look on
+# Outputs:
+#   STDOUT: full path
+#   STDERR: Error messages
+# Returns:
+#   0: full path detected
+#   >0: unable to detect or error
+#######################################
+function bl64_bsh_command_locate_user() {
+  bl64_dbg_lib_show_function "$@"
+  local command="${1:-}"
+  shift
+  bl64_bsh_command_locate \
+    "$command" \
+    "${HOME}/bin" \
+    "${HOME}/.local/bin" \
+    "${HOME}/node_modules/.bin" \
+    "$@"
+}
+
+#######################################
+# Search for the command in well known system locations
 #
 # Arguments:
 #   $1: command name
