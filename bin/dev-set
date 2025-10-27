@@ -5,7 +5,7 @@
 # * Loads DevBin64 environment variables
 # * To be used by DevBin64 scripts
 # * Warning: Bash is the only supported shell. Other shells may work as long as they are compatible with Bash syntax
-# * Version: 10.0.1
+# * Version: 10.1.0
 #
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
@@ -29,8 +29,8 @@
 export DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-}"
 [[ -n "$DEV_CICD_DEBUG" ]] && set -x
 
-# Main / Increase verbosity? Set to YES to increase
-export DEV_SET_VERBOSE="${DEV_SET_VERBOSE:-}"
+# Main / Verbose format (BL64_MSG_FORMAT_*)
+export DEV_VERBOSE="${DEV_VERBOSE:-FULL}"
 
 # Main / Profile
 export DEV_PROFILE="${DEV_PROFILE:-}"
@@ -167,7 +167,7 @@ function db64_msg_show_error() {
 
 function db64_msg_show_task() {
   local msg="$1"
-  [[ -n "$DEV_SET_VERBOSE" ]] && echo "db64:Task: ${msg}"
+  [[ -n "$DEV_CICD_DEBUG" ]] && echo "db64:Task: ${msg}"
   return 0
 }
 

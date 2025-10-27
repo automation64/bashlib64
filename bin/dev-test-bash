@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-task: 1.8.0
+# template-test: 1.0.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -15,8 +15,6 @@
 
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
-# shellcheck source-path=bin
-source ./bin/dev-env-bash || exit 1
 # shellcheck source-path=lib/bl64
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
@@ -25,6 +23,8 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-cnt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
+# shellcheck source-path=bin
+source ./bin/dev-env-bash || exit 1
 
 declare MY_CONTAINER="${1:-${BL64_VAR_DEFAULT}}"
 shift
@@ -67,6 +67,13 @@ function my_test_run() {
     my_test_host_run "$test_file"
   else
     my_test_container_run "$container_path" "$test_file"
+  fi
+  # shellcheck disable=SC2181
+  if (( $? == 0 )); then
+    bl64_msg_show_info 'test result: PASS'
+  else
+    bl64_msg_show_info 'test result: FAIL'
+    return 1
   fi
 }
 
@@ -112,9 +119,9 @@ function my_initialize() {
 }
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '1.3.1'
+bl64_lib_script_version_set '1.4.0'
 bl64_msg_help_about_set 'Run bash test scripts inside a container or on the host'
-bl64_msg_all_enable_verbose && my_initialize || exit $?
+bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_test

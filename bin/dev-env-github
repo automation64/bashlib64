@@ -16,7 +16,7 @@
 #
 # Globals
 #
-# * Use .env file to override values
+# * Use .dev.env file to override values
 #
 
 # shellcheck disable=SC2154
@@ -40,9 +40,3 @@
   # Lib / GitHub / Command
   export DEV_LIB_GITHUB_BIN="${DEV_LIB_GITHUB_BIN:-/usr/bin/gh}"
 }
-
-#
-# Secrets
-#
-# * Use .secrets.env file or CICD secrets to override values
-#

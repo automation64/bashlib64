@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# template-test: 1.0.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -12,30 +13,24 @@
 # limitations under the License.
 #######################################
 
-#
-# Imports
-#
-
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
-# shellcheck source-path=bin
-source ./bin/dev-env-bash || exit 1
 # shellcheck source-path=lib/bl64
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
+# shellcheck source-path=bin
+source ./bin/dev-env-bash || exit 1
 
-#
-# Functions
-#
+declare MY_TARGET="${*:-}"
 
-function dev_test_host_run() {
+function my_test_run_instance() {
   local test_file="$1"
   "${DEV_PATH_ROOT}/${test_file}"
 }
 
-function dev_test_run() {
+function my_test_run() {
   bl64_dbg_app_show_function "$@"
   local test_file="$1"
 
@@ -43,50 +38,52 @@ function dev_test_run() {
   [[ "$test_file" =~ "$DEV_BASE_GITKEEP" ]] && return 0
 
   bl64_msg_show_phase "run test target: ${test_file}"
-  dev_test_host_run "$test_file"
+  my_test_run_instance "$test_file"
+  # shellcheck disable=SC2181
+  if (( $? == 0 )); then
+    bl64_msg_show_info 'test result: PASS'
+  else
+    bl64_msg_show_info 'test result: FAIL'
+    return 1
+  fi
 }
 
-function dev_test_bash() {
+function my_test() {
   bl64_dbg_app_show_function "$@"
-  local target="$*"
   local current=''
   local tests=''
 
   bl64_dbg_app_show_comments 'define target tests'
-  if [[ -z "$target" ]]; then
-    target="$DEV_TEST_BASH_CASES"
+  if [[ -z "$MY_TARGET" ]]; then
+    MY_TARGET="$DEV_TEST_BASH_CASES"
   fi
-  if [[ -d "$target" ]]; then
-    bl64_dbg_app_show_comments "look for tests (${target})"
-    tests="$(bl64_fs_file_search "$target")" ||
+  if [[ -d "$MY_TARGET" ]]; then
+    bl64_dbg_app_show_comments "look for tests (${MY_TARGET})"
+    tests="$(bl64_fs_file_search "$MY_TARGET")" ||
       return $?
   else
-    tests="$target"
+    tests="$MY_TARGET"
   fi
   for current in $tests; do
     bl64_dbg_app_show_comments 'skip git dir holder'
     [[ "$current" == "$DEV_BASE_GITKEEP" ]] && continue
-    dev_test_run "$current" ||
+    my_test_run "$current" ||
       return $?
   done
 }
 
-function dev_test_initialize() {
+function my_initialize() {
   bl64_dbg_app_show_function
+  bl64_msg_show_about
   bl64_check_directory "$DEV_TEST_BASH_CASES"
 }
 
-#
-# Main
-#
-
-declare dev_test_target="${*:-}"
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '1.0.2'
-bl64_msg_all_enable_verbose
+bl64_lib_script_version_set '1.1.0'
+bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
-dev_test_initialize &&
-  dev_test_bash "$dev_test_target"
+my_initialize &&
+  my_test "$MY_TARGET"
 bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

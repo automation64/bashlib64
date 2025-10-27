@@ -16,7 +16,7 @@
 #
 # Globals
 #
-# * Use .env file to override values
+# * Use .dev.env file to override values
 #
 
 # shellcheck disable=SC2154
@@ -50,9 +50,3 @@
   # Lib / ShellCheck / Command
   export DEV_LIB_SHELLCHECK_BIN="${DEV_LIB_SHELLCHECK_BIN:-${DEV_LIB_SHELLCHECK_TARGET}/shellcheck}"
 }
-
-#
-# Secrets
-#
-# * Use .secrets.env file or CICD secrets to override values
-#

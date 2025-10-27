@@ -18,9 +18,6 @@
 
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
-# shellcheck source-path=bin
-source ./bin/dev-env-git &&
-  source ./bin/dev-env-github || exit 1
 # shellcheck source=lib/bl64/bashlib64.bash
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
@@ -31,6 +28,9 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
+# shellcheck source-path=bin
+source ./bin/dev-env-git &&
+  source ./bin/dev-env-github || exit 1
 
 #
 # Functions
@@ -105,7 +105,7 @@ declare dev_release_tag="${1:-}"
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
 bl64_lib_script_version_set '2.2.4'
-bl64_msg_all_enable_verbose
+bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 dev_release_initialize &&

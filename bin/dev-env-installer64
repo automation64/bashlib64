@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# * Version: 2.0.0
+# template-env: 1.1.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -16,19 +16,20 @@
 #
 # Globals
 #
-# * Use .env file to override values
+# * Use .dev.env file to override values
 #
 
 # shellcheck disable=SC2154
 {
+  # Env / Installer64 / Module environment definition version
+  export DEV_ENV_INSTALLER64_VERSION='2.0.0'
+
   # Lib / Installer64 / Source
   export DEV_LIB_INSTALLER64_URL='https://raw.githubusercontent.com/automation64/installer64/main/src/install-installer64'
 }
 
 #
-# Locals
-#
-# * Use .local.env file or CICD variables to override values
+# External
 #
 
 # shellcheck disable=SC2154
@@ -36,9 +37,3 @@
   # Lib / Installer64 / Installer64 parameters
   export INST64_INSTALLER64_TARGET="$DEV_LIB_INSTALLER64_TARGET"
 }
-
-#
-# Secrets
-#
-# * Use .secrets.env file or CICD secrets to override values
-#

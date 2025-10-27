@@ -85,23 +85,28 @@ function bl64_msg_set_level() {
 function bl64_msg_set_format() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local format="$1"
+  local legacy_BL64_MSG_FORMAT_PLAIN='R'
+  local legacy_BL64_MSG_FORMAT_HOST='H'
+  local legacy_BL64_MSG_FORMAT_TIME='T'
+  local legacy_BL64_MSG_FORMAT_CALLER='C'
+  local legacy_BL64_MSG_FORMAT_FULL='F'
 
   bl64_check_parameter 'format' || return $?
 
   case "$format" in
-  "$BL64_MSG_FORMAT_PLAIN")
+  "$BL64_MSG_FORMAT_PLAIN" | "$legacy_BL64_MSG_FORMAT_PLAIN" )
     BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN"
     ;;
-  "$BL64_MSG_FORMAT_HOST")
+  "$BL64_MSG_FORMAT_HOST" | "$legacy_BL64_MSG_FORMAT_HOST" )
     BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST"
     ;;
-  "$BL64_MSG_FORMAT_TIME")
+  "$BL64_MSG_FORMAT_TIME" | "$legacy_BL64_MSG_FORMAT_TIME" )
     BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME"
     ;;
-  "$BL64_MSG_FORMAT_CALLER")
+  "$BL64_MSG_FORMAT_CALLER" | "$legacy_BL64_MSG_FORMAT_CALLER" )
     BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER"
     ;;
-  "$BL64_MSG_FORMAT_FULL")
+  "$BL64_MSG_FORMAT_FULL" | "$legacy_BL64_MSG_FORMAT_FULL" )
     BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL"
     ;;
   *)
