@@ -1,5 +1,5 @@
 ---
-# Template: 1.1.0
+# Template: 1.2.0
 name: "SAST / GitLeaks"
 
 env:
@@ -22,6 +22,14 @@ jobs:
 
       - name: "Check out repository code"
         uses: "actions/checkout@main"
+
+      - name: "Cache local tools"
+        uses: "actions/cache@v4"
+        with:
+          path: ./lib
+          key: ${{ runner.os }}-lib-cache
+          restore-keys: |
+            ${{ runner.os }}-lib-cache
 
       - name: "Prepare environment"
         run: "./bin/dev-lib-base"

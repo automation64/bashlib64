@@ -16,13 +16,13 @@
 #
 # Globals
 #
-# * Use .env file to override values
+# * Use .dev.env file to override values
 #
 
 # shellcheck disable=SC2154
 {
   # Env / Act / Module environment definition version
-  export DEV_ENV_ACT_VERSION='1.0.0'
+  export DEV_ENV_ACT_VERSION='1.1.0'
 
   # Lib / Act / Installer
   export DEV_LIB_ACT_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-act"
@@ -44,6 +44,17 @@
 
 # shellcheck disable=SC2154
 {
+  # Lib / Act / Skip installation?
+  export DEV_LIB_ACT_SKIP='YES'
   # Lib / Act / Command
-  export DEV_LIB_ACT_BIN="${DEV_LIB_ACT_BIN:-${DEV_LIB_ACT_TARGET}/act}"
+  export DEV_LIB_ACT_BIN="${DEV_LIB_ACT_BIN:-}"
+  if [[ -z "$DEV_LIB_ACT_BIN" ]]; then
+    DEV_LIB_ACT_BIN="$(bl64_bsh_command_locate_user 'act')"
+    if [[ -z "$DEV_LIB_ACT_BIN" ]]; then
+      DEV_LIB_ACT_BIN="${DEV_LIB_ACT_TARGET}/act"
+      if [[ ! -x "${DEV_LIB_ACT_BIN}" ]]; then
+      DEV_LIB_ACT_SKIP='NO'
+      fi
+    fi
+  fi
 }

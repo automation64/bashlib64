@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.4.0'
+  declare BL64_VERSION='22.4.1'
 
   #
   # Imported generic shell standard variables
@@ -592,7 +592,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.12.1'
+  declare BL64_MSG_VERSION='5.12.2'
 
   declare BL64_MSG_MODULE='0'
 
@@ -3476,23 +3476,28 @@ function bl64_msg_set_level() {
 function bl64_msg_set_format() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local format="$1"
+  local legacy_BL64_MSG_FORMAT_PLAIN='R'
+  local legacy_BL64_MSG_FORMAT_HOST='H'
+  local legacy_BL64_MSG_FORMAT_TIME='T'
+  local legacy_BL64_MSG_FORMAT_CALLER='C'
+  local legacy_BL64_MSG_FORMAT_FULL='F'
 
   bl64_check_parameter 'format' || return $?
 
   case "$format" in
-  "$BL64_MSG_FORMAT_PLAIN")
+  "$BL64_MSG_FORMAT_PLAIN" | "$legacy_BL64_MSG_FORMAT_PLAIN" )
     BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN"
     ;;
-  "$BL64_MSG_FORMAT_HOST")
+  "$BL64_MSG_FORMAT_HOST" | "$legacy_BL64_MSG_FORMAT_HOST" )
     BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST"
     ;;
-  "$BL64_MSG_FORMAT_TIME")
+  "$BL64_MSG_FORMAT_TIME" | "$legacy_BL64_MSG_FORMAT_TIME" )
     BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME"
     ;;
-  "$BL64_MSG_FORMAT_CALLER")
+  "$BL64_MSG_FORMAT_CALLER" | "$legacy_BL64_MSG_FORMAT_CALLER" )
     BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER"
     ;;
-  "$BL64_MSG_FORMAT_FULL")
+  "$BL64_MSG_FORMAT_FULL" | "$legacy_BL64_MSG_FORMAT_FULL" )
     BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL"
     ;;
   *)

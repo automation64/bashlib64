@@ -16,13 +16,13 @@
 #
 # Globals
 #
-# * Use .env file to override values
+# * Use .dev.env file to override values
 #
 
 # shellcheck disable=SC2154
 {
   # Env / GitLeaks / Module environment definition version
-  export DEV_ENV_GITLEAKS_VERSION='1.1.0'
+  export DEV_ENV_GITLEAKS_VERSION='1.2.0'
   # Lib / GitLeaks / Installer
   export DEV_LIB_GITLEAKS_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-gitleaks"
   # Lib / GitLeaks / Target
@@ -39,26 +39,20 @@
 
 # shellcheck disable=SC2154
 {
+  # Lib / GitLeaks / Skip installation?
+  export DEV_LIB_GITLEAKS_SKIP='YES'
+  # Lib / GitLeaks / Command
+  export DEV_LIB_GITLEAKS_BIN="${DEV_LIB_GITLEAKS_BIN:-}"
+  if [[ -z "$DEV_LIB_GITLEAKS_BIN" ]]; then
+    DEV_LIB_GITLEAKS_BIN="$(bl64_bsh_command_locate_user 'gitleaks')"
+    if [[ -z "$DEV_LIB_GITLEAKS_BIN" ]]; then
+      DEV_LIB_GITLEAKS_BIN="${DEV_LIB_GITLEAKS_TARGET}/gitleaks"
+      if [[ ! -x "${DEV_LIB_GITLEAKS_BIN}" ]]; then
+        DEV_LIB_GITLEAKS_SKIP='NO'
+      fi
+    fi
+  fi
+
   # Lib / GitLeaks / Command
   export DEV_LIB_GITLEAKS_BIN="${DEV_LIB_GITLEAKS_BIN:-${DEV_LIB_GITLEAKS_TARGET}/gitleaks}"
-}
-
-#
-# Secrets
-#
-# * Use .secrets.env file or CICD secrets to override values
-#
-
-# shellcheck disable=SC2154
-{
-  :
-}
-
-#
-# External
-#
-
-# shellcheck disable=SC2154
-{
-  :
 }

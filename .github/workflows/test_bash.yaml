@@ -1,5 +1,5 @@
 ---
-# Template: 2.2.0
+# Template: 2.3.0
 name: "Test / Bash"
 
 concurrency:
@@ -46,6 +46,14 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
+      - name: "Cache local tools"
+        uses: "actions/cache@v4"
+        with:
+          path: ./lib
+          key: ${{ runner.os }}-lib-cache
+          restore-keys: |
+            ${{ runner.os }}-lib-cache
+
       - name: "Prepare environment"
         run: |
           ./bin/dev-lib-base &&
@@ -81,6 +89,14 @@ jobs:
       - name: "Upgrade Bash version"
         run: |
           ./bin/dev-lib-bash
+
+      - name: "Cache local tools"
+        uses: "actions/cache@v4"
+        with:
+          path: ./lib
+          key: ${{ runner.os }}-lib-cache
+          restore-keys: |
+            ${{ runner.os }}-lib-cache
 
       - name: "Prepare environment"
         run: |
