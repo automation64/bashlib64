@@ -84,7 +84,7 @@ function _bl64_lib_module_is_imported() {
     module="${module%%_MODULE}"
     printf 'Error: required BashLib64 module not found. Please source the module before using it. (module: %s | caller: %s)\n' \
       "${module%%BL64_}" \
-      "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE}" \
+      "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
       >&2
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_MODULE_NOT_IMPORTED
@@ -120,9 +120,9 @@ function _bl64_lib_module_is_imported() {
 function bl64_lib_flag_is_enabled {
   local -u flag="${1:-}"
   case "$flag" in
-  "$BL64_VAR_ON" | 'ON' | 'YES' | '1') return 0 ;;
-  "$BL64_VAR_OFF" | 'OFF' | 'NO' | '0') return 1 ;;
-  *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
+    "$BL64_VAR_ON" | 'ON' | 'YES' | '1') return 0 ;;
+    "$BL64_VAR_OFF" | 'OFF' | 'NO' | '0') return 1 ;;
+    *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
   esac
 }
 
@@ -189,4 +189,44 @@ function bl64_lib_script_version_set() {
   # shellcheck disable=SC2086
   [[ -z "$script_version" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
   BL64_SCRIPT_VERSION="$script_version"
+}
+
+#######################################
+# Check that the minimum bashlib64 version is met
+#
+# Arguments:
+#   $1: minimum bashlib64 version (semver format)
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0: version is ok
+#   >0: version is not ok
+#######################################
+function bl64_lib_script_minver_check() {
+  local minimum_version="$1"
+  local -a a_parts
+  local -a b_parts
+
+  # shellcheck disable=SC2086
+  [[ -z "$minimum_version" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+
+  [[ "$minimum_version" == "$BL64_VERSION" ]] && return 0
+
+  IFS='.'
+  # shellcheck disable=SC2206
+  a_parts=($minimum_version) &&
+    b_parts=($BL64_VERSION)
+  unset IFS
+
+  for i in {0..2}; do
+    a_part=${a_parts[i]:-0}
+    b_part=${b_parts[i]:-0}
+    ((a_part < b_part)) && return 0
+    if ((a_part > b_part)); then
+      printf 'Error: the current BashLib64 version is older than the minimum required by the script (current: %s | mininum-supported: %s)\n' \
+        "$BL64_VERSION" "$minimum_version" >&2
+      return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    fi
+  done
 }

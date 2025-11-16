@@ -320,7 +320,7 @@ function bl64_dbg_app_show_vars() {
 # shellcheck disable=SC2120
 function bl64_dbg_lib_show_function() {
   bl64_dbg_lib_task_is_enabled || return 0
-  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_FUNCTION} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] run bashlib64 function. Parameters: ${*}"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_FUNCTION} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_CALL} parameters: ${*}"
   return 0
 }
 
@@ -338,7 +338,7 @@ function bl64_dbg_lib_show_function() {
 # shellcheck disable=SC2120
 function bl64_dbg_app_show_function() {
   bl64_dbg_app_task_is_enabled || return 0
-  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_FUNCTION} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] run app function. Parameters: (${*})"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_FUNCTION} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_CALL} parameters: (${*})"
   return 0
 }
 

@@ -42,7 +42,7 @@ function _bl64_msg_module_check_setup() {
   if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
     printf 'Error: required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module (module-id: %s | function: %s)\n' \
     "${module}" \
-    "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE}" \
+    "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
     >&2
     return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
   fi
@@ -61,7 +61,7 @@ function _bl64_msg_alert_show_parameter() {
     "$message" \
     "${parameter:+parameter: ${parameter} | }" \
     "${value:+value: ${value} | }" \
-    "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE}" \
+    "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
     >&2
   return $BL64_LIB_ERROR_PARAMETER_INVALID
 }
@@ -217,7 +217,7 @@ function bl64_msg_show_check() {
   local message="$1"
 
   bl64_log_error "${FUNCNAME[2]:-MAIN}" "$message" &&
-    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message [task: ${FUNCNAME[2]:-main}.${FUNCNAME[3]:-main}]" >&2
+    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message [task: ${FUNCNAME[2]:-main}@${BASH_LINENO[2]:-NA}.${FUNCNAME[3]:-main}@${BASH_LINENO[3]:-NA}]" >&2
 }
 
 #######################################

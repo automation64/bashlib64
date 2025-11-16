@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.4.1'
+  declare BL64_VERSION='22.5.0'
 
   #
   # Imported generic shell standard variables
@@ -352,7 +352,7 @@ function _bl64_lib_module_is_imported() {
     module="${module%%_MODULE}"
     printf 'Error: required BashLib64 module not found. Please source the module before using it. (module: %s | caller: %s)\n' \
       "${module%%BL64_}" \
-      "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE}" \
+      "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
       >&2
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_MODULE_NOT_IMPORTED
@@ -388,9 +388,9 @@ function _bl64_lib_module_is_imported() {
 function bl64_lib_flag_is_enabled {
   local -u flag="${1:-}"
   case "$flag" in
-  "$BL64_VAR_ON" | 'ON' | 'YES' | '1') return 0 ;;
-  "$BL64_VAR_OFF" | 'OFF' | 'NO' | '0') return 1 ;;
-  *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
+    "$BL64_VAR_ON" | 'ON' | 'YES' | '1') return 0 ;;
+    "$BL64_VAR_OFF" | 'OFF' | 'NO' | '0') return 1 ;;
+    *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
   esac
 }
 
@@ -458,13 +458,53 @@ function bl64_lib_script_version_set() {
   [[ -z "$script_version" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
   BL64_SCRIPT_VERSION="$script_version"
 }
+
+#######################################
+# Check that the minimum bashlib64 version is met
+#
+# Arguments:
+#   $1: minimum bashlib64 version (semver format)
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0: version is ok
+#   >0: version is not ok
+#######################################
+function bl64_lib_script_minver_check() {
+  local minimum_version="$1"
+  local -a a_parts
+  local -a b_parts
+
+  # shellcheck disable=SC2086
+  [[ -z "$minimum_version" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+
+  [[ "$minimum_version" == "$BL64_VERSION" ]] && return 0
+
+  IFS='.'
+  # shellcheck disable=SC2206
+  a_parts=($minimum_version) &&
+    b_parts=($BL64_VERSION)
+  unset IFS
+
+  for i in {0..2}; do
+    a_part=${a_parts[i]:-0}
+    b_part=${b_parts[i]:-0}
+    ((a_part < b_part)) && return 0
+    if ((a_part > b_part)); then
+      printf 'Error: the current BashLib64 version is older than the minimum required by the script (current: %s | mininum-supported: %s)\n' \
+        "$BL64_VERSION" "$minimum_version" >&2
+      return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    fi
+  done
+}
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CHECK_VERSION='6.2.1'
+  declare BL64_CHECK_VERSION='6.2.3'
 
   declare BL64_CHECK_MODULE='0'
 }
@@ -475,7 +515,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_DBG_VERSION='3.2.2'
+  declare BL64_DBG_VERSION='3.2.3'
 
   declare BL64_DBG_MODULE='0'
 
@@ -534,11 +574,12 @@ function bl64_lib_script_version_set() {
   declare BL64_DBG_DRYRUN_LIB='LIB'
   declare BL64_DBG_DRYRUN_ALL='ALL'
 
-  declare _BL64_DBG_TXT_FUNCTION_START='start-function-tracing'
-  declare _BL64_DBG_TXT_FUNCTION_STOP='stop-function-tracing'
-  declare _BL64_DBG_TXT_SHELL_VAR='shell-variable'
-  declare _BL64_DBG_TXT_COMMENTS='dev-comments'
-  declare _BL64_DBG_TXT_INFO='dev-info'
+  declare _BL64_DBG_TXT_FUNCTION_START='(start-tracing)'
+  declare _BL64_DBG_TXT_FUNCTION_STOP='(stop-tracing)'
+  declare _BL64_DBG_TXT_SHELL_VAR='(variable-value)'
+  declare _BL64_DBG_TXT_COMMENTS='(task-comments)'
+  declare _BL64_DBG_TXT_INFO='(task-info)'
+  declare _BL64_DBG_TXT_CALL='(function-call)'
 
   declare _BL64_DBG_TXT_LABEL_BASH_RUNTIME='[bash-runtime]'
   declare _BL64_DBG_TXT_LABEL_BASH_VARIABLE='[bash-variable]'
@@ -592,7 +633,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.12.2'
+  declare BL64_MSG_VERSION='5.12.3'
 
   declare BL64_MSG_MODULE='0'
 
@@ -869,7 +910,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ANS_VERSION='3.0.0'
+  declare BL64_ANS_VERSION='3.0.1'
 
   declare BL64_ANS_MODULE='0'
 
@@ -940,7 +981,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_AWS_VERSION='4.0.1'
+  declare BL64_AWS_VERSION='4.0.2'
 
   declare BL64_AWS_MODULE='0'
 
@@ -984,7 +1025,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_BSH_VERSION='3.8.0'
+  declare BL64_BSH_VERSION='3.10.0'
 
   declare BL64_BSH_MODULE='0'
 
@@ -1006,7 +1047,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CNT_VERSION='3.5.1'
+  declare BL64_CNT_VERSION='3.5.2'
 
   declare BL64_CNT_MODULE='0'
 
@@ -1065,7 +1106,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FMT_VERSION='5.0.0'
+  declare BL64_FMT_VERSION='5.1.0'
 
   declare BL64_FMT_MODULE='0'
 }
@@ -1076,7 +1117,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.3.0'
+  declare BL64_FS_VERSION='6.3.1'
 
   declare BL64_FS_MODULE='0'
 
@@ -1157,7 +1198,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_GCP_VERSION='3.0.0'
+  declare BL64_GCP_VERSION='3.0.1'
 
   declare BL64_GCP_MODULE='0'
 
@@ -1180,7 +1221,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_HLM_VERSION='3.0.0'
+  declare BL64_HLM_VERSION='3.0.1'
 
   declare BL64_HLM_MODULE='0'
 
@@ -1200,7 +1241,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_IAM_VERSION='6.0.1'
+  declare BL64_IAM_VERSION='6.0.2'
 
   declare BL64_IAM_MODULE='0'
 
@@ -1231,7 +1272,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_K8S_VERSION='3.1.5'
+  declare BL64_K8S_VERSION='3.1.6'
 
   declare BL64_K8S_MODULE='0'
 
@@ -1264,7 +1305,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MDB_VERSION='2.0.1'
+  declare BL64_MDB_VERSION='2.0.2'
 
   declare BL64_MDB_MODULE='0'
 
@@ -1465,7 +1506,7 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TF_VERSION='3.0.0'
+  declare BL64_TF_VERSION='3.1.0'
 
   declare BL64_TF_MODULE='0'
 
@@ -1473,6 +1514,7 @@ function bl64_lib_script_version_set() {
   declare BL64_TF_LOG_LEVEL=''
 
   declare BL64_TF_CMD_TERRAFORM="$BL64_VAR_UNAVAILABLE"
+  declare BL64_TF_CMD_TOFU="$BL64_VAR_UNAVAILABLE"
 
   declare BL64_TF_VERSION_CLI=''
 
@@ -1592,10 +1634,11 @@ function bl64_lib_script_version_set() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_XSV_VERSION='2.1.1'
+  declare BL64_XSV_VERSION='2.2.0'
 
   declare BL64_XSV_MODULE='0'
 
+  declare BL64_XSV_CMD_PKL="$BL64_VAR_UNAVAILABLE"
   declare BL64_XSV_CMD_YQ="$BL64_VAR_UNAVAILABLE"
   declare BL64_XSV_CMD_JQ="$BL64_VAR_UNAVAILABLE"
 
@@ -1635,7 +1678,7 @@ function bl64_lib_script_version_set() {
 #   >0: setup failed
 #######################################
 function bl64_check_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2034
@@ -1695,16 +1738,11 @@ function bl64_check_command() {
   local message="${2:-$BL64_VAR_DEFAULT}"
   local command_name="${3:-}"
 
-  bl64_lib_var_is_default "$message" && message='required command is not present'
-
-  if [[ -z "$path" || "$path" == "$BL64_VAR_DEFAULT" ]]; then
-    bl64_msg_show_check "missing command path definition${command_name:+ (command: ${command_name})}"
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PARAMETER_EMPTY
-  fi
+  bl64_lib_var_is_default "$message" && message='command not found'
+  bl64_check_parameter 'path' ${command_name:+"command: ${command_name}"} || return $?
 
   if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
-    bl64_msg_show_check "the requested operation is not supported on the current OS (OS: ${BL64_OS_DISTRO})"
+    bl64_msg_show_check "the requested command is not compatible with the current OS (OS: ${BL64_OS_DISTRO})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
@@ -2276,7 +2314,7 @@ function bl64_check_alert_module_setup() {
   bl64_check_parameter 'module' || return $?
 
   if [[ "$last_status" != '0' ]]; then
-    bl64_msg_show_check "failed to setup the requested BashLib64 module (module: ${module})"
+    bl64_msg_show_check "BashLib64 module setup failure (module: ${module})"
     return $last_status
   else
     return 0
@@ -2499,7 +2537,7 @@ function bl64_dbg_lib_dryrun_enable { BL64_DBG_DRYRUN="$BL64_DBG_DRYRUN_LIB"; }
 #   >0: setup failed
 #######################################
 function bl64_dbg_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   bl64_dbg_all_disable &&
@@ -2864,7 +2902,7 @@ function bl64_dbg_app_show_vars() {
 # shellcheck disable=SC2120
 function bl64_dbg_lib_show_function() {
   bl64_dbg_lib_task_is_enabled || return 0
-  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_FUNCTION} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] run bashlib64 function. Parameters: ${*}"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_FUNCTION} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_CALL} parameters: ${*}"
   return 0
 }
 
@@ -2882,7 +2920,7 @@ function bl64_dbg_lib_show_function() {
 # shellcheck disable=SC2120
 function bl64_dbg_app_show_function() {
   bl64_dbg_app_task_is_enabled || return 0
-  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_FUNCTION} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] run app function. Parameters: (${*})"
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_FUNCTION} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_CALL} parameters: (${*})"
   return 0
 }
 
@@ -3091,7 +3129,7 @@ function _bl64_log_set_target_multiple() {
 #   BL64_LIB_ERROR_MODULE_SETUP_INVALID
 #######################################
 function bl64_log_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local log_repository="${1:-}"
   local log_target="${2:-${BL64_VAR_DEFAULT}}"
   local log_type="${3:-${BL64_VAR_DEFAULT}}"
@@ -3408,7 +3446,7 @@ function bl64_log_warning() {
 #   >0: setup failed
 #######################################
 function bl64_msg_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2034
@@ -3697,7 +3735,7 @@ function _bl64_msg_module_check_setup() {
   if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
     printf 'Error: required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module (module-id: %s | function: %s)\n' \
     "${module}" \
-    "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE}" \
+    "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
     >&2
     return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
   fi
@@ -3716,7 +3754,7 @@ function _bl64_msg_alert_show_parameter() {
     "$message" \
     "${parameter:+parameter: ${parameter} | }" \
     "${value:+value: ${value} | }" \
-    "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NONE}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NONE}" \
+    "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
     >&2
   return $BL64_LIB_ERROR_PARAMETER_INVALID
 }
@@ -3872,7 +3910,7 @@ function bl64_msg_show_check() {
   local message="$1"
 
   bl64_log_error "${FUNCNAME[2]:-MAIN}" "$message" &&
-    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message [task: ${FUNCNAME[2]:-main}.${FUNCNAME[3]:-main}]" >&2
+    _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message [task: ${FUNCNAME[2]:-main}@${BASH_LINENO[2]:-NA}.${FUNCNAME[3]:-main}@${BASH_LINENO[3]:-NA}]" >&2
 }
 
 #######################################
@@ -4827,7 +4865,7 @@ function _bl64_os_release_normalize() {
 #   >0: setup failed
 #######################################
 function bl64_os_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   [[ "${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5' ]] &&
     bl64_msg_show_lib_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
@@ -5407,7 +5445,7 @@ function bl64_os_check_flavor() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_ans_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local ansible_bin="${1:-${BL64_VAR_DEFAULT}}"
   local ansible_config="${2:-${BL64_VAR_DEFAULT}}"
   local env_ignore="${3:-${BL64_VAR_ON}}"
@@ -5420,9 +5458,6 @@ function bl64_ans_setup() {
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_PY_MODULE' &&
     _bl64_ans_set_command "$ansible_bin" &&
-    bl64_check_command "$BL64_ANS_CMD_ANSIBLE" &&
-    bl64_check_command "$BL64_ANS_CMD_ANSIBLE_GALAXY" &&
-    bl64_check_command "$BL64_ANS_CMD_ANSIBLE_PLAYBOOK" &&
     _bl64_ans_set_runtime "$ansible_config" &&
     _bl64_ans_set_options &&
     _bl64_ans_set_version &&
@@ -5447,37 +5482,9 @@ function bl64_ans_setup() {
 #######################################
 function _bl64_ans_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local ansible_bin="$1"
-
-  if bl64_lib_var_is_default "$ansible_bin"; then
-    bl64_dbg_lib_show_info 'no custom path provided. Using known locations to detect ansible'
-    if [[ -n "$BL64_PY_PATH_VENV" && -x "${BL64_PY_PATH_VENV}/bin/ansible" ]]; then
-      ansible_bin="${BL64_PY_PATH_VENV}/bin"
-    elif [[ -n "$HOME" && -x "${HOME}/.local/bin/ansible" ]]; then
-      ansible_bin="${HOME}/.local/bin"
-    elif [[ -x '/usr/local/bin/ansible' ]]; then
-      ansible_bin='/usr/local/bin'
-    elif [[ -x '/home/linuxbrew/.linuxbrew/bin/ansible' ]]; then
-      ansible_bin='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/ansible' ]]; then
-      ansible_bin='/opt/homebrew/bin'
-    elif [[ -x '/opt/ansible/bin/ansible' ]]; then
-      ansible_bin='/opt/ansible/bin'
-    elif [[ -x '/usr/bin/ansible' ]]; then
-      ansible_bin='/usr/bin'
-    else
-      bl64_check_alert_resource_not_found 'ansible'
-      return $?
-    fi
-  fi
-
-  bl64_check_directory "$ansible_bin" || return $?
-  [[ -x "${ansible_bin}/ansible" ]] && BL64_ANS_CMD_ANSIBLE="${ansible_bin}/ansible"
-  [[ -x "${ansible_bin}/ansible-galaxy" ]] && BL64_ANS_CMD_ANSIBLE_GALAXY="${ansible_bin}/ansible-galaxy"
-  [[ -x "${ansible_bin}/ansible-playbook" ]] && BL64_ANS_CMD_ANSIBLE_PLAYBOOK="${ansible_bin}/ansible-playbook"
-
-  bl64_dbg_lib_show_vars 'BL64_ANS_CMD_ANSIBLE' 'BL64_ANS_CMD_ANSIBLE_GALAXY' 'BL64_ANS_CMD_ANSIBLE_PLAYBOOK'
-  return 0
+  BL64_ANS_CMD_ANSIBLE="$(bl64_bsh_command_import 'ansible' '/opt/ansible/bin' "${HOME}/.local/bin" "$@")" &&
+    BL64_ANS_CMD_ANSIBLE_GALAXY="$(bl64_bsh_command_import 'ansible-galaxy' '/opt/ansible/bin' "${HOME}/.local/bin" "$@")" &&
+    BL64_ANS_CMD_ANSIBLE_PLAYBOOK="$(bl64_bsh_command_import 'ansible-playbook' '/opt/ansible/bin' "${HOME}/.local/bin" "$@")"
 }
 
 #######################################
@@ -5493,7 +5500,6 @@ function _bl64_ans_set_command() {
 #######################################
 function _bl64_ans_set_options() {
   bl64_dbg_lib_show_function
-
   BL64_ANS_SET_VERBOSE='-v'
   BL64_ANS_SET_DIFF='--diff'
   BL64_ANS_SET_DEBUG='-vvvvv'
@@ -5514,7 +5520,6 @@ function _bl64_ans_set_options() {
 function _bl64_ans_set_runtime() {
   bl64_dbg_lib_show_function "$@"
   local config="$1"
-
   bl64_ans_set_paths "$config"
 }
 
@@ -5555,7 +5560,7 @@ function bl64_ans_set_paths() {
   fi
 
   # shellcheck disable=SC2034
-    if bl64_lib_var_is_default "$collections"; then
+  if bl64_lib_var_is_default "$collections"; then
     BL64_ANS_PATH_USR_COLLECTIONS="${BL64_ANS_PATH_USR_ANSIBLE}/collections/ansible_collections"
   else
     bl64_check_directory "$collections" || return $?
@@ -5805,7 +5810,7 @@ function _bl64_ans_harden_ansible() {
 #   >0: setup failed
 #######################################
 function bl64_api_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -5961,7 +5966,7 @@ function bl64_api_url_encode() {
 #   >0: setup failed
 #######################################
 function bl64_arc_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -6431,7 +6436,7 @@ function bl64_aws_get_cli_credentials() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_aws_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
   local aws_home="${2:-${BL64_VAR_DEFAULT}}"
 
@@ -6466,29 +6471,8 @@ function bl64_aws_setup() {
 #######################################
 function _bl64_aws_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
-
-  if bl64_lib_var_is_default "$aws_bin"; then
-    if [[ -x '/home/linuxbrew/.linuxbrew/bin/aws' ]]; then
-      aws_bin='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/aws' ]]; then
-      aws_bin='/opt/homebrew/bin'
-    elif [[ -x '/usr/local/bin/aws' ]]; then
-      aws_bin='/usr/local/bin'
-    elif [[ -x '/opt/aws/bin/aws' ]]; then
-      aws_bin='/opt/aws/bin'
-    elif [[ -x '/usr/bin/aws' ]]; then
-      aws_bin='/usr/bin'
-    else
-      bl64_check_alert_resource_not_found 'aws-cli'
-      return $?
-    fi
-  fi
-
-  bl64_check_directory "$aws_bin" || return $?
-  [[ -x "${aws_bin}/aws" ]] && BL64_AWS_CMD_AWS="${aws_bin}/aws"
-
-  bl64_dbg_lib_show_vars 'BL64_AWS_CMD_AWS'
+  BL64_AWS_CMD_AWS="$(bl64_bsh_command_locate 'aws' '/opt/aws/bin' "$@")"
+  return 0
 }
 
 #######################################
@@ -7083,7 +7067,7 @@ function bl64_aws_access_enable_token() {
 #   >0: setup failed
 #######################################
 function bl64_bsh_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -7741,8 +7725,8 @@ function bl64_bsh_command_locate_user() {
 #   STDOUT: full path
 #   STDERR: Error messages
 # Returns:
-#   0: full path detected
-#   >0: unable to detect or error
+#   0: operation completed
+#   >0: unable to complete operation
 #######################################
 function bl64_bsh_command_locate() {
   bl64_dbg_lib_show_function "$@"
@@ -7758,20 +7742,51 @@ function bl64_bsh_command_locate() {
   search_list+=' /home/linuxbrew/.linuxbrew/bin'
   search_list+=' /opt/homebrew/bin'
   search_list+=' /usr/local/bin'
+  search_list+=' /usr/local/sbin'
   search_list+=' /usr/bin'
-  search_list+=' /bin'
   search_list+=' /usr/sbin'
+  search_list+=' /bin'
   search_list+=' /sbin'
 
   for current_path in $search_list "${@:-}"; do
-    bl64_dbg_lib_show_info "search in: ${current_path}/${command}"
+    bl64_lib_var_is_default "$current_path" && continue
     [[ ! -d "$current_path" ]] && continue
+    bl64_dbg_lib_show_info "search in: ${current_path}/${command}"
     if [[ -x "${current_path}/${command}" ]]; then
       echo "${current_path}/${command}"
       return 0
     fi
   done
-  return $BL64_LIB_ERROR_APP_MISSING
+  return 0
+}
+
+#######################################
+# Locate and show the full path of a command
+#
+#  * Fail if the command is not found
+#  * Output is prepared to be imported as a shell variable value
+#
+# Arguments:
+#   $1: command name
+#   $@: (optional) list of additional paths where to look on
+# Outputs:
+#   STDOUT: full path
+#   STDERR: Error messages
+# Returns:
+#   0: operation completed
+#   >0: unable to complete operation
+#######################################
+function bl64_bsh_command_import() {
+  bl64_dbg_lib_show_function "$@"
+  local command="${1:-}"
+  local command_path=''
+  command_path="$(bl64_bsh_command_locate "$@")" || return $?
+  if [[ -z "$command_path" ]]; then
+    bl64_msg_show_lib_error "Unable to find the required command. Please install it and try again (${command})"
+    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+  else
+    echo "$command_path"
+  fi
 }
 
 #######################################
@@ -7877,7 +7892,7 @@ function bl64_bsh_job_try() {
 #   >0: setup failed
 #######################################
 function bl64_cnt_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local command_location="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
@@ -7932,48 +7947,13 @@ function _bl64_cnt_set_command() {
 
 function _bl64_cnt_set_command_docker() {
   bl64_dbg_lib_show_function "$@"
-  local command_location="$1"
-
-  if bl64_lib_var_is_default "$command_location"; then
-    if [[ -x '/home/linuxbrew/.linuxbrew/bin/docker' ]]; then
-      command_location='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/docker' ]]; then
-      command_location='/opt/homebrew/bin'
-    elif [[ -x '/usr/local/bin/docker' ]]; then
-      command_location='/usr/local/bin'
-    elif [[ -x '/usr/bin/docker' ]]; then
-      command_location='/usr/bin'
-    elif [[ -x "${HOME}/.rd/bin/docker" ]]; then
-      # Rancher Desktop using docker
-      command_location="${HOME}/.rd/bin"
-    fi
-  else
-    bl64_check_directory "$command_location" || return $?
-  fi
-
-  BL64_CNT_CMD_DOCKER="${command_location}/docker"
+  BL64_CNT_CMD_DOCKER="$(bl64_bsh_command_locate 'docker' "${HOME}/.rd/bin" "$@")"
   return 0
 }
 
 function _bl64_cnt_set_command_podman() {
   bl64_dbg_lib_show_function "$@"
-  local command_location="$1"
-
-  if bl64_lib_var_is_default "$command_location"; then
-    if [[ -x '/home/linuxbrew/.linuxbrew/bin/podman' ]]; then
-      command_location='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/podman' ]]; then
-      command_location='/opt/homebrew/bin'
-    elif [[ -x '/usr/local/bin/podman' ]]; then
-      command_location='/usr/local/bin'
-    elif [[ -x '/usr/bin/podman' ]]; then
-      command_location='/usr/bin'
-    fi
-  else
-    bl64_check_directory "$command_location" || return $?
-  fi
-
-  BL64_CNT_CMD_PODMAN="${command_location}/podman"
+  BL64_CNT_CMD_PODMAN="$(bl64_bsh_command_locate 'podman' "$@")"
   return 0
 }
 
@@ -9203,7 +9183,7 @@ function bl64_cnt_check_not_in_container() {
 #   >0: setup failed
 #######################################
 function bl64_cryp_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -9520,7 +9500,7 @@ function bl64_cryp_key_download() {
 #   >0: setup failed
 #######################################
 function bl64_fmt_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -9789,7 +9769,7 @@ function bl64_fmt_list_convert_to_string() {
 #   $@: list of one or more values to check against
 # Outputs:
 #   STDOUT: none
-#   STDERR: message
+#   STDERR: error message
 # Returns:
 #   0: check ok
 #   BL64_LIB_ERROR_CHECK_FAILED
@@ -9826,7 +9806,7 @@ function bl64_fmt_list_check_membership() {
 #   $1: Version
 # Outputs:
 #   STDOUT: none
-#   STDERR: message
+#   STDERR: error message
 # Returns:
 #   0: Yes
 #   >0: No
@@ -9845,7 +9825,7 @@ function bl64_fmt_version_is_semver() {
 #   $1: Version
 # Outputs:
 #   STDOUT: none
-#   STDERR: message
+#   STDERR: error message
 # Returns:
 #   0: Yes
 #   >0: No
@@ -9864,7 +9844,7 @@ function bl64_fmt_version_is_major_minor() {
 #   $1: Version
 # Outputs:
 #   STDOUT: none
-#   STDERR: message
+#   STDERR: error message
 # Returns:
 #   0: Yes
 #   >0: No
@@ -9883,7 +9863,7 @@ function bl64_fmt_version_is_major() {
 #   $1: Version
 # Outputs:
 #   STDOUT: Major.Minor
-#   STDERR: message
+#   STDERR: error message
 # Returns:
 #   0: Converted
 #   >0: Failed
@@ -9917,6 +9897,98 @@ function bl64_fmt_version_convert_to_major_minor() {
 }
 
 #######################################
+# Check that the version is in semver format
+#
+# Arguments:
+#   $1: version string
+# Outputs:
+#   STDOUT: none
+#   STDERR: error message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_CHECK_FAILED
+#######################################
+function bl64_fmt_version_check_semver_format() {
+  bl64_dbg_lib_show_function "$@"
+  local version="${1:-}"
+
+  bl64_check_parameter 'version' ||
+    return $?
+
+  if bl64_fmt_version_is_semver "$version"; then
+    return 0
+  else
+    bl64_msg_show_check "the version must be in semver format (${version})"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_CHECK_FAILED
+  fi
+}
+
+#######################################
+# Compares two semantic versions (A and B) and returns true if A is less than B.
+#
+# Arguments:
+#   $1: SemVer A
+#   $2: SemVer B
+# Outputs:
+#   STDOUT: none
+#   STDERR: error message
+# Returns:
+#   0: If version_a is less than version_b.
+#   1: If version_a is greater than or equal to version_b.
+#######################################
+function bl64_fmt_version_is_less_than() {
+  bl64_dbg_lib_show_function "$@"
+  local version_a="$1"
+  local version_b="$2"
+  local -a a_parts
+  local -a b_parts
+
+  bl64_fmt_version_check_semver_format "$version_a" &&
+    bl64_fmt_version_check_semver_format "$version_b" ||
+    return $?
+
+  if [[ "$version_a" == "$version_b" ]]; then
+    bl64_dbg_lib_show_info 'versions are equal'
+    return 1
+  fi
+
+  IFS='.'
+  # shellcheck disable=SC2206
+  a_parts=($version_a) &&
+    b_parts=($version_b)
+  unset IFS
+
+  for i in {0..2}; do
+    a_part=${a_parts[i]:-0}
+    b_part=${b_parts[i]:-0}
+
+    if ((a_part < b_part)); then
+      bl64_dbg_lib_show_info "versions is less than (${a_part} < ${b_part})"
+      return 0
+    fi
+    if ((a_part > b_part)); then
+      bl64_dbg_lib_show_info "versions is greater than (${a_part} < ${b_part})"
+      return 1
+    fi
+  done
+
+  bl64_dbg_lib_show_info "versions is greater than (${a_part} < ${b_part})"
+  return 1
+}
+
+function bl64_fmt_version_is_less_than_or_equal() {
+  bl64_dbg_lib_show_function "$@"
+  local version_a="$1"
+  local version_b="$2"
+  if [[ "$version_a" == "$version_b" ]]; then
+    bl64_dbg_lib_show_info 'versions are equal'
+    return 0
+  fi
+  bl64_fmt_version_is_less_than "$version_a" "$version_b"
+}
+
+#######################################
 # BashLib64 / Module / Setup / Manage local filesystem
 #######################################
 
@@ -9935,7 +10007,7 @@ function bl64_fmt_version_convert_to_major_minor() {
 #   >0: setup failed
 #######################################
 function bl64_fs_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -11633,10 +11705,10 @@ function bl64_fs_symlink_create() {
       return 0
     fi
   elif [[ -f "$destination" ]]; then
-    bl64_msg_show_error 'invalid destination. It is already present and it is a regular file'
+    bl64_msg_show_lib_error 'invalid destination. It is already present and it is a regular file'
     return $BL64_LIB_ERROR_TASK_REQUIREMENTS
   elif [[ -d "$destination" ]]; then
-    bl64_msg_show_error 'invalid destination. It is already present and it is a directory'
+    bl64_msg_show_lib_error 'invalid destination. It is already present and it is a directory'
     return $BL64_LIB_ERROR_TASK_REQUIREMENTS
   fi
   bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination" ||
@@ -11950,7 +12022,7 @@ function bl64_fs_path_move() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_gcp_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
@@ -11960,7 +12032,6 @@ function bl64_gcp_setup() {
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_gcp_set_command "$gcloud_bin" &&
     _bl64_gcp_set_options &&
-    bl64_check_command "$BL64_GCP_CMD_GCLOUD" &&
     BL64_GCP_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'gcp'
 }
@@ -11981,27 +12052,7 @@ function bl64_gcp_setup() {
 #######################################
 function _bl64_gcp_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
-
-  if bl64_lib_var_is_default "$gcloud_bin"; then
-    if [[ -x '/home/linuxbrew/.linuxbrew/bin/gcloud' ]]; then
-      gcloud_bin='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/gcloud' ]]; then
-      gcloud_bin='/opt/homebrew/bin'
-    elif [[ -x '/usr/local/bin/gcloud' ]]; then
-      gcloud_bin='/usr/local/bin'
-    elif [[ -x '/usr/bin/gcloud' ]]; then
-      gcloud_bin='/usr/bin'
-    else
-      bl64_check_alert_resource_not_found 'gcloud'
-      return $?
-    fi
-  fi
-
-  bl64_check_directory "$gcloud_bin" || return $?
-  [[ -x "${gcloud_bin}/gcloud" ]] && BL64_GCP_CMD_GCLOUD="${gcloud_bin}/gcloud"
-
-  bl64_dbg_lib_show_vars 'BL64_GCP_CMD_GCLOUD'
+  BL64_GCP_CMD_GCLOUD="$(bl64_bsh_command_import 'gcloud' "$@")"
 }
 
 #######################################
@@ -12275,7 +12326,7 @@ function bl64_gcp_secret_get() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_hlm_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
@@ -12284,7 +12335,6 @@ function bl64_hlm_setup() {
     bl64_dbg_lib_show_function "$@" &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_hlm_set_command "$helm_bin" &&
-    bl64_check_command "$BL64_HLM_CMD_HELM" &&
     _bl64_hlm_set_options &&
     _bl64_hlm_set_runtime &&
     BL64_HLM_MODULE="$BL64_VAR_ON"
@@ -12307,29 +12357,7 @@ function bl64_hlm_setup() {
 #######################################
 function _bl64_hlm_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
-
-  if bl64_lib_var_is_default "$helm_bin"; then
-    if [[ -x '/home/linuxbrew/.linuxbrew/bin/helm' ]]; then
-      helm_bin='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/helm' ]]; then
-      helm_bin='/opt/homebrew/bin'
-    elif [[ -x '/usr/local/bin/helm' ]]; then
-      helm_bin='/usr/local/bin'
-    elif [[ -x '/opt/helm/bin/helm' ]]; then
-      helm_bin='/opt/helm/bin'
-    elif [[ -x '/usr/bin/helm' ]]; then
-      helm_bin='/usr/bin'
-    else
-      bl64_check_alert_resource_not_found 'helm'
-      return $?
-    fi
-  fi
-
-  bl64_check_directory "$helm_bin" || return $?
-  [[ -x "${helm_bin}/helm" ]] && BL64_HLM_CMD_HELM="${helm_bin}/helm"
-
-  bl64_dbg_lib_show_vars 'BL64_HLM_CMD_HELM'
+  BL64_HLM_CMD_HELM="$(bl64_bsh_command_import 'helm' '/opt/helm/bin' "$@")"
 }
 
 #######################################
@@ -12455,14 +12483,17 @@ function bl64_hlm_chart_upgrade() {
   local chart="${3:-}"
   local source="${4:-}"
 
-    bl64_check_parameter 'namespace' &&
+  bl64_check_parameter 'namespace' &&
     bl64_check_parameter 'chart' &&
-    bl64_check_parameter 'source' &&
-    bl64_check_file "$kubeconfig" ||
+    bl64_check_parameter 'source' ||
     return $?
 
-  bl64_lib_var_is_default "$kubeconfig" && kubeconfig=''
-
+  if bl64_lib_var_is_default "$kubeconfig"; then
+    kubeconfig=''
+  else
+    bl64_check_file "$kubeconfig" ||
+      return $?
+  fi
   shift
   shift
   shift
@@ -12576,7 +12607,7 @@ function _bl64_hlm_harden_helm() {
 #   >0: setup failed
 #######################################
 function bl64_iam_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -13409,7 +13440,7 @@ function bl64_iam_user_modify() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_k8s_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
@@ -13419,7 +13450,6 @@ function bl64_k8s_setup() {
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_k8s_set_command "$kubectl_bin" &&
-    bl64_check_command "$BL64_K8S_CMD_KUBECTL" &&
     _bl64_k8s_set_version &&
     _bl64_k8s_set_options &&
     _bl64_k8s_set_runtime &&
@@ -13443,28 +13473,7 @@ function bl64_k8s_setup() {
 #######################################
 function _bl64_k8s_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
-
-  if bl64_lib_var_is_default "$kubectl_bin"; then
-    bl64_dbg_lib_show_info 'no custom path provided. Using known locations to detect ansible'
-    if [[ -x '/home/linuxbrew/.linuxbrew/bin/kubectl' ]]; then
-      kubectl_bin='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/kubectl' ]]; then
-      kubectl_bin='/opt/homebrew/bin'
-    elif [[ -x '/usr/local/bin/kubectl' ]]; then
-      kubectl_bin='/usr/local/bin'
-    elif [[ -x '/usr/bin/kubectl' ]]; then
-      kubectl_bin='/usr/bin'
-    else
-      bl64_check_alert_resource_not_found 'kubectl'
-      return $?
-    fi
-  fi
-
-  bl64_check_directory "$kubectl_bin" || return $?
-  [[ -x "${kubectl_bin}/kubectl" ]] && BL64_K8S_CMD_KUBECTL="${kubectl_bin}/kubectl"
-
-  bl64_dbg_lib_show_vars 'BL64_K8S_CMD_KUBECTL'
+  BL64_K8S_CMD_KUBECTL="$(bl64_bsh_command_import 'kubectl' "$@")"
 }
 
 #######################################
@@ -13483,35 +13492,35 @@ function _bl64_k8s_set_options() {
 
   # shellcheck disable=SC2034
   case "$BL64_K8S_VERSION_KUBECTL" in
-  1.2?|1.3?)
-    BL64_K8S_SET_VERBOSE_NONE='--v=0'
-    BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
-    BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
-    BL64_K8S_SET_VERBOSE_TRACE='--v=6'
+    1.2? | 1.3?)
+      BL64_K8S_SET_VERBOSE_NONE='--v=0'
+      BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
+      BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
+      BL64_K8S_SET_VERBOSE_TRACE='--v=6'
 
-    BL64_K8S_SET_OUTPUT_JSON='--output=json'
-    BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
-    BL64_K8S_SET_OUTPUT_TXT='--output=wide'
-    BL64_K8S_SET_OUTPUT_NAME='--output=name'
+      BL64_K8S_SET_OUTPUT_JSON='--output=json'
+      BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
+      BL64_K8S_SET_OUTPUT_TXT='--output=wide'
+      BL64_K8S_SET_OUTPUT_NAME='--output=name'
 
-    BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
-    BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
-    ;;
-  *)
-    bl64_check_compatibility_mode "k8s-api: ${BL64_K8S_VERSION_KUBECTL}" || return $?
-    BL64_K8S_SET_VERBOSE_NONE='--v=0'
-    BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
-    BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
-    BL64_K8S_SET_VERBOSE_TRACE='--v=6'
+      BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
+      BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
+      ;;
+    *)
+      bl64_check_compatibility_mode "k8s-api: ${BL64_K8S_VERSION_KUBECTL}" || return $?
+      BL64_K8S_SET_VERBOSE_NONE='--v=0'
+      BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
+      BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
+      BL64_K8S_SET_VERBOSE_TRACE='--v=6'
 
-    BL64_K8S_SET_OUTPUT_JSON='--output=json'
-    BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
-    BL64_K8S_SET_OUTPUT_TXT='--output=wide'
-    BL64_K8S_SET_OUTPUT_NAME='--output=name'
+      BL64_K8S_SET_OUTPUT_JSON='--output=json'
+      BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
+      BL64_K8S_SET_OUTPUT_TXT='--output=wide'
+      BL64_K8S_SET_OUTPUT_NAME='--output=name'
 
-    BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
-    BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
-    ;;
+      BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
+      BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
+      ;;
   esac
 }
 
@@ -13600,9 +13609,9 @@ function bl64_k8s_set_kubectl_output() {
   local output="${1:-${BL64_K8S_CFG_KUBECTL_OUTPUT_JSON}}"
 
   case "$output" in
-  "$BL64_K8S_CFG_KUBECTL_OUTPUT_JSON") BL64_K8S_CFG_KUBECTL_OUTPUT="$BL64_K8S_SET_OUTPUT_JSON" ;;
-  "$BL64_K8S_CFG_KUBECTL_OUTPUT_YAML") BL64_K8S_CFG_KUBECTL_OUTPUT="$BL64_K8S_SET_OUTPUT_YAML" ;;
-  *) bl64_check_alert_parameter_invalid ;;
+    "$BL64_K8S_CFG_KUBECTL_OUTPUT_JSON") BL64_K8S_CFG_KUBECTL_OUTPUT="$BL64_K8S_SET_OUTPUT_JSON" ;;
+    "$BL64_K8S_CFG_KUBECTL_OUTPUT_YAML") BL64_K8S_CFG_KUBECTL_OUTPUT="$BL64_K8S_SET_OUTPUT_YAML" ;;
+    *) bl64_check_alert_parameter_invalid ;;
   esac
 }
 
@@ -14141,7 +14150,7 @@ function bl64_k8s_resource_is_created() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_mdb_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
@@ -14150,9 +14159,6 @@ function bl64_mdb_setup() {
     bl64_dbg_lib_show_function "$@" &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_mdb_set_command "$mdb_bin" &&
-    bl64_check_command "$BL64_MDB_CMD_MONGOSH" &&
-    bl64_check_command "$BL64_MDB_CMD_MONGORESTORE" &&
-    bl64_check_command "$BL64_MDB_CMD_MONGOEXPORT" &&
     _bl64_mdb_set_options &&
     _bl64_mdb_set_runtime &&
     BL64_MDB_MODULE="$BL64_VAR_ON"
@@ -14175,31 +14181,9 @@ function bl64_mdb_setup() {
 #######################################
 function _bl64_mdb_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
-
-  if bl64_lib_var_is_default "$mdb_bin"; then
-    if [[ -x '/home/linuxbrew/.linuxbrew/bin/mongosh' ]]; then
-      mdb_bin='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/mongosh' ]]; then
-      mdb_bin='/opt/homebrew/bin'
-    elif [[ -x '/usr/local/bin/mongosh' ]]; then
-      mdb_bin='/usr/local/bin'
-    elif [[ -x '/opt/mongosh/bin/mongosh' ]]; then
-      mdb_bin='/opt/mongosh/bin'
-    elif [[ -x '/usr/bin/mongosh' ]]; then
-      mdb_bin='/usr/bin'
-    else
-      bl64_check_alert_resource_not_found 'mongo-shell'
-      return $?
-    fi
-  fi
-
-  bl64_check_directory "$mdb_bin" || return $?
-  [[ -x "${mdb_bin}/mongosh" ]] && BL64_MDB_CMD_MONGOSH="${mdb_bin}/mongosh"
-  [[ -x "${mdb_bin}/mongorestore" ]] && BL64_MDB_CMD_MONGORESTORE="${mdb_bin}/mongorestore"
-  [[ -x "${mdb_bin}/mongoexport" ]] && BL64_MDB_CMD_MONGOEXPORT="${mdb_bin}/mongoexport"
-
-  bl64_dbg_lib_show_vars 'BL64_MDB_CMD_MONGOSH'
+  BL64_MDB_CMD_MONGOSH="$(bl64_bsh_command_import 'mongosh' '/opt/mongosh/bin' "$@")" &&
+    BL64_MDB_CMD_MONGORESTORE="$(bl64_bsh_command_import 'mongorestore' '/opt/mongosh/bin' "$@")" &&
+    BL64_MDB_CMD_MONGOEXPORT="$(bl64_bsh_command_import 'mongoexport' '/opt/mongosh/bin' "$@")"
 }
 
 #######################################
@@ -14496,7 +14480,7 @@ function bl64_mdb_run_mongoexport() {
 #   >0: setup failed
 #######################################
 function bl64_pkg_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2249
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -15574,7 +15558,7 @@ function bl64_pkg_run_softwareupdate() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_py_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   bl64_dbg_lib_show_function "$@"
   local venv_path="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -15657,6 +15641,7 @@ function _bl64_py_set_command() {
     unset PYTHONHOME
 
     bl64_dbg_lib_show_comments 'Let other basthlib64 functions know about this venv'
+    # shellcheck disable=SC2034
     BL64_PY_PATH_VENV="$venv_path"
   fi
   bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3' 'BL64_PY_PATH_VENV' 'VIRTUAL_ENV' 'PATH'
@@ -16215,7 +16200,7 @@ function _bl64_py_harden_pipx() {
 #   >0: setup failed
 #######################################
 function bl64_rbac_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -16547,7 +16532,7 @@ function bl64_rbac_run_bash_function() {
 #   >0: setup failed
 #######################################
 function bl64_rnd_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -16683,7 +16668,7 @@ function bl64_rnd_get_alphanumeric() {
 #   >0: setup failed
 #######################################
 function bl64_rxtx_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -17242,7 +17227,7 @@ function bl64_rxtx_github_get_asset() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_tf_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
@@ -17252,7 +17237,6 @@ function bl64_tf_setup() {
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_tf_set_command "$terraform_bin" &&
-    bl64_check_command "$BL64_TF_CMD_TERRAFORM" &&
     _bl64_tf_set_version &&
     _bl64_tf_set_options &&
     _bl64_tf_set_resources &&
@@ -17277,27 +17261,12 @@ function bl64_tf_setup() {
 #######################################
 function _bl64_tf_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local terraform_bin="$1"
-
-  if bl64_lib_var_is_default "$terraform_bin"; then
-    if [[ -x '/home/linuxbrew/.linuxbrew/bin/terraform' ]]; then
-      terraform_bin='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/terraform' ]]; then
-      terraform_bin='/opt/homebrew/bin'
-    elif [[ -x '/usr/local/bin/terraform' ]]; then
-      terraform_bin='/usr/local/bin'
-    elif [[ -x '/usr/bin/terraform' ]]; then
-      terraform_bin='/usr/bin'
-    else
-      bl64_check_alert_resource_not_found 'terraform'
-      return $?
-    fi
+  BL64_TF_CMD_TERRAFORM="$(bl64_bsh_command_locate 'terraform' "$@")"
+  BL64_TF_CMD_TOFU="$(bl64_bsh_command_locate 'tofu' "$@")"
+  if [[ -z "$BL64_TF_CMD_TERRAFORM" && -z "$BL64_TF_CMD_TOFU" ]]; then
+    bl64_msg_show_lib_error 'failed to detect terraform or tofu command. Please install it and try again.'
+    return $BL64_LIB_ERROR_FILE_NOT_FOUND
   fi
-
-  bl64_check_directory "$terraform_bin" || return $?
-  [[ -x "${terraform_bin}/terraform" ]] && BL64_TF_CMD_TERRAFORM="${terraform_bin}/terraform"
-
-  bl64_dbg_lib_show_vars 'BL64_TF_CMD_TERRAFORM'
   return 0
 }
 
@@ -17394,15 +17363,18 @@ function _bl64_tf_set_version() {
   bl64_dbg_lib_show_function
   local cli_version=''
 
-  bl64_dbg_lib_show_info "run terraforn to obtain ansible-core version"
-  cli_version="$("$BL64_TF_CMD_TERRAFORM" --version | bl64_txt_run_awk '/^Terraform v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
+  if [[ -n "$BL64_TF_CMD_TERRAFORM" ]]; then
+    cli_version="$("$BL64_TF_CMD_TERRAFORM" --version | bl64_txt_run_awk '/^Terraform v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
+  else
+    cli_version="$("$BL64_TF_CMD_TOFU" --version | bl64_txt_run_awk '/^OpenTofu v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
+  fi
   bl64_dbg_lib_show_vars 'cli_version'
 
   if [[ -n "$cli_version" ]]; then
     # shellcheck disable=SC2034
     BL64_TF_VERSION_CLI="$cli_version"
   else
-    bl64_msg_show_lib_error "failed to get terraform CLI version (${BL64_TF_CMD_TERRAFORM} --version)"
+    bl64_msg_show_lib_error 'failed to get CLI version'
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
 
@@ -17518,6 +17490,76 @@ function _bl64_tf_harden_terraform() {
 }
 
 #######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_tf_run_tofu() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_TF_MODULE' ||
+    return $?
+
+  _bl64_tf_harden_tofu
+
+  if bl64_dbg_lib_command_is_enabled; then
+    export TF_LOG="$BL64_TF_SET_LOG_TRACE"
+  else
+    export TF_LOG="$BL64_TF_LOG_LEVEL"
+  fi
+  [[ "$BL64_TF_LOG_PATH" != "$BL64_VAR_DEFAULT" ]] && export TF_LOG_PATH="$BL64_TF_LOG_PATH"
+  bl64_dbg_lib_show_vars 'TF_LOG' 'TF_LOG_PATH'
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_TF_CMD_TOFU" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_tf_harden_tofu() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited TF_* shell variables'
+  bl64_dbg_lib_trace_start
+  unset TF_LOG
+  unset TF_LOG_PATH
+  unset TF_CLI_CONFIG_FILE
+  unset TF_LOG
+  unset TF_LOG_PATH
+  unset TF_IN_AUTOMATION
+  unset TF_INPUT
+  unset TF_DATA_DIR
+  unset TF_PLUGIN_CACHE_DIR
+  unset TF_REGISTRY_DISCOVERY_RETRY
+  unset TF_REGISTRY_CLIENT_TIMEOUT
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#######################################
 # BashLib64 / Module / Setup / Manage date-time data
 #######################################
 
@@ -17536,7 +17578,7 @@ function _bl64_tf_harden_terraform() {
 #   >0: setup failed
 #######################################
 function bl64_tm_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -17604,7 +17646,7 @@ function bl64_tm_create_timestamp_file() {
 #   >0: setup failed
 #######################################
 function bl64_txt_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -18285,7 +18327,7 @@ function bl64_txt_run_fmt() {
 #   >0: setup failed
 #######################################
 function bl64_ui_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -18621,7 +18663,7 @@ function bl64_ui_ask_input_date() {
 #   >0: setup failed
 #######################################
 function bl64_vcs_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -19087,7 +19129,7 @@ function _bl64_vcs_changelog_get_release() {
 #   >0: setup failed
 #######################################
 function bl64_xsv_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local search_paths=("${@:-}")
 
   # shellcheck disable=SC2034
@@ -19118,6 +19160,7 @@ function bl64_xsv_setup() {
 #######################################
 function _bl64_xsv_set_command() {
   bl64_dbg_lib_show_function "$@"
+  BL64_XSV_CMD_PKL="$(bl64_bsh_command_locate 'pkl' "$@")"
   BL64_XSV_CMD_JQ="$(bl64_bsh_command_locate 'jq' "$@")"
   BL64_XSV_CMD_YQ="$(bl64_bsh_command_locate 'yq' "$@")"
   return 0
@@ -19284,6 +19327,34 @@ function bl64_xsv_run_yq() {
 
   bl64_dbg_lib_trace_start
   "$BL64_XSV_CMD_YQ" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_xsv_run_pkl() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_XSV_MODULE' &&
+    bl64_check_command "$BL64_XSV_CMD_PKL" "$BL64_VAR_DEFAULT" 'pkl' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_XSV_CMD_PKL" "$@"
   bl64_dbg_lib_trace_stop
 }
 

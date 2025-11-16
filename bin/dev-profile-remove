@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-task: 1.7.0
+# template-task: 1.9.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -15,16 +15,18 @@
 
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
-# shellcheck source-path=lib/bl64
+# shellcheck source-path=/opt/bl64
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-ui.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
 declare MY_PROFILE="${1:-}"
 
-function dev_remove() {
+function my_remove() {
   bl64_dbg_app_show_function
   bl64_fs_path_remove \
     "${DEV_PATH_BUILD}/${DEV_BASE_PROFILE}/${MY_PROFILE}" \
@@ -35,25 +37,27 @@ function dev_remove() {
     "${DEV_PATH_VAULT}/${DEV_BASE_PROFILE}/${MY_PROFILE}"
 }
 
-function dev_initialize() {
+function my_initialize() {
   bl64_dbg_app_show_function
   bl64_msg_show_about
-  bl64_check_parameter 'MY_PROFILE' &&
-    bl64_ui_ask_confirmation \
-      "Warning: the operation will remove all content from the profile [${MY_PROFILE}]. If not tracked by GIT, it will be permanently lost. Confirm operation? Type:" \
-      'YES' ||
+  bl64_check_parameter 'MY_PROFILE' ||
     return $?
   if [[ "$MY_PROFILE" == "$DEV_PROFILE" ]]; then
     bl64_msg_show_error 'Target profile can not be the current one. Please change to a different profile before removing'
     return $BL64_LIB_ERROR_PARAMETER_INVALID
   fi
+  bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
+    'MY_PROFILE' &&
+    bl64_ui_ask_confirmation \
+      "Warning: the operation will remove all content from the profile [${MY_PROFILE}]. If not tracked by GIT, it will be permanently lost. Confirm operation? Type:" \
+      'YES'
 }
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '2.1.1'
+bl64_lib_script_version_set '2.1.2'
 bl64_msg_help_about_set 'Remove profile directory structure'
-bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && dev_initialize || exit $?
+bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
-dev_remove
+my_remove
 bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

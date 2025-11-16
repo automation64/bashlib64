@@ -21,7 +21,7 @@
 #######################################
 # shellcheck disable=SC2120
 function bl64_ans_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local ansible_bin="${1:-${BL64_VAR_DEFAULT}}"
   local ansible_config="${2:-${BL64_VAR_DEFAULT}}"
   local env_ignore="${3:-${BL64_VAR_ON}}"
@@ -34,9 +34,6 @@ function bl64_ans_setup() {
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_PY_MODULE' &&
     _bl64_ans_set_command "$ansible_bin" &&
-    bl64_check_command "$BL64_ANS_CMD_ANSIBLE" &&
-    bl64_check_command "$BL64_ANS_CMD_ANSIBLE_GALAXY" &&
-    bl64_check_command "$BL64_ANS_CMD_ANSIBLE_PLAYBOOK" &&
     _bl64_ans_set_runtime "$ansible_config" &&
     _bl64_ans_set_options &&
     _bl64_ans_set_version &&
@@ -61,37 +58,9 @@ function bl64_ans_setup() {
 #######################################
 function _bl64_ans_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local ansible_bin="$1"
-
-  if bl64_lib_var_is_default "$ansible_bin"; then
-    bl64_dbg_lib_show_info 'no custom path provided. Using known locations to detect ansible'
-    if [[ -n "$BL64_PY_PATH_VENV" && -x "${BL64_PY_PATH_VENV}/bin/ansible" ]]; then
-      ansible_bin="${BL64_PY_PATH_VENV}/bin"
-    elif [[ -n "$HOME" && -x "${HOME}/.local/bin/ansible" ]]; then
-      ansible_bin="${HOME}/.local/bin"
-    elif [[ -x '/usr/local/bin/ansible' ]]; then
-      ansible_bin='/usr/local/bin'
-    elif [[ -x '/home/linuxbrew/.linuxbrew/bin/ansible' ]]; then
-      ansible_bin='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/ansible' ]]; then
-      ansible_bin='/opt/homebrew/bin'
-    elif [[ -x '/opt/ansible/bin/ansible' ]]; then
-      ansible_bin='/opt/ansible/bin'
-    elif [[ -x '/usr/bin/ansible' ]]; then
-      ansible_bin='/usr/bin'
-    else
-      bl64_check_alert_resource_not_found 'ansible'
-      return $?
-    fi
-  fi
-
-  bl64_check_directory "$ansible_bin" || return $?
-  [[ -x "${ansible_bin}/ansible" ]] && BL64_ANS_CMD_ANSIBLE="${ansible_bin}/ansible"
-  [[ -x "${ansible_bin}/ansible-galaxy" ]] && BL64_ANS_CMD_ANSIBLE_GALAXY="${ansible_bin}/ansible-galaxy"
-  [[ -x "${ansible_bin}/ansible-playbook" ]] && BL64_ANS_CMD_ANSIBLE_PLAYBOOK="${ansible_bin}/ansible-playbook"
-
-  bl64_dbg_lib_show_vars 'BL64_ANS_CMD_ANSIBLE' 'BL64_ANS_CMD_ANSIBLE_GALAXY' 'BL64_ANS_CMD_ANSIBLE_PLAYBOOK'
-  return 0
+  BL64_ANS_CMD_ANSIBLE="$(bl64_bsh_command_import 'ansible' '/opt/ansible/bin' "${HOME}/.local/bin" "$@")" &&
+    BL64_ANS_CMD_ANSIBLE_GALAXY="$(bl64_bsh_command_import 'ansible-galaxy' '/opt/ansible/bin' "${HOME}/.local/bin" "$@")" &&
+    BL64_ANS_CMD_ANSIBLE_PLAYBOOK="$(bl64_bsh_command_import 'ansible-playbook' '/opt/ansible/bin' "${HOME}/.local/bin" "$@")"
 }
 
 #######################################
@@ -107,7 +76,6 @@ function _bl64_ans_set_command() {
 #######################################
 function _bl64_ans_set_options() {
   bl64_dbg_lib_show_function
-
   BL64_ANS_SET_VERBOSE='-v'
   BL64_ANS_SET_DIFF='--diff'
   BL64_ANS_SET_DEBUG='-vvvvv'
@@ -128,7 +96,6 @@ function _bl64_ans_set_options() {
 function _bl64_ans_set_runtime() {
   bl64_dbg_lib_show_function "$@"
   local config="$1"
-
   bl64_ans_set_paths "$config"
 }
 
@@ -169,7 +136,7 @@ function bl64_ans_set_paths() {
   fi
 
   # shellcheck disable=SC2034
-    if bl64_lib_var_is_default "$collections"; then
+  if bl64_lib_var_is_default "$collections"; then
     BL64_ANS_PATH_USR_COLLECTIONS="${BL64_ANS_PATH_USR_ANSIBLE}/collections/ansible_collections"
   else
     bl64_check_directory "$collections" || return $?

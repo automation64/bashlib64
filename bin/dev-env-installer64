@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-env: 1.1.0
+# template-env: 1.2.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -14,9 +14,21 @@
 #######################################
 
 #
-# Globals
+# External
 #
-# * Use .dev.env file to override values
+# * External tools only. Use to declare configuration env-vars
+#
+
+# shellcheck disable=SC2154
+{
+  # Lib / Installer64 / Installer64 parameters
+  export INST64_INSTALLER64_TARGET="$DEV_LIB_INSTALLER64_TARGET"
+}
+
+#
+# Internal variables
+#
+# * Shared internal variables for module tasks
 #
 
 # shellcheck disable=SC2154
@@ -26,14 +38,4 @@
 
   # Lib / Installer64 / Source
   export DEV_LIB_INSTALLER64_URL='https://raw.githubusercontent.com/automation64/installer64/main/src/install-installer64'
-}
-
-#
-# External
-#
-
-# shellcheck disable=SC2154
-{
-  # Lib / Installer64 / Installer64 parameters
-  export INST64_INSTALLER64_TARGET="$DEV_LIB_INSTALLER64_TARGET"
 }

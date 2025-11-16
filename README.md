@@ -100,8 +100,11 @@ The library has been tested on the following operating systems:
 
 Help on implementing new features and maintaining the code base is welcomed.
 
-- [Guidelines](https://github.com/automation64/bashlib64/blob/main/CONTRIBUTING.md)
 - [Contributor Covenant Code of Conduct](https://github.com/automation64/bashlib64/blob/main/CODE_OF_CONDUCT.md)
+
+## Disclaimer
+
+This repository is provided "as is" without any warranties. The author is not responsible for any damages or issues arising from its use. Additionally, this project is not affiliated with or endorsed by any organization or entity. Use at your own risk.
 
 ## License
 

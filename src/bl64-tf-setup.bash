@@ -16,7 +16,7 @@
 #######################################
 # shellcheck disable=SC2120
 function bl64_tf_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
@@ -26,7 +26,6 @@ function bl64_tf_setup() {
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_tf_set_command "$terraform_bin" &&
-    bl64_check_command "$BL64_TF_CMD_TERRAFORM" &&
     _bl64_tf_set_version &&
     _bl64_tf_set_options &&
     _bl64_tf_set_resources &&
@@ -51,27 +50,12 @@ function bl64_tf_setup() {
 #######################################
 function _bl64_tf_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local terraform_bin="$1"
-
-  if bl64_lib_var_is_default "$terraform_bin"; then
-    if [[ -x '/home/linuxbrew/.linuxbrew/bin/terraform' ]]; then
-      terraform_bin='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/terraform' ]]; then
-      terraform_bin='/opt/homebrew/bin'
-    elif [[ -x '/usr/local/bin/terraform' ]]; then
-      terraform_bin='/usr/local/bin'
-    elif [[ -x '/usr/bin/terraform' ]]; then
-      terraform_bin='/usr/bin'
-    else
-      bl64_check_alert_resource_not_found 'terraform'
-      return $?
-    fi
+  BL64_TF_CMD_TERRAFORM="$(bl64_bsh_command_locate 'terraform' "$@")"
+  BL64_TF_CMD_TOFU="$(bl64_bsh_command_locate 'tofu' "$@")"
+  if [[ -z "$BL64_TF_CMD_TERRAFORM" && -z "$BL64_TF_CMD_TOFU" ]]; then
+    bl64_msg_show_lib_error 'failed to detect terraform or tofu command. Please install it and try again.'
+    return $BL64_LIB_ERROR_FILE_NOT_FOUND
   fi
-
-  bl64_check_directory "$terraform_bin" || return $?
-  [[ -x "${terraform_bin}/terraform" ]] && BL64_TF_CMD_TERRAFORM="${terraform_bin}/terraform"
-
-  bl64_dbg_lib_show_vars 'BL64_TF_CMD_TERRAFORM'
   return 0
 }
 
@@ -168,15 +152,18 @@ function _bl64_tf_set_version() {
   bl64_dbg_lib_show_function
   local cli_version=''
 
-  bl64_dbg_lib_show_info "run terraforn to obtain ansible-core version"
-  cli_version="$("$BL64_TF_CMD_TERRAFORM" --version | bl64_txt_run_awk '/^Terraform v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
+  if [[ -n "$BL64_TF_CMD_TERRAFORM" ]]; then
+    cli_version="$("$BL64_TF_CMD_TERRAFORM" --version | bl64_txt_run_awk '/^Terraform v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
+  else
+    cli_version="$("$BL64_TF_CMD_TOFU" --version | bl64_txt_run_awk '/^OpenTofu v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
+  fi
   bl64_dbg_lib_show_vars 'cli_version'
 
   if [[ -n "$cli_version" ]]; then
     # shellcheck disable=SC2034
     BL64_TF_VERSION_CLI="$cli_version"
   else
-    bl64_msg_show_lib_error "failed to get terraform CLI version (${BL64_TF_CMD_TERRAFORM} --version)"
+    bl64_msg_show_lib_error 'failed to get CLI version'
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
 

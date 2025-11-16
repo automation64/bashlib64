@@ -16,7 +16,7 @@
 #######################################
 # shellcheck disable=SC2120
 function bl64_hlm_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
@@ -25,7 +25,6 @@ function bl64_hlm_setup() {
     bl64_dbg_lib_show_function "$@" &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_hlm_set_command "$helm_bin" &&
-    bl64_check_command "$BL64_HLM_CMD_HELM" &&
     _bl64_hlm_set_options &&
     _bl64_hlm_set_runtime &&
     BL64_HLM_MODULE="$BL64_VAR_ON"
@@ -48,29 +47,7 @@ function bl64_hlm_setup() {
 #######################################
 function _bl64_hlm_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
-
-  if bl64_lib_var_is_default "$helm_bin"; then
-    if [[ -x '/home/linuxbrew/.linuxbrew/bin/helm' ]]; then
-      helm_bin='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/helm' ]]; then
-      helm_bin='/opt/homebrew/bin'
-    elif [[ -x '/usr/local/bin/helm' ]]; then
-      helm_bin='/usr/local/bin'
-    elif [[ -x '/opt/helm/bin/helm' ]]; then
-      helm_bin='/opt/helm/bin'
-    elif [[ -x '/usr/bin/helm' ]]; then
-      helm_bin='/usr/bin'
-    else
-      bl64_check_alert_resource_not_found 'helm'
-      return $?
-    fi
-  fi
-
-  bl64_check_directory "$helm_bin" || return $?
-  [[ -x "${helm_bin}/helm" ]] && BL64_HLM_CMD_HELM="${helm_bin}/helm"
-
-  bl64_dbg_lib_show_vars 'BL64_HLM_CMD_HELM'
+  BL64_HLM_CMD_HELM="$(bl64_bsh_command_import 'helm' '/opt/helm/bin' "$@")"
 }
 
 #######################################

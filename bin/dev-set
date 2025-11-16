@@ -1,13 +1,5 @@
 #!/usr/bin/env bash
 #######################################
-# Dev / Set
-#
-# * Loads DevBin64 environment variables
-# * To be used by DevBin64 scripts
-# * Warning: Bash is the only supported shell. Other shells may work as long as they are compatible with Bash syntax
-# * Version: 10.1.0
-#
-#######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,109 +12,115 @@
 # limitations under the License.
 #######################################
 
+# shellcheck disable=SC2034
+{
 
-#
-# Parameters
-#
+  #
+  # Parameters
+  #
 
-# Main / Debug flag for bin/ scripts
-export DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-}"
-[[ -n "$DEV_CICD_DEBUG" ]] && set -x
+  # Main / Debug flag for bin/ scripts
+  export DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-}"
+  [[ -n "$DEV_CICD_DEBUG" ]] && set -x
 
-# Main / Verbose format (BL64_MSG_FORMAT_*)
-export DEV_VERBOSE="${DEV_VERBOSE:-FULL}"
+  # Main / Verbose format (BL64_MSG_FORMAT_*)
+  export DEV_VERBOSE="${DEV_VERBOSE:-FULL}"
 
-# Main / Profile
-export DEV_PROFILE="${DEV_PROFILE:-}"
+  # Main / Profile
+  export DEV_PROFILE="${DEV_PROFILE:-}"
 
-# Main / List of modules to load
-export DEV_MODULE_LOAD=''
+  # Main / List of modules to load
+  export DEV_MODULE_LOAD=''
 
-#
-# External
-#
+  #
+  # External
+  #
 
-# From CICD products
-export GITHUB_WORKSPACE="${GITHUB_WORKSPACE:-}"
-export GITLAB_CI="${GITLAB_CI:-}"
-export TESTMANSH_PROJECT_ROOT="${TESTMANSH_PROJECT_ROOT:-}"
+  # From CICD products
+  export GITHUB_WORKSPACE="${GITHUB_WORKSPACE:-}"
+  export GITLAB_CI="${GITLAB_CI:-}"
+  export TESTMANSH_PROJECT_ROOT="${TESTMANSH_PROJECT_ROOT:-}"
 
-#
-# Constants
-#
+  #
+  # Constants
+  #
 
-# Main / Bootstrap files. Must be the same as defined in .env
-declare DEV_BOOTSTRAP_STATE='.devbin64'
+  # DevSet / Version
 
-# Main / Base file and directory names
-export DEV_BASE_BUILD="build"
-export DEV_BASE_CHANGELOG="CHANGELOG.md"
-export DEV_BASE_DOT_ENV="dot.dev.env"
-export DEV_BASE_DOT_LOCAL="dot.local.env"
-export DEV_BASE_DOT_SECRETS="dot.secrets.env"
-export DEV_BASE_ENV=".dev.env"
-export DEV_BASE_GITKEEP=".gitkeep"
-export DEV_BASE_LOCAL='.local-github.env'
-export DEV_BASE_LOCAL=".local.env"
-export DEV_BASE_POST=".post.env"
-export DEV_BASE_PROFILE="prof"
-export DEV_BASE_SECRETS=".secrets.env"
-export DEV_BASE_SRC="src"
-export DEV_BASE_TEST="test"
+  declare DEV_SET_VERSION='10.1.2'
 
-#
-# Paths
-#
+  # Main / Bootstrap files. Must be the same as defined in .env
+  declare DEV_BOOTSTRAP_STATE='.devbin64'
 
-# Main / Project root
-export DEV_PATH_ROOT=''
+  # Main / Base file and directory names
+  export DEV_BASE_BUILD="build"
+  export DEV_BASE_CHANGELOG="CHANGELOG.md"
+  export DEV_BASE_DOT_ENV="dot.dev.env"
+  export DEV_BASE_DOT_LOCAL="dot.local.env"
+  export DEV_BASE_DOT_SECRETS="dot.secrets.env"
+  export DEV_BASE_ENV=".dev.env"
+  export DEV_BASE_GITKEEP=".gitkeep"
+  export DEV_BASE_LOCAL=".local.env"
+  export DEV_BASE_POST=".post.env"
+  export DEV_BASE_PROFILE="prof"
+  export DEV_BASE_SECRETS=".secrets.env"
+  export DEV_BASE_SRC="src"
+  export DEV_BASE_TEST="test"
 
-# Main / Project source code
-export DEV_PATH_SRC=''
+  #
+  # Paths
+  #
 
-# Main / Project test code
-export DEV_PATH_TEST=''
+  # Main / Project root
+  export DEV_PATH_ROOT=''
 
-# Main / Project configuration files
-export DEV_PATH_ETC=''
+  # Main / Project source code
+  export DEV_PATH_SRC=''
 
-# Main / Project documentation
-export DEV_PATH_DOCS=''
+  # Main / Project test code
+  export DEV_PATH_TEST=''
 
-# Main / DevOps scripts
-export DEV_PATH_BIN=''
+  # Main / Project configuration files
+  export DEV_PATH_ETC=''
 
-# Main / DevOps persistent data
-export DEV_PATH_VAR=''
+  # Main / Project documentation
+  export DEV_PATH_DOCS=''
 
-# Main / DevOps ephemeral tools. Content excluded from GIT
-export DEV_PATH_LIB=''
+  # Main / DevOps scripts
+  export DEV_PATH_BIN=''
 
-# Main / DevOps builds. Content excluded from GIT
-export DEV_PATH_BUILD=''
-export DEV_PATH_BUILD_PREPARE=''
-export DEV_PATH_BUILD_STAGING=''
-export DEV_PATH_BUILD_PACK=''
+  # Main / DevOps persistent data
+  export DEV_PATH_VAR=''
 
-# Main / DevOps local vault for secrets. Content excluded from GIT
-export DEV_PATH_VAULT=''
+  # Main / DevOps ephemeral tools. Content excluded from GIT
+  export DEV_PATH_LIB=''
 
-# Main / DevOps logs store. Content excluded from GIT
-export DEV_PATH_LOGS=''
+  # Main / DevOps builds. Content excluded from GIT
+  export DEV_PATH_BUILD=''
+  export DEV_PATH_BUILD_PREPARE=''
+  export DEV_PATH_BUILD_STAGING=''
+  export DEV_PATH_BUILD_PACK=''
 
-# Main / DevOps ephemeral data. Content excluded from GIT
-export DEV_PATH_TMP=''
+  # Main / DevOps local vault for secrets. Content excluded from GIT
+  export DEV_PATH_VAULT=''
 
-# Main / Profile dependant variables
-export DEV_PATH_PROF_BUILD=''
-export DEV_PATH_PROF_BUILD_PREPARE=''
-export DEV_PATH_PROF_BUILD_STAGING=''
-export DEV_PATH_PROF_BUILD_PACK=''
-export DEV_PATH_PROF_ETC=''
-export DEV_PATH_PROF_LOGS=''
-export DEV_PATH_PROF_TMP=''
-export DEV_PATH_PROF_VAR=''
-export DEV_PATH_PROF_VAULT=''
+  # Main / DevOps logs store. Content excluded from GIT
+  export DEV_PATH_LOGS=''
+
+  # Main / DevOps ephemeral data. Content excluded from GIT
+  export DEV_PATH_TMP=''
+
+  # Main / Profile dependant variables
+  export DEV_PATH_PROF_BUILD=''
+  export DEV_PATH_PROF_BUILD_PREPARE=''
+  export DEV_PATH_PROF_BUILD_STAGING=''
+  export DEV_PATH_PROF_BUILD_PACK=''
+  export DEV_PATH_PROF_ETC=''
+  export DEV_PATH_PROF_LOGS=''
+  export DEV_PATH_PROF_TMP=''
+  export DEV_PATH_PROF_VAR=''
+  export DEV_PATH_PROF_VAULT=''
+}
 
 #
 # Public Functions
@@ -277,7 +275,7 @@ function _dev_set_load_github() {
   # shellcheck disable=SC2155
   DEV_PATH_ROOT="$GITHUB_WORKSPACE"
 
-  DEV_BASE_LOCAL="${DEV_PATH_ROOT}/${DEV_BASE_LOCAL}"
+  DEV_BASE_LOCAL="${DEV_PATH_ROOT}/.local-github.env"
   if [[ -r "$DEV_BASE_LOCAL" ]]; then
     db64_msg_show_task "Load local github automatic environment variables (${DEV_BASE_LOCAL})"
     # shellcheck source=./.local-github.env
@@ -372,23 +370,23 @@ function _dev_set_initialize() {
 function _dev_set_cleanup() {
 
   db64_msg_show_task 'cleanup unsed external variables'
-  [[ -z "$GITHUB_WORKSPACE" ]] && unset GITHUB_WORKSPACE 
-  [[ -z "$GITLAB_CI" ]] && unset GITLAB_CI 
-  [[ -z "$TESTMANSH_PROJECT_ROOT" ]] && unset TESTMANSH_PROJECT_ROOT 
+  [[ -z "$GITHUB_WORKSPACE" ]] && unset GITHUB_WORKSPACE
+  [[ -z "$GITLAB_CI" ]] && unset GITLAB_CI
+  [[ -z "$TESTMANSH_PROJECT_ROOT" ]] && unset TESTMANSH_PROJECT_ROOT
 
   db64_msg_show_task 'cleanup internal functions'
   unset _dev_set_define_paths
-    unset _dev_set_initialize
-    unset _dev_set_load_env
-    unset _dev_set_legacy
-    unset _dev_set_load_local
-    unset _dev_set_load_local_post
-    unset _dev_set_load_modules
-    unset _dev_set_load_profile
-    unset _dev_set_load_secrets
-    unset _dev_set_load_testmansh
-    unset _dev_set_load_workstation
-    unset _dev_set_load_github
+  unset _dev_set_initialize
+  unset _dev_set_load_env
+  unset _dev_set_legacy
+  unset _dev_set_load_local
+  unset _dev_set_load_local_post
+  unset _dev_set_load_modules
+  unset _dev_set_load_profile
+  unset _dev_set_load_secrets
+  unset _dev_set_load_testmansh
+  unset _dev_set_load_workstation
+  unset _dev_set_load_github
 }
 
 function _dev_set_legacy() {

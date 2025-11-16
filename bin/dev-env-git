@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-env: 1.1.0
+# template-env: 1.2.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -14,16 +14,13 @@
 #######################################
 
 #
-# Globals
+# Module parameters
 #
 # * Use .dev.env file to override values
 #
 
 # shellcheck disable=SC2154
 {
-  # Env / GIT / Module environment definition version
-  export DEV_ENV_GIT_VERSION='1.1.0'
-
   # Env / GIT / Main branch name
   export DEV_GIT_BRANCH_MAIN="${DEV_GIT_BRANCH_MAIN:-main}"
   # Env / GIT / Release branch name
@@ -53,10 +50,13 @@
 }
 
 #
-# External
+# Internal variables
+#
+# * Shared internal variables for module tasks
 #
 
 # shellcheck disable=SC2154
 {
-  :
+  # Env / GIT / Module environment definition version
+  export DEV_ENV_GIT_VERSION='1.1.0'
 }

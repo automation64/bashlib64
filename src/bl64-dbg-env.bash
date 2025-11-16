@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_DBG_VERSION='3.2.2'
+  declare BL64_DBG_VERSION='3.2.3'
 
   declare BL64_DBG_MODULE='0'
 
@@ -63,11 +63,12 @@
   declare BL64_DBG_DRYRUN_LIB='LIB'
   declare BL64_DBG_DRYRUN_ALL='ALL'
 
-  declare _BL64_DBG_TXT_FUNCTION_START='start-function-tracing'
-  declare _BL64_DBG_TXT_FUNCTION_STOP='stop-function-tracing'
-  declare _BL64_DBG_TXT_SHELL_VAR='shell-variable'
-  declare _BL64_DBG_TXT_COMMENTS='dev-comments'
-  declare _BL64_DBG_TXT_INFO='dev-info'
+  declare _BL64_DBG_TXT_FUNCTION_START='(start-tracing)'
+  declare _BL64_DBG_TXT_FUNCTION_STOP='(stop-tracing)'
+  declare _BL64_DBG_TXT_SHELL_VAR='(variable-value)'
+  declare _BL64_DBG_TXT_COMMENTS='(task-comments)'
+  declare _BL64_DBG_TXT_INFO='(task-info)'
+  declare _BL64_DBG_TXT_CALL='(function-call)'
 
   declare _BL64_DBG_TXT_LABEL_BASH_RUNTIME='[bash-runtime]'
   declare _BL64_DBG_TXT_LABEL_BASH_VARIABLE='[bash-variable]'

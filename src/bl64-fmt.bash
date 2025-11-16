@@ -255,7 +255,7 @@ function bl64_fmt_list_convert_to_string() {
 #   $@: list of one or more values to check against
 # Outputs:
 #   STDOUT: none
-#   STDERR: message
+#   STDERR: error message
 # Returns:
 #   0: check ok
 #   BL64_LIB_ERROR_CHECK_FAILED
@@ -292,7 +292,7 @@ function bl64_fmt_list_check_membership() {
 #   $1: Version
 # Outputs:
 #   STDOUT: none
-#   STDERR: message
+#   STDERR: error message
 # Returns:
 #   0: Yes
 #   >0: No
@@ -311,7 +311,7 @@ function bl64_fmt_version_is_semver() {
 #   $1: Version
 # Outputs:
 #   STDOUT: none
-#   STDERR: message
+#   STDERR: error message
 # Returns:
 #   0: Yes
 #   >0: No
@@ -330,7 +330,7 @@ function bl64_fmt_version_is_major_minor() {
 #   $1: Version
 # Outputs:
 #   STDOUT: none
-#   STDERR: message
+#   STDERR: error message
 # Returns:
 #   0: Yes
 #   >0: No
@@ -349,7 +349,7 @@ function bl64_fmt_version_is_major() {
 #   $1: Version
 # Outputs:
 #   STDOUT: Major.Minor
-#   STDERR: message
+#   STDERR: error message
 # Returns:
 #   0: Converted
 #   >0: Failed
@@ -380,4 +380,96 @@ function bl64_fmt_version_convert_to_major_minor() {
   fi
   bl64_msg_show_lib_error "unable to convert version to major.minor (${version})"
   return $BL64_LIB_ERROR_TASK_FAILED
+}
+
+#######################################
+# Check that the version is in semver format
+#
+# Arguments:
+#   $1: version string
+# Outputs:
+#   STDOUT: none
+#   STDERR: error message
+# Returns:
+#   0: check ok
+#   BL64_LIB_ERROR_CHECK_FAILED
+#######################################
+function bl64_fmt_version_check_semver_format() {
+  bl64_dbg_lib_show_function "$@"
+  local version="${1:-}"
+
+  bl64_check_parameter 'version' ||
+    return $?
+
+  if bl64_fmt_version_is_semver "$version"; then
+    return 0
+  else
+    bl64_msg_show_check "the version must be in semver format (${version})"
+    # shellcheck disable=SC2086
+    return $BL64_LIB_ERROR_CHECK_FAILED
+  fi
+}
+
+#######################################
+# Compares two semantic versions (A and B) and returns true if A is less than B.
+#
+# Arguments:
+#   $1: SemVer A
+#   $2: SemVer B
+# Outputs:
+#   STDOUT: none
+#   STDERR: error message
+# Returns:
+#   0: If version_a is less than version_b.
+#   1: If version_a is greater than or equal to version_b.
+#######################################
+function bl64_fmt_version_is_less_than() {
+  bl64_dbg_lib_show_function "$@"
+  local version_a="$1"
+  local version_b="$2"
+  local -a a_parts
+  local -a b_parts
+
+  bl64_fmt_version_check_semver_format "$version_a" &&
+    bl64_fmt_version_check_semver_format "$version_b" ||
+    return $?
+
+  if [[ "$version_a" == "$version_b" ]]; then
+    bl64_dbg_lib_show_info 'versions are equal'
+    return 1
+  fi
+
+  IFS='.'
+  # shellcheck disable=SC2206
+  a_parts=($version_a) &&
+    b_parts=($version_b)
+  unset IFS
+
+  for i in {0..2}; do
+    a_part=${a_parts[i]:-0}
+    b_part=${b_parts[i]:-0}
+
+    if ((a_part < b_part)); then
+      bl64_dbg_lib_show_info "versions is less than (${a_part} < ${b_part})"
+      return 0
+    fi
+    if ((a_part > b_part)); then
+      bl64_dbg_lib_show_info "versions is greater than (${a_part} < ${b_part})"
+      return 1
+    fi
+  done
+
+  bl64_dbg_lib_show_info "versions is greater than (${a_part} < ${b_part})"
+  return 1
+}
+
+function bl64_fmt_version_is_less_than_or_equal() {
+  bl64_dbg_lib_show_function "$@"
+  local version_a="$1"
+  local version_b="$2"
+  if [[ "$version_a" == "$version_b" ]]; then
+    bl64_dbg_lib_show_info 'versions are equal'
+    return 0
+  fi
+  bl64_fmt_version_is_less_than "$version_a" "$version_b"
 }

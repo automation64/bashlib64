@@ -18,7 +18,7 @@
 #######################################
 # shellcheck disable=SC2120
 function bl64_py_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   bl64_dbg_lib_show_function "$@"
   local venv_path="${1:-${BL64_VAR_DEFAULT}}"
 
@@ -101,6 +101,7 @@ function _bl64_py_set_command() {
     unset PYTHONHOME
 
     bl64_dbg_lib_show_comments 'Let other basthlib64 functions know about this venv'
+    # shellcheck disable=SC2034
     BL64_PY_PATH_VENV="$venv_path"
   fi
   bl64_dbg_lib_show_vars 'BL64_PY_CMD_PYTHON3' 'BL64_PY_PATH_VENV' 'VIRTUAL_ENV' 'PATH'

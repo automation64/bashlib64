@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# * Version: 1.1.2
+# template-env: 1.2.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -14,7 +14,7 @@
 #######################################
 
 #
-# Globals
+# Module parameters
 #
 # * Use .dev.env file to override values
 #
@@ -27,6 +27,8 @@
   export DEV_RELEASE_GITHUB_REPO_NAME="${DEV_RELEASE_GITHUB_REPO_NAME:-}"
   # Release / GitHub / Artifact path
   export DEV_RELEASE_GITHUB_ARTIFACT="${DEV_RELEASE_GITHUB_ARTIFACT:-}"
+  # Auth / GitHub / Scopes
+  export DEV_AUTH_GITHUB_SCOPES="${DEV_AUTH_GITHUB_SCOPES:-}"
 }
 
 #
@@ -37,6 +39,46 @@
 
 # shellcheck disable=SC2154
 {
+  # Lib / GitHub / Skip installation?
+  export DEV_LIB_GITHUB_SKIP='YES'
+  # Lib / GitHub / Target
+  export DEV_LIB_GITHUB_TARGET="${DEV_PATH_LIB}/gh"
   # Lib / GitHub / Command
-  export DEV_LIB_GITHUB_BIN="${DEV_LIB_GITHUB_BIN:-/usr/bin/gh}"
+  export DEV_LIB_GITHUB_BIN="${DEV_LIB_GITHUB_BIN:-}"
+  if [[ -z "$DEV_LIB_GITHUB_BIN" ]]; then
+    DEV_LIB_GITHUB_BIN="$(bl64_bsh_command_locate_user 'gh')"
+    if [[ -z "$DEV_LIB_GITHUB_BIN" ]]; then
+      DEV_LIB_GITHUB_BIN="${DEV_LIB_GITHUB_TARGET}/gh"
+      if [[ ! -x "${DEV_LIB_GITHUB_BIN}" ]]; then
+        DEV_LIB_GITHUB_SKIP='NO'
+      fi
+    fi
+  fi
+}
+
+#
+# External
+#
+# * External tools only. Use to declare configuration env-vars
+#
+
+# shellcheck disable=SC2154
+{
+  # Auth / GitHub / Token
+  export GITHUB_TOKEN="${GITHUB_TOKEN:-}"
+}
+
+#
+# Internal variables
+#
+# * Shared internal variables for module tasks
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / GitHub / Module environment definition version
+  export DEV_ENV_GITHUB_VERSION='2.0.0'
+
+  # Lib / GitHub / Installer
+  export DEV_LIB_GITHUB_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-ghcli"
 }

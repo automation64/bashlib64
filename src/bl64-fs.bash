@@ -1381,10 +1381,10 @@ function bl64_fs_symlink_create() {
       return 0
     fi
   elif [[ -f "$destination" ]]; then
-    bl64_msg_show_error 'invalid destination. It is already present and it is a regular file'
+    bl64_msg_show_lib_error 'invalid destination. It is already present and it is a regular file'
     return $BL64_LIB_ERROR_TASK_REQUIREMENTS
   elif [[ -d "$destination" ]]; then
-    bl64_msg_show_error 'invalid destination. It is already present and it is a directory'
+    bl64_msg_show_lib_error 'invalid destination. It is already present and it is a directory'
     return $BL64_LIB_ERROR_TASK_REQUIREMENTS
   fi
   bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination" ||

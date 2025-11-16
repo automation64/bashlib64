@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# template-task: 1.9.0
+#######################################
+# Copyright SerDigital64 - https://github.com/serdigital64
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#######################################
+
+# shellcheck source=bin/dev-set
+source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+# shellcheck source-path=/opt/bl64
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
+# shellcheck source-path=bin
+source ./bin/dev-env-bash || exit 1
+
+declare MY_REMOVER="${1:-}"
+declare MY_LOGS="${2:-${DEV_ENV_BASH_PATH_LOGS}}"
+export BL64_LIB_CICD
+
+function my_remove() {
+  bl64_dbg_app_show_function
+
+  bl64_msg_show_task 'Prepare log store'
+  bl64_fs_path_remove "$MY_LOGS"
+  bl64_fs_dir_create \
+    "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$MY_LOGS" ||
+    return $?
+
+  bl64_msg_show_task 'Remove application'
+  BL64_LIB_CICD='YES'
+  "$MY_REMOVER" | "$BL64_OS_CMD_TEE" "${MY_LOGS}/${DEV_REMOVE_BASH_LOG}" 2>&1
+}
+
+function my_initialize() {
+  bl64_dbg_app_show_function
+  bl64_msg_show_about
+  bl64_check_parameter 'MY_REMOVER' &&
+    bl64_check_command "$MY_REMOVER" &&
+    bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
+      'MY_REMOVER' \
+      'MY_LOGS'
+}
+
+[[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
+bl64_lib_script_version_set '1.0.0'
+bl64_msg_help_about_set 'Remove deployed application'
+bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && my_initialize || exit $?
+
+bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
+my_remove
+bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

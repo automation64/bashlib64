@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-env: 1.1.0
+# template-env: 1.2.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -14,19 +14,13 @@
 #######################################
 
 #
-# Globals
+# Module parameters
 #
 # * Use .dev.env file to override values
 #
 
 # shellcheck disable=SC2154
 {
-  # Env / GitLeaks / Module environment definition version
-  export DEV_ENV_GITLEAKS_VERSION='1.2.0'
-  # Lib / GitLeaks / Installer
-  export DEV_LIB_GITLEAKS_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-gitleaks"
-  # Lib / GitLeaks / Target
-  export DEV_LIB_GITLEAKS_TARGET="${DEV_LIB_GITLEAKS_TARGET:-${DEV_PATH_LIB}/glk}"
   # SAST / GitLeaks / Format
   export DEV_SAST_GITLEAKS_FORMAT="${DEV_SAST_GITLEAKS_FORMAT:-sarif}"
 }
@@ -41,6 +35,8 @@
 {
   # Lib / GitLeaks / Skip installation?
   export DEV_LIB_GITLEAKS_SKIP='YES'
+  # Lib / GitLeaks / Target
+  export DEV_LIB_GITLEAKS_TARGET="${DEV_PATH_LIB}/glk"
   # Lib / GitLeaks / Command
   export DEV_LIB_GITLEAKS_BIN="${DEV_LIB_GITLEAKS_BIN:-}"
   if [[ -z "$DEV_LIB_GITLEAKS_BIN" ]]; then
@@ -52,7 +48,18 @@
       fi
     fi
   fi
+}
 
-  # Lib / GitLeaks / Command
-  export DEV_LIB_GITLEAKS_BIN="${DEV_LIB_GITLEAKS_BIN:-${DEV_LIB_GITLEAKS_TARGET}/gitleaks}"
+#
+# Internal variables
+#
+# * Shared internal variables for module tasks
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / GitLeaks / Module environment definition version
+  export DEV_ENV_GITLEAKS_VERSION='1.2.0'
+  # Lib / GitLeaks / Installer
+  export DEV_LIB_GITLEAKS_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-gitleaks"
 }

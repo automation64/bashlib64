@@ -15,7 +15,7 @@
 #   >0: setup failed
 #######################################
 function bl64_xsv_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local search_paths=("${@:-}")
 
   # shellcheck disable=SC2034
@@ -46,6 +46,7 @@ function bl64_xsv_setup() {
 #######################################
 function _bl64_xsv_set_command() {
   bl64_dbg_lib_show_function "$@"
+  BL64_XSV_CMD_PKL="$(bl64_bsh_command_locate 'pkl' "$@")"
   BL64_XSV_CMD_JQ="$(bl64_bsh_command_locate 'jq' "$@")"
   BL64_XSV_CMD_YQ="$(bl64_bsh_command_locate 'yq' "$@")"
   return 0
