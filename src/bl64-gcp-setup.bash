@@ -24,6 +24,11 @@ function bl64_gcp_setup() {
     _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function "$@" &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_XSV_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
     _bl64_gcp_set_command "$gcloud_bin" &&
     _bl64_gcp_set_options &&
     BL64_GCP_MODULE="$BL64_VAR_ON"

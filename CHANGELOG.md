@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [22.5.0]
+## [22.5.1]
 
 ### Added
 
@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - bsh
   - bl64_bsh_command_locate: added /usr/local/sbin. Do not fail if command is not found
+- k8s, mdb, ans, gcp, hlm
+  - Command detection now uses bl64_bsh_command_import. Requires BSH module
 
 ### Fixed
 
