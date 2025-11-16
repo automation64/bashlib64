@@ -583,8 +583,8 @@ function bl64_bsh_command_locate_user() {
 #   STDOUT: full path
 #   STDERR: Error messages
 # Returns:
-#   0: full path detected
-#   >0: unable to detect or error
+#   0: operation completed
+#   >0: unable to complete operation
 #######################################
 function bl64_bsh_command_locate() {
   bl64_dbg_lib_show_function "$@"
@@ -600,20 +600,51 @@ function bl64_bsh_command_locate() {
   search_list+=' /home/linuxbrew/.linuxbrew/bin'
   search_list+=' /opt/homebrew/bin'
   search_list+=' /usr/local/bin'
+  search_list+=' /usr/local/sbin'
   search_list+=' /usr/bin'
-  search_list+=' /bin'
   search_list+=' /usr/sbin'
+  search_list+=' /bin'
   search_list+=' /sbin'
 
   for current_path in $search_list "${@:-}"; do
-    bl64_dbg_lib_show_info "search in: ${current_path}/${command}"
+    bl64_lib_var_is_default "$current_path" && continue
     [[ ! -d "$current_path" ]] && continue
+    bl64_dbg_lib_show_info "search in: ${current_path}/${command}"
     if [[ -x "${current_path}/${command}" ]]; then
       echo "${current_path}/${command}"
       return 0
     fi
   done
-  return $BL64_LIB_ERROR_APP_MISSING
+  return 0
+}
+
+#######################################
+# Locate and show the full path of a command
+#
+#  * Fail if the command is not found
+#  * Output is prepared to be imported as a shell variable value
+#
+# Arguments:
+#   $1: command name
+#   $@: (optional) list of additional paths where to look on
+# Outputs:
+#   STDOUT: full path
+#   STDERR: Error messages
+# Returns:
+#   0: operation completed
+#   >0: unable to complete operation
+#######################################
+function bl64_bsh_command_import() {
+  bl64_dbg_lib_show_function "$@"
+  local command="${1:-}"
+  local command_path=''
+  command_path="$(bl64_bsh_command_locate "$@")" || return $?
+  if [[ -z "$command_path" ]]; then
+    bl64_msg_show_lib_error "Unable to find the required command. Please install it and try again (${command})"
+    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+  else
+    echo "$command_path"
+  fi
 }
 
 #######################################

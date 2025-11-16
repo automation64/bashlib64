@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TF_VERSION='3.0.0'
+  declare BL64_TF_VERSION='3.1.0'
 
   declare BL64_TF_MODULE='0'
 
@@ -12,6 +12,7 @@
   declare BL64_TF_LOG_LEVEL=''
 
   declare BL64_TF_CMD_TERRAFORM="$BL64_VAR_UNAVAILABLE"
+  declare BL64_TF_CMD_TOFU="$BL64_VAR_UNAVAILABLE"
 
   declare BL64_TF_VERSION_CLI=''
 

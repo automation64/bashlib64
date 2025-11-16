@@ -18,7 +18,7 @@
 #   >0: setup failed
 #######################################
 function bl64_cnt_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local command_location="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
@@ -73,48 +73,13 @@ function _bl64_cnt_set_command() {
 
 function _bl64_cnt_set_command_docker() {
   bl64_dbg_lib_show_function "$@"
-  local command_location="$1"
-
-  if bl64_lib_var_is_default "$command_location"; then
-    if [[ -x '/home/linuxbrew/.linuxbrew/bin/docker' ]]; then
-      command_location='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/docker' ]]; then
-      command_location='/opt/homebrew/bin'
-    elif [[ -x '/usr/local/bin/docker' ]]; then
-      command_location='/usr/local/bin'
-    elif [[ -x '/usr/bin/docker' ]]; then
-      command_location='/usr/bin'
-    elif [[ -x "${HOME}/.rd/bin/docker" ]]; then
-      # Rancher Desktop using docker
-      command_location="${HOME}/.rd/bin"
-    fi
-  else
-    bl64_check_directory "$command_location" || return $?
-  fi
-
-  BL64_CNT_CMD_DOCKER="${command_location}/docker"
+  BL64_CNT_CMD_DOCKER="$(bl64_bsh_command_locate 'docker' "${HOME}/.rd/bin" "$@")"
   return 0
 }
 
 function _bl64_cnt_set_command_podman() {
   bl64_dbg_lib_show_function "$@"
-  local command_location="$1"
-
-  if bl64_lib_var_is_default "$command_location"; then
-    if [[ -x '/home/linuxbrew/.linuxbrew/bin/podman' ]]; then
-      command_location='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/podman' ]]; then
-      command_location='/opt/homebrew/bin'
-    elif [[ -x '/usr/local/bin/podman' ]]; then
-      command_location='/usr/local/bin'
-    elif [[ -x '/usr/bin/podman' ]]; then
-      command_location='/usr/bin'
-    fi
-  else
-    bl64_check_directory "$command_location" || return $?
-  fi
-
-  BL64_CNT_CMD_PODMAN="${command_location}/podman"
+  BL64_CNT_CMD_PODMAN="$(bl64_bsh_command_locate 'podman' "$@")"
   return 0
 }
 

@@ -161,3 +161,31 @@ function bl64_xsv_run_yq() {
   "$BL64_XSV_CMD_YQ" "$@"
   bl64_dbg_lib_trace_stop
 }
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_xsv_run_pkl() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_XSV_MODULE' &&
+    bl64_check_command "$BL64_XSV_CMD_PKL" "$BL64_VAR_DEFAULT" 'pkl' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_XSV_CMD_PKL" "$@"
+  bl64_dbg_lib_trace_stop
+}

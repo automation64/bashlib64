@@ -1,5 +1,5 @@
 ---
-# Template: 4.5.0
+# Template: 4.7.0
 name: "Lint / TestManSH"
 
 concurrency:

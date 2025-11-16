@@ -7,5 +7,5 @@
 @test "bl64_bsh_command_locate_user: command not ok - no path" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_bsh_command_locate_user bashx
-  assert_failure
+  assert_success
 }

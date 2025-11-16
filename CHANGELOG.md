@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.5.0]
+
+### Added
+
+- core
+  - bl64_lib_script_minver_check
+- tf
+  - OpenTofu support
+- xsv
+  - PKL-Lang support
+- fmt
+  - bl64_fmt_version_is_less_than_or_equal
+  - bl64_fmt_version_is_less_than
+  - bl64_fmt_version_check_semver_format
+- bsh
+  - bl64_bsh_command_import
+
+### Changed
+
+- bsh
+  - bl64_bsh_command_locate: added /usr/local/sbin. Do not fail if command is not found
+
+### Fixed
+
+- hlm
+  - bl64_hlm_chart_upgrade: kubeconfig check
+- check
+  - bl64_check_export: missing null value check
+
 ## [22.4.1]
 
 ### Added

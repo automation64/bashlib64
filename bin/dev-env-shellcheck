@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# * Version: 1.0.0
+# template-env: 1.2.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -14,7 +14,7 @@
 #######################################
 
 #
-# Globals
+# Module parameters
 #
 # * Use .dev.env file to override values
 #
@@ -23,14 +23,6 @@
 {
   # Env / ShellCheck / Container Registry for tools
   export DEV_ENV_SHELLCHECK_REGISTRY="${DEV_ENV_SHELLCHECK_REGISTRY:-ghcr.io/automation64}"
-  # Env / ShellCheck / Container path for project mounts
-  export DEV_ENV_SHELLCHECK_CONTAINER_PATH_ROOT='/project'
-  # Lib / ShellCheck / Installer
-  export DEV_LIB_SHELLCHECK_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-shellcheck"
-  # Lib / ShellCheck / Target
-  export DEV_LIB_SHELLCHECK_TARGET="${DEV_LIB_SHELLCHECK_TARGET:-${DEV_PATH_LIB}/shellcheck}"
-  # Lib / ShellCheck / Configuration
-  export DEV_LIB_SHELLCHECK_CFG='.shellcheckrc'
   # Lint / ShellCheck / Target
   export DEV_LINT_SHELLCHECK_TARGET="${DEV_LINT_SHELLCHECK_TARGET:-${DEV_BASE_SRC}}"
   # Lint / ShellCheck / Container with linting tool
@@ -47,6 +39,37 @@
 
 # shellcheck disable=SC2154
 {
+  # Lib / ShellCheck / Skip installation?
+  export DEV_LIB_SHELLCHECK_SKIP='YES'
+  # Lib / ShellCheck / Target
+  export DEV_LIB_SHELLCHECK_TARGET="${DEV_PATH_LIB}/shellcheck"
   # Lib / ShellCheck / Command
-  export DEV_LIB_SHELLCHECK_BIN="${DEV_LIB_SHELLCHECK_BIN:-${DEV_LIB_SHELLCHECK_TARGET}/shellcheck}"
+  export DEV_LIB_SHELLCHECK_BIN="${DEV_LIB_SHELLCHECK_BIN:-}"
+  if [[ -z "$DEV_LIB_SHELLCHECK_BIN" ]]; then
+    DEV_LIB_SHELLCHECK_BIN="$(bl64_bsh_command_locate_user 'shellcheck')"
+    if [[ -z "$DEV_LIB_SHELLCHECK_BIN" ]]; then
+      DEV_LIB_SHELLCHECK_BIN="${DEV_LIB_SHELLCHECK_TARGET}/shellcheck"
+      if [[ ! -x "${DEV_LIB_SHELLCHECK_BIN}" ]]; then
+        DEV_LIB_SHELLCHECK_SKIP='NO'
+      fi
+    fi
+  fi
+}
+
+#
+# Internal variables
+#
+# * Shared internal variables for module tasks
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / ShellCheck / Module environment definition version
+  export DEV_ENV_SHELLCHECK_VERSION='1.2.1'
+  # Env / ShellCheck / Container path for project mounts
+  export DEV_ENV_SHELLCHECK_CONTAINER_PATH_ROOT='/project'
+  # Lib / ShellCheck / Installer
+  export DEV_LIB_SHELLCHECK_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-shellcheck"
+  # Lib / ShellCheck / Configuration
+  export DEV_LIB_SHELLCHECK_CFG='.shellcheckrc'
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-test: 1.0.0
+# template-test: 1.1.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -15,13 +15,13 @@
 
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
-# shellcheck source-path=lib/bl64
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+# shellcheck source-path=/opt/bl64
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-cnt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-cnt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 # shellcheck source-path=bin
 source ./bin/dev-env-bash || exit 1
@@ -69,7 +69,7 @@ function my_test_run() {
     my_test_container_run "$container_path" "$test_file"
   fi
   # shellcheck disable=SC2181
-  if (( $? == 0 )); then
+  if (($? == 0)); then
     bl64_msg_show_info 'test result: PASS'
   else
     bl64_msg_show_info 'test result: FAIL'
@@ -105,6 +105,7 @@ function my_test() {
 function my_initialize() {
   bl64_dbg_app_show_function
 
+  bl64_msg_show_about
   bl64_lib_var_is_default "$MY_CONTAINER" &&
     MY_CONTAINER="$DEV_TEST_BASH_CONTAINER"
   if [[ -z "$MY_TARGET" ]]; then
@@ -119,7 +120,7 @@ function my_initialize() {
 }
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '1.4.0'
+bl64_lib_script_version_set '1.4.1'
 bl64_msg_help_about_set 'Run bash test scripts inside a container or on the host'
 bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && my_initialize || exit $?
 

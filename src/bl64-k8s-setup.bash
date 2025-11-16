@@ -16,7 +16,7 @@
 #######################################
 # shellcheck disable=SC2120
 function bl64_k8s_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
@@ -26,7 +26,6 @@ function bl64_k8s_setup() {
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_k8s_set_command "$kubectl_bin" &&
-    bl64_check_command "$BL64_K8S_CMD_KUBECTL" &&
     _bl64_k8s_set_version &&
     _bl64_k8s_set_options &&
     _bl64_k8s_set_runtime &&
@@ -50,28 +49,7 @@ function bl64_k8s_setup() {
 #######################################
 function _bl64_k8s_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
-
-  if bl64_lib_var_is_default "$kubectl_bin"; then
-    bl64_dbg_lib_show_info 'no custom path provided. Using known locations to detect ansible'
-    if [[ -x '/home/linuxbrew/.linuxbrew/bin/kubectl' ]]; then
-      kubectl_bin='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/kubectl' ]]; then
-      kubectl_bin='/opt/homebrew/bin'
-    elif [[ -x '/usr/local/bin/kubectl' ]]; then
-      kubectl_bin='/usr/local/bin'
-    elif [[ -x '/usr/bin/kubectl' ]]; then
-      kubectl_bin='/usr/bin'
-    else
-      bl64_check_alert_resource_not_found 'kubectl'
-      return $?
-    fi
-  fi
-
-  bl64_check_directory "$kubectl_bin" || return $?
-  [[ -x "${kubectl_bin}/kubectl" ]] && BL64_K8S_CMD_KUBECTL="${kubectl_bin}/kubectl"
-
-  bl64_dbg_lib_show_vars 'BL64_K8S_CMD_KUBECTL'
+  BL64_K8S_CMD_KUBECTL="$(bl64_bsh_command_import 'kubectl' "$@")"
 }
 
 #######################################
@@ -90,35 +68,35 @@ function _bl64_k8s_set_options() {
 
   # shellcheck disable=SC2034
   case "$BL64_K8S_VERSION_KUBECTL" in
-  1.2?|1.3?)
-    BL64_K8S_SET_VERBOSE_NONE='--v=0'
-    BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
-    BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
-    BL64_K8S_SET_VERBOSE_TRACE='--v=6'
+    1.2? | 1.3?)
+      BL64_K8S_SET_VERBOSE_NONE='--v=0'
+      BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
+      BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
+      BL64_K8S_SET_VERBOSE_TRACE='--v=6'
 
-    BL64_K8S_SET_OUTPUT_JSON='--output=json'
-    BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
-    BL64_K8S_SET_OUTPUT_TXT='--output=wide'
-    BL64_K8S_SET_OUTPUT_NAME='--output=name'
+      BL64_K8S_SET_OUTPUT_JSON='--output=json'
+      BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
+      BL64_K8S_SET_OUTPUT_TXT='--output=wide'
+      BL64_K8S_SET_OUTPUT_NAME='--output=name'
 
-    BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
-    BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
-    ;;
-  *)
-    bl64_check_compatibility_mode "k8s-api: ${BL64_K8S_VERSION_KUBECTL}" || return $?
-    BL64_K8S_SET_VERBOSE_NONE='--v=0'
-    BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
-    BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
-    BL64_K8S_SET_VERBOSE_TRACE='--v=6'
+      BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
+      BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
+      ;;
+    *)
+      bl64_check_compatibility_mode "k8s-api: ${BL64_K8S_VERSION_KUBECTL}" || return $?
+      BL64_K8S_SET_VERBOSE_NONE='--v=0'
+      BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
+      BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
+      BL64_K8S_SET_VERBOSE_TRACE='--v=6'
 
-    BL64_K8S_SET_OUTPUT_JSON='--output=json'
-    BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
-    BL64_K8S_SET_OUTPUT_TXT='--output=wide'
-    BL64_K8S_SET_OUTPUT_NAME='--output=name'
+      BL64_K8S_SET_OUTPUT_JSON='--output=json'
+      BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
+      BL64_K8S_SET_OUTPUT_TXT='--output=wide'
+      BL64_K8S_SET_OUTPUT_NAME='--output=name'
 
-    BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
-    BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
-    ;;
+      BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
+      BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
+      ;;
   esac
 }
 
@@ -207,8 +185,8 @@ function bl64_k8s_set_kubectl_output() {
   local output="${1:-${BL64_K8S_CFG_KUBECTL_OUTPUT_JSON}}"
 
   case "$output" in
-  "$BL64_K8S_CFG_KUBECTL_OUTPUT_JSON") BL64_K8S_CFG_KUBECTL_OUTPUT="$BL64_K8S_SET_OUTPUT_JSON" ;;
-  "$BL64_K8S_CFG_KUBECTL_OUTPUT_YAML") BL64_K8S_CFG_KUBECTL_OUTPUT="$BL64_K8S_SET_OUTPUT_YAML" ;;
-  *) bl64_check_alert_parameter_invalid ;;
+    "$BL64_K8S_CFG_KUBECTL_OUTPUT_JSON") BL64_K8S_CFG_KUBECTL_OUTPUT="$BL64_K8S_SET_OUTPUT_JSON" ;;
+    "$BL64_K8S_CFG_KUBECTL_OUTPUT_YAML") BL64_K8S_CFG_KUBECTL_OUTPUT="$BL64_K8S_SET_OUTPUT_YAML" ;;
+    *) bl64_check_alert_parameter_invalid ;;
   esac
 }

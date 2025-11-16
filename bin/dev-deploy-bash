@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-task: 1.8.0
+# template-task: 1.9.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -15,16 +15,19 @@
 
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
-# shellcheck source-path=lib/bl64
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+# shellcheck source-path=/opt/bl64
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 # shellcheck source-path=bin
 source ./bin/dev-env-bash || exit 1
 
 declare MY_DEPLOYER="${1:-}"
-declare MY_LOGS="${2:-${DEV_DEPLOY_BASH_LOG_PATH}}"
+declare MY_LOGS="${2:-${DEV_ENV_BASH_PATH_LOGS}}"
+export BL64_LIB_CICD
 
 function my_deploy() {
   bl64_dbg_app_show_function
@@ -36,7 +39,8 @@ function my_deploy() {
     return $?
 
   bl64_msg_show_task 'Deploy application'
-  "$MY_DEPLOYER" | "$BL64_OS_CMD_TEE" "${MY_LOGS}/${DEV_DEPLOY_BASH_LOG_FILE}" 2>&1
+  BL64_LIB_CICD='YES'
+  "$MY_DEPLOYER" | "$BL64_OS_CMD_TEE" "${MY_LOGS}/${DEV_DEPLOY_BASH_LOG}" 2>&1
 }
 
 function my_initialize() {

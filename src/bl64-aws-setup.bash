@@ -33,7 +33,7 @@ function bl64_aws_get_cli_credentials() {
 #######################################
 # shellcheck disable=SC2120
 function bl64_aws_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
   local aws_home="${2:-${BL64_VAR_DEFAULT}}"
 
@@ -68,29 +68,8 @@ function bl64_aws_setup() {
 #######################################
 function _bl64_aws_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local aws_bin="${1:-${BL64_VAR_DEFAULT}}"
-
-  if bl64_lib_var_is_default "$aws_bin"; then
-    if [[ -x '/home/linuxbrew/.linuxbrew/bin/aws' ]]; then
-      aws_bin='/home/linuxbrew/.linuxbrew/bin'
-    elif [[ -x '/opt/homebrew/bin/aws' ]]; then
-      aws_bin='/opt/homebrew/bin'
-    elif [[ -x '/usr/local/bin/aws' ]]; then
-      aws_bin='/usr/local/bin'
-    elif [[ -x '/opt/aws/bin/aws' ]]; then
-      aws_bin='/opt/aws/bin'
-    elif [[ -x '/usr/bin/aws' ]]; then
-      aws_bin='/usr/bin'
-    else
-      bl64_check_alert_resource_not_found 'aws-cli'
-      return $?
-    fi
-  fi
-
-  bl64_check_directory "$aws_bin" || return $?
-  [[ -x "${aws_bin}/aws" ]] && BL64_AWS_CMD_AWS="${aws_bin}/aws"
-
-  bl64_dbg_lib_show_vars 'BL64_AWS_CMD_AWS'
+  BL64_AWS_CMD_AWS="$(bl64_bsh_command_locate 'aws' '/opt/aws/bin' "$@")"
+  return 0
 }
 
 #######################################

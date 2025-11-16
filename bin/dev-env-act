@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-env: 1.1.0
+# template-env: 1.2.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -14,21 +14,13 @@
 #######################################
 
 #
-# Globals
+# Module parameters
 #
 # * Use .dev.env file to override values
 #
 
 # shellcheck disable=SC2154
 {
-  # Env / Act / Module environment definition version
-  export DEV_ENV_ACT_VERSION='1.1.0'
-
-  # Lib / Act / Installer
-  export DEV_LIB_ACT_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-act"
-  # Lib / Act / Target
-  export DEV_LIB_ACT_TARGET="${DEV_LIB_ACT_TARGET:-${DEV_PATH_LIB}/act}"
-
   # Test / Act / List of workflows. Format: job-id, separated by spaces
   export DEV_TEST_ACT_WORKFLOWS="${DEV_TEST_ACT_WORKFLOWS:-}"
 
@@ -46,6 +38,8 @@
 {
   # Lib / Act / Skip installation?
   export DEV_LIB_ACT_SKIP='YES'
+  # Lib / Act / Target
+  export DEV_LIB_ACT_TARGET="${DEV_PATH_LIB}/act"
   # Lib / Act / Command
   export DEV_LIB_ACT_BIN="${DEV_LIB_ACT_BIN:-}"
   if [[ -z "$DEV_LIB_ACT_BIN" ]]; then
@@ -57,4 +51,19 @@
       fi
     fi
   fi
+}
+
+#
+# Internal variables
+#
+# * Shared internal variables for module tasks
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / Act / Module environment definition version
+  export DEV_ENV_ACT_VERSION='1.1.1'
+
+  # Lib / Act / Installer
+  export DEV_LIB_ACT_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-act"
 }

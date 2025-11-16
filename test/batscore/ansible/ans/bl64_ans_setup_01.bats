@@ -12,5 +12,5 @@ setup() {
 @test "bl64_ans_setup: module setup - invalid bin path" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
   run bl64_ans_setup '/no/ansible'
-  assert_failure
+  assert_success
 }

@@ -42,7 +42,7 @@ function _bl64_log_set_target_multiple() {
 #   BL64_LIB_ERROR_MODULE_SETUP_INVALID
 #######################################
 function bl64_log_setup() {
-  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be sourced at the end' && return 21
+  [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
   local log_repository="${1:-}"
   local log_target="${2:-${BL64_VAR_DEFAULT}}"
   local log_type="${3:-${BL64_VAR_DEFAULT}}"

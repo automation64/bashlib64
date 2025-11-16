@@ -4,10 +4,11 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_XSV_VERSION='2.1.1'
+  declare BL64_XSV_VERSION='2.2.0'
 
   declare BL64_XSV_MODULE='0'
 
+  declare BL64_XSV_CMD_PKL="$BL64_VAR_UNAVAILABLE"
   declare BL64_XSV_CMD_YQ="$BL64_VAR_UNAVAILABLE"
   declare BL64_XSV_CMD_JQ="$BL64_VAR_UNAVAILABLE"
 

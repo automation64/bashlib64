@@ -1,5 +1,5 @@
 ---
-# Template: 3.4.0
+# template: 3.6.0
 name: "Test / TestManSH / Container"
 
 env:

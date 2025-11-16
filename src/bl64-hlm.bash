@@ -62,14 +62,17 @@ function bl64_hlm_chart_upgrade() {
   local chart="${3:-}"
   local source="${4:-}"
 
-    bl64_check_parameter 'namespace' &&
+  bl64_check_parameter 'namespace' &&
     bl64_check_parameter 'chart' &&
-    bl64_check_parameter 'source' &&
-    bl64_check_file "$kubeconfig" ||
+    bl64_check_parameter 'source' ||
     return $?
 
-  bl64_lib_var_is_default "$kubeconfig" && kubeconfig=''
-
+  if bl64_lib_var_is_default "$kubeconfig"; then
+    kubeconfig=''
+  else
+    bl64_check_file "$kubeconfig" ||
+      return $?
+  fi
   shift
   shift
   shift

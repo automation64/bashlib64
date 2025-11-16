@@ -47,16 +47,11 @@ function bl64_check_command() {
   local message="${2:-$BL64_VAR_DEFAULT}"
   local command_name="${3:-}"
 
-  bl64_lib_var_is_default "$message" && message='required command is not present'
-
-  if [[ -z "$path" || "$path" == "$BL64_VAR_DEFAULT" ]]; then
-    bl64_msg_show_check "missing command path definition${command_name:+ (command: ${command_name})}"
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PARAMETER_EMPTY
-  fi
+  bl64_lib_var_is_default "$message" && message='command not found'
+  bl64_check_parameter 'path' ${command_name:+"command: ${command_name}"} || return $?
 
   if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
-    bl64_msg_show_check "the requested operation is not supported on the current OS (OS: ${BL64_OS_DISTRO})"
+    bl64_msg_show_check "the requested command is not compatible with the current OS (OS: ${BL64_OS_DISTRO})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
@@ -628,7 +623,7 @@ function bl64_check_alert_module_setup() {
   bl64_check_parameter 'module' || return $?
 
   if [[ "$last_status" != '0' ]]; then
-    bl64_msg_show_check "failed to setup the requested BashLib64 module (module: ${module})"
+    bl64_msg_show_check "BashLib64 module setup failure (module: ${module})"
     return $last_status
   else
     return 0
