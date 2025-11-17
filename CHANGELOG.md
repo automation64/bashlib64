@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [22.5.1]
+## [22.5.2]
 
 ### Added
 
@@ -35,6 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_hlm_chart_upgrade: kubeconfig check
 - check
   - bl64_check_export: missing null value check
+- msg
+  - bl64_msg_show_setup: non existing vars
 
 ## [22.4.1]
 
