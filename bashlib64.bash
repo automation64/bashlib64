@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.5.0'
+  declare BL64_VERSION='22.5.2'
 
   #
   # Imported generic shell standard variables
@@ -633,7 +633,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.12.3'
+  declare BL64_MSG_VERSION='5.12.4'
 
   declare BL64_MSG_MODULE='0'
 
@@ -4376,7 +4376,7 @@ function bl64_msg_show_setup() {
 
   bl64_msg_show_info "$message"
   for variable in "$@"; do
-    [[ -z "${!variable}" ]] && continue
+    [[ -z "${!variable:-}" || ! -v "$variable" ]] && continue
     bl64_msg_show_info "${BL64_MSG_COSMETIC_TAB2}${variable}=${!variable}"
   done
 }
