@@ -258,7 +258,11 @@ function bl64_iam_group_is_created() {
 function bl64_iam_user_get_id() {
   bl64_dbg_lib_show_function "$@"
   local user="$1"
-  bl64_iam_run_id -u "$user"
+  if [[ -z "$user" ]]; then
+    bl64_iam_run_id -u
+  else
+    bl64_iam_run_id -u "$user"
+  fi
 }
 
 #######################################
@@ -513,7 +517,6 @@ function bl64_iam_run_addgroup() {
 #######################################
 function bl64_iam_run_id() {
   bl64_dbg_lib_show_function "$@"
-  local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_IAM_MODULE' &&
@@ -523,7 +526,6 @@ function bl64_iam_run_id() {
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_IAM_CMD_ID" \
-    $verbosity \
     "$@"
   bl64_dbg_lib_trace_stop
 }
