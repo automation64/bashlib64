@@ -81,7 +81,6 @@ function my_initialize() {
 }
 
 
-[[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
 bl64_lib_script_version_set '1.1.1'
 bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose
 

@@ -40,14 +40,13 @@ function bl64_pkg_repository_add() {
     return $?
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    _bl64_pkg_repository_add_apt "$name" "$source" "$gpgkey" "$extra1" "$extra2"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    _bl64_pkg_repository_add_yum "$name" "$source" "$gpgkey"
-    ;;
-  *) bl64_check_alert_unsupported ;;
-
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      _bl64_pkg_repository_add_apt "$name" "$source" "$gpgkey" "$extra1" "$extra2"
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      _bl64_pkg_repository_add_yum "$name" "$source" "$gpgkey"
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -155,34 +154,38 @@ function bl64_pkg_repository_refresh() {
   bl64_msg_show_lib_subtask 'refresh package repository content'
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_apt 'update'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_dnf 'makecache'
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_yum 'makecache'
-    ;;
-  ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_dnf 'makecache'
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_zypper 'refresh'
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_apk 'update'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    bl64_pkg_brew_repository_refresh
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_apt 'update'
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_dnf 'makecache'
+      ;;
+    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_yum 'makecache'
+      ;;
+    ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_dnf 'makecache'
+      ;;
+    ${BL64_OS_SLES}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_zypper 'refresh'
+      ;;
+    ${BL64_OS_ALP}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_apk 'update'
+      ;;
+    ${BL64_OS_ARC}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_pacman --sync --refresh
+      ;;
+    ${BL64_OS_MCOS}-*)
+      bl64_pkg_brew_repository_refresh
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -273,35 +276,38 @@ function bl64_pkg_install() {
   bl64_msg_show_lib_subtask "install packages (${*})"
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_apt 'install' $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES -- "$@"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' "$@"
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
-    ;;
-  ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' "$@"
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_zypper 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_apk 'add' -- "$@"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    bl64_pkg_brew_install "$@"
-    ;;
-  *) bl64_check_alert_unsupported ;;
-
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_apt 'install' $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES -- "$@"
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' "$@"
+      ;;
+    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'install' -- "$@"
+      ;;
+    ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' "$@"
+      ;;
+    ${BL64_OS_SLES}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_zypper 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
+      ;;
+    ${BL64_OS_ALP}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_apk 'add' -- "$@"
+      ;;
+    ${BL64_OS_ARC}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_pacman --sync $BL64_PKG_SET_ASSUME_YES "$@"
+      ;;
+    ${BL64_OS_MCOS}-*)
+      bl64_pkg_brew_install "$@"
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -333,34 +339,38 @@ function bl64_pkg_upgrade() {
 
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES "$@"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
-    ;;
-  ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_zypper 'update' $BL64_PKG_SET_ASSUME_YES "$@"
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_apk 'upgrade' "$@"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    bl64_pkg_brew_upgrade "$@"
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_apt 'upgrade' $BL64_PKG_SET_ASSUME_YES "$@"
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
+      ;;
+    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_yum $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
+      ;;
+    ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
+      ;;
+    ${BL64_OS_SLES}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_zypper 'update' $BL64_PKG_SET_ASSUME_YES "$@"
+      ;;
+    ${BL64_OS_ALP}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_apk 'upgrade' "$@"
+      ;;
+    ${BL64_OS_ARC}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_pacman --upgrade $BL64_PKG_SET_ASSUME_YES "$@"
+      ;;
+    ${BL64_OS_MCOS}-*)
+      bl64_pkg_brew_upgrade "$@"
+      ;;
+    *) bl64_check_alert_unsupported ;;
 
   esac
 }
@@ -392,38 +402,39 @@ function bl64_pkg_cleanup() {
   bl64_msg_show_lib_subtask 'clean up package manager run-time environment'
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_apt 'clean'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_dnf 'clean' 'all'
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_yum 'clean' 'all'
-    ;;
-  ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_dnf 'clean' 'all'
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_zypper 'clean' '--all'
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_check_privilege_root &&
-      bl64_pkg_run_apk 'cache' 'clean'
-    target='/var/cache/apk'
-    if [[ -d "$target" ]]; then
-      bl64_fs_path_remove ${target}/[[:alpha:]]*
-    fi
-    ;;
-  ${BL64_OS_MCOS}-*)
-    bl64_pkg_brew_cleanup
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_apt 'clean'
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_dnf 'clean' 'all'
+      ;;
+    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_yum 'clean' 'all'
+      ;;
+    ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_dnf 'clean' 'all'
+      ;;
+    ${BL64_OS_SLES}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_zypper 'clean' '--all'
+      ;;
+    ${BL64_OS_ALP}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_apk 'cache' 'clean'
+      target='/var/cache/apk'
+      if [[ -d "$target" ]]; then
+        bl64_fs_path_remove ${target}/[[:alpha:]]*
+      fi
+      ;;
+    ${BL64_OS_ARC}-*) : ;;
+    ${BL64_OS_MCOS}-*)
+      bl64_pkg_brew_cleanup
+      ;;
+    *) bl64_check_alert_unsupported ;;
 
   esac
 }
@@ -792,5 +803,37 @@ function bl64_pkg_run_softwareupdate() {
 
   bl64_dbg_lib_trace_start
   "$BL64_PKG_CMD_SOFTWAREUPDATE" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_pkg_run_pacman() {
+  bl64_dbg_lib_show_function "$@"
+  local verbose=''
+
+  bl64_check_module 'BL64_PKG_MODULE' &&
+    bl64_check_parameters_none "$#" ||
+    return $?
+
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+    verbose="$BL64_PKG_SET_VERBOSE"
+  fi
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_PKG_CMD_PACMAN" $verbose "$@"
   bl64_dbg_lib_trace_stop
 }

@@ -25,7 +25,7 @@ export TESTMANSH_TEST_SAMPLES
 #
 
 bl64_msg_all_enable_verbose
-#bl64_dbg_all_enable
+bl64_dbg_all_enable
 #export BL64_LIB_CICD=YES
 
 #
@@ -35,4 +35,4 @@ bl64_msg_all_enable_verbose
 #
 
 # Enable for containers
-bl64_cnt_is_inside_container || { bl64_msg_show_error 'test must be run inside a container'; exit 1; }
+#bl64_cnt_is_inside_container || { bl64_msg_show_error 'test must be run inside a container'; exit 1; }

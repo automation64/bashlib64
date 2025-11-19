@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_OS_VERSION='5.8.2'
+  declare BL64_OS_VERSION='5.9.0'
 
   declare BL64_OS_MODULE='0'
 
@@ -44,6 +44,7 @@
   declare BL64_OS_ALM='ALMALINUX'
   declare BL64_OS_ALP='ALPINE'
   declare BL64_OS_AMZ='AMAZONLINUX'
+  declare BL64_OS_ARC='ARCHLINUX'
   declare BL64_OS_CNT='CENTOS'
   declare BL64_OS_DEB='DEBIAN'
   declare BL64_OS_FD='FEDORA'
@@ -62,6 +63,7 @@
   # * Flavor defines groups of OS distros that are 100% compatible between them
 
   declare BL64_OS_FLAVOR_ALPINE='ALPINE'
+  declare BL64_OS_FLAVOR_ARCH='ARCH'
   declare BL64_OS_FLAVOR_DEBIAN='DEBIAN'
   declare BL64_OS_FLAVOR_FEDORA='FEDORA'
   declare BL64_OS_FLAVOR_MACOS='MACOS'

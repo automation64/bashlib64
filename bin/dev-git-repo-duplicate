@@ -96,7 +96,6 @@ function dev_git_initialize() {
 declare dev_git_destination="${1:-}"
 declare dev_git_dry_run="${2:-YES}"
 
-[[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
 bl64_lib_script_version_set '3.3.1'
 bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose
 

@@ -19,9 +19,12 @@
   # Parameters
   #
 
-  # Main / Debug flag for bin/ scripts
-  export DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-}"
-  [[ -n "$DEV_CICD_DEBUG" ]] && set -x
+  # Main / Debug flag for bin/ scripts (BL64_DBG_TARGET_*)
+  export DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-NONE}"
+
+  # Main / Debug flag for pure bash scripts
+  export DEV_BASH_DEBUG="${DEV_BASH_DEBUG:-}"
+  [[ -n "$DEV_BASH_DEBUG" ]] && set -x
 
   # Main / Verbose format (BL64_MSG_FORMAT_*)
   export DEV_VERBOSE="${DEV_VERBOSE:-FULL}"
@@ -47,7 +50,7 @@
 
   # DevSet / Version
 
-  declare DEV_SET_VERSION='10.1.2'
+  declare DEV_SET_VERSION='10.1.3'
 
   # Main / Bootstrap files. Must be the same as defined in .env
   declare DEV_BOOTSTRAP_STATE='.devbin64'
@@ -165,7 +168,7 @@ function db64_msg_show_error() {
 
 function db64_msg_show_task() {
   local msg="$1"
-  [[ -n "$DEV_CICD_DEBUG" ]] && echo "db64:Task: ${msg}"
+  [[ -n "$DEV_BASH_DEBUG" ]] && echo "db64:Task: ${msg}"
   return 0
 }
 
@@ -420,5 +423,5 @@ _dev_set_initialize &&
   _dev_set_legacy &&
   _dev_set_cleanup ||
   { db64_msg_show_error 'failed to load Dev environment variables' && return 1; }
-[[ -n "$DEV_CICD_DEBUG" ]] && set +x
+[[ -n "$DEV_BASH_DEBUG" ]] && set +x
 :

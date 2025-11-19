@@ -69,6 +69,10 @@ function _bl64_rxtx_set_command() {
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
     BL64_RXTX_CMD_WGET='/usr/bin/wget'
     ;;
+  ${BL64_OS_ARC}-*)
+    BL64_RXTX_CMD_CURL='/usr/bin/curl'
+    BL64_RXTX_CMD_WGET='/usr/bin/wget'
+    ;;
   ${BL64_OS_MCOS}-*)
     BL64_RXTX_CMD_CURL='/usr/bin/curl'
     BL64_RXTX_CMD_WGET="$BL64_VAR_INCOMPATIBLE"
@@ -184,6 +188,21 @@ function _bl64_rxtx_set_options() {
     BL64_RXTX_SET_WGET_SECURE=' '
     BL64_RXTX_SET_WGET_VERBOSE='--verbose'
     ;;
+  ${BL64_OS_ARC}-*)
+    BL64_RXTX_SET_CURL_FAIL='--fail'
+    BL64_RXTX_SET_CURL_HEADER='-H'
+    BL64_RXTX_SET_CURL_INCLUDE='--include'
+    BL64_RXTX_SET_CURL_OUTPUT='--output'
+    BL64_RXTX_SET_CURL_NO_PROGRESS=' '
+    BL64_RXTX_SET_CURL_REDIRECT='--location'
+    BL64_RXTX_SET_CURL_REQUEST='-X'
+    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+    BL64_RXTX_SET_CURL_SILENT='--silent'
+    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
+    BL64_RXTX_SET_WGET_SECURE='--no-config'
+    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+    ;;
   ${BL64_OS_MCOS}-*)
     BL64_RXTX_SET_CURL_FAIL='--fail'
     BL64_RXTX_SET_CURL_HEADER='-H'
@@ -235,6 +254,10 @@ function _bl64_rxtx_set_alias() {
     BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
     ;;
   ${BL64_OS_ALP}-*)
+    BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
+    BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
+    ;;
+  ${BL64_OS_ARC}-*)
     BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
     BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
     ;;

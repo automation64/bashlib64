@@ -39,7 +39,7 @@ function my_initialize() {
   return 0
 }
 
-[[ -n "$DEV_CICD_DEBUG" ]] && set -x
+[[ -n "$DEV_BASH_DEBUG" ]] && set -x
 
 my_initialize &&
   my_profile &&

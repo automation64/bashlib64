@@ -5,11 +5,14 @@
 #
 # Deprecation aliases
 #
-# * Aliases to deprecated functions 
+# * Aliases to deprecated functions
 # * Needed to maintain compatibility up to N-2 versions
 #
 
-function bl64_iam_xdg_create() { bl64_msg_show_deprecated 'bl64_iam_xdg_create' 'bl64_bsh_xdg_create'; bl64_bsh_xdg_create "$@"; }
+function bl64_iam_xdg_create() {
+  bl64_msg_show_deprecated 'bl64_iam_xdg_create' 'bl64_bsh_xdg_create'
+  bl64_bsh_xdg_create "$@"
+}
 
 #
 # Public functions
@@ -61,65 +64,75 @@ function bl64_iam_user_add() {
   bl64_lib_var_is_default "$uid" && uid=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_iam_run_useradd \
-      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
-      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
-      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
-      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
-      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
-      $BL64_IAM_SET_USERADD_CREATE_HOME \
-      "$login"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    bl64_iam_run_useradd \
-      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
-      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
-      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
-      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
-      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
-      $BL64_IAM_SET_USERADD_CREATE_HOME \
-      "$login"
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_dbg_lib_show_comments 'SLES: force primary group creation when group is not specified'
-    [[ -z "$group" ]] && extra_params='--user-group'
-    bl64_dbg_lib_show_comments 'SLES: --user-group and --gid can not be used together'
-    bl64_iam_run_useradd \
-      ${extra_params} \
-      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
-      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
-      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
-      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
-      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
-      $BL64_IAM_SET_USERADD_CREATE_HOME \
-      "$login"
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_dbg_lib_show_comments 'ALP: disable automatic password generation'
-    bl64_iam_run_adduser \
-      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
-      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
-      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
-      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
-      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
-      $BL64_IAM_SET_USERADD_CREATE_HOME \
-      -D \
-      "$login"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    password="$(bl64_rnd_get_numeric)" || return $?
-    bl64_iam_run_sysadminctl \
-      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
-      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
-      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
-      ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
-      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
-      $BL64_IAM_SET_USERADD_CREATE_HOME \
-      -addUser "$login" \
-      -password "$password"
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      bl64_iam_run_useradd \
+        ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
+        ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+        ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+        ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+        ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+        $BL64_IAM_SET_USERADD_CREATE_HOME \
+        "$login"
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      bl64_iam_run_useradd \
+        ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
+        ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+        ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+        ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+        ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+        $BL64_IAM_SET_USERADD_CREATE_HOME \
+        "$login"
+      ;;
+    ${BL64_OS_SLES}-*)
+      bl64_dbg_lib_show_comments 'SLES: force primary group creation when group is not specified'
+      [[ -z "$group" ]] && extra_params='--user-group'
+      bl64_dbg_lib_show_comments 'SLES: --user-group and --gid can not be used together'
+      bl64_iam_run_useradd \
+        ${extra_params} \
+        ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
+        ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+        ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+        ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+        ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+        $BL64_IAM_SET_USERADD_CREATE_HOME \
+        "$login"
+      ;;
+    ${BL64_OS_ALP}-*)
+      bl64_dbg_lib_show_comments 'ALP: disable automatic password generation'
+      bl64_iam_run_adduser \
+        ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
+        ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+        ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+        ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+        ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+        $BL64_IAM_SET_USERADD_CREATE_HOME \
+        -D \
+        "$login"
+      ;;
+    ${BL64_OS_ARC}-*)
+      bl64_iam_run_useradd \
+        ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
+        ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+        ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+        ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+        ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+        $BL64_IAM_SET_USERADD_CREATE_HOME \
+        "$login"
+      ;;
+    ${BL64_OS_MCOS}-*)
+      password="$(bl64_rnd_get_numeric)" || return $?
+      bl64_iam_run_sysadminctl \
+        ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
+        ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+        ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+        ${home:+${BL64_IAM_SET_USERADD_HOME_PATH} "${home}"} \
+        ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+        $BL64_IAM_SET_USERADD_CREATE_HOME \
+        -addUser "$login" \
+        -password "$password"
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -153,27 +166,32 @@ function bl64_iam_group_add() {
   bl64_lib_var_is_default "$group_id" && group_id=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_iam_run_groupadd \
-      ${group_id:+--gid ${group_id}} \
-      "$group_name"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    bl64_iam_run_groupadd \
-      ${group_id:+--gid ${group_id}} \
-      "$group_name"
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_iam_run_groupadd \
-      ${group_id:+--gid ${group_id}} \
-      "$group_name"
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_iam_run_addgroup \
-      ${group_id:+--gid ${group_id}} \
-      "$group_name"
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      bl64_iam_run_groupadd \
+        ${group_id:+--gid ${group_id}} \
+        "$group_name"
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      bl64_iam_run_groupadd \
+        ${group_id:+--gid ${group_id}} \
+        "$group_name"
+      ;;
+    ${BL64_OS_SLES}-*)
+      bl64_iam_run_groupadd \
+        ${group_id:+--gid ${group_id}} \
+        "$group_name"
+      ;;
+    ${BL64_OS_ALP}-*)
+      bl64_iam_run_addgroup \
+        ${group_id:+--gid ${group_id}} \
+        "$group_name"
+      ;;
+    ${BL64_OS_ARC}-*)
+      bl64_iam_run_groupadd \
+        ${group_id:+--gid ${group_id}} \
+        "$group_name"
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -240,27 +258,7 @@ function bl64_iam_group_is_created() {
 function bl64_iam_user_get_id() {
   bl64_dbg_lib_show_function "$@"
   local user="$1"
-
-  # shellcheck disable=SC2086
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_iam_run_id -u $user
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    bl64_iam_run_id -u $user
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_iam_run_id -u $user
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_iam_run_id -u $user
-    ;;
-  ${BL64_OS_MCOS}-*)
-    bl64_iam_run_id -u $user
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-
+  bl64_iam_run_id -u "$user"
 }
 
 #######################################
@@ -598,31 +596,39 @@ function bl64_iam_user_modify() {
   bl64_lib_var_is_default "$uid" && uid=''
   # shellcheck disable=SC2086
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_iam_run_usermod \
-      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
-      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
-      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
-      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
-      "$login"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    bl64_iam_run_usermod \
-      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
-      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
-      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
-      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
-      "$login"
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_dbg_lib_show_comments 'force primary group creation'
-    bl64_iam_run_usermod \
-      ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
-      ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
-      ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
-      ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
-      "$login"
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      bl64_iam_run_usermod \
+        ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
+        ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+        ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+        ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+        "$login"
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      bl64_iam_run_usermod \
+        ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
+        ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+        ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+        ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+        "$login"
+      ;;
+    ${BL64_OS_SLES}-*)
+      bl64_dbg_lib_show_comments 'force primary group creation'
+      bl64_iam_run_usermod \
+        ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
+        ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+        ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+        ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+        "$login"
+      ;;
+    ${BL64_OS_ARC}-*)
+      bl64_iam_run_usermod \
+        ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
+        ${shell:+${BL64_IAM_SET_USERADD_SHELL} "${shell}"} \
+        ${group:+${BL64_IAM_SET_USERADD_GROUP} "${group}"} \
+        ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
+        "$login"
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }

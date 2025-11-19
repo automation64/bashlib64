@@ -51,36 +51,6 @@ function bl64_pkg_setup() {
 #######################################
 function _bl64_pkg_set_command() {
   bl64_dbg_lib_show_function
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_PKG_CMD_APT='/usr/bin/apt'
-    BL64_PKG_CMD_DPKG='/usr/bin/dpkg'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-    BL64_PKG_CMD_DNF='/usr/bin/dnf'
-    BL64_PKG_CMD_RPM='/usr/bin/rpm'
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    BL64_PKG_CMD_YUM='/usr/bin/yum'
-    BL64_PKG_CMD_RPM='/usr/bin/rpm'
-    ;;
-  ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
-    BL64_PKG_CMD_DNF='/usr/bin/dnf'
-    BL64_PKG_CMD_RPM='/usr/bin/rpm'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_PKG_CMD_ZYPPER='/usr/bin/zypper'
-    BL64_PKG_CMD_RPM='/usr/bin/rpm'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_PKG_CMD_APK='/sbin/apk'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_PKG_CMD_INSTALLER='/usr/sbin/installer'
-    BL64_PKG_CMD_SOFTWAREUPDATE='/usr/sbin/softwareupdate'
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
   if [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_MACOS" ]]; then
     BL64_PKG_PATH_BREW_HOME='/opt/homebrew'
     BL64_PKG_CMD_BREW="${BL64_PKG_PATH_BREW_HOME}/bin/brew"
@@ -88,6 +58,39 @@ function _bl64_pkg_set_command() {
     BL64_PKG_PATH_BREW_HOME='/home/linuxbrew/.linuxbrew'
     BL64_PKG_CMD_BREW="${BL64_PKG_PATH_BREW_HOME}/bin/brew"
   fi
+  case "$BL64_OS_DISTRO" in
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_PKG_CMD_APT='/usr/bin/apt'
+      BL64_PKG_CMD_DPKG='/usr/bin/dpkg'
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
+      BL64_PKG_CMD_DNF='/usr/bin/dnf'
+      BL64_PKG_CMD_RPM='/usr/bin/rpm'
+      ;;
+    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+      BL64_PKG_CMD_YUM='/usr/bin/yum'
+      BL64_PKG_CMD_RPM='/usr/bin/rpm'
+      ;;
+    ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+      BL64_PKG_CMD_DNF='/usr/bin/dnf'
+      BL64_PKG_CMD_RPM='/usr/bin/rpm'
+      ;;
+    ${BL64_OS_SLES}-*)
+      BL64_PKG_CMD_ZYPPER='/usr/bin/zypper'
+      BL64_PKG_CMD_RPM='/usr/bin/rpm'
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_PKG_CMD_APK='/sbin/apk'
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_PKG_CMD_PACMAN='/usr/bin/pacman'
+      ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_PKG_CMD_INSTALLER='/usr/sbin/installer'
+      BL64_PKG_CMD_SOFTWAREUPDATE='/usr/sbin/softwareupdate'
+      ;;
+    *) bl64_check_alert_unsupported ;;
+  esac
 }
 
 #######################################
@@ -108,52 +111,56 @@ function _bl64_pkg_set_options() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_PKG_SET_ASSUME_YES='--assume-yes'
-    BL64_PKG_SET_SLIM='--no-install-recommends'
-    BL64_PKG_SET_QUIET='--quiet --quiet'
-    BL64_PKG_SET_VERBOSE='--show-progress'
-    ;;
-  ${BL64_OS_FD}-41.* | ${BL64_OS_FD}-42.*)
-    BL64_PKG_SET_ASSUME_YES='--assumeyes'
-    BL64_PKG_SET_SLIM='--no-docs'
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE=' ' # Not implemented in DNF-5
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-    BL64_PKG_SET_ASSUME_YES='--assumeyes'
-    BL64_PKG_SET_SLIM='--nodocs'
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--color=never --verbose'
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    BL64_PKG_SET_ASSUME_YES='--assumeyes'
-    BL64_PKG_SET_SLIM=' '
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--color=never --verbose'
-    ;;
-  ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
-    BL64_PKG_SET_ASSUME_YES='--assumeyes'
-    BL64_PKG_SET_SLIM='--nodocs'
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--color=never --verbose'
-    ;;
-  ${BL64_OS_SLES}-15.*)
-    BL64_PKG_SET_ASSUME_YES='--no-confirm'
-    BL64_PKG_SET_SLIM=' '
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--verbose'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_PKG_SET_ASSUME_YES=' '
-    BL64_PKG_SET_SLIM=' '
-    BL64_PKG_SET_QUIET='--quiet'
-    BL64_PKG_SET_VERBOSE='--verbose'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    :
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_PKG_SET_ASSUME_YES='--assume-yes'
+      BL64_PKG_SET_SLIM='--no-install-recommends'
+      BL64_PKG_SET_QUIET='--quiet --quiet'
+      BL64_PKG_SET_VERBOSE='--show-progress'
+      ;;
+    ${BL64_OS_FD}-41.* | ${BL64_OS_FD}-42.* | ${BL64_OS_FD}-43.*)
+      BL64_PKG_SET_ASSUME_YES='--assumeyes'
+      BL64_PKG_SET_SLIM='--no-docs'
+      BL64_PKG_SET_QUIET='--quiet'
+      BL64_PKG_SET_VERBOSE=' ' # Not implemented in DNF-5
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
+      BL64_PKG_SET_ASSUME_YES='--assumeyes'
+      BL64_PKG_SET_SLIM='--nodocs'
+      BL64_PKG_SET_QUIET='--quiet'
+      BL64_PKG_SET_VERBOSE='--color=never --verbose'
+      ;;
+    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+      BL64_PKG_SET_ASSUME_YES='--assumeyes'
+      BL64_PKG_SET_SLIM=' '
+      BL64_PKG_SET_QUIET='--quiet'
+      BL64_PKG_SET_VERBOSE='--color=never --verbose'
+      ;;
+    ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+      BL64_PKG_SET_ASSUME_YES='--assumeyes'
+      BL64_PKG_SET_SLIM='--nodocs'
+      BL64_PKG_SET_QUIET='--quiet'
+      BL64_PKG_SET_VERBOSE='--color=never --verbose'
+      ;;
+    ${BL64_OS_SLES}-15.*)
+      BL64_PKG_SET_ASSUME_YES='--no-confirm'
+      BL64_PKG_SET_SLIM=' '
+      BL64_PKG_SET_QUIET='--quiet'
+      BL64_PKG_SET_VERBOSE='--verbose'
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_PKG_SET_ASSUME_YES=' '
+      BL64_PKG_SET_SLIM=' '
+      BL64_PKG_SET_QUIET='--quiet'
+      BL64_PKG_SET_VERBOSE='--verbose'
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_PKG_SET_ASSUME_YES='--noconfirm'
+      BL64_PKG_SET_SLIM=' '
+      BL64_PKG_SET_QUIET='--quiet'
+      BL64_PKG_SET_VERBOSE='--verbose'
+      ;;
+    ${BL64_OS_MCOS}-*) : ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -176,40 +183,39 @@ function _bl64_pkg_set_alias() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-    BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
-    BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
-    BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
-    ;;
-  ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-    BL64_PKG_ALIAS_YUM_CACHE="$BL64_PKG_CMD_YUM ${BL64_PKG_SET_VERBOSE} makecache"
-    BL64_PKG_ALIAS_YUM_INSTALL="$BL64_PKG_CMD_YUM ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_ASSUME_YES} install"
-    BL64_PKG_ALIAS_YUM_CLEAN="$BL64_PKG_CMD_YUM clean all"
-    ;;
-  ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
-    BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
-    BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
-    BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
-    ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_PKG_ALIAS_APT_CACHE="$BL64_PKG_CMD_APT update"
-    BL64_PKG_ALIAS_APT_INSTALL="$BL64_PKG_CMD_APT install ${BL64_PKG_SET_ASSUME_YES} ${BL64_PKG_SET_VERBOSE}"
-    BL64_PKG_ALIAS_APT_CLEAN="$BL64_PKG_CMD_APT clean"
-    ;;
-  ${BL64_OS_SLES}-*)
-    :
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_PKG_ALIAS_APK_CACHE="$BL64_PKG_CMD_APK update ${BL64_PKG_SET_VERBOSE}"
-    BL64_PKG_ALIAS_APK_INSTALL="$BL64_PKG_CMD_APK add ${BL64_PKG_SET_VERBOSE}"
-    BL64_PKG_ALIAS_APK_CLEAN="$BL64_PKG_CMD_APK cache clean ${BL64_PKG_SET_VERBOSE}"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_PKG_ALIAS_BRW_CACHE="$BL64_PKG_CMD_BREW update ${BL64_PKG_SET_VERBOSE}"
-    BL64_PKG_ALIAS_BRW_INSTALL="$BL64_PKG_CMD_BREW install ${BL64_PKG_SET_VERBOSE}"
-    BL64_PKG_ALIAS_BRW_CLEAN="$BL64_PKG_CMD_BREW cleanup ${BL64_PKG_SET_VERBOSE} --prune=all -s"
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
+      BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
+      BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
+      BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
+      ;;
+    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+      BL64_PKG_ALIAS_YUM_CACHE="$BL64_PKG_CMD_YUM ${BL64_PKG_SET_VERBOSE} makecache"
+      BL64_PKG_ALIAS_YUM_INSTALL="$BL64_PKG_CMD_YUM ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_ASSUME_YES} install"
+      BL64_PKG_ALIAS_YUM_CLEAN="$BL64_PKG_CMD_YUM clean all"
+      ;;
+    ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+      BL64_PKG_ALIAS_DNF_CACHE="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} makecache"
+      BL64_PKG_ALIAS_DNF_INSTALL="$BL64_PKG_CMD_DNF ${BL64_PKG_SET_VERBOSE} ${BL64_PKG_SET_SLIM} ${BL64_PKG_SET_ASSUME_YES} install"
+      BL64_PKG_ALIAS_DNF_CLEAN="$BL64_PKG_CMD_DNF clean all"
+      ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_PKG_ALIAS_APT_CACHE="$BL64_PKG_CMD_APT update"
+      BL64_PKG_ALIAS_APT_INSTALL="$BL64_PKG_CMD_APT install ${BL64_PKG_SET_ASSUME_YES} ${BL64_PKG_SET_VERBOSE}"
+      BL64_PKG_ALIAS_APT_CLEAN="$BL64_PKG_CMD_APT clean"
+      ;;
+    ${BL64_OS_SLES}-*) : ;;
+    ${BL64_OS_ALP}-*)
+      BL64_PKG_ALIAS_APK_CACHE="$BL64_PKG_CMD_APK update ${BL64_PKG_SET_VERBOSE}"
+      BL64_PKG_ALIAS_APK_INSTALL="$BL64_PKG_CMD_APK add ${BL64_PKG_SET_VERBOSE}"
+      BL64_PKG_ALIAS_APK_CLEAN="$BL64_PKG_CMD_APK cache clean ${BL64_PKG_SET_VERBOSE}"
+      ;;
+    ${BL64_OS_ARC}-*) : ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_PKG_ALIAS_BRW_CACHE="$BL64_PKG_CMD_BREW update ${BL64_PKG_SET_VERBOSE}"
+      BL64_PKG_ALIAS_BRW_INSTALL="$BL64_PKG_CMD_BREW install ${BL64_PKG_SET_VERBOSE}"
+      BL64_PKG_ALIAS_BRW_CLEAN="$BL64_PKG_CMD_BREW cleanup ${BL64_PKG_SET_VERBOSE} --prune=all -s"
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -227,7 +233,6 @@ function _bl64_pkg_set_alias() {
 #######################################
 function _bl64_pkg_set_runtime() {
   bl64_dbg_lib_show_function
-
   bl64_pkg_set_paths
 }
 
@@ -251,27 +256,20 @@ function bl64_pkg_set_paths() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d'
-    ;;
-  ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
-    BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d'
-    ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_PKG_PATH_APT_SOURCES_LIST_D='/etc/apt/sources.list.d'
-    BL64_PKG_PATH_GPG_KEYRINGS='/usr/share/keyrings'
-    ;;
-  ${BL64_OS_SLES}-*)
-    :
-    ;;
-  ${BL64_OS_ALP}-*)
-    :
-    ;;
-  ${BL64_OS_MCOS}-*)
-    :
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
+      BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d'
+      ;;
+    ${BL64_OS_CNT}-* | ${BL64_OS_OL}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_RCK}-*)
+      BL64_PKG_PATH_YUM_REPOS_D='/etc/yum.repos.d'
+      ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_PKG_PATH_APT_SOURCES_LIST_D='/etc/apt/sources.list.d'
+      BL64_PKG_PATH_GPG_KEYRINGS='/usr/share/keyrings'
+      ;;
+    ${BL64_OS_SLES}-*) : ;;
+    ${BL64_OS_ALP}-*) : ;;
+    ${BL64_OS_ARC}-*) : ;;
+    ${BL64_OS_MCOS}-*) : ;;
+    *) bl64_check_alert_unsupported ;;
   esac
-
-  return 0
 }
