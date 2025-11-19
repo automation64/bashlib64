@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.6.2'
+  declare BL64_VERSION='22.6.3'
 
   #
   # Imported generic shell standard variables
@@ -1092,7 +1092,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CRYP_VERSION='2.4.0'
+  declare BL64_CRYP_VERSION='2.4.1'
 
   declare BL64_CRYP_MODULE='0'
 
@@ -1423,7 +1423,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_RBAC_VERSION='2.3.0'
+  declare BL64_RBAC_VERSION='2.3.1'
 
   declare BL64_RBAC_MODULE='0'
 
@@ -9218,33 +9218,8 @@ function bl64_cryp_setup() {
 # Warning: bootstrap function
 function _bl64_cryp_set_command() {
   # shellcheck disable=SC2034
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_CRYP_CMD_GPG='/usr/bin/gpg'
-    BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_CRYP_CMD_GPG='/usr/bin/gpg'
-    BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_CRYP_CMD_GPG='/usr/bin/gpg'
-    BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_CRYP_CMD_GPG='/usr/bin/gpg'
-    BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_CRYP_CMD_GPG='/usr/bin/gpg'
-    BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_CRYP_CMD_GPG='/usr/bin/gpg'
-    BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
+  BL64_CRYP_CMD_GPG='/usr/bin/gpg'
+  BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
 }
 
 #######################################
@@ -16380,37 +16355,37 @@ function bl64_rbac_setup() {
 function _bl64_rbac_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
-    BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
-    BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
-    BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
-    BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
-    BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
-    BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
-    BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
-    BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
-    BL64_RBAC_CMD_VISUDO='/usr/bin/visudo'
-    BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
-    BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
-    BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
+      BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
+      BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
+      BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
+      BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
+      ;;
+    ${BL64_OS_SLES}-*)
+      BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
+      BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
+      BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
+      BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
+      BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
+      BL64_RBAC_CMD_VISUDO='/usr/bin/visudo'
+      BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
+      ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
+      BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
+      BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -16431,25 +16406,7 @@ function _bl64_rbac_set_command() {
 #######################################
 function _bl64_rbac_set_alias() {
   bl64_dbg_lib_show_function
-  # shellcheck disable=SC2034
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_RBAC_ALIAS_SUDO_ENV="$BL64_RBAC_CMD_SUDO --preserve-env --set-home"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_RBAC_ALIAS_SUDO_ENV="$BL64_RBAC_CMD_SUDO --preserve-env --set-home"
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_RBAC_ALIAS_SUDO_ENV="$BL64_RBAC_CMD_SUDO --preserve-env --set-home"
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_RBAC_ALIAS_SUDO_ENV="$BL64_RBAC_CMD_SUDO --preserve-env --set-home"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_RBAC_ALIAS_SUDO_ENV="$BL64_RBAC_CMD_SUDO --preserve-env --set-home"
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
+  BL64_RBAC_ALIAS_SUDO_ENV="$BL64_RBAC_CMD_SUDO --preserve-env --set-home"
 }
 
 #######################################
@@ -16465,7 +16422,6 @@ function _bl64_rbac_set_alias() {
 #######################################
 function _bl64_rbac_set_options() {
   bl64_dbg_lib_show_function
-
   BL64_RBAC_SET_SUDO_CHECK='--check'
   BL64_RBAC_SET_SUDO_FILE='--file'
   BL64_RBAC_SET_SUDO_QUIET='--quiet'

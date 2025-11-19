@@ -49,31 +49,6 @@ function bl64_cryp_setup() {
 # Warning: bootstrap function
 function _bl64_cryp_set_command() {
   # shellcheck disable=SC2034
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_CRYP_CMD_GPG='/usr/bin/gpg'
-    BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_CRYP_CMD_GPG='/usr/bin/gpg'
-    BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_CRYP_CMD_GPG='/usr/bin/gpg'
-    BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_CRYP_CMD_GPG='/usr/bin/gpg'
-    BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_CRYP_CMD_GPG='/usr/bin/gpg'
-    BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_CRYP_CMD_GPG='/usr/bin/gpg'
-    BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
+  BL64_CRYP_CMD_GPG='/usr/bin/gpg'
+  BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
 }
