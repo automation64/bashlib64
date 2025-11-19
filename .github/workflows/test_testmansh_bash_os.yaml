@@ -18,16 +18,11 @@ on:
     branches:
       - "feature/**"
     paths:
-      - "src/*-api-*"
-      - "src/*-fmt-*"
       - "src/*-fs-*"
       - "src/*-iam-*"
       - "src/*-lib-*"
       - "src/*-os-*"
-      - "src/*-rbac-*"
-      - "src/*-rxtx-*"
       - "src/*-txt-*"
-      - "src/*-vcs-*"
       - "test/batscore/bash-os/**"
 
 jobs:
