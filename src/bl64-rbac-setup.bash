@@ -73,6 +73,11 @@ function _bl64_rbac_set_command() {
     BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
     BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
     ;;
+  ${BL64_OS_ARC}-*)
+    BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
+    BL64_RBAC_CMD_VISUDO='/usr/bin/visudo'
+    BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
+    ;;
   ${BL64_OS_MCOS}-*)
     BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
     BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'

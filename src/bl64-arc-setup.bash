@@ -72,6 +72,10 @@ function _bl64_arc_set_command() {
     BL64_ARC_CMD_TAR='/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
     ;;
+  ${BL64_OS_ARC}-*)
+    BL64_ARC_CMD_TAR='/usr/bin/tar'
+    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    ;;
   ${BL64_OS_MCOS}-*)
     BL64_ARC_CMD_TAR='/usr/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
@@ -109,6 +113,10 @@ function _bl64_arc_set_options() {
     ;;
   ${BL64_OS_ALP}-*)
     BL64_ARC_SET_TAR_VERBOSE='-v'
+    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+    ;;
+  ${BL64_OS_ARC}-*)
+    BL64_ARC_SET_TAR_VERBOSE='--verbose'
     BL64_ARC_SET_UNZIP_OVERWRITE='-o'
     ;;
   ${BL64_OS_MCOS}-*)

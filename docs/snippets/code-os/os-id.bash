@@ -1,3 +1,4 @@
+"${BL64_OS_ARC}" \
 "${BL64_OS_ALM}" \
 "${BL64_OS_ALP}" \
 "${BL64_OS_CNT}" \

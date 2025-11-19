@@ -18,13 +18,18 @@ on:
     branches:
       - "feature/**"
     paths:
-      - "src/*-arc"
-      - "src/*-cryp"
-      - "src/*-log"
-      - "src/*-pkg"
-      - "src/*-py"
-      - "src/*-tm"
-      - "src/*-xsv"
+      - "src/*-api-*"
+      - "src/*-arc-*"
+      - "src/*-cryp-*"
+      - "src/*-fmt-*"
+      - "src/*-log-*"
+      - "src/*-pkg-*"
+      - "src/*-py-*"
+      - "src/*-rbac-*"
+      - "src/*-rxtx-*"
+      - "src/*-tm-*"
+      - "src/*-vcs-*"
+      - "src/*-xsv-*"
       - "test/batscore/bash-opt/**"
 
 jobs:

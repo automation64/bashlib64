@@ -24,7 +24,7 @@ source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2
 # Main
 #
 
-[[ -n "$DEV_CICD_DEBUG" ]] && set -x
+[[ -n "$DEV_BASH_DEBUG" ]] && set -x
 if [[ "$DEV_LIB_BASHLIB64_SKIP" == 'YES' ]]; then
   echo 'dev-lib-bashlib64: Warning: tool already installed. No further action taken'
   exit 0

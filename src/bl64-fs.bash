@@ -552,6 +552,9 @@ function bl64_fs_path_merge() {
         bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" ${source}/* -t "$target" &&
         shopt -uq dotglob
       ;;
+    ${BL64_OS_ARC}-*)
+      bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" --no-target-directory "$source" "$target"
+      ;;
     ${BL64_OS_MCOS}-*)
       # shellcheck disable=SC2086
       bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" ${source}/ "$target"
@@ -1372,7 +1375,7 @@ function bl64_fs_symlink_create() {
 
   bl64_msg_show_lib_subtask "create symbolic link (${source} ${BL64_MSG_COSMETIC_ARROW2} ${destination})"
 
-  if [[ -h "$destination" ]]; then
+  if [[ -L "$destination" ]]; then
     if [[ "$overwrite" == "$BL64_VAR_ON" ]]; then
       bl64_fs_file_remove "$destination" ||
         return $?

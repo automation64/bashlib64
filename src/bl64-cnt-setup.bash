@@ -29,7 +29,6 @@ function bl64_cnt_setup() {
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
     _bl64_cnt_set_command "$command_location" &&
-    bl64_cnt_set_paths &&
     _bl64_cnt_set_options &&
     BL64_CNT_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'cnt'
@@ -134,49 +133,5 @@ function _bl64_cnt_set_options() {
     BL64_CNT_SET_LOG_LEVEL_INFO='info' &&
     BL64_CNT_SET_STATUS_RUNNING='running'
 
-  return 0
-}
-
-#######################################
-# Set and prepare module paths
-#
-# * Global paths only
-# * If preparation fails the whole module fails
-#
-# Arguments:
-#   $1: configuration file name
-#   $2: credential file name
-# Outputs:
-#   STDOUT: None
-#   STDERR: check errors
-# Returns:
-#   0: paths prepared ok
-#   >0: failed to prepare paths
-#######################################
-# shellcheck disable=SC2120
-function bl64_cnt_set_paths() {
-  bl64_dbg_lib_show_function "$@"
-
-  # shellcheck disable=SC2034
-  case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_CNT_PATH_DOCKER_SOCKET='/var/run/docker.sock'
-    ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
-
-  bl64_dbg_lib_show_vars 'BL64_CNT_PATH_DOCKER_SOCKET'
   return 0
 }

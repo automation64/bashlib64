@@ -24,73 +24,73 @@
 function _bl64_os_set_command() {
   # shellcheck disable=SC2034
   case "$BL64_OS_FLAVOR" in
-  "$BL64_OS_FLAVOR_DEBIAN")
-    BL64_OS_CMD_BASH='/bin/bash'
-    BL64_OS_CMD_CAT='/bin/cat'
-    BL64_OS_CMD_DATE='/bin/date'
-    BL64_OS_CMD_FALSE='/bin/false'
-    BL64_OS_CMD_HOSTNAME='/bin/hostname'
-    BL64_OS_CMD_GETENT='/usr/bin/getent'
-    BL64_OS_CMD_LOCALE='/usr/bin/locale'
-    BL64_OS_CMD_SLEEP='/bin/sleep'
-    BL64_OS_CMD_TEE='/usr/bin/tee'
-    BL64_OS_CMD_TRUE='/bin/true'
-    BL64_OS_CMD_UNAME='/bin/uname'
-    ;;
-  "$BL64_OS_FLAVOR_FEDORA" | "$BL64_OS_FLAVOR_REDHAT")
-    BL64_OS_CMD_BASH='/bin/bash'
-    BL64_OS_CMD_CAT='/usr/bin/cat'
-    BL64_OS_CMD_DATE='/bin/date'
-    BL64_OS_CMD_FALSE='/usr/bin/false'
-    BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
-    BL64_OS_CMD_GETENT='/usr/bin/getent'
-    BL64_OS_CMD_LOCALE='/usr/bin/locale'
-    BL64_OS_CMD_SLEEP='/usr/bin/sleep'
-    BL64_OS_CMD_TEE='/usr/bin/tee'
-    BL64_OS_CMD_TRUE='/usr/bin/true'
-    BL64_OS_CMD_UNAME='/bin/uname'
-    ;;
-  "$BL64_OS_FLAVOR_SUSE")
-    BL64_OS_CMD_BASH='/usr/bin/bash'
-    BL64_OS_CMD_CAT='/usr/bin/cat'
-    BL64_OS_CMD_DATE='/usr/bin/date'
-    BL64_OS_CMD_FALSE='/usr/bin/false'
-    BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
-    BL64_OS_CMD_GETENT='/usr/bin/getent'
-    BL64_OS_CMD_LOCALE='/usr/bin/locale'
-    BL64_OS_CMD_SLEEP='/usr/bin/sleep'
-    BL64_OS_CMD_TEE='/usr/bin/tee'
-    BL64_OS_CMD_TRUE='/usr/bin/true'
-    BL64_OS_CMD_UNAME='/usr/bin/uname'
-    ;;
-  "$BL64_OS_FLAVOR_ALPINE")
-    BL64_OS_CMD_BASH='/bin/bash'
-    BL64_OS_CMD_CAT='/bin/cat'
-    BL64_OS_CMD_DATE='/bin/date'
-    BL64_OS_CMD_FALSE='/bin/false'
-    BL64_OS_CMD_HOSTNAME='/bin/hostname'
-    BL64_OS_CMD_GETENT='/usr/bin/getent'
-    BL64_OS_CMD_LOCALE='/usr/bin/locale'
-    BL64_OS_CMD_SLEEP='/bin/sleep'
-    BL64_OS_CMD_TEE='/usr/bin/tee'
-    BL64_OS_CMD_TRUE='/bin/true'
-    BL64_OS_CMD_UNAME='/bin/uname'
-    ;;
-  "$BL64_OS_FLAVOR_MACOS")
-    # Homebrew used when no native option available
-    BL64_OS_CMD_BASH='/opt/homebre/bin/bash'
-    BL64_OS_CMD_CAT='/bin/cat'
-    BL64_OS_CMD_DATE='/bin/date'
-    BL64_OS_CMD_FALSE='/usr/bin/false'
-    BL64_OS_CMD_HOSTNAME='/bin/hostname'
-    BL64_OS_CMD_GETENT="$BL64_VAR_INCOMPATIBLE"
-    BL64_OS_CMD_LOCALE='/usr/bin/locale'
-    BL64_OS_CMD_SLEEP='/usr/bin/sleep'
-    BL64_OS_CMD_TEE='/usr/bin/tee'
-    BL64_OS_CMD_TRUE='/usr/bin/true'
-    BL64_OS_CMD_UNAME='/usr/bin/uname'
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    "$BL64_OS_FLAVOR_DEBIAN")
+      BL64_OS_CMD_BASH='/bin/bash'
+      BL64_OS_CMD_CAT='/bin/cat'
+      BL64_OS_CMD_DATE='/bin/date'
+      BL64_OS_CMD_FALSE='/bin/false'
+      BL64_OS_CMD_HOSTNAME='/bin/hostname'
+      BL64_OS_CMD_GETENT='/usr/bin/getent'
+      BL64_OS_CMD_LOCALE='/usr/bin/locale'
+      BL64_OS_CMD_SLEEP='/bin/sleep'
+      BL64_OS_CMD_TEE='/usr/bin/tee'
+      BL64_OS_CMD_TRUE='/bin/true'
+      BL64_OS_CMD_UNAME='/bin/uname'
+      ;;
+    "$BL64_OS_FLAVOR_FEDORA" | "$BL64_OS_FLAVOR_REDHAT")
+      BL64_OS_CMD_BASH='/bin/bash'
+      BL64_OS_CMD_CAT='/usr/bin/cat'
+      BL64_OS_CMD_DATE='/bin/date'
+      BL64_OS_CMD_FALSE='/usr/bin/false'
+      BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
+      BL64_OS_CMD_GETENT='/usr/bin/getent'
+      BL64_OS_CMD_LOCALE='/usr/bin/locale'
+      BL64_OS_CMD_SLEEP='/usr/bin/sleep'
+      BL64_OS_CMD_TEE='/usr/bin/tee'
+      BL64_OS_CMD_TRUE='/usr/bin/true'
+      BL64_OS_CMD_UNAME='/bin/uname'
+      ;;
+    "$BL64_OS_FLAVOR_SUSE")
+      BL64_OS_CMD_BASH='/usr/bin/bash'
+      BL64_OS_CMD_CAT='/usr/bin/cat'
+      BL64_OS_CMD_DATE='/usr/bin/date'
+      BL64_OS_CMD_FALSE='/usr/bin/false'
+      BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
+      BL64_OS_CMD_GETENT='/usr/bin/getent'
+      BL64_OS_CMD_LOCALE='/usr/bin/locale'
+      BL64_OS_CMD_SLEEP='/usr/bin/sleep'
+      BL64_OS_CMD_TEE='/usr/bin/tee'
+      BL64_OS_CMD_TRUE='/usr/bin/true'
+      BL64_OS_CMD_UNAME='/usr/bin/uname'
+      ;;
+    "$BL64_OS_FLAVOR_ALPINE")
+      BL64_OS_CMD_BASH='/bin/bash'
+      BL64_OS_CMD_CAT='/bin/cat'
+      BL64_OS_CMD_DATE='/bin/date'
+      BL64_OS_CMD_FALSE='/bin/false'
+      BL64_OS_CMD_HOSTNAME='/bin/hostname'
+      BL64_OS_CMD_GETENT='/usr/bin/getent'
+      BL64_OS_CMD_LOCALE='/usr/bin/locale'
+      BL64_OS_CMD_SLEEP='/bin/sleep'
+      BL64_OS_CMD_TEE='/usr/bin/tee'
+      BL64_OS_CMD_TRUE='/bin/true'
+      BL64_OS_CMD_UNAME='/bin/uname'
+      ;;
+    "$BL64_OS_FLAVOR_MACOS")
+      # Homebrew used when no native option available
+      BL64_OS_CMD_BASH='/opt/homebre/bin/bash'
+      BL64_OS_CMD_CAT='/bin/cat'
+      BL64_OS_CMD_DATE='/bin/date'
+      BL64_OS_CMD_FALSE='/usr/bin/false'
+      BL64_OS_CMD_HOSTNAME='/bin/hostname'
+      BL64_OS_CMD_GETENT="$BL64_VAR_INCOMPATIBLE"
+      BL64_OS_CMD_LOCALE='/usr/bin/locale'
+      BL64_OS_CMD_SLEEP='/usr/bin/sleep'
+      BL64_OS_CMD_TEE='/usr/bin/tee'
+      BL64_OS_CMD_TRUE='/usr/bin/true'
+      BL64_OS_CMD_UNAME='/usr/bin/uname'
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -133,35 +133,33 @@ function _bl64_os_set_runtime() {
   if bl64_lib_lang_is_enabled; then
     # shellcheck disable=SC2034
     case "$BL64_OS_DISTRO" in
-    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-      bl64_os_set_lang 'C.UTF-8'
-      ;;
-    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-      bl64_os_set_lang 'C.UTF-8'
-      ;;
-    ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-      bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
-      ;;
-    ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-8.* | ${BL64_OS_OL}-9.* | ${BL64_OS_RCK}-*)
-      bl64_os_set_lang 'C.UTF-8'
-      ;;
-    ${BL64_OS_SLES}-*)
-      bl64_os_set_lang 'C.UTF-8'
-      ;;
-    ${BL64_OS_ALP}-*)
-      bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
-      ;;
-    ${BL64_OS_MCOS}-*)
-      bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
-      ;;
-    *)
-      bl64_check_alert_unsupported
-      return $?
-      ;;
+      ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+        bl64_os_set_lang 'C.UTF-8'
+        ;;
+      ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
+        bl64_os_set_lang 'C.UTF-8'
+        ;;
+      ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
+        bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
+        ;;
+      ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+        bl64_os_set_lang 'C.UTF-8'
+        ;;
+      ${BL64_OS_SLES}-*)
+        bl64_os_set_lang 'C.UTF-8'
+        ;;
+      ${BL64_OS_ALP}-*)
+        bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
+        ;;
+      ${BL64_OS_ARC}-*)
+        bl64_os_set_lang 'C.UTF-8'
+        ;;
+      ${BL64_OS_MCOS}-*)
+        bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
+        ;;
+      *) bl64_check_alert_unsupported ;;
     esac
   fi
-
-  return 0
 }
 
 #######################################
@@ -183,13 +181,13 @@ function _bl64_os_set_type() {
   bl64_dbg_lib_show_function
   BL64_OS_TYPE="$(uname -o)"
   case "$BL64_OS_TYPE" in
-  'Darwin') BL64_OS_TYPE="$BL64_OS_TYPE_MACOS" ;;
-  'GNU/Linux' | 'Linux') BL64_OS_TYPE="$BL64_OS_TYPE_LINUX" ;;
-  *)
-    bl64_msg_show_warning \
-      "BashLib64 was unable to identify the current OS type (${BL64_OS_TYPE})"
-    BL64_OS_TYPE="$BL64_OS_TYPE_UNK"
-    ;;
+    'Darwin') BL64_OS_TYPE="$BL64_OS_TYPE_MACOS" ;;
+    'GNU/Linux' | 'Linux') BL64_OS_TYPE="$BL64_OS_TYPE_LINUX" ;;
+    *)
+      bl64_msg_show_warning \
+        "BashLib64 was unable to identify the current OS type (${BL64_OS_TYPE})"
+      BL64_OS_TYPE="$BL64_OS_TYPE_UNK"
+      ;;
   esac
 }
 
@@ -216,14 +214,14 @@ function _bl64_os_set_machine() {
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
   case "$machine" in
-  'x86_64' | 'amd64') BL64_OS_MACHINE="$BL64_OS_MACHINE_AMD64" ;;
-  'aarch64' | 'arm64') BL64_OS_MACHINE="$BL64_OS_MACHINE_ARM64" ;;
-  *)
-    bl64_msg_show_warning \
-      "BashLib64 was unable to identify the current machine type (${machine})"
-    # shellcheck disable=SC2034
-    BL64_OS_MACHINE="$BL64_OS_MACHINE_UNK"
-    ;;
+    'x86_64' | 'amd64') BL64_OS_MACHINE="$BL64_OS_MACHINE_AMD64" ;;
+    'aarch64' | 'arm64') BL64_OS_MACHINE="$BL64_OS_MACHINE_ARM64" ;;
+    *)
+      bl64_msg_show_warning \
+        "BashLib64 was unable to identify the current machine type (${machine})"
+      # shellcheck disable=SC2034
+      BL64_OS_MACHINE="$BL64_OS_MACHINE_UNK"
+      ;;
   esac
 }
 
@@ -249,21 +247,21 @@ function _bl64_os_get_distro_from_uname() {
   local cmd_sw_vers='/usr/bin/sw_vers'
 
   case "$BL64_OS_TYPE" in
-  "$BL64_OS_TYPE_MACOS")
-    os_version="$("$cmd_sw_vers" -productVersion)" &&
-      BL64_OS_DISTRO="$(_bl64_os_release_normalize "$os_version")" ||
-      return $?
+    "$BL64_OS_TYPE_MACOS")
+      os_version="$("$cmd_sw_vers" -productVersion)" &&
+        BL64_OS_DISTRO="$(_bl64_os_release_normalize "$os_version")" ||
+        return $?
 
-    BL64_OS_DISTRO="DARWIN-${BL64_OS_DISTRO}"
-    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_MACOS"
-    bl64_dbg_lib_show_vars 'BL64_OS_DISTRO'
-    ;;
-  *)
-    BL64_OS_DISTRO="$BL64_OS_UNK"
-    bl64_msg_show_lib_error \
-      "BashLib64 not supported on the current OS. Please check the OS compatibility matrix (OS: ${BL64_OS_TYPE})"
-    return $BL64_LIB_ERROR_OS_INCOMPATIBLE
-    ;;
+      BL64_OS_DISTRO="DARWIN-${BL64_OS_DISTRO}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_MACOS"
+      bl64_dbg_lib_show_vars 'BL64_OS_DISTRO'
+      ;;
+    *)
+      BL64_OS_DISTRO="$BL64_OS_UNK"
+      bl64_msg_show_lib_error \
+        "BashLib64 not supported on the current OS. Please check the OS compatibility matrix (OS: ${BL64_OS_TYPE})"
+      return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+      ;;
   esac
   return 0
 }
@@ -297,63 +295,67 @@ function _bl64_os_get_distro_from_os_release() {
 
   bl64_dbg_lib_show_info 'set BL_OS_DISTRO'
   case "${ID^^}" in
-  'ALMALINUX')
-    BL64_OS_DISTRO="${BL64_OS_ALM}-${version_normalized}"
-    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
-    ;;
-  'ALPINE')
-    BL64_OS_DISTRO="${BL64_OS_ALP}-${version_normalized}"
-    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_ALPINE"
-    ;;
-  'AMZN')
-    BL64_OS_DISTRO="${BL64_OS_AMZ}-${version_normalized}"
-    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_FEDORA"
-    ;;
-  'CENTOS')
-    BL64_OS_DISTRO="${BL64_OS_CNT}-${version_normalized}"
-    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
-    ;;
-  'DEBIAN')
-    BL64_OS_DISTRO="${BL64_OS_DEB}-${version_normalized}"
-    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_DEBIAN"
-    ;;
-  'FEDORA')
-    BL64_OS_DISTRO="${BL64_OS_FD}-${version_normalized}"
-    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_FEDORA"
-    ;;
-  'DARWIN')
-    BL64_OS_DISTRO="${BL64_OS_MCOS}-${version_normalized}"
-    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_MACOS"
-    ;;
-  'KALI')
-    BL64_OS_DISTRO="${BL64_OS_KL}-${version_normalized}"
-    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_DEBIAN"
-    ;;
-  'OL')
-    BL64_OS_DISTRO="${BL64_OS_OL}-${version_normalized}"
-    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
-    ;;
-  'ROCKY')
-    BL64_OS_DISTRO="${BL64_OS_RCK}-${version_normalized}"
-    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
-    ;;
-  'RHEL')
-    BL64_OS_DISTRO="${BL64_OS_RHEL}-${version_normalized}"
-    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
-    ;;
-  'SLES')
-    BL64_OS_DISTRO="${BL64_OS_SLES}-${version_normalized}"
-    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_SUSE"
-    ;;
-  'UBUNTU')
-    BL64_OS_DISTRO="${BL64_OS_UB}-${version_normalized}"
-    BL64_OS_FLAVOR="$BL64_OS_FLAVOR_DEBIAN"
-    ;;
-  *)
-    bl64_msg_show_lib_error \
-      "current OS is not supported. Please check the OS compatibility matrix (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE})"
-    return $BL64_LIB_ERROR_OS_INCOMPATIBLE
-    ;;
+    'ALMALINUX')
+      BL64_OS_DISTRO="${BL64_OS_ALM}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+      ;;
+    'ALPINE')
+      BL64_OS_DISTRO="${BL64_OS_ALP}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_ALPINE"
+      ;;
+    'AMZN')
+      BL64_OS_DISTRO="${BL64_OS_AMZ}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_FEDORA"
+      ;;
+    'ARCH')
+      BL64_OS_DISTRO="${BL64_OS_ARC}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_ARCH"
+      ;;
+    'CENTOS')
+      BL64_OS_DISTRO="${BL64_OS_CNT}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+      ;;
+    'DEBIAN')
+      BL64_OS_DISTRO="${BL64_OS_DEB}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_DEBIAN"
+      ;;
+    'FEDORA')
+      BL64_OS_DISTRO="${BL64_OS_FD}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_FEDORA"
+      ;;
+    'DARWIN')
+      BL64_OS_DISTRO="${BL64_OS_MCOS}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_MACOS"
+      ;;
+    'KALI')
+      BL64_OS_DISTRO="${BL64_OS_KL}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_DEBIAN"
+      ;;
+    'OL')
+      BL64_OS_DISTRO="${BL64_OS_OL}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+      ;;
+    'ROCKY')
+      BL64_OS_DISTRO="${BL64_OS_RCK}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+      ;;
+    'RHEL')
+      BL64_OS_DISTRO="${BL64_OS_RHEL}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
+      ;;
+    'SLES')
+      BL64_OS_DISTRO="${BL64_OS_SLES}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_SUSE"
+      ;;
+    'UBUNTU')
+      BL64_OS_DISTRO="${BL64_OS_UB}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_DEBIAN"
+      ;;
+    *)
+      bl64_msg_show_lib_error \
+        "current OS is not supported. Please check the OS compatibility matrix (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE})"
+      return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+      ;;
   esac
   bl64_dbg_lib_show_vars 'BL64_OS_DISTRO' 'BL64_OS_FLAVOR'
   return 0
@@ -378,15 +380,24 @@ function _bl64_os_release_normalize() {
   local version_pattern_major_minor='^[0-9]+\.[0-9]+$'
   local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
 
-  bl64_dbg_lib_show_info 'normalize OS version to match X.Y'
+  bl64_dbg_lib_show_comments 'normalize OS version to match X.Y'
   if [[ "$version_raw" =~ $version_pattern_single ]]; then
+    bl64_dbg_lib_show_info "version_pattern_single:  ${version_pattern_single}"
     version_normalized="${version_raw}.0"
   elif [[ "$version_raw" =~ $version_pattern_major_minor ]]; then
+    bl64_dbg_lib_show_info "version_pattern_major_minor: ${version_pattern_major_minor}"
     version_normalized="${version_raw}"
   elif [[ "$version_raw" =~ $version_pattern_semver ]]; then
-    version_normalized="${version_raw%.*}"
+    bl64_dbg_lib_show_info "version_pattern_semver: ${version_pattern_semver}"
+    if [[ "${ID^^}" == 'ARCH' ]]; then
+      bl64_dbg_lib_show_comments 'convert rolling version YYYYMMDD to YYYY.MM'
+      version_normalized="${version_raw:0:4}.${version_raw:4:2}"
+    else
+      version_normalized="${version_raw%.*}"
+    fi
   else
-    version_normalized="$version_raw"bl64_os_is_compatible
+    bl64_dbg_lib_show_info "pattern: raw"
+    version_normalized="$version_raw"
   fi
   if [[ "$version_normalized" =~ $version_pattern_major_minor ]]; then
     echo "$version_normalized"

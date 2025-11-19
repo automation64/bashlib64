@@ -79,6 +79,13 @@ function _bl64_iam_set_command() {
     BL64_IAM_CMD_ADDGROUP='/usr/sbin/addgroup'
     BL64_IAM_CMD_ID='/usr/bin/id'
     ;;
+  ${BL64_OS_ARC}-*)
+    BL64_IAM_CMD_USERADD='/usr/bin/useradd'
+    BL64_IAM_CMD_USERMOD='/usr/bin/usermod'
+    BL64_IAM_CMD_GROUPADD='/usr/bin/groupadd'
+    BL64_IAM_CMD_GROUPMOD='/usr/bin/groupmod'
+    BL64_IAM_CMD_ID='/usr/bin/id'
+    ;;
   ${BL64_OS_MCOS}-*)
     BL64_IAM_CMD_SYSADMINCTL='/usr/sbin/sysadminctl'
     BL64_IAM_CMD_ID='/usr/bin/id'
@@ -118,6 +125,9 @@ function _bl64_iam_set_alias() {
     ;;
   ${BL64_OS_ALP}-*)
     BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_ADDUSER"
+    ;;
+  ${BL64_OS_ARC}-*)
+    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_SYSADMINCTL"
@@ -184,6 +194,17 @@ function _bl64_iam_set_options() {
     BL64_IAM_SET_USERADD_HOME_PATH='-h'
     BL64_IAM_SET_USERADD_SHELL='-s'
     BL64_IAM_SET_USERADD_UID='-u'
+
+    BL64_IAM_SYSTEM_USER='root'
+    BL64_IAM_SYSTEM_GROUP='root'
+    ;;
+  ${BL64_OS_ARC}-*)
+    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
+    BL64_IAM_SET_USERADD_GECO='--comment'
+    BL64_IAM_SET_USERADD_GROUP='--gid'
+    BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
+    BL64_IAM_SET_USERADD_SHELL='--shell'
+    BL64_IAM_SET_USERADD_UID='--uid'
 
     BL64_IAM_SYSTEM_USER='root'
     BL64_IAM_SYSTEM_GROUP='root'

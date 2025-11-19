@@ -97,7 +97,6 @@ function dev_git_initialize() {
 declare dev_git_new_tag="${1:-}"
 declare dev_git_include_changelog="${2:-$BL64_VAR_OFF}"
 
-[[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
 bl64_lib_script_version_set '2.2.1'
 bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose
 

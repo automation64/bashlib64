@@ -26,7 +26,7 @@ source ./bin/dev-env-bash || exit 1
 # Main
 #
 
-[[ -n "$DEV_CICD_DEBUG" ]] && set -x
+[[ -n "$DEV_BASH_DEBUG" ]] && set -x
 
 echo 'dev-lib-bash: Task: install Bash Latest'
 [[ "$(uname -s)" != 'Darwin' ]] && exit 0

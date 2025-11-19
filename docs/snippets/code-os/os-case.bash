@@ -11,6 +11,9 @@
   ${BL64_OS_ALP}-*)
     # X_CODE_PLACEHOLDER_X
     ;;
+  ${BL64_OS_ARC}-*)
+    # X_CODE_PLACEHOLDER_X
+    ;;
   ${BL64_OS_MCOS}-*)
     # X_CODE_PLACEHOLDER_X
     ;;

@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CNT_VERSION='3.5.2'
+  declare BL64_CNT_VERSION='4.0.0'
 
   declare BL64_CNT_MODULE='0'
 
@@ -39,6 +39,4 @@
   declare BL64_CNT_SET_LOG_LEVEL_ERROR=''
   declare BL64_CNT_SET_LOG_LEVEL_INFO=''
   declare BL64_CNT_SET_STATUS_RUNNING=''
-
-  declare BL64_CNT_PATH_DOCKER_SOCKET=''
 }

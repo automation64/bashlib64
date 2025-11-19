@@ -75,7 +75,6 @@ function dev_git_initialize() {
 
 declare dev_git_tag="${1:-}"
 
-[[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
 bl64_lib_script_version_set '1.0.1'
 bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose
 

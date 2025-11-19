@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# template-lint: 1.2.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -12,39 +13,25 @@
 # limitations under the License.
 #######################################
 
-#
-# Imports
-#
-
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
 # shellcheck source-path=/opt/bl64
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" ||
-  exit 1
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 # shellcheck source-path=bin
 source ./bin/dev-env-testmansh || exit 1
 
-#
-# Globals
-#
+declare MY_TARGET="${*:-$DEV_LINT_TESTMANSH_SOURCE}"
 
-# Lint / TestmanSH / Configuration
-export DEV_LINT_TESTMANSH_CFG="${DEV_PATH_ROOT}/.shellcheckrc"
-
-#
-# Functions
-#
-
-function dev_lint_testmansh() {
-  bl64_dbg_app_show_function "$@"
-  local target="$*"
+function my_lint() {
+  bl64_dbg_app_show_function
   local current=''
 
-  [[ -z "$target" ]] && target="$DEV_LINT_TESTMANSH_SOURCE"
-  for current in $target; do
+  for current in $MY_TARGET; do
     bl64_msg_show_phase "lint target: ${current}"
     "$DEV_LIB_TESTMANSH_BIN" \
       -t -a -V 'NONE' \
@@ -53,22 +40,18 @@ function dev_lint_testmansh() {
   done
 }
 
-function dev_lint_initialize() {
+function my_initialize() {
   bl64_dbg_app_show_function
-  bl64_check_command_search_path "$DEV_LIB_TESTMANSH_BIN"
+  bl64_msg_show_about
+  bl64_check_command "$DEV_LIB_TESTMANSH_BIN" &&
+    bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
+      'MY_TARGET'
 }
 
-#
-# Main
-#
-
-declare dev_lint_target="${*:-}"
-
-[[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '6.2.1'
-bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose
+bl64_lib_script_version_set '6.2.2'
+bl64_msg_help_about_set 'Lint source code'
+bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && bl64_dbg_set_level "$DEV_CICD_DEBUG" && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
-dev_lint_initialize &&
-  dev_lint_testmansh "$dev_lint_target"
+my_lint
 bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

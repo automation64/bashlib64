@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.6.0]
+
+### Added
+
+- all
+  - ArchLinux support, OEL10, Debian13, Fedora43 support
+
+### Deprecated
+
+- cnt
+  - BL64_CNT_PATH_DOCKER_SOCKET
+  - bl64_cnt_set_paths
+
 ## [22.5.2]
 
 ### Added
