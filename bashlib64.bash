@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.6.0'
+  declare BL64_VERSION='22.6.1'
 
   #
   # Imported generic shell standard variables
@@ -4525,6 +4525,19 @@ function _bl64_os_set_command() {
       BL64_OS_CMD_SLEEP='/bin/sleep'
       BL64_OS_CMD_TEE='/usr/bin/tee'
       BL64_OS_CMD_TRUE='/bin/true'
+      BL64_OS_CMD_UNAME='/bin/uname'
+      ;;
+    "$BL64_OS_FLAVOR_ARCH")
+      BL64_OS_CMD_BASH='/bin/bash'
+      BL64_OS_CMD_CAT='/usr/bin/cat'
+      BL64_OS_CMD_DATE='/bin/date'
+      BL64_OS_CMD_FALSE='/usr/bin/false'
+      BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
+      BL64_OS_CMD_GETENT='/usr/bin/getent'
+      BL64_OS_CMD_LOCALE='/usr/bin/locale'
+      BL64_OS_CMD_SLEEP='/usr/bin/sleep'
+      BL64_OS_CMD_TEE='/usr/bin/tee'
+      BL64_OS_CMD_TRUE='/usr/bin/true'
       BL64_OS_CMD_UNAME='/bin/uname'
       ;;
     "$BL64_OS_FLAVOR_MACOS")
@@ -13109,7 +13122,11 @@ function bl64_iam_group_is_created() {
 function bl64_iam_user_get_id() {
   bl64_dbg_lib_show_function "$@"
   local user="$1"
-  bl64_iam_run_id -u "$user"
+  if [[ -z "$user" ]]; then
+    bl64_iam_run_id -u
+  else
+    bl64_iam_run_id -u "$user"
+  fi
 }
 
 #######################################
@@ -13364,7 +13381,6 @@ function bl64_iam_run_addgroup() {
 #######################################
 function bl64_iam_run_id() {
   bl64_dbg_lib_show_function "$@"
-  local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_IAM_MODULE' &&
@@ -13374,7 +13390,6 @@ function bl64_iam_run_id() {
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_IAM_CMD_ID" \
-    $verbosity \
     "$@"
   bl64_dbg_lib_trace_stop
 }
