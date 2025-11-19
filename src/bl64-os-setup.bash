@@ -76,6 +76,19 @@ function _bl64_os_set_command() {
       BL64_OS_CMD_TRUE='/bin/true'
       BL64_OS_CMD_UNAME='/bin/uname'
       ;;
+    "$BL64_OS_FLAVOR_ARCH")
+      BL64_OS_CMD_BASH='/bin/bash'
+      BL64_OS_CMD_CAT='/usr/bin/cat'
+      BL64_OS_CMD_DATE='/bin/date'
+      BL64_OS_CMD_FALSE='/usr/bin/false'
+      BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
+      BL64_OS_CMD_GETENT='/usr/bin/getent'
+      BL64_OS_CMD_LOCALE='/usr/bin/locale'
+      BL64_OS_CMD_SLEEP='/usr/bin/sleep'
+      BL64_OS_CMD_TEE='/usr/bin/tee'
+      BL64_OS_CMD_TRUE='/usr/bin/true'
+      BL64_OS_CMD_UNAME='/bin/uname'
+      ;;
     "$BL64_OS_FLAVOR_MACOS")
       # Homebrew used when no native option available
       BL64_OS_CMD_BASH='/opt/homebre/bin/bash'
