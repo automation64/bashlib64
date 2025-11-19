@@ -99,7 +99,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.6.1'
+  declare BL64_VERSION='22.6.2'
 
   #
   # Imported generic shell standard variables
@@ -825,7 +825,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_OS_VERSION='5.9.0'
+  declare BL64_OS_VERSION='5.9.1'
 
   declare BL64_OS_MODULE='0'
 
@@ -962,7 +962,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ARC_VERSION='4.2.0'
+  declare BL64_ARC_VERSION='4.2.1'
 
   declare BL64_ARC_MODULE='0'
 
@@ -6271,6 +6271,17 @@ function bl64_arc_open_tar() {
       --overwrite \
       -f "$source" \
       -o
+    ;;
+  ${BL64_OS_ARC}-*)
+    bl64_arc_run_tar \
+      --overwrite \
+      --extract \
+      --no-same-owner \
+      --preserve-permissions \
+      --no-acls \
+      --force-local \
+      --auto-compress \
+      --file="$source"
     ;;
   ${BL64_OS_MCOS}-*)
     bl64_arc_run_tar \

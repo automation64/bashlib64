@@ -165,6 +165,17 @@ function bl64_arc_open_tar() {
       -f "$source" \
       -o
     ;;
+  ${BL64_OS_ARC}-*)
+    bl64_arc_run_tar \
+      --overwrite \
+      --extract \
+      --no-same-owner \
+      --preserve-permissions \
+      --no-acls \
+      --force-local \
+      --auto-compress \
+      --file="$source"
+    ;;
   ${BL64_OS_MCOS}-*)
     bl64_arc_run_tar \
       --extract \
