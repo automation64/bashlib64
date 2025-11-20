@@ -24,8 +24,8 @@ export TESTMANSH_TEST_SAMPLES
 # Debugging Control
 #
 
-bl64_msg_all_enable_verbose
-bl64_dbg_all_enable
+#bl64_msg_all_enable_verbose
+#bl64_dbg_all_enable
 #export BL64_LIB_CICD=YES
 
 #

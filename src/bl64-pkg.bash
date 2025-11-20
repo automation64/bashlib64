@@ -365,13 +365,12 @@ function bl64_pkg_upgrade() {
       ;;
     ${BL64_OS_ARC}-*)
       bl64_check_privilege_root &&
-        bl64_pkg_run_pacman --upgrade $BL64_PKG_SET_ASSUME_YES "$@"
+        bl64_pkg_run_pacman --sync $BL64_PKG_SET_ASSUME_YES "$@"
       ;;
     ${BL64_OS_MCOS}-*)
       bl64_pkg_brew_upgrade "$@"
       ;;
     *) bl64_check_alert_unsupported ;;
-
   esac
 }
 
@@ -435,7 +434,6 @@ function bl64_pkg_cleanup() {
       bl64_pkg_brew_cleanup
       ;;
     *) bl64_check_alert_unsupported ;;
-
   esac
 }
 

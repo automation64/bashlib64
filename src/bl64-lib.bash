@@ -25,38 +25,36 @@ function bl64_lib_var_is_default {
 # Private functions
 #
 
+# shellcheck disable=SC2164
 function _bl64_lib_script_get_path() {
   local -i main=${#BASH_SOURCE[*]}
   local caller=''
+  local current_path="$PWD"
+  local current_cdpath=''
 
   ((main > 0)) && main=$((main - 1))
   caller="${BASH_SOURCE[${main}]}"
 
-  unset CDPATH &&
-    [[ -n "$caller" ]] &&
-    cd -- "${caller%/*}" >/dev/null &&
-    pwd -P ||
-    return $?
+  caller="${caller%/*}"
+  if [[ -n "$caller" ]]; then
+    [[ -n "${CDPATH:-}" ]] && current_cdpath="$CDPATH"
+    cd -- "$caller" >/dev/null 2>&1 &&
+      pwd -P
+    [[ -n "$current_cdpath" ]] && CDPATH="$current_cdpath"
+    cd "$current_path"
+  fi
 }
 
 function _bl64_lib_script_get_name() {
-  local -i main=0
-  local path=''
   local base=''
 
-  main=${#BASH_SOURCE[*]}
-  ((main > 0)) && main=$((main - 1))
-  path="${BASH_SOURCE[${main}]}"
-
-  if [[ -n "$path" && "$path" != '/' ]]; then
-    base="${path##*/}"
+  if [[ -n "$BL64_SCRIPT_PATH" && "$BL64_SCRIPT_PATH" != '/' ]]; then
+    base="${BL64_SCRIPT_PATH##*/}"
   fi
   if [[ -z "$base" || "$base" == */* ]]; then
-    # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
-  else
-    printf '%s' "$base"
+    base='noname'
   fi
+  printf '%s' "$base"
 }
 
 #######################################
