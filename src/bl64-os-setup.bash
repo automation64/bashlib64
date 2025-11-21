@@ -308,6 +308,10 @@ function _bl64_os_get_distro_from_os_release() {
 
   bl64_dbg_lib_show_info 'set BL_OS_DISTRO'
   case "${ID^^}" in
+    'ARCH' | 'CACHYOS')
+      BL64_OS_DISTRO="${BL64_OS_ARC}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_ARCH"
+      ;;
     'ALMALINUX')
       BL64_OS_DISTRO="${BL64_OS_ALM}-${version_normalized}"
       BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
@@ -319,10 +323,6 @@ function _bl64_os_get_distro_from_os_release() {
     'AMZN')
       BL64_OS_DISTRO="${BL64_OS_AMZ}-${version_normalized}"
       BL64_OS_FLAVOR="$BL64_OS_FLAVOR_FEDORA"
-      ;;
-    'ARCH')
-      BL64_OS_DISTRO="${BL64_OS_ARC}-${version_normalized}"
-      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_ARCH"
       ;;
     'CENTOS')
       BL64_OS_DISTRO="${BL64_OS_CNT}-${version_normalized}"
@@ -387,11 +387,13 @@ function _bl64_os_release_load() {
 
 function _bl64_os_release_normalize() {
   bl64_dbg_lib_show_function "$@"
-  local version_raw="$1"
+  local version_raw="${1:-}"
   local version_normalized=''
   local version_pattern_single='^[0-9]+$'
   local version_pattern_major_minor='^[0-9]+\.[0-9]+$'
   local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
+
+  bl64_check_parameter 'version_raw' || return $?
 
   bl64_dbg_lib_show_comments 'normalize OS version to match X.Y'
   if [[ "$version_raw" =~ $version_pattern_single ]]; then
@@ -402,7 +404,7 @@ function _bl64_os_release_normalize() {
     version_normalized="${version_raw}"
   elif [[ "$version_raw" =~ $version_pattern_semver ]]; then
     bl64_dbg_lib_show_info "version_pattern_semver: ${version_pattern_semver}"
-    if [[ "${ID^^}" == 'ARCH' ]]; then
+    if [[ "${ID^^}" =~ ^(ARCH|CACHYOS)$ ]]; then
       bl64_dbg_lib_show_comments 'convert rolling version YYYYMMDD to YYYY.MM'
       version_normalized="${version_raw:0:4}.${version_raw:4:2}"
     else
