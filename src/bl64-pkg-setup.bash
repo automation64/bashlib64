@@ -141,7 +141,7 @@ function _bl64_pkg_set_options() {
       BL64_PKG_SET_QUIET='--quiet'
       BL64_PKG_SET_VERBOSE='--color=never --verbose'
       ;;
-    ${BL64_OS_SLES}-15.*)
+    ${BL64_OS_SLES}-*)
       BL64_PKG_SET_ASSUME_YES='--no-confirm'
       BL64_PKG_SET_SLIM=' '
       BL64_PKG_SET_QUIET='--quiet'

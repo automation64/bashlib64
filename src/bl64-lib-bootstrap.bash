@@ -13,9 +13,13 @@ fi
 
 # Do not inherit aliases and commands
 builtin unset -f unalias
-builtin unalias -a
 builtin unset -f command
+builtin unset -f set
+builtin unalias -a
 builtin hash -r
+
+# Disable debugging by default. Can be reactivated with bl64_dbg_*
+set +x
 
 # Normalize shtop defaults
 builtin shopt -qu \

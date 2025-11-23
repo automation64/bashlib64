@@ -134,6 +134,20 @@ function _bl64_msg_format_ansi() {
       "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
+  "$BL64_MSG_FORMAT_SCRIPT")
+    printf "[%b] %b | %b: %s${linefeed}" \
+      "\e[${!style_fmttime}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_SCRIPT2")
+    printf "%b|%b|%b| %s${linefeed}" \
+      "\e[${!style_fmttime}m$(printf '%(%d%b%Y%H%M%SUTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "$message"
+    ;;
   "$BL64_MSG_FORMAT_FULL")
     printf "[%b] %b:%b | %b: %s${linefeed}" \
       "\e[${!style_fmttime}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
@@ -180,6 +194,20 @@ function _bl64_msg_format_ascii() {
     ;;
   "$BL64_MSG_FORMAT_CALLER")
     printf "[%s] %s: %s${linefeed}" \
+      "$BL64_SCRIPT_ID" \
+      "${!style} $type" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_SCRIPT")
+    printf "[%(%d/%b/%Y-%H:%M:%S-UTC%z)T] %s | %s: %s${linefeed}" \
+      '-1' \
+      "$BL64_SCRIPT_ID" \
+      "${!style} $type" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_SCRIPT2")
+    printf "%(%d%b%Y%H%M%SUTC%z)T|%s|%s| %s${linefeed}" \
+      '-1' \
       "$BL64_SCRIPT_ID" \
       "${!style} $type" \
       "$message"
@@ -633,7 +661,7 @@ function bl64_msg_show_separator() {
     done
   )"
 
-  _bl64_msg_print "$BL64_MSG_TYPE_SEPARATOR" "${BL64_MSG_COSMETIC_ARROW3}    " "${separator}${separator}${separator}[${message}]${output}"
+  _bl64_msg_print "$BL64_MSG_TYPE_SEPARATOR" '>>>>>>>' "${separator}${separator}${separator}[ ${message} ]${output}"
 }
 
 #######################################

@@ -4,6 +4,9 @@
   { echo 'test:Error: unable to load test environment' 2>&1 && exit 1; }
 
 function show() {
+  echo ''
+  echo '================================================================================================='
+  echo ''
   bl64_msg_show_error 'bl64_msg_show_error'
   bl64_msg_show_fatal 'bl64_msg_show_fatal'
   bl64_msg_show_warning 'bl64_msg_show_warning'
@@ -15,7 +18,7 @@ function show() {
   bl64_msg_show_phase 'bl64_msg_show_phase'
   bl64_msg_show_task 'bl64_msg_show_task'
   bl64_msg_show_subtask 'bl64_msg_show_subtask'
-  bl64_msg_show_separator
+  bl64_msg_show_separator 'bl64_msg_show_separator'
   bl64_msg_show_lib_task 'bl64_msg_show_lib_task'
   bl64_msg_show_lib_subtask 'bl64_msg_show_lib_subtask'
   bl64_msg_show_lib_info 'bl64_msg_show_lib_info'
@@ -36,4 +39,8 @@ show
 bl64_msg_set_format "$BL64_MSG_FORMAT_TIME"
 show
 bl64_msg_set_format "$BL64_MSG_FORMAT_CALLER"
+show
+bl64_msg_set_format "$BL64_MSG_FORMAT_SCRIPT"
+show
+bl64_msg_set_format "$BL64_MSG_FORMAT_SCRIPT2"
 show
