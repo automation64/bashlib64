@@ -144,30 +144,11 @@ function _bl64_os_set_runtime() {
 
   # Reset language to modern specification of C locale
   if bl64_lib_lang_is_enabled; then
-    # shellcheck disable=SC2034
-    case "$BL64_OS_DISTRO" in
-      ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+    case "$BL64_OS_FLAVOR" in
+      "${BL64_OS_FLAVOR_DEBIAN}" | "${BL64_OS_FLAVOR_FEDORA}" | "${BL64_OS_FLAVOR_REDHAT}" | "${BL64_OS_FLAVOR_SUSE}" | "${BL64_OS_FLAVOR_ARCH}")
         bl64_os_set_lang 'C.UTF-8'
         ;;
-      ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-        bl64_os_set_lang 'C.UTF-8'
-        ;;
-      ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-        bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
-        ;;
-      ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-        bl64_os_set_lang 'C.UTF-8'
-        ;;
-      ${BL64_OS_SLES}-*)
-        bl64_os_set_lang 'C.UTF-8'
-        ;;
-      ${BL64_OS_ALP}-*)
-        bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
-        ;;
-      ${BL64_OS_ARC}-*)
-        bl64_os_set_lang 'C.UTF-8'
-        ;;
-      ${BL64_OS_MCOS}-*)
+      "${BL64_OS_FLAVOR_MACOS}" | "${BL64_OS_FLAVOR_ALPINE}")
         bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
         ;;
       *) bl64_check_alert_unsupported ;;
@@ -262,7 +243,7 @@ function _bl64_os_get_distro_from_uname() {
   case "$BL64_OS_TYPE" in
     "$BL64_OS_TYPE_MACOS")
       os_version="$("$cmd_sw_vers" -productVersion)" &&
-        BL64_OS_DISTRO="$(_bl64_os_release_normalize "$os_version")" ||
+        BL64_OS_DISTRO="$(_bl64_os_release_normalize "$BL64_VAR_NONE" "$os_version")" ||
         return $?
 
       BL64_OS_DISTRO="DARWIN-${BL64_OS_DISTRO}"
@@ -301,14 +282,19 @@ function _bl64_os_get_distro_from_uname() {
 function _bl64_os_get_distro_from_os_release() {
   bl64_dbg_lib_show_function
   local version_normalized=''
+  local os_id=''
+  local version_id=''
 
   _bl64_os_release_load &&
-    version_normalized="$(_bl64_os_release_normalize "$VERSION_ID")" ||
+    os_id="${ID:-$BL64_VAR_NONE}" &&
+    version_id="${VERSION_ID:-$BL64_VAR_NONE}" &&
+    version_normalized="$(_bl64_os_release_normalize "$os_id" "$version_id")" ||
     return $?
 
   bl64_dbg_lib_show_info 'set BL_OS_DISTRO'
-  case "${ID^^}" in
-    'ARCH' | 'CACHYOS')
+  case "${os_id^^}" in
+    'ARCH' | 'CACHYOS' | 'MANJARO')
+      bl64_dbg_lib_show_comments "treat all arch based distros as arch (ID=${os_id})"
       BL64_OS_DISTRO="${BL64_OS_ARC}-${version_normalized}"
       BL64_OS_FLAVOR="$BL64_OS_FLAVOR_ARCH"
       ;;
@@ -378,7 +364,7 @@ function _bl64_os_release_load() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC1091
   bl64_dbg_lib_show_info 'parse /etc/os-release'
-  if ! source '/etc/os-release' || [[ -z "$ID" || -z "$VERSION_ID" ]]; then
+  if ! source '/etc/os-release'; then
     bl64_msg_show_lib_error 'failed to load OS information from /etc/os-release file'
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
@@ -387,13 +373,16 @@ function _bl64_os_release_load() {
 
 function _bl64_os_release_normalize() {
   bl64_dbg_lib_show_function "$@"
-  local version_raw="${1:-}"
+  local os_id="${1:-}"
+  local version_raw="${2:-}"
   local version_normalized=''
   local version_pattern_single='^[0-9]+$'
   local version_pattern_major_minor='^[0-9]+\.[0-9]+$'
   local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
 
-  bl64_check_parameter 'version_raw' || return $?
+  bl64_check_parameter 'os_id' &&
+    bl64_check_parameter 'version_raw' ||
+    return $?
 
   bl64_dbg_lib_show_comments 'normalize OS version to match X.Y'
   if [[ "$version_raw" =~ $version_pattern_single ]]; then
@@ -404,16 +393,23 @@ function _bl64_os_release_normalize() {
     version_normalized="${version_raw}"
   elif [[ "$version_raw" =~ $version_pattern_semver ]]; then
     bl64_dbg_lib_show_info "version_pattern_semver: ${version_pattern_semver}"
-    if [[ "${ID^^}" =~ ^(ARCH|CACHYOS)$ ]]; then
-      bl64_dbg_lib_show_comments 'convert rolling version YYYYMMDD to YYYY.MM'
+    if [[ "${os_id^^}" =~ ^(ARCH|CACHYOS|MANJARO)$ ]]; then
+      bl64_dbg_lib_show_comments 'convert version format from YYYYMMDD to YYYY.MM'
       version_normalized="${version_raw:0:4}.${version_raw:4:2}"
     else
       version_normalized="${version_raw%.*}"
+    fi
+  elif [[ "$version_raw" == "$BL64_VAR_NONE" ]]; then
+    bl64_dbg_lib_show_info "no version definition. Assume rolling OS"
+    if [[ "${os_id^^}" =~ ^(ARCH|CACHYOS|MANJARO)$ ]]; then
+      bl64_dbg_lib_show_info 'define version as the year-month when the OS was added to bl64'
+      version_normalized='2025.10'
     fi
   else
     bl64_dbg_lib_show_info "pattern: raw"
     version_normalized="$version_raw"
   fi
+
   if [[ "$version_normalized" =~ $version_pattern_major_minor ]]; then
     echo "$version_normalized"
     return 0

@@ -50,23 +50,23 @@ function bl64_msg_set_level() {
   bl64_check_parameter 'level' || return $?
 
   case "$level" in
-  "$BL64_MSG_VERBOSE_NONE")
-    bl64_msg_all_disable_verbose
-    ;;
-  "$BL64_MSG_VERBOSE_APP")
-    bl64_msg_app_enable_verbose
-    ;;
-  "$BL64_MSG_VERBOSE_LIB")
-    bl64_msg_lib_enable_verbose
-    ;;
-  "$BL64_MSG_VERBOSE_ALL")
-    bl64_msg_all_enable_verbose
-    ;;
-  *)
-    bl64_check_alert_parameter_invalid 'BL64_MSG_VERBOSE' \
-      "invalid value. Not one of: ${BL64_MSG_VERBOSE_NONE}|${BL64_MSG_VERBOSE_ALL}|${BL64_MSG_VERBOSE_APP}|${BL64_MSG_VERBOSE_LIB}"
-    return $?
-    ;;
+    "$BL64_MSG_VERBOSE_NONE")
+      bl64_msg_all_disable_verbose
+      ;;
+    "$BL64_MSG_VERBOSE_APP")
+      bl64_msg_app_enable_verbose
+      ;;
+    "$BL64_MSG_VERBOSE_LIB")
+      bl64_msg_lib_enable_verbose
+      ;;
+    "$BL64_MSG_VERBOSE_ALL")
+      bl64_msg_all_enable_verbose
+      ;;
+    *)
+      bl64_check_alert_parameter_invalid 'BL64_MSG_VERBOSE' \
+        "invalid value. Not one of: ${BL64_MSG_VERBOSE_NONE}|${BL64_MSG_VERBOSE_ALL}|${BL64_MSG_VERBOSE_APP}|${BL64_MSG_VERBOSE_LIB}"
+      return $?
+      ;;
   esac
 }
 
@@ -94,26 +94,32 @@ function bl64_msg_set_format() {
   bl64_check_parameter 'format' || return $?
 
   case "$format" in
-  "$BL64_MSG_FORMAT_PLAIN" | "$legacy_BL64_MSG_FORMAT_PLAIN" )
-    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN"
-    ;;
-  "$BL64_MSG_FORMAT_HOST" | "$legacy_BL64_MSG_FORMAT_HOST" )
-    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST"
-    ;;
-  "$BL64_MSG_FORMAT_TIME" | "$legacy_BL64_MSG_FORMAT_TIME" )
-    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME"
-    ;;
-  "$BL64_MSG_FORMAT_CALLER" | "$legacy_BL64_MSG_FORMAT_CALLER" )
-    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER"
-    ;;
-  "$BL64_MSG_FORMAT_FULL" | "$legacy_BL64_MSG_FORMAT_FULL" )
-    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL"
-    ;;
-  *)
-    bl64_check_alert_parameter_invalid 'BL64_MSG_FORMAT' \
-      "invalid value. Not one of: ${BL64_MSG_FORMAT_PLAIN}|${BL64_MSG_FORMAT_HOST}|${BL64_MSG_FORMAT_TIME}|${BL64_MSG_FORMAT_CALLER}|${BL64_MSG_FORMAT_FULL}"
-    return $?
-    ;;
+    "$BL64_MSG_FORMAT_PLAIN" | "$legacy_BL64_MSG_FORMAT_PLAIN")
+      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN"
+      ;;
+    "$BL64_MSG_FORMAT_HOST" | "$legacy_BL64_MSG_FORMAT_HOST")
+      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST"
+      ;;
+    "$BL64_MSG_FORMAT_TIME" | "$legacy_BL64_MSG_FORMAT_TIME")
+      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME"
+      ;;
+    "$BL64_MSG_FORMAT_CALLER" | "$legacy_BL64_MSG_FORMAT_CALLER")
+      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER"
+      ;;
+    "$BL64_MSG_FORMAT_FULL" | "$legacy_BL64_MSG_FORMAT_FULL")
+      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT")
+      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_SCRIPT"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT2")
+      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_SCRIPT2"
+      ;;
+    *)
+      bl64_check_alert_parameter_invalid 'BL64_MSG_FORMAT' \
+        "invalid value. Not one of: ${BL64_MSG_FORMAT_PLAIN}|${BL64_MSG_FORMAT_HOST}|${BL64_MSG_FORMAT_TIME}|${BL64_MSG_FORMAT_CALLER}|${BL64_MSG_FORMAT_SCRIPT}|${BL64_MSG_FORMAT_SCRIPT2}|${BL64_MSG_FORMAT_FULL}"
+      return $?
+      ;;
   esac
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_vars 'BL64_MSG_FORMAT'
   return 0
@@ -138,17 +144,13 @@ function bl64_msg_set_theme() {
   bl64_check_parameter 'theme' || return $?
 
   case "$theme" in
-  "$BL64_MSG_THEME_ID_ASCII_STD")
-    BL64_MSG_THEME='BL64_MSG_THEME_ASCII_STD'
-    ;;
-  "$BL64_MSG_THEME_ID_ANSI_STD")
-    BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD'
-    ;;
-  *)
-    bl64_check_alert_parameter_invalid 'BL64_MSG_THEME' \
-      "invalid value. Not one of: ${BL64_MSG_THEME_ID_ASCII_STD}|${BL64_MSG_THEME_ID_ANSI_STD}"
-    return $?
-    ;;
+    "$BL64_MSG_THEME_ID_ASCII_STD") BL64_MSG_THEME='BL64_MSG_THEME_ASCII_STD' ;;
+    "$BL64_MSG_THEME_ID_ANSI_STD") BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD' ;;
+    *)
+      bl64_check_alert_parameter_invalid 'BL64_MSG_THEME' \
+        "invalid value. Not one of: ${BL64_MSG_THEME_ID_ASCII_STD}|${BL64_MSG_THEME_ID_ANSI_STD}"
+      return $?
+      ;;
   esac
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_vars 'BL64_MSG_THEME'
   return 0
@@ -186,19 +188,19 @@ function bl64_msg_set_output() {
   fi
 
   case "$output" in
-  "$BL64_MSG_OUTPUT_ASCII")
-    bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ASCII_STD"
-    BL64_MSG_OUTPUT="$output"
-    ;;
-  "$BL64_MSG_OUTPUT_ANSI")
-    bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ANSI_STD"
-    BL64_MSG_OUTPUT="$output"
-    ;;
-  *)
-    bl64_check_alert_parameter_invalid 'BL64_MSG_OUTPUT' \
-      "invalid value. Not one of: ${BL64_MSG_OUTPUT_ASCII}|${BL64_MSG_OUTPUT_ANSI}"
-    return $?
-    ;;
+    "$BL64_MSG_OUTPUT_ASCII")
+      bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ASCII_STD"
+      BL64_MSG_OUTPUT="$output"
+      ;;
+    "$BL64_MSG_OUTPUT_ANSI")
+      bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ANSI_STD"
+      BL64_MSG_OUTPUT="$output"
+      ;;
+    *)
+      bl64_check_alert_parameter_invalid 'BL64_MSG_OUTPUT' \
+        "invalid value. Not one of: ${BL64_MSG_OUTPUT_ASCII}|${BL64_MSG_OUTPUT_ANSI}"
+      return $?
+      ;;
   esac
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_vars 'BL64_MSG_OUTPUT'
   bl64_msg_set_theme "$theme"
@@ -238,25 +240,25 @@ function bl64_msg_app_enable_verbose {
 # Help attributes
 #
 
-function bl64_msg_help_usage_set(){
+function bl64_msg_help_usage_set() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local content="${1:-$BL64_VAR_DEFAULT}"
   BL64_MSG_HELP_USAGE="$content"
 }
 
-function bl64_msg_help_about_set(){
+function bl64_msg_help_about_set() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local content="${1:-$BL64_VAR_DEFAULT}"
   BL64_MSG_HELP_ABOUT="$content"
 }
 
-function bl64_msg_help_description_set(){
+function bl64_msg_help_description_set() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local content="${1:-$BL64_VAR_DEFAULT}"
   BL64_MSG_HELP_DESCRIPTION="$content"
 }
 
-function bl64_msg_help_parameters_set(){
+function bl64_msg_help_parameters_set() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local content="${1:-$BL64_VAR_DEFAULT}"
   BL64_MSG_HELP_PARAMETERS="$content"

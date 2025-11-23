@@ -14,8 +14,6 @@
 # Globals
 #
 
-export TESTMANSH_TEST_SAMPLES
-
 #
 # Main
 #

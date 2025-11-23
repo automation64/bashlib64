@@ -5,12 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.8.0]
+
+### Added
+
+- all
+  - Manjaro Linux support
+  - SLES 16 Linux support
+- msg
+  - Message format: SCRIPT, SCRIPT2
+
 ## [22.7.0]
 
 ### Added
 
 - all
-  - CachyOS support
+  - CachyOS Linux support
 
 ## [22.6.4]
 

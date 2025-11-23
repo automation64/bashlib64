@@ -36,9 +36,13 @@ fi
 
 # Do not inherit aliases and commands
 builtin unset -f unalias
-builtin unalias -a
 builtin unset -f command
+builtin unset -f set
+builtin unalias -a
 builtin hash -r
+
+# Disable debugging by default. Can be reactivated with bl64_dbg_*
+set +x
 
 # Normalize shtop defaults
 builtin shopt -qu \
@@ -99,7 +103,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.7.0'
+  declare BL64_VERSION='22.8.0'
 
   #
   # Imported generic shell standard variables
@@ -631,7 +635,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.12.4'
+  declare BL64_MSG_VERSION='5.13.0'
 
   declare BL64_MSG_MODULE='0'
 
@@ -689,6 +693,8 @@ function bl64_lib_script_minver_check() {
   declare BL64_MSG_FORMAT_PLAIN='PLAIN'
   declare BL64_MSG_FORMAT_HOST='HOST'
   declare BL64_MSG_FORMAT_TIME='TIME'
+  declare BL64_MSG_FORMAT_SCRIPT='SCRIPT'
+  declare BL64_MSG_FORMAT_SCRIPT2='SCRIPT2'
   declare BL64_MSG_FORMAT_CALLER='CALLER'
   declare BL64_MSG_FORMAT_FULL='FULL'
 
@@ -708,14 +714,14 @@ function bl64_lib_script_minver_check() {
   declare BL64_MSG_THEME_ASCII_STD_FMTHOST=''
   declare BL64_MSG_THEME_ASCII_STD_FMTTIME=''
   declare BL64_MSG_THEME_ASCII_STD_HELP='(?)'
-  declare BL64_MSG_THEME_ASCII_STD_INFO='(I)'
+  declare BL64_MSG_THEME_ASCII_STD_INFO='(i)'
   declare BL64_MSG_THEME_ASCII_STD_INIT='(:)'
   declare BL64_MSG_THEME_ASCII_STD_INPUT='(?)'
-  declare BL64_MSG_THEME_ASCII_STD_LIBINFO='(II)'
-  declare BL64_MSG_THEME_ASCII_STD_LIBSUBTASK='(>>)'
-  declare BL64_MSG_THEME_ASCII_STD_LIBTASK='(--)'
+  declare BL64_MSG_THEME_ASCII_STD_LIBINFO='(I)'
+  declare BL64_MSG_THEME_ASCII_STD_LIBSUBTASK='(S)'
+  declare BL64_MSG_THEME_ASCII_STD_LIBTASK='(T)'
   declare BL64_MSG_THEME_ASCII_STD_PHASE='(=)'
-  declare BL64_MSG_THEME_ASCII_STD_SEPARATOR=''
+  declare BL64_MSG_THEME_ASCII_STD_SEPARATOR='(#)'
   declare BL64_MSG_THEME_ASCII_STD_SUBTASK='(>)'
   declare BL64_MSG_THEME_ASCII_STD_TASK='(-)'
   declare BL64_MSG_THEME_ASCII_STD_WARNING='(*)'
@@ -823,7 +829,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_OS_VERSION='5.10.0'
+  declare BL64_OS_VERSION='5.11.0'
 
   declare BL64_OS_MODULE='0'
 
@@ -1325,7 +1331,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PKG_VERSION='6.5.1'
+  declare BL64_PKG_VERSION='6.5.2'
 
   declare BL64_PKG_MODULE='0'
 
@@ -3478,23 +3484,23 @@ function bl64_msg_set_level() {
   bl64_check_parameter 'level' || return $?
 
   case "$level" in
-  "$BL64_MSG_VERBOSE_NONE")
-    bl64_msg_all_disable_verbose
-    ;;
-  "$BL64_MSG_VERBOSE_APP")
-    bl64_msg_app_enable_verbose
-    ;;
-  "$BL64_MSG_VERBOSE_LIB")
-    bl64_msg_lib_enable_verbose
-    ;;
-  "$BL64_MSG_VERBOSE_ALL")
-    bl64_msg_all_enable_verbose
-    ;;
-  *)
-    bl64_check_alert_parameter_invalid 'BL64_MSG_VERBOSE' \
-      "invalid value. Not one of: ${BL64_MSG_VERBOSE_NONE}|${BL64_MSG_VERBOSE_ALL}|${BL64_MSG_VERBOSE_APP}|${BL64_MSG_VERBOSE_LIB}"
-    return $?
-    ;;
+    "$BL64_MSG_VERBOSE_NONE")
+      bl64_msg_all_disable_verbose
+      ;;
+    "$BL64_MSG_VERBOSE_APP")
+      bl64_msg_app_enable_verbose
+      ;;
+    "$BL64_MSG_VERBOSE_LIB")
+      bl64_msg_lib_enable_verbose
+      ;;
+    "$BL64_MSG_VERBOSE_ALL")
+      bl64_msg_all_enable_verbose
+      ;;
+    *)
+      bl64_check_alert_parameter_invalid 'BL64_MSG_VERBOSE' \
+        "invalid value. Not one of: ${BL64_MSG_VERBOSE_NONE}|${BL64_MSG_VERBOSE_ALL}|${BL64_MSG_VERBOSE_APP}|${BL64_MSG_VERBOSE_LIB}"
+      return $?
+      ;;
   esac
 }
 
@@ -3522,26 +3528,32 @@ function bl64_msg_set_format() {
   bl64_check_parameter 'format' || return $?
 
   case "$format" in
-  "$BL64_MSG_FORMAT_PLAIN" | "$legacy_BL64_MSG_FORMAT_PLAIN" )
-    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN"
-    ;;
-  "$BL64_MSG_FORMAT_HOST" | "$legacy_BL64_MSG_FORMAT_HOST" )
-    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST"
-    ;;
-  "$BL64_MSG_FORMAT_TIME" | "$legacy_BL64_MSG_FORMAT_TIME" )
-    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME"
-    ;;
-  "$BL64_MSG_FORMAT_CALLER" | "$legacy_BL64_MSG_FORMAT_CALLER" )
-    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER"
-    ;;
-  "$BL64_MSG_FORMAT_FULL" | "$legacy_BL64_MSG_FORMAT_FULL" )
-    BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL"
-    ;;
-  *)
-    bl64_check_alert_parameter_invalid 'BL64_MSG_FORMAT' \
-      "invalid value. Not one of: ${BL64_MSG_FORMAT_PLAIN}|${BL64_MSG_FORMAT_HOST}|${BL64_MSG_FORMAT_TIME}|${BL64_MSG_FORMAT_CALLER}|${BL64_MSG_FORMAT_FULL}"
-    return $?
-    ;;
+    "$BL64_MSG_FORMAT_PLAIN" | "$legacy_BL64_MSG_FORMAT_PLAIN")
+      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN"
+      ;;
+    "$BL64_MSG_FORMAT_HOST" | "$legacy_BL64_MSG_FORMAT_HOST")
+      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST"
+      ;;
+    "$BL64_MSG_FORMAT_TIME" | "$legacy_BL64_MSG_FORMAT_TIME")
+      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME"
+      ;;
+    "$BL64_MSG_FORMAT_CALLER" | "$legacy_BL64_MSG_FORMAT_CALLER")
+      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER"
+      ;;
+    "$BL64_MSG_FORMAT_FULL" | "$legacy_BL64_MSG_FORMAT_FULL")
+      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT")
+      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_SCRIPT"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT2")
+      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_SCRIPT2"
+      ;;
+    *)
+      bl64_check_alert_parameter_invalid 'BL64_MSG_FORMAT' \
+        "invalid value. Not one of: ${BL64_MSG_FORMAT_PLAIN}|${BL64_MSG_FORMAT_HOST}|${BL64_MSG_FORMAT_TIME}|${BL64_MSG_FORMAT_CALLER}|${BL64_MSG_FORMAT_SCRIPT}|${BL64_MSG_FORMAT_SCRIPT2}|${BL64_MSG_FORMAT_FULL}"
+      return $?
+      ;;
   esac
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_vars 'BL64_MSG_FORMAT'
   return 0
@@ -3566,17 +3578,13 @@ function bl64_msg_set_theme() {
   bl64_check_parameter 'theme' || return $?
 
   case "$theme" in
-  "$BL64_MSG_THEME_ID_ASCII_STD")
-    BL64_MSG_THEME='BL64_MSG_THEME_ASCII_STD'
-    ;;
-  "$BL64_MSG_THEME_ID_ANSI_STD")
-    BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD'
-    ;;
-  *)
-    bl64_check_alert_parameter_invalid 'BL64_MSG_THEME' \
-      "invalid value. Not one of: ${BL64_MSG_THEME_ID_ASCII_STD}|${BL64_MSG_THEME_ID_ANSI_STD}"
-    return $?
-    ;;
+    "$BL64_MSG_THEME_ID_ASCII_STD") BL64_MSG_THEME='BL64_MSG_THEME_ASCII_STD' ;;
+    "$BL64_MSG_THEME_ID_ANSI_STD") BL64_MSG_THEME='BL64_MSG_THEME_ANSI_STD' ;;
+    *)
+      bl64_check_alert_parameter_invalid 'BL64_MSG_THEME' \
+        "invalid value. Not one of: ${BL64_MSG_THEME_ID_ASCII_STD}|${BL64_MSG_THEME_ID_ANSI_STD}"
+      return $?
+      ;;
   esac
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_vars 'BL64_MSG_THEME'
   return 0
@@ -3614,19 +3622,19 @@ function bl64_msg_set_output() {
   fi
 
   case "$output" in
-  "$BL64_MSG_OUTPUT_ASCII")
-    bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ASCII_STD"
-    BL64_MSG_OUTPUT="$output"
-    ;;
-  "$BL64_MSG_OUTPUT_ANSI")
-    bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ANSI_STD"
-    BL64_MSG_OUTPUT="$output"
-    ;;
-  *)
-    bl64_check_alert_parameter_invalid 'BL64_MSG_OUTPUT' \
-      "invalid value. Not one of: ${BL64_MSG_OUTPUT_ASCII}|${BL64_MSG_OUTPUT_ANSI}"
-    return $?
-    ;;
+    "$BL64_MSG_OUTPUT_ASCII")
+      bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ASCII_STD"
+      BL64_MSG_OUTPUT="$output"
+      ;;
+    "$BL64_MSG_OUTPUT_ANSI")
+      bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ANSI_STD"
+      BL64_MSG_OUTPUT="$output"
+      ;;
+    *)
+      bl64_check_alert_parameter_invalid 'BL64_MSG_OUTPUT' \
+        "invalid value. Not one of: ${BL64_MSG_OUTPUT_ASCII}|${BL64_MSG_OUTPUT_ANSI}"
+      return $?
+      ;;
   esac
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_vars 'BL64_MSG_OUTPUT'
   bl64_msg_set_theme "$theme"
@@ -3666,25 +3674,25 @@ function bl64_msg_app_enable_verbose {
 # Help attributes
 #
 
-function bl64_msg_help_usage_set(){
+function bl64_msg_help_usage_set() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local content="${1:-$BL64_VAR_DEFAULT}"
   BL64_MSG_HELP_USAGE="$content"
 }
 
-function bl64_msg_help_about_set(){
+function bl64_msg_help_about_set() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local content="${1:-$BL64_VAR_DEFAULT}"
   BL64_MSG_HELP_ABOUT="$content"
 }
 
-function bl64_msg_help_description_set(){
+function bl64_msg_help_description_set() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local content="${1:-$BL64_VAR_DEFAULT}"
   BL64_MSG_HELP_DESCRIPTION="$content"
 }
 
-function bl64_msg_help_parameters_set(){
+function bl64_msg_help_parameters_set() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local content="${1:-$BL64_VAR_DEFAULT}"
   BL64_MSG_HELP_PARAMETERS="$content"
@@ -3826,6 +3834,20 @@ function _bl64_msg_format_ansi() {
       "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
+  "$BL64_MSG_FORMAT_SCRIPT")
+    printf "[%b] %b | %b: %s${linefeed}" \
+      "\e[${!style_fmttime}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_SCRIPT2")
+    printf "%b|%b|%b| %s${linefeed}" \
+      "\e[${!style_fmttime}m$(printf '%(%d%b%Y%H%M%SUTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "$message"
+    ;;
   "$BL64_MSG_FORMAT_FULL")
     printf "[%b] %b:%b | %b: %s${linefeed}" \
       "\e[${!style_fmttime}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
@@ -3872,6 +3894,20 @@ function _bl64_msg_format_ascii() {
     ;;
   "$BL64_MSG_FORMAT_CALLER")
     printf "[%s] %s: %s${linefeed}" \
+      "$BL64_SCRIPT_ID" \
+      "${!style} $type" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_SCRIPT")
+    printf "[%(%d/%b/%Y-%H:%M:%S-UTC%z)T] %s | %s: %s${linefeed}" \
+      '-1' \
+      "$BL64_SCRIPT_ID" \
+      "${!style} $type" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_SCRIPT2")
+    printf "%(%d%b%Y%H%M%SUTC%z)T|%s|%s| %s${linefeed}" \
+      '-1' \
       "$BL64_SCRIPT_ID" \
       "${!style} $type" \
       "$message"
@@ -4325,7 +4361,7 @@ function bl64_msg_show_separator() {
     done
   )"
 
-  _bl64_msg_print "$BL64_MSG_TYPE_SEPARATOR" "${BL64_MSG_COSMETIC_ARROW3}    " "${separator}${separator}${separator}[${message}]${output}"
+  _bl64_msg_print "$BL64_MSG_TYPE_SEPARATOR" '>>>>>>>' "${separator}${separator}${separator}[ ${message} ]${output}"
 }
 
 #######################################
@@ -4593,30 +4629,11 @@ function _bl64_os_set_runtime() {
 
   # Reset language to modern specification of C locale
   if bl64_lib_lang_is_enabled; then
-    # shellcheck disable=SC2034
-    case "$BL64_OS_DISTRO" in
-      ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+    case "$BL64_OS_FLAVOR" in
+      "${BL64_OS_FLAVOR_DEBIAN}" | "${BL64_OS_FLAVOR_FEDORA}" | "${BL64_OS_FLAVOR_REDHAT}" | "${BL64_OS_FLAVOR_SUSE}" | "${BL64_OS_FLAVOR_ARCH}")
         bl64_os_set_lang 'C.UTF-8'
         ;;
-      ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-        bl64_os_set_lang 'C.UTF-8'
-        ;;
-      ${BL64_OS_CNT}-7.* | ${BL64_OS_OL}-7.*)
-        bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
-        ;;
-      ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-        bl64_os_set_lang 'C.UTF-8'
-        ;;
-      ${BL64_OS_SLES}-*)
-        bl64_os_set_lang 'C.UTF-8'
-        ;;
-      ${BL64_OS_ALP}-*)
-        bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
-        ;;
-      ${BL64_OS_ARC}-*)
-        bl64_os_set_lang 'C.UTF-8'
-        ;;
-      ${BL64_OS_MCOS}-*)
+      "${BL64_OS_FLAVOR_MACOS}" | "${BL64_OS_FLAVOR_ALPINE}")
         bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
         ;;
       *) bl64_check_alert_unsupported ;;
@@ -4711,7 +4728,7 @@ function _bl64_os_get_distro_from_uname() {
   case "$BL64_OS_TYPE" in
     "$BL64_OS_TYPE_MACOS")
       os_version="$("$cmd_sw_vers" -productVersion)" &&
-        BL64_OS_DISTRO="$(_bl64_os_release_normalize "$os_version")" ||
+        BL64_OS_DISTRO="$(_bl64_os_release_normalize "$BL64_VAR_NONE" "$os_version")" ||
         return $?
 
       BL64_OS_DISTRO="DARWIN-${BL64_OS_DISTRO}"
@@ -4750,14 +4767,19 @@ function _bl64_os_get_distro_from_uname() {
 function _bl64_os_get_distro_from_os_release() {
   bl64_dbg_lib_show_function
   local version_normalized=''
+  local os_id=''
+  local version_id=''
 
   _bl64_os_release_load &&
-    version_normalized="$(_bl64_os_release_normalize "$VERSION_ID")" ||
+    os_id="${ID:-$BL64_VAR_NONE}" &&
+    version_id="${VERSION_ID:-$BL64_VAR_NONE}" &&
+    version_normalized="$(_bl64_os_release_normalize "$os_id" "$version_id")" ||
     return $?
 
   bl64_dbg_lib_show_info 'set BL_OS_DISTRO'
-  case "${ID^^}" in
-    'ARCH' | 'CACHYOS')
+  case "${os_id^^}" in
+    'ARCH' | 'CACHYOS' | 'MANJARO')
+      bl64_dbg_lib_show_comments "treat all arch based distros as arch (ID=${os_id})"
       BL64_OS_DISTRO="${BL64_OS_ARC}-${version_normalized}"
       BL64_OS_FLAVOR="$BL64_OS_FLAVOR_ARCH"
       ;;
@@ -4827,7 +4849,7 @@ function _bl64_os_release_load() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC1091
   bl64_dbg_lib_show_info 'parse /etc/os-release'
-  if ! source '/etc/os-release' || [[ -z "$ID" || -z "$VERSION_ID" ]]; then
+  if ! source '/etc/os-release'; then
     bl64_msg_show_lib_error 'failed to load OS information from /etc/os-release file'
     return $BL64_LIB_ERROR_TASK_FAILED
   fi
@@ -4836,13 +4858,16 @@ function _bl64_os_release_load() {
 
 function _bl64_os_release_normalize() {
   bl64_dbg_lib_show_function "$@"
-  local version_raw="${1:-}"
+  local os_id="${1:-}"
+  local version_raw="${2:-}"
   local version_normalized=''
   local version_pattern_single='^[0-9]+$'
   local version_pattern_major_minor='^[0-9]+\.[0-9]+$'
   local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
 
-  bl64_check_parameter 'version_raw' || return $?
+  bl64_check_parameter 'os_id' &&
+    bl64_check_parameter 'version_raw' ||
+    return $?
 
   bl64_dbg_lib_show_comments 'normalize OS version to match X.Y'
   if [[ "$version_raw" =~ $version_pattern_single ]]; then
@@ -4853,16 +4878,23 @@ function _bl64_os_release_normalize() {
     version_normalized="${version_raw}"
   elif [[ "$version_raw" =~ $version_pattern_semver ]]; then
     bl64_dbg_lib_show_info "version_pattern_semver: ${version_pattern_semver}"
-    if [[ "${ID^^}" =~ ^(ARCH|CACHYOS)$ ]]; then
-      bl64_dbg_lib_show_comments 'convert rolling version YYYYMMDD to YYYY.MM'
+    if [[ "${os_id^^}" =~ ^(ARCH|CACHYOS|MANJARO)$ ]]; then
+      bl64_dbg_lib_show_comments 'convert version format from YYYYMMDD to YYYY.MM'
       version_normalized="${version_raw:0:4}.${version_raw:4:2}"
     else
       version_normalized="${version_raw%.*}"
+    fi
+  elif [[ "$version_raw" == "$BL64_VAR_NONE" ]]; then
+    bl64_dbg_lib_show_info "no version definition. Assume rolling OS"
+    if [[ "${os_id^^}" =~ ^(ARCH|CACHYOS|MANJARO)$ ]]; then
+      bl64_dbg_lib_show_info 'define version as the year-month when the OS was added to bl64'
+      version_normalized='2025.10'
     fi
   else
     bl64_dbg_lib_show_info "pattern: raw"
     version_normalized="$version_raw"
   fi
+
   if [[ "$version_normalized" =~ $version_pattern_major_minor ]]; then
     echo "$version_normalized"
     return 0
@@ -14678,7 +14710,7 @@ function _bl64_pkg_set_options() {
       BL64_PKG_SET_QUIET='--quiet'
       BL64_PKG_SET_VERBOSE='--color=never --verbose'
       ;;
-    ${BL64_OS_SLES}-15.*)
+    ${BL64_OS_SLES}-*)
       BL64_PKG_SET_ASSUME_YES='--no-confirm'
       BL64_PKG_SET_SLIM=' '
       BL64_PKG_SET_QUIET='--quiet'
@@ -19582,7 +19614,7 @@ if [[ "${BL64_OS_MODULE:-$BL64_VAR_OFF}" == "$BL64_VAR_ON" ]]; then
     "${BL64_OS_OL}-7" "${BL64_OS_OL}-8" "${BL64_OS_OL}-9" "${BL64_OS_OL}-10" \
     "${BL64_OS_RCK}-8" "${BL64_OS_RCK}-9" "${BL64_OS_RCK}-10" \
     "${BL64_OS_RHEL}-8" "${BL64_OS_RHEL}-9" "${BL64_OS_RHEL}-10" \
-    "${BL64_OS_SLES}-15" \
+    "${BL64_OS_SLES}-15" "${BL64_OS_SLES}-16" \
     "${BL64_OS_UB}-18" "${BL64_OS_UB}-20" "${BL64_OS_UB}-21" "${BL64_OS_UB}-22" "${BL64_OS_UB}-23" "${BL64_OS_UB}-24" "${BL64_OS_UB}-25" ||
     exit $?
 fi
