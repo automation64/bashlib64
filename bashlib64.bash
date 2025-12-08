@@ -103,7 +103,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.8.0'
+  declare BL64_VERSION='22.9.0'
 
   #
   # Imported generic shell standard variables
@@ -319,9 +319,9 @@ function _bl64_lib_script_get_path() {
 
 function _bl64_lib_script_get_name() {
   local base=''
-
-  if [[ -n "$BL64_SCRIPT_PATH" && "$BL64_SCRIPT_PATH" != '/' ]]; then
-    base="${BL64_SCRIPT_PATH##*/}"
+  local name="${BASH_ARGV0:-}"
+  if [[ -n "$name" && "$name" != '/' ]]; then
+    base="${name##*/}"
   fi
   if [[ -z "$base" || "$base" == */* ]]; then
     base='noname'
@@ -635,7 +635,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.13.0'
+  declare BL64_MSG_VERSION='5.14.0'
 
   declare BL64_MSG_MODULE='0'
 
@@ -680,8 +680,8 @@ function bl64_lib_script_minver_check() {
   # Message output type
   #
 
-  declare BL64_MSG_OUTPUT_ASCII='A'
-  declare BL64_MSG_OUTPUT_ANSI='N'
+  declare BL64_MSG_OUTPUT_ASCII='ASCII'
+  declare BL64_MSG_OUTPUT_ANSI='ANSI'
 
   # default message output type
   declare BL64_MSG_OUTPUT=''
@@ -690,13 +690,15 @@ function bl64_lib_script_minver_check() {
   # Message formats
   #
 
-  declare BL64_MSG_FORMAT_PLAIN='PLAIN'
-  declare BL64_MSG_FORMAT_HOST='HOST'
-  declare BL64_MSG_FORMAT_TIME='TIME'
-  declare BL64_MSG_FORMAT_SCRIPT='SCRIPT'
-  declare BL64_MSG_FORMAT_SCRIPT2='SCRIPT2'
   declare BL64_MSG_FORMAT_CALLER='CALLER'
   declare BL64_MSG_FORMAT_FULL='FULL'
+  declare BL64_MSG_FORMAT_FULL2='FULL2'
+  declare BL64_MSG_FORMAT_HOST='HOST'
+  declare BL64_MSG_FORMAT_PLAIN='PLAIN'
+  declare BL64_MSG_FORMAT_SCRIPT='SCRIPT'
+  declare BL64_MSG_FORMAT_SCRIPT2='SCRIPT2'
+  declare BL64_MSG_FORMAT_TIME='TIME'
+  declare BL64_MSG_FORMAT_TIME2='TIME2'
 
   # Selected message format
   declare BL64_MSG_FORMAT="${BL64_MSG_FORMAT:-$BL64_MSG_FORMAT_FULL}"
@@ -794,6 +796,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_MSG_ANSI_CHAR_BLINK='5'
   declare BL64_MSG_ANSI_CHAR_REVERSE='7'
 
+  # Time formats
+
+  declare BL64_MSG_TIME_DMY_HMS_FULL='%(%d/%b/%Y-%H:%M:%S-UTC%z)T'
+  declare BL64_MSG_TIME_DMY_HMS_COMPACT='%(%d%b%Y:%H%M%SUTC%z)T'
+
   #
   # Cosmetic
   #
@@ -807,8 +814,10 @@ function bl64_lib_script_minver_check() {
   declare BL64_MSG_COSMETIC_LEFT_ARROW='<--'
   declare BL64_MSG_COSMETIC_LEFT_ARROW2='<=='
   declare BL64_MSG_COSMETIC_LEFT_ARROW3='<<<'
-  declare BL64_MSG_COSMETIC_PHASE_PREFIX='===['
-  declare BL64_MSG_COSMETIC_PHASE_SUFIX=']==='
+  declare BL64_MSG_COSMETIC_PHASE_PREFIX='==['
+  declare BL64_MSG_COSMETIC_PHASE_SUFIX=']=='
+  declare BL64_MSG_COSMETIC_PHASE_PREFIX2='***'
+  declare BL64_MSG_COSMETIC_PHASE_SUFIX2='***'
   declare BL64_MSG_COSMETIC_PIPE='|'
   declare BL64_MSG_COSMETIC_ARROW='-->'
 
@@ -1331,7 +1340,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PKG_VERSION='6.5.2'
+  declare BL64_PKG_VERSION='6.5.3'
 
   declare BL64_PKG_MODULE='0'
 
@@ -3484,18 +3493,10 @@ function bl64_msg_set_level() {
   bl64_check_parameter 'level' || return $?
 
   case "$level" in
-    "$BL64_MSG_VERBOSE_NONE")
-      bl64_msg_all_disable_verbose
-      ;;
-    "$BL64_MSG_VERBOSE_APP")
-      bl64_msg_app_enable_verbose
-      ;;
-    "$BL64_MSG_VERBOSE_LIB")
-      bl64_msg_lib_enable_verbose
-      ;;
-    "$BL64_MSG_VERBOSE_ALL")
-      bl64_msg_all_enable_verbose
-      ;;
+    "$BL64_MSG_VERBOSE_NONE") bl64_msg_all_disable_verbose ;;
+    "$BL64_MSG_VERBOSE_APP") bl64_msg_app_enable_verbose ;;
+    "$BL64_MSG_VERBOSE_LIB") bl64_msg_lib_enable_verbose ;;
+    "$BL64_MSG_VERBOSE_ALL") bl64_msg_all_enable_verbose ;;
     *)
       bl64_check_alert_parameter_invalid 'BL64_MSG_VERBOSE' \
         "invalid value. Not one of: ${BL64_MSG_VERBOSE_NONE}|${BL64_MSG_VERBOSE_ALL}|${BL64_MSG_VERBOSE_APP}|${BL64_MSG_VERBOSE_LIB}"
@@ -3528,30 +3529,14 @@ function bl64_msg_set_format() {
   bl64_check_parameter 'format' || return $?
 
   case "$format" in
-    "$BL64_MSG_FORMAT_PLAIN" | "$legacy_BL64_MSG_FORMAT_PLAIN")
-      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN"
-      ;;
-    "$BL64_MSG_FORMAT_HOST" | "$legacy_BL64_MSG_FORMAT_HOST")
-      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST"
-      ;;
-    "$BL64_MSG_FORMAT_TIME" | "$legacy_BL64_MSG_FORMAT_TIME")
-      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME"
-      ;;
-    "$BL64_MSG_FORMAT_CALLER" | "$legacy_BL64_MSG_FORMAT_CALLER")
-      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER"
-      ;;
-    "$BL64_MSG_FORMAT_FULL" | "$legacy_BL64_MSG_FORMAT_FULL")
-      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL"
-      ;;
-    "$BL64_MSG_FORMAT_SCRIPT")
-      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_SCRIPT"
-      ;;
-    "$BL64_MSG_FORMAT_SCRIPT2")
-      BL64_MSG_FORMAT="$BL64_MSG_FORMAT_SCRIPT2"
-      ;;
+    "$BL64_MSG_FORMAT_PLAIN" | "$legacy_BL64_MSG_FORMAT_PLAIN") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN" ;;
+    "$BL64_MSG_FORMAT_HOST" | "$legacy_BL64_MSG_FORMAT_HOST") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST" ;;
+    "$BL64_MSG_FORMAT_TIME" | "$legacy_BL64_MSG_FORMAT_TIME") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME" ;;
+    "$BL64_MSG_FORMAT_CALLER" | "$legacy_BL64_MSG_FORMAT_CALLER") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER" ;;
+    "$BL64_MSG_FORMAT_FULL" | "$legacy_BL64_MSG_FORMAT_FULL") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL" ;;
+    "$BL64_MSG_FORMAT_TIME2" | "$BL64_MSG_FORMAT_FULL2" | "$BL64_MSG_FORMAT_SCRIPT" | "$BL64_MSG_FORMAT_SCRIPT2") BL64_MSG_FORMAT="$format" ;;
     *)
-      bl64_check_alert_parameter_invalid 'BL64_MSG_FORMAT' \
-        "invalid value. Not one of: ${BL64_MSG_FORMAT_PLAIN}|${BL64_MSG_FORMAT_HOST}|${BL64_MSG_FORMAT_TIME}|${BL64_MSG_FORMAT_CALLER}|${BL64_MSG_FORMAT_SCRIPT}|${BL64_MSG_FORMAT_SCRIPT2}|${BL64_MSG_FORMAT_FULL}"
+      bl64_check_alert_parameter_invalid 'BL64_MSG_FORMAT' 'invalid value. Not one of: BL64_MSG_FORMAT_*'
       return $?
       ;;
   esac
@@ -3612,6 +3597,8 @@ function bl64_msg_set_output() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local output="${1:-}"
   local theme="${2:-${BL64_VAR_DEFAULT}}"
+  local legacy_BL64_MSG_OUTPUT_ASCII='A'
+  local legacy_BL64_MSG_OUTPUT_ANSI='N'
 
   if bl64_lib_var_is_default "$output"; then
     if bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
@@ -3622,11 +3609,11 @@ function bl64_msg_set_output() {
   fi
 
   case "$output" in
-    "$BL64_MSG_OUTPUT_ASCII")
+    "$BL64_MSG_OUTPUT_ASCII" | "$legacy_BL64_MSG_OUTPUT_ASCII")
       bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ASCII_STD"
       BL64_MSG_OUTPUT="$output"
       ;;
-    "$BL64_MSG_OUTPUT_ANSI")
+    "$BL64_MSG_OUTPUT_ANSI" | "$legacy_BL64_MSG_OUTPUT_ANSI")
       bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ANSI_STD"
       BL64_MSG_OUTPUT="$output"
       ;;
@@ -3824,7 +3811,13 @@ function _bl64_msg_format_ansi() {
     ;;
   "$BL64_MSG_FORMAT_TIME")
     printf "[%b] %b: %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_TIME2")
+    printf "%b %b: %s${linefeed}" \
+      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
@@ -3836,21 +3829,29 @@ function _bl64_msg_format_ansi() {
     ;;
   "$BL64_MSG_FORMAT_SCRIPT")
     printf "[%b] %b | %b: %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_SCRIPT2")
     printf "%b|%b|%b| %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf '%(%d%b%Y%H%M%SUTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_FULL")
     printf "[%b] %b:%b | %b: %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf '%(%d/%b/%Y-%H:%M:%S-UTC%z)T' '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_FULL2")
+    printf "%b|%b|%b|%b| %s${linefeed}" \
+      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
       "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
@@ -3887,7 +3888,13 @@ function _bl64_msg_format_ascii() {
       "$message"
     ;;
   "$BL64_MSG_FORMAT_TIME")
-    printf "[%(%d/%b/%Y-%H:%M:%S-UTC%z)T] %s: %s${linefeed}" \
+    printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s: %s${linefeed}" \
+      '-1' \
+      "${!style} $type" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_TIME2")
+    printf "${BL64_MSG_TIME_DMY_HMS_COMPACT} %s: %s${linefeed}" \
       '-1' \
       "${!style} $type" \
       "$message"
@@ -3899,21 +3906,29 @@ function _bl64_msg_format_ascii() {
       "$message"
     ;;
   "$BL64_MSG_FORMAT_SCRIPT")
-    printf "[%(%d/%b/%Y-%H:%M:%S-UTC%z)T] %s | %s: %s${linefeed}" \
+    printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s | %s: %s${linefeed}" \
       '-1' \
       "$BL64_SCRIPT_ID" \
       "${!style} $type" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_SCRIPT2")
-    printf "%(%d%b%Y%H%M%SUTC%z)T|%s|%s| %s${linefeed}" \
+    printf "${BL64_MSG_TIME_DMY_HMS_COMPACT}|%s|%s| %s${linefeed}" \
       '-1' \
       "$BL64_SCRIPT_ID" \
       "${!style} $type" \
       "$message"
     ;;
   "$BL64_MSG_FORMAT_FULL")
-    printf "[%(%d/%b/%Y-%H:%M:%S-UTC%z)T] %s:%s | %s: %s${linefeed}" \
+    printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s:%s | %s: %s${linefeed}" \
+      '-1' \
+      "$HOSTNAME" \
+      "$BL64_SCRIPT_ID" \
+      "${!style} $type" \
+      "$message"
+    ;;
+  "$BL64_MSG_FORMAT_FULL2")
+    printf "${BL64_MSG_TIME_DMY_HMS_COMPACT}|%s|%s|%s| %s${linefeed}" \
       '-1' \
       "$HOSTNAME" \
       "$BL64_SCRIPT_ID" \
@@ -4112,7 +4127,7 @@ function bl64_msg_show_phase() {
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_PHASE}:${message}" &&
     bl64_msg_app_verbose_is_enabled || return 0
 
-  _bl64_msg_print "$BL64_MSG_TYPE_PHASE" 'Phase  ' "${BL64_MSG_COSMETIC_PHASE_PREFIX} ${message} ${BL64_MSG_COSMETIC_PHASE_SUFIX}"
+  _bl64_msg_print "$BL64_MSG_TYPE_PHASE" 'Phase  ' "${BL64_MSG_COSMETIC_PHASE_PREFIX2}  ${message}  ${BL64_MSG_COSMETIC_PHASE_SUFIX2}"
 }
 
 #######################################
@@ -4361,7 +4376,7 @@ function bl64_msg_show_separator() {
     done
   )"
 
-  _bl64_msg_print "$BL64_MSG_TYPE_SEPARATOR" '>>>>>>>' "${separator}${separator}${separator}[ ${message} ]${output}"
+  _bl64_msg_print "$BL64_MSG_TYPE_SEPARATOR" '>>>>>>>' "${separator}${separator}[ ${message} ]${output}"
 }
 
 #######################################
@@ -14684,7 +14699,7 @@ function _bl64_pkg_set_options() {
       BL64_PKG_SET_ASSUME_YES='--assume-yes'
       BL64_PKG_SET_SLIM='--no-install-recommends'
       BL64_PKG_SET_QUIET='--quiet --quiet'
-      BL64_PKG_SET_VERBOSE='--show-progress'
+      BL64_PKG_SET_VERBOSE=' '
       ;;
     ${BL64_OS_FD}-41.* | ${BL64_OS_FD}-42.* | ${BL64_OS_FD}-43.*)
       BL64_PKG_SET_ASSUME_YES='--assumeyes'

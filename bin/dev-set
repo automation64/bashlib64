@@ -32,12 +32,12 @@
   # Main / Profile
   export DEV_PROFILE="${DEV_PROFILE:-}"
 
-  # Main / List of modules to load
-  export DEV_MODULE_LOAD=''
-
   #
   # External
   #
+
+  # From BashLib64
+  export BL64_LIB_CICD="${BL64_LIB_CICD:-}"
 
   # From CICD products
   export GITHUB_WORKSPACE="${GITHUB_WORKSPACE:-}"
@@ -45,12 +45,11 @@
   export TESTMANSH_PROJECT_ROOT="${TESTMANSH_PROJECT_ROOT:-}"
 
   #
-  # Constants
+  # Internal
   #
 
   # DevSet / Version
-
-  declare DEV_SET_VERSION='10.1.3'
+  declare DEV_SET_VERSION='10.2.0'
 
   # Main / Bootstrap files. Must be the same as defined in .env
   declare DEV_BOOTSTRAP_STATE='.devbin64'
@@ -69,6 +68,9 @@
   export DEV_BASE_SECRETS=".secrets.env"
   export DEV_BASE_SRC="src"
   export DEV_BASE_TEST="test"
+
+  # Main / List of modules to load
+  export DEV_MODULE_LOAD=''
 
   #
   # Paths
@@ -259,6 +261,7 @@ function _dev_set_load_gitlab() {
   db64_msg_show_task "Info: GitLab detected, setting project root (${CI_PROJECT_DIR})"
   # shellcheck disable=SC2155
   DEV_PATH_ROOT="$CI_PROJECT_DIR"
+  BL64_LIB_CICD='YES'
 }
 
 function _dev_set_load_local_post() {
@@ -277,6 +280,7 @@ function _dev_set_load_github() {
   db64_msg_show_task "Info: GitHub detected, setting project root (${GITHUB_WORKSPACE})"
   # shellcheck disable=SC2155
   DEV_PATH_ROOT="$GITHUB_WORKSPACE"
+  BL64_LIB_CICD='YES'
 
   DEV_BASE_LOCAL="${DEV_PATH_ROOT}/.local-github.env"
   if [[ -r "$DEV_BASE_LOCAL" ]]; then
@@ -291,6 +295,7 @@ function _dev_set_load_github() {
 function _dev_set_load_testmansh() {
   db64_msg_show_task "Info: testmansh container detected, setting project root (${TESTMANSH_PROJECT_ROOT})"
   DEV_PATH_ROOT="$TESTMANSH_PROJECT_ROOT"
+  BL64_LIB_CICD='YES'
 }
 
 function _dev_set_load_env() {
@@ -311,7 +316,7 @@ function _dev_set_load_modules() {
     source "${DEV_PATH_BIN}/dev-env-installer64" ||
     { db64_msg_show_error "unable to load environment core modules" && return 1; }
 
-  # Warning: no using direct var expansion to avoid compatibility issues with ZSH
+  # Warning: not using direct var expansion to avoid compatibility issues with ZSH
   for module_name in $(echo "$DEV_MODULE_LOAD"); do
     module_env="${DEV_PATH_BIN}/dev-env-${module_name}"
     db64_msg_show_task "load module environment variables (${module_env})"

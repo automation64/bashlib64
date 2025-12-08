@@ -27,7 +27,6 @@ source ./bin/dev-env-bash || exit 1
 
 declare MY_DEPLOYER="${1:-}"
 declare MY_LOGS="${2:-${DEV_ENV_BASH_PATH_LOGS}}"
-export BL64_LIB_CICD
 
 function my_deploy() {
   bl64_dbg_app_show_function
@@ -38,8 +37,7 @@ function my_deploy() {
     "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$MY_LOGS" ||
     return $?
 
-  bl64_msg_show_task 'Deploy application'
-  BL64_LIB_CICD='YES'
+  bl64_msg_show_phase 'Deploy application'
   "$MY_DEPLOYER" | "$BL64_OS_CMD_TEE" "${MY_LOGS}/${DEV_DEPLOY_BASH_LOG}" 2>&1
 }
 
@@ -53,7 +51,7 @@ function my_initialize() {
       'MY_LOGS'
 }
 
-bl64_lib_script_version_set '1.0.0'
+bl64_lib_script_version_set '1.0.1'
 bl64_msg_help_about_set 'Deploy application'
 bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && bl64_dbg_set_level "$DEV_CICD_DEBUG" && my_initialize || exit $?
 

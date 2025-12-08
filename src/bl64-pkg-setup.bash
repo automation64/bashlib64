@@ -115,7 +115,7 @@ function _bl64_pkg_set_options() {
       BL64_PKG_SET_ASSUME_YES='--assume-yes'
       BL64_PKG_SET_SLIM='--no-install-recommends'
       BL64_PKG_SET_QUIET='--quiet --quiet'
-      BL64_PKG_SET_VERBOSE='--show-progress'
+      BL64_PKG_SET_VERBOSE=' '
       ;;
     ${BL64_OS_FD}-41.* | ${BL64_OS_FD}-42.* | ${BL64_OS_FD}-43.*)
       BL64_PKG_SET_ASSUME_YES='--assumeyes'
