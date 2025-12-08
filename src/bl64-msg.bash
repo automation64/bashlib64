@@ -110,6 +110,7 @@ function _bl64_msg_format_ansi() {
   style="${BL64_MSG_THEME}_${attribute}"
   [[ "$attribute" == "$BL64_MSG_TYPE_INPUT" ]] && linefeed=''
 
+  # shellcheck disable=SC2059
   case "$BL64_MSG_FORMAT" in
   "$BL64_MSG_FORMAT_PLAIN")
     printf "%b: %s${linefeed}" \
@@ -188,6 +189,7 @@ function _bl64_msg_format_ascii() {
   style="${BL64_MSG_THEME}_${attribute}"
   [[ "$attribute" == "$BL64_MSG_TYPE_INPUT" ]] && linefeed=''
 
+  # shellcheck disable=SC2059
   case "$BL64_MSG_FORMAT" in
   "$BL64_MSG_FORMAT_PLAIN")
     printf "%s: %s${linefeed}" \
