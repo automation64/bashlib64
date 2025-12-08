@@ -5,7 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [22.8.0]
+## [22.9.0]
+
+### Added
+
+- msg
+  - New formats: TIME2, SCRIPT2, FULL2
+
+### Changed
+
+- msg
+  - bl64_msg_set_output: allow full output name (ANSI, ASCII)
+
+### Fixed
+
+- core
+  - get script name
+
+## [22.8.1]
 
 ### Added
 
@@ -14,6 +31,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - SLES 16 Linux support
 - msg
   - Message format: SCRIPT, SCRIPT2
+
+### Fixed
+
+- pkg
+  - removed invalid parameter for Debian flavor verbose
 
 ## [22.7.0]
 

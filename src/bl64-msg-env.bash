@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.13.0'
+  declare BL64_MSG_VERSION='5.14.0'
 
   declare BL64_MSG_MODULE='0'
 
@@ -49,8 +49,8 @@
   # Message output type
   #
 
-  declare BL64_MSG_OUTPUT_ASCII='A'
-  declare BL64_MSG_OUTPUT_ANSI='N'
+  declare BL64_MSG_OUTPUT_ASCII='ASCII'
+  declare BL64_MSG_OUTPUT_ANSI='ANSI'
 
   # default message output type
   declare BL64_MSG_OUTPUT=''
@@ -59,13 +59,15 @@
   # Message formats
   #
 
-  declare BL64_MSG_FORMAT_PLAIN='PLAIN'
-  declare BL64_MSG_FORMAT_HOST='HOST'
-  declare BL64_MSG_FORMAT_TIME='TIME'
-  declare BL64_MSG_FORMAT_SCRIPT='SCRIPT'
-  declare BL64_MSG_FORMAT_SCRIPT2='SCRIPT2'
   declare BL64_MSG_FORMAT_CALLER='CALLER'
   declare BL64_MSG_FORMAT_FULL='FULL'
+  declare BL64_MSG_FORMAT_FULL2='FULL2'
+  declare BL64_MSG_FORMAT_HOST='HOST'
+  declare BL64_MSG_FORMAT_PLAIN='PLAIN'
+  declare BL64_MSG_FORMAT_SCRIPT='SCRIPT'
+  declare BL64_MSG_FORMAT_SCRIPT2='SCRIPT2'
+  declare BL64_MSG_FORMAT_TIME='TIME'
+  declare BL64_MSG_FORMAT_TIME2='TIME2'
 
   # Selected message format
   declare BL64_MSG_FORMAT="${BL64_MSG_FORMAT:-$BL64_MSG_FORMAT_FULL}"
@@ -163,6 +165,11 @@
   declare BL64_MSG_ANSI_CHAR_BLINK='5'
   declare BL64_MSG_ANSI_CHAR_REVERSE='7'
 
+  # Time formats
+
+  declare BL64_MSG_TIME_DMY_HMS_FULL='%(%d/%b/%Y-%H:%M:%S-UTC%z)T'
+  declare BL64_MSG_TIME_DMY_HMS_COMPACT='%(%d%b%Y:%H%M%SUTC%z)T'
+
   #
   # Cosmetic
   #
@@ -176,8 +183,10 @@
   declare BL64_MSG_COSMETIC_LEFT_ARROW='<--'
   declare BL64_MSG_COSMETIC_LEFT_ARROW2='<=='
   declare BL64_MSG_COSMETIC_LEFT_ARROW3='<<<'
-  declare BL64_MSG_COSMETIC_PHASE_PREFIX='===['
-  declare BL64_MSG_COSMETIC_PHASE_SUFIX=']==='
+  declare BL64_MSG_COSMETIC_PHASE_PREFIX='==['
+  declare BL64_MSG_COSMETIC_PHASE_SUFIX=']=='
+  declare BL64_MSG_COSMETIC_PHASE_PREFIX2='***'
+  declare BL64_MSG_COSMETIC_PHASE_SUFIX2='***'
   declare BL64_MSG_COSMETIC_PIPE='|'
   declare BL64_MSG_COSMETIC_ARROW='-->'
 

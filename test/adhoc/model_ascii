@@ -4,8 +4,9 @@
   { echo 'test:Error: unable to load test environment' 2>&1 && exit 1; }
 
 function show() {
+  local type="$1"
   echo ''
-  echo '================================================================================================='
+  echo "[$type]================================================================================================="
   echo ''
   bl64_msg_show_error 'bl64_msg_show_error'
   bl64_msg_show_fatal 'bl64_msg_show_fatal'
@@ -31,16 +32,20 @@ bl64_msg_all_enable_verbose
 bl64_msg_set_output "$BL64_MSG_OUTPUT_ASCII"
 
 bl64_msg_set_format "$BL64_MSG_FORMAT_FULL"
-show
+show 'BL64_MSG_FORMAT_FULL'
+bl64_msg_set_format "$BL64_MSG_FORMAT_FULL2"
+show 'BL64_MSG_FORMAT_FULL2'
 bl64_msg_set_format "$BL64_MSG_FORMAT_PLAIN"
-show
+show 'BL64_MSG_FORMAT_PLAIN'
 bl64_msg_set_format "$BL64_MSG_FORMAT_HOST"
-show
+show 'BL64_MSG_FORMAT_HOST'
 bl64_msg_set_format "$BL64_MSG_FORMAT_TIME"
-show
+show 'BL64_MSG_FORMAT_TIME'
+bl64_msg_set_format "$BL64_MSG_FORMAT_TIME2"
+show 'BL64_MSG_FORMAT_TIME2'
 bl64_msg_set_format "$BL64_MSG_FORMAT_CALLER"
-show
+show 'BL64_MSG_FORMAT_CALLER'
 bl64_msg_set_format "$BL64_MSG_FORMAT_SCRIPT"
-show
+show 'BL64_MSG_FORMAT_SCRIPT'
 bl64_msg_set_format "$BL64_MSG_FORMAT_SCRIPT2"
-show
+show 'BL64_MSG_FORMAT_SCRIPT2'
