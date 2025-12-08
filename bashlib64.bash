@@ -103,7 +103,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='c'
+  declare BL64_VERSION='22.9.0'
 
   #
   # Imported generic shell standard variables
@@ -319,8 +319,9 @@ function _bl64_lib_script_get_path() {
 
 function _bl64_lib_script_get_name() {
   local base=''
-  if [[ -n "$BASH_ARGV0" && "$BASH_ARGV0" != '/' ]]; then
-    base="${BASH_ARGV0##*/}"
+  local name="${BASH_ARGV0:-}"
+  if [[ -n "$name" && "$name" != '/' ]]; then
+    base="${name##*/}"
   fi
   if [[ -z "$base" || "$base" == */* ]]; then
     base='noname'
