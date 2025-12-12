@@ -168,15 +168,21 @@ function bl64_msg_set_output() {
   case "$output" in
     "$BL64_MSG_OUTPUT_ASCII" | "$legacy_BL64_MSG_OUTPUT_ASCII")
       bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ASCII_STD"
+      BL64_MSG_LABEL="$output"
       BL64_MSG_OUTPUT="$output"
       ;;
     "$BL64_MSG_OUTPUT_ANSI" | "$legacy_BL64_MSG_OUTPUT_ANSI")
       bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ANSI_STD"
       BL64_MSG_OUTPUT="$output"
       ;;
+    "$BL64_MSG_OUTPUT_EMOJI")
+      bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ANSI_STD"
+      BL64_MSG_LABEL="$output"
+      BL64_MSG_OUTPUT="$output"
+      ;;
     *)
       bl64_check_alert_parameter_invalid 'BL64_MSG_OUTPUT' \
-        "invalid value. Not one of: ${BL64_MSG_OUTPUT_ASCII}|${BL64_MSG_OUTPUT_ANSI}"
+        "invalid value. Not one of: ${BL64_MSG_OUTPUT_ASCII}|${BL64_MSG_OUTPUT_ANSI}|${BL64_MSG_OUTPUT_EMOJI}"
       return $?
       ;;
   esac
