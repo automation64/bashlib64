@@ -1,11 +1,5 @@
 ---
-# Template: 1.2.0
 name: "SAST / GitLeaks"
-
-env:
-  DEV_CICD_DEBUG: "NONE"
-  BL64_LIB_CICD: "YES"
-  DEV_TEST_BASH_RUNNER_ENVIRONMENT: "ON"
 
 on:
   pull_request:
@@ -17,26 +11,7 @@ on:
 
 jobs:
   sast-gitleaks:
-    runs-on: "ubuntu-latest"
-    steps:
-
-      - name: "Check out repository code"
-        uses: "actions/checkout@main"
-
-      - name: "Cache local tools"
-        uses: "actions/cache@v4"
-        with:
-          path: ./lib
-          key: ${{ runner.os }}-lib-cache
-          restore-keys: |
-            ${{ runner.os }}-lib-cache
-
-      - name: "Prepare environment"
-        run: "./bin/dev-lib-base"
-
-      - name: "Download tools"
-        run: "./bin/dev-lib-gitleaks"
-
-      - name: "Run SAST"
-        run: "./bin/dev-sast-gitleaks"
+    uses: "automation64/github-workflow-gitleaks/.github/workflows/main.yaml@main"
+    with:
+      DEV_CICD_DEBUG: "${{ vars.DEV_CICD_DEBUG }}"
 ...
