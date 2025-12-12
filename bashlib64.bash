@@ -103,7 +103,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.10'
+  declare BL64_VERSION='22.10.0'
 
   #
   # Imported generic shell standard variables
