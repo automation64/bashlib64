@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-source './build/prepare/bashlib64-core.bash' &&
-  source './build/prepare/bashlib64-opt.bash'
+source './build/prepare/project/bashlib64-core.bash' &&
+  source './build/prepare/project/bashlib64-opt.bash'
