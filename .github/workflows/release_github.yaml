@@ -41,7 +41,7 @@ jobs:
       - name: "Prepare application for release"
         run: |
           ./bin/dev-build-project &&
-          ./bin/dev-pack-project"
+          ./bin/dev-pack-project
 
       - name: "Create release"
         run: "./bin/dev-release-github ${GITHUB_REF_NAME}"
