@@ -32,7 +32,7 @@ function bl64_vcs_run_git() {
     export GIT_TRACE='2'
   else
     if bl64_msg_lib_verbose_is_enabled; then
-      if bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+      if bl64_lib_mode_cicd_is_enabled; then
         export GIT_PROGRESS_DELAY='60'
       fi
     else
@@ -104,7 +104,7 @@ function bl64_vcs_git_clone() {
 
   bl64_lib_var_is_default "$branch" && branch=''
   bl64_msg_lib_verbose_is_enabled && verbose=' '
-  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbose='--no-progress'
+  bl64_lib_mode_cicd_is_enabled && verbose='--no-progress'
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_check_command "$BL64_VCS_CMD_GIT" ||
@@ -235,7 +235,13 @@ function bl64_vcs_github_run_api() {
   bl64_check_parameter 'api_path' ||
     return $?
 
-  [[ "$api_token" == "$BL64_VAR_NULL" ]] && api_token=''
+  if [[ "$api_token" == "$BL64_VAR_NULL" ]]; then
+    if [[ -v 'GITHUB_TOKEN' ]]; then
+      api_token="$GITHUB_TOKEN"
+    else
+      api_token=''
+    fi
+  fi
   shift
   shift
   shift

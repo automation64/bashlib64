@@ -14,6 +14,28 @@
 #######################################
 
 #
+# Module variables
+#
+# * Shared internal variables for module tasks
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / GitLeaks / Module environment definition version
+  export DEV_ENV_GITLEAKS_ID='gitleaks'
+  export DEV_ENV_GITLEAKS_VERSION='1.3.0'
+  # Env / GitLeaks / Log path
+  export DEV_ENV_GITLEAKS_PATH_LOGS="${DEV_PATH_LOGS}/gl"
+
+  # Lib / GitLeaks / Installer
+  export DEV_LIB_GITLEAKS_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-gitleaks"
+  # Lib / GitLeaks / Skip installation?
+  export DEV_LIB_GITLEAKS_SKIP='YES'
+  # Lib / GitLeaks / Target
+  export DEV_LIB_GITLEAKS_TARGET="${DEV_PATH_LIB}/${DEV_ENV_GITLEAKS_ID}"
+}
+
+#
 # Module parameters
 #
 # * Use .dev.env file to override values
@@ -23,6 +45,8 @@
 {
   # SAST / GitLeaks / Format
   export DEV_SAST_GITLEAKS_FORMAT="${DEV_SAST_GITLEAKS_FORMAT:-sarif}"
+  # SAST / GitLeaks / Report
+  export DEV_SAST_GITLEAKS_PATH_REPORT="${DEV_ENV_GITLEAKS_PATH_LOGS}/gitleaks.${DEV_SAST_GITLEAKS_FORMAT}"
 }
 
 #
@@ -33,10 +57,6 @@
 
 # shellcheck disable=SC2154
 {
-  # Lib / GitLeaks / Skip installation?
-  export DEV_LIB_GITLEAKS_SKIP='YES'
-  # Lib / GitLeaks / Target
-  export DEV_LIB_GITLEAKS_TARGET="${DEV_PATH_LIB}/glk"
   # Lib / GitLeaks / Command
   export DEV_LIB_GITLEAKS_BIN="${DEV_LIB_GITLEAKS_BIN:-}"
   if [[ -z "$DEV_LIB_GITLEAKS_BIN" ]]; then
@@ -46,20 +66,8 @@
       if [[ ! -x "${DEV_LIB_GITLEAKS_BIN}" ]]; then
         DEV_LIB_GITLEAKS_SKIP='NO'
       fi
+    else
+      DEV_LIB_GITLEAKS_TARGET="$(bl64_fmt_path_get_basename "$DEV_LIB_GITLEAKS_BIN")"
     fi
   fi
-}
-
-#
-# Internal variables
-#
-# * Shared internal variables for module tasks
-#
-
-# shellcheck disable=SC2154
-{
-  # Env / GitLeaks / Module environment definition version
-  export DEV_ENV_GITLEAKS_VERSION='1.2.0'
-  # Lib / GitLeaks / Installer
-  export DEV_LIB_GITLEAKS_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-gitleaks"
 }

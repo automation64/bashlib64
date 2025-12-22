@@ -14,6 +14,26 @@
 #######################################
 
 #
+# Module variables
+#
+# * Shared internal variables for module tasks
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / TestmanSH / Module environment definition version
+  export DEV_ENV_TESTMANSH_ID='testmansh'
+  export DEV_ENV_TESTMANSH_VERSION='1.3.1'
+
+  # Lib / TestmanSH / Installer
+  export DEV_LIB_TESTMANSH_INSTALLER='https://raw.githubusercontent.com/automation64/testmansh/main/testmansh'
+  # Lib / TestmanSH / Skip installation?
+  export DEV_LIB_TESTMANSH_SKIP='YES'
+  # Lib / TestmanSH / Target
+  export DEV_LIB_TESTMANSH_TARGET="${DEV_PATH_LIB}/${DEV_ENV_TESTMANSH_ID}"
+}
+
+#
 # Module parameters
 #
 # * Use .dev.env file to override values
@@ -37,10 +57,6 @@
 
 # shellcheck disable=SC2154
 {
-  # Lib / TestmanSH / Skip installation?
-  export DEV_LIB_TESTMANSH_SKIP='YES'
-  # Lib / TestmanSH / Target
-  export DEV_LIB_TESTMANSH_TARGET="${DEV_PATH_LIB}/tms}"
   # Lib / TestmanSH / Command
   export DEV_LIB_TESTMANSH_BIN="${DEV_LIB_TESTMANSH_BIN:-}"
   if [[ -z "$DEV_LIB_TESTMANSH_BIN" ]]; then
@@ -50,21 +66,8 @@
       if [[ ! -x "${DEV_LIB_TESTMANSH_BIN}" ]]; then
         DEV_LIB_TESTMANSH_SKIP='NO'
       fi
+    else
+      DEV_LIB_TESTMANSH_TARGET="$(bl64_fmt_path_get_basename "$DEV_LIB_TESTMANSH_BIN")"
     fi
   fi
-}
-
-#
-# Internal variables
-#
-# * Shared internal variables for module tasks
-#
-
-# shellcheck disable=SC2154
-{
-  # Env / TestmanSH / Module environment definition version
-  export DEV_ENV_TESTMANSH_VERSION='1.3.0'
-
-  # Lib / TestmanSH / Installer
-  export DEV_LIB_TESTMANSH_INSTALLER='https://raw.githubusercontent.com/automation64/testmansh/main/testmansh'
 }

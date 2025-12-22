@@ -5,24 +5,66 @@
 #
 # Deprecation aliases
 #
-# * Aliases to deprecated functions 
+# * Aliases to deprecated functions
 # * Needed to maintain compatibility up to N-2 versions
 #
 
-function bl64_dbg_app_show_variables() { bl64_msg_show_deprecated 'bl64_dbg_app_show_variables' 'bl64_dbg_app_show_globals'; bl64_dbg_app_show_globals "$@"; }
-function bl64_dbg_lib_show_variables() { bl64_msg_show_deprecated 'bl64_dbg_lib_show_variables' 'bl64_dbg_lib_show_globals'; bl64_dbg_lib_show_globals "$@"; }
-function bl64_dbg_app_task_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_task_enabled' 'bl64_dbg_app_task_is_enabled'; bl64_dbg_app_task_is_enabled; }
-function bl64_dbg_lib_task_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_task_enabled' 'bl64_dbg_lib_task_is_enabled'; bl64_dbg_lib_task_is_enabled; }
-function bl64_dbg_app_command_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_command_enabled' 'bl64_dbg_app_command_is_enabled'; bl64_dbg_app_command_is_enabled; }
-function bl64_dbg_lib_command_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_command_enabled' 'bl64_dbg_lib_command_is_enabled'; bl64_dbg_lib_command_is_enabled; }
-function bl64_dbg_app_trace_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_trace_enabled' 'bl64_dbg_app_trace_is_enabled'; bl64_dbg_app_trace_is_enabled; }
-function bl64_dbg_lib_trace_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_trace_enabled' 'bl64_dbg_lib_trace_is_enabled'; bl64_dbg_lib_trace_is_enabled; }
-function bl64_dbg_app_custom_1_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_custom_1_enabled' 'bl64_dbg_app_custom_1_is_enabled'; bl64_dbg_app_custom_1_is_enabled; }
-function bl64_dbg_app_custom_2_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_custom_2_enabled' 'bl64_dbg_app_custom_2_is_enabled'; bl64_dbg_app_custom_2_is_enabled; }
-function bl64_dbg_app_custom_3_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_custom_3_enabled' 'bl64_dbg_app_custom_3_is_enabled'; bl64_dbg_app_custom_3_is_enabled; }
-function bl64_dbg_lib_check_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_check_enabled' '_bl64_dbg_lib_check_is_enabled'; _bl64_dbg_lib_check_is_enabled; }
-function bl64_dbg_lib_log_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_log_enabled' '_bl64_dbg_lib_log_is_enabled'; _bl64_dbg_lib_log_is_enabled; }
-function bl64_dbg_lib_msg_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_msg_enabled' '_bl64_dbg_lib_msg_is_enabled'; _bl64_dbg_lib_msg_is_enabled; }
+function bl64_dbg_app_show_variables() {
+  bl64_msg_show_deprecated 'bl64_dbg_app_show_variables' 'bl64_dbg_app_show_globals'
+  bl64_dbg_app_show_globals "$@"
+}
+function bl64_dbg_lib_show_variables() {
+  bl64_msg_show_deprecated 'bl64_dbg_lib_show_variables' 'bl64_dbg_lib_show_globals'
+  bl64_dbg_lib_show_globals "$@"
+}
+function bl64_dbg_app_task_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_app_task_enabled' 'bl64_dbg_app_task_is_enabled'
+  bl64_dbg_app_task_is_enabled
+}
+function bl64_dbg_lib_task_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_lib_task_enabled' 'bl64_dbg_lib_task_is_enabled'
+  bl64_dbg_lib_task_is_enabled
+}
+function bl64_dbg_app_command_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_app_command_enabled' 'bl64_dbg_app_command_is_enabled'
+  bl64_dbg_app_command_is_enabled
+}
+function bl64_dbg_lib_command_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_lib_command_enabled' 'bl64_dbg_lib_command_is_enabled'
+  bl64_dbg_lib_command_is_enabled
+}
+function bl64_dbg_app_trace_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_app_trace_enabled' 'bl64_dbg_app_trace_is_enabled'
+  bl64_dbg_app_trace_is_enabled
+}
+function bl64_dbg_lib_trace_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_lib_trace_enabled' 'bl64_dbg_lib_trace_is_enabled'
+  bl64_dbg_lib_trace_is_enabled
+}
+function bl64_dbg_app_custom_1_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_app_custom_1_enabled' 'bl64_dbg_app_custom_1_is_enabled'
+  bl64_dbg_app_custom_1_is_enabled
+}
+function bl64_dbg_app_custom_2_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_app_custom_2_enabled' 'bl64_dbg_app_custom_2_is_enabled'
+  bl64_dbg_app_custom_2_is_enabled
+}
+function bl64_dbg_app_custom_3_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_app_custom_3_enabled' 'bl64_dbg_app_custom_3_is_enabled'
+  bl64_dbg_app_custom_3_is_enabled
+}
+function bl64_dbg_lib_check_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_lib_check_enabled' '_bl64_dbg_lib_check_is_enabled'
+  _bl64_dbg_lib_check_is_enabled
+}
+function bl64_dbg_lib_log_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_lib_log_enabled' '_bl64_dbg_lib_log_is_enabled'
+  _bl64_dbg_lib_log_is_enabled
+}
+function bl64_dbg_lib_msg_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_lib_msg_enabled' '_bl64_dbg_lib_msg_is_enabled'
+  _bl64_dbg_lib_msg_is_enabled
+}
 
 #
 # Internal functions
@@ -275,10 +317,17 @@ function bl64_dbg_app_show_info() {
 #######################################
 function bl64_dbg_lib_show_vars() {
   local variable=''
+  local value=''
   bl64_dbg_lib_task_is_enabled || return 0
 
   for variable in "$@"; do
-    _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=${!variable}]"
+    if [[ ! -v "$variable" ]]; then
+      value='**UNSET**'
+    else
+      value="${!variable}"
+    fi
+
+    _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=${value}]"
   done
 
   return 0
@@ -297,9 +346,16 @@ function bl64_dbg_lib_show_vars() {
 #######################################
 function bl64_dbg_app_show_vars() {
   local variable=''
+  local value=''
   bl64_dbg_app_task_is_enabled || return 0
 
   for variable in "$@"; do
+    if [[ ! -v "$variable" ]]; then
+      value='**UNSET**'
+    else
+      value="${!variable}"
+    fi
+
     _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=${!variable}]"
   done
 

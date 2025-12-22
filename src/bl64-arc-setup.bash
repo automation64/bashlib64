@@ -52,33 +52,40 @@ function _bl64_arc_set_command() {
   bl64_dbg_lib_show_comments 'detect optional commands. No error if not found'
   BL64_ARC_CMD_BUNZIP2="$(bl64_bsh_command_locate 'bunzip2')"
   BL64_ARC_CMD_GUNZIP="$(bl64_bsh_command_locate 'gunzip')"
-  BL64_ARC_CMD_UNXZ="$(bl64_bsh_command_locate 'unxz')"''
+  BL64_ARC_CMD_UNXZ="$(bl64_bsh_command_locate 'unxz')"
+  BL64_ARC_CMD_7ZZ="$(bl64_bsh_command_locate '7zz')"
 
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_ARC_CMD_TAR='/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    BL64_ARC_CMD_ZIP='/usr/bin/zip'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_ARC_CMD_TAR='/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    BL64_ARC_CMD_ZIP='/usr/bin/zip'
     ;;
   ${BL64_OS_SLES}-*)
     BL64_ARC_CMD_TAR='/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    BL64_ARC_CMD_ZIP='/usr/bin/zip'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_ARC_CMD_TAR='/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    BL64_ARC_CMD_ZIP='/usr/bin/zip'
     ;;
   ${BL64_OS_ARC}-*)
     BL64_ARC_CMD_TAR='/usr/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    BL64_ARC_CMD_ZIP='/usr/bin/zip'
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_ARC_CMD_TAR='/usr/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    BL64_ARC_CMD_ZIP='/usr/bin/zip'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac

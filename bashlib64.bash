@@ -103,7 +103,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.10.0'
+  declare BL64_VERSION='22.11.0'
 
   #
   # Imported generic shell standard variables
@@ -167,7 +167,7 @@ builtin unset MAILPATH
   # Enable lib shell traps? (On/Off)
   declare BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
 
-  # Assume shell non-interactive mode? (On/Off)
+  # Enable CICD operation mode? (On/Off)
   declare BL64_LIB_CICD="${BL64_LIB_CICD:-$BL64_VAR_OFF}"
 
   #
@@ -275,15 +275,13 @@ builtin unset MAILPATH
 #######################################
 
 #
-# Deprecation aliases
-#
-# * Aliases to deprecated functions
-# * Needed to maintain compatibility up to N-2 versions
+# Public functions
 #
 
 function bl64_lib_mode_command_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_CMD"; }
 function bl64_lib_mode_compability_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_COMPATIBILITY"; }
 function bl64_lib_mode_strict_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_STRICT"; }
+function bl64_lib_mode_cicd_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; }
 
 function bl64_lib_lang_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_LANG"; }
 function bl64_lib_trap_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_TRAPS"; }
@@ -517,7 +515,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_DBG_VERSION='3.2.3'
+  declare BL64_DBG_VERSION='3.2.4'
 
   declare BL64_DBG_MODULE='0'
 
@@ -635,7 +633,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.15.0'
+  declare BL64_MSG_VERSION='5.15.1'
 
   declare BL64_MSG_MODULE='0'
 
@@ -764,7 +762,7 @@ function bl64_lib_script_minver_check() {
   declare BL64_MSG_LABEL_EMOJI_BATCHERR='(🔥)'
   declare BL64_MSG_LABEL_EMOJI_BATCHOK='(🌟)'
   declare BL64_MSG_LABEL_EMOJI_ERROR='(⛔)'
-  declare BL64_MSG_LABEL_EMOJI_HELP='(🆘)'
+  declare BL64_MSG_LABEL_EMOJI_HELP='(🚩)'
   declare BL64_MSG_LABEL_EMOJI_INFO='(💡)'
   declare BL64_MSG_LABEL_EMOJI_INIT='(⚙️)'
   declare BL64_MSG_LABEL_EMOJI_INPUT='(📝)'
@@ -1016,15 +1014,17 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ARC_VERSION='4.2.1'
+  declare BL64_ARC_VERSION='4.3.0'
 
   declare BL64_ARC_MODULE='0'
 
   declare BL64_ARC_CMD_BUNZIP2="$BL64_VAR_UNAVAILABLE"
   declare BL64_ARC_CMD_GUNZIP="$BL64_VAR_UNAVAILABLE"
-  declare BL64_ARC_CMD_TAR="$BL64_VAR_UNAVAILABLE"''
+  declare BL64_ARC_CMD_TAR="$BL64_VAR_UNAVAILABLE"
   declare BL64_ARC_CMD_UNXZ="$BL64_VAR_UNAVAILABLE"
   declare BL64_ARC_CMD_UNZIP="$BL64_VAR_UNAVAILABLE"
+  declare BL64_ARC_CMD_ZIP="$BL64_VAR_UNAVAILABLE"
+  declare BL64_ARC_CMD_7ZZ="$BL64_VAR_UNAVAILABLE"
 
   declare BL64_ARC_SET_TAR_VERBOSE=''
 
@@ -1037,7 +1037,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_AWS_VERSION='4.0.2'
+  declare BL64_AWS_VERSION='4.0.3'
 
   declare BL64_AWS_MODULE='0'
 
@@ -1146,12 +1146,14 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CRYP_VERSION='2.4.1'
+  declare BL64_CRYP_VERSION='2.5.0'
 
   declare BL64_CRYP_MODULE='0'
 
-  declare BL64_CRYP_CMD_GPG=''
-  declare BL64_CRYP_CMD_OPENSSL=''
+  declare BL64_CRYP_CMD_GPG="$BL64_VAR_UNAVAILABLE"
+  declare BL64_CRYP_CMD_OPENSSL="$BL64_VAR_UNAVAILABLE"
+  declare BL64_CRYP_CMD_MD5SUM="$BL64_VAR_UNAVAILABLE"
+  declare BL64_CRYP_CMD_SHA256SUM="$BL64_VAR_UNAVAILABLE"
 }
 
 #######################################
@@ -1171,7 +1173,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.4.0'
+  declare BL64_FS_VERSION='6.4.1'
 
   declare BL64_FS_MODULE='0'
 
@@ -1381,7 +1383,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PKG_VERSION='6.5.3'
+  declare BL64_PKG_VERSION='6.5.4'
 
   declare BL64_PKG_MODULE='0'
 
@@ -1438,7 +1440,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='4.2.0'
+  declare BL64_PY_VERSION='4.2.1'
 
   declare BL64_PY_MODULE='0'
 
@@ -1524,7 +1526,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_RXTX_VERSION='2.6.0'
+  declare BL64_RXTX_VERSION='2.6.1'
 
   declare BL64_RXTX_MODULE='0'
 
@@ -1662,7 +1664,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VCS_VERSION='3.1.0'
+  declare BL64_VCS_VERSION='3.2.0'
 
   declare BL64_VCS_MODULE='0'
 
@@ -2642,24 +2644,66 @@ function bl64_dbg_set_level() {
 #
 # Deprecation aliases
 #
-# * Aliases to deprecated functions 
+# * Aliases to deprecated functions
 # * Needed to maintain compatibility up to N-2 versions
 #
 
-function bl64_dbg_app_show_variables() { bl64_msg_show_deprecated 'bl64_dbg_app_show_variables' 'bl64_dbg_app_show_globals'; bl64_dbg_app_show_globals "$@"; }
-function bl64_dbg_lib_show_variables() { bl64_msg_show_deprecated 'bl64_dbg_lib_show_variables' 'bl64_dbg_lib_show_globals'; bl64_dbg_lib_show_globals "$@"; }
-function bl64_dbg_app_task_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_task_enabled' 'bl64_dbg_app_task_is_enabled'; bl64_dbg_app_task_is_enabled; }
-function bl64_dbg_lib_task_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_task_enabled' 'bl64_dbg_lib_task_is_enabled'; bl64_dbg_lib_task_is_enabled; }
-function bl64_dbg_app_command_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_command_enabled' 'bl64_dbg_app_command_is_enabled'; bl64_dbg_app_command_is_enabled; }
-function bl64_dbg_lib_command_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_command_enabled' 'bl64_dbg_lib_command_is_enabled'; bl64_dbg_lib_command_is_enabled; }
-function bl64_dbg_app_trace_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_trace_enabled' 'bl64_dbg_app_trace_is_enabled'; bl64_dbg_app_trace_is_enabled; }
-function bl64_dbg_lib_trace_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_trace_enabled' 'bl64_dbg_lib_trace_is_enabled'; bl64_dbg_lib_trace_is_enabled; }
-function bl64_dbg_app_custom_1_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_custom_1_enabled' 'bl64_dbg_app_custom_1_is_enabled'; bl64_dbg_app_custom_1_is_enabled; }
-function bl64_dbg_app_custom_2_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_custom_2_enabled' 'bl64_dbg_app_custom_2_is_enabled'; bl64_dbg_app_custom_2_is_enabled; }
-function bl64_dbg_app_custom_3_enabled { bl64_msg_show_deprecated 'bl64_dbg_app_custom_3_enabled' 'bl64_dbg_app_custom_3_is_enabled'; bl64_dbg_app_custom_3_is_enabled; }
-function bl64_dbg_lib_check_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_check_enabled' '_bl64_dbg_lib_check_is_enabled'; _bl64_dbg_lib_check_is_enabled; }
-function bl64_dbg_lib_log_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_log_enabled' '_bl64_dbg_lib_log_is_enabled'; _bl64_dbg_lib_log_is_enabled; }
-function bl64_dbg_lib_msg_enabled { bl64_msg_show_deprecated 'bl64_dbg_lib_msg_enabled' '_bl64_dbg_lib_msg_is_enabled'; _bl64_dbg_lib_msg_is_enabled; }
+function bl64_dbg_app_show_variables() {
+  bl64_msg_show_deprecated 'bl64_dbg_app_show_variables' 'bl64_dbg_app_show_globals'
+  bl64_dbg_app_show_globals "$@"
+}
+function bl64_dbg_lib_show_variables() {
+  bl64_msg_show_deprecated 'bl64_dbg_lib_show_variables' 'bl64_dbg_lib_show_globals'
+  bl64_dbg_lib_show_globals "$@"
+}
+function bl64_dbg_app_task_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_app_task_enabled' 'bl64_dbg_app_task_is_enabled'
+  bl64_dbg_app_task_is_enabled
+}
+function bl64_dbg_lib_task_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_lib_task_enabled' 'bl64_dbg_lib_task_is_enabled'
+  bl64_dbg_lib_task_is_enabled
+}
+function bl64_dbg_app_command_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_app_command_enabled' 'bl64_dbg_app_command_is_enabled'
+  bl64_dbg_app_command_is_enabled
+}
+function bl64_dbg_lib_command_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_lib_command_enabled' 'bl64_dbg_lib_command_is_enabled'
+  bl64_dbg_lib_command_is_enabled
+}
+function bl64_dbg_app_trace_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_app_trace_enabled' 'bl64_dbg_app_trace_is_enabled'
+  bl64_dbg_app_trace_is_enabled
+}
+function bl64_dbg_lib_trace_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_lib_trace_enabled' 'bl64_dbg_lib_trace_is_enabled'
+  bl64_dbg_lib_trace_is_enabled
+}
+function bl64_dbg_app_custom_1_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_app_custom_1_enabled' 'bl64_dbg_app_custom_1_is_enabled'
+  bl64_dbg_app_custom_1_is_enabled
+}
+function bl64_dbg_app_custom_2_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_app_custom_2_enabled' 'bl64_dbg_app_custom_2_is_enabled'
+  bl64_dbg_app_custom_2_is_enabled
+}
+function bl64_dbg_app_custom_3_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_app_custom_3_enabled' 'bl64_dbg_app_custom_3_is_enabled'
+  bl64_dbg_app_custom_3_is_enabled
+}
+function bl64_dbg_lib_check_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_lib_check_enabled' '_bl64_dbg_lib_check_is_enabled'
+  _bl64_dbg_lib_check_is_enabled
+}
+function bl64_dbg_lib_log_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_lib_log_enabled' '_bl64_dbg_lib_log_is_enabled'
+  _bl64_dbg_lib_log_is_enabled
+}
+function bl64_dbg_lib_msg_enabled {
+  bl64_msg_show_deprecated 'bl64_dbg_lib_msg_enabled' '_bl64_dbg_lib_msg_is_enabled'
+  _bl64_dbg_lib_msg_is_enabled
+}
 
 #
 # Internal functions
@@ -2912,10 +2956,17 @@ function bl64_dbg_app_show_info() {
 #######################################
 function bl64_dbg_lib_show_vars() {
   local variable=''
+  local value=''
   bl64_dbg_lib_task_is_enabled || return 0
 
   for variable in "$@"; do
-    _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=${!variable}]"
+    if [[ ! -v "$variable" ]]; then
+      value='**UNSET**'
+    else
+      value="${!variable}"
+    fi
+
+    _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=${value}]"
   done
 
   return 0
@@ -2934,9 +2985,16 @@ function bl64_dbg_lib_show_vars() {
 #######################################
 function bl64_dbg_app_show_vars() {
   local variable=''
+  local value=''
   bl64_dbg_app_task_is_enabled || return 0
 
   for variable in "$@"; do
+    if [[ ! -v "$variable" ]]; then
+      value='**UNSET**'
+    else
+      value="${!variable}"
+    fi
+
     _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=${!variable}]"
   done
 
@@ -3642,10 +3700,14 @@ function bl64_msg_set_output() {
   local legacy_BL64_MSG_OUTPUT_ANSI='N'
 
   if bl64_lib_var_is_default "$output"; then
-    if bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+    if bl64_lib_mode_cicd_is_enabled; then
       output="$BL64_MSG_OUTPUT_ASCII"
     else
       output="$BL64_MSG_OUTPUT_ANSI"
+    fi
+  else
+    if bl64_lib_mode_cicd_is_enabled; then
+      output="$BL64_MSG_OUTPUT_ASCII"
     fi
   fi
 
@@ -6206,33 +6268,40 @@ function _bl64_arc_set_command() {
   bl64_dbg_lib_show_comments 'detect optional commands. No error if not found'
   BL64_ARC_CMD_BUNZIP2="$(bl64_bsh_command_locate 'bunzip2')"
   BL64_ARC_CMD_GUNZIP="$(bl64_bsh_command_locate 'gunzip')"
-  BL64_ARC_CMD_UNXZ="$(bl64_bsh_command_locate 'unxz')"''
+  BL64_ARC_CMD_UNXZ="$(bl64_bsh_command_locate 'unxz')"
+  BL64_ARC_CMD_7ZZ="$(bl64_bsh_command_locate '7zz')"
 
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     BL64_ARC_CMD_TAR='/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    BL64_ARC_CMD_ZIP='/usr/bin/zip'
     ;;
   ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
     BL64_ARC_CMD_TAR='/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    BL64_ARC_CMD_ZIP='/usr/bin/zip'
     ;;
   ${BL64_OS_SLES}-*)
     BL64_ARC_CMD_TAR='/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    BL64_ARC_CMD_ZIP='/usr/bin/zip'
     ;;
   ${BL64_OS_ALP}-*)
     BL64_ARC_CMD_TAR='/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    BL64_ARC_CMD_ZIP='/usr/bin/zip'
     ;;
   ${BL64_OS_ARC}-*)
     BL64_ARC_CMD_TAR='/usr/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    BL64_ARC_CMD_ZIP='/usr/bin/zip'
     ;;
   ${BL64_OS_MCOS}-*)
     BL64_ARC_CMD_TAR='/usr/bin/tar'
     BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+    BL64_ARC_CMD_ZIP='/usr/bin/zip'
     ;;
   *) bl64_check_alert_unsupported ;;
   esac
@@ -6307,13 +6376,83 @@ function bl64_arc_run_unzip() {
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
-  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && verbosity=' '
 
   _bl64_arc_harden_unzip
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ARC_CMD_UNZIP" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_arc_run_zip() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity='--verbose'
+
+  bl64_check_module 'BL64_ARC_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_ARC_CMD_ZIP" || return $?
+
+  if ! bl64_msg_lib_verbose_is_enabled || bl64_lib_mode_cicd_is_enabled; then
+    verbosity=' '
+  fi
+
+  _bl64_arc_harden_unzip
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_ARC_CMD_ZIP" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_arc_run_7zz() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity='-bso1'
+
+  bl64_check_module 'BL64_ARC_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_ARC_CMD_7ZZ" || return $?
+
+  if ! bl64_msg_lib_verbose_is_enabled || bl64_lib_mode_cicd_is_enabled; then
+    verbosity='-bso0'
+  fi
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_ARC_CMD_7ZZ" \
     $verbosity \
     "$@"
   bl64_dbg_lib_trace_stop
@@ -6362,7 +6501,7 @@ function bl64_arc_run_tar() {
     bl64_check_command "$BL64_ARC_CMD_TAR" ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && debug="$BL64_ARC_SET_TAR_VERBOSE"
+  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && debug="$BL64_ARC_SET_TAR_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -6408,66 +6547,66 @@ function bl64_arc_open_tar() {
     return $?
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_arc_run_tar \
-      --overwrite \
-      --extract \
-      --no-same-owner \
-      --preserve-permissions \
-      --no-acls \
-      --force-local \
-      --auto-compress \
-      --file="$source"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    bl64_arc_run_tar \
-      --overwrite \
-      --extract \
-      --no-same-owner \
-      --preserve-permissions \
-      --no-acls \
-      --force-local \
-      --auto-compress \
-      --file="$source"
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_arc_run_tar \
-      --overwrite \
-      --extract \
-      --no-same-owner \
-      --preserve-permissions \
-      --no-acls \
-      --force-local \
-      --auto-compress \
-      --file="$source"
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_arc_run_tar \
-      x \
-      --overwrite \
-      -f "$source" \
-      -o
-    ;;
-  ${BL64_OS_ARC}-*)
-    bl64_arc_run_tar \
-      --overwrite \
-      --extract \
-      --no-same-owner \
-      --preserve-permissions \
-      --no-acls \
-      --force-local \
-      --auto-compress \
-      --file="$source"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    bl64_arc_run_tar \
-      --extract \
-      --no-same-owner \
-      --preserve-permissions \
-      --no-acls \
-      --file="$source"
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      bl64_arc_run_tar \
+        --overwrite \
+        --extract \
+        --no-same-owner \
+        --preserve-permissions \
+        --no-acls \
+        --force-local \
+        --auto-compress \
+        --file="$source"
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      bl64_arc_run_tar \
+        --overwrite \
+        --extract \
+        --no-same-owner \
+        --preserve-permissions \
+        --no-acls \
+        --force-local \
+        --auto-compress \
+        --file="$source"
+      ;;
+    ${BL64_OS_SLES}-*)
+      bl64_arc_run_tar \
+        --overwrite \
+        --extract \
+        --no-same-owner \
+        --preserve-permissions \
+        --no-acls \
+        --force-local \
+        --auto-compress \
+        --file="$source"
+      ;;
+    ${BL64_OS_ALP}-*)
+      bl64_arc_run_tar \
+        x \
+        --overwrite \
+        -f "$source" \
+        -o
+      ;;
+    ${BL64_OS_ARC}-*)
+      bl64_arc_run_tar \
+        --overwrite \
+        --extract \
+        --no-same-owner \
+        --preserve-permissions \
+        --no-acls \
+        --force-local \
+        --auto-compress \
+        --file="$source"
+      ;;
+    ${BL64_OS_MCOS}-*)
+      bl64_arc_run_tar \
+        --extract \
+        --no-same-owner \
+        --preserve-permissions \
+        --no-acls \
+        --file="$source"
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
   status=$?
 
@@ -6543,7 +6682,7 @@ function bl64_arc_run_unxz() {
     bl64_check_command "$BL64_ARC_CMD_UNXZ" || return $?
 
   bl64_msg_lib_verbose_is_enabled && verbosity='-v'
-  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+  bl64_lib_mode_cicd_is_enabled && verbosity=' '
 
   _bl64_arc_harden_unxz
 
@@ -6584,9 +6723,9 @@ function bl64_arc_run_bunzip2() {
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_ARC_CMD_BUNZIP2" 
-    $verbosity 
-    "$@"
+  "$BL64_ARC_CMD_BUNZIP2"
+  $verbosity
+  "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -6613,15 +6752,15 @@ function bl64_arc_run_gunzip() {
     bl64_check_command "$BL64_ARC_CMD_GUNZIP" || return $?
 
   bl64_msg_lib_verbose_is_enabled && verbosity='-v'
-  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+  bl64_lib_mode_cicd_is_enabled && verbosity=' '
 
   _bl64_arc_harden_gunzip
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_ARC_CMD_GUNZIP" 
-    $verbosity 
-    "$@"
+  "$BL64_ARC_CMD_GUNZIP"
+  $verbosity
+  "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -7020,7 +7159,7 @@ function bl64_aws_run_aws() {
     bl64_check_module 'BL64_AWS_MODULE' ||
     return $?
   
-  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && verbosity=' '
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_AWS_SET_DEBUG"
 
   _bl64_aws_harden_aws &&
@@ -9372,6 +9511,7 @@ function bl64_cryp_setup() {
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_RXTX_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
     _bl64_cryp_set_command &&
     BL64_CRYP_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'cryp'
@@ -9393,9 +9533,10 @@ function bl64_cryp_setup() {
 #######################################
 # Warning: bootstrap function
 function _bl64_cryp_set_command() {
-  # shellcheck disable=SC2034
-  BL64_CRYP_CMD_GPG='/usr/bin/gpg'
-  BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
+  BL64_CRYP_CMD_MD5SUM="$(bl64_bsh_command_locate 'md5sum')"
+  BL64_CRYP_CMD_SHA256SUM="$(bl64_bsh_command_locate 'sha256sum')"
+  BL64_CRYP_CMD_GPG="$(bl64_bsh_command_locate 'gpg')"
+  BL64_CRYP_CMD_OPENSSL="$(bl64_bsh_command_locate 'openssl')"
 }
 
 #######################################
@@ -9458,6 +9599,60 @@ function bl64_cryp_run_openssl() {
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_CRYP_CMD_OPENSSL" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_cryp_run_md5sum() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_CRYP_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_CRYP_CMD_MD5SUM" || return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_CRYP_CMD_MD5SUM" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_cryp_run_sha256sum() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_CRYP_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_CRYP_CMD_SHA256SUM" || return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_CRYP_CMD_SHA256SUM" \
     "$@"
   bl64_dbg_lib_trace_stop
 }
@@ -11989,10 +12184,10 @@ function bl64_fs_file_remove() {
     return 0
 
   for path_current in "$@"; do
-    bl64_msg_show_lib_subtask "remove file (${path_current})"
     [[ ! -e "$path_current" && ! -L "$path_current" ]] &&
-      bl64_msg_show_warning 'file already removed. No further action taken' &&
+      bl64_dbg_lib_show_info 'file already removed. No further action taken' &&
       continue
+    bl64_msg_show_lib_subtask "remove file (${path_current})"
 
     [[ ! -f "$path_current" && ! -L "$path_current" ]] &&
       bl64_msg_show_lib_error 'invalid file type. It must be a regular file or a symlink. No further action taken.' &&
@@ -15455,7 +15650,7 @@ function bl64_pkg_run_dnf() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -15489,7 +15684,7 @@ function bl64_pkg_run_yum() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -15526,7 +15721,7 @@ function bl64_pkg_run_apt() {
   _bl64_pkg_harden_apt
 
   # Verbose is only available for a subset of commands
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && [[ "$*" =~ (install|upgrade|remove) ]]; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     export DEBCONF_NOWARNINGS='yes'
@@ -15589,7 +15784,7 @@ function bl64_pkg_run_apk() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -15625,7 +15820,7 @@ function bl64_pkg_run_brew() {
     bl64_check_privilege_not_root ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose='--verbose'
   else
     verbose='--quiet'
@@ -15663,7 +15858,7 @@ function bl64_pkg_run_zypper() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -15697,7 +15892,7 @@ function bl64_pkg_run_rpm() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose='--verbose'
   else
     verbose='--quiet'
@@ -15757,7 +15952,7 @@ function bl64_pkg_run_installer() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose='-verbose'
   fi
 
@@ -15815,7 +16010,7 @@ function bl64_pkg_run_pacman() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   fi
 
@@ -16222,7 +16417,7 @@ function bl64_py_pip_usr_install() {
       return $?
   fi
 
-  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbose='--progress-bar=off'
+  bl64_lib_mode_cicd_is_enabled && verbose='--progress-bar=off'
 
   bl64_msg_show_lib_subtask "install modules ($*)"
   # shellcheck disable=SC2086
@@ -16365,7 +16560,7 @@ function bl64_py_run_pip() {
     verbose="$BL64_PY_SET_PIP_DEBUG"
   else
     if bl64_msg_lib_verbose_is_enabled; then
-      if bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+      if bl64_lib_mode_cicd_is_enabled; then
         export PIP_NO_COLOR='on'
       fi
     else
@@ -16435,7 +16630,7 @@ function bl64_py_run_pipx() {
   local cache=' '
 
   bl64_msg_lib_verbose_is_enabled && debug=' '
-  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && export USE_EMOJI='no'
+  bl64_lib_mode_cicd_is_enabled && export USE_EMOJI='no'
   bl64_dbg_lib_command_is_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
   _bl64_py_harden_pipx
@@ -17358,7 +17553,7 @@ function bl64_rxtx_run_curl() {
     bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
 
-  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && debug=''
+  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && debug=''
   bl64_dbg_lib_command_is_enabled && debug="$BL64_RXTX_SET_CURL_VERBOSE"
 
   bl64_dbg_lib_trace_start
@@ -19091,7 +19286,7 @@ function bl64_vcs_run_git() {
     export GIT_TRACE='2'
   else
     if bl64_msg_lib_verbose_is_enabled; then
-      if bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+      if bl64_lib_mode_cicd_is_enabled; then
         export GIT_PROGRESS_DELAY='60'
       fi
     else
@@ -19163,7 +19358,7 @@ function bl64_vcs_git_clone() {
 
   bl64_lib_var_is_default "$branch" && branch=''
   bl64_msg_lib_verbose_is_enabled && verbose=' '
-  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbose='--no-progress'
+  bl64_lib_mode_cicd_is_enabled && verbose='--no-progress'
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_check_command "$BL64_VCS_CMD_GIT" ||
@@ -19294,7 +19489,13 @@ function bl64_vcs_github_run_api() {
   bl64_check_parameter 'api_path' ||
     return $?
 
-  [[ "$api_token" == "$BL64_VAR_NULL" ]] && api_token=''
+  if [[ "$api_token" == "$BL64_VAR_NULL" ]]; then
+    if [[ -v 'GITHUB_TOKEN' ]]; then
+      api_token="$GITHUB_TOKEN"
+    else
+      api_token=''
+    fi
+  fi
   shift
   shift
   shift

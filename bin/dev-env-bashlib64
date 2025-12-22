@@ -13,6 +13,28 @@
 # limitations under the License.
 #######################################
 
+# Attention: this env file is automatically sourced by dev-set
+
+#
+# Module variables
+#
+# * Shared internal variables for module tasks
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / BashLib64 / Module environment definition version
+  export DEV_ENV_BASHLIB64_ID='bl64'
+  export DEV_ENV_BASHLIB64_VERSION='3.0.0'
+
+  # Lib / BashLib64 / Skip installation?
+  export DEV_LIB_BASHLIB64_SKIP='YES'
+  # Lib / BashLib64 / Location
+  export DEV_LIB_BASHLIB64_TARGET="${DEV_PATH_LIB}/${DEV_ENV_BASHLIB64_ID}"
+  # Lib / BashLib64 / Version
+  export DEV_LIB_BASHLIB64_VERSION='22.10.0'
+}
+
 #
 # Locals
 #
@@ -21,61 +43,19 @@
 
 # shellcheck disable=SC2154
 {
-
-  # Lib / BashLib64 / Skip installation?
-  export DEV_LIB_BASHLIB64_SKIP='YES'
-  # Lib / BashLib64 / Location
-  export DEV_LIB_BASHLIB64_TARGET="${DEV_LIB_BASHLIB64_TARGET:-}"
-  if [[ -z "$DEV_LIB_BASHLIB64_TARGET" ]]; then
-    if [[ -f '/opt/bl64/bashlib64.bash' ]]; then
-      DEV_LIB_BASHLIB64_TARGET='/opt/bl64'
-    else
-      DEV_LIB_BASHLIB64_TARGET="${DEV_PATH_LIB}/bl64"
-      DEV_LIB_BASHLIB64_SKIP='NO'
-    fi
+  if [[ ! -f "${DEV_LIB_BASHLIB64_TARGET}/bashlib64.bash" ]]; then
+    DEV_LIB_BASHLIB64_SKIP='NO'
   fi
 }
 
 #
 # External
 #
+# * External tools only. Use to declare configuration env-vars
+#
 
 # shellcheck disable=SC2154
 {
-  # Warning: declared in here to avoid circular dependency with dev-env-installer64 and dev-set
-  # Lib / Installer64 / Skip installation?
-  export DEV_LIB_INSTALLER64_SKIP='YES'
-  # Lib / Installer64 / Location
-  export DEV_LIB_INSTALLER64_TARGET="${DEV_LIB_INSTALLER64_TARGET:-}"
-  if [[ -z "$DEV_LIB_INSTALLER64_TARGET" ]]; then
-    if [[ -f '/opt/inst64/install-installer64' ]]; then
-      DEV_LIB_INSTALLER64_TARGET='/opt/inst64'
-    else
-      DEV_LIB_INSTALLER64_TARGET="${DEV_PATH_LIB}/inst64"
-    fi
-  fi
-  if [[ ! -f "${DEV_LIB_INSTALLER64_TARGET}/install-installer64" ]]; then
-    DEV_LIB_INSTALLER64_SKIP='NO'
-  fi
-
-  # Lib / Installer64 / Local Installer64 library for BashLib64
-  export INST64_LIB_PATH="$DEV_LIB_INSTALLER64_TARGET"
-  # Lib / Installer64 / Local Installer64 library for BashLib64
-  export INST64_BASHLIB64="$DEV_LIB_BASHLIB64_TARGET"
-  # Lib / BashLib64 / Installer64 parameters
+  # Lib / Installer64 / Installer64 parameters
   export INST64_BASHLIB64_TARGET="$DEV_LIB_BASHLIB64_TARGET"
-  # Lib / Installer64 / Force user install type
-  export INST64_SYSTEM_WIDE='NO'
-}
-
-#
-# Internal variables
-#
-# * Shared internal variables for module tasks
-#
-
-# shellcheck disable=SC2154
-{
-  # Env / BashLib64 / Module environment definition version
-  export DEV_ENV_BASHLIB64_VERSION='2.2.0'
 }

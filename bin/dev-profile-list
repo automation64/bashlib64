@@ -40,7 +40,7 @@ function my_initialize() {
 
 bl64_lib_script_version_set '1.0.1'
 bl64_msg_help_about_set 'List devbin64 profiles'
-bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && bl64_dbg_set_level "$DEV_CICD_DEBUG" && my_initialize || exit $?
+dev_bin64_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_list

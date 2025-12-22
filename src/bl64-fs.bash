@@ -1463,10 +1463,10 @@ function bl64_fs_file_remove() {
     return 0
 
   for path_current in "$@"; do
-    bl64_msg_show_lib_subtask "remove file (${path_current})"
     [[ ! -e "$path_current" && ! -L "$path_current" ]] &&
-      bl64_msg_show_warning 'file already removed. No further action taken' &&
+      bl64_dbg_lib_show_info 'file already removed. No further action taken' &&
       continue
+    bl64_msg_show_lib_subtask "remove file (${path_current})"
 
     [[ ! -f "$path_current" && ! -L "$path_current" ]] &&
       bl64_msg_show_lib_error 'invalid file type. It must be a regular file or a symlink. No further action taken.' &&

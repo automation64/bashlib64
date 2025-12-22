@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.15.0'
+  declare BL64_MSG_VERSION='5.15.1'
 
   declare BL64_MSG_MODULE='0'
 
@@ -133,7 +133,7 @@
   declare BL64_MSG_LABEL_EMOJI_BATCHERR='(🔥)'
   declare BL64_MSG_LABEL_EMOJI_BATCHOK='(🌟)'
   declare BL64_MSG_LABEL_EMOJI_ERROR='(⛔)'
-  declare BL64_MSG_LABEL_EMOJI_HELP='(🆘)'
+  declare BL64_MSG_LABEL_EMOJI_HELP='(🚩)'
   declare BL64_MSG_LABEL_EMOJI_INFO='(💡)'
   declare BL64_MSG_LABEL_EMOJI_INIT='(⚙️)'
   declare BL64_MSG_LABEL_EMOJI_INPUT='(📝)'

@@ -466,7 +466,7 @@ function bl64_pkg_run_dnf() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -500,7 +500,7 @@ function bl64_pkg_run_yum() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -537,7 +537,7 @@ function bl64_pkg_run_apt() {
   _bl64_pkg_harden_apt
 
   # Verbose is only available for a subset of commands
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && [[ "$*" =~ (install|upgrade|remove) ]]; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     export DEBCONF_NOWARNINGS='yes'
@@ -600,7 +600,7 @@ function bl64_pkg_run_apk() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -636,7 +636,7 @@ function bl64_pkg_run_brew() {
     bl64_check_privilege_not_root ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose='--verbose'
   else
     verbose='--quiet'
@@ -674,7 +674,7 @@ function bl64_pkg_run_zypper() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     verbose="$BL64_PKG_SET_QUIET"
@@ -708,7 +708,7 @@ function bl64_pkg_run_rpm() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose='--verbose'
   else
     verbose='--quiet'
@@ -768,7 +768,7 @@ function bl64_pkg_run_installer() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose='-verbose'
   fi
 
@@ -826,7 +826,7 @@ function bl64_pkg_run_pacman() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
     verbose="$BL64_PKG_SET_VERBOSE"
   fi
 

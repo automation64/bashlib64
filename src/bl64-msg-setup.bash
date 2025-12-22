@@ -158,10 +158,14 @@ function bl64_msg_set_output() {
   local legacy_BL64_MSG_OUTPUT_ANSI='N'
 
   if bl64_lib_var_is_default "$output"; then
-    if bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+    if bl64_lib_mode_cicd_is_enabled; then
       output="$BL64_MSG_OUTPUT_ASCII"
     else
       output="$BL64_MSG_OUTPUT_ANSI"
+    fi
+  else
+    if bl64_lib_mode_cicd_is_enabled; then
+      output="$BL64_MSG_OUTPUT_ASCII"
     fi
   fi
 

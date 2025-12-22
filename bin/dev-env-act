@@ -14,6 +14,29 @@
 #######################################
 
 #
+# Module variables
+#
+# * Shared internal variables for module tasks
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / Act / Module environment definition version
+  export DEV_ENV_ACT_ID='act'
+  export DEV_ENV_ACT_VERSION='1.3.0'
+
+  # Lib / Act / Installer
+  export DEV_LIB_ACT_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-act"
+  # Lib / Act / Skip installation?
+  export DEV_LIB_ACT_SKIP='YES'
+  # Lib / Act / Target
+  export DEV_LIB_ACT_TARGET="${DEV_PATH_LIB}/${DEV_ENV_ACT_ID}"
+  # Lib / Act / Paths
+  export DEV_LIB_ACT_PATH_CACHE_ACTION="${DEV_PATH_TMP}/act/cache-action"
+  export DEV_LIB_ACT_PATH_CACHE_SERVER="${DEV_PATH_TMP}/act/cache-server"
+}
+
+#
 # Module parameters
 #
 # * Use .dev.env file to override values
@@ -22,7 +45,7 @@
 # shellcheck disable=SC2154
 {
   # Test / Act / List of workflows. Format: job-id, separated by spaces
-  export DEV_TEST_ACT_WORKFLOWS="${DEV_TEST_ACT_WORKFLOWS:-}"
+  export DEV_TEST_ACT_WORKFLOWS="${DEV_TEST_ACT_WORKFLOWS:-sast-gitleaks}"
 
   # Test / Act / Max concurrent jobs
   export DEV_TEST_ACT_JOBS_MAX="${DEV_TEST_ACT_JOBS_MAX:-2}"
@@ -36,10 +59,6 @@
 
 # shellcheck disable=SC2154
 {
-  # Lib / Act / Skip installation?
-  export DEV_LIB_ACT_SKIP='YES'
-  # Lib / Act / Target
-  export DEV_LIB_ACT_TARGET="${DEV_PATH_LIB}/act"
   # Lib / Act / Command
   export DEV_LIB_ACT_BIN="${DEV_LIB_ACT_BIN:-}"
   if [[ -z "$DEV_LIB_ACT_BIN" ]]; then
@@ -47,23 +66,10 @@
     if [[ -z "$DEV_LIB_ACT_BIN" ]]; then
       DEV_LIB_ACT_BIN="${DEV_LIB_ACT_TARGET}/act"
       if [[ ! -x "${DEV_LIB_ACT_BIN}" ]]; then
-      DEV_LIB_ACT_SKIP='NO'
+        DEV_LIB_ACT_SKIP='NO'
       fi
+    else
+      DEV_LIB_ACT_TARGET="$(bl64_fmt_path_get_basename "$DEV_LIB_ACT_BIN")"
     fi
   fi
-}
-
-#
-# Internal variables
-#
-# * Shared internal variables for module tasks
-#
-
-# shellcheck disable=SC2154
-{
-  # Env / Act / Module environment definition version
-  export DEV_ENV_ACT_VERSION='1.1.1'
-
-  # Lib / Act / Installer
-  export DEV_LIB_ACT_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-act"
 }

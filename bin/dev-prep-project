@@ -1,20 +1,11 @@
 #!/usr/bin/env bash
+# template-task: 1.9.0
 #######################################
-# Dev / Prep / Project / Prepare project environment
-#
-# * Use to prepare the project's dev environment. For example: normalize permissions
-# * Version: 1.0.0
-# * Template: 1.0.0
-#
-#######################################
-# Copyright [2023] [serdigital64@gmail.com]
+# Copyright SerDigital64 - https://github.com/serdigital64
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
+# You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,45 +13,34 @@
 # limitations under the License.
 #######################################
 
-#
-# Imports
-#
-
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
-# shellcheck source-path=bin
-source ./bin/dev-env-project || exit 1
-# shellcheck source-path=lib/bl64
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+# shellcheck source-path=/opt/bl64
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
-#
-# Functions
-#
-
-function dev_prep_normalize() {
+function my_prepare() {
   bl64_dbg_app_show_function
   bl64_msg_show_task 'Normalize repository permissions'
   bl64_fs_path_permission_set '0755' '0755' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_ON" \
     "$DEV_PATH_BIN" \
     "$DEV_PATH_SRC" \
-    "$DEV_PATH_TEST" \
-    "$DEV_PATH_BUILD" \
-    "$DEV_BASE_ENV"
+    "$DEV_PATH_TEST"
 }
 
-function dev_prep_initialize() {
+function my_initialize() {
   bl64_dbg_app_show_function
+  bl64_msg_show_about
 }
 
-#
-# Main
-#
+bl64_lib_script_version_set '1.0.0'
+bl64_msg_help_about_set 'Prepare local repository'
+dev_bin64_initialize && my_initialize || exit $?
 
-bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && bl64_dbg_set_level "$DEV_CICD_DEBUG" && dev_prep_initialize || exit $?
-bl64_msg_show_batch_start 'dev-prep-project'
-dev_prep_initialize &&
-  dev_prep_normalize
-bl64_msg_show_batch_finish $? 'dev-prep-project'
+bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
+my_prepare
+bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

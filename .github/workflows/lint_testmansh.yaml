@@ -1,6 +1,6 @@
 ---
-# Template: 4.7.0
-name: "Lint / TestManSH"
+# template: 4.8.0
+name: "Lint/TestManSH"
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.ref }}"
@@ -36,13 +36,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-lib-cache
 
-      - name: "Prepare environment"
-        run: "./bin/dev-lib-base"
-
       - name: "Download tools"
-        run: "./bin/dev-lib-testmansh"
+        run: |
+          ./bin/dev-lib-base &&
+          ./bin/dev-lib-testmansh
 
-      - name: "Build app"
+      - name: "Prepare for linting"
         run: "./bin/dev-build-project"
 
       - name: "Lint app"

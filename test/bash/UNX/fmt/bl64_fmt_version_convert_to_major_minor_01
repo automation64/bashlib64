@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source './build/prepare/bashlib64.bash' || exit $?
+source './test/lib/bash-setup.bash' || exit $?
 
 [[ "$(bl64_fmt_version_convert_to_major_minor '15.33.23')" == '15.33' ]] &&
 [[ "$(bl64_fmt_version_convert_to_major_minor '1.3.2')" == '1.3' ]] &&

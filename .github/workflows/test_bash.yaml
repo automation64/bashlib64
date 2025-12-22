@@ -1,6 +1,6 @@
 ---
-# Template: 2.3.0
-name: "Test / Bash"
+# template: 2.4.0
+name: "Test/Bash"
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.ref }}"
@@ -54,13 +54,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-lib-cache
 
-      - name: "Prepare environment"
+      - name: "Download tools"
         run: |
-          ./bin/dev-lib-base &&
-          ./bin/dev-prep-project
+          ./bin/dev-lib-base
 
-      - name: "Build app"
-        run: "./bin/dev-build-project"
+      - name: "Prepare for testing"
+        run: |
+          ./bin/dev-prep-project &&
+          ./bin/dev-build-project
 
       - name: "Run OS specific tests"
         run: |
@@ -98,13 +99,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-lib-cache
 
-      - name: "Prepare environment"
+      - name: "Download tools"
         run: |
-          ./bin/dev-lib-base &&
-          ./bin/dev-prep-project
+          ./bin/dev-lib-base
 
-      - name: "Build app"
-        run: "./bin/dev-build-project"
+      - name: "Prepare for testing"
+        run: |
+          ./bin/dev-prep-project &&
+          ./bin/dev-build-project
 
       - name: "Run OS specific tests"
         run: |

@@ -13,6 +13,43 @@
 # limitations under the License.
 #######################################
 
+# Attention: this env file is automatically sourced by dev-set
+
+#
+# Module variables
+#
+# * Shared internal variables for module tasks
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / Installer64 / Module environment definition version
+  export DEV_ENV_INSTALLER64_ID='inst64'
+  export DEV_ENV_INSTALLER64_VERSION='3.0.0'
+
+  # Lib / Installer64 / Skip installation?
+  export DEV_LIB_INSTALLER64_SKIP='YES'
+  # Lib / Installer64 / Location
+  export DEV_LIB_INSTALLER64_TARGET="${DEV_PATH_LIB}/${DEV_ENV_INSTALLER64_ID}"
+  # Lib / Installer64 / Version
+  export DEV_LIB_INSTALLER64_VERSION='7.3.0'
+  # Lib / Installer64 / Source
+  export DEV_LIB_INSTALLER64_URL='https://raw.githubusercontent.com/automation64/installer64/main/src/install-installer64'
+}
+
+#
+# Locals
+#
+# * Use .local.env file or CICD variables to override values
+#
+
+# shellcheck disable=SC2154
+{
+  if [[ ! -f "${DEV_LIB_INSTALLER64_TARGET}/install-installer64" ]]; then
+    DEV_LIB_INSTALLER64_SKIP='NO'
+  fi
+}
+
 #
 # External
 #
@@ -21,21 +58,13 @@
 
 # shellcheck disable=SC2154
 {
+  # Lib / Installer64 / Local Installer64 library for BashLib64
+  export INST64_LIB_PATH="$DEV_LIB_INSTALLER64_TARGET"
   # Lib / Installer64 / Installer64 parameters
   export INST64_INSTALLER64_TARGET="$DEV_LIB_INSTALLER64_TARGET"
-}
-
-#
-# Internal variables
-#
-# * Shared internal variables for module tasks
-#
-
-# shellcheck disable=SC2154
-{
-  # Env / Installer64 / Module environment definition version
-  export DEV_ENV_INSTALLER64_VERSION='2.0.0'
-
-  # Lib / Installer64 / Source
-  export DEV_LIB_INSTALLER64_URL='https://raw.githubusercontent.com/automation64/installer64/main/src/install-installer64'
+  # Lib / Installer64 / Local Installer64 library for BashLib64
+  export INST64_BASHLIB64="$DEV_LIB_BASHLIB64_TARGET"
+  # Lib / Installer64 / Force user install type
+  export INST64_SYSTEM_WIDE='NO'
+  export INST64_CLI_PROMOTE='NO'
 }

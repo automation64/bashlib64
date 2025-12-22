@@ -27,6 +27,7 @@ function bl64_cryp_setup() {
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_RXTX_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
     _bl64_cryp_set_command &&
     BL64_CRYP_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'cryp'
@@ -48,7 +49,8 @@ function bl64_cryp_setup() {
 #######################################
 # Warning: bootstrap function
 function _bl64_cryp_set_command() {
-  # shellcheck disable=SC2034
-  BL64_CRYP_CMD_GPG='/usr/bin/gpg'
-  BL64_CRYP_CMD_OPENSSL='/usr/bin/openssl'
+  BL64_CRYP_CMD_MD5SUM="$(bl64_bsh_command_locate 'md5sum')"
+  BL64_CRYP_CMD_SHA256SUM="$(bl64_bsh_command_locate 'sha256sum')"
+  BL64_CRYP_CMD_GPG="$(bl64_bsh_command_locate 'gpg')"
+  BL64_CRYP_CMD_OPENSSL="$(bl64_bsh_command_locate 'openssl')"
 }

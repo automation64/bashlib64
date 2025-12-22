@@ -24,13 +24,83 @@ function bl64_arc_run_unzip() {
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
-  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && verbosity=' '
 
   _bl64_arc_harden_unzip
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ARC_CMD_UNZIP" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_arc_run_zip() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity='--verbose'
+
+  bl64_check_module 'BL64_ARC_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_ARC_CMD_ZIP" || return $?
+
+  if ! bl64_msg_lib_verbose_is_enabled || bl64_lib_mode_cicd_is_enabled; then
+    verbosity=' '
+  fi
+
+  _bl64_arc_harden_unzip
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_ARC_CMD_ZIP" \
+    $verbosity \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_arc_run_7zz() {
+  bl64_dbg_lib_show_function "$@"
+  local verbosity='-bso1'
+
+  bl64_check_module 'BL64_ARC_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_ARC_CMD_7ZZ" || return $?
+
+  if ! bl64_msg_lib_verbose_is_enabled || bl64_lib_mode_cicd_is_enabled; then
+    verbosity='-bso0'
+  fi
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_ARC_CMD_7ZZ" \
     $verbosity \
     "$@"
   bl64_dbg_lib_trace_stop
@@ -79,7 +149,7 @@ function bl64_arc_run_tar() {
     bl64_check_command "$BL64_ARC_CMD_TAR" ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && debug="$BL64_ARC_SET_TAR_VERBOSE"
+  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && debug="$BL64_ARC_SET_TAR_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -125,66 +195,66 @@ function bl64_arc_open_tar() {
     return $?
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    bl64_arc_run_tar \
-      --overwrite \
-      --extract \
-      --no-same-owner \
-      --preserve-permissions \
-      --no-acls \
-      --force-local \
-      --auto-compress \
-      --file="$source"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    bl64_arc_run_tar \
-      --overwrite \
-      --extract \
-      --no-same-owner \
-      --preserve-permissions \
-      --no-acls \
-      --force-local \
-      --auto-compress \
-      --file="$source"
-    ;;
-  ${BL64_OS_SLES}-*)
-    bl64_arc_run_tar \
-      --overwrite \
-      --extract \
-      --no-same-owner \
-      --preserve-permissions \
-      --no-acls \
-      --force-local \
-      --auto-compress \
-      --file="$source"
-    ;;
-  ${BL64_OS_ALP}-*)
-    bl64_arc_run_tar \
-      x \
-      --overwrite \
-      -f "$source" \
-      -o
-    ;;
-  ${BL64_OS_ARC}-*)
-    bl64_arc_run_tar \
-      --overwrite \
-      --extract \
-      --no-same-owner \
-      --preserve-permissions \
-      --no-acls \
-      --force-local \
-      --auto-compress \
-      --file="$source"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    bl64_arc_run_tar \
-      --extract \
-      --no-same-owner \
-      --preserve-permissions \
-      --no-acls \
-      --file="$source"
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      bl64_arc_run_tar \
+        --overwrite \
+        --extract \
+        --no-same-owner \
+        --preserve-permissions \
+        --no-acls \
+        --force-local \
+        --auto-compress \
+        --file="$source"
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      bl64_arc_run_tar \
+        --overwrite \
+        --extract \
+        --no-same-owner \
+        --preserve-permissions \
+        --no-acls \
+        --force-local \
+        --auto-compress \
+        --file="$source"
+      ;;
+    ${BL64_OS_SLES}-*)
+      bl64_arc_run_tar \
+        --overwrite \
+        --extract \
+        --no-same-owner \
+        --preserve-permissions \
+        --no-acls \
+        --force-local \
+        --auto-compress \
+        --file="$source"
+      ;;
+    ${BL64_OS_ALP}-*)
+      bl64_arc_run_tar \
+        x \
+        --overwrite \
+        -f "$source" \
+        -o
+      ;;
+    ${BL64_OS_ARC}-*)
+      bl64_arc_run_tar \
+        --overwrite \
+        --extract \
+        --no-same-owner \
+        --preserve-permissions \
+        --no-acls \
+        --force-local \
+        --auto-compress \
+        --file="$source"
+      ;;
+    ${BL64_OS_MCOS}-*)
+      bl64_arc_run_tar \
+        --extract \
+        --no-same-owner \
+        --preserve-permissions \
+        --no-acls \
+        --file="$source"
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
   status=$?
 
@@ -260,7 +330,7 @@ function bl64_arc_run_unxz() {
     bl64_check_command "$BL64_ARC_CMD_UNXZ" || return $?
 
   bl64_msg_lib_verbose_is_enabled && verbosity='-v'
-  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+  bl64_lib_mode_cicd_is_enabled && verbosity=' '
 
   _bl64_arc_harden_unxz
 
@@ -301,9 +371,9 @@ function bl64_arc_run_bunzip2() {
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_ARC_CMD_BUNZIP2" 
-    $verbosity 
-    "$@"
+  "$BL64_ARC_CMD_BUNZIP2"
+  $verbosity
+  "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -330,14 +400,14 @@ function bl64_arc_run_gunzip() {
     bl64_check_command "$BL64_ARC_CMD_GUNZIP" || return $?
 
   bl64_msg_lib_verbose_is_enabled && verbosity='-v'
-  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+  bl64_lib_mode_cicd_is_enabled && verbosity=' '
 
   _bl64_arc_harden_gunzip
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_ARC_CMD_GUNZIP" 
-    $verbosity 
-    "$@"
+  "$BL64_ARC_CMD_GUNZIP"
+  $verbosity
+  "$@"
   bl64_dbg_lib_trace_stop
 }

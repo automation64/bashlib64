@@ -20,7 +20,7 @@
 #
 
 # Base path for the testing libraries
-export DEV_TEST_PATH_LIBRARY="${TESTMANSH_PROJECT_BUILD}/prepare"
+export DEV_TEST_PATH_LIBRARY="${TESTMANSH_PROJECT_BUILD}/prepare/project"
 export DEV_TEST_BASHLIB64="${DEV_TEST_PATH_LIBRARY}/bashlib64.bash"
 
 # Setup initialization only?. Empty: No, Not-Empty: Yes

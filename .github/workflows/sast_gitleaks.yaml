@@ -1,5 +1,6 @@
 ---
-name: "SAST / GitLeaks"
+# template: 1.1.0
+name: "SAST/GitLeaks"
 
 on:
   pull_request:

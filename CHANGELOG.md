@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.11.0]
+
+### Added
+
+- arc
+  - bl64_arc_run_zip: command wrapper
+  - bl64_arc_run_7zz: command wrapper
+- core
+  - bl64_lib_mode_cicd_is_enabled: query CICD mode
+- cryp
+  - bl64_cryp_run_md5sum: command wrapper
+  - bl64_cryp_run_sha256sum: command wrapper
+- vcs
+  - bl64_vcs_github_run_api: use GITHUB_TOKEN if present and no token was requested
+
+### Changed
+
+- msg
+  - Force ASCII output when CICD mode is enabled
+
+### Fixed
+
+- dbg
+  - bl64_dbg_*_show_vars: show UNDEF when var is not defined
+
 ## [22.10.0]
 
 ### Added

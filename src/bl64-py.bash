@@ -159,7 +159,7 @@ function bl64_py_pip_usr_install() {
       return $?
   fi
 
-  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbose='--progress-bar=off'
+  bl64_lib_mode_cicd_is_enabled && verbose='--progress-bar=off'
 
   bl64_msg_show_lib_subtask "install modules ($*)"
   # shellcheck disable=SC2086
@@ -302,7 +302,7 @@ function bl64_py_run_pip() {
     verbose="$BL64_PY_SET_PIP_DEBUG"
   else
     if bl64_msg_lib_verbose_is_enabled; then
-      if bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; then
+      if bl64_lib_mode_cicd_is_enabled; then
         export PIP_NO_COLOR='on'
       fi
     else
@@ -372,7 +372,7 @@ function bl64_py_run_pipx() {
   local cache=' '
 
   bl64_msg_lib_verbose_is_enabled && debug=' '
-  bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && export USE_EMOJI='no'
+  bl64_lib_mode_cicd_is_enabled && export USE_EMOJI='no'
   bl64_dbg_lib_command_is_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
   _bl64_py_harden_pipx

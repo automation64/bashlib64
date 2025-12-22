@@ -162,7 +162,7 @@ function bl64_aws_run_aws() {
     bl64_check_module 'BL64_AWS_MODULE' ||
     return $?
   
-  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && verbosity=' '
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_AWS_SET_DEBUG"
 
   _bl64_aws_harden_aws &&

@@ -1,9 +1,11 @@
+# Template: 1.0.0
 #
-# External sources
+# Configuration
 #
 
 external-sources=true
-# source-path=
+# Warning: temporary fix to avoid memory bug in 0.9 series
+extended-analysis=false
 
 #
 # Optional checks
@@ -13,5 +15,3 @@ enable=add-default-case
 enable=avoid-nullary-conditions
 enable=check-unassigned-uppercase
 enable=deprecate-which
-# enable=quote-safe-variables
-# enable=require-variable-braces

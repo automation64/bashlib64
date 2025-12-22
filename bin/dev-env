@@ -1,0 +1,304 @@
+#!/usr/bin/env bash
+# template-env: 1.2.0
+#######################################
+# Copyright SerDigital64 - https://github.com/serdigital64
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#######################################
+
+#
+# Module variables
+#
+# * Shared internal variables for module tasks
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / DevBin64 / Base file and directory names
+  export DEV_BASE_BUILD="build"
+  export DEV_BASE_CHANGELOG="CHANGELOG.md"
+  export DEV_BASE_DOT_ENV="dot.dev.env"
+  export DEV_BASE_DOT_LOCAL="dot.local.env"
+  export DEV_BASE_DOT_SECRETS="dot.secrets.env"
+  export DEV_BASE_ENV=".dev.env"
+  export DEV_BASE_GITKEEP=".gitkeep"
+  export DEV_BASE_LOCAL=".local.env"
+  export DEV_BASE_POST=".post.env"
+  export DEV_BASE_PROFILE="prof"
+  export DEV_BASE_SECRETS=".secrets.env"
+  export DEV_BASE_SRC="src"
+  export DEV_BASE_TEST="test"
+
+  # Env / DevBin64 / Standard prefixes and suffixes
+  export DEV_SUFFIX_CHECKSUM='-checksums.txt'
+
+  # Env / DevBin64 / List of modules to load
+  export DEV_MODULE_LOAD=''
+
+  # Env / DevBin64 / Current version
+  export DEV_BIN64_VERSION='12.0.1'
+
+  # Env / DevBin64 / Project root
+  export DEV_PATH_ROOT=''
+
+  # Env / DevBin64 / Project source code
+  export DEV_PATH_SRC=''
+
+  # Env / DevBin64 / Project test code
+  export DEV_PATH_TEST=''
+
+  # Env / DevBin64 / Project configuration files
+  export DEV_PATH_ETC=''
+
+  # Env / DevBin64 / Project documentation
+  export DEV_PATH_DOCS=''
+
+  # Env / DevBin64 / DevOps scripts
+  export DEV_PATH_BIN=''
+
+  # Env / DevBin64 / DevOps persistent data
+  export DEV_PATH_VAR=''
+
+  # Env / DevBin64 / DevOps ephemeral tools. Content excluded from GIT
+  export DEV_PATH_LIB=''
+
+  # Env / DevBin64 / DevOps builds. Content excluded from GIT
+  export DEV_PATH_BUILD=''
+  export DEV_PATH_BUILD_PREPARE=''
+  export DEV_PATH_BUILD_STAGING=''
+  export DEV_PATH_BUILD_PACK=''
+
+  # Env / DevBin64 / DevOps local vault for secrets. Content excluded from GIT
+  export DEV_PATH_VAULT=''
+
+  # Env / DevBin64 / DevOps logs store. Content excluded from GIT
+  export DEV_PATH_LOGS=''
+
+  # Env / DevBin64 / DevOps ephemeral data. Content excluded from GIT
+  export DEV_PATH_TMP=''
+
+  # Env / DevBin64 / Profile dependant variables
+  export DEV_PATH_PROF_BUILD=''
+  export DEV_PATH_PROF_BUILD_PREPARE=''
+  export DEV_PATH_PROF_BUILD_STAGING=''
+  export DEV_PATH_PROF_BUILD_PACK=''
+  export DEV_PATH_PROF_ETC=''
+  export DEV_PATH_PROF_LOGS=''
+  export DEV_PATH_PROF_TMP=''
+  export DEV_PATH_PROF_VAR=''
+  export DEV_PATH_PROF_VAULT=''
+}
+
+#
+# Locals
+#
+# * Use .local.env file or CICD variables to override values
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / DevBin64 / Debug flag for scripts (Format: BL64_DBG_TARGET_*)
+  export DEV_CICD_DEBUG="${DEV_CICD_DEBUG:-NONE}"
+
+  # Env / DevBin64 / Debug flag for pure bash scripts
+  export DEV_CICD_DEBUG_BASH="${DEV_CICD_DEBUG_BASH:-}"
+
+  # Env / DevBin64 / Verbose format (Format: BL64_MSG_FORMAT_*)
+  export DEV_VERBOSE="${DEV_VERBOSE:-FULL2}"
+
+  # Env / DevBin64 / Verbose output type (Format: BL64_MSG_OUTPUT_*)
+  export DEV_VERBOSE_TYPE="${DEV_VERBOSE_TYPE:-EMOJI}"
+
+  # Env / DevBin64 / Profile
+  export DEV_PROFILE="${DEV_PROFILE:-}"
+}
+
+#
+# External
+#
+# * External tools only. Use to declare configuration env-vars
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / DevBin64 / BashLib64 debugging
+  export BL64_LIB_CICD="${BL64_LIB_CICD:-}"
+
+  # Env / DevBin64 / GitHub Actions. Managed by the runner
+  export GITHUB_WORKSPACE="${GITHUB_WORKSPACE:-}"
+
+  # Env / DevBin64 / GitLab CICD. Managed by the runner
+  export GITLAB_CI="${GITLAB_CI:-}"
+
+  # Env / DevBin64 / TestManSH container. Managed by the runner
+  export TESTMANSH_PROJECT_ROOT="${TESTMANSH_PROJECT_ROOT:-}"
+}
+
+#
+# Module functions
+#
+# * Shared internal functions for module tasks
+# * Warning: some functions are to be used before BashLib64 is loaded
+#
+
+function dev_bin64_profile_check_disabled() {
+  ! dev_bin64_profile_is_set && ! dev_bin64_profile_is_enabled && return 0
+
+  dev_bin64_profile_is_set &&
+    dev_bin64_msg_show_error 'Profile must be disabled for this task. Set the variable DEV_PROFILE to "none" and retry.'
+
+  dev_bin64_profile_is_enabled &&
+    dev_bin64_msg_show_error 'Profile is not supported for this task.'
+
+  return 1
+}
+
+function dev_bin64_profile_check_set() {
+  dev_bin64_profile_is_set && return 0
+
+  dev_bin64_msg_show_error 'Profile is not set. Please set the DEV_PROFILE variable to a valid profile name.'
+  return 1
+}
+
+function dev_bin64_profile_is_enabled() {
+  [[ -d "${DEV_PATH_ETC}/${DEV_BASE_PROFILE}" ]]
+}
+
+function dev_bin64_profile_is_set() {
+  [[ -n "$DEV_PROFILE" && "$DEV_PROFILE" != 'none' ]]
+}
+
+function dev_bin64_msg_show_warning() {
+  local task="$1"
+  local msg="$2"
+  echo "${task}:Warning: ${msg}" 2>&1
+}
+
+function dev_bin64_msg_show_error() {
+  local task="$1"
+  local msg="$2"
+  echo "${task}:Error: ${msg}" 2>&1
+}
+
+function dev_bin64_msg_show_task() {
+  local task="$1"
+  local msg="$2"
+  [[ -n "$DEV_CICD_DEBUG_BASH" ]] && echo "${task}:Task: ${msg}"
+  return 0
+}
+
+function dev_bin64_msg_show_legacy() {
+  local task="$1"
+  local msg="$2"
+  echo "${task}:Legacy: legacy content detected. Please re-run devbin64 to upgrade the latest repository structure (${msg})" 2>&1
+}
+
+function dev_bin64_build_setup() {
+  bl64_dbg_app_show_function "$@"
+  local module_paths=("${@:-}")
+
+  bl64_msg_show_task 'initialize build area'
+  bl64_check_export 'DEV_PATH_BUILD_PREPARE' &&
+    bl64_check_export 'DEV_PATH_BUILD_STAGING' &&
+    bl64_check_export 'DEV_PATH_BUILD_PACK' &&
+    bl64_fs_dir_create \
+      "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+      "$DEV_PATH_PROF_BUILD_PREPARE" \
+      "$DEV_PATH_PROF_BUILD_STAGING" \
+      "$DEV_PATH_PROF_BUILD_PACK" ||
+    return $?
+
+  if [[ -n "${module_paths[*]}" ]]; then
+    bl64_msg_show_task 'reset temporal build paths'
+    bl64_fs_dir_reset \
+      "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+      "${module_paths[@]}"
+  fi
+}
+
+function dev_bin64_tmp_setup() {
+  bl64_dbg_app_show_function "$@"
+  local module_paths=("${@:-}")
+
+  bl64_msg_show_task 'initialize temporal work area'
+  bl64_check_export 'DEV_PATH_PROF_VAR' &&
+    bl64_fs_dir_create \
+      "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+      "$DEV_PATH_PROF_TMP" ||
+    return $?
+
+  if [[ -n "${module_paths[*]}" ]]; then
+    bl64_msg_show_task 'initialize module ephemeral paths'
+    bl64_fs_dir_create \
+      "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+      "${module_paths[@]}"
+  fi
+}
+
+function dev_bin64_log_setup() {
+  bl64_dbg_app_show_function "$@"
+  local module_paths=("${@:-}")
+
+  bl64_msg_show_task 'initialize logging area'
+  bl64_check_export 'DEV_PATH_PROF_LOGS' &&
+    bl64_fs_dir_create \
+      "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+      "$DEV_PATH_PROF_LOGS" ||
+    return $?
+
+  if [[ -n "${module_paths[*]}" ]]; then
+    bl64_msg_show_task 'initialize module logging paths'
+    bl64_fs_dir_create \
+      "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+      "${module_paths[@]}"
+  fi
+}
+
+function dev_bin64_initialize() {
+  bl64_dbg_set_level "$DEV_CICD_DEBUG" &&
+    bl64_msg_set_format "$DEV_VERBOSE" &&
+    bl64_msg_set_output "$DEV_VERBOSE_TYPE" &&
+    bl64_msg_all_enable_verbose &&
+    bl64_fs_set_umask 'u=rwx,g=rx,o=rx'
+}
+
+function dev_bin64_task_show_setup() {
+  bl64_dbg_app_show_function "$@"
+  bl64_dbg_app_show_vars \
+    'DEV_LIB_BASHLIB64_TARGET' \
+    'DEV_PATH_ROOT' \
+    'DEV_PATH_PROF_BUILD' \
+    'DEV_PATH_PROF_BUILD_PREPARE' \
+    'DEV_PATH_PROF_BUILD_STAGING' \
+    'DEV_PATH_PROF_BUILD_PACK' \
+    'DEV_PATH_PROF_ETC' \
+    'DEV_PATH_PROF_LOGS' \
+    'DEV_PATH_PROF_TMP' \
+    'DEV_PATH_PROF_VAR' \
+    'DEV_PATH_PROF_VAULT' \
+    'DEV_CICD_DEBUG' \
+    'DEV_CICD_DEBUG_BASH' \
+    'DEV_VERBOSE' \
+    'DEV_VERBOSE_TYPE' \
+    'DEV_PROFILE' \
+    'BL64_LIB_CICD' \
+    'DEV_LIB_BASHLIB64_TARGET' \
+    'DEV_LIB_INSTALLER64_TARGET' \
+    'INST64_LIB_PATH' \
+    'INST64_BASHLIB64' \
+    'INST64_BASHLIB64_TARGET' \
+    'DEV_SET_VERSION' \
+    'BL64_VERSION'
+
+  bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
+    'DEV_BIN64_VERSION' \
+    'DEV_PROFILE' \
+    "${@}"
+}

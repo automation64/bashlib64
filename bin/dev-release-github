@@ -52,8 +52,16 @@ function my_release_create() {
 function my_release_upload() {
   bl64_dbg_app_show_function "$@"
   local tag="$1"
+  local artifacts=''
 
   [[ -z "$DEV_RELEASE_GITHUB_ARTIFACT" ]] && return 0
+  if [[ -d "$DEV_RELEASE_GITHUB_ARTIFACT" ]]; then
+    artifacts="$(bl64_fs_file_search "$DEV_RELEASE_GITHUB_ARTIFACT")" &&
+      [[ -n "$artifacts" ]] ||
+      return $?
+  else
+    artifacts="$DEV_RELEASE_GITHUB_ARTIFACT"
+  fi
 
   bl64_msg_show_task "Upload release assets (${DEV_RELEASE_GITHUB_REPO_OWNER}/${DEV_RELEASE_GITHUB_REPO_NAME})"
   # shellcheck disable=SC2086
@@ -61,7 +69,7 @@ function my_release_upload() {
     release upload \
     --repo="${DEV_RELEASE_GITHUB_REPO_OWNER}/${DEV_RELEASE_GITHUB_REPO_NAME}" \
     "$tag" \
-    $DEV_RELEASE_GITHUB_ARTIFACT
+    $artifacts
 }
 
 function my_release() {
@@ -70,7 +78,7 @@ function my_release() {
   local notes=''
   local -i status=0
 
-  notes="$(bl64_fs_create_tmpfile).md" &&
+  notes="$(bl64_fs_create_tmpfile)" &&
     bl64_vcs_changelog_get_release "$DEV_BASE_CHANGELOG" "$tag" >"$notes"
   [[ ! -s "$notes" ]] && bl64_msg_show_error 'Unable to extract changelog for the requested tag' && status=1
 
@@ -89,18 +97,20 @@ function my_initialize() {
   bl64_check_parameter 'MY_RELEASE_TAG' &&
     bl64_check_export 'DEV_RELEASE_GITHUB_REPO_OWNER' &&
     bl64_check_export 'DEV_RELEASE_GITHUB_REPO_NAME' &&
-    bl64_check_command_search_path "$DEV_LIB_GITHUB_BIN" &&
+    bl64_check_command "$DEV_LIB_GITHUB_BIN" &&
     bl64_check_file "$DEV_BASE_CHANGELOG" &&
-    bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
+    dev_bin64_task_show_setup \
       'DEV_RELEASE_GITHUB_REPO_OWNER' \
       'DEV_RELEASE_GITHUB_REPO_NAME' \
+      'DEV_RELEASE_GITHUB_ARTIFACT' \
       'DEV_BASE_CHANGELOG' \
+      'DEV_GIT_BRANCH_MAIN' \
       'MY_RELEASE_TAG'
 }
 
-bl64_lib_script_version_set '2.2.5'
+bl64_lib_script_version_set '2.3.0'
 bl64_msg_help_about_set 'Create a GitHub release'
-bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && bl64_dbg_set_level "$DEV_CICD_DEBUG" && my_initialize || exit $?
+dev_bin64_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_release "$MY_RELEASE_TAG"

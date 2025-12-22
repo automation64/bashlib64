@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.10.0'
+  declare BL64_VERSION='22.11.0'
 
   #
   # Imported generic shell standard variables
@@ -68,7 +68,7 @@
   # Enable lib shell traps? (On/Off)
   declare BL64_LIB_TRAPS="${BL64_LIB_TRAPS:-$BL64_VAR_ON}"
 
-  # Assume shell non-interactive mode? (On/Off)
+  # Enable CICD operation mode? (On/Off)
   declare BL64_LIB_CICD="${BL64_LIB_CICD:-$BL64_VAR_OFF}"
 
   #

@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# * Version: 4.1.1
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -21,25 +20,40 @@
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
 
 #
+# Functions
+#
+
+function my_download() {
+  if [[ -n "$GITHUB_TOKEN" ]]; then
+    curl -LO -H "Authorization: Bearer $GITHUB_TOKEN" "$DEV_LIB_INSTALLER64_URL"
+  else
+    curl -LO "$DEV_LIB_INSTALLER64_URL"
+  fi ||
+    return $?
+  chmod 700 ./install-installer64
+}
+
+#
 # Main
 #
 
-[[ -n "$DEV_BASH_DEBUG" ]] && set -x
+[[ -n "$DEV_CICD_DEBUG_BASH" ]] && set -x
 
 if [[ "$DEV_LIB_INSTALLER64_SKIP" == 'YES' ]]; then
-  echo 'dev-lib-installer64: Warning: tool already installed. No further action taken'
   exit 0
 fi
 
-echo 'dev-lib-installer64: Task: remove older Installer64 versions'
+dev_bin64_msg_show_task 'dev-lib-installer64' 'remove older Installer64 versions'
 [[ -d "$DEV_LIB_INSTALLER64_TARGET" ]] && rm -Rf "$DEV_LIB_INSTALLER64_TARGET"
 
-echo 'dev-lib-installer64: Task: download Installer64'
+dev_bin64_msg_show_task 'dev-lib-installer64' 'download Installer64'
 cd "$DEV_PATH_LIB" &&
-  curl -LO "$DEV_LIB_INSTALLER64_URL" &&
-  bash './install-installer64' ||
+  my_download &&
+  INST64_INSTALLER64_VERSION="$DEV_LIB_INSTALLER64_VERSION" \
+    ./install-installer64 ||
   exit $?
 
 rm -f \
   'install-installer64'
+[[ -n "$DEV_CICD_DEBUG_BASH" ]] && set +x
 :
