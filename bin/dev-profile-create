@@ -53,13 +53,13 @@ function my_initialize() {
   bl64_dbg_app_show_function
   bl64_msg_show_about
   bl64_check_parameter 'MY_PROFILE' &&
-    bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
+    dev_bin64_task_show_setup \
       'MY_PROFILE'
 }
 
 bl64_lib_script_version_set '2.2.0'
 bl64_msg_help_about_set 'Create profile directory structure'
-bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && bl64_dbg_set_level "$DEV_CICD_DEBUG" && my_initialize || exit $?
+dev_bin64_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_create

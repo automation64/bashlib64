@@ -44,7 +44,7 @@ function my_initialize() {
   bl64_dbg_app_show_function
   bl64_check_export 'DEV_GIT_REMOTE_UPSTREAM_URL' &&
     bl64_msg_show_about &&
-    bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
+    dev_bin64_task_show_setup \
       'DEV_GIT_BRANCH_MAIN' \
       'DEV_GIT_REMOTE_UPSTREAM' \
       'DEV_GIT_REMOTE_UPSTREAM_URL' \
@@ -53,7 +53,7 @@ function my_initialize() {
 
 bl64_lib_script_version_set '1.0.1'
 bl64_msg_help_about_set 'Create local git repository and push to remote upstream'
-bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && bl64_dbg_set_level "$DEV_CICD_DEBUG" && my_initialize || exit $?
+dev_bin64_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_create

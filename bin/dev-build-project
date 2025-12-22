@@ -1,49 +1,46 @@
 #!/usr/bin/env bash
+# template-build: 1.0.0
+#######################################
+# Copyright SerDigital64 - https://github.com/serdigital64
 #
-# Dev / Build / Project / Build application
-#
-# * Version: 4.0.2
-# * Template: 2.0.0
-#
-
-#
-# Imports
-#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#######################################
 
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+# shellcheck source-path=/opt/bl64
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 # shellcheck source-path=bin
 source ./bin/dev-env-project || exit 1
-# shellcheck source-path=lib/bl64
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 
-#
-# Globals
-#
+declare MY_BUILD_SA="${DEV_BUILD_PROJECT_PATH_TARGET}/${DEV_PACK_PROJECT_ASSETS_SA}"
+declare MY_BUILD_CORE="${DEV_BUILD_PROJECT_PATH_TARGET}/${DEV_PACK_PROJECT_ASSETS_CORE}"
+declare MY_BUILD_OPT="${DEV_BUILD_PROJECT_PATH_TARGET}/${DEV_PACK_PROJECT_ASSETS_OPT}"
+declare MY_BUILD_MODULE_CORE="${DEV_BUILD_PROJECT_PATH_TARGET}/${DEV_PACK_PROJECT_ASSETS_MODULE_CORE}"
 
-declare _BUILD_SA="${DEV_PATH_BUILD_PREPARE}/${DEV_PACK_PROJECT_ASSETS_SA}"
-declare _BUILD_CORE="${DEV_PATH_BUILD_PREPARE}/${DEV_PACK_PROJECT_ASSETS_CORE}"
-declare _BUILD_OPT="${DEV_PATH_BUILD_PREPARE}/${DEV_PACK_PROJECT_ASSETS_OPT}"
-declare _BUILD_MODULE_CORE="${DEV_PATH_BUILD_PREPARE}/${DEV_PACK_PROJECT_ASSETS_MODULE_CORE}"
-
-#
-# Functions
-#
-
-function dev_build_merge_main() {
+function my_build_merge_main() {
   bl64_msg_show_task 'adding main'
   # shellcheck disable=SC2119
-  { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && echo; } >>"$_BUILD_SA" &&
-    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && echo; } >>"$_BUILD_CORE" &&
-    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && echo; } >>"$_BUILD_MODULE_CORE" &&
+  { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && echo; } >>"$MY_BUILD_SA" &&
+    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && echo; } >>"$MY_BUILD_CORE" &&
+    { "$BL64_OS_CMD_CAT" "bl64-lib-main.bash" && echo; } >>"$MY_BUILD_MODULE_CORE" &&
     bl64_fs_run_chmod '0755' \
-      "$_BUILD_SA" \
-      "$_BUILD_MODULE_CORE" \
-      "$_BUILD_CORE" \
-      "$_BUILD_OPT" ||
+      "$MY_BUILD_SA" \
+      "$MY_BUILD_MODULE_CORE" \
+      "$MY_BUILD_CORE" \
+      "$MY_BUILD_OPT" ||
     return $?
 }
 
@@ -70,19 +67,19 @@ function dev_build_merge_module() {
   done
 }
 
-function dev_build_create_modules() {
+function my_build_create_modules() {
   bl64_dbg_lib_show_function
   local build_module=''
   local module_name=''
 
   bl64_msg_show_task 'adding modules'
-  dev_build_merge_module "$_BUILD_SA" "${DEV_ENV_PROJECT_MODULES_CORE} ${DEV_ENV_PROJECT_MODULES_OPT}" &&
-    dev_build_merge_module "$_BUILD_CORE" "$DEV_ENV_PROJECT_MODULES_CORE" &&
-    dev_build_merge_module "$_BUILD_OPT" "$DEV_ENV_PROJECT_MODULES_OPT" ||
+  dev_build_merge_module "$MY_BUILD_SA" "${DEV_ENV_PROJECT_MODULES_CORE} ${DEV_ENV_PROJECT_MODULES_OPT}" &&
+    dev_build_merge_module "$MY_BUILD_CORE" "$DEV_ENV_PROJECT_MODULES_CORE" &&
+    dev_build_merge_module "$MY_BUILD_OPT" "$DEV_ENV_PROJECT_MODULES_OPT" ||
     return $?
 
   for module_name in ${DEV_ENV_PROJECT_MODULES_CORE} ${DEV_ENV_PROJECT_MODULES_OPT}; do
-    build_module="${DEV_PATH_BUILD_PREPARE}/${DEV_PACK_PROJECT_ASSETS_MODULE}-${module_name}.bash"
+    build_module="${DEV_BUILD_PROJECT_PATH_TARGET}/${DEV_PACK_PROJECT_ASSETS_MODULE}-${module_name}.bash"
     dev_build_merge_module "${build_module}.tmp" "$module_name"
     {
       "$BL64_OS_CMD_CAT" 'bl64-lib-header.bash' &&
@@ -105,42 +102,43 @@ function dev_build_merge_core() {
     "$BL64_OS_CMD_CAT" "bl64-lib.bash"
 }
 
-function dev_build_create_header() {
+function my_build_create_header() {
   # Create header
   bl64_msg_show_task 'creating library header'
   # shellcheck disable=SC2119
-  dev_build_merge_core >"$_BUILD_SA" &&
-    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$_BUILD_SA" "$_BUILD_CORE" &&
-    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$_BUILD_SA" "$_BUILD_MODULE_CORE" ||
+  dev_build_merge_core >"$MY_BUILD_SA" &&
+    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$MY_BUILD_SA" "$MY_BUILD_CORE" &&
+    bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$MY_BUILD_SA" "$MY_BUILD_MODULE_CORE" ||
     return $?
   # shellcheck disable=SC2119
   {
     "$BL64_OS_CMD_CAT" "bl64-lib-header.bash" && echo
-  } >"$_BUILD_OPT" || return 1
+  } >"$MY_BUILD_OPT" || return 1
 }
 
-function dev_build() {
+function my_build() {
   bl64_dbg_app_show_function
-  cd "$DEV_PATH_SRC" &&
-    dev_build_create_header &&
-    dev_build_create_modules &&
-    dev_build_merge_main &&
-    bl64_fs_path_permission_set '0755' '0755' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_ON" \
-      "$DEV_PATH_BUILD_PREPARE"
+  cd "$DEV_BUILD_PROJECT_PATH_SOURCE" &&
+    my_build_create_header &&
+    my_build_create_modules &&
+    my_build_merge_main
 }
 
-function dev_build_initialize() {
+function my_initialize() {
   bl64_dbg_app_show_function
-  bl64_fs_dir_reset \
-    "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$DEV_PATH_BUILD_PREPARE"
+  bl64_msg_show_about
+  dev_bin64_build_setup "$DEV_BUILD_PROJECT_PATH_TARGET" &&
+    dev_bin64_task_show_setup \
+      'DEV_BUILD_PROJECT_PATH_SOURCE' \
+      'DEV_BUILD_PROJECT_PATH_TARGET' \
+      'DEV_ENV_PROJECT_MODULES_CORE' \
+      'DEV_ENV_PROJECT_MODULES_OPT'
 }
 
-#
-# Main
-#
+bl64_lib_script_version_set '1.0.0'
+bl64_msg_help_about_set 'Build application in staging area'
+dev_bin64_initialize && my_initialize || exit $?
 
-bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && bl64_dbg_set_level "$DEV_CICD_DEBUG" && dev_build_initialize || exit $?
-bl64_msg_show_batch_start 'dev-build-project'
-dev_build_initialize &&
-  dev_build
-bl64_msg_show_batch_finish $? 'dev-build-project'
+bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
+my_build
+bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

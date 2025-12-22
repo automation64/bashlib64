@@ -14,6 +14,41 @@
 #######################################
 
 #
+# Module variables
+#
+# * Shared internal variables for module tasks
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / Bash / Module environment definition version
+  export DEV_ENV_BASH_ID='bash'
+  export DEV_ENV_BASH_VERSION='1.11.0'
+  # Env / Bash / Container path for project mounts
+  export DEV_ENV_BASH_CONTAINER_PATH_SRC='/source'
+  export DEV_ENV_BASH_CONTAINER_PATH_ROOT='/project'
+  export DEV_ENV_BASH_CONTAINER_PATH_TEST='/test'
+  # Env / Bash / Local work paths
+  export DEV_ENV_BASH_PATH_LOGS="${DEV_PATH_PROF_LOGS}/bash"
+
+  # Test / Bash / Cooldown between tests in seconds
+  export DEV_TEST_BASH_COOLDOWN='2'
+  # Test / Bash / Path to test cases. Relative to DEV_PATH_ROOT
+  export DEV_TEST_BASH_CASES="${DEV_BASE_TEST}/bash"
+  # Test / Bash / Flag for disabling container test, and run on local OS
+  export DEV_TEST_BASH_CONTAINER_DISABLED='YES'
+
+  # Build / Bash / Target
+  export DEV_BUILD_BASH_PATH_TARGET="${DEV_PATH_BUILD_PREPARE}/${DEV_ENV_BASH_ID}"
+
+  # Deploy / OpenTofu / Log file
+  export DEV_DEPLOY_BASH_LOG='deploy.log'
+
+  # Remove / OpenTofu / Log file
+  export DEV_REMOVE_BASH_LOG='remove.log'
+}
+
+#
 # Module parameters
 #
 # * Use .dev.env file to override values
@@ -29,7 +64,7 @@
   # Build / Bash / Source full path
   export DEV_BUILD_BASH_SOURCE="${DEV_BUILD_BASH_SOURCE:-${DEV_PATH_SRC}}"
   # Build / Bash / Target file full path
-  export DEV_BUILD_BASH_FILE="${DEV_BUILD_BASH_FILE:-${DEV_PATH_BUILD_PREPARE}/${DEV_BUILD_BASH_NAME}}"
+  export DEV_BUILD_BASH_FILE="${DEV_BUILD_BASH_FILE:-${DEV_BUILD_BASH_PATH_TARGET}/${DEV_BUILD_BASH_NAME}}"
   # Build / Bash / Libraries
   export DEV_BUILD_BASH_MODULES="${DEV_BUILD_BASH_MODULES:-/dev/null}"
 
@@ -40,33 +75,7 @@
   export DEV_TEST_BASH_CONTAINER_ENVIRONMENT="${DEV_TEST_BASH_CONTAINER_ENVIRONMENT:-OFF}"
   # Test / Bash / Flag for marking CICD runner  environment
   export DEV_TEST_BASH_RUNNER_ENVIRONMENT="${DEV_TEST_BASH_RUNNER_ENVIRONMENT:-OFF}"
-}
 
-#
-# Internal variables
-#
-# * Shared internal variables for module tasks
-#
-
-# shellcheck disable=SC2154
-{
-  # Env / Bash / Module environment definition version
-  export DEV_ENV_BASH_VERSION='1.10.0'
-
-  # Env / Bash / Container path for project mounts
-  export DEV_ENV_BASH_CONTAINER_PATH_SRC='/source'
-  export DEV_ENV_BASH_CONTAINER_PATH_ROOT='/project'
-  export DEV_ENV_BASH_CONTAINER_PATH_TEST='/test'
-  # Env / Bash / Local work paths
-  export DEV_ENV_BASH_PATH_LOGS="${DEV_PATH_PROF_LOGS}/bash"
-
-  # Test / Bash / Cooldown between tests in seconds
-  export DEV_TEST_BASH_COOLDOWN='2'
-  # Test / Bash / Path to test cases. Relative to DEV_PATH_ROOT
-  export DEV_TEST_BASH_CASES="${DEV_BASE_TEST}/bash"
-
-  # Test / Bash / Flag for disabling container test, and run on local OS
-  export DEV_TEST_BASH_CONTAINER_DISABLED='YES'
   # Test / Bash / Default test containers
   export DEV_TEST_BASH_CONTAINER="${DEV_TEST_BASH_CONTAINER:-bash-test/alpine-3-bash-test}"
   export DEV_TEST_BASH_CONTAINER_ALM="${DEV_TEST_BASH_CONTAINER_ALM:-bash-test/almalinux-9-bash-test}"
@@ -81,10 +90,4 @@
   export DEV_TEST_BASH_CONTAINER_RHEL="${DEV_TEST_BASH_CONTAINER_RHEL:-bash-test/rhel-9-bash-test}"
   export DEV_TEST_BASH_CONTAINER_SLES="${DEV_TEST_BASH_CONTAINER_SLES:-bash-test/sles-15-bash-test}"
   export DEV_TEST_BASH_CONTAINER_UB="${DEV_TEST_BASH_CONTAINER_UB:-bash-test/ubuntu-22.4-bash-test}"
-
-  # Deploy / OpenTofu / Log file
-  export DEV_DEPLOY_BASH_LOG='deploy.log'
-
-  # Remove / OpenTofu / Log file
-  export DEV_REMOVE_BASH_LOG='remove.log'
 }

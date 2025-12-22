@@ -1,6 +1,6 @@
 ---
-# Template: 1.3.0
-name: "Release / GitHub"
+# template: 1.4.0
+name: "Release/GitHub"
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.ref }}"
@@ -33,14 +33,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-lib-cache
 
-      - name: "Prepare environment"
-        run: "./bin/dev-lib-base"
+      - name: "Download tools"
+        run: |
+          ./bin/dev-lib-base &&
+          ./bin/dev-lib-github
 
-      - name: "Build app for release"
-        run: "./bin/dev-build-project"
-
-      - name: "Create distributable packages"
-        run: "./bin/dev-pack-project"
+      - name: "Prepare application for release"
+        run: |
+          ./bin/dev-build-project &&
+          ./bin/dev-pack-project"
 
       - name: "Create release"
         run: "./bin/dev-release-github ${GITHUB_REF_NAME}"

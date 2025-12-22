@@ -14,6 +14,19 @@
 #######################################
 
 #
+# Module variables
+#
+# * Shared internal variables for module tasks
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / GIT / Module environment definition version
+  export DEV_ENV_GIT_ID='git'
+  export DEV_ENV_GIT_VERSION='1.1.0'
+}
+
+#
 # Module parameters
 #
 # * Use .dev.env file to override values
@@ -47,16 +60,4 @@
 {
   # Lib / RSync / Command
   export DEV_LIB_RSYNC_BIN="${DEV_LIB_RSYNC_BIN:-/usr/bin/rsync}"
-}
-
-#
-# Internal variables
-#
-# * Shared internal variables for module tasks
-#
-
-# shellcheck disable=SC2154
-{
-  # Env / GIT / Module environment definition version
-  export DEV_ENV_GIT_VERSION='1.1.0'
 }

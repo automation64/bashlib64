@@ -13,6 +13,31 @@
 # limitations under the License.
 #######################################
 
+
+#
+# Module variables
+#
+# * Shared internal variables for module tasks
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / ShellCheck / Module environment definition version
+  export DEV_ENV_SHELLCHECK_ID='shellcheck'
+  export DEV_ENV_SHELLCHECK_VERSION='1.2.1'
+  # Env / ShellCheck / Container path for project mounts
+  export DEV_ENV_SHELLCHECK_CONTAINER_PATH_ROOT='/project'
+
+  # Lib / ShellCheck / Installer
+  export DEV_LIB_SHELLCHECK_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-shellcheck"
+  # Lib / ShellCheck / Skip installation?
+  export DEV_LIB_SHELLCHECK_SKIP='YES'
+  # Lib / ShellCheck / Target
+  export DEV_LIB_SHELLCHECK_TARGET="${DEV_PATH_LIB}/${DEV_ENV_SHELLCHECK_ID}"
+  # Lib / ShellCheck / Configuration
+  export DEV_LIB_SHELLCHECK_CFG='.shellcheckrc'
+}
+
 #
 # Module parameters
 #
@@ -39,10 +64,6 @@
 
 # shellcheck disable=SC2154
 {
-  # Lib / ShellCheck / Skip installation?
-  export DEV_LIB_SHELLCHECK_SKIP='YES'
-  # Lib / ShellCheck / Target
-  export DEV_LIB_SHELLCHECK_TARGET="${DEV_PATH_LIB}/shellcheck"
   # Lib / ShellCheck / Command
   export DEV_LIB_SHELLCHECK_BIN="${DEV_LIB_SHELLCHECK_BIN:-}"
   if [[ -z "$DEV_LIB_SHELLCHECK_BIN" ]]; then
@@ -52,24 +73,8 @@
       if [[ ! -x "${DEV_LIB_SHELLCHECK_BIN}" ]]; then
         DEV_LIB_SHELLCHECK_SKIP='NO'
       fi
+    else
+      DEV_LIB_SHELLCHECK_TARGET="$(bl64_fmt_path_get_basename "$DEV_LIB_SHELLCHECK_BIN")"
     fi
   fi
-}
-
-#
-# Internal variables
-#
-# * Shared internal variables for module tasks
-#
-
-# shellcheck disable=SC2154
-{
-  # Env / ShellCheck / Module environment definition version
-  export DEV_ENV_SHELLCHECK_VERSION='1.2.1'
-  # Env / ShellCheck / Container path for project mounts
-  export DEV_ENV_SHELLCHECK_CONTAINER_PATH_ROOT='/project'
-  # Lib / ShellCheck / Installer
-  export DEV_LIB_SHELLCHECK_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-shellcheck"
-  # Lib / ShellCheck / Configuration
-  export DEV_LIB_SHELLCHECK_CFG='.shellcheckrc'
 }

@@ -14,6 +14,26 @@
 #######################################
 
 #
+# Module variables
+#
+# * Shared internal variables for module tasks
+#
+
+# shellcheck disable=SC2154
+{
+  # Env / GitHub / Module environment definition version
+  export DEV_ENV_GITHUB_ID='github'
+  export DEV_ENV_GITHUB_VERSION='2.0.0'
+
+  # Lib / GitHub / Installer
+  export DEV_LIB_GITHUB_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-ghcli"
+  # Lib / GitHub / Skip installation?
+  export DEV_LIB_GITHUB_SKIP='YES'
+  # Lib / GitHub / Target
+  export DEV_LIB_GITHUB_TARGET="${DEV_PATH_LIB}/${DEV_ENV_GITHUB_ID}"
+}
+
+#
 # Module parameters
 #
 # * Use .dev.env file to override values
@@ -39,10 +59,6 @@
 
 # shellcheck disable=SC2154
 {
-  # Lib / GitHub / Skip installation?
-  export DEV_LIB_GITHUB_SKIP='YES'
-  # Lib / GitHub / Target
-  export DEV_LIB_GITHUB_TARGET="${DEV_PATH_LIB}/gh"
   # Lib / GitHub / Command
   export DEV_LIB_GITHUB_BIN="${DEV_LIB_GITHUB_BIN:-}"
   if [[ -z "$DEV_LIB_GITHUB_BIN" ]]; then
@@ -52,6 +68,8 @@
       if [[ ! -x "${DEV_LIB_GITHUB_BIN}" ]]; then
         DEV_LIB_GITHUB_SKIP='NO'
       fi
+    else
+      DEV_LIB_GITHUB_TARGET="$(bl64_fmt_path_get_basename "$DEV_LIB_GITHUB_BIN")"
     fi
   fi
 }
@@ -66,19 +84,4 @@
 {
   # Auth / GitHub / Token
   export GITHUB_TOKEN="${GITHUB_TOKEN:-}"
-}
-
-#
-# Internal variables
-#
-# * Shared internal variables for module tasks
-#
-
-# shellcheck disable=SC2154
-{
-  # Env / GitHub / Module environment definition version
-  export DEV_ENV_GITHUB_VERSION='2.0.0'
-
-  # Lib / GitHub / Installer
-  export DEV_LIB_GITHUB_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-ghcli"
 }

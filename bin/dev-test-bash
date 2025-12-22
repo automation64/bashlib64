@@ -114,14 +114,14 @@ function my_initialize() {
 
   bl64_cnt_setup &&
     bl64_check_directory "$DEV_TEST_BASH_CASES" &&
-    bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
+    dev_bin64_task_show_setup \
       'MY_CONTAINER' \
       'MY_TARGET'
 }
 
 bl64_lib_script_version_set '1.4.1'
 bl64_msg_help_about_set 'Run bash test scripts inside a container or on the host'
-bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && bl64_dbg_set_level "$DEV_CICD_DEBUG" && my_initialize || exit $?
+dev_bin64_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_test

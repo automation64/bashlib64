@@ -9,6 +9,7 @@ function show() {
   echo "[$type]================================================================================================="
   echo ''
   bl64_msg_show_error 'bl64_msg_show_error'
+  bl64_msg_show_about
   bl64_msg_show_fatal 'bl64_msg_show_fatal'
   bl64_msg_show_warning 'bl64_msg_show_warning'
   bl64_msg_show_deprecated 'bl64_msg_show_deprecated'

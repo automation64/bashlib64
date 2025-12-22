@@ -63,6 +63,60 @@ function bl64_cryp_run_openssl() {
 }
 
 #######################################
+# Command wrapper with debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_cryp_run_md5sum() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_CRYP_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_CRYP_CMD_MD5SUM" || return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_CRYP_CMD_MD5SUM" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_cryp_run_sha256sum() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_CRYP_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_CRYP_CMD_SHA256SUM" || return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_CRYP_CMD_SHA256SUM" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
 # Determine if the GPG key file is armored or not
 #
 # * File is not checked to be a valid key

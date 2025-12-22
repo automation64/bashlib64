@@ -35,6 +35,7 @@ function my_sast() {
     --verbose \
     --exit-code 1 \
     --report-format "$DEV_SAST_GITLEAKS_FORMAT" \
+    --report-path "$DEV_SAST_GITLEAKS_PATH_REPORT" \
     "$MY_TARGET"
 }
 
@@ -42,13 +43,14 @@ function my_initialize() {
   bl64_dbg_app_show_function
   bl64_msg_show_about
   bl64_check_command "$DEV_LIB_GITLEAKS_BIN" &&
-    bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
+    dev_bin64_log_setup "$DEV_ENV_GITLEAKS_PATH_LOGS" &&
+    dev_bin64_task_show_setup \
       'MY_TARGET'
 }
 
-bl64_lib_script_version_set '1.0.4'
+bl64_lib_script_version_set '1.1.0'
 bl64_msg_help_about_set 'Static test source code security'
-bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && bl64_dbg_set_level "$DEV_CICD_DEBUG" && my_initialize || exit $?
+dev_bin64_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_sast

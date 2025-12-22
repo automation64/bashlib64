@@ -39,11 +39,14 @@ function my_initialize() {
   return 0
 }
 
-[[ -n "$DEV_BASH_DEBUG" ]] && set -x
+[[ -n "$DEV_CICD_DEBUG_BASH" ]] && set -x
 
 my_initialize &&
   my_profile &&
   my_load &&
   unset my_initialize &&
   unset my_profile &&
-  unset my_load
+  unset my_load ||
+  exit $?
+[[ -n "$DEV_CICD_DEBUG_BASH" ]] && set +x
+:

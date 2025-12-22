@@ -1,6 +1,6 @@
 ---
-# template: 3.6.0
-name: "Test / TestManSH / Cloud"
+# template: 3.7.0
+name: "Test/TestManSH/Cloud"
 
 env:
   DEV_CICD_DEBUG: "NONE"
@@ -43,13 +43,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-lib-cache
 
-      - name: "Prepare environment"
-        run: "./bin/dev-lib-base"
-
       - name: "Download tools"
-        run: "./bin/dev-lib-testmansh"
+        run: |
+          ./bin/dev-lib-base &&
+          ./bin/dev-lib-testmansh
 
-      - name: "Build app"
+
+      - name: "Prepare for testing"
         run: "./bin/dev-build-project"
 
       - name: "Run tests"

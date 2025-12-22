@@ -53,14 +53,14 @@ function my_initialize() {
   bl64_lib_var_is_default "$MY_CONTAINER" &&
     MY_CONTAINER="$DEV_TEST_TESTMANSH_CONTAINER"
   bl64_check_command "$DEV_LIB_TESTMANSH_BIN" &&
-    bl64_msg_show_setup "$BL64_VAR_DEFAULT" \
+    dev_bin64_task_show_setup \
       'MY_CONTAINER' \
       'MY_TARGET'
 }
 
 bl64_lib_script_version_set '3.1.1'
 bl64_msg_help_about_set 'Test source code'
-bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose && bl64_dbg_set_level "$DEV_CICD_DEBUG" && my_initialize || exit $?
+dev_bin64_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_test
