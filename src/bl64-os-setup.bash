@@ -362,8 +362,8 @@ function _bl64_os_get_distro_from_os_release() {
 
 function _bl64_os_release_load() {
   bl64_dbg_lib_show_function
-  # shellcheck disable=SC1091
   bl64_dbg_lib_show_info 'parse /etc/os-release'
+  # shellcheck disable=SC1091
   if ! source '/etc/os-release'; then
     bl64_msg_show_lib_error 'failed to load OS information from /etc/os-release file'
     return $BL64_LIB_ERROR_TASK_FAILED
