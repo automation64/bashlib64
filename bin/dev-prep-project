@@ -29,6 +29,7 @@ function my_prepare() {
   bl64_fs_path_permission_set '0755' '0755' "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_ON" \
     "$DEV_PATH_BIN" \
     "$DEV_PATH_SRC" \
+    "$DEV_PATH_BUILD" \
     "$DEV_PATH_TEST"
 }
 
@@ -37,7 +38,7 @@ function my_initialize() {
   bl64_msg_show_about
 }
 
-bl64_lib_script_version_set '1.0.0'
+bl64_lib_script_version_set '1.1.0'
 bl64_msg_help_about_set 'Prepare local repository'
 dev_bin64_initialize && my_initialize || exit $?
 
