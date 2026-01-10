@@ -41,7 +41,7 @@ function _bl64_log_register() {
   local payload="$3"
 
   [[ "$BL64_LOG_MODULE" == "$BL64_VAR_OFF" ]] && return 0
-  [[ -z "$source" || -z "$category" || -z "$payload" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -z "$source" || -z "$category" || -z "$payload" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
 
   case "$BL64_LOG_FORMAT" in
   "$BL64_LOG_FORMAT_CSV")
@@ -60,7 +60,7 @@ function _bl64_log_register() {
       "$BL64_LOG_FS" \
       "$payload" >>"$BL64_LOG_DESTINATION"
     ;;
-  *) return $BL64_LIB_ERROR_MODULE_SETUP_INVALID ;;
+  *) return "$BL64_LIB_ERROR_MODULE_SETUP_INVALID" ;;
   esac
 }
 

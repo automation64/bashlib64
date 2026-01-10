@@ -279,7 +279,7 @@ function bl64_k8s_secret_copy() {
   fi
 
   [[ -f "$resource" ]] && bl64_fs_file_remove "$resource"
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -507,10 +507,10 @@ function bl64_k8s_resource_is_created() {
   if bl64_dbg_lib_task_is_enabled; then
     bl64_k8s_run_kubectl "$kubeconfig" \
       'get' "$type" "$name" \
-      $BL64_K8S_SET_OUTPUT_NAME $namespace || return $BL64_LIB_ERROR_IS_NOT
+      $BL64_K8S_SET_OUTPUT_NAME $namespace || return "$BL64_LIB_ERROR_IS_NOT"
   else
     bl64_k8s_run_kubectl "$kubeconfig" \
       'get' "$type" "$name" \
-      $BL64_K8S_SET_OUTPUT_NAME $namespace >/dev/null 2>&1 || return $BL64_LIB_ERROR_IS_NOT
+      $BL64_K8S_SET_OUTPUT_NAME $namespace >/dev/null 2>&1 || return "$BL64_LIB_ERROR_IS_NOT"
   fi
 }

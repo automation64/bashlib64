@@ -54,7 +54,7 @@ function _bl64_tf_set_command() {
   BL64_TF_CMD_TOFU="$(bl64_bsh_command_locate 'tofu' "$@")"
   if [[ -z "$BL64_TF_CMD_TERRAFORM" && -z "$BL64_TF_CMD_TOFU" ]]; then
     bl64_msg_show_lib_error 'failed to detect terraform or tofu command. Please install it and try again.'
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   fi
   return 0
 }
@@ -164,7 +164,7 @@ function _bl64_tf_set_version() {
     BL64_TF_VERSION_CLI="$cli_version"
   else
     bl64_msg_show_lib_error 'failed to get CLI version'
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
   fi
 
   bl64_dbg_lib_show_vars 'BL64_TF_VERSION_CLI'

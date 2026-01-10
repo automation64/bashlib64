@@ -367,7 +367,7 @@ function bl64_arc_tar_open() {
     bl64_fs_file_remove "$source"
     bl64_bsh_run_popd
   fi
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -409,7 +409,7 @@ function bl64_arc_zip_open() {
 
   ((status == 0)) && bl64_fs_file_remove "$source"
 
-  return $status
+  return "$status"
 }
 
 #######################################

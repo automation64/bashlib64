@@ -49,7 +49,7 @@ function bl64_ui_ask_confirmation() {
   [[ "$input" == "$confirmation" ]] && return 0
 
   bl64_msg_show_warning 'Confirmation verification failed. The operation will be cancelled.'
-  return $BL64_LIB_ERROR_PARAMETER_INVALID
+  return "$BL64_LIB_ERROR_PARAMETER_INVALID"
 }
 
 #######################################

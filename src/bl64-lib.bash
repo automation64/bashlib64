@@ -73,7 +73,7 @@ function _bl64_lib_script_get_name() {
 #######################################
 function _bl64_lib_module_is_imported() {
   local module="${1:-}"
-  [[ -z "$module" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -z "$module" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
 
   if [[ ! -v "$module" ]]; then
     module="${module##BL64_}"
@@ -83,7 +83,7 @@ function _bl64_lib_module_is_imported() {
       "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
       >&2
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_MODULE_NOT_IMPORTED
+    return "$BL64_LIB_ERROR_MODULE_NOT_IMPORTED"
   fi
   return 0
 }
@@ -118,7 +118,7 @@ function bl64_lib_flag_is_enabled {
   case "$flag" in
     "$BL64_VAR_ON" | 'ON' | 'YES' | '1') return 0 ;;
     "$BL64_VAR_OFF" | 'OFF' | 'NO' | '0') return 1 ;;
-    *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
+    *) return "$BL64_LIB_ERROR_PARAMETER_INVALID" ;;
   esac
 }
 
@@ -140,7 +140,7 @@ function bl64_lib_flag_is_enabled {
 function bl64_lib_script_set_id() {
   local script_id="${1:-}"
   # shellcheck disable=SC2086
-  [[ -z "$script_id" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -z "$script_id" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
   BL64_SCRIPT_ID="$script_id"
 }
 
@@ -183,7 +183,7 @@ function bl64_lib_script_set_identity() {
 function bl64_lib_script_version_set() {
   local script_version="$1"
   # shellcheck disable=SC2086
-  [[ -z "$script_version" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -z "$script_version" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
   BL64_SCRIPT_VERSION="$script_version"
 }
 
@@ -205,7 +205,7 @@ function bl64_lib_script_minver_check() {
   local -a b_parts
 
   # shellcheck disable=SC2086
-  [[ -z "$minimum_version" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -z "$minimum_version" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
 
   [[ "$minimum_version" == "$BL64_VERSION" ]] && return 0
 
@@ -222,7 +222,7 @@ function bl64_lib_script_minver_check() {
     if ((a_part > b_part)); then
       printf 'Error: the current BashLib64 version is older than the minimum required by the script (current: %s | mininum-supported: %s)\n' \
         "$BL64_VERSION" "$minimum_version" >&2
-      return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+      return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
     fi
   done
 }

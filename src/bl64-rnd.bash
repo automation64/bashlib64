@@ -25,10 +25,10 @@ function bl64_rnd_get_range() {
 
   # shellcheck disable=SC2086
   ((min < BL64_RND_RANDOM_MIN)) &&
-    bl64_msg_show_lib_error "length can not be less than $BL64_RND_RANDOM_MIN" && return $BL64_LIB_ERROR_PARAMETER_RANGE
+    bl64_msg_show_lib_error "length can not be less than $BL64_RND_RANDOM_MIN" && return "$BL64_LIB_ERROR_PARAMETER_RANGE"
   # shellcheck disable=SC2086
   ((max > BL64_RND_RANDOM_MAX)) &&
-    bl64_msg_show_lib_error "length can not be greater than $BL64_RND_RANDOM_MAX" && return $BL64_LIB_ERROR_PARAMETER_RANGE
+    bl64_msg_show_lib_error "length can not be greater than $BL64_RND_RANDOM_MAX" && return "$BL64_LIB_ERROR_PARAMETER_RANGE"
 
   modulo=$((max - min + 1))
 
@@ -57,10 +57,10 @@ function bl64_rnd_get_numeric() {
 
   # shellcheck disable=SC2086
   ((length < BL64_RND_LENGTH_1)) &&
-    bl64_msg_show_lib_error "length can not be less than $BL64_RND_LENGTH_1" && return $BL64_LIB_ERROR_PARAMETER_RANGE
+    bl64_msg_show_lib_error "length can not be less than $BL64_RND_LENGTH_1" && return "$BL64_LIB_ERROR_PARAMETER_RANGE"
   # shellcheck disable=SC2086
   ((length > BL64_RND_LENGTH_20)) &&
-    bl64_msg_show_lib_error "length can not be greater than $BL64_RND_LENGTH_20" && return $BL64_LIB_ERROR_PARAMETER_RANGE
+    bl64_msg_show_lib_error "length can not be greater than $BL64_RND_LENGTH_20" && return "$BL64_LIB_ERROR_PARAMETER_RANGE"
 
   seed="${RANDOM}${RANDOM}${RANDOM}${RANDOM}${RANDOM}"
   printf '%s' "${seed:0:$length}"
@@ -90,9 +90,9 @@ function bl64_rnd_get_alphanumeric() {
   local count=0
 
   ((length < BL64_RND_LENGTH_1)) &&
-    bl64_msg_show_lib_error "length can not be less than $BL64_RND_LENGTH_1" && return $BL64_LIB_ERROR_PARAMETER_RANGE
+    bl64_msg_show_lib_error "length can not be less than $BL64_RND_LENGTH_1" && return "$BL64_LIB_ERROR_PARAMETER_RANGE"
   ((length > BL64_RND_LENGTH_100)) &&
-    bl64_msg_show_lib_error "length can not be greater than $BL64_RND_LENGTH_100" && return $BL64_LIB_ERROR_PARAMETER_RANGE
+    bl64_msg_show_lib_error "length can not be greater than $BL64_RND_LENGTH_100" && return "$BL64_LIB_ERROR_PARAMETER_RANGE"
 
   while ((count < length)); do
     index=$(bl64_rnd_get_range '0' "$BL64_RND_POOL_ALPHANUMERIC_MAX_IDX")

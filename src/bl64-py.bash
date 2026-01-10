@@ -69,7 +69,7 @@ function bl64_py_pip_get_version() {
     printf '%s' "${version[1]}"
   else
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
   fi
 
   return 0

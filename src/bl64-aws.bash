@@ -133,7 +133,7 @@ function bl64_aws_sso_get_token() {
     echo "$token_file"
   else
     bl64_msg_show_lib_error 'unable to locate temporary access token file'
-    return $BL64_LIB_ERROR_TASK_FAILED
+    return "$BL64_LIB_ERROR_TASK_FAILED"
   fi
 
 }

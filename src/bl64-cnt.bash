@@ -25,7 +25,7 @@ function bl64_cnt_is_inside_container() {
   _bl64_cnt_find_variable_marker 'DOCKER_CONTAINER' && return 0
   _bl64_cnt_find_variable_marker 'KUBERNETES_SERVICE_HOST' && return 0
 
-  return $BL64_LIB_ERROR_IS_NOT
+  return "$BL64_LIB_ERROR_IS_NOT"
 }
 
 function _bl64_cnt_find_file_marker() {
@@ -390,9 +390,9 @@ function bl64_cnt_container_is_running() {
   bl64_dbg_lib_show_vars 'result'
 
   if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ "$result" == "$name" ]] || return $BL64_LIB_ERROR_IS_NOT
+    [[ "$result" == "$name" ]] || return "$BL64_LIB_ERROR_IS_NOT"
   elif bl64_lib_var_is_default "$id"; then
-    [[ "$result" != "$id" ]] || return $BL64_LIB_ERROR_IS_NOT
+    [[ "$result" != "$id" ]] || return "$BL64_LIB_ERROR_IS_NOT"
   fi
 }
 
@@ -704,7 +704,7 @@ function _bl64_cnt_docker_network_is_defined() {
   )"
 
   bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
-  [[ -n "$network_id" ]] || return $BL64_LIB_ERROR_IS_NOT
+  [[ -n "$network_id" ]] || return "$BL64_LIB_ERROR_IS_NOT"
 }
 
 #######################################
@@ -1008,7 +1008,7 @@ function _bl64_cnt_podman_network_is_defined() {
   )"
 
   bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
-  [[ -n "$network_id" ]] || return $BL64_LIB_ERROR_IS_NOT
+  [[ -n "$network_id" ]] || return "$BL64_LIB_ERROR_IS_NOT"
 }
 
 #######################################
@@ -1085,7 +1085,7 @@ function bl64_cnt_check_in_container() {
   bl64_dbg_lib_show_function
   bl64_cnt_is_inside_container && return 0
   bl64_msg_show_check 'current task must be run inside a container'
-  return $BL64_LIB_ERROR_TASK_REQUIREMENTS
+  return "$BL64_LIB_ERROR_TASK_REQUIREMENTS"
 }
 
 #######################################
@@ -1104,5 +1104,5 @@ function bl64_cnt_check_not_in_container() {
   bl64_dbg_lib_show_function
   bl64_cnt_is_inside_container || return 0
   bl64_msg_show_check 'current task must not be run inside a container'
-  return $BL64_LIB_ERROR_TASK_REQUIREMENTS
+  return "$BL64_LIB_ERROR_TASK_REQUIREMENTS"
 }

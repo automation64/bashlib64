@@ -216,7 +216,7 @@ function bl64_iam_user_is_created() {
     return $?
 
   bl64_iam_user_get_id "$user_name" >/dev/null 2>&1 ||
-    return $BL64_LIB_ERROR_IS_NOT
+    return "$BL64_LIB_ERROR_IS_NOT"
 }
 
 #######################################
@@ -240,7 +240,7 @@ function bl64_iam_group_is_created() {
     return $?
 
   bl64_os_run_getent 'group' "$group_name" >/dev/null 2>&1 ||
-    return $BL64_LIB_ERROR_IS_NOT
+    return "$BL64_LIB_ERROR_IS_NOT"
 }
 
 #######################################
@@ -303,7 +303,7 @@ function bl64_iam_check_user() {
 
   if ! bl64_iam_user_is_created "$user"; then
     bl64_msg_show_check "${message} (user: ${user})"
-    return $BL64_LIB_ERROR_USER_NOT_FOUND
+    return "$BL64_LIB_ERROR_USER_NOT_FOUND"
   else
     return 0
   fi

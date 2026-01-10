@@ -49,7 +49,7 @@ ${parameters}"
 function _bl64_msg_module_check_setup() {
   local module="${1:-}"
   local setup_status=''
-  [[ -z "$module" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -z "$module" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
   _bl64_lib_module_is_imported "$module" || return $?
 
   setup_status="${!module}"
@@ -58,7 +58,7 @@ function _bl64_msg_module_check_setup() {
       "${module}" \
       "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
       >&2
-    return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
+    return "$BL64_LIB_ERROR_MODULE_SETUP_MISSING"
   fi
   return 0
 }
@@ -77,7 +77,7 @@ function _bl64_msg_alert_show_parameter() {
     "${value:+value: ${value} | }" \
     "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
     >&2
-  return $BL64_LIB_ERROR_PARAMETER_INVALID
+  return "$BL64_LIB_ERROR_PARAMETER_INVALID"
 }
 
 #######################################
@@ -101,7 +101,7 @@ function _bl64_msg_print() {
   local message="${3:-}"
 
   _bl64_msg_module_check_setup 'BL64_MSG_MODULE' || return $?
-  [[ -n "$attribute" && -n "$type" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -n "$attribute" && -n "$type" ]] || return "$BL64_LIB_ERROR_PARAMETER_MISSING"
 
   case "$BL64_MSG_OUTPUT" in
     "$BL64_MSG_OUTPUT_ASCII") _bl64_msg_format_ascii "$attribute" "$type" "$message" ;;
@@ -719,7 +719,7 @@ function bl64_msg_show_batch_finish() {
   # shellcheck disable=SC2086
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${status}:${message}" &&
     bl64_msg_app_verbose_is_enabled ||
-    return $status
+    return "$status"
 
   if ((status == 0)); then
     _bl64_msg_print "$BL64_MSG_TYPE_BATCHOK" 'Process' "[${message}] finished successfully"
@@ -727,7 +727,7 @@ function bl64_msg_show_batch_finish() {
     _bl64_msg_print "$BL64_MSG_TYPE_BATCHERR" 'Process' "[${message}] finished with errors: exit-status-${status}"
   fi
   # shellcheck disable=SC2086
-  return $status
+  return "$status"
 }
 
 #######################################

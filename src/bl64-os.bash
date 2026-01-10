@@ -44,7 +44,7 @@ function bl64_os_is_flavor() {
     return $?
 
   [[ "$BL64_OS_FLAVOR" == "$os_flavor" ]] && return 0
-  return $BL64_LIB_ERROR_OS_NOT_MATCH
+  return "$BL64_LIB_ERROR_OS_NOT_MATCH"
 }
 
 #######################################
@@ -77,7 +77,7 @@ function bl64_os_is_distro() {
     status=$?
     ((status == 0)) && break
   done
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -126,7 +126,7 @@ function bl64_os_is_compatible() {
       fi
     done
   fi
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -159,7 +159,7 @@ function bl64_os_lang_is_available() {
     [[ "$line" == "$locale" ]] && return 0
   done
 
-  return $BL64_LIB_ERROR_IS_NOT
+  return "$BL64_LIB_ERROR_IS_NOT"
 }
 
 #######################################
@@ -187,7 +187,7 @@ function bl64_os_check_version() {
 
   bl64_msg_show_check \
     "task not supported by the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}))"
-  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+  return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
 }
 
 #######################################
@@ -211,7 +211,7 @@ function bl64_os_check_compatibility() {
 
   bl64_msg_show_check \
     "task not supported by the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}))"
-  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+  return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
 }
 
 #######################################
@@ -345,7 +345,7 @@ function bl64_os_check_not_version() {
 
   bl64_msg_show_check \
     "task not supported by the current OS version (${BL64_OS_DISTRO})"
-  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+  return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
 }
 
 #######################################
@@ -407,7 +407,7 @@ function _bl64_os_is_distro() {
         [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
         return 1
       else
-        return $BL64_LIB_ERROR_OS_NOT_MATCH
+        return "$BL64_LIB_ERROR_OS_NOT_MATCH"
       fi
     fi
 
@@ -430,7 +430,7 @@ function _bl64_os_is_distro() {
         [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
         return 1
       else
-        return $BL64_LIB_ERROR_OS_NOT_MATCH
+        return "$BL64_LIB_ERROR_OS_NOT_MATCH"
       fi
     fi
 
@@ -440,11 +440,11 @@ function _bl64_os_is_distro() {
 
     bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}]"
     [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] ||
-      return $BL64_LIB_ERROR_OS_NOT_MATCH
+      return "$BL64_LIB_ERROR_OS_NOT_MATCH"
 
   else
     bl64_msg_show_lib_error "invalid OS pattern (${target})"
-    return $BL64_LIB_ERROR_OS_TAG_INVALID
+    return "$BL64_LIB_ERROR_OS_TAG_INVALID"
   fi
 
   return 0
@@ -477,7 +477,7 @@ function bl64_os_check_flavor() {
 
   bl64_msg_show_check \
     "task not supported by the current OS flavor (current-flavor: ${BL64_OS_FLAVOR} ${BL64_MSG_COSMETIC_PIPE} supported-flavor: ${*}))"
-  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+  return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
 }
 
 #######################################
@@ -497,5 +497,5 @@ function bl64_os_check_flavor() {
 function bl64_os_raise_platform_unsupported() {
   bl64_dbg_lib_show_function
   bl64_msg_show_error "current OS and CPU architecture are not supported by the script (OS_TYPE:${BL64_OS_TYPE} / MACHINE: ${BL64_OS_MACHINE})"
-  return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+  return "$BL64_LIB_ERROR_OS_INCOMPATIBLE"
 }

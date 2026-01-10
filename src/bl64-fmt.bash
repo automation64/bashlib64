@@ -151,7 +151,7 @@ function bl64_fmt_path_get_basename() {
 
   if [[ -z "$base" || "$base" == */* ]]; then
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
+    return "$BL64_LIB_ERROR_PARAMETER_INVALID"
   else
     printf '%s' "$base"
   fi
@@ -379,7 +379,7 @@ function bl64_fmt_version_convert_to_major_minor() {
     return 0
   fi
   bl64_msg_show_lib_error "unable to convert version to major.minor (${version})"
-  return $BL64_LIB_ERROR_TASK_FAILED
+  return "$BL64_LIB_ERROR_TASK_FAILED"
 }
 
 #######################################
@@ -406,7 +406,7 @@ function bl64_fmt_version_check_semver_format() {
   else
     bl64_msg_show_check "the version must be in semver format (${version})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_CHECK_FAILED
+    return "$BL64_LIB_ERROR_CHECK_FAILED"
   fi
 }
 

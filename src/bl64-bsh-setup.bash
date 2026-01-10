@@ -56,7 +56,7 @@ function _bl64_bsh_set_version() {
   5*) BL64_BSH_VERSION_BASH='5.0' ;;
   *)
     bl64_check_alert_unsupported "Bash: ${BASH_VERSINFO[0]}"
-    return $BL64_LIB_ERROR_OS_BASH_VERSION
+    return "$BL64_LIB_ERROR_OS_BASH_VERSION"
     ;;
   esac
   bl64_dbg_lib_show_vars 'BL64_BSH_VERSION_BASH'

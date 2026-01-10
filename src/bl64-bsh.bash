@@ -239,7 +239,7 @@ function bl64_bsh_command_get_path() {
     echo "$full_path"
     return 0
   fi
-  return $BL64_LIB_ERROR_TASK_FAILED
+  return "$BL64_LIB_ERROR_TASK_FAILED"
 }
 
 #######################################
@@ -267,11 +267,11 @@ function bl64_bsh_command_is_executable() {
   full_path="$(bl64_bsh_command_get_path "${command}")" ||
     return $?
   [[ ! -e "$full_path" ]] &&
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   [[ ! -x "$full_path" ]] &&
-    return $BL64_LIB_ERROR_FILE_NOT_EXECUTE
+    return "$BL64_LIB_ERROR_FILE_NOT_EXECUTE"
   [[ -x "$full_path" ]] ||
-    return $BL64_LIB_ERROR_TASK_FAILED
+    return "$BL64_LIB_ERROR_TASK_FAILED"
 }
 
 #######################################
@@ -641,7 +641,7 @@ function bl64_bsh_command_import() {
   command_path="$(bl64_bsh_command_locate "$@")" || return $?
   if [[ -z "$command_path" ]]; then
     bl64_msg_show_lib_error "Unable to find the required command. Please install it and try again (${command})"
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   else
     echo "$command_path"
   fi

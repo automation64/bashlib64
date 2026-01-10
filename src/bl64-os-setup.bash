@@ -205,7 +205,7 @@ function _bl64_os_set_machine() {
   machine="$("$BL64_OS_CMD_UNAME" -m)"
   if [[ -z "$machine" ]]; then
     bl64_msg_show_lib_error 'failed to get machine type from uname'
-    return $BL64_LIB_ERROR_TASK_FAILED
+    return "$BL64_LIB_ERROR_TASK_FAILED"
   fi
   case "$machine" in
     'x86_64' | 'amd64') BL64_OS_MACHINE="$BL64_OS_MACHINE_AMD64" ;;
@@ -254,7 +254,7 @@ function _bl64_os_get_distro_from_uname() {
       BL64_OS_DISTRO="$BL64_OS_UNK"
       bl64_msg_show_lib_error \
         "BashLib64 not supported on the current OS. Please check the OS compatibility matrix (OS: ${BL64_OS_TYPE})"
-      return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+      return "$BL64_LIB_ERROR_OS_INCOMPATIBLE"
       ;;
   esac
   return 0
@@ -353,7 +353,7 @@ function _bl64_os_get_distro_from_os_release() {
     *)
       bl64_msg_show_lib_error \
         "current OS is not supported. Please check the OS compatibility matrix (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE})"
-      return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+      return "$BL64_LIB_ERROR_OS_INCOMPATIBLE"
       ;;
   esac
   bl64_dbg_lib_show_vars 'BL64_OS_DISTRO' 'BL64_OS_FLAVOR'
@@ -366,7 +366,7 @@ function _bl64_os_release_load() {
   # shellcheck disable=SC1091
   if ! source '/etc/os-release'; then
     bl64_msg_show_lib_error 'failed to load OS information from /etc/os-release file'
-    return $BL64_LIB_ERROR_TASK_FAILED
+    return "$BL64_LIB_ERROR_TASK_FAILED"
   fi
   bl64_dbg_lib_show_vars 'ID' 'VERSION_ID'
 }
@@ -415,7 +415,7 @@ function _bl64_os_release_normalize() {
     return 0
   fi
   bl64_msg_show_lib_error "unable to normalize OS version (${version_raw} != Major.Minor != ${version_normalized})"
-  return $BL64_LIB_ERROR_TASK_FAILED
+  return "$BL64_LIB_ERROR_TASK_FAILED"
 }
 
 #
@@ -441,7 +441,7 @@ function bl64_os_setup() {
 
   [[ "${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5' ]] &&
     bl64_msg_show_lib_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
-    return $BL64_LIB_ERROR_OS_BASH_VERSION
+    return "$BL64_LIB_ERROR_OS_BASH_VERSION"
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&

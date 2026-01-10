@@ -143,7 +143,7 @@ function bl64_cryp_gpg_key_is_armored() {
   bl64_txt_run_grep \
     $BL64_TXT_SET_GREP_QUIET \
     'BEGIN PGP PUBLIC KEY BLOCK' \
-    "$key_file" || return $BL64_LIB_ERROR_IS_NOT
+    "$key_file" || return "$BL64_LIB_ERROR_IS_NOT"
 }
 
 #######################################

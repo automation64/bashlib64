@@ -53,25 +53,25 @@ function bl64_check_command() {
   if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
     bl64_msg_show_check "command not compatible with the current OS (OS: ${BL64_OS_DISTRO}${command_name:+ | command: ${command_name}})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
   fi
 
   if [[ "$path" == "$BL64_VAR_UNAVAILABLE" ]]; then
     bl64_msg_show_check "${message}${command_name:+ (command: ${command_name})}"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_MISSING
+    return "$BL64_LIB_ERROR_APP_MISSING"
   fi
 
   if [[ ! -e "$path" ]]; then
     bl64_msg_show_check "${message} (command: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   fi
 
   if [[ ! -x "$path" ]]; then
     bl64_msg_show_check "invalid command permissions. Set the execution permission and try again (command: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_FILE_NOT_EXECUTE
+    return "$BL64_LIB_ERROR_FILE_NOT_EXECUTE"
   fi
 
   return 0
@@ -101,17 +101,17 @@ function bl64_check_file() {
   if [[ ! -e "$path" ]]; then
     bl64_msg_show_check "${message} (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   fi
   if [[ ! -f "$path" ]]; then
     bl64_msg_show_check "path is present but is not a regular file (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   fi
   if [[ ! -r "$path" ]]; then
     bl64_msg_show_check "required file is present but has no read permission (file: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_FILE_NOT_READ
+    return "$BL64_LIB_ERROR_FILE_NOT_READ"
   fi
   return 0
 }
@@ -140,17 +140,17 @@ function bl64_check_directory() {
   if [[ ! -e "$path" ]]; then
     bl64_msg_show_check "${message} (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_DIRECTORY_NOT_FOUND
+    return "$BL64_LIB_ERROR_DIRECTORY_NOT_FOUND"
   fi
   if [[ ! -d "$path" ]]; then
     bl64_msg_show_check "path is present but is not a directory (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_DIRECTORY_NOT_FOUND
+    return "$BL64_LIB_ERROR_DIRECTORY_NOT_FOUND"
   fi
   if [[ ! -r "$path" || ! -x "$path" ]]; then
     bl64_msg_show_check "required directory is present but has no read permission (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_DIRECTORY_NOT_READ
+    return "$BL64_LIB_ERROR_DIRECTORY_NOT_READ"
   fi
   return 0
 }
@@ -180,7 +180,7 @@ function bl64_check_path() {
   if [[ ! -e "$path" ]]; then
     bl64_msg_show_check "${message} (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PATH_NOT_FOUND
+    return "$BL64_LIB_ERROR_PATH_NOT_FOUND"
   fi
   return 0
 }
@@ -213,23 +213,23 @@ function bl64_check_parameter() {
 
   if [[ -z "$parameter_name" ]]; then
     bl64_msg_show_check "required parameter is missing (parameter: ${parameter_name})"
-    return $BL64_LIB_ERROR_PARAMETER_EMPTY
+    return "$BL64_LIB_ERROR_PARAMETER_EMPTY"
   fi
 
   if [[ ! -v "$parameter_name" ]]; then
     bl64_msg_show_check "required shell variable is not set (${description})"
-    return $BL64_LIB_ERROR_PARAMETER_MISSING
+    return "$BL64_LIB_ERROR_PARAMETER_MISSING"
   fi
 
   parameter_ref="${!parameter_name}"
   if [[ -z "$parameter_ref" || "$parameter_ref" == "${BL64_VAR_NULL}" ]]; then
     bl64_msg_show_check "required parameter is missing (${description})"
-    return $BL64_LIB_ERROR_PARAMETER_EMPTY
+    return "$BL64_LIB_ERROR_PARAMETER_EMPTY"
   fi
 
   if [[ "$parameter_ref" == "${BL64_VAR_DEFAULT}" ]]; then
     bl64_msg_show_check "required parameter value must be other than default (${description})"
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
+    return "$BL64_LIB_ERROR_PARAMETER_INVALID"
   fi
   return 0
 }
@@ -262,14 +262,14 @@ function bl64_check_export() {
   if [[ ! -v "$export_name" ]]; then
     bl64_msg_show_check "required shell exported variable is not set (${description})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_EXPORT_SET
+    return "$BL64_LIB_ERROR_EXPORT_SET"
   fi
 
   export_ref="${!export_name}"
   if [[ -z "$export_ref" ]]; then
     bl64_msg_show_check "required shell exported variable is empty (${description})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_EXPORT_EMPTY
+    return "$BL64_LIB_ERROR_EXPORT_EMPTY"
   fi
   return 0
 }
@@ -300,7 +300,7 @@ function bl64_check_path_relative() {
   if [[ "$path" == '/' || "$path" == /* ]]; then
     bl64_msg_show_check "${message} (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PATH_NOT_RELATIVE
+    return "$BL64_LIB_ERROR_PATH_NOT_RELATIVE"
   fi
   return 0
 }
@@ -330,7 +330,7 @@ function bl64_check_path_not_present() {
   if [[ -e "$path" ]]; then
     bl64_msg_show_check "${message} (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PATH_PRESENT
+    return "$BL64_LIB_ERROR_PATH_PRESENT"
   fi
   return 0
 }
@@ -361,7 +361,7 @@ function bl64_check_path_absolute() {
   if [[ "$path" != '/' && "$path" != /* ]]; then
     bl64_msg_show_check "${message} (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
+    return "$BL64_LIB_ERROR_PATH_NOT_ABSOLUTE"
   fi
   return 0
 }
@@ -383,7 +383,7 @@ function bl64_check_privilege_root() {
   if [[ "$EUID" != '0' ]]; then
     bl64_msg_show_check "the task requires root privilege. Please run the script as root or with SUDO (current id: $EUID)"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT
+    return "$BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT"
   fi
   return 0
 }
@@ -406,7 +406,7 @@ function bl64_check_privilege_not_root() {
   if [[ "$EUID" == '0' ]]; then
     bl64_msg_show_check 'the task should not be run with root privilege. Please run the script as a regular user and not using SUDO'
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PRIVILEGE_IS_ROOT
+    return "$BL64_LIB_ERROR_PRIVILEGE_IS_ROOT"
   fi
   return 0
 }
@@ -440,7 +440,7 @@ function bl64_check_overwrite() {
   if ! bl64_lib_flag_is_enabled "$overwrite" || bl64_lib_var_is_default "$overwrite"; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_check "${message} (path: ${path})"
-      return $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
+      return "$BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED"
     fi
   fi
 
@@ -507,7 +507,7 @@ function bl64_check_alert_parameter_invalid() {
 
   bl64_lib_var_is_default "$parameter" && parameter=''
   bl64_msg_show_check "${message} ${parameter:+(parameter: ${parameter})}"
-  return $BL64_LIB_ERROR_PARAMETER_INVALID
+  return "$BL64_LIB_ERROR_PARAMETER_INVALID"
 }
 
 #######################################
@@ -526,7 +526,7 @@ function bl64_check_alert_unsupported() {
   local extra="${1:-}"
 
   bl64_msg_show_check "the requested operation is not supported on the current OS (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO})"
-  return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+  return "$BL64_LIB_ERROR_OS_INCOMPATIBLE"
 }
 
 #######################################
@@ -575,7 +575,7 @@ function bl64_check_alert_resource_not_found() {
   local resource="${1:-}"
 
   bl64_msg_show_check "required resource was not found on the system (${resource:+resource: ${resource} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO})"
-  return $BL64_LIB_ERROR_APP_MISSING
+  return "$BL64_LIB_ERROR_APP_MISSING"
 }
 
 #######################################
@@ -597,7 +597,7 @@ function bl64_check_alert_undefined() {
   local target="${1:-}"
 
   bl64_msg_show_check "requested command is not defined or implemented (${target:+ ${BL64_MSG_COSMETIC_PIPE} command: ${target}})"
-  return $BL64_LIB_ERROR_TASK_UNDEFINED
+  return "$BL64_LIB_ERROR_TASK_UNDEFINED"
 }
 
 #######################################
@@ -652,7 +652,7 @@ function bl64_check_parameters_none() {
 
   if [[ "$count" == '0' ]]; then
     bl64_msg_show_check "${message}"
-    return $BL64_LIB_ERROR_PARAMETER_MISSING
+    return "$BL64_LIB_ERROR_PARAMETER_MISSING"
   else
     return 0
   fi
@@ -684,7 +684,7 @@ function bl64_check_module() {
   setup_status="${!module}"
   if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
     bl64_msg_show_check "required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module (module: ${module})"
-    return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
+    return "$BL64_LIB_ERROR_MODULE_SETUP_MISSING"
   fi
 
   return 0
@@ -772,7 +772,7 @@ function bl64_check_command_search_path() {
   if (($? != 0)); then
     bl64_msg_show_check "${message} (command: ${file})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   fi
 
   bl64_check_command "$full_path"

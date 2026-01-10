@@ -57,7 +57,7 @@ function bl64_rxtx_web_get_file() {
     status=$?
   else
     bl64_msg_show_lib_error "no web transfer command was found on the system (wget or curl)" &&
-      return $BL64_LIB_ERROR_APP_MISSING
+      return "$BL64_LIB_ERROR_APP_MISSING"
   fi
 
   if ((status != 0)); then
@@ -68,7 +68,7 @@ function bl64_rxtx_web_get_file() {
   fi
 
   bl64_fs_path_recover "$destination" "$status" || return $?
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -132,7 +132,7 @@ function bl64_rxtx_git_get_dir() {
   fi
 
   bl64_fs_path_recover "$destination" "$status" || return $?
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -213,7 +213,7 @@ function _bl64_rxtx_git_get_dir_root() {
   bl64_check_module 'BL64_RXTX_MODULE' || return $?
 
   repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
-  bl64_check_directory "$repo" 'unable to create temporary git repo' || return $BL64_LIB_ERROR_TASK_TEMP
+  bl64_check_directory "$repo" 'unable to create temporary git repo' || return "$BL64_LIB_ERROR_TASK_TEMP"
 
   git_name="$(bl64_fmt_path_get_basename "$source_url")"
   git_name="${git_name/.git/}"
@@ -227,7 +227,7 @@ function _bl64_rxtx_git_get_dir_root() {
   status=$?
 
   [[ -d "$repo" ]] && bl64_fs_path_remove "$repo" >/dev/null
-  return $status
+  return "$status"
 }
 
 function _bl64_rxtx_git_get_dir_sub() {
@@ -246,7 +246,7 @@ function _bl64_rxtx_git_get_dir_sub() {
 
   repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
   # shellcheck disable=SC2086
-  bl64_check_directory "$repo" 'unable to create temporary git repo' || return $BL64_LIB_ERROR_TASK_TEMP
+  bl64_check_directory "$repo" 'unable to create temporary git repo' || return "$BL64_LIB_ERROR_TASK_TEMP"
 
   bl64_dbg_lib_show_comments 'Use transition path to get to the final target path'
   source="${repo}/${source_path}"
@@ -262,7 +262,7 @@ function _bl64_rxtx_git_get_dir_sub() {
   status=$?
 
   [[ -d "$repo" ]] && bl64_fs_path_remove "$repo" >/dev/null
-  return $status
+  return "$status"
 }
 
 #######################################

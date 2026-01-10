@@ -63,7 +63,7 @@ function _bl64_cnt_set_command() {
     BL64_CNT_DRIVER="$BL64_CNT_DRIVER_PODMAN"
   else
     bl64_msg_show_lib_error "unable to find a container manager CLI location (${BL64_CNT_CMD_DOCKER}, ${BL64_CNT_CMD_PODMAN})"
-    return $BL64_LIB_ERROR_APP_MISSING
+    return "$BL64_LIB_ERROR_APP_MISSING"
   fi
   bl64_dbg_lib_show_vars 'BL64_CNT_DRIVER'
 
