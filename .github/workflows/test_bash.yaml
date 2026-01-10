@@ -62,9 +62,9 @@ jobs:
           ./bin/dev-lib-base
 
       - name: "Prepare for testing"
-        run: |
-          ./bin/dev-prep-project &&
-          ./bin/dev-build-project
+        run : |
+          ./bin/dev-build-project &&
+          ./bin/dev-prep-project
 
       - name: "Run OS specific tests"
         run: |
@@ -109,9 +109,9 @@ jobs:
           ./bin/dev-lib-base
 
       - name: "Prepare for testing"
-        run: |
-          ./bin/dev-prep-project &&
-          ./bin/dev-build-project
+        run : |
+          ./bin/dev-build-project &&
+          ./bin/dev-prep-project
 
       - name: "Run OS specific tests"
         run: |

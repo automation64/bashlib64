@@ -1,10 +1,6 @@
 ---
-# template: 4.9.0
-name: "Lint/TestManSH"
-
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
+# template: 1.4.0
+name: "Lint/ShellCheck"
 
 env:
   DEV_CICD_DEBUG: "NONE"
@@ -24,7 +20,7 @@ on:
       - "src/**"
 
 jobs:
-  lint-testmansh:
+  lint-shellcheck:
     runs-on: "ubuntu-latest"
     steps:
 
@@ -37,20 +33,19 @@ jobs:
           path: |
             ./lib/bl64
             ./lib/inst64
-            ./lib/testmansh
+            ./lib/shellcheck
           key: "dev-tools"
 
       - name: "Download tools"
         run: |
           ./bin/dev-lib-base &&
-          ./bin/dev-lib-testmansh
+          ./bin/dev-lib-shellcheck
 
       - name: "Prepare for linting"
         run : |
           ./bin/dev-build-project &&
           ./bin/dev-prep-project
 
-      - name: "Lint app"
-        shell: 'script -q -e -c "bash {0}"' # Required to avoid no TTY error
-        run: "./bin/dev-lint-testmansh"
+      - name: "Run Linter"
+        run: "./bin/dev-lint-shellcheck"
 ...
