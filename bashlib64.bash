@@ -345,7 +345,7 @@ function _bl64_lib_script_get_name() {
 #######################################
 function _bl64_lib_module_is_imported() {
   local module="${1:-}"
-  [[ -z "$module" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -z "$module" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
 
   if [[ ! -v "$module" ]]; then
     module="${module##BL64_}"
@@ -355,7 +355,7 @@ function _bl64_lib_module_is_imported() {
       "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
       >&2
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_MODULE_NOT_IMPORTED
+    return "$BL64_LIB_ERROR_MODULE_NOT_IMPORTED"
   fi
   return 0
 }
@@ -390,7 +390,7 @@ function bl64_lib_flag_is_enabled {
   case "$flag" in
     "$BL64_VAR_ON" | 'ON' | 'YES' | '1') return 0 ;;
     "$BL64_VAR_OFF" | 'OFF' | 'NO' | '0') return 1 ;;
-    *) return $BL64_LIB_ERROR_PARAMETER_INVALID ;;
+    *) return "$BL64_LIB_ERROR_PARAMETER_INVALID" ;;
   esac
 }
 
@@ -412,7 +412,7 @@ function bl64_lib_flag_is_enabled {
 function bl64_lib_script_set_id() {
   local script_id="${1:-}"
   # shellcheck disable=SC2086
-  [[ -z "$script_id" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -z "$script_id" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
   BL64_SCRIPT_ID="$script_id"
 }
 
@@ -455,7 +455,7 @@ function bl64_lib_script_set_identity() {
 function bl64_lib_script_version_set() {
   local script_version="$1"
   # shellcheck disable=SC2086
-  [[ -z "$script_version" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -z "$script_version" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
   BL64_SCRIPT_VERSION="$script_version"
 }
 
@@ -477,7 +477,7 @@ function bl64_lib_script_minver_check() {
   local -a b_parts
 
   # shellcheck disable=SC2086
-  [[ -z "$minimum_version" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -z "$minimum_version" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
 
   [[ "$minimum_version" == "$BL64_VERSION" ]] && return 0
 
@@ -494,7 +494,7 @@ function bl64_lib_script_minver_check() {
     if ((a_part > b_part)); then
       printf 'Error: the current BashLib64 version is older than the minimum required by the script (current: %s | mininum-supported: %s)\n' \
         "$BL64_VERSION" "$minimum_version" >&2
-      return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+      return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
     fi
   done
 }
@@ -1798,25 +1798,25 @@ function bl64_check_command() {
   if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
     bl64_msg_show_check "command not compatible with the current OS (OS: ${BL64_OS_DISTRO}${command_name:+ | command: ${command_name}})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
   fi
 
   if [[ "$path" == "$BL64_VAR_UNAVAILABLE" ]]; then
     bl64_msg_show_check "${message}${command_name:+ (command: ${command_name})}"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_MISSING
+    return "$BL64_LIB_ERROR_APP_MISSING"
   fi
 
   if [[ ! -e "$path" ]]; then
     bl64_msg_show_check "${message} (command: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   fi
 
   if [[ ! -x "$path" ]]; then
     bl64_msg_show_check "invalid command permissions. Set the execution permission and try again (command: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_FILE_NOT_EXECUTE
+    return "$BL64_LIB_ERROR_FILE_NOT_EXECUTE"
   fi
 
   return 0
@@ -1846,17 +1846,17 @@ function bl64_check_file() {
   if [[ ! -e "$path" ]]; then
     bl64_msg_show_check "${message} (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   fi
   if [[ ! -f "$path" ]]; then
     bl64_msg_show_check "path is present but is not a regular file (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   fi
   if [[ ! -r "$path" ]]; then
     bl64_msg_show_check "required file is present but has no read permission (file: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_FILE_NOT_READ
+    return "$BL64_LIB_ERROR_FILE_NOT_READ"
   fi
   return 0
 }
@@ -1885,17 +1885,17 @@ function bl64_check_directory() {
   if [[ ! -e "$path" ]]; then
     bl64_msg_show_check "${message} (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_DIRECTORY_NOT_FOUND
+    return "$BL64_LIB_ERROR_DIRECTORY_NOT_FOUND"
   fi
   if [[ ! -d "$path" ]]; then
     bl64_msg_show_check "path is present but is not a directory (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_DIRECTORY_NOT_FOUND
+    return "$BL64_LIB_ERROR_DIRECTORY_NOT_FOUND"
   fi
   if [[ ! -r "$path" || ! -x "$path" ]]; then
     bl64_msg_show_check "required directory is present but has no read permission (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_DIRECTORY_NOT_READ
+    return "$BL64_LIB_ERROR_DIRECTORY_NOT_READ"
   fi
   return 0
 }
@@ -1925,7 +1925,7 @@ function bl64_check_path() {
   if [[ ! -e "$path" ]]; then
     bl64_msg_show_check "${message} (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PATH_NOT_FOUND
+    return "$BL64_LIB_ERROR_PATH_NOT_FOUND"
   fi
   return 0
 }
@@ -1958,23 +1958,23 @@ function bl64_check_parameter() {
 
   if [[ -z "$parameter_name" ]]; then
     bl64_msg_show_check "required parameter is missing (parameter: ${parameter_name})"
-    return $BL64_LIB_ERROR_PARAMETER_EMPTY
+    return "$BL64_LIB_ERROR_PARAMETER_EMPTY"
   fi
 
   if [[ ! -v "$parameter_name" ]]; then
     bl64_msg_show_check "required shell variable is not set (${description})"
-    return $BL64_LIB_ERROR_PARAMETER_MISSING
+    return "$BL64_LIB_ERROR_PARAMETER_MISSING"
   fi
 
   parameter_ref="${!parameter_name}"
   if [[ -z "$parameter_ref" || "$parameter_ref" == "${BL64_VAR_NULL}" ]]; then
     bl64_msg_show_check "required parameter is missing (${description})"
-    return $BL64_LIB_ERROR_PARAMETER_EMPTY
+    return "$BL64_LIB_ERROR_PARAMETER_EMPTY"
   fi
 
   if [[ "$parameter_ref" == "${BL64_VAR_DEFAULT}" ]]; then
     bl64_msg_show_check "required parameter value must be other than default (${description})"
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
+    return "$BL64_LIB_ERROR_PARAMETER_INVALID"
   fi
   return 0
 }
@@ -2007,14 +2007,14 @@ function bl64_check_export() {
   if [[ ! -v "$export_name" ]]; then
     bl64_msg_show_check "required shell exported variable is not set (${description})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_EXPORT_SET
+    return "$BL64_LIB_ERROR_EXPORT_SET"
   fi
 
   export_ref="${!export_name}"
   if [[ -z "$export_ref" ]]; then
     bl64_msg_show_check "required shell exported variable is empty (${description})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_EXPORT_EMPTY
+    return "$BL64_LIB_ERROR_EXPORT_EMPTY"
   fi
   return 0
 }
@@ -2045,7 +2045,7 @@ function bl64_check_path_relative() {
   if [[ "$path" == '/' || "$path" == /* ]]; then
     bl64_msg_show_check "${message} (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PATH_NOT_RELATIVE
+    return "$BL64_LIB_ERROR_PATH_NOT_RELATIVE"
   fi
   return 0
 }
@@ -2075,7 +2075,7 @@ function bl64_check_path_not_present() {
   if [[ -e "$path" ]]; then
     bl64_msg_show_check "${message} (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PATH_PRESENT
+    return "$BL64_LIB_ERROR_PATH_PRESENT"
   fi
   return 0
 }
@@ -2106,7 +2106,7 @@ function bl64_check_path_absolute() {
   if [[ "$path" != '/' && "$path" != /* ]]; then
     bl64_msg_show_check "${message} (path: ${path})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PATH_NOT_ABSOLUTE
+    return "$BL64_LIB_ERROR_PATH_NOT_ABSOLUTE"
   fi
   return 0
 }
@@ -2128,7 +2128,7 @@ function bl64_check_privilege_root() {
   if [[ "$EUID" != '0' ]]; then
     bl64_msg_show_check "the task requires root privilege. Please run the script as root or with SUDO (current id: $EUID)"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT
+    return "$BL64_LIB_ERROR_PRIVILEGE_IS_NOT_ROOT"
   fi
   return 0
 }
@@ -2151,7 +2151,7 @@ function bl64_check_privilege_not_root() {
   if [[ "$EUID" == '0' ]]; then
     bl64_msg_show_check 'the task should not be run with root privilege. Please run the script as a regular user and not using SUDO'
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PRIVILEGE_IS_ROOT
+    return "$BL64_LIB_ERROR_PRIVILEGE_IS_ROOT"
   fi
   return 0
 }
@@ -2185,7 +2185,7 @@ function bl64_check_overwrite() {
   if ! bl64_lib_flag_is_enabled "$overwrite" || bl64_lib_var_is_default "$overwrite"; then
     if [[ -e "$path" ]]; then
       bl64_msg_show_check "${message} (path: ${path})"
-      return $BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED
+      return "$BL64_LIB_ERROR_OVERWRITE_NOT_PERMITED"
     fi
   fi
 
@@ -2252,7 +2252,7 @@ function bl64_check_alert_parameter_invalid() {
 
   bl64_lib_var_is_default "$parameter" && parameter=''
   bl64_msg_show_check "${message} ${parameter:+(parameter: ${parameter})}"
-  return $BL64_LIB_ERROR_PARAMETER_INVALID
+  return "$BL64_LIB_ERROR_PARAMETER_INVALID"
 }
 
 #######################################
@@ -2271,7 +2271,7 @@ function bl64_check_alert_unsupported() {
   local extra="${1:-}"
 
   bl64_msg_show_check "the requested operation is not supported on the current OS (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO})"
-  return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+  return "$BL64_LIB_ERROR_OS_INCOMPATIBLE"
 }
 
 #######################################
@@ -2320,7 +2320,7 @@ function bl64_check_alert_resource_not_found() {
   local resource="${1:-}"
 
   bl64_msg_show_check "required resource was not found on the system (${resource:+resource: ${resource} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO})"
-  return $BL64_LIB_ERROR_APP_MISSING
+  return "$BL64_LIB_ERROR_APP_MISSING"
 }
 
 #######################################
@@ -2342,7 +2342,7 @@ function bl64_check_alert_undefined() {
   local target="${1:-}"
 
   bl64_msg_show_check "requested command is not defined or implemented (${target:+ ${BL64_MSG_COSMETIC_PIPE} command: ${target}})"
-  return $BL64_LIB_ERROR_TASK_UNDEFINED
+  return "$BL64_LIB_ERROR_TASK_UNDEFINED"
 }
 
 #######################################
@@ -2369,7 +2369,7 @@ function bl64_check_alert_module_setup() {
 
   if [[ "$last_status" != '0' ]]; then
     bl64_msg_show_check "BashLib64 module setup failure (module: ${module})"
-    return $last_status
+    return "$last_status"
   else
     return 0
   fi
@@ -2397,7 +2397,7 @@ function bl64_check_parameters_none() {
 
   if [[ "$count" == '0' ]]; then
     bl64_msg_show_check "${message}"
-    return $BL64_LIB_ERROR_PARAMETER_MISSING
+    return "$BL64_LIB_ERROR_PARAMETER_MISSING"
   else
     return 0
   fi
@@ -2429,7 +2429,7 @@ function bl64_check_module() {
   setup_status="${!module}"
   if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
     bl64_msg_show_check "required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module (module: ${module})"
-    return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
+    return "$BL64_LIB_ERROR_MODULE_SETUP_MISSING"
   fi
 
   return 0
@@ -2517,7 +2517,7 @@ function bl64_check_command_search_path() {
   if (($? != 0)); then
     bl64_msg_show_check "${message} (command: ${file})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   fi
 
   bl64_check_command "$full_path"
@@ -2629,7 +2629,7 @@ function bl64_dbg_set_level() {
   "$BL64_DBG_TARGET_ALL") bl64_dbg_all_enable ;;
   *)
     _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] invalid debugging level. Must be one of: ${BL64_DBG_TARGET_ALL}|${BL64_DBG_TARGET_APP_ALL}|${BL64_DBG_TARGET_LIB_ALL}|${BL64_DBG_TARGET_NONE}"
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
+    return "$BL64_LIB_ERROR_PARAMETER_INVALID"
     ;;
   esac
 }
@@ -2736,7 +2736,7 @@ function _bl64_dbg_dryrun_show() {
 function bl64_dbg_runtime_show() {
   local -i last_status=$?
   local label="${_BL64_DBG_TXT_LABEL_BASH_RUNTIME}"
-  bl64_dbg_app_command_is_enabled || return $last_status
+  bl64_dbg_app_command_is_enabled || return "$last_status"
 
   _bl64_dbg_show "${label} Bash / Interpreter path: [${BASH}]"
   _bl64_dbg_show "${label} Bash / ShOpt Options: [${BASHOPTS:-NONE}]"
@@ -2756,7 +2756,7 @@ function bl64_dbg_runtime_show() {
   bl64_dbg_runtime_show_bashlib64
 
   # shellcheck disable=SC2248
-  return $last_status
+  return "$last_status"
 }
 
 #######################################
@@ -2839,10 +2839,10 @@ function bl64_dbg_runtime_show_paths() {
 #######################################
 function bl64_dbg_app_trace_stop() {
   local -i state=$?
-  bl64_dbg_app_trace_is_enabled || return $state
+  bl64_dbg_app_trace_is_enabled || return "$state"
   set +x
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
-  return $state
+  return "$state"
 }
 
 #######################################
@@ -2878,12 +2878,12 @@ function bl64_dbg_app_trace_start() {
 #######################################
 function bl64_dbg_lib_trace_stop() {
   local -i state=$?
-  bl64_dbg_lib_trace_is_enabled || return $state
+  bl64_dbg_lib_trace_is_enabled || return "$state"
 
   set +x
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
 
-  return $state
+  return "$state"
 }
 
 #######################################
@@ -3049,12 +3049,12 @@ function bl64_dbg_app_show_function() {
 #######################################
 function bl64_dbg_lib_command_trace_stop() {
   local -i state=$?
-  bl64_dbg_lib_task_is_enabled || return $state
+  bl64_dbg_lib_task_is_enabled || return "$state"
 
   set +x
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
 
-  return $state
+  return "$state"
 }
 
 #######################################
@@ -3427,7 +3427,7 @@ function _bl64_log_register() {
   local payload="$3"
 
   [[ "$BL64_LOG_MODULE" == "$BL64_VAR_OFF" ]] && return 0
-  [[ -z "$source" || -z "$category" || -z "$payload" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -z "$source" || -z "$category" || -z "$payload" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
 
   case "$BL64_LOG_FORMAT" in
   "$BL64_LOG_FORMAT_CSV")
@@ -3446,7 +3446,7 @@ function _bl64_log_register() {
       "$BL64_LOG_FS" \
       "$payload" >>"$BL64_LOG_DESTINATION"
     ;;
-  *) return $BL64_LIB_ERROR_MODULE_SETUP_INVALID ;;
+  *) return "$BL64_LIB_ERROR_MODULE_SETUP_INVALID" ;;
   esac
 }
 
@@ -3852,7 +3852,7 @@ ${parameters}"
 function _bl64_msg_module_check_setup() {
   local module="${1:-}"
   local setup_status=''
-  [[ -z "$module" ]] && return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -z "$module" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
   _bl64_lib_module_is_imported "$module" || return $?
 
   setup_status="${!module}"
@@ -3861,7 +3861,7 @@ function _bl64_msg_module_check_setup() {
       "${module}" \
       "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
       >&2
-    return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
+    return "$BL64_LIB_ERROR_MODULE_SETUP_MISSING"
   fi
   return 0
 }
@@ -3880,7 +3880,7 @@ function _bl64_msg_alert_show_parameter() {
     "${value:+value: ${value} | }" \
     "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
     >&2
-  return $BL64_LIB_ERROR_PARAMETER_INVALID
+  return "$BL64_LIB_ERROR_PARAMETER_INVALID"
 }
 
 #######################################
@@ -3904,7 +3904,7 @@ function _bl64_msg_print() {
   local message="${3:-}"
 
   _bl64_msg_module_check_setup 'BL64_MSG_MODULE' || return $?
-  [[ -n "$attribute" && -n "$type" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
+  [[ -n "$attribute" && -n "$type" ]] || return "$BL64_LIB_ERROR_PARAMETER_MISSING"
 
   case "$BL64_MSG_OUTPUT" in
     "$BL64_MSG_OUTPUT_ASCII") _bl64_msg_format_ascii "$attribute" "$type" "$message" ;;
@@ -4522,7 +4522,7 @@ function bl64_msg_show_batch_finish() {
   # shellcheck disable=SC2086
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${status}:${message}" &&
     bl64_msg_app_verbose_is_enabled ||
-    return $status
+    return "$status"
 
   if ((status == 0)); then
     _bl64_msg_print "$BL64_MSG_TYPE_BATCHOK" 'Process' "[${message}] finished successfully"
@@ -4530,7 +4530,7 @@ function bl64_msg_show_batch_finish() {
     _bl64_msg_print "$BL64_MSG_TYPE_BATCHERR" 'Process' "[${message}] finished with errors: exit-status-${status}"
   fi
   # shellcheck disable=SC2086
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -4918,7 +4918,7 @@ function _bl64_os_set_machine() {
   machine="$("$BL64_OS_CMD_UNAME" -m)"
   if [[ -z "$machine" ]]; then
     bl64_msg_show_lib_error 'failed to get machine type from uname'
-    return $BL64_LIB_ERROR_TASK_FAILED
+    return "$BL64_LIB_ERROR_TASK_FAILED"
   fi
   case "$machine" in
     'x86_64' | 'amd64') BL64_OS_MACHINE="$BL64_OS_MACHINE_AMD64" ;;
@@ -4967,7 +4967,7 @@ function _bl64_os_get_distro_from_uname() {
       BL64_OS_DISTRO="$BL64_OS_UNK"
       bl64_msg_show_lib_error \
         "BashLib64 not supported on the current OS. Please check the OS compatibility matrix (OS: ${BL64_OS_TYPE})"
-      return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+      return "$BL64_LIB_ERROR_OS_INCOMPATIBLE"
       ;;
   esac
   return 0
@@ -5066,7 +5066,7 @@ function _bl64_os_get_distro_from_os_release() {
     *)
       bl64_msg_show_lib_error \
         "current OS is not supported. Please check the OS compatibility matrix (ID=${ID:-NONE} | VERSION_ID=${VERSION_ID:-NONE})"
-      return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+      return "$BL64_LIB_ERROR_OS_INCOMPATIBLE"
       ;;
   esac
   bl64_dbg_lib_show_vars 'BL64_OS_DISTRO' 'BL64_OS_FLAVOR'
@@ -5075,11 +5075,11 @@ function _bl64_os_get_distro_from_os_release() {
 
 function _bl64_os_release_load() {
   bl64_dbg_lib_show_function
-  # shellcheck disable=SC1091
   bl64_dbg_lib_show_info 'parse /etc/os-release'
+  # shellcheck disable=SC1091
   if ! source '/etc/os-release'; then
     bl64_msg_show_lib_error 'failed to load OS information from /etc/os-release file'
-    return $BL64_LIB_ERROR_TASK_FAILED
+    return "$BL64_LIB_ERROR_TASK_FAILED"
   fi
   bl64_dbg_lib_show_vars 'ID' 'VERSION_ID'
 }
@@ -5128,7 +5128,7 @@ function _bl64_os_release_normalize() {
     return 0
   fi
   bl64_msg_show_lib_error "unable to normalize OS version (${version_raw} != Major.Minor != ${version_normalized})"
-  return $BL64_LIB_ERROR_TASK_FAILED
+  return "$BL64_LIB_ERROR_TASK_FAILED"
 }
 
 #
@@ -5154,7 +5154,7 @@ function bl64_os_setup() {
 
   [[ "${BASH_VERSINFO[0]}" != '4' && "${BASH_VERSINFO[0]}" != '5' ]] &&
     bl64_msg_show_lib_error "BashLib64 is not supported in the current Bash version (${BASH_VERSINFO[0]})" &&
-    return $BL64_LIB_ERROR_OS_BASH_VERSION
+    return "$BL64_LIB_ERROR_OS_BASH_VERSION"
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
@@ -5271,7 +5271,7 @@ function bl64_os_is_flavor() {
     return $?
 
   [[ "$BL64_OS_FLAVOR" == "$os_flavor" ]] && return 0
-  return $BL64_LIB_ERROR_OS_NOT_MATCH
+  return "$BL64_LIB_ERROR_OS_NOT_MATCH"
 }
 
 #######################################
@@ -5304,7 +5304,7 @@ function bl64_os_is_distro() {
     status=$?
     ((status == 0)) && break
   done
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -5353,7 +5353,7 @@ function bl64_os_is_compatible() {
       fi
     done
   fi
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -5386,7 +5386,7 @@ function bl64_os_lang_is_available() {
     [[ "$line" == "$locale" ]] && return 0
   done
 
-  return $BL64_LIB_ERROR_IS_NOT
+  return "$BL64_LIB_ERROR_IS_NOT"
 }
 
 #######################################
@@ -5414,7 +5414,7 @@ function bl64_os_check_version() {
 
   bl64_msg_show_check \
     "task not supported by the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}))"
-  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+  return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
 }
 
 #######################################
@@ -5438,7 +5438,7 @@ function bl64_os_check_compatibility() {
 
   bl64_msg_show_check \
     "task not supported by the current OS version (current-os: ${BL64_OS_DISTRO} ${BL64_MSG_COSMETIC_PIPE} supported-os: ${*}))"
-  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+  return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
 }
 
 #######################################
@@ -5572,7 +5572,7 @@ function bl64_os_check_not_version() {
 
   bl64_msg_show_check \
     "task not supported by the current OS version (${BL64_OS_DISTRO})"
-  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+  return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
 }
 
 #######################################
@@ -5634,7 +5634,7 @@ function _bl64_os_is_distro() {
         [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
         return 1
       else
-        return $BL64_LIB_ERROR_OS_NOT_MATCH
+        return "$BL64_LIB_ERROR_OS_NOT_MATCH"
       fi
     fi
 
@@ -5657,7 +5657,7 @@ function _bl64_os_is_distro() {
         [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]]; then
         return 1
       else
-        return $BL64_LIB_ERROR_OS_NOT_MATCH
+        return "$BL64_LIB_ERROR_OS_NOT_MATCH"
       fi
     fi
 
@@ -5667,11 +5667,11 @@ function _bl64_os_is_distro() {
 
     bl64_dbg_lib_show_info "[${BL64_OS_DISTRO}] == [${target_os}]"
     [[ "$BL64_OS_DISTRO" == ${target_os}-+([[:digit:]]).+([[:digit:]]) ]] ||
-      return $BL64_LIB_ERROR_OS_NOT_MATCH
+      return "$BL64_LIB_ERROR_OS_NOT_MATCH"
 
   else
     bl64_msg_show_lib_error "invalid OS pattern (${target})"
-    return $BL64_LIB_ERROR_OS_TAG_INVALID
+    return "$BL64_LIB_ERROR_OS_TAG_INVALID"
   fi
 
   return 0
@@ -5704,7 +5704,7 @@ function bl64_os_check_flavor() {
 
   bl64_msg_show_check \
     "task not supported by the current OS flavor (current-flavor: ${BL64_OS_FLAVOR} ${BL64_MSG_COSMETIC_PIPE} supported-flavor: ${*}))"
-  return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+  return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
 }
 
 #######################################
@@ -5724,7 +5724,7 @@ function bl64_os_check_flavor() {
 function bl64_os_raise_platform_unsupported() {
   bl64_dbg_lib_show_function
   bl64_msg_show_error "current OS and CPU architecture are not supported by the script (OS_TYPE:${BL64_OS_TYPE} / MACHINE: ${BL64_OS_MACHINE})"
-  return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+  return "$BL64_LIB_ERROR_OS_INCOMPATIBLE"
 }
 
 #######################################
@@ -5908,7 +5908,7 @@ function _bl64_ans_set_version() {
   else
     bl64_msg_show_lib_error "'failed to get CLI version' (${BL64_ANS_CMD_ANSIBLE} --version)"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
   fi
 
   bl64_dbg_lib_show_vars 'BL64_ANS_VERSION_CORE'
@@ -6192,7 +6192,7 @@ function bl64_api_call() {
   bl64_dbg_lib_trace_stop
   status=$?
   ((status != 0)) && bl64_msg_show_lib_error "API call failed (${api_url}${api_path})"
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -6761,7 +6761,7 @@ function bl64_arc_tar_open() {
     bl64_fs_file_remove "$source"
     bl64_bsh_run_popd
   fi
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -6803,7 +6803,7 @@ function bl64_arc_zip_open() {
 
   ((status == 0)) && bl64_fs_file_remove "$source"
 
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -7383,7 +7383,7 @@ function bl64_aws_sso_get_token() {
     echo "$token_file"
   else
     bl64_msg_show_lib_error 'unable to locate temporary access token file'
-    return $BL64_LIB_ERROR_TASK_FAILED
+    return "$BL64_LIB_ERROR_TASK_FAILED"
   fi
 
 }
@@ -7722,7 +7722,7 @@ function _bl64_bsh_set_version() {
   5*) BL64_BSH_VERSION_BASH='5.0' ;;
   *)
     bl64_check_alert_unsupported "Bash: ${BASH_VERSINFO[0]}"
-    return $BL64_LIB_ERROR_OS_BASH_VERSION
+    return "$BL64_LIB_ERROR_OS_BASH_VERSION"
     ;;
   esac
   bl64_dbg_lib_show_vars 'BL64_BSH_VERSION_BASH'
@@ -7997,7 +7997,7 @@ function bl64_bsh_command_get_path() {
     echo "$full_path"
     return 0
   fi
-  return $BL64_LIB_ERROR_TASK_FAILED
+  return "$BL64_LIB_ERROR_TASK_FAILED"
 }
 
 #######################################
@@ -8025,11 +8025,11 @@ function bl64_bsh_command_is_executable() {
   full_path="$(bl64_bsh_command_get_path "${command}")" ||
     return $?
   [[ ! -e "$full_path" ]] &&
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   [[ ! -x "$full_path" ]] &&
-    return $BL64_LIB_ERROR_FILE_NOT_EXECUTE
+    return "$BL64_LIB_ERROR_FILE_NOT_EXECUTE"
   [[ -x "$full_path" ]] ||
-    return $BL64_LIB_ERROR_TASK_FAILED
+    return "$BL64_LIB_ERROR_TASK_FAILED"
 }
 
 #######################################
@@ -8399,7 +8399,7 @@ function bl64_bsh_command_import() {
   command_path="$(bl64_bsh_command_locate "$@")" || return $?
   if [[ -z "$command_path" ]]; then
     bl64_msg_show_lib_error "Unable to find the required command. Please install it and try again (${command})"
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   else
     echo "$command_path"
   fi
@@ -8553,7 +8553,7 @@ function _bl64_cnt_set_command() {
     BL64_CNT_DRIVER="$BL64_CNT_DRIVER_PODMAN"
   else
     bl64_msg_show_lib_error "unable to find a container manager CLI location (${BL64_CNT_CMD_DOCKER}, ${BL64_CNT_CMD_PODMAN})"
-    return $BL64_LIB_ERROR_APP_MISSING
+    return "$BL64_LIB_ERROR_APP_MISSING"
   fi
   bl64_dbg_lib_show_vars 'BL64_CNT_DRIVER'
 
@@ -8653,7 +8653,7 @@ function bl64_cnt_is_inside_container() {
   _bl64_cnt_find_variable_marker 'DOCKER_CONTAINER' && return 0
   _bl64_cnt_find_variable_marker 'KUBERNETES_SERVICE_HOST' && return 0
 
-  return $BL64_LIB_ERROR_IS_NOT
+  return "$BL64_LIB_ERROR_IS_NOT"
 }
 
 function _bl64_cnt_find_file_marker() {
@@ -9018,9 +9018,9 @@ function bl64_cnt_container_is_running() {
   bl64_dbg_lib_show_vars 'result'
 
   if [[ "$name" != "$BL64_VAR_DEFAULT" ]]; then
-    [[ "$result" == "$name" ]] || return $BL64_LIB_ERROR_IS_NOT
+    [[ "$result" == "$name" ]] || return "$BL64_LIB_ERROR_IS_NOT"
   elif bl64_lib_var_is_default "$id"; then
-    [[ "$result" != "$id" ]] || return $BL64_LIB_ERROR_IS_NOT
+    [[ "$result" != "$id" ]] || return "$BL64_LIB_ERROR_IS_NOT"
   fi
 }
 
@@ -9332,7 +9332,7 @@ function _bl64_cnt_docker_network_is_defined() {
   )"
 
   bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
-  [[ -n "$network_id" ]] || return $BL64_LIB_ERROR_IS_NOT
+  [[ -n "$network_id" ]] || return "$BL64_LIB_ERROR_IS_NOT"
 }
 
 #######################################
@@ -9636,7 +9636,7 @@ function _bl64_cnt_podman_network_is_defined() {
   )"
 
   bl64_dbg_lib_show_info "check if the network is defined ([${network}] == [${network_id}])"
-  [[ -n "$network_id" ]] || return $BL64_LIB_ERROR_IS_NOT
+  [[ -n "$network_id" ]] || return "$BL64_LIB_ERROR_IS_NOT"
 }
 
 #######################################
@@ -9713,7 +9713,7 @@ function bl64_cnt_check_in_container() {
   bl64_dbg_lib_show_function
   bl64_cnt_is_inside_container && return 0
   bl64_msg_show_check 'current task must be run inside a container'
-  return $BL64_LIB_ERROR_TASK_REQUIREMENTS
+  return "$BL64_LIB_ERROR_TASK_REQUIREMENTS"
 }
 
 #######################################
@@ -9732,7 +9732,7 @@ function bl64_cnt_check_not_in_container() {
   bl64_dbg_lib_show_function
   bl64_cnt_is_inside_container || return 0
   bl64_msg_show_check 'current task must not be run inside a container'
-  return $BL64_LIB_ERROR_TASK_REQUIREMENTS
+  return "$BL64_LIB_ERROR_TASK_REQUIREMENTS"
 }
 
 #######################################
@@ -9937,7 +9937,7 @@ function bl64_cryp_gpg_key_is_armored() {
   bl64_txt_run_grep \
     $BL64_TXT_SET_GREP_QUIET \
     'BEGIN PGP PUBLIC KEY BLOCK' \
-    "$key_file" || return $BL64_LIB_ERROR_IS_NOT
+    "$key_file" || return "$BL64_LIB_ERROR_IS_NOT"
 }
 
 #######################################
@@ -10271,7 +10271,7 @@ function bl64_fmt_path_get_basename() {
 
   if [[ -z "$base" || "$base" == */* ]]; then
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
+    return "$BL64_LIB_ERROR_PARAMETER_INVALID"
   else
     printf '%s' "$base"
   fi
@@ -10402,7 +10402,7 @@ function bl64_fmt_list_check_membership() {
   ((is_valid != 0)) &&
     bl64_msg_show_check "${error_message}. Value must be one of: [${*}]"
 
-  return $is_valid
+  return "$is_valid"
 }
 
 #######################################
@@ -10499,7 +10499,7 @@ function bl64_fmt_version_convert_to_major_minor() {
     return 0
   fi
   bl64_msg_show_lib_error "unable to convert version to major.minor (${version})"
-  return $BL64_LIB_ERROR_TASK_FAILED
+  return "$BL64_LIB_ERROR_TASK_FAILED"
 }
 
 #######################################
@@ -10526,7 +10526,7 @@ function bl64_fmt_version_check_semver_format() {
   else
     bl64_msg_show_check "the version must be in semver format (${version})"
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_CHECK_FAILED
+    return "$BL64_LIB_ERROR_CHECK_FAILED"
   fi
 }
 
@@ -11470,7 +11470,7 @@ function bl64_fs_file_merge() {
     bl64_fs_file_remove "$destination"
   fi
 
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -11690,11 +11690,11 @@ function bl64_fs_cleanup_tmps() {
 
   target='/tmp'
   bl64_msg_show_lib_subtask "clean up OS temporary files (${target})"
-  bl64_fs_path_remove -- ${target}/[[:alnum:]]*
+  bl64_fs_path_remove -- "${target}"/[[:alnum:]]*
 
   target='/var/tmp'
   bl64_msg_show_lib_subtask "clean up OS temporary files (${target})"
-  bl64_fs_path_remove -- ${target}/[[:alnum:]]*
+  bl64_fs_path_remove -- "${target}"/[[:alnum:]]*
   return 0
 }
 
@@ -11717,7 +11717,7 @@ function bl64_fs_cleanup_logs() {
 
   if [[ -d "$target" ]]; then
     bl64_msg_show_lib_subtask "clean up OS logs (${target})"
-    bl64_fs_path_remove ${target}/[[:alnum:]]*
+    bl64_fs_path_remove "${target}"/[[:alnum:]]*
   fi
   return 0
 }
@@ -11741,7 +11741,7 @@ function bl64_fs_cleanup_caches() {
 
   if [[ -d "$target" ]]; then
     bl64_msg_show_lib_subtask "clean up OS cache contents (${target})"
-    bl64_fs_path_remove ${target}/[[:alnum:]]*
+    bl64_fs_path_remove "${target}"/[[:alnum:]]*
   fi
   return 0
 }
@@ -11881,7 +11881,7 @@ function bl64_fs_path_archive() {
   bl64_msg_show_lib_subtask "backup source path ([${source}]->[${backup}])"
   if ! bl64_fs_run_mv "$source" "$backup"; then
     bl64_msg_show_lib_error "unable to archive source path ($source)"
-    return $BL64_LIB_ERROR_TASK_BACKUP
+    return "$BL64_LIB_ERROR_TASK_BACKUP"
   fi
 
   return 0
@@ -11929,7 +11929,7 @@ function bl64_fs_path_recover() {
     bl64_msg_show_lib_subtask "restore original path from backup ([${backup}]->[${source}])"
     # shellcheck disable=SC2086
     bl64_fs_run_mv "$backup" "$source" ||
-      return $BL64_LIB_ERROR_TASK_RESTORE
+      return "$BL64_LIB_ERROR_TASK_RESTORE"
   fi
 }
 
@@ -12225,7 +12225,7 @@ function bl64_fs_rm_tmpdir() {
 
   if [[ "$tmpdir" != ${BL64_FS_PATH_TMP}/${BL64_FS_TMP_PREFIX}-*.* ]]; then
     bl64_msg_show_lib_error "provided directory was not created by bl64_fs_create_tmpdir (${tmpdir})"
-    return $BL64_LIB_ERROR_TASK_FAILED
+    return "$BL64_LIB_ERROR_TASK_FAILED"
   fi
 
   bl64_fs_path_remove "$tmpdir"
@@ -12253,7 +12253,7 @@ function bl64_fs_rm_tmpfile() {
 
   if [[ "$tmpfile" != ${BL64_FS_PATH_TMP}/${BL64_FS_TMP_PREFIX}-*.* ]]; then
     bl64_msg_show_lib_error "provided directory was not created by bl64_fs_create_tmpfile (${tmpfile})"
-    return $BL64_LIB_ERROR_TASK_FAILED
+    return "$BL64_LIB_ERROR_TASK_FAILED"
   fi
 
   bl64_fs_file_remove "$tmpfile"
@@ -12283,7 +12283,7 @@ function bl64_fs_check_new_file() {
 
   if [[ -d "$file" ]]; then
     bl64_msg_show_check "invalid file destination. Provided path exists and is a directory (${file})"
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
+    return "$BL64_LIB_ERROR_PARAMETER_INVALID"
   fi
 
   return 0
@@ -12313,7 +12313,7 @@ function bl64_fs_check_new_dir() {
 
   if [[ -f "$directory" ]]; then
     bl64_msg_show_check "invalid directory destination. Provided path exists and is a file (${directory})"
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
+    return "$BL64_LIB_ERROR_PARAMETER_INVALID"
   fi
 
   return 0
@@ -12359,10 +12359,10 @@ function bl64_fs_symlink_create() {
     fi
   elif [[ -f "$destination" ]]; then
     bl64_msg_show_lib_error 'invalid destination. It is already present and it is a regular file'
-    return $BL64_LIB_ERROR_TASK_REQUIREMENTS
+    return "$BL64_LIB_ERROR_TASK_REQUIREMENTS"
   elif [[ -d "$destination" ]]; then
     bl64_msg_show_lib_error 'invalid destination. It is already present and it is a directory'
-    return $BL64_LIB_ERROR_TASK_REQUIREMENTS
+    return "$BL64_LIB_ERROR_TASK_REQUIREMENTS"
   fi
   bl64_fs_run_ln "$BL64_FS_SET_LN_SYMBOLIC" "$source" "$destination" ||
     return $?
@@ -12444,7 +12444,7 @@ function bl64_fs_file_remove() {
 
     [[ ! -f "$path_current" && ! -L "$path_current" ]] &&
       bl64_msg_show_lib_error 'invalid file type. It must be a regular file or a symlink. No further action taken.' &&
-      return $BL64_LIB_ERROR_TASK_FAILED
+      return "$BL64_LIB_ERROR_TASK_FAILED"
 
     bl64_fs_run_rm \
       "$BL64_FS_SET_RM_FORCE" \
@@ -12540,7 +12540,7 @@ function bl64_fs_file_backup() {
   bl64_msg_show_lib_subtask "backup original file ([${source}]->[${backup}])"
   if ! bl64_fs_run_cp "$source" "$backup"; then
     bl64_msg_show_lib_error 'failed to create file backup'
-    return $BL64_LIB_ERROR_TASK_BACKUP
+    return "$BL64_LIB_ERROR_TASK_BACKUP"
   fi
 
   return 0
@@ -12589,7 +12589,7 @@ function bl64_fs_file_restore() {
     # shellcheck disable=SC2086
     bl64_os_run_cat "$backup" >"$source" &&
       bl64_fs_file_remove "$backup" ||
-      return $BL64_LIB_ERROR_TASK_RESTORE
+      return "$BL64_LIB_ERROR_TASK_RESTORE"
   fi
 }
 
@@ -13690,7 +13690,7 @@ function bl64_iam_user_is_created() {
     return $?
 
   bl64_iam_user_get_id "$user_name" >/dev/null 2>&1 ||
-    return $BL64_LIB_ERROR_IS_NOT
+    return "$BL64_LIB_ERROR_IS_NOT"
 }
 
 #######################################
@@ -13714,7 +13714,7 @@ function bl64_iam_group_is_created() {
     return $?
 
   bl64_os_run_getent 'group' "$group_name" >/dev/null 2>&1 ||
-    return $BL64_LIB_ERROR_IS_NOT
+    return "$BL64_LIB_ERROR_IS_NOT"
 }
 
 #######################################
@@ -13777,7 +13777,7 @@ function bl64_iam_check_user() {
 
   if ! bl64_iam_user_is_created "$user"; then
     bl64_msg_show_check "${message} (user: ${user})"
-    return $BL64_LIB_ERROR_USER_NOT_FOUND
+    return "$BL64_LIB_ERROR_USER_NOT_FOUND"
   else
     return 0
   fi
@@ -14241,7 +14241,7 @@ function _bl64_k8s_set_version() {
     BL64_K8S_VERSION_KUBECTL="$cli_version"
   else
     bl64_msg_show_lib_error 'unable to determine kubectl version'
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
   fi
 
   bl64_dbg_lib_show_vars 'BL64_K8S_VERSION_KUBECTL'
@@ -14571,6 +14571,7 @@ function bl64_k8s_secret_copy() {
   resource="$($BL64_FS_CMD_MKTEMP)" || return $?
 
   bl64_msg_show_lib_task "get secret definition from source (${namespace_src}/${secret})"
+  # shellcheck disable=SC2086
   bl64_k8s_resource_get "$kubeconfig" "$BL64_K8S_RESOURCE_SECRET" "$secret" "$namespace_src" |
     bl64_txt_run_awk $BL64_TXT_SET_AWS_FS ':' '
       BEGIN { metadata = 0 }
@@ -14587,7 +14588,7 @@ function bl64_k8s_secret_copy() {
   fi
 
   [[ -f "$resource" ]] && bl64_fs_file_remove "$resource"
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -14815,11 +14816,11 @@ function bl64_k8s_resource_is_created() {
   if bl64_dbg_lib_task_is_enabled; then
     bl64_k8s_run_kubectl "$kubeconfig" \
       'get' "$type" "$name" \
-      $BL64_K8S_SET_OUTPUT_NAME $namespace || return $BL64_LIB_ERROR_IS_NOT
+      $BL64_K8S_SET_OUTPUT_NAME $namespace || return "$BL64_LIB_ERROR_IS_NOT"
   else
     bl64_k8s_run_kubectl "$kubeconfig" \
       'get' "$type" "$name" \
-      $BL64_K8S_SET_OUTPUT_NAME $namespace >/dev/null 2>&1 || return $BL64_LIB_ERROR_IS_NOT
+      $BL64_K8S_SET_OUTPUT_NAME $namespace >/dev/null 2>&1 || return "$BL64_LIB_ERROR_IS_NOT"
   fi
 }
 
@@ -16477,14 +16478,14 @@ function _bl64_py_set_version() {
   )"
   [[ -z "$BL64_PY_VERSION_PYTHON3" ]] &&
     bl64_msg_show_lib_error "Unable to determine Python version (${BL64_PY_CMD_PYTHON3})" &&
-    return $BL64_LIB_ERROR_TASK_FAILED
+    return "$BL64_LIB_ERROR_TASK_FAILED"
 
   BL64_PY_VERSION_PIP3="$(
     "$BL64_PY_CMD_PYTHON3" -c "import pip; print(pip.__version__)"
   )"
   [[ -z "$BL64_PY_VERSION_PIP3" ]] &&
     bl64_msg_show_lib_error "Unable to determine PIP version (${BL64_PY_CMD_PYTHON3})" &&
-    return $BL64_LIB_ERROR_TASK_FAILED
+    return "$BL64_LIB_ERROR_TASK_FAILED"
 
   return 0
 }
@@ -16560,7 +16561,7 @@ function bl64_py_pip_get_version() {
     printf '%s' "${version[1]}"
   else
     # shellcheck disable=SC2086
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
   fi
 
   return 0
@@ -17135,7 +17136,7 @@ function bl64_rbac_check_sudoers() {
     bl64_msg_show_check "the sudoers file is corrupt or invalid ($sudoers)"
   fi
 
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -17277,10 +17278,10 @@ function bl64_rnd_get_range() {
 
   # shellcheck disable=SC2086
   ((min < BL64_RND_RANDOM_MIN)) &&
-    bl64_msg_show_lib_error "length can not be less than $BL64_RND_RANDOM_MIN" && return $BL64_LIB_ERROR_PARAMETER_RANGE
+    bl64_msg_show_lib_error "length can not be less than $BL64_RND_RANDOM_MIN" && return "$BL64_LIB_ERROR_PARAMETER_RANGE"
   # shellcheck disable=SC2086
   ((max > BL64_RND_RANDOM_MAX)) &&
-    bl64_msg_show_lib_error "length can not be greater than $BL64_RND_RANDOM_MAX" && return $BL64_LIB_ERROR_PARAMETER_RANGE
+    bl64_msg_show_lib_error "length can not be greater than $BL64_RND_RANDOM_MAX" && return "$BL64_LIB_ERROR_PARAMETER_RANGE"
 
   modulo=$((max - min + 1))
 
@@ -17309,10 +17310,10 @@ function bl64_rnd_get_numeric() {
 
   # shellcheck disable=SC2086
   ((length < BL64_RND_LENGTH_1)) &&
-    bl64_msg_show_lib_error "length can not be less than $BL64_RND_LENGTH_1" && return $BL64_LIB_ERROR_PARAMETER_RANGE
+    bl64_msg_show_lib_error "length can not be less than $BL64_RND_LENGTH_1" && return "$BL64_LIB_ERROR_PARAMETER_RANGE"
   # shellcheck disable=SC2086
   ((length > BL64_RND_LENGTH_20)) &&
-    bl64_msg_show_lib_error "length can not be greater than $BL64_RND_LENGTH_20" && return $BL64_LIB_ERROR_PARAMETER_RANGE
+    bl64_msg_show_lib_error "length can not be greater than $BL64_RND_LENGTH_20" && return "$BL64_LIB_ERROR_PARAMETER_RANGE"
 
   seed="${RANDOM}${RANDOM}${RANDOM}${RANDOM}${RANDOM}"
   printf '%s' "${seed:0:$length}"
@@ -17342,9 +17343,9 @@ function bl64_rnd_get_alphanumeric() {
   local count=0
 
   ((length < BL64_RND_LENGTH_1)) &&
-    bl64_msg_show_lib_error "length can not be less than $BL64_RND_LENGTH_1" && return $BL64_LIB_ERROR_PARAMETER_RANGE
+    bl64_msg_show_lib_error "length can not be less than $BL64_RND_LENGTH_1" && return "$BL64_LIB_ERROR_PARAMETER_RANGE"
   ((length > BL64_RND_LENGTH_100)) &&
-    bl64_msg_show_lib_error "length can not be greater than $BL64_RND_LENGTH_100" && return $BL64_LIB_ERROR_PARAMETER_RANGE
+    bl64_msg_show_lib_error "length can not be greater than $BL64_RND_LENGTH_100" && return "$BL64_LIB_ERROR_PARAMETER_RANGE"
 
   while ((count < length)); do
     index=$(bl64_rnd_get_range '0' "$BL64_RND_POOL_ALPHANUMERIC_MAX_IDX")
@@ -17686,7 +17687,7 @@ function bl64_rxtx_web_get_file() {
     status=$?
   else
     bl64_msg_show_lib_error "no web transfer command was found on the system (wget or curl)" &&
-      return $BL64_LIB_ERROR_APP_MISSING
+      return "$BL64_LIB_ERROR_APP_MISSING"
   fi
 
   if ((status != 0)); then
@@ -17697,7 +17698,7 @@ function bl64_rxtx_web_get_file() {
   fi
 
   bl64_fs_path_recover "$destination" "$status" || return $?
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -17761,7 +17762,7 @@ function bl64_rxtx_git_get_dir() {
   fi
 
   bl64_fs_path_recover "$destination" "$status" || return $?
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -17842,7 +17843,7 @@ function _bl64_rxtx_git_get_dir_root() {
   bl64_check_module 'BL64_RXTX_MODULE' || return $?
 
   repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
-  bl64_check_directory "$repo" 'unable to create temporary git repo' || return $BL64_LIB_ERROR_TASK_TEMP
+  bl64_check_directory "$repo" 'unable to create temporary git repo' || return "$BL64_LIB_ERROR_TASK_TEMP"
 
   git_name="$(bl64_fmt_path_get_basename "$source_url")"
   git_name="${git_name/.git/}"
@@ -17856,7 +17857,7 @@ function _bl64_rxtx_git_get_dir_root() {
   status=$?
 
   [[ -d "$repo" ]] && bl64_fs_path_remove "$repo" >/dev/null
-  return $status
+  return "$status"
 }
 
 function _bl64_rxtx_git_get_dir_sub() {
@@ -17875,7 +17876,7 @@ function _bl64_rxtx_git_get_dir_sub() {
 
   repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
   # shellcheck disable=SC2086
-  bl64_check_directory "$repo" 'unable to create temporary git repo' || return $BL64_LIB_ERROR_TASK_TEMP
+  bl64_check_directory "$repo" 'unable to create temporary git repo' || return "$BL64_LIB_ERROR_TASK_TEMP"
 
   bl64_dbg_lib_show_comments 'Use transition path to get to the final target path'
   source="${repo}/${source_path}"
@@ -17891,7 +17892,7 @@ function _bl64_rxtx_git_get_dir_sub() {
   status=$?
 
   [[ -d "$repo" ]] && bl64_fs_path_remove "$repo" >/dev/null
-  return $status
+  return "$status"
 }
 
 #######################################
@@ -17996,7 +17997,7 @@ function _bl64_tf_set_command() {
   BL64_TF_CMD_TOFU="$(bl64_bsh_command_locate 'tofu' "$@")"
   if [[ -z "$BL64_TF_CMD_TERRAFORM" && -z "$BL64_TF_CMD_TOFU" ]]; then
     bl64_msg_show_lib_error 'failed to detect terraform or tofu command. Please install it and try again.'
-    return $BL64_LIB_ERROR_FILE_NOT_FOUND
+    return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   fi
   return 0
 }
@@ -18106,7 +18107,7 @@ function _bl64_tf_set_version() {
     BL64_TF_VERSION_CLI="$cli_version"
   else
     bl64_msg_show_lib_error 'failed to get CLI version'
-    return $BL64_LIB_ERROR_APP_INCOMPATIBLE
+    return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
   fi
 
   bl64_dbg_lib_show_vars 'BL64_TF_VERSION_CLI'
@@ -18757,7 +18758,7 @@ function bl64_txt_line_replace_sed() {
   bl64_txt_run_sed -i"$BL64_LIB_SUFFIX_BACKUP" "$sed_expression" $source
   exit_status=$?
   bl64_fs_path_remove "${source}${BL64_LIB_SUFFIX_BACKUP}"
-  return $exit_status
+  return "$exit_status"
 }
 
 #######################################
@@ -19153,7 +19154,7 @@ function bl64_ui_ask_confirmation() {
   [[ "$input" == "$confirmation" ]] && return 0
 
   bl64_msg_show_warning 'Confirmation verification failed. The operation will be cancelled.'
-  return $BL64_LIB_ERROR_PARAMETER_INVALID
+  return "$BL64_LIB_ERROR_PARAMETER_INVALID"
 }
 
 #######################################
@@ -19775,7 +19776,7 @@ function bl64_vcs_github_release_get_latest() {
     echo "$repo_tag"
   else
     bl64_msg_show_lib_error "failed to determine latest release (${repo_owner}/${repo_name})"
-    return $BL64_LIB_ERROR_TASK_FAILED
+    return "$BL64_LIB_ERROR_TASK_FAILED"
   fi
 }
 
