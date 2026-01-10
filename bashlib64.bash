@@ -103,7 +103,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.11.0'
+  declare BL64_VERSION='22.12.0'
 
   #
   # Imported generic shell standard variables
@@ -633,7 +633,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.15.1'
+  declare BL64_MSG_VERSION='5.16.0'
 
   declare BL64_MSG_MODULE='0'
 
@@ -643,13 +643,10 @@ function bl64_lib_script_minver_check() {
   #
   # Verbosity levels
   #
-  # * 0: nothing is showed
-  # * 1: application messages only
-  # * 2: bashlib64 and application messages
-  #
 
   declare BL64_MSG_VERBOSE_NONE='NONE'
   declare BL64_MSG_VERBOSE_APP='APP'
+  declare BL64_MSG_VERBOSE_DETAIL='DETAIL'
   declare BL64_MSG_VERBOSE_LIB='LIB'
   declare BL64_MSG_VERBOSE_ALL='ALL'
 
@@ -877,7 +874,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_OS_VERSION='5.11.0'
+  declare BL64_OS_VERSION='5.12.0'
 
   declare BL64_OS_MODULE='0'
 
@@ -1014,7 +1011,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ARC_VERSION='4.3.0'
+  declare BL64_ARC_VERSION='4.4.0'
 
   declare BL64_ARC_MODULE='0'
 
@@ -1037,7 +1034,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_AWS_VERSION='4.0.3'
+  declare BL64_AWS_VERSION='4.0.4'
 
   declare BL64_AWS_MODULE='0'
 
@@ -1173,7 +1170,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.4.1'
+  declare BL64_FS_VERSION='6.4.2'
 
   declare BL64_FS_MODULE='0'
 
@@ -1383,7 +1380,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PKG_VERSION='6.5.4'
+  declare BL64_PKG_VERSION='6.5.5'
 
   declare BL64_PKG_MODULE='0'
 
@@ -1440,7 +1437,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='4.2.1'
+  declare BL64_PY_VERSION='4.2.2'
 
   declare BL64_PY_MODULE='0'
 
@@ -1526,7 +1523,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_RXTX_VERSION='2.6.1'
+  declare BL64_RXTX_VERSION='2.6.2'
 
   declare BL64_RXTX_MODULE='0'
 
@@ -1664,7 +1661,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VCS_VERSION='3.2.0'
+  declare BL64_VCS_VERSION='3.2.1'
 
   declare BL64_VCS_MODULE='0'
 
@@ -1795,17 +1792,17 @@ function bl64_check_command() {
   local message="${2:-$BL64_VAR_DEFAULT}"
   local command_name="${3:-}"
 
-  bl64_lib_var_is_default "$message" && message='command not found'
+  bl64_lib_var_is_default "$message" && message='command not found. Please install it and try again'
   bl64_check_parameter 'path' ${command_name:+"command: ${command_name}"} || return $?
 
   if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
-    bl64_msg_show_check "the requested command is not compatible with the current OS (OS: ${BL64_OS_DISTRO})"
+    bl64_msg_show_check "command not compatible with the current OS (OS: ${BL64_OS_DISTRO}${command_name:+ | command: ${command_name}})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
 
   if [[ "$path" == "$BL64_VAR_UNAVAILABLE" ]]; then
-    bl64_msg_show_check "required command is not installed${command_name:+ (command: ${command_name})}"
+    bl64_msg_show_check "${message}${command_name:+ (command: ${command_name})}"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -1817,7 +1814,7 @@ function bl64_check_command() {
   fi
 
   if [[ ! -x "$path" ]]; then
-    bl64_msg_show_check "required command is present but has no execution permission (command: ${path})"
+    bl64_msg_show_check "invalid command permissions. Set the execution permission and try again (command: ${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_EXECUTE
   fi
@@ -2254,7 +2251,7 @@ function bl64_check_alert_parameter_invalid() {
   local message="${2:-the requested operation was provided with an invalid parameter value}"
 
   bl64_lib_var_is_default "$parameter" && parameter=''
-  bl64_msg_show_check "${message} ${parameter:+( parameter: ${parameter})}"
+  bl64_msg_show_check "${message} ${parameter:+(parameter: ${parameter})}"
   return $BL64_LIB_ERROR_PARAMETER_INVALID
 }
 
@@ -3594,11 +3591,12 @@ function bl64_msg_set_level() {
   case "$level" in
     "$BL64_MSG_VERBOSE_NONE") bl64_msg_all_disable_verbose ;;
     "$BL64_MSG_VERBOSE_APP") bl64_msg_app_enable_verbose ;;
-    "$BL64_MSG_VERBOSE_LIB") bl64_msg_lib_enable_verbose ;;
+    "$BL64_MSG_VERBOSE_DETAIL") bl64_msg_app_enable_detail ;;
+    "$BL64_MSG_VERBOSE_LIB") bl64_msg_app_detail_is_enabled ;;
     "$BL64_MSG_VERBOSE_ALL") bl64_msg_all_enable_verbose ;;
     *)
       bl64_check_alert_parameter_invalid 'BL64_MSG_VERBOSE' \
-        "invalid value. Not one of: ${BL64_MSG_VERBOSE_NONE}|${BL64_MSG_VERBOSE_ALL}|${BL64_MSG_VERBOSE_APP}|${BL64_MSG_VERBOSE_LIB}"
+        "invalid value. Not one of: ${BL64_MSG_VERBOSE_NONE}|${BL64_MSG_VERBOSE_ALL}|${BL64_MSG_VERBOSE_APP}|${BL64_MSG_VERBOSE_DETAIL}|${BL64_MSG_VERBOSE_LIB}"
       return $?
       ;;
   esac
@@ -3744,26 +3742,35 @@ function bl64_msg_app_verbose_is_enabled {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
 }
-function bl64_msg_lib_verbose_is_enabled {
+
+function bl64_msg_app_run_is_enabled {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-  [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
+  bl64_msg_app_detail_is_enabled && ! bl64_lib_mode_cicd_is_enabled
+}
+
+function bl64_msg_app_detail_is_enabled {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
+  [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_DETAIL" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
 }
 
 function bl64_msg_all_disable_verbose {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_NONE"
 }
+
 function bl64_msg_all_enable_verbose {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_ALL"
 }
-function bl64_msg_lib_enable_verbose {
-  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-  BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_LIB"
-}
+
 function bl64_msg_app_enable_verbose {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_APP"
+}
+
+function bl64_msg_app_enable_detail {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
+  BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_DETAIL"
 }
 
 #
@@ -3805,8 +3812,22 @@ function bl64_msg_help_parameters_set() {
 # * Needed to maintain compatibility up to N-2 versions
 #
 
-function bl64_msg_app_verbose_enabled { bl64_msg_show_deprecated 'bl64_msg_app_verbose_enabled' 'bl64_msg_app_verbose_is_enabled'; bl64_msg_app_verbose_is_enabled; }
-function bl64_msg_lib_verbose_enabled { bl64_msg_show_deprecated 'bl64_msg_lib_verbose_enabled' 'bl64_msg_lib_verbose_is_enabled'; bl64_msg_lib_verbose_is_enabled; }
+function bl64_msg_app_verbose_enabled {
+  bl64_msg_show_deprecated 'bl64_msg_app_verbose_enabled' 'bl64_msg_app_verbose_is_enabled'
+  bl64_msg_app_verbose_is_enabled
+}
+function bl64_msg_lib_verbose_enabled {
+  bl64_msg_show_deprecated 'bl64_msg_lib_verbose_enabled' 'bl64_msg_app_detail_is_enabled'
+  bl64_msg_app_detail_is_enabled
+}
+function bl64_msg_lib_enable_verbose {
+  bl64_msg_show_deprecated 'bl64_msg_lib_enable_verbose' 'bl64_msg_app_enable_detail'
+  bl64_msg_app_enable_detail
+}
+function bl64_msg_lib_verbose_is_enabled {
+  bl64_msg_show_deprecated 'bl64_msg_lib_verbose_is_enabled' 'bl64_msg_app_detail_is_enabled'
+  bl64_msg_app_detail_is_enabled
+}
 function bl64_msg_show_usage() {
   bl64_msg_show_deprecated 'bl64_msg_show_usage' 'bl64_msg_help_show'
   local usage="${1:-${BL64_VAR_NULL}}"
@@ -3818,7 +3839,7 @@ function bl64_msg_show_usage() {
   bl64_msg_help_usage_set "$usage"
   bl64_msg_help_description_set "$description"
   bl64_msg_help_parameters_set \
-"${commands}
+    "${commands}
 ${flags}
 ${parameters}"
   bl64_msg_help_show
@@ -3837,9 +3858,9 @@ function _bl64_msg_module_check_setup() {
   setup_status="${!module}"
   if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
     printf 'Error: required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module (module-id: %s | function: %s)\n' \
-    "${module}" \
-    "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
-    >&2
+      "${module}" \
+      "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
+      >&2
     return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
   fi
   return 0
@@ -3886,10 +3907,10 @@ function _bl64_msg_print() {
   [[ -n "$attribute" && -n "$type" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
 
   case "$BL64_MSG_OUTPUT" in
-  "$BL64_MSG_OUTPUT_ASCII") _bl64_msg_format_ascii "$attribute" "$type" "$message" ;;
-  "$BL64_MSG_OUTPUT_ANSI") _bl64_msg_format_ansi "$attribute" "$type" "$message" ;;
-  "$BL64_MSG_OUTPUT_EMOJI") _bl64_msg_format_emoji "$attribute" "$type" "$message" ;;
-  *) _bl64_msg_alert_show_parameter 'BL64_MSG_OUTPUT' "$BL64_VAR_DEFAULT" "$BL64_MSG_OUTPUT" ;;
+    "$BL64_MSG_OUTPUT_ASCII") _bl64_msg_format_ascii "$attribute" "$type" "$message" ;;
+    "$BL64_MSG_OUTPUT_ANSI") _bl64_msg_format_ansi "$attribute" "$type" "$message" ;;
+    "$BL64_MSG_OUTPUT_EMOJI") _bl64_msg_format_emoji "$attribute" "$type" "$message" ;;
+    *) _bl64_msg_alert_show_parameter 'BL64_MSG_OUTPUT' "$BL64_VAR_DEFAULT" "$BL64_MSG_OUTPUT" ;;
   esac
 }
 
@@ -3909,66 +3930,66 @@ function _bl64_msg_format_ansi() {
 
   # shellcheck disable=SC2059
   case "$BL64_MSG_FORMAT" in
-  "$BL64_MSG_FORMAT_PLAIN")
-    printf "%b: %s${linefeed}" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_HOST")
-    printf "[%b] %b: %s${linefeed}" \
-      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_TIME")
-    printf "[%b] %b: %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_TIME2")
-    printf "%b %b: %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_CALLER")
-    printf "[%b] %b: %s${linefeed}" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_SCRIPT")
-    printf "[%b] %b | %b: %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_SCRIPT2")
-    printf "%b|%b|%b| %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_FULL")
-    printf "[%b] %b:%b | %b: %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_FULL2")
-    printf "%b|%b|%b|%b| %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  *) _bl64_msg_alert_show_parameter 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
+    "$BL64_MSG_FORMAT_PLAIN")
+      printf "%b: %s${linefeed}" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_HOST")
+      printf "[%b] %b: %s${linefeed}" \
+        "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_TIME")
+      printf "[%b] %b: %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_TIME2")
+      printf "%b %b: %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_CALLER")
+      printf "[%b] %b: %s${linefeed}" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT")
+      printf "[%b] %b | %b: %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT2")
+      printf "%b|%b|%b| %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_FULL")
+      printf "[%b] %b:%b | %b: %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_FULL2")
+      printf "%b|%b|%b|%b| %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    *) _bl64_msg_alert_show_parameter 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
   esac
 }
 
@@ -3988,66 +4009,66 @@ function _bl64_msg_format_ascii() {
 
   # shellcheck disable=SC2059
   case "$BL64_MSG_FORMAT" in
-  "$BL64_MSG_FORMAT_PLAIN")
-    printf "%s %s${linefeed}" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_HOST")
-    printf "[%s] %s %s${linefeed}" \
-      "${HOSTNAME}" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_TIME")
-    printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s %s${linefeed}" \
-      '-1' \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_TIME2")
-    printf "${BL64_MSG_TIME_DMY_HMS_COMPACT} %s %s${linefeed}" \
-      '-1' \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_CALLER")
-    printf "[%s] %s %s${linefeed}" \
-      "$BL64_SCRIPT_ID" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_SCRIPT")
-    printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s %s %s${linefeed}" \
-      '-1' \
-      "$BL64_SCRIPT_ID" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_SCRIPT2")
-    printf "${BL64_MSG_TIME_DMY_HMS_COMPACT}|%s %s %s${linefeed}" \
-      '-1' \
-      "$BL64_SCRIPT_ID" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_FULL")
-    printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s:%s %s %s${linefeed}" \
-      '-1' \
-      "$HOSTNAME" \
-      "$BL64_SCRIPT_ID" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_FULL2")
-    printf "${BL64_MSG_TIME_DMY_HMS_COMPACT}|%s|%s %s %s${linefeed}" \
-      '-1' \
-      "$HOSTNAME" \
-      "$BL64_SCRIPT_ID" \
-      "${!label}" \
-      "$message"
-    ;;
-  *) _bl64_msg_alert_show_parameter 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
+    "$BL64_MSG_FORMAT_PLAIN")
+      printf "%s %s${linefeed}" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_HOST")
+      printf "[%s] %s %s${linefeed}" \
+        "${HOSTNAME}" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_TIME")
+      printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s %s${linefeed}" \
+        '-1' \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_TIME2")
+      printf "${BL64_MSG_TIME_DMY_HMS_COMPACT} %s %s${linefeed}" \
+        '-1' \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_CALLER")
+      printf "[%s] %s %s${linefeed}" \
+        "$BL64_SCRIPT_ID" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT")
+      printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s %s %s${linefeed}" \
+        '-1' \
+        "$BL64_SCRIPT_ID" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT2")
+      printf "${BL64_MSG_TIME_DMY_HMS_COMPACT}|%s %s %s${linefeed}" \
+        '-1' \
+        "$BL64_SCRIPT_ID" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_FULL")
+      printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s:%s %s %s${linefeed}" \
+        '-1' \
+        "$HOSTNAME" \
+        "$BL64_SCRIPT_ID" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_FULL2")
+      printf "${BL64_MSG_TIME_DMY_HMS_COMPACT}|%s|%s %s %s${linefeed}" \
+        '-1' \
+        "$HOSTNAME" \
+        "$BL64_SCRIPT_ID" \
+        "${!label}" \
+        "$message"
+      ;;
+    *) _bl64_msg_alert_show_parameter 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
   esac
 }
 
@@ -4067,66 +4088,66 @@ function _bl64_msg_format_emoji() {
 
   # shellcheck disable=SC2059
   case "$BL64_MSG_FORMAT" in
-  "$BL64_MSG_FORMAT_PLAIN")
-    printf "%b %s${linefeed}" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_HOST")
-    printf "[%b] %b %s${linefeed}" \
-      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_TIME")
-    printf "[%b] %b %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_TIME2")
-    printf "%b %b %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_CALLER")
-    printf "[%b] %b %s${linefeed}" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_SCRIPT")
-    printf "[%b] %b %b %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_SCRIPT2")
-    printf "%b|%b %b %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_FULL")
-    printf "[%b] %b:%b %b %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_FULL2")
-    printf "%b|%b|%b %b %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  *) _bl64_msg_alert_show_parameter 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
+    "$BL64_MSG_FORMAT_PLAIN")
+      printf "%b %s${linefeed}" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_HOST")
+      printf "[%b] %b %s${linefeed}" \
+        "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_TIME")
+      printf "[%b] %b %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_TIME2")
+      printf "%b %b %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_CALLER")
+      printf "[%b] %b %s${linefeed}" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT")
+      printf "[%b] %b %b %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT2")
+      printf "%b|%b %b %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_FULL")
+      printf "[%b] %b:%b %b %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_FULL2")
+      printf "%b|%b|%b %b %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    *) _bl64_msg_alert_show_parameter 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
   esac
 }
 
@@ -4294,7 +4315,7 @@ function bl64_msg_show_info() {
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
-    bl64_msg_app_verbose_is_enabled || return 0
+    bl64_msg_app_detail_is_enabled || return 0
 
   _bl64_msg_print "$BL64_MSG_TYPE_INFO" 'Info   ' "$message"
 }
@@ -4360,7 +4381,7 @@ function bl64_msg_show_subtask() {
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_SUBTASK}:${message}" &&
-    bl64_msg_app_verbose_is_enabled || return 0
+    bl64_msg_app_detail_is_enabled || return 0
 
   _bl64_msg_print "$BL64_MSG_TYPE_SUBTASK" 'Subtask' "${BL64_MSG_COSMETIC_ARROW2} ${message}"
 }
@@ -4382,7 +4403,7 @@ function bl64_msg_show_lib_task() {
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBTASK}:${message}" &&
-    bl64_msg_lib_verbose_is_enabled || return 0
+    bl64_msg_app_verbose_is_enabled || return 0
 
   _bl64_msg_print "$BL64_MSG_TYPE_LIBTASK" 'Task   ' "$message"
 }
@@ -4404,7 +4425,7 @@ function bl64_msg_show_lib_subtask() {
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBSUBTASK}:${message}" &&
-    bl64_msg_lib_verbose_is_enabled || return 0
+    bl64_msg_app_detail_is_enabled || return 0
 
   _bl64_msg_print "$BL64_MSG_TYPE_LIBSUBTASK" 'Subtask' "${BL64_MSG_COSMETIC_ARROW2} ${message}"
 }
@@ -4426,7 +4447,7 @@ function bl64_msg_show_lib_info() {
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBINFO}:${message}" &&
-    bl64_msg_lib_verbose_is_enabled || return 0
+    bl64_msg_app_detail_is_enabled || return 0
 
   _bl64_msg_print "$BL64_MSG_TYPE_LIBINFO" 'Info   ' "$message"
 }
@@ -4612,6 +4633,7 @@ function bl64_msg_show_setup() {
   local message="${1:-$BL64_VAR_DEFAULT}"
   local variable=''
 
+  bl64_msg_app_detail_is_enabled || return 0
   bl64_lib_var_is_default "$message" && message='Executing task with the following parameters'
   shift
 
@@ -4633,7 +4655,7 @@ function bl64_msg_show_setup() {
 # Returns:
 #   0: Always OK
 #######################################
-function bl64_msg_help_show(){
+function bl64_msg_help_show() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   local current_format="$BL64_MSG_FORMAT"
 
@@ -4674,7 +4696,7 @@ function bl64_msg_show_about() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   bl64_msg_app_verbose_is_enabled || return 0
   _bl64_msg_show_script &&
-  _bl64_msg_show_about
+    _bl64_msg_show_about
 }
 
 function _bl64_msg_show_script() {
@@ -5686,6 +5708,26 @@ function bl64_os_check_flavor() {
 }
 
 #######################################
+# Raise OS and CPU not supported error
+#
+# * Commonly used in the default branch of case statements or else if
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_TASK_UNDEFINED
+#######################################
+# shellcheck disable=SC2119,SC2120
+function bl64_os_raise_platform_unsupported() {
+  bl64_dbg_lib_show_function
+  bl64_msg_show_error "current OS and CPU architecture are not supported by the script (OS_TYPE:${BL64_OS_TYPE} / MACHINE: ${BL64_OS_MACHINE})"
+  return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+}
+
+#######################################
 # BashLib64 / Module / Setup / Interact with Ansible CLI
 #######################################
 
@@ -5927,7 +5969,7 @@ function bl64_ans_run_ansible() {
     bl64_check_module 'BL64_ANS_MODULE' ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
+  bl64_msg_app_detail_is_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
   bl64_dbg_lib_command_is_enabled && debug="$BL64_ANS_SET_DEBUG"
 
   _bl64_ans_harden_ansible
@@ -5967,7 +6009,7 @@ function bl64_ans_run_ansible_galaxy() {
     bl64_check_parameter 'subcommand' ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && debug="$BL64_ANS_SET_VERBOSE"
+  bl64_msg_app_detail_is_enabled && debug="$BL64_ANS_SET_VERBOSE"
 
   _bl64_ans_harden_ansible
 
@@ -6005,7 +6047,7 @@ function bl64_ans_run_ansible_playbook() {
     bl64_check_module 'BL64_ANS_MODULE' ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
+  bl64_msg_app_detail_is_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
   bl64_dbg_lib_command_is_enabled && debug="$BL64_ANS_SET_DEBUG"
 
   _bl64_ans_harden_ansible
@@ -6354,6 +6396,138 @@ function _bl64_arc_set_options() {
 # BashLib64 / Module / Functions / Manage archive files
 #######################################
 
+#
+# Deprecation aliases
+#
+# * Aliases to deprecated functions
+# * Needed to maintain compatibility up to N-2 versions
+#
+
+function bl64_arc_open_tar() {
+  bl64_msg_show_deprecated 'bl64_arc_open_tar' 'bl64_arc_tar_open'
+  bl64_arc_tar_open "$@"
+}
+
+function bl64_arc_open_zip() {
+  bl64_msg_show_deprecated 'bl64_arc_open_zip' 'bl64_arc_zip_open'
+  bl64_arc_zip_open "$@"
+}
+
+#
+# Private functions
+#
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_arc_harden_unzip() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_trace_start
+  unset UNZIP
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_arc_harden_zip() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_trace_start
+  unset ZIP
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_arc_harden_gzip() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_trace_start
+  unset GZIP
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_arc_harden_bzip2() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_trace_start
+  unset BZIP
+  unset BZIP2
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_arc_harden_unxz() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_trace_start
+  unset XZ_DEFAULTS
+  unset XZ_OPT
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#
+# Public functions
+#
+
 #######################################
 # Command wrapper with verbose, debug and common options
 #
@@ -6370,20 +6544,20 @@ function _bl64_arc_set_options() {
 #######################################
 function bl64_arc_run_unzip() {
   bl64_dbg_lib_show_function "$@"
-  local verbosity='-qq'
+  local verbose='-qq'
 
   bl64_check_module 'BL64_ARC_MODULE' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
-  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && verbosity=' '
+  bl64_msg_app_run_is_enabled && verbose=' '
 
   _bl64_arc_harden_unzip
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ARC_CMD_UNZIP" \
-    $verbosity \
+    $verbose \
     "$@"
   bl64_dbg_lib_trace_stop
 }
@@ -6404,23 +6578,20 @@ function bl64_arc_run_unzip() {
 #######################################
 function bl64_arc_run_zip() {
   bl64_dbg_lib_show_function "$@"
-  local verbosity='--verbose'
+  local verbose=' '
 
   bl64_check_module 'BL64_ARC_MODULE' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_ZIP" || return $?
 
-  if ! bl64_msg_lib_verbose_is_enabled || bl64_lib_mode_cicd_is_enabled; then
-    verbosity=' '
-  fi
+  bl64_msg_app_run_is_enabled && verbose='--verbose'
 
-  _bl64_arc_harden_unzip
+  _bl64_arc_harden_zip
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ARC_CMD_ZIP" \
-    $verbosity \
-    "$@"
+    $verbose "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -6440,44 +6611,21 @@ function bl64_arc_run_zip() {
 #######################################
 function bl64_arc_run_7zz() {
   bl64_dbg_lib_show_function "$@"
-  local verbosity='-bso1'
+  local verbose='-bso0 -bd'
 
   bl64_check_module 'BL64_ARC_MODULE' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_7ZZ" || return $?
 
-  if ! bl64_msg_lib_verbose_is_enabled || bl64_lib_mode_cicd_is_enabled; then
-    verbosity='-bso0'
-  fi
+  bl64_msg_app_run_is_enabled &&
+    verbose='-bso1'
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ARC_CMD_7ZZ" \
-    $verbosity \
+    $verbose \
     "$@"
   bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_arc_harden_unzip() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited UNZIP* shell variables'
-  bl64_dbg_lib_trace_start
-  unset UNZIP
-  bl64_dbg_lib_trace_stop
-
-  return 0
 }
 
 #######################################
@@ -6495,19 +6643,18 @@ function _bl64_arc_harden_unzip() {
 function bl64_arc_run_tar() {
   bl64_dbg_lib_show_function "$@"
   bl64_check_parameters_none "$#" || return $?
-  local debug=''
+  local verbose=''
 
   bl64_check_module 'BL64_ARC_MODULE' &&
     bl64_check_command "$BL64_ARC_CMD_TAR" ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && debug="$BL64_ARC_SET_TAR_VERBOSE"
+  bl64_msg_app_run_is_enabled && verbose="$BL64_ARC_SET_TAR_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ARC_CMD_TAR" \
-    "$@" \
-    $debug
+    "$@" $verbose
   bl64_dbg_lib_trace_stop
 }
 
@@ -6528,7 +6675,7 @@ function bl64_arc_run_tar() {
 #   BL64_ARC_ERROR_INVALID_DESTINATION
 #   tar error status
 #######################################
-function bl64_arc_open_tar() {
+function bl64_arc_tar_open() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
   local destination="$2"
@@ -6634,7 +6781,7 @@ function bl64_arc_open_tar() {
 #   BL64_ARC_ERROR_INVALID_DESTINATION
 #   tar error status
 #######################################
-function bl64_arc_open_zip() {
+function bl64_arc_zip_open() {
   bl64_dbg_lib_show_function "$@"
   local source="$1"
   local destination="$2"
@@ -6675,21 +6822,20 @@ function bl64_arc_open_zip() {
 #######################################
 function bl64_arc_run_unxz() {
   bl64_dbg_lib_show_function "$@"
-  local verbosity=' '
+  local verbose=' '
 
   bl64_check_module 'BL64_ARC_MODULE' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNXZ" || return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity='-v'
-  bl64_lib_mode_cicd_is_enabled && verbosity=' '
+  bl64_msg_app_run_is_enabled && verbose='-v'
 
   _bl64_arc_harden_unxz
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_ARC_CMD_UNXZ" \
-    $verbosity \
+    $verbose \
     "$@"
   bl64_dbg_lib_trace_stop
 }
@@ -6710,22 +6856,20 @@ function bl64_arc_run_unxz() {
 #######################################
 function bl64_arc_run_bunzip2() {
   bl64_dbg_lib_show_function "$@"
-  local verbosity=' '
+  local verbose='--quiet'
 
   bl64_check_module 'BL64_ARC_MODULE' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_BUNZIP2" || return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity='-v'
-  bl664_lib_flag_is_enabled "$BL64_LIB_CICD" && verbosity=' '
+  bl64_msg_app_detail_is_enabled && verbose='--verbose'
 
-  _bl64_arc_harden_bunzip2
+  _bl64_arc_harden_bzip2
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_ARC_CMD_BUNZIP2"
-  $verbosity
-  "$@"
+  "$BL64_ARC_CMD_BUNZIP2" \
+    $verbose "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -6745,23 +6889,132 @@ function bl64_arc_run_bunzip2() {
 #######################################
 function bl64_arc_run_gunzip() {
   bl64_dbg_lib_show_function "$@"
-  local verbosity=' '
+  local verbose='--quiet'
 
   bl64_check_module 'BL64_ARC_MODULE' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_GUNZIP" || return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity='-v'
-  bl64_lib_mode_cicd_is_enabled && verbosity=' '
+  bl64_msg_app_run_is_enabled && verbose='--verbose'
 
-  _bl64_arc_harden_gunzip
+  _bl64_arc_harden_gzip
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_ARC_CMD_GUNZIP"
-  $verbosity
-  "$@"
+  "$BL64_ARC_CMD_GUNZIP" \
+    $verbose "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Open gzip files and remove the source after extraction
+#
+# * Preserves permissions but not ownership
+# * Overwrites destination
+# * Ignore ACLs and extended attributes
+#
+# Arguments:
+#   $1: Full path to the source file
+#   $2: Full path to the destination
+# Outputs:
+#   STDOUT: None
+#   STDERR: tar or lib error messages
+# Returns:
+#   BL64_ARC_ERROR_INVALID_DESTINATION
+#   tar error status
+#######################################
+function bl64_arc_gzip_open() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local destination="$2"
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'destination' &&
+    bl64_check_file "$source" &&
+    bl64_check_directory "$destination" ||
+    return $?
+
+  bl64_msg_show_lib_subtask "open gzip archive ($source)"
+  # shellcheck disable=SC2086
+  cd "$destination" &&
+    bl64_arc_run_gunzip \
+      --decompress \
+      "$source"
+}
+
+#######################################
+# Open 7z files and remove the source after extraction
+#
+# * Preserves permissions but not ownership
+# * Overwrites destination
+# * Ignore ACLs and extended attributes
+#
+# Arguments:
+#   $1: Full path to the source file
+#   $2: Full path to the destination
+# Outputs:
+#   STDOUT: None
+#   STDERR: tar or lib error messages
+# Returns:
+#   BL64_ARC_ERROR_INVALID_DESTINATION
+#   tar error status
+#######################################
+function bl64_arc_7z_open() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local destination="$2"
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'destination' &&
+    bl64_check_file "$source" &&
+    bl64_check_directory "$destination" ||
+    return $?
+
+  bl64_msg_show_lib_subtask "open 7z archive ($source)"
+  # shellcheck disable=SC2086
+  bl64_arc_run_7zz \
+    -aoa \
+    -y \
+    "-o${destination}" \
+    x \
+    "$source"
+}
+
+#######################################
+# Open bzip2 files and remove the source after extraction
+#
+# * Preserves permissions but not ownership
+# * Overwrites destination
+# * Ignore ACLs and extended attributes
+#
+# Arguments:
+#   $1: Full path to the source file
+#   $2: Full path to the destination
+# Outputs:
+#   STDOUT: None
+#   STDERR: tar or lib error messages
+# Returns:
+#   BL64_ARC_ERROR_INVALID_DESTINATION
+#   tar error status
+#######################################
+function bl64_arc_bzip2_open() {
+  bl64_dbg_lib_show_function "$@"
+  local source="$1"
+  local destination="$2"
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'destination' &&
+    bl64_check_file "$source" &&
+    bl64_check_directory "$destination" ||
+    return $?
+
+  bl64_msg_show_lib_subtask "open bzip2 archive ($source)"
+  # shellcheck disable=SC2086
+  cd "$destination" &&
+    bl64_arc_run_bunzip2 \
+      --decompress \
+      --force \
+      "$source"
 }
 
 #######################################
@@ -7154,13 +7407,14 @@ function bl64_aws_sso_get_token() {
 function bl64_aws_run_aws() {
   bl64_dbg_lib_show_function "$@"
   local verbosity="$BL64_AWS_SET_OUPUT_NO_COLOR"
+  local debug=' '
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_AWS_MODULE' ||
     return $?
-  
-  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && verbosity=' '
-  bl64_dbg_lib_command_is_enabled && verbosity="$BL64_AWS_SET_DEBUG"
+
+  bl64_msg_app_run_is_enabled && verbosity=' '
+  bl64_dbg_lib_command_is_enabled && debug="$BL64_AWS_SET_DEBUG"
 
   _bl64_aws_harden_aws &&
     _bl64_aws_run_aws_prepare ||
@@ -7171,8 +7425,7 @@ function bl64_aws_run_aws() {
   "$BL64_AWS_CMD_AWS" \
     $BL64_AWS_SET_INPUT_NO_PROMPT \
     $BL64_AWS_SET_OUPUT_NO_PAGER \
-    $verbosity \
-    "$@"
+    $verbosity $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -7207,28 +7460,28 @@ function _bl64_aws_run_aws_prepare() {
   export AWS_SHARED_CREDENTIALS_FILE="$BL64_AWS_CLI_CREDENTIALS"
   bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE' 'AWS_SHARED_CREDENTIALS_FILE'
   case "$BL64_AWS_ACCESS_MODE" in
-  "$BL64_AWS_ACCESS_MODE_PROFILE")
-    export AWS_PROFILE="$BL64_AWS_ACCESS_PROFILE"
-    bl64_dbg_lib_show_vars 'AWS_PROFILE'
-    ;;
-  "$BL64_AWS_ACCESS_MODE_SSO")
-    export AWS_PROFILE="$BL64_AWS_ACCESS_PROFILE"
-    bl64_dbg_lib_show_vars 'AWS_PROFILE'
-    ;;
-  "$BL64_AWS_ACCESS_MODE_KEY")
-    export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
-    export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
-    bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY'
-    ;;
-  "$BL64_AWS_ACCESS_MODE_TOKEN")
-    export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
-    export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
-    export AWS_SESSION_TOKEN="$BL64_AWS_ACCESS_TOKEN"
-    bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY' 'AWS_SESSION_TOKEN'
-    ;;
-  *)
-    bl64_dbg_lib_show_info 'No access mode requested, using CLI defaults'
-    ;;
+    "$BL64_AWS_ACCESS_MODE_PROFILE")
+      export AWS_PROFILE="$BL64_AWS_ACCESS_PROFILE"
+      bl64_dbg_lib_show_vars 'AWS_PROFILE'
+      ;;
+    "$BL64_AWS_ACCESS_MODE_SSO")
+      export AWS_PROFILE="$BL64_AWS_ACCESS_PROFILE"
+      bl64_dbg_lib_show_vars 'AWS_PROFILE'
+      ;;
+    "$BL64_AWS_ACCESS_MODE_KEY")
+      export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
+      export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
+      bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY'
+      ;;
+    "$BL64_AWS_ACCESS_MODE_TOKEN")
+      export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
+      export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
+      export AWS_SESSION_TOKEN="$BL64_AWS_ACCESS_TOKEN"
+      bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY' 'AWS_SESSION_TOKEN'
+      ;;
+    *)
+      bl64_dbg_lib_show_info 'No access mode requested, using CLI defaults'
+      ;;
   esac
   return 0
 }
@@ -9565,7 +9818,7 @@ function bl64_cryp_run_gpg() {
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_CRYP_CMD_GPG" || return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity='--verbose'
+  bl64_msg_app_detail_is_enabled && verbosity='--verbose'
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -11857,7 +12110,7 @@ function bl64_fs_set_umask() {
   bl64_dbg_lib_show_function "$@"
   local permissions="${1:-${BL64_FS_UMASK_RW_USER}}"
 
-  bl64_msg_show_lib_subtask "temporary change current script umask (${permissions})"
+  bl64_dbg_lib_show_comments "temporary change current script umask (${permissions})"
   umask -S "$permissions" >/dev/null
 }
 
@@ -14090,7 +14343,7 @@ function bl64_k8s_label_set() {
     bl64_check_parameter 'value' ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
+  bl64_msg_app_detail_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   bl64_msg_show_lib_task "set or update label (${resource}/${name}/${key})"
   # shellcheck disable=SC2086
@@ -14138,7 +14391,7 @@ function bl64_k8s_annotation_set() {
   shift
   shift
 
-  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
+  bl64_msg_app_detail_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
   [[ "$namespace" == "$BL64_VAR_NONE" ]] && namespace='' || namespace="--namespace ${namespace}"
 
   bl64_msg_show_lib_task "set or update annotation (${resource}/${name})"
@@ -14176,7 +14429,7 @@ function bl64_k8s_namespace_create() {
   bl64_check_parameter 'namespace' ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
+  bl64_msg_app_detail_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_NS" "$namespace"; then
     bl64_msg_show_lib_info "the resource is already created. No further actions are needed (namespace:${namespace})"
@@ -14216,7 +14469,7 @@ function bl64_k8s_sa_create() {
     bl64_check_parameter 'sa' ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
+  bl64_msg_app_detail_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_SA" "$sa" "$namespace"; then
     bl64_msg_show_lib_info "the resource is already created. No further actions are needed (service-account:${sa})"
@@ -14263,7 +14516,7 @@ function bl64_k8s_secret_create() {
     bl64_check_file "$file" ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
+  bl64_msg_app_detail_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   if bl64_k8s_resource_is_created "$kubeconfig" "$BL64_K8S_RESOURCE_SECRET" "$secret" "$namespace"; then
     bl64_msg_show_lib_info "the resource is already created. No further actions are needed (${BL64_K8S_RESOURCE_SECRET}:${secret})"
@@ -14365,7 +14618,7 @@ function bl64_k8s_resource_update() {
     bl64_check_file "$definition" ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
+  bl64_msg_app_detail_is_enabled && verbosity="$BL64_K8S_CFG_KUBECTL_OUTPUT"
 
   bl64_msg_show_lib_task "create or update resource definition (${definition} -> ${namespace})"
   # shellcheck disable=SC2086
@@ -14830,7 +15083,7 @@ function bl64_mdb_run_mongosh() {
     bl64_check_module 'BL64_MDB_MODULE' ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
+  bl64_msg_app_detail_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -14864,7 +15117,7 @@ function bl64_mdb_run_mongorestore() {
     bl64_check_module 'BL64_MDB_MODULE' ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
+  bl64_msg_app_detail_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -14896,7 +15149,7 @@ function bl64_mdb_run_mongoexport() {
     bl64_check_module 'BL64_MDB_MODULE' ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
+  bl64_msg_app_detail_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -15644,17 +15897,14 @@ function bl64_pkg_brew_cleanup() {
 #######################################
 function bl64_pkg_run_dnf() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local verbose="$BL64_PKG_SET_QUIET"
 
   bl64_check_module 'BL64_PKG_MODULE' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose="$BL64_PKG_SET_VERBOSE"
-  else
-    verbose="$BL64_PKG_SET_QUIET"
-  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -15678,17 +15928,14 @@ function bl64_pkg_run_dnf() {
 #######################################
 function bl64_pkg_run_yum() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local verbose="$BL64_PKG_SET_QUIET"
 
   bl64_check_module 'BL64_PKG_MODULE' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose="$BL64_PKG_SET_VERBOSE"
-  else
-    verbose="$BL64_PKG_SET_QUIET"
-  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -15721,7 +15968,7 @@ function bl64_pkg_run_apt() {
   _bl64_pkg_harden_apt
 
   # Verbose is only available for a subset of commands
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
+  if bl64_msg_app_run_is_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     export DEBCONF_NOWARNINGS='yes'
@@ -15778,17 +16025,14 @@ function _bl64_pkg_harden_apt() {
 #######################################
 function bl64_pkg_run_apk() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local verbose="$BL64_PKG_SET_QUIET"
 
   bl64_check_module 'BL64_PKG_MODULE' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose="$BL64_PKG_SET_VERBOSE"
-  else
-    verbose="$BL64_PKG_SET_QUIET"
-  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -15812,7 +16056,7 @@ function bl64_pkg_run_apk() {
 #######################################
 function bl64_pkg_run_brew() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local verbose='--quiet'
 
   bl64_check_module 'BL64_PKG_MODULE' &&
     bl64_check_command "$BL64_PKG_CMD_BREW" &&
@@ -15820,11 +16064,8 @@ function bl64_pkg_run_brew() {
     bl64_check_privilege_not_root ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose='--verbose'
-  else
-    verbose='--quiet'
-  fi
 
   export HOMEBREW_PREFIX="$BL64_PKG_PATH_BREW_HOME"
   export HOMEBREW_CELLAR="${BL64_PKG_PATH_BREW_HOME}/Cellar"
@@ -15852,17 +16093,14 @@ function bl64_pkg_run_brew() {
 #######################################
 function bl64_pkg_run_zypper() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local verbose="$BL64_PKG_SET_QUIET"
 
   bl64_check_module 'BL64_PKG_MODULE' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose="$BL64_PKG_SET_VERBOSE"
-  else
-    verbose="$BL64_PKG_SET_QUIET"
-  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -15886,17 +16124,14 @@ function bl64_pkg_run_zypper() {
 #######################################
 function bl64_pkg_run_rpm() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local verbose='--quiet'
 
   bl64_check_module 'BL64_PKG_MODULE' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose='--verbose'
-  else
-    verbose='--quiet'
-  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -15952,9 +16187,8 @@ function bl64_pkg_run_installer() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose='-verbose'
-  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -16010,9 +16244,8 @@ function bl64_pkg_run_pacman() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose="$BL64_PKG_SET_VERBOSE"
-  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -16403,7 +16636,7 @@ function bl64_py_pip_usr_prepare() {
 function bl64_py_pip_usr_install() {
   bl64_dbg_lib_show_function "$@"
   local flag_user="$BL64_PY_SET_PIP_USER"
-  local verbose=' '
+  local verbose='--progress-bar=off'
 
   bl64_check_parameters_none $# || return $?
 
@@ -16417,15 +16650,14 @@ function bl64_py_pip_usr_install() {
       return $?
   fi
 
-  bl64_lib_mode_cicd_is_enabled && verbose='--progress-bar=off'
+  bl64_msg_app_run_is_enabled && verbose=' '
 
   bl64_msg_show_lib_subtask "install modules ($*)"
   # shellcheck disable=SC2086
   bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_UPGRADE \
-    $flag_user \
-    $verbose \
+    $flag_user $verbose \
     "$@"
 }
 
@@ -16553,18 +16785,16 @@ function _bl64_py_harden_python() {
 #######################################
 function bl64_py_run_pip() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=' '
+  local verbose="$BL64_PY_SET_PIP_QUIET"
   local cache=' '
 
   if bl64_dbg_lib_command_is_enabled; then
     verbose="$BL64_PY_SET_PIP_DEBUG"
   else
-    if bl64_msg_lib_verbose_is_enabled; then
-      if bl64_lib_mode_cicd_is_enabled; then
-        export PIP_NO_COLOR='on'
-      fi
+    if bl64_msg_app_run_is_enabled; then
+      verbose=' '
     else
-      verbose="$BL64_PY_SET_PIP_QUIET"
+      export PIP_NO_COLOR='on'
     fi
   fi
 
@@ -16626,19 +16856,22 @@ function _bl64_py_harden_pip() {
 #######################################
 function bl64_py_run_pipx() {
   bl64_dbg_lib_show_function "$@"
-  local debug="$BL64_PY_SET_PIP_QUIET"
+  local debug=' '
+  local verbose="$BL64_PY_SET_PIP_QUIET"
   local cache=' '
 
-  bl64_msg_lib_verbose_is_enabled && debug=' '
-  bl64_lib_mode_cicd_is_enabled && export USE_EMOJI='no'
+  if bl64_msg_app_run_is_enabled; then
+    verbose=' '
+  else
+    export USE_EMOJI='no'
+  fi
   bl64_dbg_lib_command_is_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
   _bl64_py_harden_pipx
   # shellcheck disable=SC2086
   bl64_py_run_python \
     -m 'pipx' \
-    $debug \
-    $cache \
+    $debug $verbose $cache \
     "$@"
 }
 
@@ -17456,7 +17689,7 @@ function bl64_rxtx_web_get_file() {
       return $BL64_LIB_ERROR_APP_MISSING
   fi
 
-  if (( status != 0 )); then
+  if ((status != 0)); then
     bl64_msg_show_lib_error 'file download failed'
   else
     bl64_fs_path_permission_set "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" "$destination"
@@ -17517,7 +17750,7 @@ function bl64_rxtx_git_get_dir() {
     _bl64_rxtx_git_get_dir_sub "$source_url" "$source_path" "$destination" "$branch"
   fi
   status=$?
-  (( status != 0 )) && bl64_msg_show_lib_error 'directory download failed'
+  ((status != 0)) && bl64_msg_show_lib_error 'directory download failed'
 
   if [[ "$status" == '0' && -d "${destination}/.git" ]]; then
     bl64_msg_show_lib_subtask "remove git metadata (${destination}/.git)"
@@ -17547,20 +17780,20 @@ function bl64_rxtx_git_get_dir() {
 #######################################
 function bl64_rxtx_run_curl() {
   bl64_dbg_lib_show_function "$@"
-  local debug="$BL64_RXTX_SET_CURL_SILENT"
+  local verbose="$BL64_RXTX_SET_CURL_SILENT"
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
 
-  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && debug=''
-  bl64_dbg_lib_command_is_enabled && debug="$BL64_RXTX_SET_CURL_VERBOSE"
+  bl64_msg_app_run_is_enabled && verbose=''
+  bl64_dbg_lib_command_is_enabled && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_RXTX_CMD_CURL" \
     $BL64_RXTX_SET_CURL_SECURE \
-    $debug \
+    $verbose \
     "$@"
   bl64_dbg_lib_trace_stop
 }
@@ -17585,7 +17818,8 @@ function bl64_rxtx_run_wget() {
     bl64_check_module 'BL64_RXTX_MODULE' &&
     bl64_check_command "$BL64_RXTX_CMD_WGET" || return $?
 
-  bl64_dbg_lib_command_is_enabled && verbose="$BL64_RXTX_SET_WGET_VERBOSE"
+  bl64_dbg_lib_command_is_enabled &&
+    verbose="$BL64_RXTX_SET_WGET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -19272,7 +19506,7 @@ function _bl64_vcs_set_options() {
 #######################################
 function bl64_vcs_run_git() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=' '
+  local verbose="$BL64_VCS_SET_GIT_QUIET"
 
   bl64_check_module 'BL64_VCS_MODULE' &&
     bl64_check_parameters_none "$#" &&
@@ -19280,25 +19514,18 @@ function bl64_vcs_run_git() {
 
   _bl64_vcs_harden_git
 
-  bl64_dbg_lib_show_info "current path: $(pwd)"
   if bl64_dbg_lib_command_is_enabled; then
     verbose=''
     export GIT_TRACE='2'
   else
-    if bl64_msg_lib_verbose_is_enabled; then
-      if bl64_lib_mode_cicd_is_enabled; then
-        export GIT_PROGRESS_DELAY='60'
-      fi
-    else
-      verbose="$BL64_VCS_SET_GIT_QUIET"
-    fi
+    bl64_msg_app_run_is_enabled &&
+      export GIT_PROGRESS_DELAY='60'
   fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_VCS_CMD_GIT" \
-    $verbose \
-    $BL64_VCS_SET_GIT_NO_PAGER \
+    $verbose $BL64_VCS_SET_GIT_NO_PAGER \
     "$@"
   bl64_dbg_lib_trace_stop
 }
@@ -19354,15 +19581,15 @@ function bl64_vcs_git_clone() {
   local destination="${2}"
   local branch="${3:-$BL64_VAR_DEFAULT}"
   local name="${4:-$BL64_VAR_DEFAULT}"
-  local verbose='--quiet'
+  local verbose='--quiet --no-progress'
 
-  bl64_lib_var_is_default "$branch" && branch=''
-  bl64_msg_lib_verbose_is_enabled && verbose=' '
-  bl64_lib_mode_cicd_is_enabled && verbose='--no-progress'
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_check_command "$BL64_VCS_CMD_GIT" ||
     return $?
+
+  bl64_lib_var_is_default "$branch" && branch=''
+  bl64_msg_app_run_is_enabled && verbose=' '
 
   bl64_msg_show_lib_subtask "clone single branch (${source}/${branch} -> ${destination})"
   bl64_fs_dir_create "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" &&
