@@ -263,6 +263,7 @@ function bl64_k8s_secret_copy() {
   resource="$($BL64_FS_CMD_MKTEMP)" || return $?
 
   bl64_msg_show_lib_task "get secret definition from source (${namespace_src}/${secret})"
+  # shellcheck disable=SC2086
   bl64_k8s_resource_get "$kubeconfig" "$BL64_K8S_RESOURCE_SECRET" "$secret" "$namespace_src" |
     bl64_txt_run_awk $BL64_TXT_SET_AWS_FS ':' '
       BEGIN { metadata = 0 }

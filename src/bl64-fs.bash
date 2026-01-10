@@ -716,11 +716,11 @@ function bl64_fs_cleanup_tmps() {
 
   target='/tmp'
   bl64_msg_show_lib_subtask "clean up OS temporary files (${target})"
-  bl64_fs_path_remove -- ${target}/[[:alnum:]]*
+  bl64_fs_path_remove -- "${target}"/[[:alnum:]]*
 
   target='/var/tmp'
   bl64_msg_show_lib_subtask "clean up OS temporary files (${target})"
-  bl64_fs_path_remove -- ${target}/[[:alnum:]]*
+  bl64_fs_path_remove -- "${target}"/[[:alnum:]]*
   return 0
 }
 
@@ -743,7 +743,7 @@ function bl64_fs_cleanup_logs() {
 
   if [[ -d "$target" ]]; then
     bl64_msg_show_lib_subtask "clean up OS logs (${target})"
-    bl64_fs_path_remove ${target}/[[:alnum:]]*
+    bl64_fs_path_remove "${target}"/[[:alnum:]]*
   fi
   return 0
 }
@@ -767,7 +767,7 @@ function bl64_fs_cleanup_caches() {
 
   if [[ -d "$target" ]]; then
     bl64_msg_show_lib_subtask "clean up OS cache contents (${target})"
-    bl64_fs_path_remove ${target}/[[:alnum:]]*
+    bl64_fs_path_remove "${target}"/[[:alnum:]]*
   fi
   return 0
 }

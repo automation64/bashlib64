@@ -100,7 +100,7 @@ function _bl64_dbg_dryrun_show() {
 function bl64_dbg_runtime_show() {
   local -i last_status=$?
   local label="${_BL64_DBG_TXT_LABEL_BASH_RUNTIME}"
-  bl64_dbg_app_command_is_enabled || return $last_status
+  bl64_dbg_app_command_is_enabled || return "$last_status"
 
   _bl64_dbg_show "${label} Bash / Interpreter path: [${BASH}]"
   _bl64_dbg_show "${label} Bash / ShOpt Options: [${BASHOPTS:-NONE}]"
@@ -120,7 +120,7 @@ function bl64_dbg_runtime_show() {
   bl64_dbg_runtime_show_bashlib64
 
   # shellcheck disable=SC2248
-  return $last_status
+  return "$last_status"
 }
 
 #######################################
@@ -203,10 +203,10 @@ function bl64_dbg_runtime_show_paths() {
 #######################################
 function bl64_dbg_app_trace_stop() {
   local -i state=$?
-  bl64_dbg_app_trace_is_enabled || return $state
+  bl64_dbg_app_trace_is_enabled || return "$state"
   set +x
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
-  return $state
+  return "$state"
 }
 
 #######################################
@@ -242,12 +242,12 @@ function bl64_dbg_app_trace_start() {
 #######################################
 function bl64_dbg_lib_trace_stop() {
   local -i state=$?
-  bl64_dbg_lib_trace_is_enabled || return $state
+  bl64_dbg_lib_trace_is_enabled || return "$state"
 
   set +x
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
 
-  return $state
+  return "$state"
 }
 
 #######################################
@@ -413,12 +413,12 @@ function bl64_dbg_app_show_function() {
 #######################################
 function bl64_dbg_lib_command_trace_stop() {
   local -i state=$?
-  bl64_dbg_lib_task_is_enabled || return $state
+  bl64_dbg_lib_task_is_enabled || return "$state"
 
   set +x
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_TRACE} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_FUNCTION_STOP}"
 
-  return $state
+  return "$state"
 }
 
 #######################################

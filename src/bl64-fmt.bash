@@ -282,7 +282,7 @@ function bl64_fmt_list_check_membership() {
   ((is_valid != 0)) &&
     bl64_msg_show_check "${error_message}. Value must be one of: [${*}]"
 
-  return $is_valid
+  return "$is_valid"
 }
 
 #######################################

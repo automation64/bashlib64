@@ -624,7 +624,7 @@ function bl64_check_alert_module_setup() {
 
   if [[ "$last_status" != '0' ]]; then
     bl64_msg_show_check "BashLib64 module setup failure (module: ${module})"
-    return $last_status
+    return "$last_status"
   else
     return 0
   fi

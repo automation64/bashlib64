@@ -109,7 +109,7 @@ function bl64_txt_line_replace_sed() {
   bl64_txt_run_sed -i"$BL64_LIB_SUFFIX_BACKUP" "$sed_expression" $source
   exit_status=$?
   bl64_fs_path_remove "${source}${BL64_LIB_SUFFIX_BACKUP}"
-  return $exit_status
+  return "$exit_status"
 }
 
 #######################################
