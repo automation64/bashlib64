@@ -157,13 +157,14 @@ function bl64_aws_sso_get_token() {
 function bl64_aws_run_aws() {
   bl64_dbg_lib_show_function "$@"
   local verbosity="$BL64_AWS_SET_OUPUT_NO_COLOR"
+  local debug=' '
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_AWS_MODULE' ||
     return $?
-  
-  bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && verbosity=' '
-  bl64_dbg_lib_command_is_enabled && verbosity="$BL64_AWS_SET_DEBUG"
+
+  bl64_msg_app_run_is_enabled && verbosity=' '
+  bl64_dbg_lib_command_is_enabled && debug="$BL64_AWS_SET_DEBUG"
 
   _bl64_aws_harden_aws &&
     _bl64_aws_run_aws_prepare ||
@@ -174,8 +175,7 @@ function bl64_aws_run_aws() {
   "$BL64_AWS_CMD_AWS" \
     $BL64_AWS_SET_INPUT_NO_PROMPT \
     $BL64_AWS_SET_OUPUT_NO_PAGER \
-    $verbosity \
-    "$@"
+    $verbosity $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -210,28 +210,28 @@ function _bl64_aws_run_aws_prepare() {
   export AWS_SHARED_CREDENTIALS_FILE="$BL64_AWS_CLI_CREDENTIALS"
   bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE' 'AWS_SHARED_CREDENTIALS_FILE'
   case "$BL64_AWS_ACCESS_MODE" in
-  "$BL64_AWS_ACCESS_MODE_PROFILE")
-    export AWS_PROFILE="$BL64_AWS_ACCESS_PROFILE"
-    bl64_dbg_lib_show_vars 'AWS_PROFILE'
-    ;;
-  "$BL64_AWS_ACCESS_MODE_SSO")
-    export AWS_PROFILE="$BL64_AWS_ACCESS_PROFILE"
-    bl64_dbg_lib_show_vars 'AWS_PROFILE'
-    ;;
-  "$BL64_AWS_ACCESS_MODE_KEY")
-    export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
-    export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
-    bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY'
-    ;;
-  "$BL64_AWS_ACCESS_MODE_TOKEN")
-    export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
-    export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
-    export AWS_SESSION_TOKEN="$BL64_AWS_ACCESS_TOKEN"
-    bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY' 'AWS_SESSION_TOKEN'
-    ;;
-  *)
-    bl64_dbg_lib_show_info 'No access mode requested, using CLI defaults'
-    ;;
+    "$BL64_AWS_ACCESS_MODE_PROFILE")
+      export AWS_PROFILE="$BL64_AWS_ACCESS_PROFILE"
+      bl64_dbg_lib_show_vars 'AWS_PROFILE'
+      ;;
+    "$BL64_AWS_ACCESS_MODE_SSO")
+      export AWS_PROFILE="$BL64_AWS_ACCESS_PROFILE"
+      bl64_dbg_lib_show_vars 'AWS_PROFILE'
+      ;;
+    "$BL64_AWS_ACCESS_MODE_KEY")
+      export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
+      export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
+      bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY'
+      ;;
+    "$BL64_AWS_ACCESS_MODE_TOKEN")
+      export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
+      export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
+      export AWS_SESSION_TOKEN="$BL64_AWS_ACCESS_TOKEN"
+      bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY' 'AWS_SESSION_TOKEN'
+      ;;
+    *)
+      bl64_dbg_lib_show_info 'No access mode requested, using CLI defaults'
+      ;;
   esac
   return 0
 }

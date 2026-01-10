@@ -1,5 +1,5 @@
 ---
-# template: 2.4.0
+# template: 2.5.0
 name: "Test/Bash"
 
 concurrency:
@@ -11,6 +11,7 @@ env:
   BL64_LIB_CICD: "YES"
   DEV_TEST_BASH_RUNNER_ENVIRONMENT: "ON"
 
+# yamllint disable-line rule:truthy
 on:
   workflow_dispatch:
   pull_request:
@@ -19,6 +20,7 @@ on:
   push:
     branches:
       - "feature/**"
+      - "release/**"
     paths:
       - "src/**"
       - "test/bash/**"
@@ -28,6 +30,7 @@ jobs:
     runs-on: "ubuntu-latest"
     strategy:
       fail-fast: false
+      max-parallel: 3
       matrix:
         target:
           - "ALM"
@@ -47,12 +50,12 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Cache local tools"
-        uses: "actions/cache@v4"
+        uses: "actions/cache@v5"
         with:
-          path: ./lib
-          key: ${{ runner.os }}-lib-cache
-          restore-keys: |
-            ${{ runner.os }}-lib-cache
+          path: |
+            ./lib/bl64
+            ./lib/inst64
+          key: "dev-tools"
 
       - name: "Download tools"
         run: |
@@ -82,6 +85,8 @@ jobs:
           ./bin/dev-test-bash $DEV_TEST_BASH_CONTAINER_${{matrix.target}} ${DEV_TEST_BASH_CASES}/UNX
 
   test-bash-macos:
+    needs: "test-bash-linux"
+    if: "always()"
     runs-on: "macos-latest"
     steps:
       - name: "Check out repository code"
@@ -92,12 +97,12 @@ jobs:
           ./bin/dev-lib-bash
 
       - name: "Cache local tools"
-        uses: "actions/cache@v4"
+        uses: "actions/cache@v5"
         with:
-          path: ./lib
-          key: ${{ runner.os }}-lib-cache
-          restore-keys: |
-            ${{ runner.os }}-lib-cache
+          path: |
+            ./lib/bl64
+            ./lib/inst64
+          key: "dev-tools"
 
       - name: "Download tools"
         run: |
@@ -119,3 +124,4 @@ jobs:
           source ./bin/dev-set &&
           source ./bin/dev-env-bash &&
           ./bin/dev-test-bash-host ${DEV_TEST_BASH_CASES}/UNX
+...

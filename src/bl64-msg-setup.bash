@@ -52,11 +52,12 @@ function bl64_msg_set_level() {
   case "$level" in
     "$BL64_MSG_VERBOSE_NONE") bl64_msg_all_disable_verbose ;;
     "$BL64_MSG_VERBOSE_APP") bl64_msg_app_enable_verbose ;;
-    "$BL64_MSG_VERBOSE_LIB") bl64_msg_lib_enable_verbose ;;
+    "$BL64_MSG_VERBOSE_DETAIL") bl64_msg_app_enable_detail ;;
+    "$BL64_MSG_VERBOSE_LIB") bl64_msg_app_detail_is_enabled ;;
     "$BL64_MSG_VERBOSE_ALL") bl64_msg_all_enable_verbose ;;
     *)
       bl64_check_alert_parameter_invalid 'BL64_MSG_VERBOSE' \
-        "invalid value. Not one of: ${BL64_MSG_VERBOSE_NONE}|${BL64_MSG_VERBOSE_ALL}|${BL64_MSG_VERBOSE_APP}|${BL64_MSG_VERBOSE_LIB}"
+        "invalid value. Not one of: ${BL64_MSG_VERBOSE_NONE}|${BL64_MSG_VERBOSE_ALL}|${BL64_MSG_VERBOSE_APP}|${BL64_MSG_VERBOSE_DETAIL}|${BL64_MSG_VERBOSE_LIB}"
       return $?
       ;;
   esac
@@ -202,26 +203,35 @@ function bl64_msg_app_verbose_is_enabled {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_APP" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
 }
-function bl64_msg_lib_verbose_is_enabled {
+
+function bl64_msg_app_run_is_enabled {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-  [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
+  bl64_msg_app_detail_is_enabled && ! bl64_lib_mode_cicd_is_enabled
+}
+
+function bl64_msg_app_detail_is_enabled {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
+  [[ "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_LIB" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_DETAIL" || "$BL64_MSG_VERBOSE" == "$BL64_MSG_VERBOSE_ALL" ]]
 }
 
 function bl64_msg_all_disable_verbose {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_NONE"
 }
+
 function bl64_msg_all_enable_verbose {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_ALL"
 }
-function bl64_msg_lib_enable_verbose {
-  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-  BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_LIB"
-}
+
 function bl64_msg_app_enable_verbose {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_APP"
+}
+
+function bl64_msg_app_enable_detail {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
+  BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_DETAIL"
 }
 
 #

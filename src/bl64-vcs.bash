@@ -18,7 +18,7 @@
 #######################################
 function bl64_vcs_run_git() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=' '
+  local verbose="$BL64_VCS_SET_GIT_QUIET"
 
   bl64_check_module 'BL64_VCS_MODULE' &&
     bl64_check_parameters_none "$#" &&
@@ -26,25 +26,18 @@ function bl64_vcs_run_git() {
 
   _bl64_vcs_harden_git
 
-  bl64_dbg_lib_show_info "current path: $(pwd)"
   if bl64_dbg_lib_command_is_enabled; then
     verbose=''
     export GIT_TRACE='2'
   else
-    if bl64_msg_lib_verbose_is_enabled; then
-      if bl64_lib_mode_cicd_is_enabled; then
-        export GIT_PROGRESS_DELAY='60'
-      fi
-    else
-      verbose="$BL64_VCS_SET_GIT_QUIET"
-    fi
+    bl64_msg_app_run_is_enabled &&
+      export GIT_PROGRESS_DELAY='60'
   fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_VCS_CMD_GIT" \
-    $verbose \
-    $BL64_VCS_SET_GIT_NO_PAGER \
+    $verbose $BL64_VCS_SET_GIT_NO_PAGER \
     "$@"
   bl64_dbg_lib_trace_stop
 }
@@ -100,15 +93,15 @@ function bl64_vcs_git_clone() {
   local destination="${2}"
   local branch="${3:-$BL64_VAR_DEFAULT}"
   local name="${4:-$BL64_VAR_DEFAULT}"
-  local verbose='--quiet'
+  local verbose='--quiet --no-progress'
 
-  bl64_lib_var_is_default "$branch" && branch=''
-  bl64_msg_lib_verbose_is_enabled && verbose=' '
-  bl64_lib_mode_cicd_is_enabled && verbose='--no-progress'
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_check_command "$BL64_VCS_CMD_GIT" ||
     return $?
+
+  bl64_lib_var_is_default "$branch" && branch=''
+  bl64_msg_app_run_is_enabled && verbose=' '
 
   bl64_msg_show_lib_subtask "clone single branch (${source}/${branch} -> ${destination})"
   bl64_fs_dir_create "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "${BL64_VAR_DEFAULT}" "$destination" &&

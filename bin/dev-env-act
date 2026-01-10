@@ -23,7 +23,7 @@
 {
   # Env / Act / Module environment definition version
   export DEV_ENV_ACT_ID='act'
-  export DEV_ENV_ACT_VERSION='1.3.0'
+  export DEV_ENV_ACT_VERSION='1.3.1'
 
   # Lib / Act / Installer
   export DEV_LIB_ACT_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-act"
@@ -32,8 +32,8 @@
   # Lib / Act / Target
   export DEV_LIB_ACT_TARGET="${DEV_PATH_LIB}/${DEV_ENV_ACT_ID}"
   # Lib / Act / Paths
-  export DEV_LIB_ACT_PATH_CACHE_ACTION="${DEV_PATH_TMP}/act/cache-action"
-  export DEV_LIB_ACT_PATH_CACHE_SERVER="${DEV_PATH_TMP}/act/cache-server"
+  export DEV_LIB_ACT_PATH_CACHE_ACTION="${DEV_PATH_TMP}/${DEV_ENV_ACT_ID}/cache-action"
+  export DEV_LIB_ACT_PATH_CACHE_SERVER="${DEV_PATH_TMP}/${DEV_ENV_ACT_ID}/cache-server"
 }
 
 #

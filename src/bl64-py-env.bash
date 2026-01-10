@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='4.2.1'
+  declare BL64_PY_VERSION='4.2.2'
 
   declare BL64_PY_MODULE='0'
 

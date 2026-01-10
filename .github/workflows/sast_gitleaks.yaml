@@ -2,17 +2,24 @@
 # template: 1.1.0
 name: "SAST/GitLeaks"
 
+# yamllint disable-line rule:truthy
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - "main"
   push:
     branches:
       - "feature/**"
+      - "release/**"
 
 jobs:
   sast-gitleaks:
     uses: "automation64/github-workflow-gitleaks/.github/workflows/main.yaml@main"
     with:
       DEV_CICD_DEBUG: "${{ vars.DEV_CICD_DEBUG }}"
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
 ...

@@ -145,7 +145,7 @@ function bl64_py_pip_usr_prepare() {
 function bl64_py_pip_usr_install() {
   bl64_dbg_lib_show_function "$@"
   local flag_user="$BL64_PY_SET_PIP_USER"
-  local verbose=' '
+  local verbose='--progress-bar=off'
 
   bl64_check_parameters_none $# || return $?
 
@@ -159,15 +159,14 @@ function bl64_py_pip_usr_install() {
       return $?
   fi
 
-  bl64_lib_mode_cicd_is_enabled && verbose='--progress-bar=off'
+  bl64_msg_app_run_is_enabled && verbose=' '
 
   bl64_msg_show_lib_subtask "install modules ($*)"
   # shellcheck disable=SC2086
   bl64_py_run_pip \
     'install' \
     $BL64_PY_SET_PIP_UPGRADE \
-    $flag_user \
-    $verbose \
+    $flag_user $verbose \
     "$@"
 }
 
@@ -295,18 +294,16 @@ function _bl64_py_harden_python() {
 #######################################
 function bl64_py_run_pip() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=' '
+  local verbose="$BL64_PY_SET_PIP_QUIET"
   local cache=' '
 
   if bl64_dbg_lib_command_is_enabled; then
     verbose="$BL64_PY_SET_PIP_DEBUG"
   else
-    if bl64_msg_lib_verbose_is_enabled; then
-      if bl64_lib_mode_cicd_is_enabled; then
-        export PIP_NO_COLOR='on'
-      fi
+    if bl64_msg_app_run_is_enabled; then
+      verbose=' '
     else
-      verbose="$BL64_PY_SET_PIP_QUIET"
+      export PIP_NO_COLOR='on'
     fi
   fi
 
@@ -368,19 +365,22 @@ function _bl64_py_harden_pip() {
 #######################################
 function bl64_py_run_pipx() {
   bl64_dbg_lib_show_function "$@"
-  local debug="$BL64_PY_SET_PIP_QUIET"
+  local debug=' '
+  local verbose="$BL64_PY_SET_PIP_QUIET"
   local cache=' '
 
-  bl64_msg_lib_verbose_is_enabled && debug=' '
-  bl64_lib_mode_cicd_is_enabled && export USE_EMOJI='no'
+  if bl64_msg_app_run_is_enabled; then
+    verbose=' '
+  else
+    export USE_EMOJI='no'
+  fi
   bl64_dbg_lib_command_is_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
   _bl64_py_harden_pipx
   # shellcheck disable=SC2086
   bl64_py_run_python \
     -m 'pipx' \
-    $debug \
-    $cache \
+    $debug $verbose $cache \
     "$@"
 }
 

@@ -43,7 +43,7 @@ function my_download() {
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  bl64_msg_show_about
+  dev_bin64_task_initialize &&
   bl64_check_parameter 'DEV_LIB_TESTMANSH_INSTALLER' &&
     bl64_check_parameter 'DEV_LIB_TESTMANSH_BIN'
 }

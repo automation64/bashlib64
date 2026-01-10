@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
-#######################################
-# Dev / GIT / Remove tag
-#
-# * Remove from local, origin and upstream
-# * Works on the main branch
-# * Version: 1.0.0
-#
+# template-task: 1.9.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -19,66 +13,57 @@
 # limitations under the License.
 #######################################
 
-#
-# Imports
-#
-
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
 # shellcheck source-path=/opt/bl64
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-rxtx.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-rxtx.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-api.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-vcs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 # shellcheck source-path=bin
 source ./bin/dev-env-git || exit 1
 
-#
-# Functions
-#
+declare MY_TAG="${1:-}"
 
-function dev_git_tag_destroy() {
-  bl64_dbg_app_show_function "$@"
-  local tag="$1"
-
+function my_destroy() {
+  bl64_dbg_app_show_function
   bl64_msg_show_task "switch to main branch (${DEV_GIT_BRANCH_MAIN})"
   bl64_vcs_run_git checkout "$DEV_GIT_BRANCH_MAIN" ||
     return $?
 
-  bl64_msg_show_task "destroy local tag (${tag})"
-  bl64_vcs_run_git tag -d "$tag"
+  bl64_msg_show_task "destroy local tag (${MY_TAG})"
+  bl64_vcs_run_git tag -d "$MY_TAG"
 
-  bl64_msg_show_task "destroy tag in origin (${DEV_GIT_REMOTE_ORIGIN})"
-  bl64_vcs_run_git push -d "$DEV_GIT_REMOTE_ORIGIN" "$tag"
+  bl64_msg_show_task "destroy MY_TAG in origin (${DEV_GIT_REMOTE_ORIGIN})"
+  bl64_vcs_run_git push -d "$DEV_GIT_REMOTE_ORIGIN" "$MY_TAG"
 
   if bl64_lib_flag_is_enabled "$DEV_GIT_REMOTE_UPSTREAM_ENABLED"; then
-    bl64_msg_show_task "destroy tag in upstream (${DEV_GIT_REMOTE_UPSTREAM})"
-    bl64_vcs_run_git push -d "$DEV_GIT_REMOTE_UPSTREAM" "$tag"
+    bl64_msg_show_task "destroy MY_TAG in upstream (${DEV_GIT_REMOTE_UPSTREAM})"
+    bl64_vcs_run_git push -d "$DEV_GIT_REMOTE_UPSTREAM" "$MY_TAG"
   fi
 }
 
-function dev_git_initialize() {
-  bl64_dbg_app_show_function "$@"
-  local tag="$1"
-  bl64_check_parameter 'tag' &&
-    bl64_vcs_setup
+function my_initialize() {
+  bl64_dbg_app_show_function
+  dev_bin64_task_initialize &&
+    bl64_check_parameter 'MY_TAG' &&
+    dev_bin64_task_show_setup \
+      'DEV_GIT_BRANCH_MAIN' \
+      'DEV_GIT_REMOTE_ORIGIN' \
+      'DEV_GIT_REMOTE_UPSTREAM_ENABLED' \
+      'DEV_GIT_REMOTE_UPSTREAM' \
+      'MY_TAG'
 }
 
-#
-# Main
-#
-
-declare dev_git_tag="${1:-}"
-
-bl64_lib_script_version_set '1.0.1'
-bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose
+bl64_lib_script_version_set '1.0.2'
+bl64_msg_help_about_set 'Remove GIT Tag from local, origin and upstream'
+dev_bin64_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
-dev_git_initialize "$dev_git_tag" &&
-  dev_git_tag_destroy "$dev_git_tag"
+my_destroy
 bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

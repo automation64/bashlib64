@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# template-task: 1.9.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -11,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #######################################
-
-#
-# Imports
-#
 
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
@@ -31,10 +28,6 @@ source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
 # shellcheck source-path=bin
 source ./bin/dev-env-git || exit 1
 
-#
-# Functions
-#
-
 function dev_repo_update() {
   bl64_dbg_app_show_function
 
@@ -46,8 +39,8 @@ function dev_repo_update() {
     bl64_msg_show_task "pull latest changes from upstream (${DEV_GIT_REMOTE_UPSTREAM})"
     bl64_vcs_run_git fetch "$DEV_GIT_REMOTE_UPSTREAM" &&
       bl64_vcs_run_git pull "$DEV_GIT_REMOTE_UPSTREAM" "$DEV_GIT_BRANCH_MAIN" &&
-      bl64_msg_show_task "push changes to origin (${DEV_GIT_REMOTE_ORIGIN})"
-    bl64_vcs_run_git push "${DEV_GIT_REMOTE_ORIGIN}" "$DEV_GIT_BRANCH_MAIN"
+      bl64_msg_show_task "push changes to origin (${DEV_GIT_REMOTE_ORIGIN})" &&
+      bl64_vcs_run_git push "${DEV_GIT_REMOTE_ORIGIN}" "$DEV_GIT_BRANCH_MAIN"
   else
     bl64_msg_show_task "pull latest changes from origin (${DEV_GIT_REMOTE_ORIGIN})"
     bl64_vcs_run_git fetch "$DEV_GIT_REMOTE_ORIGIN" &&
@@ -57,19 +50,20 @@ function dev_repo_update() {
   bl64_vcs_run_git gc
 }
 
-function dev_git_initialize() {
+function my_initialize() {
   bl64_dbg_app_show_function
-  bl64_vcs_setup
+  dev_bin64_task_initialize &&
+    dev_bin64_task_show_setup \
+      'DEV_GIT_BRANCH_MAIN' \
+      'DEV_GIT_REMOTE_ORIGIN' \
+      'DEV_GIT_REMOTE_UPSTREAM' \
+      'DEV_GIT_REMOTE_UPSTREAM_ENABLED'
 }
 
-#
-# Main
-#
-
-bl64_lib_script_version_set '1.5.2'
-bl64_msg_set_format "$DEV_VERBOSE" && bl64_msg_all_enable_verbose
+bl64_lib_script_version_set '1.5.3'
+bl64_msg_help_about_set 'Update local repository from origin and upstream'
+dev_bin64_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
-dev_git_initialize &&
-  dev_repo_update
+dev_repo_update
 bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

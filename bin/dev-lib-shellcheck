@@ -34,8 +34,8 @@ function my_download() {
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  bl64_msg_show_about
-  bl64_check_file "$DEV_LIB_SHELLCHECK_INSTALLER"
+  dev_bin64_task_initialize &&
+    bl64_check_file "$DEV_LIB_SHELLCHECK_INSTALLER"
 }
 
 bl64_lib_script_version_set '1.0.4'

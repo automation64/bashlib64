@@ -93,7 +93,7 @@ function my_release() {
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  bl64_msg_show_about
+  dev_bin64_task_initialize &&
   bl64_check_parameter 'MY_RELEASE_TAG' &&
     bl64_check_export 'DEV_RELEASE_GITHUB_REPO_OWNER' &&
     bl64_check_export 'DEV_RELEASE_GITHUB_REPO_NAME' &&

@@ -23,20 +23,20 @@
 {
   # Env / Bash / Module environment definition version
   export DEV_ENV_BASH_ID='bash'
-  export DEV_ENV_BASH_VERSION='1.11.0'
+  export DEV_ENV_BASH_VERSION='1.11.2'
   # Env / Bash / Container path for project mounts
   export DEV_ENV_BASH_CONTAINER_PATH_SRC='/source'
   export DEV_ENV_BASH_CONTAINER_PATH_ROOT='/project'
   export DEV_ENV_BASH_CONTAINER_PATH_TEST='/test'
   # Env / Bash / Local work paths
-  export DEV_ENV_BASH_PATH_LOGS="${DEV_PATH_PROF_LOGS}/bash"
+  export DEV_ENV_BASH_PATH_LOGS="${DEV_PATH_PROF_LOGS}/${DEV_ENV_BASH_ID}"
 
   # Test / Bash / Cooldown between tests in seconds
   export DEV_TEST_BASH_COOLDOWN='2'
   # Test / Bash / Path to test cases. Relative to DEV_PATH_ROOT
   export DEV_TEST_BASH_CASES="${DEV_BASE_TEST}/bash"
   # Test / Bash / Flag for disabling container test, and run on local OS
-  export DEV_TEST_BASH_CONTAINER_DISABLED='YES'
+  export DEV_TEST_BASH_CONTAINER_DISABLED='DISABLED'
 
   # Build / Bash / Target
   export DEV_BUILD_BASH_PATH_TARGET="${DEV_PATH_BUILD_PREPARE}/${DEV_ENV_BASH_ID}"

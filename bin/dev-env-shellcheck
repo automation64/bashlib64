@@ -24,9 +24,9 @@
 {
   # Env / ShellCheck / Module environment definition version
   export DEV_ENV_SHELLCHECK_ID='shellcheck'
-  export DEV_ENV_SHELLCHECK_VERSION='1.2.1'
-  # Env / ShellCheck / Container path for project mounts
-  export DEV_ENV_SHELLCHECK_CONTAINER_PATH_ROOT='/project'
+  export DEV_ENV_SHELLCHECK_VERSION='2.0.0'
+  # Env / ShellCheck / Log path
+  export DEV_ENV_SHELLCHECK_PATH_LOGS="${DEV_PATH_LOGS}/${DEV_ENV_SHELLCHECK_ID}"
 
   # Lib / ShellCheck / Installer
   export DEV_LIB_SHELLCHECK_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-shellcheck"
@@ -35,7 +35,7 @@
   # Lib / ShellCheck / Target
   export DEV_LIB_SHELLCHECK_TARGET="${DEV_PATH_LIB}/${DEV_ENV_SHELLCHECK_ID}"
   # Lib / ShellCheck / Configuration
-  export DEV_LIB_SHELLCHECK_CFG='.shellcheckrc'
+  export DEV_LIB_SHELLCHECK_CFG="${DEV_PATH_ROOT}/.shellcheckrc"
 }
 
 #
@@ -46,14 +46,12 @@
 
 # shellcheck disable=SC2154
 {
-  # Env / ShellCheck / Container Registry for tools
-  export DEV_ENV_SHELLCHECK_REGISTRY="${DEV_ENV_SHELLCHECK_REGISTRY:-ghcr.io/automation64}"
   # Lint / ShellCheck / Target
   export DEV_LINT_SHELLCHECK_TARGET="${DEV_LINT_SHELLCHECK_TARGET:-${DEV_BASE_SRC}}"
-  # Lint / ShellCheck / Container with linting tool
-  export DEV_LINT_SHELLCHECK_CONTAINER="${DEV_LINT_SHELLCHECK_CONTAINER:-shell-lint/alpine-3-shell-lint}"
-  # Lint / ShellCheck / Container entrypoint
-  export DEV_LINT_SHELLCHECK_CONTAINER_ENTRYPOINT="${DEV_LINT_SHELLCHECK_CONTAINER_ENTRYPOINT:-/usr/local/bin/shellcheck}"
+  # Lint / ShellCheck / Format
+  export DEV_LINT_SHELLCHECK_FORMAT="${DEV_LINT_SHELLCHECK_FORMAT:-tty}"
+  # Lint / ShellCheck / Report
+  export DEV_LINT_SHELLCHECK_PATH_REPORT="${DEV_ENV_SHELLCHECK_PATH_LOGS}/${DEV_ENV_SHELLCHECK_ID}.${DEV_LINT_SHELLCHECK_FORMAT}"
 }
 
 #

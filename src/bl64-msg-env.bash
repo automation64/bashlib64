@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.15.1'
+  declare BL64_MSG_VERSION='5.16.0'
 
   declare BL64_MSG_MODULE='0'
 
@@ -14,13 +14,10 @@
   #
   # Verbosity levels
   #
-  # * 0: nothing is showed
-  # * 1: application messages only
-  # * 2: bashlib64 and application messages
-  #
 
   declare BL64_MSG_VERBOSE_NONE='NONE'
   declare BL64_MSG_VERBOSE_APP='APP'
+  declare BL64_MSG_VERBOSE_DETAIL='DETAIL'
   declare BL64_MSG_VERBOSE_LIB='LIB'
   declare BL64_MSG_VERBOSE_ALL='ALL'
 

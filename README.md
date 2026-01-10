@@ -1,5 +1,10 @@
 # Project: BashLib64
 
+![License](https://img.shields.io/github/license/automation64/bashlib64)
+![GitHub stars](https://img.shields.io/github/stars/automation64/bashlib64?style=social)
+![GitHub forks](https://img.shields.io/github/forks/automation64/bashlib64?style=social)
+![Release Downloads](https://img.shields.io/github/downloads/automation64/bashlib64/total)
+
 ```shell linenums="0"
 
 
@@ -13,7 +18,20 @@
 
 ```
 
-## Overview
+- [Project: BashLib64](#project-bashlib64)
+  - [📌 Overview](#-overview)
+  - [📦 Deployment](#-deployment)
+    - [Minimum Requirements](#minimum-requirements)
+    - [Installation](#installation)
+  - [🚀 Usage](#-usage)
+  - [🛠 Contributing](#-contributing)
+  - [⚠️ Disclaimer](#️-disclaimer)
+  - [📜 License](#-license)
+  - [👤 Author](#-author)
+
+---
+
+## 📌 Overview
 
 BashLib64 is a **Bash** library that provides a simple abstraction layer for developing multi-platform automation scripts.
 
@@ -51,9 +69,11 @@ BashLib64 is a **Bash** library that provides a simple abstraction layer for dev
 | [bl64-vcs](https://automation64.github.io/bashlib64/bl64-vcs/)     | Manage Version Control System                      |
 | [bl64-xsv](https://automation64.github.io/bashlib64/bl64-xsv/)     | Manipulate CSV like text files                     |
 
-## Deployment
+---
 
-### OS Compatibility
+## 📦 Deployment
+
+### Minimum Requirements
 
 The library has been tested on the following operating systems:
 
@@ -65,52 +85,69 @@ The library has been tested on the following operating systems:
 - Debian: 9,10,11,12,13
 - Fedora: 33,34,35,36,37,38,39,40,41,42,43
 - KaliLinux: 2024,2025
-- MacOS (*): 12,13,14,15
+- MacOS (\*): 12,13,14,15
 - OracleLinux; 7,8,9,10
 - RedHatEnterpriseLinux: 8,9,10
 - RockyLinux: 8,9,10
 - SuSELinuxEnterpriseServer: 15, 16
 - Ubuntu: 18,20,21,22,23,24,25
 
-(*) Requires Bash4 (e.g. homebrew install bash)
-
-### Prerequisites
-
-- Minimum Bash version: 4
+Minimum Bash version: 4
 
 ### Installation
 
-- Download the library to the project directory
+Download the library to the project directory
 
-  ```shell
-  curl -O https://raw.githubusercontent.com/automation64/bashlib64/main/bashlib64.bash
+```shell
+curl -O https://raw.githubusercontent.com/automation64/bashlib64/main/bashlib64.bash
   ```
+
+Or use the **Installer64** tool to install it in `/opt/bl64`
+
+```shell
+curl -sL https://raw.githubusercontent.com/automation64/installer64/main/src/bootstrap | sh
+```
+
+Or download the distributable package from GitHub releases:
+
+- `bashlib64-stand-alone.tgz`: single library file (`bashlib64.bash`) with all modules.
+- `bashlib64-split.tgz`: two library files: `bashlib64-core.bash` for main modules and `bashlib64-opt.bash` for remaining ones.
+- `bashlib64-modular.tgz`: one file per module (`bashlib64-module-*.bash`)
+
+---
+
+## 🚀 Usage
 
 - Add the library loader to the target script:
 
-  ```shell
-  source "<PROJECT_DIR>/bashlib64.bash"
-  ```
+```shell
+source "<LIBRARY_LOCATION>/bashlib64.bash"
+```
 
-- The library is also available as release assets:
-  - `bashlib64-stand-alone.tgz`: single library file (`bashlib64.bash`) with all modules.
-  - `bashlib64-split.tgz`: two library files: `bashlib64-core.bash` for main modules and `bashlib64-opt.bash` for remaining ones.
-  - `bashlib64-modular.tgz`: one file per module (`bashlib64-module-*.bash`)
+---
 
-## Contributing
+## 🛠 Contributing
 
-Help on implementing new features and maintaining the code base is welcomed.
+Contributions are welcome! Help us improve by submitting issues, feature requests, or pull requests.
 
-- [Contributor Covenant Code of Conduct](https://github.com/automation64/bashlib64/blob/main/CODE_OF_CONDUCT.md)
+- [Code of Conduct](https://github.com/automation64/bashlib64/blob/main/CODE_OF_CONDUCT.md)
 
-## Disclaimer
+## ⚠️ Disclaimer
 
 This repository is provided "as is" without any warranties. The author is not responsible for any damages or issues arising from its use. Additionally, this project is not affiliated with or endorsed by any organization or entity. Use at your own risk.
 
-## License
+---
+
+## 📜 License
 
 [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-## Author
+---
+
+## 👤 Author
 
 - [SerDigital64](https://github.com/serdigital64)
+
+---
+
+🌟 **If you find this project useful, consider giving it a star!** ⭐

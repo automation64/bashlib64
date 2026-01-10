@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-lib-inst64: 1.2.0
+# template-lib-inst64: 1.4.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -16,7 +16,12 @@
 # shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
 # shellcheck source-path=/opt/bl64
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
+source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
+  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
 # shellcheck source-path=bin
 source ./bin/dev-env-gitleaks || exit 1
 
@@ -29,11 +34,11 @@ function my_download() {
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  bl64_msg_show_about
+  dev_bin64_task_initialize &&
   bl64_check_file "$DEV_LIB_GITLEAKS_INSTALLER"
 }
 
-bl64_lib_script_version_set '2.1.0'
+bl64_lib_script_version_set '2.1.1'
 bl64_msg_help_about_set 'Prepare module resources'
 dev_bin64_initialize && my_initialize || exit $?
 

@@ -460,17 +460,14 @@ function bl64_pkg_brew_cleanup() {
 #######################################
 function bl64_pkg_run_dnf() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local verbose="$BL64_PKG_SET_QUIET"
 
   bl64_check_module 'BL64_PKG_MODULE' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose="$BL64_PKG_SET_VERBOSE"
-  else
-    verbose="$BL64_PKG_SET_QUIET"
-  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -494,17 +491,14 @@ function bl64_pkg_run_dnf() {
 #######################################
 function bl64_pkg_run_yum() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local verbose="$BL64_PKG_SET_QUIET"
 
   bl64_check_module 'BL64_PKG_MODULE' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose="$BL64_PKG_SET_VERBOSE"
-  else
-    verbose="$BL64_PKG_SET_QUIET"
-  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -537,7 +531,7 @@ function bl64_pkg_run_apt() {
   _bl64_pkg_harden_apt
 
   # Verbose is only available for a subset of commands
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
+  if bl64_msg_app_run_is_enabled && [[ "$*" =~ (install|upgrade|remove) ]]; then
     verbose="$BL64_PKG_SET_VERBOSE"
   else
     export DEBCONF_NOWARNINGS='yes'
@@ -594,17 +588,14 @@ function _bl64_pkg_harden_apt() {
 #######################################
 function bl64_pkg_run_apk() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local verbose="$BL64_PKG_SET_QUIET"
 
   bl64_check_module 'BL64_PKG_MODULE' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose="$BL64_PKG_SET_VERBOSE"
-  else
-    verbose="$BL64_PKG_SET_QUIET"
-  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -628,7 +619,7 @@ function bl64_pkg_run_apk() {
 #######################################
 function bl64_pkg_run_brew() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local verbose='--quiet'
 
   bl64_check_module 'BL64_PKG_MODULE' &&
     bl64_check_command "$BL64_PKG_CMD_BREW" &&
@@ -636,11 +627,8 @@ function bl64_pkg_run_brew() {
     bl64_check_privilege_not_root ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose='--verbose'
-  else
-    verbose='--quiet'
-  fi
 
   export HOMEBREW_PREFIX="$BL64_PKG_PATH_BREW_HOME"
   export HOMEBREW_CELLAR="${BL64_PKG_PATH_BREW_HOME}/Cellar"
@@ -668,17 +656,14 @@ function bl64_pkg_run_brew() {
 #######################################
 function bl64_pkg_run_zypper() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local verbose="$BL64_PKG_SET_QUIET"
 
   bl64_check_module 'BL64_PKG_MODULE' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose="$BL64_PKG_SET_VERBOSE"
-  else
-    verbose="$BL64_PKG_SET_QUIET"
-  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -702,17 +687,14 @@ function bl64_pkg_run_zypper() {
 #######################################
 function bl64_pkg_run_rpm() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local verbose='--quiet'
 
   bl64_check_module 'BL64_PKG_MODULE' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose='--verbose'
-  else
-    verbose='--quiet'
-  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -768,9 +750,8 @@ function bl64_pkg_run_installer() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose='-verbose'
-  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -826,9 +807,8 @@ function bl64_pkg_run_pacman() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  if bl64_msg_lib_verbose_is_enabled && ! bl64_lib_mode_cicd_is_enabled; then
+  bl64_msg_app_run_is_enabled &&
     verbose="$BL64_PKG_SET_VERBOSE"
-  fi
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086

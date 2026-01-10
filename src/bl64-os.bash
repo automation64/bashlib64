@@ -479,3 +479,23 @@ function bl64_os_check_flavor() {
     "task not supported by the current OS flavor (current-flavor: ${BL64_OS_FLAVOR} ${BL64_MSG_COSMETIC_PIPE} supported-flavor: ${*}))"
   return $BL64_LIB_ERROR_APP_INCOMPATIBLE
 }
+
+#######################################
+# Raise OS and CPU not supported error
+#
+# * Commonly used in the default branch of case statements or else if
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_TASK_UNDEFINED
+#######################################
+# shellcheck disable=SC2119,SC2120
+function bl64_os_raise_platform_unsupported() {
+  bl64_dbg_lib_show_function
+  bl64_msg_show_error "current OS and CPU architecture are not supported by the script (OS_TYPE:${BL64_OS_TYPE} / MACHINE: ${BL64_OS_MACHINE})"
+  return $BL64_LIB_ERROR_OS_INCOMPATIBLE
+}

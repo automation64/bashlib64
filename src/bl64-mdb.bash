@@ -161,7 +161,7 @@ function bl64_mdb_run_mongosh() {
     bl64_check_module 'BL64_MDB_MODULE' ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
+  bl64_msg_app_detail_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -195,7 +195,7 @@ function bl64_mdb_run_mongorestore() {
     bl64_check_module 'BL64_MDB_MODULE' ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
+  bl64_msg_app_detail_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -227,7 +227,7 @@ function bl64_mdb_run_mongoexport() {
     bl64_check_module 'BL64_MDB_MODULE' ||
     return $?
 
-  bl64_msg_lib_verbose_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
+  bl64_msg_app_detail_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086

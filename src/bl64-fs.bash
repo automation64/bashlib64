@@ -1136,7 +1136,7 @@ function bl64_fs_set_umask() {
   bl64_dbg_lib_show_function "$@"
   local permissions="${1:-${BL64_FS_UMASK_RW_USER}}"
 
-  bl64_msg_show_lib_subtask "temporary change current script umask (${permissions})"
+  bl64_dbg_lib_show_comments "temporary change current script umask (${permissions})"
   umask -S "$permissions" >/dev/null
 }
 

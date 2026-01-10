@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.12.0]
+
+### Added
+
+- arc
+  - bl64_arc_gzip_open
+  - bl64_arc_bzip2_open
+  - bl64_arc_7z_open
+- msg
+  - bl64_msg_app_run_is_enabled
+  - bl64_msg_app_detail_is_enabled
+- os
+  - bl64_os_raise_platform_unsupported
+
+### Fixed
+
+- arc
+  - bl64_arc_run_bunzip2: typo, missing hardener
+  - missing harden functions
+- msg
+  - Verbosity type: detailed (BL64_MSG_VERBOSE_DETAIL)
+
+### Deprecated
+
+- msg
+  - Verbosity type: BL64_MSG_VERBOSE_LIB. Replaced by BL64_MSG_VERBOSE_DETAIL
+  - bl64_msg_lib_enable_verbose
+  - bl64_msg_lib_verbose_is_enabled
+- arc
+  - bl64_arc_open_tar: renamed to bl64_arc_tar_open
+  - bl64_arc_open_zip: renamed to bl64_arc_zip_open
+
 ## [22.11.0]
 
 ### Added
@@ -525,7 +557,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - msg
   - bl64_msg_app_verbose_enabled: replaced by bl64_msg_app_verbose_is_enabled
-  - bl64_msg_lib_verbose_enabled: replaced by bl64_msg_lib_verbose_is_enabled
+  - bl64_msg_lib_verbose_enabled: replaced by bl64_msg_app_detail_is_enabled
 - fs
   - bl64_fs_create_file: replaced by bl64_fs_file_create
   - bl64_fs_create_symlink: replaced by bl64_fs_symlink_create

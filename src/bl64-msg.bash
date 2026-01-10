@@ -9,8 +9,22 @@
 # * Needed to maintain compatibility up to N-2 versions
 #
 
-function bl64_msg_app_verbose_enabled { bl64_msg_show_deprecated 'bl64_msg_app_verbose_enabled' 'bl64_msg_app_verbose_is_enabled'; bl64_msg_app_verbose_is_enabled; }
-function bl64_msg_lib_verbose_enabled { bl64_msg_show_deprecated 'bl64_msg_lib_verbose_enabled' 'bl64_msg_lib_verbose_is_enabled'; bl64_msg_lib_verbose_is_enabled; }
+function bl64_msg_app_verbose_enabled {
+  bl64_msg_show_deprecated 'bl64_msg_app_verbose_enabled' 'bl64_msg_app_verbose_is_enabled'
+  bl64_msg_app_verbose_is_enabled
+}
+function bl64_msg_lib_verbose_enabled {
+  bl64_msg_show_deprecated 'bl64_msg_lib_verbose_enabled' 'bl64_msg_app_detail_is_enabled'
+  bl64_msg_app_detail_is_enabled
+}
+function bl64_msg_lib_enable_verbose {
+  bl64_msg_show_deprecated 'bl64_msg_lib_enable_verbose' 'bl64_msg_app_enable_detail'
+  bl64_msg_app_enable_detail
+}
+function bl64_msg_lib_verbose_is_enabled {
+  bl64_msg_show_deprecated 'bl64_msg_lib_verbose_is_enabled' 'bl64_msg_app_detail_is_enabled'
+  bl64_msg_app_detail_is_enabled
+}
 function bl64_msg_show_usage() {
   bl64_msg_show_deprecated 'bl64_msg_show_usage' 'bl64_msg_help_show'
   local usage="${1:-${BL64_VAR_NULL}}"
@@ -22,7 +36,7 @@ function bl64_msg_show_usage() {
   bl64_msg_help_usage_set "$usage"
   bl64_msg_help_description_set "$description"
   bl64_msg_help_parameters_set \
-"${commands}
+    "${commands}
 ${flags}
 ${parameters}"
   bl64_msg_help_show
@@ -41,9 +55,9 @@ function _bl64_msg_module_check_setup() {
   setup_status="${!module}"
   if [[ "$setup_status" == "$BL64_VAR_OFF" ]]; then
     printf 'Error: required BashLib64 module is not setup. Call the bl64_<MODULE>_setup function before using the module (module-id: %s | function: %s)\n' \
-    "${module}" \
-    "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
-    >&2
+      "${module}" \
+      "${FUNCNAME[1]:-NONE}@${BASH_LINENO[1]:-NA}.${FUNCNAME[2]:-NONE}@${BASH_LINENO[2]:-NA}" \
+      >&2
     return $BL64_LIB_ERROR_MODULE_SETUP_MISSING
   fi
   return 0
@@ -90,10 +104,10 @@ function _bl64_msg_print() {
   [[ -n "$attribute" && -n "$type" ]] || return $BL64_LIB_ERROR_PARAMETER_MISSING
 
   case "$BL64_MSG_OUTPUT" in
-  "$BL64_MSG_OUTPUT_ASCII") _bl64_msg_format_ascii "$attribute" "$type" "$message" ;;
-  "$BL64_MSG_OUTPUT_ANSI") _bl64_msg_format_ansi "$attribute" "$type" "$message" ;;
-  "$BL64_MSG_OUTPUT_EMOJI") _bl64_msg_format_emoji "$attribute" "$type" "$message" ;;
-  *) _bl64_msg_alert_show_parameter 'BL64_MSG_OUTPUT' "$BL64_VAR_DEFAULT" "$BL64_MSG_OUTPUT" ;;
+    "$BL64_MSG_OUTPUT_ASCII") _bl64_msg_format_ascii "$attribute" "$type" "$message" ;;
+    "$BL64_MSG_OUTPUT_ANSI") _bl64_msg_format_ansi "$attribute" "$type" "$message" ;;
+    "$BL64_MSG_OUTPUT_EMOJI") _bl64_msg_format_emoji "$attribute" "$type" "$message" ;;
+    *) _bl64_msg_alert_show_parameter 'BL64_MSG_OUTPUT' "$BL64_VAR_DEFAULT" "$BL64_MSG_OUTPUT" ;;
   esac
 }
 
@@ -113,66 +127,66 @@ function _bl64_msg_format_ansi() {
 
   # shellcheck disable=SC2059
   case "$BL64_MSG_FORMAT" in
-  "$BL64_MSG_FORMAT_PLAIN")
-    printf "%b: %s${linefeed}" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_HOST")
-    printf "[%b] %b: %s${linefeed}" \
-      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_TIME")
-    printf "[%b] %b: %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_TIME2")
-    printf "%b %b: %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_CALLER")
-    printf "[%b] %b: %s${linefeed}" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_SCRIPT")
-    printf "[%b] %b | %b: %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_SCRIPT2")
-    printf "%b|%b|%b| %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_FULL")
-    printf "[%b] %b:%b | %b: %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_FULL2")
-    printf "%b|%b|%b|%b| %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "$message"
-    ;;
-  *) _bl64_msg_alert_show_parameter 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
+    "$BL64_MSG_FORMAT_PLAIN")
+      printf "%b: %s${linefeed}" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_HOST")
+      printf "[%b] %b: %s${linefeed}" \
+        "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_TIME")
+      printf "[%b] %b: %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_TIME2")
+      printf "%b %b: %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_CALLER")
+      printf "[%b] %b: %s${linefeed}" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT")
+      printf "[%b] %b | %b: %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT2")
+      printf "%b|%b|%b| %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_FULL")
+      printf "[%b] %b:%b | %b: %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_FULL2")
+      printf "%b|%b|%b|%b| %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style}m${type}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "$message"
+      ;;
+    *) _bl64_msg_alert_show_parameter 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
   esac
 }
 
@@ -192,66 +206,66 @@ function _bl64_msg_format_ascii() {
 
   # shellcheck disable=SC2059
   case "$BL64_MSG_FORMAT" in
-  "$BL64_MSG_FORMAT_PLAIN")
-    printf "%s %s${linefeed}" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_HOST")
-    printf "[%s] %s %s${linefeed}" \
-      "${HOSTNAME}" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_TIME")
-    printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s %s${linefeed}" \
-      '-1' \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_TIME2")
-    printf "${BL64_MSG_TIME_DMY_HMS_COMPACT} %s %s${linefeed}" \
-      '-1' \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_CALLER")
-    printf "[%s] %s %s${linefeed}" \
-      "$BL64_SCRIPT_ID" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_SCRIPT")
-    printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s %s %s${linefeed}" \
-      '-1' \
-      "$BL64_SCRIPT_ID" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_SCRIPT2")
-    printf "${BL64_MSG_TIME_DMY_HMS_COMPACT}|%s %s %s${linefeed}" \
-      '-1' \
-      "$BL64_SCRIPT_ID" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_FULL")
-    printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s:%s %s %s${linefeed}" \
-      '-1' \
-      "$HOSTNAME" \
-      "$BL64_SCRIPT_ID" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_FULL2")
-    printf "${BL64_MSG_TIME_DMY_HMS_COMPACT}|%s|%s %s %s${linefeed}" \
-      '-1' \
-      "$HOSTNAME" \
-      "$BL64_SCRIPT_ID" \
-      "${!label}" \
-      "$message"
-    ;;
-  *) _bl64_msg_alert_show_parameter 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
+    "$BL64_MSG_FORMAT_PLAIN")
+      printf "%s %s${linefeed}" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_HOST")
+      printf "[%s] %s %s${linefeed}" \
+        "${HOSTNAME}" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_TIME")
+      printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s %s${linefeed}" \
+        '-1' \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_TIME2")
+      printf "${BL64_MSG_TIME_DMY_HMS_COMPACT} %s %s${linefeed}" \
+        '-1' \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_CALLER")
+      printf "[%s] %s %s${linefeed}" \
+        "$BL64_SCRIPT_ID" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT")
+      printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s %s %s${linefeed}" \
+        '-1' \
+        "$BL64_SCRIPT_ID" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT2")
+      printf "${BL64_MSG_TIME_DMY_HMS_COMPACT}|%s %s %s${linefeed}" \
+        '-1' \
+        "$BL64_SCRIPT_ID" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_FULL")
+      printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s:%s %s %s${linefeed}" \
+        '-1' \
+        "$HOSTNAME" \
+        "$BL64_SCRIPT_ID" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_FULL2")
+      printf "${BL64_MSG_TIME_DMY_HMS_COMPACT}|%s|%s %s %s${linefeed}" \
+        '-1' \
+        "$HOSTNAME" \
+        "$BL64_SCRIPT_ID" \
+        "${!label}" \
+        "$message"
+      ;;
+    *) _bl64_msg_alert_show_parameter 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
   esac
 }
 
@@ -271,66 +285,66 @@ function _bl64_msg_format_emoji() {
 
   # shellcheck disable=SC2059
   case "$BL64_MSG_FORMAT" in
-  "$BL64_MSG_FORMAT_PLAIN")
-    printf "%b %s${linefeed}" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_HOST")
-    printf "[%b] %b %s${linefeed}" \
-      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_TIME")
-    printf "[%b] %b %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_TIME2")
-    printf "%b %b %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_CALLER")
-    printf "[%b] %b %s${linefeed}" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_SCRIPT")
-    printf "[%b] %b %b %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_SCRIPT2")
-    printf "%b|%b %b %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_FULL")
-    printf "[%b] %b:%b %b %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  "$BL64_MSG_FORMAT_FULL2")
-    printf "%b|%b|%b %b %s${linefeed}" \
-      "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-      "${!label}" \
-      "$message"
-    ;;
-  *) _bl64_msg_alert_show_parameter 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
+    "$BL64_MSG_FORMAT_PLAIN")
+      printf "%b %s${linefeed}" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_HOST")
+      printf "[%b] %b %s${linefeed}" \
+        "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_TIME")
+      printf "[%b] %b %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_TIME2")
+      printf "%b %b %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_CALLER")
+      printf "[%b] %b %s${linefeed}" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT")
+      printf "[%b] %b %b %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_SCRIPT2")
+      printf "%b|%b %b %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_FULL")
+      printf "[%b] %b:%b %b %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    "$BL64_MSG_FORMAT_FULL2")
+      printf "%b|%b|%b %b %s${linefeed}" \
+        "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
+        "${!label}" \
+        "$message"
+      ;;
+    *) _bl64_msg_alert_show_parameter 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
   esac
 }
 
@@ -498,7 +512,7 @@ function bl64_msg_show_info() {
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
-    bl64_msg_app_verbose_is_enabled || return 0
+    bl64_msg_app_detail_is_enabled || return 0
 
   _bl64_msg_print "$BL64_MSG_TYPE_INFO" 'Info   ' "$message"
 }
@@ -564,7 +578,7 @@ function bl64_msg_show_subtask() {
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_SUBTASK}:${message}" &&
-    bl64_msg_app_verbose_is_enabled || return 0
+    bl64_msg_app_detail_is_enabled || return 0
 
   _bl64_msg_print "$BL64_MSG_TYPE_SUBTASK" 'Subtask' "${BL64_MSG_COSMETIC_ARROW2} ${message}"
 }
@@ -586,7 +600,7 @@ function bl64_msg_show_lib_task() {
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBTASK}:${message}" &&
-    bl64_msg_lib_verbose_is_enabled || return 0
+    bl64_msg_app_verbose_is_enabled || return 0
 
   _bl64_msg_print "$BL64_MSG_TYPE_LIBTASK" 'Task   ' "$message"
 }
@@ -608,7 +622,7 @@ function bl64_msg_show_lib_subtask() {
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBSUBTASK}:${message}" &&
-    bl64_msg_lib_verbose_is_enabled || return 0
+    bl64_msg_app_detail_is_enabled || return 0
 
   _bl64_msg_print "$BL64_MSG_TYPE_LIBSUBTASK" 'Subtask' "${BL64_MSG_COSMETIC_ARROW2} ${message}"
 }
@@ -630,7 +644,7 @@ function bl64_msg_show_lib_info() {
   local message="$1"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBINFO}:${message}" &&
-    bl64_msg_lib_verbose_is_enabled || return 0
+    bl64_msg_app_detail_is_enabled || return 0
 
   _bl64_msg_print "$BL64_MSG_TYPE_LIBINFO" 'Info   ' "$message"
 }
@@ -816,6 +830,7 @@ function bl64_msg_show_setup() {
   local message="${1:-$BL64_VAR_DEFAULT}"
   local variable=''
 
+  bl64_msg_app_detail_is_enabled || return 0
   bl64_lib_var_is_default "$message" && message='Executing task with the following parameters'
   shift
 
@@ -837,7 +852,7 @@ function bl64_msg_show_setup() {
 # Returns:
 #   0: Always OK
 #######################################
-function bl64_msg_help_show(){
+function bl64_msg_help_show() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   local current_format="$BL64_MSG_FORMAT"
 
@@ -878,7 +893,7 @@ function bl64_msg_show_about() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
   bl64_msg_app_verbose_is_enabled || return 0
   _bl64_msg_show_script &&
-  _bl64_msg_show_about
+    _bl64_msg_show_about
 }
 
 function _bl64_msg_show_script() {

@@ -104,8 +104,9 @@ function my_test() {
 
 function my_initialize() {
   bl64_dbg_app_show_function
+  dev_bin64_task_initialize ||
+    return $?
 
-  bl64_msg_show_about
   bl64_lib_var_is_default "$MY_CONTAINER" &&
     MY_CONTAINER="$DEV_TEST_BASH_CONTAINER"
   if [[ -z "$MY_TARGET" ]]; then
@@ -119,7 +120,7 @@ function my_initialize() {
       'MY_TARGET'
 }
 
-bl64_lib_script_version_set '1.4.1'
+bl64_lib_script_version_set '1.4.2'
 bl64_msg_help_about_set 'Run bash test scripts inside a container or on the host'
 dev_bin64_initialize && my_initialize || exit $?
 

@@ -23,9 +23,9 @@
 {
   # Env / GitLeaks / Module environment definition version
   export DEV_ENV_GITLEAKS_ID='gitleaks'
-  export DEV_ENV_GITLEAKS_VERSION='1.3.0'
+  export DEV_ENV_GITLEAKS_VERSION='1.3.1'
   # Env / GitLeaks / Log path
-  export DEV_ENV_GITLEAKS_PATH_LOGS="${DEV_PATH_LOGS}/gl"
+  export DEV_ENV_GITLEAKS_PATH_LOGS="${DEV_PATH_LOGS}/${DEV_ENV_GITLEAKS_ID}"
 
   # Lib / GitLeaks / Installer
   export DEV_LIB_GITLEAKS_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-gitleaks"
@@ -46,7 +46,7 @@
   # SAST / GitLeaks / Format
   export DEV_SAST_GITLEAKS_FORMAT="${DEV_SAST_GITLEAKS_FORMAT:-sarif}"
   # SAST / GitLeaks / Report
-  export DEV_SAST_GITLEAKS_PATH_REPORT="${DEV_ENV_GITLEAKS_PATH_LOGS}/gitleaks.${DEV_SAST_GITLEAKS_FORMAT}"
+  export DEV_SAST_GITLEAKS_PATH_REPORT="${DEV_ENV_GITLEAKS_PATH_LOGS}/${DEV_ENV_GITLEAKS_ID}.${DEV_SAST_GITLEAKS_FORMAT}"
 }
 
 #

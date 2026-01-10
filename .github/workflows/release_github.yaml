@@ -1,5 +1,5 @@
 ---
-# template: 1.4.0
+# template: 1.5.0
 name: "Release/GitHub"
 
 concurrency:
@@ -9,8 +9,8 @@ concurrency:
 env:
   DEV_CICD_DEBUG: "NONE"
   BL64_LIB_CICD: "YES"
-  DEV_LIB_GITHUB_BIN: "gh"
 
+# yamllint disable-line rule:truthy
 on:
   push:
     tags:
@@ -26,12 +26,13 @@ jobs:
         uses: "actions/checkout@main"
 
       - name: "Cache local tools"
-        uses: "actions/cache@v4"
+        uses: "actions/cache@v5"
         with:
-          path: ./lib
-          key: ${{ runner.os }}-lib-cache
-          restore-keys: |
-            ${{ runner.os }}-lib-cache
+          path: |
+            ./lib/bl64
+            ./lib/inst64
+            ./lib/github
+          key: "dev-tools"
 
       - name: "Download tools"
         run: |

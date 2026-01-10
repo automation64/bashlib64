@@ -4,7 +4,7 @@ echo "WARING: this will be ran on the local machine, not in the container."
 echo "======================================================================="
 
 export TEST_ROOT="/opt/bl64"
-export TEST_SRC="./build/prepare"
+export TEST_SRC="./build/prepare/project"
 
 sudo rm -Rf "$TEST_ROOT" &&
 sudo mkdir -p $TEST_ROOT &&

@@ -47,17 +47,17 @@ function bl64_check_command() {
   local message="${2:-$BL64_VAR_DEFAULT}"
   local command_name="${3:-}"
 
-  bl64_lib_var_is_default "$message" && message='command not found'
+  bl64_lib_var_is_default "$message" && message='command not found. Please install it and try again'
   bl64_check_parameter 'path' ${command_name:+"command: ${command_name}"} || return $?
 
   if [[ "$path" == "$BL64_VAR_INCOMPATIBLE" ]]; then
-    bl64_msg_show_check "the requested command is not compatible with the current OS (OS: ${BL64_OS_DISTRO})"
+    bl64_msg_show_check "command not compatible with the current OS (OS: ${BL64_OS_DISTRO}${command_name:+ | command: ${command_name}})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_INCOMPATIBLE
   fi
 
   if [[ "$path" == "$BL64_VAR_UNAVAILABLE" ]]; then
-    bl64_msg_show_check "required command is not installed${command_name:+ (command: ${command_name})}"
+    bl64_msg_show_check "${message}${command_name:+ (command: ${command_name})}"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_APP_MISSING
   fi
@@ -69,7 +69,7 @@ function bl64_check_command() {
   fi
 
   if [[ ! -x "$path" ]]; then
-    bl64_msg_show_check "required command is present but has no execution permission (command: ${path})"
+    bl64_msg_show_check "invalid command permissions. Set the execution permission and try again (command: ${path})"
     # shellcheck disable=SC2086
     return $BL64_LIB_ERROR_FILE_NOT_EXECUTE
   fi
@@ -506,7 +506,7 @@ function bl64_check_alert_parameter_invalid() {
   local message="${2:-the requested operation was provided with an invalid parameter value}"
 
   bl64_lib_var_is_default "$parameter" && parameter=''
-  bl64_msg_show_check "${message} ${parameter:+( parameter: ${parameter})}"
+  bl64_msg_show_check "${message} ${parameter:+(parameter: ${parameter})}"
   return $BL64_LIB_ERROR_PARAMETER_INVALID
 }
 
