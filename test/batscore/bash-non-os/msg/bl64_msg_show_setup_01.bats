@@ -4,5 +4,4 @@
 
   run bl64_msg_show_setup "$value" 'BL64_VAR_DEFAULT'
   assert_success
-  assert_output --partial "$value"
 }

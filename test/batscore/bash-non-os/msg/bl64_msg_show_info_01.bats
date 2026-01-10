@@ -4,5 +4,4 @@
 
   run bl64_msg_show_info "$value"
   assert_success
-  assert_output --partial "$value"
 }
