@@ -53,7 +53,9 @@ jobs:
 
 
       - name: "Prepare for testing"
-        run: "./bin/dev-build-project"
+        run : |
+          ./bin/dev-build-project &&
+          ./bin/dev-prep-project
 
       - name: "Run tests"
         shell: 'script -q -e -c "bash {0}"'
