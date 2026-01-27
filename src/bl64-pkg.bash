@@ -429,7 +429,10 @@ function bl64_pkg_cleanup() {
         bl64_fs_path_remove ${target}/[[:alpha:]]*
       fi
       ;;
-    ${BL64_OS_ARC}-*) : ;;
+    ${BL64_OS_ARC}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_pacman --sync --clean --clean
+      ;;
     ${BL64_OS_MCOS}-*)
       bl64_pkg_brew_cleanup
       ;;

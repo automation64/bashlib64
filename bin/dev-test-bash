@@ -107,20 +107,23 @@ function my_initialize() {
   dev_bin64_task_initialize ||
     return $?
 
-  bl64_lib_var_is_default "$MY_CONTAINER" &&
-    MY_CONTAINER="$DEV_TEST_BASH_CONTAINER"
+  if [[ "$MY_CONTAINER" != "$DEV_TEST_BASH_CONTAINER_DISABLED" ]]; then
+    bl64_lib_var_is_default "$MY_CONTAINER" &&
+      MY_CONTAINER="$DEV_TEST_BASH_CONTAINER"
+    bl64_cnt_setup ||
+      return $?
+  fi
   if [[ -z "$MY_TARGET" ]]; then
     MY_TARGET="$DEV_TEST_BASH_CASES"
   fi
 
-  bl64_cnt_setup &&
-    bl64_check_directory "$DEV_TEST_BASH_CASES" &&
+  bl64_check_directory "$DEV_TEST_BASH_CASES" &&
     dev_bin64_task_show_setup \
       'MY_CONTAINER' \
       'MY_TARGET'
 }
 
-bl64_lib_script_version_set '1.4.2'
+bl64_lib_script_version_set '1.5.0'
 bl64_msg_help_about_set 'Run bash test scripts inside a container or on the host'
 dev_bin64_initialize && my_initialize || exit $?
 

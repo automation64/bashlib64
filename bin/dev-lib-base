@@ -16,7 +16,8 @@
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
 
 # shellcheck disable=2034
-declare MY_VERSION='3.2.0'
+declare MY_VERSION='3.3.0'
 
 # Download main components
-./bin/dev-lib-installer64
+./bin/dev-lib-installer64 &&
+  ./bin/dev-lib-bashlib64

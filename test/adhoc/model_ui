@@ -3,12 +3,35 @@
 . test/lib/adhoc-setup.bash ||
   { echo 'test:Error: unable to load test environment' 2>&1 && exit 1; }
 
-bl64_ui_ask_confirmation
-bl64_ui_ask_input_date
-bl64_ui_ask_input_time
-bl64_ui_ask_input_semver
-bl64_ui_ask_input_string
-bl64_ui_ask_input_decimal
-bl64_ui_ask_input_integer
-bl64_ui_ask_input_free
-bl64_ui_ask_yesno
+function ui_input() {
+  bl64_ui_ask_input_date
+  bl64_ui_ask_input_time
+  bl64_ui_ask_input_semver
+  bl64_ui_ask_input_string
+  bl64_ui_ask_input_decimal
+  bl64_ui_ask_input_integer
+  bl64_ui_ask_input_free
+}
+
+function ui_ask() {
+  bl64_ui_ask_confirmation
+  bl64_ui_ask_yesno
+  bl64_ui_ask_proceed
+}
+
+clear
+
+bl64_msg_show_separator 'BL64_UI_CONFIRMATION_SKIP=YES'
+BL64_UI_CONFIRMATION_SKIP=YES
+ui_ask
+
+bl64_msg_show_separator 'BL64_UI_CONFIRMATION_SKIP=NO'
+BL64_UI_CONFIRMATION_SKIP=NO
+bl64_lib_mode_cicd_enable
+ui_ask
+
+bl64_msg_show_separator 'CICD=YES'
+BL64_UI_CONFIRMATION_SKIP=NO
+ui_ask
+
+ui_input

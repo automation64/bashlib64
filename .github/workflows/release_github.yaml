@@ -1,5 +1,5 @@
 ---
-# template: 1.5.0
+# template: 1.6.0
 name: "Release/GitHub"
 
 concurrency:
@@ -7,8 +7,9 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DEV_CICD_DEBUG: "NONE"
-  BL64_LIB_CICD: "YES"
+  DEV_CICD_DEBUG: ${{ vars.DEV_CICD_DEBUG || 'NONE' }}
+  DEV_CICD_DEBUG_BASH: ${{ vars.DEV_CICD_DEBUG_BASH || '' }}
+  BL64_LIB_CICD: ${{ vars.BL64_LIB_CICD || 'YES' }}
 
 # yamllint disable-line rule:truthy
 on:

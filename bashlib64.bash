@@ -103,7 +103,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.12.0'
+  declare BL64_VERSION='22.13.0'
 
   #
   # Imported generic shell standard variables
@@ -123,7 +123,7 @@ builtin unset MAILPATH
   # Common constants
   #
 
-  # Default value for parameters
+  # Default value
   declare BL64_VAR_DEFAULT='DEFAULT'
   declare BL64_VAR_DEFAULT_LEGACY='_'
 
@@ -135,6 +135,8 @@ builtin unset MAILPATH
 
   # Pseudo null value
   declare BL64_VAR_NULL='_NULL_'
+  declare BL64_VAR_ALL='_ALL_'
+  declare BL64_VAR_NONE='_NONE_'
 
   # Logical values
   declare BL64_VAR_TRUE='0'
@@ -142,8 +144,9 @@ builtin unset MAILPATH
   declare BL64_VAR_ON='1'
   declare BL64_VAR_OFF='0'
   declare BL64_VAR_OK='0'
-  declare BL64_VAR_NONE='_NONE_'
-  declare BL64_VAR_ALL='_ALL_'
+  declare BL64_VAR_NOTOK='1'
+  declare BL64_VAR_YES='1'
+  declare BL64_VAR_NO='0'
 
   #
   # Global settings
@@ -281,7 +284,10 @@ builtin unset MAILPATH
 function bl64_lib_mode_command_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_CMD"; }
 function bl64_lib_mode_compability_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_COMPATIBILITY"; }
 function bl64_lib_mode_strict_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_STRICT"; }
+
 function bl64_lib_mode_cicd_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; }
+function bl64_lib_mode_cicd_enable { BL64_LIB_CICD="$BL64_VAR_ON"; }
+function bl64_lib_mode_cicd_disable { BL64_LIB_CICD="$BL64_VAR_OFF"; }
 
 function bl64_lib_lang_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_LANG"; }
 function bl64_lib_trap_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_TRAPS"; }
@@ -515,7 +521,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_DBG_VERSION='3.2.4'
+  declare BL64_DBG_VERSION='3.3.0'
 
   declare BL64_DBG_MODULE='0'
 
@@ -633,7 +639,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.16.0'
+  declare BL64_MSG_VERSION='5.17.0'
 
   declare BL64_MSG_MODULE='0'
 
@@ -1380,7 +1386,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PKG_VERSION='6.5.5'
+  declare BL64_PKG_VERSION='6.6.0'
 
   declare BL64_PKG_MODULE='0'
 
@@ -1523,7 +1529,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_RXTX_VERSION='2.6.2'
+  declare BL64_RXTX_VERSION='2.6.3'
 
   declare BL64_RXTX_MODULE='0'
 
@@ -1648,11 +1654,12 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_UI_VERSION='3.2.0'
+  declare BL64_UI_VERSION='3.3.0'
 
   declare BL64_UI_MODULE='0'
 
   declare BL64_UI_CONFIRMATION_TIMEOUT='60'
+  declare BL64_UI_CONFIRMATION_SKIP="$BL64_VAR_NO"
 }
 
 #######################################
@@ -2958,12 +2965,12 @@ function bl64_dbg_lib_show_vars() {
 
   for variable in "$@"; do
     if [[ ! -v "$variable" ]]; then
-      value='**UNSET**'
+      value="${variable}->**UNSET**"
     else
-      value="${!variable}"
+      value="${variable}=${!variable}"
     fi
 
-    _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=${value}]"
+    _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${value}]"
   done
 
   return 0
@@ -2987,12 +2994,12 @@ function bl64_dbg_app_show_vars() {
 
   for variable in "$@"; do
     if [[ ! -v "$variable" ]]; then
-      value='**UNSET**'
+      value="${variable}->**UNSET**"
     else
-      value="${!variable}"
+      value="${variable}=${!variable}"
     fi
 
-    _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=${!variable}]"
+    _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${value}]"
   done
 
   return 0
@@ -4274,6 +4281,26 @@ function bl64_msg_show_warning() {
 
   bl64_log_warning "${FUNCNAME[1]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Warning' "$message" >&2
+}
+
+#######################################
+# Display attention message
+#
+# Arguments:
+#   $1: warning message
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_attention() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
+  local message="$1"
+
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
+    _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Attention' "$message"
 }
 
 #######################################
@@ -15867,7 +15894,10 @@ function bl64_pkg_cleanup() {
         bl64_fs_path_remove ${target}/[[:alpha:]]*
       fi
       ;;
-    ${BL64_OS_ARC}-*) : ;;
+    ${BL64_OS_ARC}-*)
+      bl64_check_privilege_root &&
+        bl64_pkg_run_pacman --sync --clean --clean
+      ;;
     ${BL64_OS_MCOS}-*)
       bl64_pkg_brew_cleanup
       ;;
@@ -17755,10 +17785,10 @@ function bl64_rxtx_git_get_dir() {
 
   if [[ "$status" == '0' && -d "${destination}/.git" ]]; then
     bl64_msg_show_lib_subtask "remove git metadata (${destination}/.git)"
-    # shellcheck disable=SC2164
-    bl64_bsh_run_pushd "$destination" || return $?
-    bl64_fs_path_remove '.git' >/dev/null
-    bl64_bsh_run_popd
+    bl64_bsh_run_pushd "$destination" &&
+      bl64_fs_path_remove '.git' &&
+      bl64_bsh_run_popd
+    status=$?
   fi
 
   bl64_fs_path_recover "$destination" "$status" || return $?
@@ -19123,6 +19153,19 @@ function bl64_ui_confirmation_ask() {
 # Private functions
 #
 
+function _bl64_ui_is_confirmation_disabled(){
+  bl64_dbg_lib_show_function
+  if bl64_lib_flag_is_enabled "$BL64_UI_CONFIRMATION_SKIP"; then
+    bl64_msg_show_text '** warning - confirmation verification disabled. The operation will continue without interruption **'
+    return 0
+  fi
+  if bl64_lib_mode_cicd_is_enabled; then
+    bl64_msg_show_text '** warning - confirmation verification disabled because CICD mode is enabled. The operation will continue without interruption **'
+    return 0
+  fi
+  return 1
+}
+
 #
 # Public functions
 #
@@ -19147,6 +19190,8 @@ function bl64_ui_ask_confirmation() {
   local input=''
 
   bl64_msg_show_input "${question} [${confirmation}]: "
+  _bl64_ui_is_confirmation_disabled && return 0
+
   read -r -t "$BL64_UI_CONFIRMATION_TIMEOUT" input
 
   input="${input#"${input%%[![:space:]]*}"}"
@@ -19174,6 +19219,7 @@ function bl64_ui_ask_proceed() {
 
   while true; do
     bl64_msg_show_input "${question} [y/n]: "
+    _bl64_ui_is_confirmation_disabled && return 0
     read -r input
     case "$input" in
     [Yy]*) return 0 ;;
@@ -19220,6 +19266,7 @@ function bl64_ui_ask_yesno() {
 
   while true; do
     bl64_msg_show_input "${question} [y/n]: "
+    _bl64_ui_is_confirmation_disabled && return 0
     read -r input
     case "$input" in
     [Yy]*) return 0 ;;

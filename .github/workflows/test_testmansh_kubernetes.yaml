@@ -1,14 +1,15 @@
 ---
-# template: 3.8.0
+# template: 3.9.0
 name: "Test/TestManSH/Kubernetes"
-
-env:
-  DEV_CICD_DEBUG: "NONE"
-  BL64_LIB_CICD: "YES"
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true
+
+env:
+  DEV_CICD_DEBUG: ${{ vars.DEV_CICD_DEBUG || 'NONE' }}
+  DEV_CICD_DEBUG_BASH: ${{ vars.DEV_CICD_DEBUG_BASH || '' }}
+  BL64_LIB_CICD: ${{ vars.BL64_LIB_CICD || 'YES' }}
 
 # yamllint disable-line rule:truthy
 on:

@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.13.0]
+
+### Added
+
+- msg
+  - bl64_msg_show_attention
+- pkg
+  - bl64_pkg_cleanup: Arch linux support
+- core
+  - BL64_VAR_*: added variables for YES,NO,NOTOK
+  - bl64_lib_mode_cicd_enable, bl64_lib_mode_cicd_disable: control CICD setting
+- ui
+  - BL64_UI_CONFIRMATION_SKIP: flag to disable confirmation functions (i.e.: for CICD, etc.)
+
 ## [22.12.0]
 
 ### Added

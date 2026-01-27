@@ -322,12 +322,12 @@ function bl64_dbg_lib_show_vars() {
 
   for variable in "$@"; do
     if [[ ! -v "$variable" ]]; then
-      value='**UNSET**'
+      value="${variable}->**UNSET**"
     else
-      value="${!variable}"
+      value="${variable}=${!variable}"
     fi
 
-    _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=${value}]"
+    _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${value}]"
   done
 
   return 0
@@ -351,12 +351,12 @@ function bl64_dbg_app_show_vars() {
 
   for variable in "$@"; do
     if [[ ! -v "$variable" ]]; then
-      value='**UNSET**'
+      value="${variable}->**UNSET**"
     else
-      value="${!variable}"
+      value="${variable}=${!variable}"
     fi
 
-    _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${variable}=${!variable}]"
+    _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_INFO} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_SHELL_VAR}: [${value}]"
   done
 
   return 0

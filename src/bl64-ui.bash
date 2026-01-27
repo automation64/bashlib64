@@ -18,6 +18,19 @@ function bl64_ui_confirmation_ask() {
 # Private functions
 #
 
+function _bl64_ui_is_confirmation_disabled(){
+  bl64_dbg_lib_show_function
+  if bl64_lib_flag_is_enabled "$BL64_UI_CONFIRMATION_SKIP"; then
+    bl64_msg_show_text '** warning - confirmation verification disabled. The operation will continue without interruption **'
+    return 0
+  fi
+  if bl64_lib_mode_cicd_is_enabled; then
+    bl64_msg_show_text '** warning - confirmation verification disabled because CICD mode is enabled. The operation will continue without interruption **'
+    return 0
+  fi
+  return 1
+}
+
 #
 # Public functions
 #
@@ -42,6 +55,8 @@ function bl64_ui_ask_confirmation() {
   local input=''
 
   bl64_msg_show_input "${question} [${confirmation}]: "
+  _bl64_ui_is_confirmation_disabled && return 0
+
   read -r -t "$BL64_UI_CONFIRMATION_TIMEOUT" input
 
   input="${input#"${input%%[![:space:]]*}"}"
@@ -69,6 +84,7 @@ function bl64_ui_ask_proceed() {
 
   while true; do
     bl64_msg_show_input "${question} [y/n]: "
+    _bl64_ui_is_confirmation_disabled && return 0
     read -r input
     case "$input" in
     [Yy]*) return 0 ;;
@@ -115,6 +131,7 @@ function bl64_ui_ask_yesno() {
 
   while true; do
     bl64_msg_show_input "${question} [y/n]: "
+    _bl64_ui_is_confirmation_disabled && return 0
     read -r input
     case "$input" in
     [Yy]*) return 0 ;;

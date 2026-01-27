@@ -125,10 +125,10 @@ function bl64_rxtx_git_get_dir() {
 
   if [[ "$status" == '0' && -d "${destination}/.git" ]]; then
     bl64_msg_show_lib_subtask "remove git metadata (${destination}/.git)"
-    # shellcheck disable=SC2164
-    bl64_bsh_run_pushd "$destination" || return $?
-    bl64_fs_path_remove '.git' >/dev/null
-    bl64_bsh_run_popd
+    bl64_bsh_run_pushd "$destination" &&
+      bl64_fs_path_remove '.git' &&
+      bl64_bsh_run_popd
+    status=$?
   fi
 
   bl64_fs_path_recover "$destination" "$status" || return $?

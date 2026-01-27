@@ -474,6 +474,26 @@ function bl64_msg_show_warning() {
 }
 
 #######################################
+# Display attention message
+#
+# Arguments:
+#   $1: warning message
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_attention() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
+  local message="$1"
+
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
+    _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Attention' "$message"
+}
+
+#######################################
 # Display script initialization message
 #
 # Arguments:

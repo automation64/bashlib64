@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='22.12.0'
+  declare BL64_VERSION='22.13.0'
 
   #
   # Imported generic shell standard variables
@@ -24,7 +24,7 @@
   # Common constants
   #
 
-  # Default value for parameters
+  # Default value
   declare BL64_VAR_DEFAULT='DEFAULT'
   declare BL64_VAR_DEFAULT_LEGACY='_'
 
@@ -36,6 +36,8 @@
 
   # Pseudo null value
   declare BL64_VAR_NULL='_NULL_'
+  declare BL64_VAR_ALL='_ALL_'
+  declare BL64_VAR_NONE='_NONE_'
 
   # Logical values
   declare BL64_VAR_TRUE='0'
@@ -43,8 +45,9 @@
   declare BL64_VAR_ON='1'
   declare BL64_VAR_OFF='0'
   declare BL64_VAR_OK='0'
-  declare BL64_VAR_NONE='_NONE_'
-  declare BL64_VAR_ALL='_ALL_'
+  declare BL64_VAR_NOTOK='1'
+  declare BL64_VAR_YES='1'
+  declare BL64_VAR_NO='0'
 
   #
   # Global settings

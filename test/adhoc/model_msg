@@ -18,7 +18,8 @@ function show() {
   bl64_msg_show_warning 'bl64_msg_show_warning'
   bl64_msg_show_deprecated 'bl64_msg_show_deprecated'
   bl64_msg_show_info 'bl64_msg_show_info'
-  bl64_msg_show_setup "$BL64_VAR_DEFAULT" 'PARAMETER1' 'PARAMETER2' 'PARAMETER3' 'PARAMETER4'
+  bl64_msg_show_attention 'bl64_msg_show_attention'
+  bl64_msg_show_setup "$BL64_VAR_DEFAULT" 'PARAMETER1' 'PARAMETER2' 'PARAMETER3' 'PARAMETER4' 'PARAMETER5'
   bl64_msg_show_input 'bl64_msg_show_input'
   printf '%s\n' "[USER INPUT HERE]"
   bl64_msg_show_phase 'bl64_msg_show_phase'

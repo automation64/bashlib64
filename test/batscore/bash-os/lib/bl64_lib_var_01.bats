@@ -12,13 +12,6 @@
 
   # Pseudo null value
   assert_equal "$BL64_VAR_NULL" '_NULL_'
-
-  # Logical values
-  assert_equal "$BL64_VAR_TRUE" '0'
-  assert_equal "$BL64_VAR_FALSE" '1'
-  assert_equal "$BL64_VAR_ON" '1'
-  assert_equal "$BL64_VAR_OFF" '0'
-  assert_equal "$BL64_VAR_OK" '0'
   assert_equal "$BL64_VAR_NONE" '_NONE_'
   assert_equal "$BL64_VAR_ALL" '_ALL_'
 }

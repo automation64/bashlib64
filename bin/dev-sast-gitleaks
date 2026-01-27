@@ -42,14 +42,14 @@ function my_sast() {
 function my_initialize() {
   bl64_dbg_app_show_function
   dev_bin64_task_initialize &&
-  dev_bin64_log_setup "$DEV_ENV_GITLEAKS_PATH_LOGS" &&
+  dev_bin64_log_setup "$BL64_VAR_ON" "$DEV_ENV_GITLEAKS_PATH_LOGS" &&
     bl64_check_command "$DEV_LIB_GITLEAKS_BIN" &&
     dev_bin64_task_show_setup \
       'DEV_SAST_GITLEAKS_PATH_REPORT' \
       'MY_TARGET'
 }
 
-bl64_lib_script_version_set '1.1.1'
+bl64_lib_script_version_set '1.2.0'
 bl64_msg_help_about_set 'Static test source code security'
 dev_bin64_initialize && my_initialize || exit $?
 

@@ -1,5 +1,5 @@
 ---
-# template: 2.5.0
+# template: 2.6.0
 name: "Test/Bash"
 
 concurrency:
@@ -7,9 +7,10 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DEV_CICD_DEBUG: "NONE"
-  BL64_LIB_CICD: "YES"
-  DEV_TEST_BASH_RUNNER_ENVIRONMENT: "ON"
+  DEV_CICD_DEBUG: ${{ vars.DEV_CICD_DEBUG || 'NONE' }}
+  DEV_CICD_DEBUG_BASH: ${{ vars.DEV_CICD_DEBUG_BASH || '' }}
+  BL64_LIB_CICD: ${{ vars.BL64_LIB_CICD || 'YES' }}
+  DEV_TEST_BASH_RUNNER_ENVIRONMENT: ${{ vars.DEV_TEST_BASH_RUNNER_ENVIRONMENT || 'ON' }}
 
 # yamllint disable-line rule:truthy
 on:
@@ -117,11 +118,11 @@ jobs:
         run: |
           source ./bin/dev-set &&
           source ./bin/dev-env-bash &&
-          ./bin/dev-test-bash-host ${DEV_TEST_BASH_CASES}/MCOS
+          ./bin/dev-test-bash CONTAINER_MODE_DISABLED ${DEV_TEST_BASH_CASES}/MCOS
 
       - name: "Run Unix generic tests"
         run: |
           source ./bin/dev-set &&
           source ./bin/dev-env-bash &&
-          ./bin/dev-test-bash-host ${DEV_TEST_BASH_CASES}/UNX
+          ./bin/dev-test-bash CONTAINER_MODE_DISABLED ${DEV_TEST_BASH_CASES}/UNX
 ...

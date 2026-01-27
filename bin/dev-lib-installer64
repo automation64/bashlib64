@@ -43,9 +43,6 @@ if [[ "$DEV_LIB_INSTALLER64_SKIP" == 'YES' ]]; then
   exit 0
 fi
 
-dev_bin64_msg_show_task 'dev-lib-installer64' 'remove older Installer64 versions'
-[[ -d "$DEV_LIB_INSTALLER64_TARGET" ]] && rm -Rf "$DEV_LIB_INSTALLER64_TARGET"
-
 dev_bin64_msg_show_task 'dev-lib-installer64' 'download Installer64'
 cd "$DEV_PATH_LIB" &&
   my_download &&

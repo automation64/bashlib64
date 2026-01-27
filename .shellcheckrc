@@ -15,3 +15,9 @@ enable=add-default-case
 enable=avoid-nullary-conditions
 enable=check-unassigned-uppercase
 enable=deprecate-which
+
+#
+# Project
+#
+
+source-path=src

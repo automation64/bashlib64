@@ -25,29 +25,16 @@
 {
   # Env / Installer64 / Module environment definition version
   export DEV_ENV_INSTALLER64_ID='inst64'
-  export DEV_ENV_INSTALLER64_VERSION='3.0.0'
+  export DEV_ENV_INSTALLER64_VERSION='3.1.0'
 
   # Lib / Installer64 / Skip installation?
-  export DEV_LIB_INSTALLER64_SKIP='YES'
+  export DEV_LIB_INSTALLER64_SKIP='NO'
   # Lib / Installer64 / Location
   export DEV_LIB_INSTALLER64_TARGET="${DEV_PATH_LIB}/${DEV_ENV_INSTALLER64_ID}"
   # Lib / Installer64 / Version
-  export DEV_LIB_INSTALLER64_VERSION='7.3.0'
+  export DEV_LIB_INSTALLER64_VERSION='8.0.0'
   # Lib / Installer64 / Source
   export DEV_LIB_INSTALLER64_URL='https://raw.githubusercontent.com/automation64/installer64/main/src/install-installer64'
-}
-
-#
-# Locals
-#
-# * Use .local.env file or CICD variables to override values
-#
-
-# shellcheck disable=SC2154
-{
-  if [[ ! -f "${DEV_LIB_INSTALLER64_TARGET}/install-installer64" ]]; then
-    DEV_LIB_INSTALLER64_SKIP='NO'
-  fi
 }
 
 #

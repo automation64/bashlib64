@@ -14,6 +14,7 @@ function show() {
   bl64_msg_show_warning 'bl64_msg_show_warning'
   bl64_msg_show_deprecated 'bl64_msg_show_deprecated'
   bl64_msg_show_info 'bl64_msg_show_info'
+  bl64_msg_show_attention 'bl64_msg_show_attention'
   bl64_msg_show_setup 'bl64_msg_show_setup' 'BL64_VAR_DEFAULT'
   bl64_msg_show_input 'bl64_msg_show_input'
   printf '%s\n' "[USER INPUT HERE]"

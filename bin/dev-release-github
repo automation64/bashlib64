@@ -49,12 +49,26 @@ function my_release_create() {
     "$tag"
 }
 
+function my_artifact_check() {
+  bl64_dbg_app_show_function
+  local path=''
+
+  for path in $DEV_RELEASE_GITHUB_ARTIFACT; do
+    if [[ ! -e "$path" ]]; then
+      bl64_msg_show_error "unable to find the release artifact (${path})"
+      return "$BL64_LIB_ERROR_TASK_REQUIREMENTS"
+    fi
+  done
+
+}
 function my_release_upload() {
   bl64_dbg_app_show_function "$@"
   local tag="$1"
   local artifacts=''
 
   [[ -z "$DEV_RELEASE_GITHUB_ARTIFACT" ]] && return 0
+  my_artifact_check || return $?
+
   if [[ -d "$DEV_RELEASE_GITHUB_ARTIFACT" ]]; then
     artifacts="$(bl64_fs_file_search "$DEV_RELEASE_GITHUB_ARTIFACT")" &&
       [[ -n "$artifacts" ]] ||
@@ -108,7 +122,7 @@ function my_initialize() {
       'MY_RELEASE_TAG'
 }
 
-bl64_lib_script_version_set '2.3.0'
+bl64_lib_script_version_set '2.4.1'
 bl64_msg_help_about_set 'Create a GitHub release'
 dev_bin64_initialize && my_initialize || exit $?
 

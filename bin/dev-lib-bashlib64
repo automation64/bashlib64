@@ -25,16 +25,12 @@ source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2
 
 [[ -n "$DEV_CICD_DEBUG_BASH" ]] && set -x
 if [[ "$DEV_LIB_BASHLIB64_SKIP" == 'YES' ]]; then
-  dev_bin64_msg_show_warning 'dev-lib-bashlib64' 'tool already installed. No further action taken'
   exit 0
 fi
 
 [[ ! -d "$DEV_LIB_INSTALLER64_TARGET" ]] &&
   dev_bin64_msg_show_error 'dev-lib-bashlib64' 'installer not found, please run ./bin/dev-lib-base and try again' &&
   exit 1
-
-dev_bin64_msg_show_task 'dev-lib-bashlib64' 'remove older BashLib64 versions'
-[[ -d "$DEV_LIB_BASHLIB64_TARGET" ]] && rm -Rf "$DEV_LIB_BASHLIB64_TARGET"
 
 dev_bin64_msg_show_task 'dev-lib-bashlib64: Task: download BashLib64'
 INST64_BASHLIB64_VERSION="$DEV_LIB_BASHLIB64_VERSION" \
