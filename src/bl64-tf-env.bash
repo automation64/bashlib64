@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TF_VERSION='3.1.0'
+  declare BL64_TF_VERSION='3.2.0'
 
   declare BL64_TF_MODULE='0'
 
@@ -21,12 +21,12 @@
   declare BL64_TF_OUTPUT_JSON='1'
   declare BL64_TF_OUTPUT_TEXT='2'
 
-  declare BL64_TF_SET_LOG_TRACE=''
-  declare BL64_TF_SET_LOG_DEBUG=''
-  declare BL64_TF_SET_LOG_INFO=''
-  declare BL64_TF_SET_LOG_WARN=''
-  declare BL64_TF_SET_LOG_ERROR=''
-  declare BL64_TF_SET_LOG_OFF=''
+  declare BL64_TF_SET_LOG_TRACE='TRACE'
+  declare BL64_TF_SET_LOG_DEBUG='DEBUG'
+  declare BL64_TF_SET_LOG_INFO='INFO'
+  declare BL64_TF_SET_LOG_WARN='WARN'
+  declare BL64_TF_SET_LOG_ERROR='ERROR'
+  declare BL64_TF_SET_LOG_OFF='OFF'
 
   declare BL64_TF_DEF_PATH_LOCK=''
   declare BL64_TF_DEF_PATH_RUNTIME=''

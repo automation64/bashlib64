@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.14.0]
+
 ## [22.13.0]
 
 ### Added
@@ -14,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - pkg
   - bl64_pkg_cleanup: Arch linux support
 - core
-  - BL64_VAR_*: added variables for YES,NO,NOTOK
+  - BL64*VAR*\*: added variables for YES,NO,NOTOK
   - bl64_lib_mode_cicd_enable, bl64_lib_mode_cicd_disable: control CICD setting
 - ui
   - BL64_UI_CONFIRMATION_SKIP: flag to disable confirmation functions (i.e.: for CICD, etc.)
@@ -74,7 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - dbg
-  - bl64_dbg_*_show_vars: show UNDEF when var is not defined
+  - bl64*dbg*\*\_show_vars: show UNDEF when var is not defined
 
 ## [22.10.0]
 
@@ -181,7 +183,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - msg
   - bl64_msg_show_setup: skip empty vars
-  - BL64_MSG_FORMAT_*: values are now human readable
+  - BL64*MSG_FORMAT*\*: values are now human readable
 
 ### Fixed
 
@@ -273,7 +275,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_api_setup: **breaking-change**: added BSH dependency for retry command
   - bl64_api_call: added retry on error
 - pkg
-  - *_run_*: removed root check, moved to specific commands that need it
+  - _*run*_: removed root check, moved to specific commands that need it
 - ui
   - bl64_ui_ask_confirmation: removed retry routine
 - os
@@ -416,7 +418,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - cnt
   - Added rancher desktop support
 - iam
-  - _bl64_iam_set_command: system group and user definition
+  - \_bl64_iam_set_command: system group and user definition
 - txt
   - bl64_txt_line_replace_sed: supports stdin and file
 
@@ -425,7 +427,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - os
-  - _bl64_os_set_machine: normalized machine types
+  - \_bl64_os_set_machine: normalized machine types
 - core
   - Check bash compatibility at bootstrap
 - txt
@@ -440,7 +442,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - arc
   - bl64_arc_open_tar: wrong param for MCOS
 - os
-  - _bl64_os_get_distro_from_uname: add missing version normalizer
+  - \_bl64_os_get_distro_from_uname: add missing version normalizer
 
 ### Added
 
@@ -545,7 +547,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_log_set_target: added supports for multiple target type
 - dbg
   - bl64_dbg_app_dryrun_show
-  - bl64_dbg_lib_dryrun_show 
+  - bl64_dbg_lib_dryrun_show
   - bl64_dbg_app_dryrun_is_enabled
   - bl64_dbg_lib_dryrun_is_enabled
   - bl64_dbg_all_dryrun_disable
@@ -586,12 +588,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_dbg_lib_command_enabled: replaced by 4_dbg_lib_command_is_enabled
   - bl64_dbg_app_trace_enabled: replaced by l64_dbg_app_trace_is_enabled
   - bl64_dbg_lib_trace_enabled: replaced by l64_dbg_lib_trace_is_enabled
-  - bl64_dbg_app_custom_1_enabled: replaced by _dbg_app_custom_1_is_enabled
-  - bl64_dbg_app_custom_2_enabled: replaced by _dbg_app_custom_2_is_enabled
-  - bl64_dbg_app_custom_3_enabled: replaced by _dbg_app_custom_3_is_enabled
+  - bl64_dbg_app_custom_1_enabled: replaced by \_dbg_app_custom_1_is_enabled
+  - bl64_dbg_app_custom_2_enabled: replaced by \_dbg_app_custom_2_is_enabled
+  - bl64_dbg_app_custom_3_enabled: replaced by \_dbg_app_custom_3_is_enabled
   - bl64_dbg_lib_check_enabled: replaced by l64_dbg_lib_check_is_enabled
-  - bl64_dbg_lib_log_enabled: replaced by  _bl64_dbg_lib_log_is_enabled
-  - bl64_dbg_lib_msg_enabled: replaced by  _bl64_dbg_lib_msg_is_enabled
+  - bl64_dbg_lib_log_enabled: replaced by \_bl64_dbg_lib_log_is_enabled
+  - bl64_dbg_lib_msg_enabled: replaced by \_bl64_dbg_lib_msg_is_enabled
 
 ### Changed
 
@@ -642,7 +644,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - core
-  - Changed BL64_VAR_DEFAULT value to facilitate usage from CLI: `_` -> `DEFAULT`
+  - Changed BL64*VAR_DEFAULT value to facilitate usage from CLI: `*`->`DEFAULT`
   - bl64_lib_var_is_default: accept both new and legacy values
 
 ### Fixed
@@ -720,7 +722,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - aws
-  - bl64_aws_set_access_*: Set CLI access modes: SSO, Profile, IAM Key, Session Token
+  - bl64*aws_set_access*\*: Set CLI access modes: SSO, Profile, IAM Key, Session Token
 
 ### Changed
 
@@ -732,7 +734,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - aws
-  - **Breaking change**: bl64_aws_run_aws_profile: use bl64_aws_run_aws instead with bl64_aws_set_access_*
+  - **Breaking change**: bl64*aws_run_aws_profile: use bl64_aws_run_aws instead with bl64_aws_set_access*\*
 
 ## [19.6.0]
 
@@ -766,7 +768,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - iam
-  - bl64_iam_run_*: wrappers for user add commands 
+  - bl64*iam_run*\*: wrappers for user add commands
   - bl64_iam_group_add: add local user group
   - bl64_iam_group_is_created: verify that group exists
   - bl64_iam_user_add: added UID parameter (optional)
@@ -878,12 +880,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - check
-  - **Breaking change**: bl64_check_module_imported: migrated to core module: _bl64_lib_module_is_imported
+  - **Breaking change**: bl64_check_module_imported: migrated to core module: \_bl64_lib_module_is_imported
 
 ### Added
 
 - core
-  - _bl64_lib_module_is_imported: migrated from check (_bl64_lib_module_is_imported)
+  - \_bl64_lib_module_is_imported: migrated from check (\_bl64_lib_module_is_imported)
 - bsh
   - bl64_bsh_env_import_yaml: import and load shell environment variables from YAML file
 - check
@@ -998,7 +1000,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iam
   - bl64_iam_check_user: migrated from bl64_check_user
 - check
-  - _bl64_lib_module_is_imported: check that the bl64 module is imported (sourced)
+  - \_bl64_lib_module_is_imported: check that the bl64 module is imported (sourced)
 
 ### Changed
 
@@ -1016,8 +1018,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_iam_user_add: force creation of primary group in SLES distros
 - core
   - **Breaking change** normalize VAR values:
-    - BL64_VAR_NONE='_NONE_'
-    - BL64_VAR_ALL='_ALL_'
+    - BL64*VAR_NONE='\_NONE*'
+    - BL64*VAR_ALL='\_ALL*'
 - pkg
   - **Breaking change** bl64_pkg_install: add flag to not install recommended packages on debian
 

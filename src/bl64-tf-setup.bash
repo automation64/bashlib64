@@ -27,7 +27,6 @@ function bl64_tf_setup() {
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_tf_set_command "$terraform_bin" &&
     _bl64_tf_set_version &&
-    _bl64_tf_set_options &&
     _bl64_tf_set_resources &&
     BL64_TF_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'tf'
@@ -57,29 +56,6 @@ function _bl64_tf_set_command() {
     return "$BL64_LIB_ERROR_FILE_NOT_FOUND"
   fi
   return 0
-}
-
-#######################################
-# Create command sets for common options
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_tf_set_options() {
-  bl64_dbg_lib_show_function
-
-  # shellcheck disable=SC2034
-  BL64_TF_SET_LOG_TRACE='TRACE' &&
-    BL64_TF_SET_LOG_DEBUG='DEBUG' &&
-    BL64_TF_SET_LOG_INFO='INFO' &&
-    BL64_TF_SET_LOG_WARN='WARN' &&
-    BL64_TF_SET_LOG_ERROR='ERROR' &&
-    BL64_TF_SET_LOG_OFF='OFF'
 }
 
 #######################################
