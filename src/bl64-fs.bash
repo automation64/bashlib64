@@ -1167,13 +1167,13 @@ function bl64_fs_set_ephemeral() {
   local user="${4:-${BL64_VAR_DEFAULT}}"
   local group="${5:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$temporal" != "$BL64_VAR_DEFAULT" ]]; then
+  if ! bl64_lib_var_is_default "$temporal"; then
     bl64_fs_dir_create "$mode" "$user" "$group" "$temporal" &&
       BL64_FS_PATH_TEMPORAL="$temporal" ||
       return $?
   fi
 
-  if [[ "$cache" != "$BL64_VAR_DEFAULT" ]]; then
+  if ! bl64_lib_var_is_default "$cache"; then
     bl64_fs_dir_create "$mode" "$user" "$group" "$cache" &&
       BL64_FS_PATH_CACHE="$cache" ||
       return $?
