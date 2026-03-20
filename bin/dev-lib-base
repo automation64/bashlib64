@@ -12,7 +12,6 @@
 # limitations under the License.
 #######################################
 
-# shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
 
 # shellcheck disable=2034

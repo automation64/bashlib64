@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+#######################################
+# Copyright SerDigital64 - https://github.com/serdigital64
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#######################################
+
+export DEV_PROFILE
+declare MY_PROFILE="${1:-}"
+# shellcheck disable=2034
+declare MY_VERSION='3.1.0'
+
+function my_profile() {
+  [[ -d "etc/prof/${MY_PROFILE}" ]] && return 0
+  ./bin/dev-profile-create "$MY_PROFILE"
+}
+
+function my_load() {
+  DEV_PROFILE="$MY_PROFILE"
+  source ./bin/dev-set ||
+    { echo 'dev-profile-set:Error: unable to load dev environment' 2>&1 && return 1; }
+}
+
+function my_initialize() {
+  [[ "${BASH_SOURCE[0]}" == "${0}" ]] &&
+    echo 'dev-profile-set:Error: invalid execution method. Use the following command line to run this script: source ./bin/dev-profile-set.' 2>&1 &&
+    return 1
+  [[ -z "$MY_PROFILE" ]] &&
+    echo 'dev-profile-set:Error: missing profile name.' 2>&1 &&
+    return 1
+  [[ "$MY_PROFILE" == 'none' ]] &&
+    echo 'dev-profile-set:Error: invalid profile name (none).' 2>&1 &&
+    return 1
+  return 0
+}
+
+[[ -n "$DEV_CICD_DEBUG_BASH" ]] && set -x
+
+my_initialize &&
+  my_profile &&
+  my_load &&
+  unset my_initialize &&
+  unset my_profile &&
+  unset my_load ||
+  exit $?
+[[ -n "$DEV_CICD_DEBUG_BASH" ]] && set +x
+:
