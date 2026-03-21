@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [22.14.0]
 
+### Changed
+
+- tf
+  - Enabled CLI automation flag
+
 ## [22.13.0]
 
 ### Added

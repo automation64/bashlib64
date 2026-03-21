@@ -58,6 +58,7 @@ function bl64_tf_run_terraform() {
 
   _bl64_tf_harden_terraform
 
+  export TF_IN_AUTOMATION='ON'
   if bl64_dbg_lib_command_is_enabled; then
     export TF_LOG="$BL64_TF_SET_LOG_TRACE"
   else
@@ -126,6 +127,7 @@ function bl64_tf_run_tofu() {
 
   _bl64_tf_harden_tofu
 
+  export TF_IN_AUTOMATION='ON'
   if bl64_dbg_lib_command_is_enabled; then
     export TF_LOG="$BL64_TF_SET_LOG_TRACE"
   else

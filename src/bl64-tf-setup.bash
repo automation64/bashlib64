@@ -129,9 +129,11 @@ function _bl64_tf_set_version() {
   local cli_version=''
 
   if [[ -n "$BL64_TF_CMD_TERRAFORM" ]]; then
-    cli_version="$("$BL64_TF_CMD_TERRAFORM" --version | bl64_txt_run_awk '/^Terraform v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
+    _bl64_tf_harden_terraform &&
+      cli_version="$("$BL64_TF_CMD_TERRAFORM" --version | bl64_txt_run_awk '/^Terraform v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
   else
-    cli_version="$("$BL64_TF_CMD_TOFU" --version | bl64_txt_run_awk '/^OpenTofu v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
+    _bl64_tf_harden_tofu &&
+      cli_version="$("$BL64_TF_CMD_TOFU" --version | bl64_txt_run_awk '/^OpenTofu v[0-9.]+$/ { gsub( /v/, "" ); print $2 }')"
   fi
   bl64_dbg_lib_show_vars 'cli_version'
 
