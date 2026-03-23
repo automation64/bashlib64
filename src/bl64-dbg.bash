@@ -71,12 +71,12 @@ function bl64_dbg_lib_msg_enabled {
 #
 
 function _bl64_dbg_show() {
-  local message="$1"
+  local message="${1:-}"
   printf '%s: %s\n' '[Debug]' "$message" >&2
 }
 
 function _bl64_dbg_dryrun_show() {
-  local message="$1"
+  local message="${1:-}"
   printf '%s: %s\n' '[Dry-Run]' "$message"
 }
 

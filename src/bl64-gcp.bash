@@ -65,8 +65,8 @@ function bl64_gcp_run_gcloud() {
 #######################################
 function bl64_gcp_login_sa() {
   bl64_dbg_lib_show_function "$@"
-  local key_file="$1"
-  local project="$2"
+  local key_file="${1:-}"
+  local project="${2:-}"
 
   bl64_check_parameter 'key_file' &&
     bl64_check_parameter 'project' &&
@@ -163,8 +163,8 @@ function _bl64_gcp_harden_gcloud() {
 #######################################
 function bl64_gcp_secret_get() {
   bl64_dbg_lib_show_function "$@"
-  local name="$1"
-  local secret_version="$2"
+  local name="${1:-}"
+  local secret_version="${2:-}"
 
   bl64_check_parameter 'name' &&
     bl64_check_parameter 'secret_version' &&

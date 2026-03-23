@@ -23,8 +23,8 @@
 #######################################
 function bl64_rxtx_web_get_file() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local destination="$2"
+  local source="${1:-}"
+  local destination="${2:-}"
   local replace="${3:-${BL64_VAR_DEFAULT}}"
   local file_mode="${4:-${BL64_VAR_DEFAULT}}"
   local file_user="${5:-${BL64_VAR_DEFAULT}}"
@@ -285,11 +285,11 @@ function _bl64_rxtx_git_get_dir_sub() {
 #######################################
 function bl64_rxtx_github_get_asset() {
   bl64_dbg_lib_show_function "$@"
-  local repo_owner="$1"
-  local repo_name="$2"
-  local release_tag="$3"
-  local asset_name="$4"
-  local destination="$5"
+  local repo_owner="${1:-}"
+  local repo_name="${2:-}"
+  local release_tag="${3:-}"
+  local asset_name="${4:-}"
+  local destination="${5:-}"
   local replace="${6:-${BL64_VAR_OFF}}"
   local mode="${7:-${BL64_VAR_DEFAULT}}"
 

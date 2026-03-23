@@ -42,7 +42,7 @@ function bl64_py_setup() {
 }
 
 function _bl64_py_setup() {
-  local venv_path="$1"
+  local venv_path="${1:-}"
 
   if ! bl64_lib_var_is_default "$venv_path"; then
     bl64_py_venv_check "$venv_path" ||
@@ -81,7 +81,7 @@ function _bl64_py_setup() {
 #######################################
 function _bl64_py_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local venv_path="$1"
+  local venv_path="${1:-}"
 
   if bl64_lib_var_is_default "$venv_path"; then
     if [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_MACOS" ]]; then

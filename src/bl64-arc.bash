@@ -283,8 +283,8 @@ function bl64_arc_run_tar() {
 #######################################
 function bl64_arc_tar_open() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local destination="$2"
+  local source="${1:-}"
+  local destination="${2:-}"
   local -i status=0
 
   bl64_check_module 'BL64_ARC_MODULE' &&
@@ -389,8 +389,8 @@ function bl64_arc_tar_open() {
 #######################################
 function bl64_arc_zip_open() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local destination="$2"
+  local source="${1:-}"
+  local destination="${2:-}"
   local -i status=0
 
   bl64_check_parameter 'source' &&
@@ -531,8 +531,8 @@ function bl64_arc_run_gunzip() {
 #######################################
 function bl64_arc_gzip_open() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local destination="$2"
+  local source="${1:-}"
+  local destination="${2:-}"
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
@@ -567,8 +567,8 @@ function bl64_arc_gzip_open() {
 #######################################
 function bl64_arc_7z_open() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local destination="$2"
+  local source="${1:-}"
+  local destination="${2:-}"
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
@@ -605,8 +605,8 @@ function bl64_arc_7z_open() {
 #######################################
 function bl64_arc_bzip2_open() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local destination="$2"
+  local source="${1:-}"
+  local destination="${2:-}"
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&

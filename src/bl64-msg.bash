@@ -366,7 +366,7 @@ function _bl64_msg_format_emoji() {
 #######################################
 function bl64_msg_show_check() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_error "${FUNCNAME[2]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message [task: ${FUNCNAME[2]:-main}@${BASH_LINENO[2]:-NA}.${FUNCNAME[3]:-main}@${BASH_LINENO[3]:-NA}]" >&2
@@ -386,7 +386,7 @@ function bl64_msg_show_check() {
 #######################################
 function bl64_msg_show_error() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message" >&2
@@ -406,7 +406,7 @@ function bl64_msg_show_error() {
 #######################################
 function bl64_msg_show_app_error() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message [task: ${FUNCNAME[2]:-main}.${FUNCNAME[3]:-main}]" >&2
@@ -426,7 +426,7 @@ function bl64_msg_show_app_error() {
 #######################################
 function bl64_msg_show_lib_error() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message [task: ${FUNCNAME[2]:-main}.${FUNCNAME[3]:-main}]" >&2
@@ -447,7 +447,7 @@ function bl64_msg_show_lib_error() {
 #######################################
 function bl64_msg_show_fatal() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Fatal  ' "$message" >&2
@@ -467,7 +467,7 @@ function bl64_msg_show_fatal() {
 #######################################
 function bl64_msg_show_warning() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_warning "${FUNCNAME[1]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Warning' "$message" >&2
@@ -487,7 +487,7 @@ function bl64_msg_show_warning() {
 #######################################
 function bl64_msg_show_attention() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Attention' "$message"
@@ -507,7 +507,7 @@ function bl64_msg_show_attention() {
 #######################################
 function bl64_msg_show_init() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
     bl64_msg_app_verbose_is_enabled || return 0
@@ -529,7 +529,7 @@ function bl64_msg_show_init() {
 #######################################
 function bl64_msg_show_info() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
     bl64_msg_app_detail_is_enabled || return 0
@@ -551,7 +551,7 @@ function bl64_msg_show_info() {
 #######################################
 function bl64_msg_show_phase() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_PHASE}:${message}" &&
     bl64_msg_app_verbose_is_enabled || return 0
@@ -573,7 +573,7 @@ function bl64_msg_show_phase() {
 #######################################
 function bl64_msg_show_task() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_TASK}:${message}" &&
     bl64_msg_app_verbose_is_enabled || return 0
@@ -595,7 +595,7 @@ function bl64_msg_show_task() {
 #######################################
 function bl64_msg_show_subtask() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_SUBTASK}:${message}" &&
     bl64_msg_app_detail_is_enabled || return 0
@@ -617,7 +617,7 @@ function bl64_msg_show_subtask() {
 #######################################
 function bl64_msg_show_lib_task() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBTASK}:${message}" &&
     bl64_msg_app_verbose_is_enabled || return 0
@@ -639,7 +639,7 @@ function bl64_msg_show_lib_task() {
 #######################################
 function bl64_msg_show_lib_subtask() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBSUBTASK}:${message}" &&
     bl64_msg_app_detail_is_enabled || return 0
@@ -661,7 +661,7 @@ function bl64_msg_show_lib_subtask() {
 #######################################
 function bl64_msg_show_lib_info() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBINFO}:${message}" &&
     bl64_msg_app_detail_is_enabled || return 0
@@ -683,7 +683,7 @@ function bl64_msg_show_lib_info() {
 #######################################
 function bl64_msg_show_text() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
     bl64_msg_app_verbose_is_enabled || return 0
@@ -766,7 +766,7 @@ function bl64_msg_show_batch_finish() {
 #######################################
 function bl64_msg_show_input() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   _bl64_msg_print "$BL64_MSG_TYPE_INPUT" 'Input  ' "$message"
 }

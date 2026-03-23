@@ -102,7 +102,7 @@ function _bl64_hlm_set_runtime() {
 #######################################
 function bl64_hlm_set_timeout() {
   bl64_dbg_lib_show_function "$@"
-  local timeout="$1"
+  local timeout="${1:-}"
 
   bl64_check_parameter 'timeout' || return $?
 

@@ -50,7 +50,7 @@ function bl64_cnt_setup() {
 #######################################
 function _bl64_cnt_set_command() {
   bl64_dbg_lib_show_function "$@"
-  local command_location="$1"
+  local command_location="${1:-}"
 
   _bl64_cnt_set_command_podman "$command_location" &&
     _bl64_cnt_set_command_docker "$command_location" ||

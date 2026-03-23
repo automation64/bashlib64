@@ -219,7 +219,7 @@ function bl64_vcs_git_sparse() {
 #######################################
 function bl64_vcs_github_run_api() {
   bl64_dbg_lib_show_function "$@"
-  local api_path="$1"
+  local api_path="${1:-}"
   local api_method="${2:-${BL64_API_METHOD_GET}}"
   local api_query="${3:-${BL64_VAR_NULL}}"
   local api_token="${4:-${BL64_VAR_NULL}}"
@@ -272,8 +272,8 @@ function bl64_vcs_github_run_api() {
 #######################################
 function bl64_vcs_github_release_get_latest() {
   bl64_dbg_lib_show_function "$@"
-  local repo_owner="$1"
-  local repo_name="$2"
+  local repo_owner="${1:-}"
+  local repo_name="${2:-}"
   local repo_tag=''
 
   bl64_check_module 'BL64_VCS_MODULE' &&
@@ -293,8 +293,8 @@ function bl64_vcs_github_release_get_latest() {
 
 function _bl64_vcs_github_release_get_latest() {
   bl64_dbg_lib_show_function "$@"
-  local repo_owner="$1"
-  local repo_name="$2"
+  local repo_owner="${1:-}"
+  local repo_name="${2:-}"
   local repo_api_query="/repos/${repo_owner}/${repo_name}/releases/latest"
 
   # shellcheck disable=SC2086
@@ -325,8 +325,8 @@ function _bl64_vcs_github_release_get_latest() {
 #######################################
 function bl64_vcs_changelog_get_release() {
   bl64_dbg_lib_show_function "$@"
-  local changelog_path="$1"
-  local release_tag="$2"
+  local changelog_path="${1:-}"
+  local release_tag="${2:-}"
   local description=''
 
   bl64_check_parameter 'changelog_path' &&
@@ -345,8 +345,8 @@ function bl64_vcs_changelog_get_release() {
 
 function _bl64_vcs_changelog_get_release() {
   bl64_dbg_lib_show_function "$@"
-  local changelog_path="$1"
-  local release_tag="$2"
+  local changelog_path="${1:-}"
+  local release_tag="${2:-}"
 
   bl64_txt_run_awk \
     -v tag="$release_tag" '

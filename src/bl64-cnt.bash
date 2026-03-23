@@ -30,14 +30,14 @@ function bl64_cnt_is_inside_container() {
 
 function _bl64_cnt_find_file_marker() {
   bl64_dbg_lib_show_function "$@"
-  local marker="$1"
+  local marker="${1:-}"
   bl64_dbg_lib_show_info "check for file marker (${marker})"
   [[ -f "$marker" ]]
 }
 
 function _bl64_cnt_find_variable_marker() {
   bl64_dbg_lib_show_function "$@"
-  local marker="$1"
+  local marker="${1:-}"
   bl64_dbg_lib_show_info "check for variable marker (${marker})"
   [[ -v "$marker" ]]
 }
@@ -146,7 +146,7 @@ function bl64_cnt_login() {
 #######################################
 function bl64_cnt_run_sh() {
   bl64_dbg_lib_show_function "$@"
-  local container="$1"
+  local container="${1:-}"
 
   bl64_check_parameter 'container' || return $?
   # shellcheck disable=SC2086
@@ -194,7 +194,7 @@ function bl64_cnt_run_interactive() {
 #######################################
 function bl64_cnt_build() {
   bl64_dbg_lib_show_function "$@"
-  local context="$1"
+  local context="${1:-}"
   local file="${2:-Dockerfile}"
   local tag="${3:-latest}"
 
@@ -232,8 +232,8 @@ function bl64_cnt_build() {
 #######################################
 function bl64_cnt_push() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local destination="$2"
+  local source="${1:-}"
+  local destination="${2:-}"
 
   bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_parameter 'source' &&
@@ -258,7 +258,7 @@ function bl64_cnt_push() {
 #######################################
 function bl64_cnt_pull() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
+  local source="${1:-}"
 
   bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_parameter 'source' ||
@@ -270,8 +270,8 @@ function bl64_cnt_pull() {
 
 function _bl64_cnt_login_put_password() {
   bl64_dbg_lib_show_function "$@"
-  local password="$1"
-  local file="$2"
+  local password="${1:-}"
+  local file="${2:-}"
 
   if [[ "$password" != "$BL64_VAR_DEFAULT" ]]; then
     printf '%s\n' "$password"
@@ -297,8 +297,8 @@ function _bl64_cnt_login_put_password() {
 #######################################
 function bl64_cnt_tag() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local target="$2"
+  local source="${1:-}"
+  local target="${2:-}"
 
   bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_parameter 'source' &&
@@ -410,7 +410,7 @@ function bl64_cnt_container_is_running() {
 #######################################
 function bl64_cnt_network_is_defined() {
   bl64_dbg_lib_show_function "$@"
-  local network="$1"
+  local network="${1:-}"
 
   bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_parameter 'network' ||
@@ -433,7 +433,7 @@ function bl64_cnt_network_is_defined() {
 #######################################
 function bl64_cnt_network_create() {
   bl64_dbg_lib_show_function "$@"
-  local network="$1"
+  local network="${1:-}"
 
   bl64_check_module 'BL64_CNT_MODULE' &&
     bl64_check_parameter 'network' ||
@@ -469,10 +469,10 @@ function bl64_cnt_network_create() {
 #######################################
 function _bl64_cnt_docker_login() {
   bl64_dbg_lib_show_function "$@"
-  local user="$1"
-  local password="$2"
-  local file="$3"
-  local registry="$4"
+  local user="${1:-}"
+  local password="${2:-}"
+  local file="${3:-}"
+  local registry="${4:-}"
 
   # shellcheck disable=SC2086
   _bl64_cnt_login_put_password "$password" "$file" |
@@ -566,8 +566,8 @@ function bl64_cnt_run_docker() {
 #######################################
 function _bl64_cnt_docker_build() {
   bl64_dbg_lib_show_function "$@"
-  local file="$1"
-  local tag="$2"
+  local file="${1:-}"
+  local tag="${2:-}"
 
   # Remove used parameters
   shift
@@ -597,8 +597,8 @@ function _bl64_cnt_docker_build() {
 #######################################
 function _bl64_cnt_docker_push() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local destination="$2"
+  local source="${1:-}"
+  local destination="${2:-}"
 
   bl64_cnt_run_docker \
     tag \
@@ -624,7 +624,7 @@ function _bl64_cnt_docker_push() {
 #######################################
 function _bl64_cnt_docker_pull() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
+  local source="${1:-}"
 
   bl64_cnt_run_docker \
     pull \
@@ -646,8 +646,8 @@ function _bl64_cnt_docker_pull() {
 #######################################
 function _bl64_cnt_docker_tag() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local target="$2"
+  local source="${1:-}"
+  local target="${2:-}"
 
   bl64_cnt_run_docker \
     tag \
@@ -693,7 +693,7 @@ function _bl64_cnt_docker_run() {
 #######################################
 function _bl64_cnt_docker_network_is_defined() {
   bl64_dbg_lib_show_function "$@"
-  local network="$1"
+  local network="${1:-}"
   local network_id=''
 
   network_id="$(
@@ -721,7 +721,7 @@ function _bl64_cnt_docker_network_is_defined() {
 #######################################
 function _bl64_cnt_docker_network_create() {
   bl64_dbg_lib_show_function "$@"
-  local network="$1"
+  local network="${1:-}"
 
   bl64_cnt_run_docker \
     network create \
@@ -744,9 +744,9 @@ function _bl64_cnt_docker_network_create() {
 #######################################
 function _bl64_cnt_docker_ps_filter() {
   bl64_dbg_lib_show_function "$@"
-  local name="$1"
-  local id="$2"
-  local status="$3"
+  local name="${1:-}"
+  local id="${2:-}"
+  local status="${3:-}"
   local format=''
   local filter=''
 
@@ -786,10 +786,10 @@ function _bl64_cnt_docker_ps_filter() {
 #######################################
 function _bl64_cnt_podman_login() {
   bl64_dbg_lib_show_function "$@"
-  local user="$1"
-  local password="$2"
-  local file="$3"
-  local registry="$4"
+  local user="${1:-}"
+  local password="${2:-}"
+  local file="${3:-}"
+  local registry="${4:-}"
 
   # shellcheck disable=SC2086
   _bl64_cnt_login_put_password "$password" "$file" |
@@ -877,8 +877,8 @@ function bl64_cnt_run_podman() {
 #######################################
 function _bl64_cnt_podman_build() {
   bl64_dbg_lib_show_function "$@"
-  local file="$1"
-  local tag="$2"
+  local file="${1:-}"
+  local tag="${2:-}"
 
   # Remove used parameters
   shift
@@ -907,8 +907,8 @@ function _bl64_cnt_podman_build() {
 #######################################
 function _bl64_cnt_podman_push() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local destination="$2"
+  local source="${1:-}"
+  local destination="${2:-}"
 
   bl64_cnt_run_podman \
     push \
@@ -930,7 +930,7 @@ function _bl64_cnt_podman_push() {
 #######################################
 function _bl64_cnt_podman_pull() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
+  local source="${1:-}"
 
   bl64_cnt_run_podman \
     pull \
@@ -952,8 +952,8 @@ function _bl64_cnt_podman_pull() {
 #######################################
 function _bl64_cnt_podman_tag() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local target="$2"
+  local source="${1:-}"
+  local target="${2:-}"
 
   bl64_cnt_run_podman \
     tag \
@@ -997,7 +997,7 @@ function _bl64_cnt_podman_run() {
 #######################################
 function _bl64_cnt_podman_network_is_defined() {
   bl64_dbg_lib_show_function "$@"
-  local network="$1"
+  local network="${1:-}"
   local network_id=''
 
   network_id="$(
@@ -1025,7 +1025,7 @@ function _bl64_cnt_podman_network_is_defined() {
 #######################################
 function _bl64_cnt_podman_network_create() {
   bl64_dbg_lib_show_function "$@"
-  local network="$1"
+  local network="${1:-}"
 
   bl64_cnt_run_podman \
     network create \
@@ -1048,9 +1048,9 @@ function _bl64_cnt_podman_network_create() {
 #######################################
 function _bl64_cnt_podman_ps_filter() {
   bl64_dbg_lib_show_function "$@"
-  local name="$1"
-  local id="$2"
-  local status="$3"
+  local name="${1:-}"
+  local id="${2:-}"
+  local status="${3:-}"
   local format=''
   local filter=''
 

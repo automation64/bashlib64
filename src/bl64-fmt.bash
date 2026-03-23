@@ -68,7 +68,7 @@ function bl64_fmt_check_value_in_list() {
 #######################################
 function bl64_fmt_path_strip_starting_slash() {
   bl64_dbg_lib_show_function "$@"
-  local path="$1"
+  local path="${1:-}"
 
   # shellcheck disable=SC2086
   if [[ -z "$path" ]]; then
@@ -98,7 +98,7 @@ function bl64_fmt_path_strip_starting_slash() {
 #######################################
 function bl64_fmt_path_strip_ending_slash() {
   bl64_dbg_lib_show_function "$@"
-  local path="$1"
+  local path="${1:-}"
 
   # shellcheck disable=SC2086
   if [[ -z "$path" ]]; then
@@ -142,7 +142,7 @@ function bl64_fmt_path_strip_ending_slash() {
 #######################################
 function bl64_fmt_path_get_basename() {
   bl64_dbg_lib_show_function "$@"
-  local path="$1"
+  local path="${1:-}"
   local base=''
 
   if [[ -n "$path" && "$path" != '/' ]]; then
@@ -184,7 +184,7 @@ function bl64_fmt_path_get_basename() {
 #######################################
 function bl64_fmt_path_get_dirname() {
   bl64_dbg_lib_show_function "$@"
-  local path="$1"
+  local path="${1:-}"
 
   # shellcheck disable=SC2086
   if [[ -z "$path" ]]; then
@@ -299,7 +299,7 @@ function bl64_fmt_list_check_membership() {
 #######################################
 function bl64_fmt_version_is_semver() {
   bl64_dbg_lib_show_function "$@"
-  local version="$1"
+  local version="${1:-}"
   local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
   [[ "$version" =~ $version_pattern_semver ]]
 }
@@ -318,7 +318,7 @@ function bl64_fmt_version_is_semver() {
 #######################################
 function bl64_fmt_version_is_major_minor() {
   bl64_dbg_lib_show_function "$@"
-  local version="$1"
+  local version="${1:-}"
   local version_pattern='^[0-9]+\.[0-9]+$'
   [[ "$version" =~ $version_pattern ]]
 }
@@ -337,7 +337,7 @@ function bl64_fmt_version_is_major_minor() {
 #######################################
 function bl64_fmt_version_is_major() {
   bl64_dbg_lib_show_function "$@"
-  local version="$1"
+  local version="${1:-}"
   local version_pattern='^[0-9]+$'
   [[ "$version" =~ $version_pattern ]]
 }
@@ -356,7 +356,7 @@ function bl64_fmt_version_is_major() {
 #######################################
 function bl64_fmt_version_convert_to_major_minor() {
   bl64_dbg_lib_show_function "$@"
-  local version="$1"
+  local version="${1:-}"
   local version_pattern_single='^[0-9]+$'
   local version_pattern_major_minor='^[0-9]+\.[0-9]+$'
   local version_pattern_semver='^[0-9]+\.[0-9]+\.[0-9]+$'
@@ -425,8 +425,8 @@ function bl64_fmt_version_check_semver_format() {
 #######################################
 function bl64_fmt_version_is_less_than() {
   bl64_dbg_lib_show_function "$@"
-  local version_a="$1"
-  local version_b="$2"
+  local version_a="${1:-}"
+  local version_b="${2:-}"
   local -a a_parts
   local -a b_parts
 
@@ -465,8 +465,8 @@ function bl64_fmt_version_is_less_than() {
 
 function bl64_fmt_version_is_less_than_or_equal() {
   bl64_dbg_lib_show_function "$@"
-  local version_a="$1"
-  local version_b="$2"
+  local version_a="${1:-}"
+  local version_b="${2:-}"
   if [[ "$version_a" == "$version_b" ]]; then
     bl64_dbg_lib_show_info 'versions are equal'
     return 0

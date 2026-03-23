@@ -37,7 +37,7 @@ function bl64_os_match_compatible() {
 #######################################
 function bl64_os_is_flavor() {
   bl64_dbg_lib_show_function "$@"
-  local os_flavor="$1"
+  local os_flavor="${1:-}"
 
   bl64_check_module 'BL64_OS_MODULE' &&
     bl64_check_parameter 'os_flavor' ||
@@ -143,7 +143,7 @@ function bl64_os_is_compatible() {
 #######################################
 function bl64_os_lang_is_available() {
   bl64_dbg_lib_show_function "$@"
-  local locale="$1"
+  local locale="${1:-}"
   local line=''
 
   bl64_check_module 'BL64_OS_MODULE' &&
@@ -378,8 +378,8 @@ function bl64_os_run_uname() {
 
 function _bl64_os_is_distro() {
   bl64_dbg_lib_show_function "$@"
-  local check_compatibility="$1"
-  local target="$2"
+  local check_compatibility="${1:-}"
+  local target="${2:-}"
   local target_os=''
   local target_major=''
   local target_minor=''

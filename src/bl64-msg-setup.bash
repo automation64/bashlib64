@@ -45,7 +45,7 @@ function bl64_msg_setup() {
 #######################################
 function bl64_msg_set_level() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local level="$1"
+  local level="${1:-}"
 
   bl64_check_parameter 'level' || return $?
 
@@ -77,7 +77,7 @@ function bl64_msg_set_level() {
 #######################################
 function bl64_msg_set_format() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local format="$1"
+  local format="${1:-}"
   local legacy_BL64_MSG_FORMAT_PLAIN='R'
   local legacy_BL64_MSG_FORMAT_HOST='H'
   local legacy_BL64_MSG_FORMAT_TIME='T'
@@ -116,7 +116,7 @@ function bl64_msg_set_format() {
 #######################################
 function bl64_msg_set_theme() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local theme="$1"
+  local theme="${1:-}"
 
   bl64_check_parameter 'theme' || return $?
 

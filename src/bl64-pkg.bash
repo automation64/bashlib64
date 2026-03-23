@@ -52,9 +52,9 @@ function bl64_pkg_repository_add() {
 
 function _bl64_pkg_repository_add_yum() {
   bl64_dbg_lib_show_function "$@"
-  local name="$1"
-  local source="$2"
-  local gpgkey="$3"
+  local name="${1:-}"
+  local source="${2:-}"
+  local gpgkey="${3:-}"
   local definition=''
   local file_mode='0644'
 
@@ -95,11 +95,11 @@ enabled=1\n' \
 
 function _bl64_pkg_repository_add_apt() {
   bl64_dbg_lib_show_function "$@"
-  local name="$1"
-  local source="$2"
-  local gpgkey="$3"
-  local suite="$4"
-  local component="$5"
+  local name="${1:-}"
+  local source="${2:-}"
+  local gpgkey="${3:-}"
+  local suite="${4:-}"
+  local component="${5:-}"
   local definition=''
   local gpgkey_file=''
   local file_mode='0644'

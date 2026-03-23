@@ -141,7 +141,7 @@ function _bl64_aws_set_resources() {
 #######################################
 function _bl64_aws_set_runtime() {
   bl64_dbg_lib_show_function "$@"
-  local aws_home="$1"
+  local aws_home="${1:-}"
   bl64_aws_set_home "$aws_home" &&
     bl64_aws_set_paths "$aws_home"
 }

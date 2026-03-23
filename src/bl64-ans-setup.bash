@@ -99,7 +99,7 @@ function _bl64_ans_set_options() {
 #######################################
 function _bl64_ans_set_runtime() {
   bl64_dbg_lib_show_function "$@"
-  local config="$1"
+  local config="${1:-}"
   bl64_ans_set_paths "$config"
 }
 

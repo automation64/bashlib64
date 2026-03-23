@@ -183,7 +183,7 @@ function bl64_bsh_env_export_variable() {
 #######################################
 function bl64_bsh_env_import_yaml() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
+  local source="${1:-}"
   local dynamic_env=''
 
   bl64_check_parameter 'source' &&
