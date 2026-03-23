@@ -7,10 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [22.14.0]
 
+### Added
+
+- xsv
+  - bl64_xsv_json_format_human
+  - bl64_xsv_json_format_machine
+
 ### Changed
 
 - tf
   - Enabled CLI automation flag
+  - Updated hardened vars for opentofu
 
 ## [22.13.0]
 
