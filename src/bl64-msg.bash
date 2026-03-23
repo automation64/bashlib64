@@ -856,7 +856,7 @@ function bl64_msg_show_setup() {
 
   bl64_msg_show_info "$message"
   for variable in "$@"; do
-    [[ -z "${!variable:-}" || ! -v "$variable" ]] && continue
+    [[ ! -v "$variable" || -z "${!variable:-}" ]] && continue
     bl64_msg_show_info "${BL64_MSG_COSMETIC_TAB2}${variable}=${!variable}"
   done
 }
