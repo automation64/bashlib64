@@ -138,8 +138,7 @@ function bl64_tf_run_tofu() {
 
   bl64_dbg_lib_trace_start
   "$BL64_TF_CMD_TOFU" \
-    "$@" \
-    -consolidate-errors
+    "$@"
   bl64_dbg_lib_trace_stop
 }
 
