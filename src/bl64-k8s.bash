@@ -418,12 +418,16 @@ function bl64_k8s_resource_get() {
 function bl64_k8s_run_kubectl_cfg() {
   bl64_dbg_lib_show_function "$@"
   local kubeconfig="${1:-}"
+  local command="${2:-}"
 
   bl64_check_parameter 'kubeconfig' &&
     bl64_check_file "$kubeconfig" 'kubectl config file not found' ||
     return $?
 
+  shift
+  shift
   bl64_k8s_run_kubectl \
+    "$command" \
     --kubeconfig="${kubeconfig}" \
     "$@"
 }
