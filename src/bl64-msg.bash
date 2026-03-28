@@ -861,16 +861,25 @@ function bl64_msg_show_setup() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local message="${1:-$BL64_VAR_DEFAULT}"
   local variable=''
+  local has_values=''
 
   bl64_msg_app_detail_is_enabled || return 0
-  bl64_lib_var_is_default "$message" && message='Executing task with the following parameters'
+  bl64_lib_var_is_default "$message" && message='Configuration parameters:'
   shift
 
-  bl64_msg_show_info "$message"
   for variable in "$@"; do
     [[ ! -v "$variable" || -z "${!variable:-}" ]] && continue
-    bl64_msg_show_info "${BL64_MSG_COSMETIC_TAB2}${variable}=${!variable}"
+    has_values='1'
+    break
   done
+  if [[ -n "$has_values" ]]; then
+    _bl64_msg_print "$BL64_MSG_TYPE_INFO" 'Setup  ' "$message"
+    for variable in "$@"; do
+      [[ ! -v "$variable" || -z "${!variable:-}" ]] && continue
+      _bl64_msg_print "$BL64_MSG_TYPE_INFO" 'Setup  ' "${BL64_MSG_COSMETIC_TAB2}${variable}=${!variable}"
+    done
+  fi
+  return 0
 }
 
 #######################################

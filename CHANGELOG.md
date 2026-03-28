@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - k8s **breaking-change**
   - bl64_k8s_run_kubectl: removed kubeconfig parameter
   - harden: updated shell envs to unset
+- msg
+  - bl64_msg_show_setup: show only when there are non-empty variables
 
 ## [22.13.0]
 
