@@ -2,6 +2,37 @@
 # BashLib64 / Module / Functions / Interact with Kubernetes
 #######################################
 
+#
+# Private functions
+#
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_k8s_harden_kubectl() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited HELM_* shell variables'
+  bl64_dbg_lib_trace_start
+  unset POD_NAMESPACE
+  unset KUBECONFIG
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#
+# Public functions
+#
+
 #######################################
 # Set label on resource
 #
@@ -402,7 +433,7 @@ function bl64_k8s_run_kubectl() {
 
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_K8S_SET_VERBOSE_TRACE"
 
-  bl64_k8s_blank_kubectl
+  _bl64_k8s_harden_kubectl
   bl64_dbg_lib_command_trace_start
   # shellcheck disable=SC2086
   "$BL64_K8S_CMD_KUBECTL" \
@@ -439,7 +470,7 @@ function bl64_k8s_run_kubectl_plugin() {
   bl64_check_parameters_none "$#" 'missing kubectl command' ||
     return $?
 
-  bl64_k8s_blank_kubectl
+  _bl64_k8s_harden_kubectl
   if ! bl64_lib_var_is_default "$kubeconfig"; then
     bl64_check_file "$kubeconfig" 'kubectl config file not found' ||
       return $?
@@ -451,29 +482,6 @@ function bl64_k8s_run_kubectl_plugin() {
   "$BL64_K8S_CMD_KUBECTL" \
     "$@"
   bl64_dbg_lib_command_trace_stop
-}
-
-#######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function bl64_k8s_blank_kubectl() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited HELM_* shell variables'
-  bl64_dbg_lib_trace_start
-  unset POD_NAMESPACE
-  unset KUBECONFIG
-  bl64_dbg_lib_trace_stop
-
-  return 0
 }
 
 #######################################

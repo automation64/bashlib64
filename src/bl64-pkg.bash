@@ -2,53 +2,9 @@
 # BashLib64 / Module / Functions / Manage native OS packages
 #######################################
 
-#######################################
-# Add package repository
 #
-# * Covers simple uses cases that can be applied to most OS versions:
-#   * YUM: repo package definition created
-#   * APT: repo package definition created, GPGkey downloaded and installed
-# * Package cache is not refreshed
-# * No replacement done if already present
+# Private functions
 #
-# Requirements:
-#   * root privilege (sudo)
-# Arguments:
-#   $1: repository name. Format: alphanumeric, _-
-#   $2: repository source. Format: URL
-#   $3: GPGKey source. Format: URL. Default: $BL64_VAR_NONE
-#   $4: extra package specific parameter. For APT: suite. Default: empty
-#   $5: extra package specific parameter. For APT: component. Default: empty
-#
-# Outputs:
-#   STDOUT: package manager stderr
-#   STDERR: package manager stderr
-# Returns:
-#   package manager exit status
-#######################################
-function bl64_pkg_repository_add() {
-  bl64_dbg_lib_show_function "$@"
-  local name="${1:-}"
-  local source="${2:-}"
-  local gpgkey="${3:-${BL64_VAR_NONE}}"
-  local extra1="${4:-}"
-  local extra2="${5:-}"
-
-  bl64_check_privilege_root &&
-    bl64_check_parameter 'name' &&
-    bl64_check_parameter 'source' ||
-    return $?
-
-  case "$BL64_OS_DISTRO" in
-    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-      _bl64_pkg_repository_add_apt "$name" "$source" "$gpgkey" "$extra1" "$extra2"
-      ;;
-    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-      _bl64_pkg_repository_add_yum "$name" "$source" "$gpgkey"
-      ;;
-    *) bl64_check_alert_unsupported ;;
-  esac
-}
 
 function _bl64_pkg_repository_add_yum() {
   bl64_dbg_lib_show_function "$@"
@@ -133,6 +89,82 @@ function _bl64_pkg_repository_add_apt() {
       >"$definition"
   fi
   [[ -f "$definition" ]] && bl64_fs_run_chmod "$file_mode" "$definition"
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_pkg_harden_apt() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited DEB* shell variables'
+  bl64_dbg_lib_trace_start
+  unset DEBIAN_FRONTEND
+  unset DEBCONF_TERSE
+  unset DEBCONF_NOWARNINGS
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#
+# Public functions
+#
+
+#######################################
+# Add package repository
+#
+# * Covers simple uses cases that can be applied to most OS versions:
+#   * YUM: repo package definition created
+#   * APT: repo package definition created, GPGkey downloaded and installed
+# * Package cache is not refreshed
+# * No replacement done if already present
+#
+# Requirements:
+#   * root privilege (sudo)
+# Arguments:
+#   $1: repository name. Format: alphanumeric, _-
+#   $2: repository source. Format: URL
+#   $3: GPGKey source. Format: URL. Default: $BL64_VAR_NONE
+#   $4: extra package specific parameter. For APT: suite. Default: empty
+#   $5: extra package specific parameter. For APT: component. Default: empty
+#
+# Outputs:
+#   STDOUT: package manager stderr
+#   STDERR: package manager stderr
+# Returns:
+#   package manager exit status
+#######################################
+function bl64_pkg_repository_add() {
+  bl64_dbg_lib_show_function "$@"
+  local name="${1:-}"
+  local source="${2:-}"
+  local gpgkey="${3:-${BL64_VAR_NONE}}"
+  local extra1="${4:-}"
+  local extra2="${5:-}"
+
+  bl64_check_privilege_root &&
+    bl64_check_parameter 'name' &&
+    bl64_check_parameter 'source' ||
+    return $?
+
+  case "$BL64_OS_DISTRO" in
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      _bl64_pkg_repository_add_apt "$name" "$source" "$gpgkey" "$extra1" "$extra2"
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      _bl64_pkg_repository_add_yum "$name" "$source" "$gpgkey"
+      ;;
+    *) bl64_check_alert_unsupported ;;
+  esac
 }
 
 #######################################
@@ -549,30 +581,6 @@ function bl64_pkg_run_apt() {
   # shellcheck disable=SC2086
   "$BL64_PKG_CMD_APT" $verbose "$@"
   bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_pkg_harden_apt() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited DEB* shell variables'
-  bl64_dbg_lib_trace_start
-  unset DEBIAN_FRONTEND
-  unset DEBCONF_TERSE
-  unset DEBCONF_NOWARNINGS
-  bl64_dbg_lib_trace_stop
-
-  return 0
 }
 
 #######################################

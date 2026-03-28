@@ -2,6 +2,102 @@
 # BashLib64 / Module / Functions / Interact with system-wide Python
 #######################################
 
+#
+# Private functions
+#
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_py_harden_python() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited PYTHON* shell variables'
+  bl64_dbg_lib_trace_start
+  unset PYTHONHOME
+  unset PYTHONPATH
+  unset PYTHONSTARTUP
+  unset PYTHONDEBUG
+  unset PYTHONUSERBASE
+  unset PYTHONEXECUTABLE
+  unset PYTHONWARNINGS
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_py_harden_pip() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited PIP* shell variables'
+  bl64_dbg_lib_trace_start
+  unset PIP_GLOBAL
+  unset PIP_USER
+  unset PIP_SITE
+  bl64_dbg_lib_trace_stop
+
+  bl64_dbg_lib_show_info 'normalize PIP_* shell variables'
+  bl64_dbg_lib_trace_start
+  export PIP_CONFIG_FILE='os.devnull'
+  export PIP_DISABLE_PIP_VERSION_CHECK='yes'
+  export PIP_NO_INPUT='yes'
+  export PIP_NO_PYTHON_VERSION_WARNING='yes'
+  export PIP_NO_WARN_SCRIPT_LOCATION='yes'
+  export PIP_YES='yes'
+  bl64_dbg_lib_trace_stop
+  return 0
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_py_harden_pipx() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited PIPX* shell variables'
+  bl64_dbg_lib_trace_start
+  bl64_dbg_lib_trace_stop
+  unset PIPX_HOME
+  unset PIPX_GLOBAL_HOME
+  unset PIPX_BIN_DIR
+  unset PIPX_GLOBAL_BIN_DIR
+  unset PIPX_MAN_DIR
+  unset PIPX_GLOBAL_MAN_DIR
+  unset PIPX_DEFAULT_PYTHON
+  return 0
+}
+
+#
+# Public functions
+#
+
 #######################################
 # Create virtual environment
 #
@@ -252,34 +348,6 @@ function bl64_py_run_python() {
 }
 
 #######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_py_harden_python() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited PYTHON* shell variables'
-  bl64_dbg_lib_trace_start
-  unset PYTHONHOME
-  unset PYTHONPATH
-  unset PYTHONSTARTUP
-  unset PYTHONDEBUG
-  unset PYTHONUSERBASE
-  unset PYTHONEXECUTABLE
-  unset PYTHONWARNINGS
-  bl64_dbg_lib_trace_stop
-
-  return 0
-}
-
-#######################################
 # Python PIP wrapper
 #
 # * Uses global ephemeral settings when configured for temporal and cache
@@ -320,39 +388,6 @@ function bl64_py_run_pip() {
 }
 
 #######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_py_harden_pip() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited PIP* shell variables'
-  bl64_dbg_lib_trace_start
-  unset PIP_GLOBAL
-  unset PIP_USER
-  unset PIP_SITE
-  bl64_dbg_lib_trace_stop
-
-  bl64_dbg_lib_show_info 'normalize PIP_* shell variables'
-  bl64_dbg_lib_trace_start
-  export PIP_CONFIG_FILE='os.devnull'
-  export PIP_DISABLE_PIP_VERSION_CHECK='yes'
-  export PIP_NO_INPUT='yes'
-  export PIP_NO_PYTHON_VERSION_WARNING='yes'
-  export PIP_NO_WARN_SCRIPT_LOCATION='yes'
-  export PIP_YES='yes'
-  bl64_dbg_lib_trace_stop
-  return 0
-}
-
-#######################################
 # Python PIPX wrapper
 #
 # Arguments:
@@ -382,31 +417,4 @@ function bl64_py_run_pipx() {
     -m 'pipx' \
     $debug $verbose $cache \
     "$@"
-}
-
-#######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_py_harden_pipx() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited PIPX* shell variables'
-  bl64_dbg_lib_trace_start
-  bl64_dbg_lib_trace_stop
-  unset PIPX_HOME
-  unset PIPX_GLOBAL_HOME
-  unset PIPX_BIN_DIR
-  unset PIPX_GLOBAL_BIN_DIR
-  unset PIPX_MAN_DIR
-  unset PIPX_GLOBAL_MAN_DIR
-  unset PIPX_DEFAULT_PYTHON
-  return 0
 }

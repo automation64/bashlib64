@@ -2,6 +2,54 @@
 # BashLib64 / Module / Functions / Interact with HLM
 #######################################
 
+#
+# Private functions
+#
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_hlm_harden_helm() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited HELM_* shell variables'
+  bl64_dbg_lib_trace_start
+  unset HELM_CACHE_HOME
+  unset HELM_CONFIG_HOME
+  unset HELM_DATA_HOME
+  unset HELM_DEBUG
+  unset HELM_DRIVER
+  unset HELM_DRIVER_SQL_CONNECTION_STRING
+  unset HELM_MAX_HISTORY
+  unset HELM_NAMESPACE
+  unset HELM_NO_PLUGINS
+  unset HELM_PLUGINS
+  unset HELM_REGISTRY_CONFIG
+  unset HELM_REPOSITORY_CACHE
+  unset HELM_REPOSITORY_CONFIG
+  unset HELM_KUBEAPISERVER
+  unset HELM_KUBECAFILE
+  unset HELM_KUBEASGROUPS
+  unset HELM_KUBEASUSER
+  unset HELM_KUBECONTEXT
+  unset HELM_KUBETOKEN
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#
+# Public functions
+#
+
 #######################################
 # Add a helm repository to the local host
 #
@@ -125,44 +173,4 @@ function bl64_hlm_run_helm() {
     $verbosity \
     "$@"
   bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_hlm_harden_helm() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited HELM_* shell variables'
-  bl64_dbg_lib_trace_start
-  unset HELM_CACHE_HOME
-  unset HELM_CONFIG_HOME
-  unset HELM_DATA_HOME
-  unset HELM_DEBUG
-  unset HELM_DRIVER
-  unset HELM_DRIVER_SQL_CONNECTION_STRING
-  unset HELM_MAX_HISTORY
-  unset HELM_NAMESPACE
-  unset HELM_NO_PLUGINS
-  unset HELM_PLUGINS
-  unset HELM_REGISTRY_CONFIG
-  unset HELM_REPOSITORY_CACHE
-  unset HELM_REPOSITORY_CONFIG
-  unset HELM_KUBEAPISERVER
-  unset HELM_KUBECAFILE
-  unset HELM_KUBEASGROUPS
-  unset HELM_KUBEASUSER
-  unset HELM_KUBECONTEXT
-  unset HELM_KUBETOKEN
-  bl64_dbg_lib_trace_stop
-
-  return 0
 }

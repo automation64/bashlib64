@@ -2,6 +2,72 @@
 # BashLib64 / Module / Functions / Interact with GCP
 #######################################
 
+#
+# Private functions
+#
+
+function _bl64_gcp_configure() {
+  bl64_dbg_lib_show_function
+  if [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_VAR_FALSE" ]]; then
+    bl64_msg_show_lib_subtask "create private GCP configuration (${BL64_GCP_CONFIGURATION_NAME})"
+    bl64_gcp_run_gcloud \
+      config \
+      configurations \
+      create "$BL64_GCP_CONFIGURATION_NAME" &&
+      BL64_GCP_CONFIGURATION_CREATED="$BL64_VAR_TRUE"
+  fi
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_gcp_harden_gcloud() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited _* shell variables'
+  bl64_dbg_lib_trace_start
+  unset CLOUDSDK_CONFIG
+  unset CLOUDSDK_ACTIVE_CONFIG_NAME
+
+  unset CLOUDSDK_AUTH_ACCESS_TOKEN_FILE
+  unset CLOUDSDK_AUTH_DISABLE_CREDENTIALS
+  unset CLOUDSDK_AUTH_IMPERSONATE_SERVICE_ACCOUNT
+  unset CLOUDSDK_AUTH_TOKEN_HOST
+
+  unset CLOUDSDK_CORE_ACCOUNT
+  unset CLOUDSDK_CORE_CONSOLE_LOG_FORMAT
+  unset CLOUDSDK_CORE_CUSTOM_CA_CERTS_FILE
+  unset CLOUDSDK_CORE_DEFAULT_REGIONAL_BACKEND_SERVICE
+  unset CLOUDSDK_CORE_DISABLE_COLOR
+  unset CLOUDSDK_CORE_DISABLE_FILE_LOGGING
+  unset CLOUDSDK_CORE_DISABLE_PROMPTS
+  unset CLOUDSDK_CORE_DISABLE_USAGE_REPORTING
+  unset CLOUDSDK_CORE_ENABLE_FEATURE_FLAGS
+  unset CLOUDSDK_CORE_LOG_HTTP
+  unset CLOUDSDK_CORE_MAX_LOG_DAYS
+  unset CLOUDSDK_CORE_PASS_CREDENTIALS_TO_GSUTIL
+  unset CLOUDSDK_CORE_PROJECT
+  unset CLOUDSDK_CORE_SHOW_STRUCTURED_LOGS
+  unset CLOUDSDK_CORE_TRACE_TOKEN
+  unset CLOUDSDK_CORE_USER_OUTPUT_ENABLED
+  unset CLOUDSDK_CORE_VERBOSITY
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#
+# Public functions
+#
+
 #######################################
 # Command wrapper with verbose, debug and common options
 #
@@ -86,64 +152,6 @@ function bl64_gcp_login_sa() {
     activate-service-account \
     --key-file "$key_file" \
     --project "$project"
-}
-
-function _bl64_gcp_configure() {
-  bl64_dbg_lib_show_function
-  if [[ "$BL64_GCP_CONFIGURATION_CREATED" == "$BL64_VAR_FALSE" ]]; then
-    bl64_msg_show_lib_subtask "create private GCP configuration (${BL64_GCP_CONFIGURATION_NAME})"
-    bl64_gcp_run_gcloud \
-      config \
-      configurations \
-      create "$BL64_GCP_CONFIGURATION_NAME" &&
-      BL64_GCP_CONFIGURATION_CREATED="$BL64_VAR_TRUE"
-  fi
-}
-
-#######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_gcp_harden_gcloud() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited _* shell variables'
-  bl64_dbg_lib_trace_start
-  unset CLOUDSDK_CONFIG
-  unset CLOUDSDK_ACTIVE_CONFIG_NAME
-
-  unset CLOUDSDK_AUTH_ACCESS_TOKEN_FILE
-  unset CLOUDSDK_AUTH_DISABLE_CREDENTIALS
-  unset CLOUDSDK_AUTH_IMPERSONATE_SERVICE_ACCOUNT
-  unset CLOUDSDK_AUTH_TOKEN_HOST
-
-  unset CLOUDSDK_CORE_ACCOUNT
-  unset CLOUDSDK_CORE_CONSOLE_LOG_FORMAT
-  unset CLOUDSDK_CORE_CUSTOM_CA_CERTS_FILE
-  unset CLOUDSDK_CORE_DEFAULT_REGIONAL_BACKEND_SERVICE
-  unset CLOUDSDK_CORE_DISABLE_COLOR
-  unset CLOUDSDK_CORE_DISABLE_FILE_LOGGING
-  unset CLOUDSDK_CORE_DISABLE_PROMPTS
-  unset CLOUDSDK_CORE_DISABLE_USAGE_REPORTING
-  unset CLOUDSDK_CORE_ENABLE_FEATURE_FLAGS
-  unset CLOUDSDK_CORE_LOG_HTTP
-  unset CLOUDSDK_CORE_MAX_LOG_DAYS
-  unset CLOUDSDK_CORE_PASS_CREDENTIALS_TO_GSUTIL
-  unset CLOUDSDK_CORE_PROJECT
-  unset CLOUDSDK_CORE_SHOW_STRUCTURED_LOGS
-  unset CLOUDSDK_CORE_TRACE_TOKEN
-  unset CLOUDSDK_CORE_USER_OUTPUT_ENABLED
-  unset CLOUDSDK_CORE_VERBOSITY
-  bl64_dbg_lib_trace_stop
-
-  return 0
 }
 
 #######################################
