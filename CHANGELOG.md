@@ -5,19 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [22.14.0]
+## [23.0.0]
 
 ### Added
 
 - xsv
   - bl64_xsv_json_format_human
   - bl64_xsv_json_format_machine
+- k8s
+  - bl64_k8s_run_kubectl_cfg: run kubectl with kubeconfig parameter (ported from bl64_k8s_run_kubectl)
 
 ### Changed
 
 - tf
   - Enabled CLI automation flag
   - Updated hardened vars for opentofu
+- k8s **breaking-change**
+  - bl64_k8s_run_kubectl: removed kubeconfig parameter
+  - harden: updated shell envs to unset
 
 ## [22.13.0]
 
