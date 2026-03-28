@@ -60,14 +60,14 @@
   # Lib / TestmanSH / Command
   export DEV_LIB_TESTMANSH_BIN="${DEV_LIB_TESTMANSH_BIN:-}"
   if [[ -z "$DEV_LIB_TESTMANSH_BIN" ]]; then
-    DEV_LIB_TESTMANSH_BIN="$(bl64_bsh_command_locate_user 'testmansh')"
+    DEV_LIB_TESTMANSH_BIN="$(dev_bin64_lib_locate 'testmansh')"
     if [[ -z "$DEV_LIB_TESTMANSH_BIN" ]]; then
       DEV_LIB_TESTMANSH_BIN="${DEV_LIB_TESTMANSH_TARGET}/testmansh"
       if [[ ! -x "${DEV_LIB_TESTMANSH_BIN}" ]]; then
         DEV_LIB_TESTMANSH_SKIP='NO'
       fi
     else
-      DEV_LIB_TESTMANSH_TARGET="$(bl64_fmt_path_get_basename "$DEV_LIB_TESTMANSH_BIN")"
+      DEV_LIB_TESTMANSH_TARGET="$(dev_bin64_lib_basename "$DEV_LIB_TESTMANSH_BIN")"
     fi
   fi
 }

@@ -184,7 +184,7 @@ function bl64_lib_script_set_identity() {
 #   >0: failed to set
 #######################################
 function bl64_lib_script_version_set() {
-  local script_version="$1"
+  local script_version="${1:-}"
   # shellcheck disable=SC2086
   [[ -z "$script_version" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
   BL64_SCRIPT_VERSION="$script_version"
@@ -203,7 +203,7 @@ function bl64_lib_script_version_set() {
 #   >0: version is not ok
 #######################################
 function bl64_lib_script_minver_check() {
-  local minimum_version="$1"
+  local minimum_version="${1:-}"
   local -a a_parts
   local -a b_parts
 

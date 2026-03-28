@@ -24,7 +24,7 @@
 {
   # Env / ShellCheck / Module environment definition version
   export DEV_ENV_SHELLCHECK_ID='shellcheck'
-  export DEV_ENV_SHELLCHECK_VERSION='2.0.0'
+  export DEV_ENV_SHELLCHECK_VERSION='2.1.0'
   # Env / ShellCheck / Log path
   export DEV_ENV_SHELLCHECK_PATH_LOGS="${DEV_PATH_LOGS}/${DEV_ENV_SHELLCHECK_ID}"
 
@@ -36,6 +36,11 @@
   export DEV_LIB_SHELLCHECK_TARGET="${DEV_PATH_LIB}/${DEV_ENV_SHELLCHECK_ID}"
   # Lib / ShellCheck / Configuration
   export DEV_LIB_SHELLCHECK_CFG="${DEV_PATH_ROOT}/.shellcheckrc"
+
+  # Lint / ShellCheck / Format
+  export DEV_LINT_SHELLCHECK_FORMAT='json'
+  # Lint / ShellCheck / Report
+  export DEV_LINT_SHELLCHECK_PATH_REPORT="${DEV_ENV_SHELLCHECK_PATH_LOGS}/${DEV_ENV_SHELLCHECK_ID}-lint.${DEV_LINT_SHELLCHECK_FORMAT}"
 }
 
 #
@@ -48,10 +53,6 @@
 {
   # Lint / ShellCheck / Target
   export DEV_LINT_SHELLCHECK_TARGET="${DEV_LINT_SHELLCHECK_TARGET:-${DEV_BASE_SRC}}"
-  # Lint / ShellCheck / Format
-  export DEV_LINT_SHELLCHECK_FORMAT="${DEV_LINT_SHELLCHECK_FORMAT:-tty}"
-  # Lint / ShellCheck / Report
-  export DEV_LINT_SHELLCHECK_PATH_REPORT="${DEV_ENV_SHELLCHECK_PATH_LOGS}/${DEV_ENV_SHELLCHECK_ID}.${DEV_LINT_SHELLCHECK_FORMAT}"
 }
 
 #
@@ -65,14 +66,14 @@
   # Lib / ShellCheck / Command
   export DEV_LIB_SHELLCHECK_BIN="${DEV_LIB_SHELLCHECK_BIN:-}"
   if [[ -z "$DEV_LIB_SHELLCHECK_BIN" ]]; then
-    DEV_LIB_SHELLCHECK_BIN="$(bl64_bsh_command_locate_user 'shellcheck')"
+    DEV_LIB_SHELLCHECK_BIN="$(dev_bin64_lib_locate 'shellcheck')"
     if [[ -z "$DEV_LIB_SHELLCHECK_BIN" ]]; then
       DEV_LIB_SHELLCHECK_BIN="${DEV_LIB_SHELLCHECK_TARGET}/shellcheck"
       if [[ ! -x "${DEV_LIB_SHELLCHECK_BIN}" ]]; then
         DEV_LIB_SHELLCHECK_SKIP='NO'
       fi
     else
-      DEV_LIB_SHELLCHECK_TARGET="$(bl64_fmt_path_get_basename "$DEV_LIB_SHELLCHECK_BIN")"
+      DEV_LIB_SHELLCHECK_TARGET="$(dev_bin64_lib_basename "$DEV_LIB_SHELLCHECK_BIN")"
     fi
   fi
 }

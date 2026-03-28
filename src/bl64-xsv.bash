@@ -16,7 +16,7 @@
 #######################################
 function bl64_xsv_dump() {
   bl64_dbg_lib_show_function "$@"
-  local source="$1"
+  local source="${1:-}"
 
   bl64_check_parameter 'source' &&
     bl64_check_file "$source" 'source file not found' || return $?
@@ -46,14 +46,13 @@ function bl64_xsv_dump() {
 #######################################
 function bl64_xsv_search_records() {
   bl64_dbg_lib_show_function "$@"
-  local values="$1"
+  local values="${1:-}"
   local source="${2:--}"
   local keys="${3:-1}"
   local fields="${4:-0}"
   local fs_src="${5:-$BL64_XSV_FS_COLON}"
   local fs_out="${6:-$BL64_XSV_FS_COLON}"
 
-  # shellcheck disable=SC2086
   bl64_check_parameter 'values' 'search value' || return $?
 
   bl64_dbg_lib_show_comments 'run in a subshell to avoid leaving exported vars'
@@ -188,4 +187,53 @@ function bl64_xsv_run_pkl() {
   bl64_dbg_lib_trace_start
   "$BL64_XSV_CMD_PKL" "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Normalize JSON data for human consumption
+#
+# Arguments:
+#   $1: Full path to the file or nothing for STDIN. Default: STDIN
+# Outputs:
+#   STDOUT: file content
+#   STDERR: Error messages
+# Returns:
+#   0: successfull execution
+#   BL64_LIB_ERROR_FILE_*
+#######################################
+function bl64_xsv_json_format_human() {
+  bl64_dbg_lib_show_function "$@"
+  local source="${1:-}"
+
+  if [[ -n "$source" ]]; then
+    bl64_check_file "$source" || return $?
+  fi
+
+  bl64_xsv_run_jq \
+    '.' ${source:+"$source"}
+}
+
+#######################################
+# Normalize JSON data for machine consumption
+#
+# Arguments:
+#   $1: Full path to the file or nothing for STDIN. Default: STDIN
+# Outputs:
+#   STDOUT: file content
+#   STDERR: Error messages
+# Returns:
+#   0: successfull execution
+#   BL64_LIB_ERROR_FILE_*
+#######################################
+function bl64_xsv_json_format_machine() {
+  bl64_dbg_lib_show_function "$@"
+  local source="${1:-}"
+
+  if [[ -n "$source" ]]; then
+    bl64_check_file "$source" || return $?
+  fi
+
+  bl64_xsv_run_jq \
+    --compact-output \
+    '.' ${source:+"$source"}
 }

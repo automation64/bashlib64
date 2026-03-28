@@ -13,16 +13,13 @@
 # limitations under the License.
 #######################################
 
-# shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
-# shellcheck source-path=/opt/bl64
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
-# shellcheck source-path=bin
 source ./bin/dev-env-act || exit 1
 
 declare MY_WORKFLOWS="${1:-${DEV_TEST_ACT_WORKFLOWS}}"
@@ -35,10 +32,14 @@ function my_test() {
     bl64_msg_show_phase "run GitHub Actions workflow (${job})"
     # shellcheck disable=SC2086
     "$DEV_LIB_ACT_BIN" \
+      --strict \
+      --use-gitignore \
       --env-file=/dev/null \
       --concurrent-jobs="$DEV_TEST_ACT_JOBS_MAX" \
-      --action-cache-path "$DEV_LIB_ACT_PATH_CACHE_ACTION" \
-      --cache-server-path "$DEV_LIB_ACT_PATH_CACHE_SERVER" \
+      --artifact-server-port="$DEV_LIB_ACT_PORT_ARTIFACT" \
+      --artifact-server-path="$DEV_LIB_ACT_PATH_ARTIFACT" \
+      --action-cache-path="$DEV_LIB_ACT_PATH_CACHE_ACTION" \
+      --cache-server-path="$DEV_LIB_ACT_PATH_CACHE_SERVER" \
       --job ${job} ||
       return $?
   done
@@ -47,13 +48,13 @@ function my_test() {
 function my_initialize() {
   bl64_dbg_app_show_function
   dev_bin64_task_initialize &&
-  bl64_check_command "$DEV_LIB_ACT_BIN" &&
+    bl64_check_command "$DEV_LIB_ACT_BIN" &&
     bl64_check_parameter 'MY_WORKFLOWS' &&
     dev_bin64_task_show_setup \
       'MY_WORKFLOWS'
 }
 
-bl64_lib_script_version_set '1.3.0'
+bl64_lib_script_version_set '1.4.0'
 bl64_msg_help_about_set 'Run GitHub workflows'
 dev_bin64_initialize && my_initialize || exit $?
 

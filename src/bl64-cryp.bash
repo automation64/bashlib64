@@ -134,7 +134,7 @@ function bl64_cryp_run_sha256sum() {
 #######################################
 function bl64_cryp_gpg_key_is_armored() {
   bl64_dbg_lib_show_function "$@"
-  local key_file="$1"
+  local key_file="${1:-}"
 
   bl64_check_file "$key_file" ||
     return $?
@@ -167,7 +167,7 @@ function bl64_cryp_gpg_key_is_armored() {
 #######################################
 function bl64_cryp_gpg_key_armor() {
   bl64_dbg_lib_show_function "$@"
-  local source_key_file="$1"
+  local source_key_file="${1:-}"
   local target_key_file="${2:-${source_key_file}.asc}"
   local file_mode="${3:-${BL64_VAR_DEFAULT}}"
   local file_user="${4:-${BL64_VAR_DEFAULT}}"
@@ -212,7 +212,7 @@ function bl64_cryp_gpg_key_armor() {
 #######################################
 function bl64_cryp_gpg_key_dearmor() {
   bl64_dbg_lib_show_function "$@"
-  local source_key_file="$1"
+  local source_key_file="${1:-}"
   local target_key_file="${2:-}"
   local file_mode="${3:-${BL64_VAR_DEFAULT}}"
   local file_user="${4:-${BL64_VAR_DEFAULT}}"
@@ -267,7 +267,7 @@ function bl64_cryp_gpg_key_dearmor() {
 #######################################
 function bl64_cryp_key_download() {
   bl64_dbg_lib_show_function "$@"
-  local source_url="$1"
+  local source_url="${1:-}"
   local target_key_file="${2:-}"
   local replace="${3:-${BL64_VAR_DEFAULT}}"
   local file_mode="${4:-${BL64_VAR_DEFAULT}}"

@@ -500,7 +500,7 @@ function _bl64_os_set_distro() {
 #######################################
 function bl64_os_set_lang() {
   bl64_dbg_lib_show_function "$@"
-  local locale="$1"
+  local locale="${1:-}"
 
   bl64_check_parameter 'locale' || return $?
 

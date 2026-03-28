@@ -87,24 +87,24 @@ function bl64_dbg_setup() {
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
 function bl64_dbg_set_level() {
-  local level="$1"
+  local level="${1:-}"
   case "$level" in
-  "$BL64_DBG_TARGET_NONE") bl64_dbg_all_disable ;;
-  "$BL64_DBG_TARGET_APP_TRACE") bl64_dbg_app_trace_enable ;;
-  "$BL64_DBG_TARGET_APP_TASK") bl64_dbg_app_task_enable ;;
-  "$BL64_DBG_TARGET_APP_CMD") bl64_dbg_app_command_enable ;;
-  "$BL64_DBG_TARGET_APP_CUSTOM_1") bl64_dbg_app_custom_1_enable ;;
-  "$BL64_DBG_TARGET_APP_CUSTOM_2") bl64_dbg_app_custom_2_enable ;;
-  "$BL64_DBG_TARGET_APP_CUSTOM_3") bl64_dbg_app_custom_3_enable ;;
-  "$BL64_DBG_TARGET_APP_ALL") bl64_dbg_app_enable ;;
-  "$BL64_DBG_TARGET_LIB_TRACE") bl64_dbg_lib_trace_enable ;;
-  "$BL64_DBG_TARGET_LIB_TASK") bl64_dbg_lib_task_enable ;;
-  "$BL64_DBG_TARGET_LIB_CMD") bl64_dbg_lib_command_enable ;;
-  "$BL64_DBG_TARGET_LIB_ALL") bl64_dbg_lib_enable ;;
-  "$BL64_DBG_TARGET_ALL") bl64_dbg_all_enable ;;
-  *)
-    _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] invalid debugging level. Must be one of: ${BL64_DBG_TARGET_ALL}|${BL64_DBG_TARGET_APP_ALL}|${BL64_DBG_TARGET_LIB_ALL}|${BL64_DBG_TARGET_NONE}"
-    return "$BL64_LIB_ERROR_PARAMETER_INVALID"
-    ;;
+    "$BL64_DBG_TARGET_NONE") bl64_dbg_all_disable ;;
+    "$BL64_DBG_TARGET_APP_TRACE") bl64_dbg_app_trace_enable ;;
+    "$BL64_DBG_TARGET_APP_TASK") bl64_dbg_app_task_enable ;;
+    "$BL64_DBG_TARGET_APP_CMD") bl64_dbg_app_command_enable ;;
+    "$BL64_DBG_TARGET_APP_CUSTOM_1") bl64_dbg_app_custom_1_enable ;;
+    "$BL64_DBG_TARGET_APP_CUSTOM_2") bl64_dbg_app_custom_2_enable ;;
+    "$BL64_DBG_TARGET_APP_CUSTOM_3") bl64_dbg_app_custom_3_enable ;;
+    "$BL64_DBG_TARGET_APP_ALL") bl64_dbg_app_enable ;;
+    "$BL64_DBG_TARGET_LIB_TRACE") bl64_dbg_lib_trace_enable ;;
+    "$BL64_DBG_TARGET_LIB_TASK") bl64_dbg_lib_task_enable ;;
+    "$BL64_DBG_TARGET_LIB_CMD") bl64_dbg_lib_command_enable ;;
+    "$BL64_DBG_TARGET_LIB_ALL") bl64_dbg_lib_enable ;;
+    "$BL64_DBG_TARGET_ALL") bl64_dbg_all_enable ;;
+    *)
+      _bl64_dbg_show "[${FUNCNAME[1]:-NONE}] invalid debugging level. Must be one of: ${BL64_DBG_TARGET_ALL}|${BL64_DBG_TARGET_APP_ALL}|${BL64_DBG_TARGET_LIB_ALL}|${BL64_DBG_TARGET_NONE}"
+      return "$BL64_LIB_ERROR_PARAMETER_INVALID"
+      ;;
   esac
 }

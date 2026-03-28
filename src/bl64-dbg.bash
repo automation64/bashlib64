@@ -71,12 +71,12 @@ function bl64_dbg_lib_msg_enabled {
 #
 
 function _bl64_dbg_show() {
-  local message="$1"
+  local message="${1:-}"
   printf '%s: %s\n' '[Debug]' "$message" >&2
 }
 
 function _bl64_dbg_dryrun_show() {
-  local message="$1"
+  local message="${1:-}"
   printf '%s: %s\n' '[Dry-Run]' "$message"
 }
 
@@ -557,4 +557,24 @@ function bl64_dbg_lib_dryrun_show() {
   bl64_dbg_lib_dryrun_is_enabled || return 0
   _bl64_dbg_dryrun_show "$@"
   return 0
+}
+
+#######################################
+# Halt script execution
+#
+# * Use as debug breakpoint
+# * Should never be used in production code
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Break warning
+# Returns:
+#   1: always error
+#######################################
+function bl64_dbg_app_breakpoint() {
+  _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BREAKPOINT} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_BREAKPOINT}: REMOVE THIS BREAKPOINT FROM THE CODE AFTER TESTING"
+  bl64_dbg_app_task_is_enabled || return 0
+  return 1
 }

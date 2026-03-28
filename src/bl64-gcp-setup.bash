@@ -30,7 +30,6 @@ function bl64_gcp_setup() {
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
     _bl64_gcp_set_command "$gcloud_bin" &&
-    _bl64_gcp_set_options &&
     BL64_GCP_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'gcp'
 }
@@ -52,26 +51,6 @@ function bl64_gcp_setup() {
 function _bl64_gcp_set_command() {
   bl64_dbg_lib_show_function "$@"
   BL64_GCP_CMD_GCLOUD="$(bl64_bsh_command_import 'gcloud' "$@")"
-}
-
-#######################################
-# Create command sets for common options
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_gcp_set_options() {
-  bl64_dbg_lib_show_function
-
-  # shellcheck disable=SC2034
-  BL64_GCP_SET_FORMAT_YAML='--format yaml' &&
-    BL64_GCP_SET_FORMAT_TEXT='--format text' &&
-    BL64_GCP_SET_FORMAT_JSON='--format json'
 }
 
 #######################################

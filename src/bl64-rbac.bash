@@ -8,7 +8,7 @@
 
 function _bl64_rbac_add_root() {
   bl64_dbg_lib_show_function "$@"
-  local user="$1"
+  local user="${1:-}"
   local new_file="${BL64_RBAC_FILE_SUDOERS}-TMP"
 
   bl64_msg_show_lib_subtask "modify sudoers file (${BL64_RBAC_FILE_SUDOERS})"
@@ -48,7 +48,7 @@ function _bl64_rbac_add_root() {
 #######################################
 function bl64_rbac_add_root() {
   bl64_dbg_lib_show_function "$@"
-  local user="$1"
+  local user="${1:-}"
   local -i status=0
 
   bl64_check_privilege_root &&
@@ -59,7 +59,7 @@ function bl64_rbac_add_root() {
   umask 0266
 
   if [[ -s "$BL64_RBAC_FILE_SUDOERS" ]]; then
-      bl64_fs_file_backup "$BL64_RBAC_FILE_SUDOERS" &&
+    bl64_fs_file_backup "$BL64_RBAC_FILE_SUDOERS" &&
       _bl64_rbac_add_root "$user" &&
       bl64_fs_file_restore "$BL64_RBAC_FILE_SUDOERS" $?
   else
@@ -83,7 +83,7 @@ function bl64_rbac_add_root() {
 #######################################
 function bl64_rbac_check_sudoers() {
   bl64_dbg_lib_show_function "$@"
-  local sudoers="$1"
+  local sudoers="${1:-}"
   local -i status=0
   local debug="$BL64_RBAC_SET_SUDO_QUIET"
 

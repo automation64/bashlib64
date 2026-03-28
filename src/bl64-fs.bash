@@ -123,9 +123,9 @@ function bl64_fs_fix_permissions() {
 
 function _bl64_fs_path_permission_set_file() {
   bl64_dbg_lib_show_function "$@"
-  local mode="$1"
-  local recursive="$2"
-  local path="$3"
+  local mode="${1:-}"
+  local recursive="${2:-}"
+  local path="${3:-}"
 
   bl64_lib_var_is_default "$mode" && return 0
   bl64_msg_show_lib_subtask "set file permissions (${file_mode} ${BL64_MSG_COSMETIC_ARROW} ${path})"
@@ -144,9 +144,9 @@ function _bl64_fs_path_permission_set_file() {
 
 function _bl64_fs_path_permission_set_dir() {
   bl64_dbg_lib_show_function "$@"
-  local mode="$1"
-  local recursive="$2"
-  local path="$3"
+  local mode="${1:-}"
+  local recursive="${2:-}"
+  local path="${3:-}"
 
   bl64_lib_var_is_default "$mode" && return 0
   bl64_msg_show_lib_subtask "set directory permissions (${dir_mode} ${BL64_MSG_COSMETIC_ARROW} ${path})"
@@ -165,9 +165,9 @@ function _bl64_fs_path_permission_set_dir() {
 
 function _bl64_fs_path_permission_set_user() {
   bl64_dbg_lib_show_function "$@"
-  local user="$1"
-  local recursive="$2"
-  local path="$3"
+  local user="${1:-}"
+  local recursive="${2:-}"
+  local path="${3:-}"
   local cli_options=' '
 
   bl64_lib_var_is_default "$user" && return 0
@@ -182,9 +182,9 @@ function _bl64_fs_path_permission_set_user() {
 
 function _bl64_fs_path_permission_set_group() {
   bl64_dbg_lib_show_function "$@"
-  local group="$1"
-  local recursive="$2"
-  local path="$3"
+  local group="${1:-}"
+  local recursive="${2:-}"
+  local path="${3:-}"
   local cli_options=' '
 
   bl64_lib_var_is_default "$group" && return 0
@@ -1167,13 +1167,13 @@ function bl64_fs_set_ephemeral() {
   local user="${4:-${BL64_VAR_DEFAULT}}"
   local group="${5:-${BL64_VAR_DEFAULT}}"
 
-  if [[ "$temporal" != "$BL64_VAR_DEFAULT" ]]; then
+  if ! bl64_lib_var_is_default "$temporal"; then
     bl64_fs_dir_create "$mode" "$user" "$group" "$temporal" &&
       BL64_FS_PATH_TEMPORAL="$temporal" ||
       return $?
   fi
 
-  if [[ "$cache" != "$BL64_VAR_DEFAULT" ]]; then
+  if ! bl64_lib_var_is_default "$cache"; then
     bl64_fs_dir_create "$mode" "$user" "$group" "$cache" &&
       BL64_FS_PATH_CACHE="$cache" ||
       return $?
@@ -1243,7 +1243,7 @@ function bl64_fs_create_tmpfile() {
 #######################################
 function bl64_fs_rm_tmpdir() {
   bl64_dbg_lib_show_function "$@"
-  local tmpdir="$1"
+  local tmpdir="${1:-}"
 
   bl64_check_parameter 'tmpdir' &&
     bl64_check_directory "$tmpdir" ||
@@ -1271,7 +1271,7 @@ function bl64_fs_rm_tmpdir() {
 #######################################
 function bl64_fs_rm_tmpfile() {
   bl64_dbg_lib_show_function "$@"
-  local tmpfile="$1"
+  local tmpfile="${1:-}"
 
   bl64_check_parameter 'tmpfile' &&
     bl64_check_file "$tmpfile" ||
@@ -1417,7 +1417,7 @@ function bl64_fs_symlink_create() {
 #######################################
 function bl64_fs_file_create() {
   bl64_dbg_lib_show_function "$@"
-  local file_path="$1"
+  local file_path="${1:-}"
   local mode="${2:-${BL64_VAR_DEFAULT}}"
   local user="${3:-${BL64_VAR_DEFAULT}}"
   local group="${4:-${BL64_VAR_DEFAULT}}"

@@ -4,7 +4,7 @@
 
 function _bl64_log_set_target_single() {
   _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
-  local target="$1"
+  local target="${1:-}"
   local destination="${BL64_LOG_REPOSITORY}/${target}.log"
 
   [[ "$BL64_LOG_DESTINATION" == "$destination" ]] && return 0
@@ -14,7 +14,7 @@ function _bl64_log_set_target_single() {
 
 function _bl64_log_set_target_multiple() {
   _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
-  local target="$1"
+  local target="${1:-}"
   local destination="${BL64_LOG_REPOSITORY}/${target}_"
 
   destination+="$(printf '%(%FT%TZ%z)T' '-1').log" || return $?
@@ -85,7 +85,7 @@ function bl64_log_setup() {
 #######################################
 function bl64_log_set_repository() {
   _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
-  local log_repository="$1"
+  local log_repository="${1:-}"
 
   bl64_check_parameter 'log_repository' || return $?
   [[ "$BL64_LOG_REPOSITORY" == "$log_repository" ]] && return 0
@@ -112,15 +112,15 @@ function bl64_log_set_repository() {
 #######################################
 function bl64_log_set_level() {
   _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
-  local log_level="$1"
+  local log_level="${1:-}"
 
   case "$log_level" in
-  "$BL64_LOG_CATEGORY_NONE") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_NONE" ;;
-  "$BL64_LOG_CATEGORY_INFO") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_INFO" ;;
-  "$BL64_LOG_CATEGORY_DEBUG") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_DEBUG" ;;
-  "$BL64_LOG_CATEGORY_WARNING") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_WARNING" ;;
-  "$BL64_LOG_CATEGORY_ERROR") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_ERROR" ;;
-  *) bl64_check_alert_parameter_invalid 'log_level' ;;
+    "$BL64_LOG_CATEGORY_NONE") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_NONE" ;;
+    "$BL64_LOG_CATEGORY_INFO") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_INFO" ;;
+    "$BL64_LOG_CATEGORY_DEBUG") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_DEBUG" ;;
+    "$BL64_LOG_CATEGORY_WARNING") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_WARNING" ;;
+    "$BL64_LOG_CATEGORY_ERROR") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_ERROR" ;;
+    *) bl64_check_alert_parameter_invalid 'log_level' ;;
   esac
 }
 
@@ -138,14 +138,14 @@ function bl64_log_set_level() {
 #######################################
 function bl64_log_set_format() {
   _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
-  local log_format="$1"
+  local log_format="${1:-}"
 
   case "$log_format" in
-  "$BL64_LOG_FORMAT_CSV")
-    BL64_LOG_FORMAT="$BL64_LOG_FORMAT_CSV"
-    BL64_LOG_FS=':'
-    ;;
-  *) bl64_check_alert_parameter_invalid 'log_format' ;;
+    "$BL64_LOG_FORMAT_CSV")
+      BL64_LOG_FORMAT="$BL64_LOG_FORMAT_CSV"
+      BL64_LOG_FS=':'
+      ;;
+    *) bl64_check_alert_parameter_invalid 'log_format' ;;
   esac
 }
 
@@ -166,23 +166,23 @@ function bl64_log_set_format() {
 #######################################
 function bl64_log_set_target() {
   _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
-  local log_target="$1"
-  local log_type="$2"
+  local log_target="${1:-}"
+  local log_type="${2:-}"
 
   bl64_check_parameter 'log_target' &&
     bl64_check_parameter 'log_type' ||
     return $?
 
   case "$log_type" in
-  "$BL64_LOG_TYPE_SINGLE")
-    _bl64_log_set_target_single "$log_target"
-    ;;
-  "$BL64_LOG_TYPE_MULTIPLE")
-    _bl64_log_set_target_multiple "$log_target"
-    ;;
-  *)
-    bl64_check_alert_parameter_invalid 'log_type'
-    return $?
-    ;;
+    "$BL64_LOG_TYPE_SINGLE")
+      _bl64_log_set_target_single "$log_target"
+      ;;
+    "$BL64_LOG_TYPE_MULTIPLE")
+      _bl64_log_set_target_multiple "$log_target"
+      ;;
+    *)
+      bl64_check_alert_parameter_invalid 'log_type'
+      return $?
+      ;;
   esac
 }

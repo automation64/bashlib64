@@ -13,9 +13,7 @@
 # limitations under the License.
 #######################################
 
-# shellcheck source=bin/dev-set
 source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
-# shellcheck source-path=/opt/bl64
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-ui.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
@@ -44,7 +42,7 @@ function my_initialize() {
     return $?
   if [[ "$MY_PROFILE" == "$DEV_PROFILE" ]]; then
     bl64_msg_show_error 'Target profile can not be the current one. Please change to a different profile before removing'
-    return $BL64_LIB_ERROR_PARAMETER_INVALID
+    return "$BL64_LIB_ERROR_PARAMETER_INVALID"
   fi
   dev_bin64_task_show_setup \
     'MY_PROFILE' &&
@@ -54,7 +52,7 @@ function my_initialize() {
 }
 
 [[ -n "$DEV_CICD_DEBUG" ]] && bl64_dbg_all_enable
-bl64_lib_script_version_set '2.1.2'
+bl64_lib_script_version_set '2.1.3'
 bl64_msg_help_about_set 'Remove profile directory structure'
 dev_bin64_initialize && my_initialize || exit $?
 
