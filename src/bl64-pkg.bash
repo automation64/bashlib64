@@ -501,8 +501,7 @@ function bl64_pkg_run_dnf() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose="$BL64_PKG_SET_VERBOSE"
+  bl64_msg_app_run_is_enabled && verbose="$BL64_PKG_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -532,8 +531,7 @@ function bl64_pkg_run_yum() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose="$BL64_PKG_SET_VERBOSE"
+  bl64_msg_app_run_is_enabled && verbose="$BL64_PKG_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -605,8 +603,7 @@ function bl64_pkg_run_apk() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose="$BL64_PKG_SET_VERBOSE"
+  bl64_msg_app_run_is_enabled && verbose="$BL64_PKG_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -638,8 +635,7 @@ function bl64_pkg_run_brew() {
     bl64_check_privilege_not_root ||
     return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose='--verbose'
+  bl64_msg_app_run_is_enabled && verbose='--verbose'
 
   export HOMEBREW_PREFIX="$BL64_PKG_PATH_BREW_HOME"
   export HOMEBREW_CELLAR="${BL64_PKG_PATH_BREW_HOME}/Cellar"
@@ -673,8 +669,7 @@ function bl64_pkg_run_zypper() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose="$BL64_PKG_SET_VERBOSE"
+  bl64_msg_app_run_is_enabled && verbose="$BL64_PKG_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -704,8 +699,7 @@ function bl64_pkg_run_rpm() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose='--verbose'
+  bl64_msg_app_run_is_enabled && verbose='--verbose'
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -818,8 +812,7 @@ function bl64_pkg_run_pacman() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose="$BL64_PKG_SET_VERBOSE"
+  bl64_msg_app_run_is_enabled && verbose="$BL64_PKG_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086

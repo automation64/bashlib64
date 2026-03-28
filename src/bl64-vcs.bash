@@ -30,8 +30,7 @@ function bl64_vcs_run_git() {
     verbose=''
     export GIT_TRACE='2'
   else
-    bl64_msg_app_run_is_enabled &&
-      export GIT_PROGRESS_DELAY='60'
+    bl64_msg_app_run_is_enabled && export GIT_PROGRESS_DELAY='60'
   fi
 
   bl64_dbg_lib_trace_start
