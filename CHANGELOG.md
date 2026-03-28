@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_k8s_run_kubectl_cfg: run kubectl with kubeconfig parameter (ported from bl64_k8s_run_kubectl)
 - msg
   - bl64_msg_show_doc: show documentation message
+- dbg
+  - bl64_dbg_app_breakpoint
 
 ### Changed
 
