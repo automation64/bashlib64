@@ -150,13 +150,13 @@ function _bl64_arc_harden_unxz() {
 #######################################
 function bl64_arc_run_unzip() {
   bl64_dbg_lib_show_function "$@"
-  local verbose='-qq'
+  local verbose=' '
 
   bl64_check_module 'BL64_ARC_MODULE' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
-  bl64_msg_app_run_is_enabled && verbose=' '
+  bl64_msg_app_run_is_enabled && verbose='-qq'
 
   _bl64_arc_harden_unzip
 
@@ -223,8 +223,7 @@ function bl64_arc_run_7zz() {
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_7ZZ" || return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose='-bso1'
+  bl64_msg_app_run_is_enabled && verbose='-bso1'
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -249,7 +248,7 @@ function bl64_arc_run_7zz() {
 function bl64_arc_run_tar() {
   bl64_dbg_lib_show_function "$@"
   bl64_check_parameters_none "$#" || return $?
-  local verbose=''
+  local verbose=' '
 
   bl64_check_module 'BL64_ARC_MODULE' &&
     bl64_check_command "$BL64_ARC_CMD_TAR" ||
