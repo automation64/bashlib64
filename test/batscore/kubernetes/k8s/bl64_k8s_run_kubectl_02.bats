@@ -3,9 +3,9 @@ setup() {
   bl64_k8s_setup || skip 'k8s cli not found'
 }
 
-@test "bl64_k8s_run_kubectl_cfg: CLI runs ok" {
+@test "bl64_k8s_run_kubectl: CLI runs ok" {
   . "$TESTMANSH_TEST_BATSCORE_SETUP"
   bl64_k8s_setup
-  run bl64_k8s_run_kubectl_cfg "$TESTMANSH_TEST_SAMPLES/kubectl_01/config_01" version --client=true
+  run bl64_k8s_run_kubectl version --client=true
   assert_success
 }
