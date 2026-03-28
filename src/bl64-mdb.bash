@@ -2,6 +2,10 @@
 # BashLib64 / Module / Setup / Interact with MongoDB
 #######################################
 
+#
+# Public functions
+#
+
 #######################################
 # Restore mongodb dump
 #

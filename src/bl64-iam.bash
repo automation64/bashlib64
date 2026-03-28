@@ -151,7 +151,7 @@ function bl64_iam_user_add() {
 #######################################
 function bl64_iam_group_add() {
   bl64_dbg_lib_show_function "$@"
-  local group_name="$1"
+  local group_name="${1:-}"
   local group_id="${2:-$BL64_VAR_DEFAULT}"
 
   bl64_check_parameter 'group_name' ||
@@ -210,7 +210,7 @@ function bl64_iam_group_add() {
 #######################################
 function bl64_iam_user_is_created() {
   bl64_dbg_lib_show_function "$@"
-  local user_name="$1"
+  local user_name="${1:-}"
 
   bl64_check_parameter 'user_name' ||
     return $?
@@ -234,7 +234,7 @@ function bl64_iam_user_is_created() {
 #######################################
 function bl64_iam_group_is_created() {
   bl64_dbg_lib_show_function "$@"
-  local group_name="$1"
+  local group_name="${1:-}"
 
   bl64_check_parameter 'group_name' ||
     return $?
@@ -257,7 +257,7 @@ function bl64_iam_group_is_created() {
 #######################################
 function bl64_iam_user_get_id() {
   bl64_dbg_lib_show_function "$@"
-  local user="$1"
+  local user="${1:-}"
   if [[ -z "$user" ]]; then
     bl64_iam_run_id -u
   else

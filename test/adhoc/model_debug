@@ -32,5 +32,5 @@ bl64_dbg_lib_show_comments 'bl64_dbg_lib_show_comments'
 bl64_dbg_lib_show_vars 'VARIABLE1' 'VARIABLE2' 'VARIABLE3' 'VARIABLE4'
 
 level1
-
+#bl64_dbg_app_breakpoint
 bl64_dbg_all_disable

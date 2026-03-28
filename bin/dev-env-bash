@@ -78,6 +78,7 @@
 
   # Test / Bash / Default test containers
   export DEV_TEST_BASH_CONTAINER="${DEV_TEST_BASH_CONTAINER:-bash-test/alpine-3-bash-test}"
+  export DEV_TEST_BASH_CONTAINER_ARCH="${DEV_TEST_BASH_CONTAINER_ARCH:-bash-test/archlinux-2025.10-bash-test}"
   export DEV_TEST_BASH_CONTAINER_ALM="${DEV_TEST_BASH_CONTAINER_ALM:-bash-test/almalinux-9-bash-test}"
   export DEV_TEST_BASH_CONTAINER_ALP="${DEV_TEST_BASH_CONTAINER_ALP:-bash-test/alpine-3-bash-test}"
   export DEV_TEST_BASH_CONTAINER_AMZ="${DEV_TEST_BASH_CONTAINER_AMZ:-bash-test/amazonlinux-2023-bash-test}"

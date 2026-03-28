@@ -2,6 +2,43 @@
 # BashLib64 / Module / Functions / Interact with Kubernetes
 #######################################
 
+#
+# Private functions
+#
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_k8s_harden_kubectl() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited HELM_* shell variables'
+  bl64_dbg_lib_trace_start
+  unset KUBECONFIG
+  unset KUBECTL_ENABLE_CMD_SHADOW
+  unset KUBECTL_EXPLAIN_OPENAPIV3
+  unset KUBECTL_KUBERC
+  unset KUBECTL_KYAML
+  unset KUBECTL_PORT_FORWARD_WEBSOCKETS
+  unset KUBECTL_REMOTE_COMMAND_WEBSOCKETS
+  unset POD_NAMESPACE
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#
+# Public functions
+#
+
 #######################################
 # Set label on resource
 #
@@ -39,7 +76,7 @@ function bl64_k8s_label_set() {
 
   bl64_msg_show_lib_task "set or update label (${resource}/${name}/${key})"
   # shellcheck disable=SC2086
-  bl64_k8s_run_kubectl \
+  bl64_k8s_run_kubectl_cfg \
     "$kubeconfig" \
     'label' $verbosity \
     --overwrite \
@@ -88,7 +125,7 @@ function bl64_k8s_annotation_set() {
 
   bl64_msg_show_lib_task "set or update annotation (${resource}/${name})"
   # shellcheck disable=SC2086
-  bl64_k8s_run_kubectl \
+  bl64_k8s_run_kubectl_cfg \
     "$kubeconfig" \
     'annotate' $verbosity $namespace \
     --overwrite \
@@ -130,7 +167,7 @@ function bl64_k8s_namespace_create() {
 
   bl64_msg_show_lib_task "create namespace (${namespace})"
   # shellcheck disable=SC2086
-  bl64_k8s_run_kubectl "$kubeconfig" \
+  bl64_k8s_run_kubectl_cfg "$kubeconfig" \
     'create' $verbosity "$BL64_K8S_RESOURCE_NS" "$namespace"
 }
 
@@ -170,7 +207,7 @@ function bl64_k8s_sa_create() {
 
   bl64_msg_show_lib_task "create service account (${namespace}/${sa})"
   # shellcheck disable=SC2086
-  bl64_k8s_run_kubectl "$kubeconfig" \
+  bl64_k8s_run_kubectl_cfg "$kubeconfig" \
     'create' $verbosity --namespace="$namespace" "$BL64_K8S_RESOURCE_SA" "$sa"
 }
 
@@ -217,7 +254,7 @@ function bl64_k8s_secret_create() {
 
   bl64_msg_show_lib_task "create generic secret (${namespace}/${secret}/${key})"
   # shellcheck disable=SC2086
-  bl64_k8s_run_kubectl "$kubeconfig" \
+  bl64_k8s_run_kubectl_cfg "$kubeconfig" \
     'create' $verbosity --namespace="$namespace" \
     "$BL64_K8S_RESOURCE_SECRET" 'generic' "$secret" \
     --type 'Opaque' \
@@ -315,7 +352,7 @@ function bl64_k8s_resource_update() {
 
   bl64_msg_show_lib_task "create or update resource definition (${definition} -> ${namespace})"
   # shellcheck disable=SC2086
-  bl64_k8s_run_kubectl \
+  bl64_k8s_run_kubectl_cfg \
     "$kubeconfig" \
     'apply' $verbosity \
     --namespace="$namespace" \
@@ -359,10 +396,40 @@ function bl64_k8s_resource_get() {
   [[ -n "$namespace" ]] && namespace="--namespace ${namespace}"
 
   # shellcheck disable=SC2086
-  bl64_k8s_run_kubectl \
+  bl64_k8s_run_kubectl_cfg \
     "$kubeconfig" \
     'get' $BL64_K8S_SET_OUTPUT_JSON \
     $namespace "$resource" "$name"
+}
+
+#######################################
+# Run KUBECTL enforcing KUBECONFIG
+#
+# Arguments:
+#   $1: full path to the kube/config file for the target cluster. Use BL64_VAR_DEFAULT to leave default
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_k8s_run_kubectl_cfg() {
+  bl64_dbg_lib_show_function "$@"
+  local kubeconfig="${1:-}"
+  local command="${2:-}"
+
+  bl64_check_parameter 'kubeconfig' &&
+    bl64_check_file "$kubeconfig" 'kubectl config file not found' ||
+    return $?
+
+  shift
+  shift
+  bl64_k8s_run_kubectl \
+    "$command" \
+    --kubeconfig="${kubeconfig}" \
+    "$@"
 }
 
 #######################################
@@ -382,33 +449,21 @@ function bl64_k8s_resource_get() {
 #######################################
 function bl64_k8s_run_kubectl() {
   bl64_dbg_lib_show_function "$@"
-  local kubeconfig="${1:-}"
+  local command="${1:-}"
   local verbosity="$BL64_K8S_SET_VERBOSE_NONE"
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_K8S_MODULE' ||
     return $?
-  shift
-  bl64_check_parameters_none "$#" 'missing kubectl command' ||
-    return $?
-
-  if bl64_lib_var_is_default "$kubeconfig"; then
-    kubeconfig=''
-  else
-    bl64_check_file "$kubeconfig" 'kubectl config file not found' ||
-      return $?
-    kubeconfig="--kubeconfig=${kubeconfig}"
-  fi
 
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_K8S_SET_VERBOSE_TRACE"
+  shift
 
-  bl64_k8s_blank_kubectl
+  _bl64_k8s_harden_kubectl
   bl64_dbg_lib_command_trace_start
   # shellcheck disable=SC2086
   "$BL64_K8S_CMD_KUBECTL" \
-    $kubeconfig \
-    $verbosity \
-    "$@"
+    "$command" $verbosity "$@"
   bl64_dbg_lib_command_trace_stop
 }
 
@@ -439,8 +494,8 @@ function bl64_k8s_run_kubectl_plugin() {
   bl64_check_parameters_none "$#" 'missing kubectl command' ||
     return $?
 
-  bl64_k8s_blank_kubectl
-  if [[ "$kubeconfig" != "$BL64_VAR_DEFAULT" ]]; then
+  _bl64_k8s_harden_kubectl
+  if ! bl64_lib_var_is_default "$kubeconfig"; then
     bl64_check_file "$kubeconfig" 'kubectl config file not found' ||
       return $?
     export KUBECONFIG="$kubeconfig"
@@ -451,29 +506,6 @@ function bl64_k8s_run_kubectl_plugin() {
   "$BL64_K8S_CMD_KUBECTL" \
     "$@"
   bl64_dbg_lib_command_trace_stop
-}
-
-#######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function bl64_k8s_blank_kubectl() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited HELM_* shell variables'
-  bl64_dbg_lib_trace_start
-  unset POD_NAMESPACE
-  unset KUBECONFIG
-  bl64_dbg_lib_trace_stop
-
-  return 0
 }
 
 #######################################
@@ -506,11 +538,11 @@ function bl64_k8s_resource_is_created() {
 
   # shellcheck disable=SC2086
   if bl64_dbg_lib_task_is_enabled; then
-    bl64_k8s_run_kubectl "$kubeconfig" \
+    bl64_k8s_run_kubectl_cfg "$kubeconfig" \
       'get' "$type" "$name" \
       $BL64_K8S_SET_OUTPUT_NAME $namespace || return "$BL64_LIB_ERROR_IS_NOT"
   else
-    bl64_k8s_run_kubectl "$kubeconfig" \
+    bl64_k8s_run_kubectl_cfg "$kubeconfig" \
       'get' "$type" "$name" \
       $BL64_K8S_SET_OUTPUT_NAME $namespace >/dev/null 2>&1 || return "$BL64_LIB_ERROR_IS_NOT"
   fi

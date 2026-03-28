@@ -39,11 +39,8 @@
   # Env / DevBin64 / Standard prefixes and suffixes
   export DEV_SUFFIX_CHECKSUM='-checksums.txt'
 
-  # Env / DevBin64 / List of modules to load
-  export DEV_MODULE_LOAD=''
-
   # Env / DevBin64 / Current version
-  export DEV_BIN64_VERSION='12.3.1'
+  export DEV_BIN64_VERSION='15.0.0'
 
   # Env / DevBin64 / Project root
   export DEV_PATH_ROOT=''
@@ -209,17 +206,34 @@ function dev_bin64_build_setup() {
 
   bl64_msg_show_task 'initialize build area'
   bl64_check_export 'DEV_PATH_BUILD_PREPARE' &&
-    bl64_check_export 'DEV_PATH_BUILD_STAGING' &&
+    bl64_fs_dir_create \
+      "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+      "$DEV_PATH_PROF_BUILD_PREPARE" ||
+    return $?
+
+  if [[ -n "${module_paths[*]}" ]]; then
+    bl64_msg_show_task 'reset temporal build paths'
+    bl64_fs_dir_reset \
+      "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+      "${module_paths[@]}"
+  fi
+}
+
+function dev_bin64_pack_setup() {
+  bl64_dbg_app_show_function "$@"
+  local module_paths=("${@:-}")
+
+  bl64_msg_show_task 'initialize packing area'
+  bl64_check_export 'DEV_PATH_BUILD_STAGING' &&
     bl64_check_export 'DEV_PATH_BUILD_PACK' &&
     bl64_fs_dir_create \
       "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
-      "$DEV_PATH_PROF_BUILD_PREPARE" \
       "$DEV_PATH_PROF_BUILD_STAGING" \
       "$DEV_PATH_PROF_BUILD_PACK" ||
     return $?
 
   if [[ -n "${module_paths[*]}" ]]; then
-    bl64_msg_show_task 'reset temporal build paths'
+    bl64_msg_show_task 'reset temporal packing paths'
     bl64_fs_dir_reset \
       "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
       "${module_paths[@]}"
@@ -247,7 +261,7 @@ function dev_bin64_tmp_setup() {
 
 function dev_bin64_log_setup() {
   bl64_dbg_app_show_function "$@"
-  local reset="${1:-$BL64_VAR_ON}"
+  local reset="${1:-$BL64_VAR_OFF}"
   local module_paths=''
 
   bl64_msg_show_task 'initialize logging area'
@@ -319,4 +333,49 @@ function dev_bin64_task_show_setup() {
     'DEV_BIN64_VERSION' \
     'DEV_PROFILE' \
     "${@}"
+}
+
+# Imported from Bashlib64:bl64_bsh_command_locate_user
+function dev_bin64_lib_locate() {
+  local command="${1:-}"
+  local search_list=''
+  local current_path=''
+
+  shift
+  search_list+=' /home/linuxbrew/.linuxbrew/bin'
+  search_list+=' /opt/homebrew/bin'
+  search_list+=' /usr/local/bin'
+  search_list+=' /usr/local/sbin'
+  search_list+=' /usr/bin'
+  search_list+=' /usr/sbin'
+  search_list+=' /bin'
+  search_list+=' /sbin'
+  search_list+=" ${HOME}/bin"
+  search_list+=" ${HOME}/.local/bin"
+  search_list+=" ${HOME}/node_modules/.bin"
+
+  for current_path in $search_list "${@:-}"; do
+    [[ ! -d "$current_path" ]] && continue
+    if [[ -x "${current_path}/${command}" ]]; then
+      echo "${current_path}/${command}"
+      return 0
+    fi
+  done
+  return 0
+}
+
+# Imported from Bashlib64:dev_bin64_lib_basename
+function dev_bin64_lib_basename() {
+  local path="$1"
+  local base=''
+  if [[ -n "$path" && "$path" != '/' ]]; then
+    base="${path##*/}"
+  fi
+
+  if [[ -z "$base" || "$base" == */* ]]; then
+    return "$BL64_LIB_ERROR_PARAMETER_INVALID"
+  else
+    printf '%s' "$base"
+  fi
+  return 0
 }

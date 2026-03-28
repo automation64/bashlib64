@@ -62,14 +62,14 @@
   # Lib / GitHub / Command
   export DEV_LIB_GITHUB_BIN="${DEV_LIB_GITHUB_BIN:-}"
   if [[ -z "$DEV_LIB_GITHUB_BIN" ]]; then
-    DEV_LIB_GITHUB_BIN="$(bl64_bsh_command_locate_user 'gh')"
+    DEV_LIB_GITHUB_BIN="$(dev_bin64_lib_locate 'gh')"
     if [[ -z "$DEV_LIB_GITHUB_BIN" ]]; then
       DEV_LIB_GITHUB_BIN="${DEV_LIB_GITHUB_TARGET}/gh"
       if [[ ! -x "${DEV_LIB_GITHUB_BIN}" ]]; then
         DEV_LIB_GITHUB_SKIP='NO'
       fi
     else
-      DEV_LIB_GITHUB_TARGET="$(bl64_fmt_path_get_basename "$DEV_LIB_GITHUB_BIN")"
+      DEV_LIB_GITHUB_TARGET="$(dev_bin64_lib_basename "$DEV_LIB_GITHUB_BIN")"
     fi
   fi
 }

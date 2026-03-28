@@ -25,8 +25,8 @@
 #######################################
 function bl64_api_call() {
   bl64_dbg_lib_show_function "$@"
-  local api_url="$1"
-  local api_path="$2"
+  local api_url="${1:-}"
+  local api_path="${2:-}"
   local api_method="${3:-${BL64_API_METHOD_GET}}"
   local api_query="${4:-${BL64_VAR_NULL}}"
   local debug="$BL64_RXTX_SET_CURL_SILENT"
@@ -85,7 +85,7 @@ function bl64_api_call() {
 #######################################
 function bl64_api_url_encode() {
   bl64_dbg_lib_show_function "$@"
-  local raw_string="$1"
+  local raw_string="${1:-}"
 
   bl64_check_parameter 'raw_string' || return $?
 

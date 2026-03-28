@@ -2,6 +2,123 @@
 # BashLib64 / Module / Functions / Manage native OS packages
 #######################################
 
+#
+# Private functions
+#
+
+function _bl64_pkg_repository_add_yum() {
+  bl64_dbg_lib_show_function "$@"
+  local name="${1:-}"
+  local source="${2:-}"
+  local gpgkey="${3:-}"
+  local definition=''
+  local file_mode='0644'
+
+  bl64_check_directory "$BL64_PKG_PATH_YUM_REPOS_D" ||
+    return $?
+
+  definition="${BL64_PKG_PATH_YUM_REPOS_D}/${name}.${BL64_PKG_DEF_SUFIX_YUM_REPOSITORY}"
+  [[ -f "$definition" ]] &&
+    bl64_msg_show_warning "requested repository is already present. Continue using existing one. (${definition})" &&
+    return 0
+
+  bl64_msg_show_lib_subtask "create YUM repository definition (${definition})"
+  if [[ "$gpgkey" != "$BL64_VAR_NONE" ]]; then
+    printf '[%s]\n
+name=%s
+baseurl=%s
+gpgcheck=1
+enabled=1
+gpgkey=%s\n' \
+      "$name" \
+      "$name" \
+      "$source" \
+      "$gpgkey" \
+      >"$definition"
+  else
+    printf '[%s]\n
+name=%s
+baseurl=%s
+gpgcheck=0
+enabled=1\n' \
+      "$name" \
+      "$name" \
+      "$source" \
+      >"$definition"
+  fi
+  [[ -f "$definition" ]] && bl64_fs_run_chmod "$file_mode" "$definition"
+}
+
+function _bl64_pkg_repository_add_apt() {
+  bl64_dbg_lib_show_function "$@"
+  local name="${1:-}"
+  local source="${2:-}"
+  local gpgkey="${3:-}"
+  local suite="${4:-}"
+  local component="${5:-}"
+  local definition=''
+  local gpgkey_file=''
+  local file_mode='0644'
+
+  bl64_check_parameter 'suite' &&
+    bl64_check_directory "$BL64_PKG_PATH_APT_SOURCES_LIST_D" &&
+    bl64_check_directory "$BL64_PKG_PATH_GPG_KEYRINGS" ||
+    return $?
+
+  definition="${BL64_PKG_PATH_APT_SOURCES_LIST_D}/${name}.${BL64_PKG_DEF_SUFIX_APT_REPOSITORY}"
+  [[ -f "$definition" ]] &&
+    bl64_msg_show_warning "requested repository is already present. Continue using existing one. (${definition})" &&
+    return 0
+
+  bl64_msg_show_lib_subtask "create APT repository definition (${definition})"
+  if [[ "$gpgkey" != "$BL64_VAR_NONE" ]]; then
+    gpgkey_file="${BL64_PKG_PATH_GPG_KEYRINGS}/${name}.${BL64_PKG_DEF_SUFIX_GPG_FILE}"
+    printf 'deb [signed-by=%s] %s %s %s\n' \
+      "$gpgkey_file" \
+      "$source" \
+      "$suite" \
+      "$component" \
+      >"$definition" &&
+      bl64_cryp_key_download \
+        "$gpgkey" "$gpgkey_file" "$BL64_VAR_DEFAULT" "$file_mode"
+  else
+    printf 'deb %s %s %s\n' \
+      "$source" \
+      "$suite" \
+      "$component" \
+      >"$definition"
+  fi
+  [[ -f "$definition" ]] && bl64_fs_run_chmod "$file_mode" "$definition"
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_pkg_harden_apt() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited DEB* shell variables'
+  bl64_dbg_lib_trace_start
+  unset DEBIAN_FRONTEND
+  unset DEBCONF_TERSE
+  unset DEBCONF_NOWARNINGS
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#
+# Public functions
+#
+
 #######################################
 # Add package repository
 #
@@ -48,91 +165,6 @@ function bl64_pkg_repository_add() {
       ;;
     *) bl64_check_alert_unsupported ;;
   esac
-}
-
-function _bl64_pkg_repository_add_yum() {
-  bl64_dbg_lib_show_function "$@"
-  local name="$1"
-  local source="$2"
-  local gpgkey="$3"
-  local definition=''
-  local file_mode='0644'
-
-  bl64_check_directory "$BL64_PKG_PATH_YUM_REPOS_D" ||
-    return $?
-
-  definition="${BL64_PKG_PATH_YUM_REPOS_D}/${name}.${BL64_PKG_DEF_SUFIX_YUM_REPOSITORY}"
-  [[ -f "$definition" ]] &&
-    bl64_msg_show_warning "requested repository is already present. Continue using existing one. (${definition})" &&
-    return 0
-
-  bl64_msg_show_lib_subtask "create YUM repository definition (${definition})"
-  if [[ "$gpgkey" != "$BL64_VAR_NONE" ]]; then
-    printf '[%s]\n
-name=%s
-baseurl=%s
-gpgcheck=1
-enabled=1
-gpgkey=%s\n' \
-      "$name" \
-      "$name" \
-      "$source" \
-      "$gpgkey" \
-      >"$definition"
-  else
-    printf '[%s]\n
-name=%s
-baseurl=%s
-gpgcheck=0
-enabled=1\n' \
-      "$name" \
-      "$name" \
-      "$source" \
-      >"$definition"
-  fi
-  [[ -f "$definition" ]] && bl64_fs_run_chmod "$file_mode" "$definition"
-}
-
-function _bl64_pkg_repository_add_apt() {
-  bl64_dbg_lib_show_function "$@"
-  local name="$1"
-  local source="$2"
-  local gpgkey="$3"
-  local suite="$4"
-  local component="$5"
-  local definition=''
-  local gpgkey_file=''
-  local file_mode='0644'
-
-  bl64_check_parameter 'suite' &&
-    bl64_check_directory "$BL64_PKG_PATH_APT_SOURCES_LIST_D" &&
-    bl64_check_directory "$BL64_PKG_PATH_GPG_KEYRINGS" ||
-    return $?
-
-  definition="${BL64_PKG_PATH_APT_SOURCES_LIST_D}/${name}.${BL64_PKG_DEF_SUFIX_APT_REPOSITORY}"
-  [[ -f "$definition" ]] &&
-    bl64_msg_show_warning "requested repository is already present. Continue using existing one. (${definition})" &&
-    return 0
-
-  bl64_msg_show_lib_subtask "create APT repository definition (${definition})"
-  if [[ "$gpgkey" != "$BL64_VAR_NONE" ]]; then
-    gpgkey_file="${BL64_PKG_PATH_GPG_KEYRINGS}/${name}.${BL64_PKG_DEF_SUFIX_GPG_FILE}"
-    printf 'deb [signed-by=%s] %s %s %s\n' \
-      "$gpgkey_file" \
-      "$source" \
-      "$suite" \
-      "$component" \
-      >"$definition" &&
-      bl64_cryp_key_download \
-        "$gpgkey" "$gpgkey_file" "$BL64_VAR_DEFAULT" "$file_mode"
-  else
-    printf 'deb %s %s %s\n' \
-      "$source" \
-      "$suite" \
-      "$component" \
-      >"$definition"
-  fi
-  [[ -f "$definition" ]] && bl64_fs_run_chmod "$file_mode" "$definition"
 }
 
 #######################################
@@ -469,8 +501,7 @@ function bl64_pkg_run_dnf() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose="$BL64_PKG_SET_VERBOSE"
+  bl64_msg_app_run_is_enabled && verbose="$BL64_PKG_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -500,8 +531,7 @@ function bl64_pkg_run_yum() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose="$BL64_PKG_SET_VERBOSE"
+  bl64_msg_app_run_is_enabled && verbose="$BL64_PKG_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -552,30 +582,6 @@ function bl64_pkg_run_apt() {
 }
 
 #######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_pkg_harden_apt() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited DEB* shell variables'
-  bl64_dbg_lib_trace_start
-  unset DEBIAN_FRONTEND
-  unset DEBCONF_TERSE
-  unset DEBCONF_NOWARNINGS
-  bl64_dbg_lib_trace_stop
-
-  return 0
-}
-
-#######################################
 # Command wrapper with verbose, debug and common options
 #
 # * Trust no one. Ignore inherited config and use explicit config
@@ -597,8 +603,7 @@ function bl64_pkg_run_apk() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose="$BL64_PKG_SET_VERBOSE"
+  bl64_msg_app_run_is_enabled && verbose="$BL64_PKG_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -630,8 +635,7 @@ function bl64_pkg_run_brew() {
     bl64_check_privilege_not_root ||
     return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose='--verbose'
+  bl64_msg_app_run_is_enabled && verbose='--verbose'
 
   export HOMEBREW_PREFIX="$BL64_PKG_PATH_BREW_HOME"
   export HOMEBREW_CELLAR="${BL64_PKG_PATH_BREW_HOME}/Cellar"
@@ -665,8 +669,7 @@ function bl64_pkg_run_zypper() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose="$BL64_PKG_SET_VERBOSE"
+  bl64_msg_app_run_is_enabled && verbose="$BL64_PKG_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -696,8 +699,7 @@ function bl64_pkg_run_rpm() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose='--verbose'
+  bl64_msg_app_run_is_enabled && verbose='--verbose'
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -810,8 +812,7 @@ function bl64_pkg_run_pacman() {
     bl64_check_parameters_none "$#" ||
     return $?
 
-  bl64_msg_app_run_is_enabled &&
-    verbose="$BL64_PKG_SET_VERBOSE"
+  bl64_msg_app_run_is_enabled && verbose="$BL64_PKG_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086

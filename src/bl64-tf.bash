@@ -2,6 +2,82 @@
 # BashLib64 / Module / Functions / Interact with Terraform
 #######################################
 
+#
+# Private functions
+#
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_tf_harden_terraform() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited TF_* shell variables'
+  bl64_dbg_lib_trace_start
+  unset TF_CLI_CONFIG_FILE
+  unset TF_DATA_DIR
+  unset TF_IN_AUTOMATION
+  unset TF_INPUT
+  unset TF_LOG
+  unset TF_LOG_PATH
+  unset TF_PLUGIN_CACHE_DIR
+  unset TF_REGISTRY_CLIENT_TIMEOUT
+  unset TF_REGISTRY_DISCOVERY_RETRY
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_tf_harden_tofu() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited shell variables'
+  bl64_dbg_lib_trace_start
+  unset TF_CLI_ARGS
+  unset TF_CLI_CONFIG_FILE
+  unset TF_DATA_DIR
+  unset TF_ENCRYPTION
+  unset TF_IN_AUTOMATION
+  unset TF_INPUT
+  unset TF_LOG
+  unset TF_LOG_CORE
+  unset TF_LOG_PATH
+  unset TF_LOG_PROVIDER
+  unset TF_PLUGIN_CACHE_DIR
+  unset TF_PROVIDER_DOWNLOAD_RETRY
+  unset TF_REGISTRY_CLIENT_TIMEOUT
+  unset TF_REGISTRY_DISCOVERY_RETRY
+  unset TF_STATE_PERSIST_INTERVAL
+  unset TF_WORKSPACE
+  unset TOFU_CPU_PROFILE
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#
+# Public functions
+#
+
 #######################################
 # Run terraform output
 #
@@ -21,10 +97,10 @@ function bl64_tf_output_export() {
   local variable="${2:-}"
 
   case "$format" in
-  "$BL64_TF_OUTPUT_RAW") format='-raw' ;;
-  "$BL64_TF_OUTPUT_JSON") format='-json' ;;
-  "$BL64_TF_OUTPUT_TEXT") format='' ;;
-  *) bl64_check_alert_undefined ;;
+    "$BL64_TF_OUTPUT_RAW") format='-raw' ;;
+    "$BL64_TF_OUTPUT_JSON") format='-json' ;;
+    "$BL64_TF_OUTPUT_TEXT") format='' ;;
+    *) bl64_check_alert_undefined ;;
   esac
 
   # shellcheck disable=SC2086
@@ -58,12 +134,13 @@ function bl64_tf_run_terraform() {
 
   _bl64_tf_harden_terraform
 
+  export TF_IN_AUTOMATION='ON'
   if bl64_dbg_lib_command_is_enabled; then
     export TF_LOG="$BL64_TF_SET_LOG_TRACE"
   else
     export TF_LOG="$BL64_TF_LOG_LEVEL"
   fi
-  [[ "$BL64_TF_LOG_PATH" != "$BL64_VAR_DEFAULT" ]] && export TF_LOG_PATH="$BL64_TF_LOG_PATH"
+  ! bl64_lib_var_is_default "$BL64_TF_LOG_PATH" && export TF_LOG_PATH="$BL64_TF_LOG_PATH"
   bl64_dbg_lib_show_vars 'TF_LOG' 'TF_LOG_PATH'
 
   bl64_dbg_lib_trace_start
@@ -71,38 +148,6 @@ function bl64_tf_run_terraform() {
   "$BL64_TF_CMD_TERRAFORM" \
     "$@"
   bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_tf_harden_terraform() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited TF_* shell variables'
-  bl64_dbg_lib_trace_start
-  unset TF_LOG
-  unset TF_LOG_PATH
-  unset TF_CLI_CONFIG_FILE
-  unset TF_LOG
-  unset TF_LOG_PATH
-  unset TF_IN_AUTOMATION
-  unset TF_INPUT
-  unset TF_DATA_DIR
-  unset TF_PLUGIN_CACHE_DIR
-  unset TF_REGISTRY_DISCOVERY_RETRY
-  unset TF_REGISTRY_CLIENT_TIMEOUT
-  bl64_dbg_lib_trace_stop
-
-  return 0
 }
 
 #######################################
@@ -128,49 +173,17 @@ function bl64_tf_run_tofu() {
 
   _bl64_tf_harden_tofu
 
+  export TF_IN_AUTOMATION='ON'
   if bl64_dbg_lib_command_is_enabled; then
     export TF_LOG="$BL64_TF_SET_LOG_TRACE"
   else
     export TF_LOG="$BL64_TF_LOG_LEVEL"
   fi
-  [[ "$BL64_TF_LOG_PATH" != "$BL64_VAR_DEFAULT" ]] && export TF_LOG_PATH="$BL64_TF_LOG_PATH"
+  ! bl64_lib_var_is_default "$BL64_TF_LOG_PATH" && export TF_LOG_PATH="$BL64_TF_LOG_PATH"
   bl64_dbg_lib_show_vars 'TF_LOG' 'TF_LOG_PATH'
 
   bl64_dbg_lib_trace_start
-  # shellcheck disable=SC2086
   "$BL64_TF_CMD_TOFU" \
     "$@"
   bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_tf_harden_tofu() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited TF_* shell variables'
-  bl64_dbg_lib_trace_start
-  unset TF_LOG
-  unset TF_LOG_PATH
-  unset TF_CLI_CONFIG_FILE
-  unset TF_LOG
-  unset TF_LOG_PATH
-  unset TF_IN_AUTOMATION
-  unset TF_INPUT
-  unset TF_DATA_DIR
-  unset TF_PLUGIN_CACHE_DIR
-  unset TF_REGISTRY_DISCOVERY_RETRY
-  unset TF_REGISTRY_CLIENT_TIMEOUT
-  bl64_dbg_lib_trace_stop
-
-  return 0
 }

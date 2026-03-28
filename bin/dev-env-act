@@ -34,6 +34,8 @@
   # Lib / Act / Paths
   export DEV_LIB_ACT_PATH_CACHE_ACTION="${DEV_PATH_TMP}/${DEV_ENV_ACT_ID}/cache-action"
   export DEV_LIB_ACT_PATH_CACHE_SERVER="${DEV_PATH_TMP}/${DEV_ENV_ACT_ID}/cache-server"
+  export DEV_LIB_ACT_PATH_ARTIFACT="${DEV_PATH_TMP}/${DEV_ENV_ACT_ID}/artifact"
+  export DEV_LIB_ACT_PORT_ARTIFACT='18080'
 }
 
 #
@@ -62,14 +64,14 @@
   # Lib / Act / Command
   export DEV_LIB_ACT_BIN="${DEV_LIB_ACT_BIN:-}"
   if [[ -z "$DEV_LIB_ACT_BIN" ]]; then
-    DEV_LIB_ACT_BIN="$(bl64_bsh_command_locate_user 'act')"
+    DEV_LIB_ACT_BIN="$(dev_bin64_lib_locate 'act')"
     if [[ -z "$DEV_LIB_ACT_BIN" ]]; then
       DEV_LIB_ACT_BIN="${DEV_LIB_ACT_TARGET}/act"
       if [[ ! -x "${DEV_LIB_ACT_BIN}" ]]; then
         DEV_LIB_ACT_SKIP='NO'
       fi
     else
-      DEV_LIB_ACT_TARGET="$(bl64_fmt_path_get_basename "$DEV_LIB_ACT_BIN")"
+      DEV_LIB_ACT_TARGET="$(dev_bin64_lib_basename "$DEV_LIB_ACT_BIN")"
     fi
   fi
 }

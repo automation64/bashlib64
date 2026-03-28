@@ -348,6 +348,18 @@ function _bl64_msg_format_emoji() {
   esac
 }
 
+function _bl64_msg_show_script() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
+  _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Script ' "${BL64_SCRIPT_ID} v${BL64_SCRIPT_VERSION}"
+}
+
+function _bl64_msg_show_about() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
+  if ! bl64_lib_var_is_default "$BL64_MSG_HELP_ABOUT"; then
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'About  ' "$BL64_MSG_HELP_ABOUT"
+  fi
+}
+
 #
 # Public functions
 #
@@ -366,7 +378,7 @@ function _bl64_msg_format_emoji() {
 #######################################
 function bl64_msg_show_check() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_error "${FUNCNAME[2]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message [task: ${FUNCNAME[2]:-main}@${BASH_LINENO[2]:-NA}.${FUNCNAME[3]:-main}@${BASH_LINENO[3]:-NA}]" >&2
@@ -386,7 +398,7 @@ function bl64_msg_show_check() {
 #######################################
 function bl64_msg_show_error() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message" >&2
@@ -406,7 +418,7 @@ function bl64_msg_show_error() {
 #######################################
 function bl64_msg_show_app_error() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message [task: ${FUNCNAME[2]:-main}.${FUNCNAME[3]:-main}]" >&2
@@ -426,7 +438,7 @@ function bl64_msg_show_app_error() {
 #######################################
 function bl64_msg_show_lib_error() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Error  ' "$message [task: ${FUNCNAME[2]:-main}.${FUNCNAME[3]:-main}]" >&2
@@ -447,7 +459,7 @@ function bl64_msg_show_lib_error() {
 #######################################
 function bl64_msg_show_fatal() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_error "${FUNCNAME[1]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_ERROR" 'Fatal  ' "$message" >&2
@@ -467,7 +479,7 @@ function bl64_msg_show_fatal() {
 #######################################
 function bl64_msg_show_warning() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_warning "${FUNCNAME[1]:-MAIN}" "$message" &&
     _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Warning' "$message" >&2
@@ -487,10 +499,10 @@ function bl64_msg_show_warning() {
 #######################################
 function bl64_msg_show_attention() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
-    _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Attention' "$message"
+    _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Caution' "$message"
 }
 
 #######################################
@@ -507,7 +519,7 @@ function bl64_msg_show_attention() {
 #######################################
 function bl64_msg_show_init() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
     bl64_msg_app_verbose_is_enabled || return 0
@@ -529,7 +541,7 @@ function bl64_msg_show_init() {
 #######################################
 function bl64_msg_show_info() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
     bl64_msg_app_detail_is_enabled || return 0
@@ -551,7 +563,7 @@ function bl64_msg_show_info() {
 #######################################
 function bl64_msg_show_phase() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_PHASE}:${message}" &&
     bl64_msg_app_verbose_is_enabled || return 0
@@ -573,7 +585,7 @@ function bl64_msg_show_phase() {
 #######################################
 function bl64_msg_show_task() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_TASK}:${message}" &&
     bl64_msg_app_verbose_is_enabled || return 0
@@ -595,7 +607,7 @@ function bl64_msg_show_task() {
 #######################################
 function bl64_msg_show_subtask() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_SUBTASK}:${message}" &&
     bl64_msg_app_detail_is_enabled || return 0
@@ -617,7 +629,7 @@ function bl64_msg_show_subtask() {
 #######################################
 function bl64_msg_show_lib_task() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBTASK}:${message}" &&
     bl64_msg_app_verbose_is_enabled || return 0
@@ -639,7 +651,7 @@ function bl64_msg_show_lib_task() {
 #######################################
 function bl64_msg_show_lib_subtask() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBSUBTASK}:${message}" &&
     bl64_msg_app_detail_is_enabled || return 0
@@ -661,7 +673,7 @@ function bl64_msg_show_lib_subtask() {
 #######################################
 function bl64_msg_show_lib_info() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_LIBINFO}:${message}" &&
     bl64_msg_app_detail_is_enabled || return 0
@@ -683,7 +695,7 @@ function bl64_msg_show_lib_info() {
 #######################################
 function bl64_msg_show_text() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
     bl64_msg_app_verbose_is_enabled || return 0
@@ -766,7 +778,7 @@ function bl64_msg_show_batch_finish() {
 #######################################
 function bl64_msg_show_input() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="$1"
+  local message="${1:-}"
 
   _bl64_msg_print "$BL64_MSG_TYPE_INPUT" 'Input  ' "$message"
 }
@@ -849,16 +861,25 @@ function bl64_msg_show_setup() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local message="${1:-$BL64_VAR_DEFAULT}"
   local variable=''
+  local has_values=''
 
   bl64_msg_app_detail_is_enabled || return 0
-  bl64_lib_var_is_default "$message" && message='Executing task with the following parameters'
+  bl64_lib_var_is_default "$message" && message='Configuration parameters:'
   shift
 
-  bl64_msg_show_info "$message"
   for variable in "$@"; do
-    [[ -z "${!variable:-}" || ! -v "$variable" ]] && continue
-    bl64_msg_show_info "${BL64_MSG_COSMETIC_TAB2}${variable}=${!variable}"
+    [[ ! -v "$variable" || -z "${!variable:-}" ]] && continue
+    has_values='1'
+    break
   done
+  if [[ -n "$has_values" ]]; then
+    _bl64_msg_print "$BL64_MSG_TYPE_INFO" 'Setup  ' "$message"
+    for variable in "$@"; do
+      [[ ! -v "$variable" || -z "${!variable:-}" ]] && continue
+      _bl64_msg_print "$BL64_MSG_TYPE_INFO" 'Setup  ' "${BL64_MSG_COSMETIC_TAB2}${variable}=${!variable}"
+    done
+  fi
+  return 0
 }
 
 #######################################
@@ -879,17 +900,17 @@ function bl64_msg_help_show() {
   bl64_msg_set_format "$BL64_MSG_FORMAT_PLAIN"
 
   _bl64_msg_show_script
-  if [[ "$BL64_MSG_HELP_USAGE" != "$BL64_VAR_DEFAULT" ]]; then
+  if ! bl64_lib_var_is_default "$BL64_MSG_HELP_USAGE"; then
     _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage  ' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
   fi
 
   _bl64_msg_show_about
 
-  if [[ "$BL64_MSG_HELP_DESCRIPTION" != "$BL64_VAR_DEFAULT" ]]; then
+  if ! bl64_lib_var_is_default "$BL64_MSG_HELP_DESCRIPTION"; then
     printf '\n%s\n' "$BL64_MSG_HELP_DESCRIPTION"
   fi
 
-  if [[ "$BL64_MSG_HELP_PARAMETERS" != "$BL64_VAR_DEFAULT" ]]; then
+  if ! bl64_lib_var_is_default "$BL64_MSG_HELP_PARAMETERS"; then
     printf '\n%s\n' "$BL64_MSG_HELP_PARAMETERS"
   fi
   bl64_msg_set_format "$current_format"
@@ -916,14 +937,24 @@ function bl64_msg_show_about() {
     _bl64_msg_show_about
 }
 
-function _bl64_msg_show_script() {
-  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-  _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Script ' "${BL64_SCRIPT_ID} v${BL64_SCRIPT_VERSION}"
-}
+#######################################
+# Display reference documentation message
+#
+# Arguments:
+#   $1: message
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_doc() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
+  local message="${1:-}"
 
-function _bl64_msg_show_about() {
-  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-  if [[ "$BL64_MSG_HELP_ABOUT" != "$BL64_VAR_DEFAULT" ]]; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'About  ' "$BL64_MSG_HELP_ABOUT"
-  fi
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
+    bl64_msg_app_detail_is_enabled || return 0
+
+  _bl64_msg_print "$BL64_MSG_TYPE_INFO" 'Doc    ' "$message"
 }

@@ -11,7 +11,7 @@
 
 function bl64_log_set_runtime() {
   bl64_msg_show_deprecated 'bl64_log_set_runtime' 'bl64_log_set_target'
-  bl64_log_set_target "$1" "$BL64_LOG_TYPE_MULTIPLE"
+  bl64_log_set_target "${1:-}" "$BL64_LOG_TYPE_MULTIPLE"
 }
 
 #
@@ -36,31 +36,31 @@ function bl64_log_set_runtime() {
 #######################################
 function _bl64_log_register() {
   _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local category="$2"
-  local payload="$3"
+  local source="${1:-}"
+  local category="${2:-}"
+  local payload="${3:-}"
 
   [[ "$BL64_LOG_MODULE" == "$BL64_VAR_OFF" ]] && return 0
   [[ -z "$source" || -z "$category" || -z "$payload" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
 
   case "$BL64_LOG_FORMAT" in
-  "$BL64_LOG_FORMAT_CSV")
-    printf '%(%FT%TZ%z)T%s%s%s%s%s%s%s%s%s%s%s%s\n' \
-      '-1' \
-      "$BL64_LOG_FS" \
-      "$BL64_SCRIPT_SID" \
-      "$BL64_LOG_FS" \
-      "$HOSTNAME" \
-      "$BL64_LOG_FS" \
-      "$BL64_SCRIPT_ID" \
-      "$BL64_LOG_FS" \
-      "${source}" \
-      "$BL64_LOG_FS" \
-      "$category" \
-      "$BL64_LOG_FS" \
-      "$payload" >>"$BL64_LOG_DESTINATION"
-    ;;
-  *) return "$BL64_LIB_ERROR_MODULE_SETUP_INVALID" ;;
+    "$BL64_LOG_FORMAT_CSV")
+      printf '%(%FT%TZ%z)T%s%s%s%s%s%s%s%s%s%s%s%s\n' \
+        '-1' \
+        "$BL64_LOG_FS" \
+        "$BL64_SCRIPT_SID" \
+        "$BL64_LOG_FS" \
+        "$HOSTNAME" \
+        "$BL64_LOG_FS" \
+        "$BL64_SCRIPT_ID" \
+        "$BL64_LOG_FS" \
+        "${source}" \
+        "$BL64_LOG_FS" \
+        "$category" \
+        "$BL64_LOG_FS" \
+        "$payload" >>"$BL64_LOG_DESTINATION"
+      ;;
+    *) return "$BL64_LIB_ERROR_MODULE_SETUP_INVALID" ;;
   esac
 }
 
@@ -83,8 +83,8 @@ function _bl64_log_register() {
 #######################################
 function bl64_log_info() {
   _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local payload="$2"
+  local source="${1:-}"
+  local payload="${2:-}"
 
   [[ "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_NONE" ||
     "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_ERROR" ||
@@ -112,8 +112,8 @@ function bl64_log_info() {
 #######################################
 function bl64_log_error() {
   _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local payload="$2"
+  local source="${1:-}"
+  local payload="${2:-}"
 
   [[ "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_NONE" ]] && return 0
 
@@ -138,8 +138,8 @@ function bl64_log_error() {
 #######################################
 function bl64_log_warning() {
   _bl64_dbg_lib_log_is_enabled && bl64_dbg_lib_show_function "$@"
-  local source="$1"
-  local payload="$2"
+  local source="${1:-}"
+  local payload="${2:-}"
 
   [[ "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_NONE" ||
     "$BL64_LOG_LEVEL" == "$BL64_LOG_CATEGORY_ERROR" ]] &&

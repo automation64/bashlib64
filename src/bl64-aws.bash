@@ -2,6 +2,114 @@
 # BashLib64 / Module / Functions / Interact with AWS
 #######################################
 
+#
+# Private functions
+#
+
+#######################################
+# Prepare CLI environment for execution
+#
+# * Sets access credential
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: preparation ok
+#   >0: failed to prepare
+#######################################
+function _bl64_aws_run_aws_prepare() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'Set CLI configuration'
+  export AWS_CONFIG_FILE="$BL64_AWS_CLI_CONFIG"
+  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE'
+
+  if [[ -n "$BL64_AWS_CLI_REGION" ]]; then
+    bl64_dbg_lib_show_info 'Set Default region'
+    export AWS_REGION="$BL64_AWS_CLI_REGION"
+    bl64_dbg_lib_show_vars 'AWS_REGION'
+  fi
+
+  bl64_dbg_lib_show_info 'Set credentials'
+  export AWS_SHARED_CREDENTIALS_FILE="$BL64_AWS_CLI_CREDENTIALS"
+  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE' 'AWS_SHARED_CREDENTIALS_FILE'
+  case "$BL64_AWS_ACCESS_MODE" in
+    "$BL64_AWS_ACCESS_MODE_PROFILE")
+      export AWS_PROFILE="$BL64_AWS_ACCESS_PROFILE"
+      bl64_dbg_lib_show_vars 'AWS_PROFILE'
+      ;;
+    "$BL64_AWS_ACCESS_MODE_SSO")
+      export AWS_PROFILE="$BL64_AWS_ACCESS_PROFILE"
+      bl64_dbg_lib_show_vars 'AWS_PROFILE'
+      ;;
+    "$BL64_AWS_ACCESS_MODE_KEY")
+      export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
+      export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
+      bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY'
+      ;;
+    "$BL64_AWS_ACCESS_MODE_TOKEN")
+      export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
+      export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
+      export AWS_SESSION_TOKEN="$BL64_AWS_ACCESS_TOKEN"
+      bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY' 'AWS_SESSION_TOKEN'
+      ;;
+    *)
+      bl64_dbg_lib_show_info 'No access mode requested, using CLI defaults'
+      ;;
+  esac
+  return 0
+}
+
+#######################################
+# Remove or nullify inherited shell variables that affects command execution
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_aws_harden_aws() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_show_info 'unset inherited AWS_* shell variables'
+  bl64_dbg_lib_trace_start
+  unset AWS_PAGER
+  unset AWS_PROFILE
+  unset AWS_REGION
+  unset AWS_CA_BUNDLE
+  unset AWS_CONFIG_FILE
+  unset AWS_DATA_PATH
+  unset AWS_DEFAULT_OUTPUT
+  unset AWS_DEFAULT_REGION
+  unset AWS_MAX_ATTEMPTS
+  unset AWS_RETRY_MODE
+  unset AWS_ROLE_ARN
+  unset AWS_SESSION_TOKEN
+  unset AWS_ACCESS_KEY_ID
+  unset AWS_CLI_AUTO_PROMPT
+  unset AWS_CLI_FILE_ENCODING
+  unset AWS_METADATA_SERVICE_TIMEOUT
+  unset AWS_ROLE_SESSION_NAME
+  unset AWS_SECRET_ACCESS_KEY
+  unset AWS_SHARED_CREDENTIALS_FILE
+  unset AWS_EC2_METADATA_DISABLED
+  unset AWS_METADATA_SERVICE_NUM_ATTEMPTS
+  unset AWS_WEB_IDENTITY_TOKEN_FILE
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+#
+# Public functions
+#
+
 #######################################
 # Creates a SSO profile in the AWS CLI configuration file
 #
@@ -177,106 +285,6 @@ function bl64_aws_run_aws() {
     $BL64_AWS_SET_OUPUT_NO_PAGER \
     $verbosity $debug "$@"
   bl64_dbg_lib_trace_stop
-}
-
-#######################################
-# Prepare CLI environment for execution
-#
-# * Sets access credential
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: check errors
-# Returns:
-#   0: preparation ok
-#   >0: failed to prepare
-#######################################
-function _bl64_aws_run_aws_prepare() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'Set CLI configuration'
-  export AWS_CONFIG_FILE="$BL64_AWS_CLI_CONFIG"
-  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE'
-
-  if [[ -n "$BL64_AWS_CLI_REGION" ]]; then
-    bl64_dbg_lib_show_info 'Set Default region'
-    export AWS_REGION="$BL64_AWS_CLI_REGION"
-    bl64_dbg_lib_show_vars 'AWS_REGION'
-  fi
-
-  bl64_dbg_lib_show_info 'Set credentials'
-  export AWS_SHARED_CREDENTIALS_FILE="$BL64_AWS_CLI_CREDENTIALS"
-  bl64_dbg_lib_show_vars 'AWS_CONFIG_FILE' 'AWS_SHARED_CREDENTIALS_FILE'
-  case "$BL64_AWS_ACCESS_MODE" in
-    "$BL64_AWS_ACCESS_MODE_PROFILE")
-      export AWS_PROFILE="$BL64_AWS_ACCESS_PROFILE"
-      bl64_dbg_lib_show_vars 'AWS_PROFILE'
-      ;;
-    "$BL64_AWS_ACCESS_MODE_SSO")
-      export AWS_PROFILE="$BL64_AWS_ACCESS_PROFILE"
-      bl64_dbg_lib_show_vars 'AWS_PROFILE'
-      ;;
-    "$BL64_AWS_ACCESS_MODE_KEY")
-      export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
-      export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
-      bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY'
-      ;;
-    "$BL64_AWS_ACCESS_MODE_TOKEN")
-      export AWS_ACCESS_KEY_ID="$BL64_AWS_ACCESS_KEY_ID"
-      export AWS_SECRET_ACCESS_KEY="$BL64_AWS_ACCESS_KEY_SECRET"
-      export AWS_SESSION_TOKEN="$BL64_AWS_ACCESS_TOKEN"
-      bl64_dbg_lib_show_vars 'AWS_ACCESS_KEY_ID' 'AWS_SECRET_ACCESS_KEY' 'AWS_SESSION_TOKEN'
-      ;;
-    *)
-      bl64_dbg_lib_show_info 'No access mode requested, using CLI defaults'
-      ;;
-  esac
-  return 0
-}
-
-#######################################
-# Remove or nullify inherited shell variables that affects command execution
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_aws_harden_aws() {
-  bl64_dbg_lib_show_function
-
-  bl64_dbg_lib_show_info 'unset inherited AWS_* shell variables'
-  bl64_dbg_lib_trace_start
-  unset AWS_PAGER
-  unset AWS_PROFILE
-  unset AWS_REGION
-  unset AWS_CA_BUNDLE
-  unset AWS_CONFIG_FILE
-  unset AWS_DATA_PATH
-  unset AWS_DEFAULT_OUTPUT
-  unset AWS_DEFAULT_REGION
-  unset AWS_MAX_ATTEMPTS
-  unset AWS_RETRY_MODE
-  unset AWS_ROLE_ARN
-  unset AWS_SESSION_TOKEN
-  unset AWS_ACCESS_KEY_ID
-  unset AWS_CLI_AUTO_PROMPT
-  unset AWS_CLI_FILE_ENCODING
-  unset AWS_METADATA_SERVICE_TIMEOUT
-  unset AWS_ROLE_SESSION_NAME
-  unset AWS_SECRET_ACCESS_KEY
-  unset AWS_SHARED_CREDENTIALS_FILE
-  unset AWS_EC2_METADATA_DISABLED
-  unset AWS_METADATA_SERVICE_NUM_ATTEMPTS
-  unset AWS_WEB_IDENTITY_TOKEN_FILE
-  bl64_dbg_lib_trace_stop
-
-  return 0
 }
 
 #######################################
