@@ -445,6 +445,7 @@ function bl64_k8s_run_kubectl_cfg() {
 #######################################
 function bl64_k8s_run_kubectl() {
   bl64_dbg_lib_show_function "$@"
+  local command="${1:-}"
   local verbosity="$BL64_K8S_SET_VERBOSE_NONE"
 
   bl64_check_parameters_none "$#" &&
@@ -452,13 +453,13 @@ function bl64_k8s_run_kubectl() {
     return $?
 
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_K8S_SET_VERBOSE_TRACE"
+  shift
 
   _bl64_k8s_harden_kubectl
   bl64_dbg_lib_command_trace_start
   # shellcheck disable=SC2086
   "$BL64_K8S_CMD_KUBECTL" \
-    $verbosity \
-    "$@"
+    "$command" $verbosity "$@"
   bl64_dbg_lib_command_trace_stop
 }
 
