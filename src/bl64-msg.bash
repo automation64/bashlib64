@@ -502,7 +502,7 @@ function bl64_msg_show_attention() {
   local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
-    _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Attention' "$message"
+    _bl64_msg_print "$BL64_MSG_TYPE_WARNING" 'Caution' "$message"
 }
 
 #######################################
@@ -926,4 +926,26 @@ function bl64_msg_show_about() {
   bl64_msg_app_verbose_is_enabled || return 0
   _bl64_msg_show_script &&
     _bl64_msg_show_about
+}
+
+#######################################
+# Display reference documentation message
+#
+# Arguments:
+#   $1: message
+# Outputs:
+#   STDOUT: message
+#   STDERR: None
+# Returns:
+#   0: successfull execution
+#   >0: printf error
+#######################################
+function bl64_msg_show_doc() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
+  local message="${1:-}"
+
+  bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
+    bl64_msg_app_detail_is_enabled || return 0
+
+  _bl64_msg_print "$BL64_MSG_TYPE_INFO" 'Doc    ' "$message"
 }
