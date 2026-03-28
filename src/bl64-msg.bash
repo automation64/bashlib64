@@ -348,6 +348,18 @@ function _bl64_msg_format_emoji() {
   esac
 }
 
+function _bl64_msg_show_script() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
+  _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Script ' "${BL64_SCRIPT_ID} v${BL64_SCRIPT_VERSION}"
+}
+
+function _bl64_msg_show_about() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
+  if ! bl64_lib_var_is_default "$BL64_MSG_HELP_ABOUT"; then
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'About  ' "$BL64_MSG_HELP_ABOUT"
+  fi
+}
+
 #
 # Public functions
 #
@@ -914,16 +926,4 @@ function bl64_msg_show_about() {
   bl64_msg_app_verbose_is_enabled || return 0
   _bl64_msg_show_script &&
     _bl64_msg_show_about
-}
-
-function _bl64_msg_show_script() {
-  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-  _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Script ' "${BL64_SCRIPT_ID} v${BL64_SCRIPT_VERSION}"
-}
-
-function _bl64_msg_show_about() {
-  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-  if ! bl64_lib_var_is_default "$BL64_MSG_HELP_ABOUT"; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'About  ' "$BL64_MSG_HELP_ABOUT"
-  fi
 }
