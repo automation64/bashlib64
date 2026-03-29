@@ -34,6 +34,8 @@ function bl64_msg_setup() {
 #######################################
 # Set verbosity level
 #
+# * BL64_MSG_VERBOSE_LIB is deprecated. Use BL64_MSG_VERBOSE_DETAIL instead
+#
 # Arguments:
 #   $1: target level. One of BL64_MSG_VERBOSE_*
 # Outputs:
@@ -53,7 +55,7 @@ function bl64_msg_set_level() {
     "$BL64_MSG_VERBOSE_NONE") bl64_msg_all_disable_verbose ;;
     "$BL64_MSG_VERBOSE_APP") bl64_msg_app_enable_verbose ;;
     "$BL64_MSG_VERBOSE_DETAIL") bl64_msg_app_enable_detail ;;
-    "$BL64_MSG_VERBOSE_LIB") bl64_msg_app_detail_is_enabled ;;
+    "$BL64_MSG_VERBOSE_LIB") bl64_msg_app_enable_detail ;;
     "$BL64_MSG_VERBOSE_ALL") bl64_msg_all_enable_verbose ;;
     *)
       bl64_check_alert_parameter_invalid 'BL64_MSG_VERBOSE' \
