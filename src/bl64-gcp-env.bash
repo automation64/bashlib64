@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_GCP_VERSION='3.0.3'
+  declare BL64_GCP_VERSION='3.0.4'
 
   declare BL64_GCP_MODULE='0'
 

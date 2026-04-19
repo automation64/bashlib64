@@ -475,7 +475,7 @@ function bl64_check_overwrite_skip() {
 
   if ! bl64_lib_flag_is_enabled "$overwrite" || bl64_lib_var_is_default "$overwrite"; then
     if [[ -e "$path" ]]; then
-      bl64_msg_show_warning "${message:-target is already present and overwrite is not requested. Target is left as is} (path: ${path})"
+      bl64_dbg_lib_show_info "${message:-target is already present and overwrite is not requested. Target is left as is} (path: ${path})"
       return 0
     fi
   fi
@@ -549,7 +549,7 @@ function bl64_check_compatibility_mode() {
   local extra="${1:-}"
 
   if bl64_lib_mode_compability_is_enabled; then
-    bl64_msg_show_warning "using generic compatibility mode for untested command version (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO})"
+    bl64_dbg_lib_show_info "using generic compatibility mode for untested command version (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO})"
   else
     bl64_check_alert_unsupported "$extra"
     return $?

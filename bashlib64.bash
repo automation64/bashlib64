@@ -103,7 +103,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='23.0.1'
+  declare BL64_VERSION='23.0.2'
 
   #
   # Imported generic shell standard variables
@@ -1259,7 +1259,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_GCP_VERSION='3.0.3'
+  declare BL64_GCP_VERSION='3.0.4'
 
   declare BL64_GCP_MODULE='0'
 
@@ -12941,7 +12941,7 @@ function _bl64_gcp_harden_gcloud() {
 #######################################
 function bl64_gcp_run_gcloud() {
   bl64_dbg_lib_show_function "$@"
-  local debug=' '
+  local verbosity='--verbosity error'
   local config=' '
   local project=' '
   local impersonate_sa=' '
@@ -12951,9 +12951,7 @@ function bl64_gcp_run_gcloud() {
     return $?
 
   if bl64_dbg_lib_command_is_enabled; then
-    debug='--verbosity debug --log-http'
-  else
-    debug='--verbosity none --quiet'
+    verbosity='--verbosity debug --log-http'
   fi
 
   _bl64_gcp_harden_gcloud
@@ -12964,7 +12962,8 @@ function bl64_gcp_run_gcloud() {
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_GCP_CMD_GCLOUD" \
-    $debug \
+    --quiet \
+    $verbosity \
     $config \
     $project \
     $impersonate_sa \

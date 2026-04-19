@@ -185,7 +185,7 @@ function _bl64_py_set_options() {
     BL64_PY_SET_PIP_VERSION='--version'
   }
 
-  if [[ "${BL64_PY_VERSION_PIP3%%.*}" -ge 10 ]]; then
+  if [[ -n "$BL64_PY_VERSION_PIP3" && "${BL64_PY_VERSION_PIP3%%.*}" -ge 10 ]]; then
     BL64_PY_SET_PIP_NO_COLOR="--no-color"
   else
     BL64_PY_SET_PIP_NO_COLOR=' '
@@ -225,11 +225,10 @@ function _bl64_py_set_version() {
     return "$BL64_LIB_ERROR_TASK_FAILED"
 
   BL64_PY_VERSION_PIP3="$(
-    "$BL64_PY_CMD_PYTHON3" -c "import pip; print(pip.__version__)"
+    "$BL64_PY_CMD_PYTHON3" -c "import pip; print(pip.__version__)" 2>/dev/null
   )"
   [[ -z "$BL64_PY_VERSION_PIP3" ]] &&
-    bl64_msg_show_lib_error "Unable to determine PIP version (${BL64_PY_CMD_PYTHON3})" &&
-    return "$BL64_LIB_ERROR_TASK_FAILED"
+    bl64_dbg_lib_show_info "Unable to determine PIP version)"
 
   return 0
 }
