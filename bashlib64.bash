@@ -510,7 +510,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CHECK_VERSION='6.2.3'
+  declare BL64_CHECK_VERSION='6.2.4'
 
   declare BL64_CHECK_MODULE='0'
 }
@@ -1178,7 +1178,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.4.4'
+  declare BL64_FS_VERSION='6.4.5'
 
   declare BL64_FS_MODULE='0'
 
@@ -1248,7 +1248,7 @@ function bl64_lib_script_minver_check() {
   declare BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
 
   declare BL64_FS_ARCHIVE_POSTFIX='-ARCHIVE'
-  declare BL64_FS_BACKUP_POSTFIX='-BACKUP'
+  declare BL64_FS_BACKUP_SUFFIX='-BACKUP'
 
   declare BL64_FS_TMP_PREFIX='bl64tmp'
 }
@@ -1298,7 +1298,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_IAM_VERSION='6.1.1'
+  declare BL64_IAM_VERSION='6.1.2'
 
   declare BL64_IAM_MODULE='0'
 
@@ -1384,7 +1384,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PKG_VERSION='6.6.1'
+  declare BL64_PKG_VERSION='6.6.3'
 
   declare BL64_PKG_MODULE='0'
 
@@ -2225,7 +2225,7 @@ function bl64_check_overwrite_skip() {
 
   if ! bl64_lib_flag_is_enabled "$overwrite" || bl64_lib_var_is_default "$overwrite"; then
     if [[ -e "$path" ]]; then
-      bl64_msg_show_warning "${message:-target is already present and overwrite is not requested. Target is left as is} (path: ${path})"
+      bl64_dbg_lib_show_info "${message:-target is already present and overwrite is not requested. Target is left as is} (path: ${path})"
       return 0
     fi
   fi
@@ -2299,7 +2299,7 @@ function bl64_check_compatibility_mode() {
   local extra="${1:-}"
 
   if bl64_lib_mode_compability_is_enabled; then
-    bl64_msg_show_warning "using generic compatibility mode for untested command version (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO})"
+    bl64_dbg_lib_show_info "using generic compatibility mode for untested command version (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO})"
   else
     bl64_check_alert_unsupported "$extra"
     return $?
@@ -3216,8 +3216,7 @@ function bl64_dbg_lib_dryrun_show() {
 #######################################
 function bl64_dbg_app_breakpoint() {
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BREAKPOINT} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_BREAKPOINT}: REMOVE THIS BREAKPOINT FROM THE CODE AFTER TESTING"
-  bl64_dbg_app_task_is_enabled || return 0
-  return 1
+  exit 1
 }
 
 #######################################
@@ -11396,7 +11395,7 @@ function bl64_fs_path_copy() {
   bl64_check_parameter 'destination' || return $?
 
   [[ "$#" == 0 ]] &&
-    bl64_msg_show_warning 'there are no files to copy. No further action taken' &&
+    bl64_dbg_lib_show_info 'there are no files to copy. No further action taken' &&
     return 0
 
   bl64_fs_dir_create \
@@ -11467,7 +11466,7 @@ function bl64_fs_file_copy() {
     bl64_check_directory "$destination" || return $?
 
   [[ "$#" == 0 ]] &&
-    bl64_msg_show_warning 'there are no files to copy. No further action taken' &&
+    bl64_dbg_lib_show_info 'there are no files to copy. No further action taken' &&
     return 0
 
   # shellcheck disable=SC2086
@@ -11767,7 +11766,7 @@ function bl64_fs_run_mv() {
 #######################################
 # Remove content from OS temporary repositories
 #
-# * Warning: intented for container build only, not to run on regular OS
+# * Warning: intended for container build only, not to run on regular OS
 #
 # Arguments:
 #   None
@@ -11794,7 +11793,7 @@ function bl64_fs_cleanup_tmps() {
 #######################################
 # Remove or reset logs from standard locations
 #
-# * Warning: intented for container build only, not to run on regular OS
+# * Warning: intended for container build only, not to run on regular OS
 #
 # Arguments:
 #   None
@@ -11818,7 +11817,7 @@ function bl64_fs_cleanup_logs() {
 #######################################
 # Remove or reset OS caches from standard locations
 #
-# * Warning: intented for container build only, not to run on regular OS
+# * Warning: intended for container build only, not to run on regular OS
 #
 # Arguments:
 #   None
@@ -11842,7 +11841,7 @@ function bl64_fs_cleanup_caches() {
 #######################################
 # Performs a complete cleanup of OS ephemeral content
 #
-# * Warning: intented for container build only, not to run on regular OS
+# * Warning: intended for container build only, not to run on regular OS
 # * Removes temporary files
 # * Cleans caches
 # * Removes logs
@@ -12447,7 +12446,7 @@ function bl64_fs_symlink_create() {
       bl64_fs_file_remove "$destination" ||
         return $?
     else
-      bl64_msg_show_warning "target symbolic link is already present. No further action taken (${destination})"
+      bl64_dbg_lib_show_info "target symbolic link is already present. No further action taken (${destination})"
       return 0
     fi
   elif [[ -f "$destination" ]]; then
@@ -12526,7 +12525,7 @@ function bl64_fs_file_remove() {
   local path_current=''
 
   [[ "$#" == 0 ]] &&
-    bl64_msg_show_warning 'there are no files to remove. No further action taken' &&
+    bl64_dbg_lib_show_info 'there are no files to remove. No further action taken' &&
     return 0
 
   for path_current in "$@"; do
@@ -12625,7 +12624,7 @@ function bl64_fs_run_touch() {
 function bl64_fs_file_backup() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-}"
-  local backup="${source}${BL64_FS_BACKUP_POSTFIX}"
+  local backup="${source}${BL64_FS_BACKUP_SUFFIX}"
 
   bl64_check_parameter 'source' || return $?
   [[ ! -f "$source" ]] && bl64_dbg_lib_show_comments "file is not yet created, nothing to do (${source})" && return 0
@@ -12660,7 +12659,7 @@ function bl64_fs_file_restore() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-}"
   local -i result=$2
-  local backup="${source}${BL64_FS_BACKUP_POSTFIX}"
+  local backup="${source}${BL64_FS_BACKUP_SUFFIX}"
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'result' ||
@@ -13613,7 +13612,7 @@ function bl64_iam_user_add() {
     return $?
 
   if bl64_iam_user_is_created "$login"; then
-    bl64_msg_show_warning "user already created, re-using existing one ($login)"
+    bl64_dbg_lib_show_info "user already created, re-using existing one ($login)"
     return 0
   fi
 
@@ -13719,7 +13718,7 @@ function bl64_iam_group_add() {
     return $?
 
   if bl64_iam_group_is_created "$group_name"; then
-    bl64_msg_show_warning "group already created, re-using existing one ($group_name)"
+    bl64_dbg_lib_show_info "group already created, re-using existing one ($group_name)"
     return 0
   fi
 
@@ -15580,7 +15579,7 @@ function _bl64_pkg_repository_add_yum() {
 
   definition="${BL64_PKG_PATH_YUM_REPOS_D}/${name}.${BL64_PKG_DEF_SUFIX_YUM_REPOSITORY}"
   [[ -f "$definition" ]] &&
-    bl64_msg_show_warning "requested repository is already present. Continue using existing one. (${definition})" &&
+    bl64_dbg_lib_show_info "requested repository is already present. Continue using existing one. (${definition})" &&
     return 0
 
   bl64_msg_show_lib_subtask "create YUM repository definition (${definition})"
@@ -15628,7 +15627,7 @@ function _bl64_pkg_repository_add_apt() {
 
   definition="${BL64_PKG_PATH_APT_SOURCES_LIST_D}/${name}.${BL64_PKG_DEF_SUFIX_APT_REPOSITORY}"
   [[ -f "$definition" ]] &&
-    bl64_msg_show_warning "requested repository is already present. Continue using existing one. (${definition})" &&
+    bl64_dbg_lib_show_info "requested repository is already present. Continue using existing one. (${definition})" &&
     return 0
 
   bl64_msg_show_lib_subtask "create APT repository definition (${definition})"
@@ -16367,17 +16366,17 @@ function bl64_pkg_run_softwareupdate() {
 #######################################
 function bl64_pkg_run_pacman() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=' '
 
   bl64_check_module 'BL64_PKG_MODULE' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
-  bl64_msg_app_run_is_enabled && verbose="$BL64_PKG_SET_VERBOSE"
+  bl64_dbg_lib_command_is_enabled && debug="$BL64_PKG_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_PKG_CMD_PACMAN" $verbose "$@"
+  "$BL64_PKG_CMD_PACMAN" $debug "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -16568,7 +16567,7 @@ function _bl64_py_set_options() {
     BL64_PY_SET_PIP_VERSION='--version'
   }
 
-  if [[ "${BL64_PY_VERSION_PIP3%%.*}" -ge 10 ]]; then
+  if [[ -n "$BL64_PY_VERSION_PIP3" && "${BL64_PY_VERSION_PIP3%%.*}" -ge 10 ]]; then
     BL64_PY_SET_PIP_NO_COLOR="--no-color"
   else
     BL64_PY_SET_PIP_NO_COLOR=' '
@@ -16608,11 +16607,10 @@ function _bl64_py_set_version() {
     return "$BL64_LIB_ERROR_TASK_FAILED"
 
   BL64_PY_VERSION_PIP3="$(
-    "$BL64_PY_CMD_PYTHON3" -c "import pip; print(pip.__version__)"
+    "$BL64_PY_CMD_PYTHON3" -c "import pip; print(pip.__version__)" 2>/dev/null
   )"
   [[ -z "$BL64_PY_VERSION_PIP3" ]] &&
-    bl64_msg_show_lib_error "Unable to determine PIP version (${BL64_PY_CMD_PYTHON3})" &&
-    return "$BL64_LIB_ERROR_TASK_FAILED"
+    bl64_dbg_lib_show_info "Unable to determine PIP version)"
 
   return 0
 }
