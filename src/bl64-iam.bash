@@ -52,7 +52,7 @@ function bl64_iam_user_add() {
     return $?
 
   if bl64_iam_user_is_created "$login"; then
-    bl64_msg_show_warning "user already created, re-using existing one ($login)"
+    bl64_dbg_lib_show_info "user already created, re-using existing one ($login)"
     return 0
   fi
 
@@ -158,7 +158,7 @@ function bl64_iam_group_add() {
     return $?
 
   if bl64_iam_group_is_created "$group_name"; then
-    bl64_msg_show_warning "group already created, re-using existing one ($group_name)"
+    bl64_dbg_lib_show_info "group already created, re-using existing one ($group_name)"
     return 0
   fi
 

@@ -575,6 +575,5 @@ function bl64_dbg_lib_dryrun_show() {
 #######################################
 function bl64_dbg_app_breakpoint() {
   _bl64_dbg_show "${_BL64_DBG_TXT_LABEL_BREAKPOINT} (${#FUNCNAME[*]})[${FUNCNAME[1]:-NONE}] ${_BL64_DBG_TXT_BREAKPOINT}: REMOVE THIS BREAKPOINT FROM THE CODE AFTER TESTING"
-  bl64_dbg_app_task_is_enabled || return 0
-  return 1
+  exit 1
 }

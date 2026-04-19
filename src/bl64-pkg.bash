@@ -19,7 +19,7 @@ function _bl64_pkg_repository_add_yum() {
 
   definition="${BL64_PKG_PATH_YUM_REPOS_D}/${name}.${BL64_PKG_DEF_SUFIX_YUM_REPOSITORY}"
   [[ -f "$definition" ]] &&
-    bl64_msg_show_warning "requested repository is already present. Continue using existing one. (${definition})" &&
+    bl64_dbg_lib_show_info "requested repository is already present. Continue using existing one. (${definition})" &&
     return 0
 
   bl64_msg_show_lib_subtask "create YUM repository definition (${definition})"
@@ -67,7 +67,7 @@ function _bl64_pkg_repository_add_apt() {
 
   definition="${BL64_PKG_PATH_APT_SOURCES_LIST_D}/${name}.${BL64_PKG_DEF_SUFIX_APT_REPOSITORY}"
   [[ -f "$definition" ]] &&
-    bl64_msg_show_warning "requested repository is already present. Continue using existing one. (${definition})" &&
+    bl64_dbg_lib_show_info "requested repository is already present. Continue using existing one. (${definition})" &&
     return 0
 
   bl64_msg_show_lib_subtask "create APT repository definition (${definition})"
@@ -806,16 +806,16 @@ function bl64_pkg_run_softwareupdate() {
 #######################################
 function bl64_pkg_run_pacman() {
   bl64_dbg_lib_show_function "$@"
-  local verbose=''
+  local debug=' '
 
   bl64_check_module 'BL64_PKG_MODULE' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
-  bl64_msg_app_run_is_enabled && verbose="$BL64_PKG_SET_VERBOSE"
+  bl64_dbg_lib_command_is_enabled && debug="$BL64_PKG_SET_VERBOSE"
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
-  "$BL64_PKG_CMD_PACMAN" $verbose "$@"
+  "$BL64_PKG_CMD_PACMAN" $debug "$@"
   bl64_dbg_lib_trace_stop
 }
