@@ -25,14 +25,14 @@
 {
   # Env / BashLib64 / Module environment definition version
   export DEV_ENV_BASHLIB64_ID='bl64'
-  export DEV_ENV_BASHLIB64_VERSION='3.1.0'
+  export DEV_ENV_BASHLIB64_VERSION='4.0.0'
 
   # Lib / BashLib64 / Skip installation?
   export DEV_LIB_BASHLIB64_SKIP='NO'
   # Lib / BashLib64 / Location
   export DEV_LIB_BASHLIB64_TARGET="${DEV_PATH_LIB}/${DEV_ENV_BASHLIB64_ID}"
   # Lib / BashLib64 / Version
-  export DEV_LIB_BASHLIB64_VERSION='22.12.0'
+  export DEV_LIB_BASHLIB64_VERSION='23.0.2'
 }
 
 #
