@@ -1019,7 +1019,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ARC_VERSION='4.4.1'
+  declare BL64_ARC_VERSION='4.5.0'
 
   declare BL64_ARC_MODULE='0'
 
@@ -1029,6 +1029,7 @@ function bl64_lib_script_minver_check() {
   declare BL64_ARC_CMD_UNXZ="$BL64_VAR_UNAVAILABLE"
   declare BL64_ARC_CMD_UNZIP="$BL64_VAR_UNAVAILABLE"
   declare BL64_ARC_CMD_ZIP="$BL64_VAR_UNAVAILABLE"
+  declare BL64_ARC_CMD_ZSTD="$BL64_VAR_UNAVAILABLE"
   declare BL64_ARC_CMD_7ZZ="$BL64_VAR_UNAVAILABLE"
 
   declare BL64_ARC_SET_TAR_VERBOSE=''
@@ -1329,25 +1330,16 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_K8S_VERSION='4.0.0'
+  declare BL64_K8S_VERSION='4.1.0'
 
   declare BL64_K8S_MODULE='0'
 
   declare BL64_K8S_CMD_KUBECTL="$BL64_VAR_UNAVAILABLE"
 
+  declare BL64_K8S_CFG_KUBECONFIG=''
   declare BL64_K8S_CFG_KUBECTL_OUTPUT=''
   declare BL64_K8S_CFG_KUBECTL_OUTPUT_JSON='j'
   declare BL64_K8S_CFG_KUBECTL_OUTPUT_YAML='y'
-
-  declare BL64_K8S_SET_VERBOSE_NONE="$BL64_VAR_UNAVAILABLE"
-  declare BL64_K8S_SET_VERBOSE_NORMAL="$BL64_VAR_UNAVAILABLE"
-  declare BL64_K8S_SET_VERBOSE_DEBUG="$BL64_VAR_UNAVAILABLE"
-  declare BL64_K8S_SET_OUTPUT_JSON="$BL64_VAR_UNAVAILABLE"
-  declare BL64_K8S_SET_OUTPUT_YAML="$BL64_VAR_UNAVAILABLE"
-  declare BL64_K8S_SET_OUTPUT_TXT="$BL64_VAR_UNAVAILABLE"
-  declare BL64_K8S_SET_OUTPUT_NAME="$BL64_VAR_UNAVAILABLE"
-  declare BL64_K8S_SET_DRY_RUN_SERVER="$BL64_VAR_UNAVAILABLE"
-  declare BL64_K8S_SET_DRY_RUN_CLIENT="$BL64_VAR_UNAVAILABLE"
 
   declare BL64_K8S_VERSION_KUBECTL=''
 
@@ -1384,7 +1376,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PKG_VERSION='6.6.3'
+  declare BL64_PKG_VERSION='6.6.4'
 
   declare BL64_PKG_MODULE='0'
 
@@ -1609,7 +1601,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TXT_VERSION='2.7.0'
+  declare BL64_TXT_VERSION='2.7.1'
 
   declare BL64_TXT_MODULE='0'
 
@@ -2294,6 +2286,7 @@ function bl64_check_alert_unsupported() {
 #   0: using compatibility mode
 #   >0: command is incompatible and compatibility mode is disabled
 #######################################
+# shellcheck disable=SC2120
 function bl64_check_compatibility_mode() {
   _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local extra="${1:-}"
@@ -6397,40 +6390,41 @@ function _bl64_arc_set_command() {
   BL64_ARC_CMD_GUNZIP="$(bl64_bsh_command_locate 'gunzip')"
   BL64_ARC_CMD_UNXZ="$(bl64_bsh_command_locate 'unxz')"
   BL64_ARC_CMD_7ZZ="$(bl64_bsh_command_locate '7zz')"
+  BL64_ARC_CMD_ZSTD="$(bl64_bsh_command_locate 'zstd')"
 
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_ARC_CMD_TAR='/bin/tar'
-    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
-    BL64_ARC_CMD_ZIP='/usr/bin/zip'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_ARC_CMD_TAR='/bin/tar'
-    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
-    BL64_ARC_CMD_ZIP='/usr/bin/zip'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_ARC_CMD_TAR='/bin/tar'
-    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
-    BL64_ARC_CMD_ZIP='/usr/bin/zip'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_ARC_CMD_TAR='/bin/tar'
-    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
-    BL64_ARC_CMD_ZIP='/usr/bin/zip'
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_ARC_CMD_TAR='/usr/bin/tar'
-    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
-    BL64_ARC_CMD_ZIP='/usr/bin/zip'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_ARC_CMD_TAR='/usr/bin/tar'
-    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
-    BL64_ARC_CMD_ZIP='/usr/bin/zip'
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_ARC_CMD_TAR='/bin/tar'
+      BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+      BL64_ARC_CMD_ZIP='/usr/bin/zip'
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      BL64_ARC_CMD_TAR='/bin/tar'
+      BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+      BL64_ARC_CMD_ZIP='/usr/bin/zip'
+      ;;
+    ${BL64_OS_SLES}-*)
+      BL64_ARC_CMD_TAR='/bin/tar'
+      BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+      BL64_ARC_CMD_ZIP='/usr/bin/zip'
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_ARC_CMD_TAR='/bin/tar'
+      BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+      BL64_ARC_CMD_ZIP='/usr/bin/zip'
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_ARC_CMD_TAR='/usr/bin/tar'
+      BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+      BL64_ARC_CMD_ZIP='/usr/bin/zip'
+      ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_ARC_CMD_TAR='/usr/bin/tar'
+      BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+      BL64_ARC_CMD_ZIP='/usr/bin/zip'
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -6449,31 +6443,31 @@ function _bl64_arc_set_command() {
 #######################################
 function _bl64_arc_set_options() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_ARC_SET_TAR_VERBOSE='--verbose'
-    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_ARC_SET_TAR_VERBOSE='--verbose'
-    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_ARC_SET_TAR_VERBOSE='--verbose'
-    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_ARC_SET_TAR_VERBOSE='-v'
-    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_ARC_SET_TAR_VERBOSE='--verbose'
-    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_ARC_SET_TAR_VERBOSE='--verbose'
-    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_ARC_SET_TAR_VERBOSE='--verbose'
+      BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      BL64_ARC_SET_TAR_VERBOSE='--verbose'
+      BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+      ;;
+    ${BL64_OS_SLES}-*)
+      BL64_ARC_SET_TAR_VERBOSE='--verbose'
+      BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_ARC_SET_TAR_VERBOSE='-v'
+      BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_ARC_SET_TAR_VERBOSE='--verbose'
+      BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+      ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_ARC_SET_TAR_VERBOSE='--verbose'
+      BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -7096,6 +7090,69 @@ function bl64_arc_bzip2_open() {
   # shellcheck disable=SC2086
   cd "$destination" &&
     bl64_arc_run_bunzip2 \
+      --decompress \
+      --force \
+      "$source"
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_arc_run_zstd() {
+  bl64_dbg_lib_show_function "$@"
+  bl64_check_module 'BL64_ARC_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_ARC_CMD_ZSTD" || return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_ARC_CMD_ZSTD" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Open zstd files and remove the source after extraction
+#
+# * Preserves permissions but not ownership
+# * Overwrites destination
+# * Ignore ACLs and extended attributes
+#
+# Arguments:
+#   $1: Full path to the source file
+#   $2: Full path to the destination
+# Outputs:
+#   STDOUT: None
+#   STDERR: tar or lib error messages
+# Returns:
+#   BL64_ARC_ERROR_INVALID_DESTINATION
+#   tar error status
+#######################################
+function bl64_arc_zstd_open() {
+  bl64_dbg_lib_show_function "$@"
+  local source="${1:-}"
+  local destination="${2:-}"
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'destination' &&
+    bl64_check_file "$source" &&
+    bl64_check_directory "$destination" ||
+    return $?
+
+  bl64_msg_show_lib_subtask "open zstd archive ($source)"
+  # shellcheck disable=SC2086
+  cd "$destination" &&
+    bl64_arc_run_zstd \
       --decompress \
       --force \
       "$source"
@@ -14228,7 +14285,6 @@ function bl64_k8s_setup() {
     _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
     _bl64_k8s_set_command "$kubectl_bin" &&
     _bl64_k8s_set_version &&
-    _bl64_k8s_set_options &&
     _bl64_k8s_set_runtime &&
     BL64_K8S_MODULE="$BL64_VAR_ON"
   bl64_check_alert_module_setup 'k8s'
@@ -14254,54 +14310,6 @@ function _bl64_k8s_set_command() {
 }
 
 #######################################
-# Create command sets for common options
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_k8s_set_options() {
-  bl64_dbg_lib_show_function
-
-  # shellcheck disable=SC2034
-  case "$BL64_K8S_VERSION_KUBECTL" in
-    1.2? | 1.3?)
-      BL64_K8S_SET_VERBOSE_NONE='--v=0'
-      BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
-      BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
-      BL64_K8S_SET_VERBOSE_TRACE='--v=6'
-
-      BL64_K8S_SET_OUTPUT_JSON='--output=json'
-      BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
-      BL64_K8S_SET_OUTPUT_TXT='--output=wide'
-      BL64_K8S_SET_OUTPUT_NAME='--output=name'
-
-      BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
-      BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
-      ;;
-    *)
-      bl64_check_compatibility_mode "k8s-api: ${BL64_K8S_VERSION_KUBECTL}" || return $?
-      BL64_K8S_SET_VERBOSE_NONE='--v=0'
-      BL64_K8S_SET_VERBOSE_NORMAL='--v=2'
-      BL64_K8S_SET_VERBOSE_DEBUG='--v=4'
-      BL64_K8S_SET_VERBOSE_TRACE='--v=6'
-
-      BL64_K8S_SET_OUTPUT_JSON='--output=json'
-      BL64_K8S_SET_OUTPUT_YAML='--output=yaml'
-      BL64_K8S_SET_OUTPUT_TXT='--output=wide'
-      BL64_K8S_SET_OUTPUT_NAME='--output=name'
-
-      BL64_K8S_SET_DRY_RUN_SERVER='--dry-run=server'
-      BL64_K8S_SET_DRY_RUN_CLIENT='--dry-run=client'
-      ;;
-  esac
-}
-
-#######################################
 # Identify and set module components versions
 #
 # * Version information is stored in module global variables
@@ -14324,6 +14332,7 @@ function _bl64_k8s_set_version() {
   bl64_dbg_lib_show_vars 'cli_version'
 
   if [[ -n "$cli_version" ]]; then
+    # shellcheck disable=SC2034
     BL64_K8S_VERSION_KUBECTL="$cli_version"
   else
     bl64_msg_show_lib_error 'unable to determine kubectl version'
@@ -14386,10 +14395,19 @@ function bl64_k8s_set_kubectl_output() {
   local output="${1:-${BL64_K8S_CFG_KUBECTL_OUTPUT_JSON}}"
 
   case "$output" in
-    "$BL64_K8S_CFG_KUBECTL_OUTPUT_JSON") BL64_K8S_CFG_KUBECTL_OUTPUT="$BL64_K8S_SET_OUTPUT_JSON" ;;
-    "$BL64_K8S_CFG_KUBECTL_OUTPUT_YAML") BL64_K8S_CFG_KUBECTL_OUTPUT="$BL64_K8S_SET_OUTPUT_YAML" ;;
+    "$BL64_K8S_CFG_KUBECTL_OUTPUT_JSON") BL64_K8S_CFG_KUBECTL_OUTPUT='--output=json' ;;
+    "$BL64_K8S_CFG_KUBECTL_OUTPUT_YAML") BL64_K8S_CFG_KUBECTL_OUTPUT='--output=yaml' ;;
     *) bl64_check_alert_parameter_invalid ;;
   esac
+}
+
+function bl64_k8s_set_kubeconfig() {
+  bl64_dbg_lib_show_function "$@"
+  local kubeconfig_path="${1:-}"
+  bl64_check_parameter 'kubeconfig_path' &&
+    bl64_check_file "$kubeconfig_path" ||
+    return $?
+  BL64_K8S_CFG_KUBECONFIG="$kubeconfig_path"
 }
 
 #######################################
@@ -14417,6 +14435,7 @@ function _bl64_k8s_harden_kubectl() {
   bl64_dbg_lib_show_info 'unset inherited HELM_* shell variables'
   bl64_dbg_lib_trace_start
   unset KUBECONFIG
+  unset KUBECTL_KUBERC
   unset KUBECTL_ENABLE_CMD_SHADOW
   unset KUBECTL_EXPLAIN_OPENAPIV3
   unset KUBECTL_KUBERC
@@ -14792,7 +14811,8 @@ function bl64_k8s_resource_get() {
   # shellcheck disable=SC2086
   bl64_k8s_run_kubectl_cfg \
     "$kubeconfig" \
-    'get' $BL64_K8S_SET_OUTPUT_JSON \
+    get \
+    --output=json \
     $namespace "$resource" "$name"
 }
 
@@ -14844,19 +14864,20 @@ function bl64_k8s_run_kubectl_cfg() {
 function bl64_k8s_run_kubectl() {
   bl64_dbg_lib_show_function "$@"
   local command="${1:-}"
-  local verbosity="$BL64_K8S_SET_VERBOSE_NONE"
+  local verbosity='--v=0'
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_K8S_MODULE' ||
     return $?
 
-  bl64_dbg_lib_command_is_enabled && verbosity="$BL64_K8S_SET_VERBOSE_TRACE"
+  bl64_dbg_lib_command_is_enabled && verbosity='--v=6'
   shift
 
   _bl64_k8s_harden_kubectl
   bl64_dbg_lib_command_trace_start
   # shellcheck disable=SC2086
   "$BL64_K8S_CMD_KUBECTL" \
+    ${BL64_K8S_CFG_KUBECONFIG:+"--kubeconfig=${BL64_K8S_CFG_KUBECONFIG}"} \
     "$command" $verbosity "$@"
   bl64_dbg_lib_command_trace_stop
 }
@@ -14934,11 +14955,11 @@ function bl64_k8s_resource_is_created() {
   if bl64_dbg_lib_task_is_enabled; then
     bl64_k8s_run_kubectl_cfg "$kubeconfig" \
       'get' "$type" "$name" \
-      $BL64_K8S_SET_OUTPUT_NAME $namespace || return "$BL64_LIB_ERROR_IS_NOT"
+      --output=name $namespace || return "$BL64_LIB_ERROR_IS_NOT"
   else
     bl64_k8s_run_kubectl_cfg "$kubeconfig" \
       'get' "$type" "$name" \
-      $BL64_K8S_SET_OUTPUT_NAME $namespace >/dev/null 2>&1 || return "$BL64_LIB_ERROR_IS_NOT"
+      --output=name $namespace >/dev/null 2>&1 || return "$BL64_LIB_ERROR_IS_NOT"
   fi
 }
 
@@ -16023,7 +16044,7 @@ function bl64_pkg_cleanup() {
       ;;
     ${BL64_OS_ARC}-*)
       bl64_check_privilege_root &&
-        bl64_pkg_run_pacman --sync --clean --clean
+        bl64_pkg_run_pacman --sync --clean --clean "$BL64_PKG_SET_ASSUME_YES"
       ;;
     ${BL64_OS_MCOS}-*)
       bl64_pkg_brew_cleanup
@@ -18881,7 +18902,7 @@ function bl64_txt_line_replace_sed() {
   # shellcheck disable=SC2086
   bl64_txt_run_sed -i"$BL64_LIB_SUFFIX_BACKUP" "$sed_expression" $source
   exit_status=$?
-  bl64_fs_path_remove "${source}${BL64_LIB_SUFFIX_BACKUP}"
+  BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_NONE" bl64_fs_path_remove "${source}${BL64_LIB_SUFFIX_BACKUP}"
   return "$exit_status"
 }
 
@@ -19188,7 +19209,7 @@ function bl64_txt_run_tail() {
 function bl64_txt_run_fmt() {
   bl64_dbg_lib_show_function "$@"
 
-    bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MODULE' &&
     bl64_check_command "$BL64_TXT_CMD_FMT" ||
     return $?
 

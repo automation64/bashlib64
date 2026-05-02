@@ -40,7 +40,7 @@
   export DEV_SUFFIX_CHECKSUM='-checksums.txt'
 
   # Env / DevBin64 / Current version
-  export DEV_BIN64_VERSION='15.0.0'
+  export DEV_BIN64_VERSION='14.2.0'
 
   # Env / DevBin64 / Project root
   export DEV_PATH_ROOT=''

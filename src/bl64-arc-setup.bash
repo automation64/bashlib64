@@ -54,40 +54,41 @@ function _bl64_arc_set_command() {
   BL64_ARC_CMD_GUNZIP="$(bl64_bsh_command_locate 'gunzip')"
   BL64_ARC_CMD_UNXZ="$(bl64_bsh_command_locate 'unxz')"
   BL64_ARC_CMD_7ZZ="$(bl64_bsh_command_locate '7zz')"
+  BL64_ARC_CMD_ZSTD="$(bl64_bsh_command_locate 'zstd')"
 
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_ARC_CMD_TAR='/bin/tar'
-    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
-    BL64_ARC_CMD_ZIP='/usr/bin/zip'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_ARC_CMD_TAR='/bin/tar'
-    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
-    BL64_ARC_CMD_ZIP='/usr/bin/zip'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_ARC_CMD_TAR='/bin/tar'
-    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
-    BL64_ARC_CMD_ZIP='/usr/bin/zip'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_ARC_CMD_TAR='/bin/tar'
-    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
-    BL64_ARC_CMD_ZIP='/usr/bin/zip'
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_ARC_CMD_TAR='/usr/bin/tar'
-    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
-    BL64_ARC_CMD_ZIP='/usr/bin/zip'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_ARC_CMD_TAR='/usr/bin/tar'
-    BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
-    BL64_ARC_CMD_ZIP='/usr/bin/zip'
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_ARC_CMD_TAR='/bin/tar'
+      BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+      BL64_ARC_CMD_ZIP='/usr/bin/zip'
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      BL64_ARC_CMD_TAR='/bin/tar'
+      BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+      BL64_ARC_CMD_ZIP='/usr/bin/zip'
+      ;;
+    ${BL64_OS_SLES}-*)
+      BL64_ARC_CMD_TAR='/bin/tar'
+      BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+      BL64_ARC_CMD_ZIP='/usr/bin/zip'
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_ARC_CMD_TAR='/bin/tar'
+      BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+      BL64_ARC_CMD_ZIP='/usr/bin/zip'
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_ARC_CMD_TAR='/usr/bin/tar'
+      BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+      BL64_ARC_CMD_ZIP='/usr/bin/zip'
+      ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_ARC_CMD_TAR='/usr/bin/tar'
+      BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
+      BL64_ARC_CMD_ZIP='/usr/bin/zip'
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -106,30 +107,30 @@ function _bl64_arc_set_command() {
 #######################################
 function _bl64_arc_set_options() {
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_ARC_SET_TAR_VERBOSE='--verbose'
-    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_ARC_SET_TAR_VERBOSE='--verbose'
-    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_ARC_SET_TAR_VERBOSE='--verbose'
-    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_ARC_SET_TAR_VERBOSE='-v'
-    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_ARC_SET_TAR_VERBOSE='--verbose'
-    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_ARC_SET_TAR_VERBOSE='--verbose'
-    BL64_ARC_SET_UNZIP_OVERWRITE='-o'
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_ARC_SET_TAR_VERBOSE='--verbose'
+      BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      BL64_ARC_SET_TAR_VERBOSE='--verbose'
+      BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+      ;;
+    ${BL64_OS_SLES}-*)
+      BL64_ARC_SET_TAR_VERBOSE='--verbose'
+      BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_ARC_SET_TAR_VERBOSE='-v'
+      BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_ARC_SET_TAR_VERBOSE='--verbose'
+      BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+      ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_ARC_SET_TAR_VERBOSE='--verbose'
+      BL64_ARC_SET_UNZIP_OVERWRITE='-o'
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }

@@ -1,5 +1,5 @@
 ---
-# template: 1.6.0
+# template: 1.7.0
 name: "Release/GitHub"
 
 concurrency:
@@ -26,14 +26,20 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Cache local tools"
+      - name: "Cache base tools"
         uses: "actions/cache@v5"
         with:
           path: |
             ./lib/bl64
             ./lib/inst64
-            ./lib/github
           key: "dev-tools"
+
+      - name: "Cache module tools"
+        uses: "actions/cache@v5"
+        with:
+          path: |
+            ./lib/github
+          key: "dev-github"
 
       - name: "Download tools"
         run: |

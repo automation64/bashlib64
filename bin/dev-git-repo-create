@@ -33,7 +33,7 @@ function my_create() {
     bl64_vcs_run_git remote add "$DEV_GIT_REMOTE_UPSTREAM" "$DEV_GIT_REMOTE_UPSTREAM_URL" &&
     bl64_msg_show_task "Prepare and push first commit (${DEV_GIT_BRANCH_MAIN})" &&
     bl64_vcs_run_git add . &&
-    bl64_vcs_run_git commit -m 'dev: create repo' &&
+    bl64_vcs_run_git commit -m 'ci: create repo' &&
     bl64_vcs_run_git push upstream "$DEV_GIT_BRANCH_MAIN"
 }
 
@@ -48,7 +48,7 @@ function my_initialize() {
       'DEV_GIT_REMOTE_UPSTREAM_ENABLED'
 }
 
-bl64_lib_script_version_set '1.0.2'
+bl64_lib_script_version_set '1.0.3'
 bl64_msg_help_about_set 'Create local git repository and push to remote upstream'
 dev_bin64_initialize && my_initialize || exit $?
 

@@ -1,6 +1,9 @@
 ---
-# template: 3.9.0
+# template: 3.11.0
 name: "Test/TestManSH/MongoDB"
+
+permissions:
+  contents: read
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.ref }}"
@@ -38,28 +41,33 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Cache local tools"
+      - name: "Cache base tools"
         uses: "actions/cache@v5"
         with:
           path: |
             ./lib/bl64
             ./lib/inst64
-            ./lib/testmansh
           key: "dev-tools"
+
+      - name: "Cache module tools"
+        uses: "actions/cache@v5"
+        with:
+          path: |
+            ./lib/testmansh
+          key: "dev-testmansh"
 
       - name: "Download tools"
         run: |
           ./bin/dev-lib-base &&
           ./bin/dev-lib-testmansh
 
-
       - name: "Prepare for testing"
-        run : |
+        run: |
           ./bin/dev-build-project &&
           ./bin/dev-prep-project
 
       - name: "Run tests"
-        shell: 'script -q -e -c "bash {0}"'
+        shell: "script -q -e -c \"bash {0}\""
         run: |
           source ./bin/dev-set &&
           source ./bin/dev-env-project &&
