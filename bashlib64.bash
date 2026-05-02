@@ -2286,6 +2286,7 @@ function bl64_check_alert_unsupported() {
 #   0: using compatibility mode
 #   >0: command is incompatible and compatibility mode is disabled
 #######################################
+# shellcheck disable=SC2120
 function bl64_check_compatibility_mode() {
   _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local extra="${1:-}"
@@ -14331,6 +14332,7 @@ function _bl64_k8s_set_version() {
   bl64_dbg_lib_show_vars 'cli_version'
 
   if [[ -n "$cli_version" ]]; then
+    # shellcheck disable=SC2034
     BL64_K8S_VERSION_KUBECTL="$cli_version"
   else
     bl64_msg_show_lib_error 'unable to determine kubectl version'
