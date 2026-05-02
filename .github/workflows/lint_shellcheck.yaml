@@ -1,6 +1,9 @@
 ---
-# template: 1.5.0
+# template: 1.6.0
 name: "Lint/ShellCheck"
+
+permissions:
+  contents: read
 
 env:
   DEV_CICD_DEBUG: ${{ vars.DEV_CICD_DEBUG || 'NONE' }}
@@ -28,14 +31,20 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@main"
 
-      - name: "Cache local tools"
+      - name: "Cache base tools"
         uses: "actions/cache@v5"
         with:
           path: |
             ./lib/bl64
             ./lib/inst64
-            ./lib/shellcheck
           key: "dev-tools"
+
+      - name: "Cache module tools"
+        uses: "actions/cache@v5"
+        with:
+          path: |
+            ./lib/shellcheck
+          key: "dev-shellcheck"
 
       - name: "Download tools"
         run: |
@@ -43,10 +52,18 @@ jobs:
           ./bin/dev-lib-shellcheck
 
       - name: "Prepare for linting"
-        run : |
+        run: |
           ./bin/dev-build-project &&
           ./bin/dev-prep-project
 
       - name: "Run Linter"
         run: "./bin/dev-lint-shellcheck"
+
+      - name: "Save report as repository artifact"
+        uses: actions/upload-artifact@v6
+        continue-on-error: true
+        if: always()
+        with:
+          name: "shellcheck-lint.json"
+          path: "./logs/shellcheck/shellcheck-lint.json"
 ...
