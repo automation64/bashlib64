@@ -23,6 +23,7 @@ function _bl64_k8s_harden_kubectl() {
   bl64_dbg_lib_show_info 'unset inherited HELM_* shell variables'
   bl64_dbg_lib_trace_start
   unset KUBECONFIG
+  unset KUBECTL_KUBERC
   unset KUBECTL_ENABLE_CMD_SHADOW
   unset KUBECTL_EXPLAIN_OPENAPIV3
   unset KUBECTL_KUBERC
@@ -398,7 +399,8 @@ function bl64_k8s_resource_get() {
   # shellcheck disable=SC2086
   bl64_k8s_run_kubectl_cfg \
     "$kubeconfig" \
-    'get' $BL64_K8S_SET_OUTPUT_JSON \
+    get \
+    --output=json \
     $namespace "$resource" "$name"
 }
 
@@ -450,19 +452,20 @@ function bl64_k8s_run_kubectl_cfg() {
 function bl64_k8s_run_kubectl() {
   bl64_dbg_lib_show_function "$@"
   local command="${1:-}"
-  local verbosity="$BL64_K8S_SET_VERBOSE_NONE"
+  local verbosity='--v=0'
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_K8S_MODULE' ||
     return $?
 
-  bl64_dbg_lib_command_is_enabled && verbosity="$BL64_K8S_SET_VERBOSE_TRACE"
+  bl64_dbg_lib_command_is_enabled && verbosity='--v=6'
   shift
 
   _bl64_k8s_harden_kubectl
   bl64_dbg_lib_command_trace_start
   # shellcheck disable=SC2086
   "$BL64_K8S_CMD_KUBECTL" \
+    ${BL64_K8S_CFG_KUBECONFIG:+"--kubeconfig=${BL64_K8S_CFG_KUBECONFIG}"} \
     "$command" $verbosity "$@"
   bl64_dbg_lib_command_trace_stop
 }
@@ -540,10 +543,10 @@ function bl64_k8s_resource_is_created() {
   if bl64_dbg_lib_task_is_enabled; then
     bl64_k8s_run_kubectl_cfg "$kubeconfig" \
       'get' "$type" "$name" \
-      $BL64_K8S_SET_OUTPUT_NAME $namespace || return "$BL64_LIB_ERROR_IS_NOT"
+      --output=name $namespace || return "$BL64_LIB_ERROR_IS_NOT"
   else
     bl64_k8s_run_kubectl_cfg "$kubeconfig" \
       'get' "$type" "$name" \
-      $BL64_K8S_SET_OUTPUT_NAME $namespace >/dev/null 2>&1 || return "$BL64_LIB_ERROR_IS_NOT"
+      --output=name $namespace >/dev/null 2>&1 || return "$BL64_LIB_ERROR_IS_NOT"
   fi
 }

@@ -621,3 +621,66 @@ function bl64_arc_bzip2_open() {
       --force \
       "$source"
 }
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore env args
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_arc_run_zstd() {
+  bl64_dbg_lib_show_function "$@"
+  bl64_check_module 'BL64_ARC_MODULE' &&
+    bl64_check_parameters_none "$#" &&
+    bl64_check_command "$BL64_ARC_CMD_ZSTD" || return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_ARC_CMD_ZSTD" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Open zstd files and remove the source after extraction
+#
+# * Preserves permissions but not ownership
+# * Overwrites destination
+# * Ignore ACLs and extended attributes
+#
+# Arguments:
+#   $1: Full path to the source file
+#   $2: Full path to the destination
+# Outputs:
+#   STDOUT: None
+#   STDERR: tar or lib error messages
+# Returns:
+#   BL64_ARC_ERROR_INVALID_DESTINATION
+#   tar error status
+#######################################
+function bl64_arc_zstd_open() {
+  bl64_dbg_lib_show_function "$@"
+  local source="${1:-}"
+  local destination="${2:-}"
+
+  bl64_check_parameter 'source' &&
+    bl64_check_parameter 'destination' &&
+    bl64_check_file "$source" &&
+    bl64_check_directory "$destination" ||
+    return $?
+
+  bl64_msg_show_lib_subtask "open zstd archive ($source)"
+  # shellcheck disable=SC2086
+  cd "$destination" &&
+    bl64_arc_run_zstd \
+      --decompress \
+      --force \
+      "$source"
+}

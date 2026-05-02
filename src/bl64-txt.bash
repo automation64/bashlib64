@@ -108,7 +108,7 @@ function bl64_txt_line_replace_sed() {
   # shellcheck disable=SC2086
   bl64_txt_run_sed -i"$BL64_LIB_SUFFIX_BACKUP" "$sed_expression" $source
   exit_status=$?
-  bl64_fs_path_remove "${source}${BL64_LIB_SUFFIX_BACKUP}"
+  BL64_MSG_VERBOSE="$BL64_MSG_VERBOSE_NONE" bl64_fs_path_remove "${source}${BL64_LIB_SUFFIX_BACKUP}"
   return "$exit_status"
 }
 
@@ -415,7 +415,7 @@ function bl64_txt_run_tail() {
 function bl64_txt_run_fmt() {
   bl64_dbg_lib_show_function "$@"
 
-    bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MODULE' &&
     bl64_check_command "$BL64_TXT_CMD_FMT" ||
     return $?
 
