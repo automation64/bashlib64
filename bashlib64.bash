@@ -103,7 +103,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='23.0.2'
+  declare BL64_VERSION='23.1.1'
 
   #
   # Imported generic shell standard variables
@@ -641,7 +641,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.17.2'
+  declare BL64_MSG_VERSION='5.17.3'
 
   declare BL64_MSG_MODULE='0'
 
@@ -4030,45 +4030,45 @@ function _bl64_msg_format_ascii() {
   case "$BL64_MSG_FORMAT" in
     "$BL64_MSG_FORMAT_PLAIN")
       printf "%s %s${linefeed}" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_HOST")
       printf "[%s] %s %s${linefeed}" \
         "${HOSTNAME}" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_TIME")
       printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s %s${linefeed}" \
         '-1' \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_TIME2")
       printf "${BL64_MSG_TIME_DMY_HMS_COMPACT} %s %s${linefeed}" \
         '-1' \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_CALLER")
       printf "[%s] %s %s${linefeed}" \
         "$BL64_SCRIPT_ID" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_SCRIPT")
       printf "[${BL64_MSG_TIME_DMY_HMS_FULL}] %s %s %s${linefeed}" \
         '-1' \
         "$BL64_SCRIPT_ID" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_SCRIPT2")
       printf "${BL64_MSG_TIME_DMY_HMS_COMPACT}|%s %s %s${linefeed}" \
         '-1' \
         "$BL64_SCRIPT_ID" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_FULL")
@@ -4076,7 +4076,7 @@ function _bl64_msg_format_ascii() {
         '-1' \
         "$HOSTNAME" \
         "$BL64_SCRIPT_ID" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_FULL2")
@@ -4084,7 +4084,7 @@ function _bl64_msg_format_ascii() {
         '-1' \
         "$HOSTNAME" \
         "$BL64_SCRIPT_ID" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     *) _bl64_msg_alert_show_parameter 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
@@ -4109,7 +4109,7 @@ function _bl64_msg_format_emoji() {
   case "$BL64_MSG_FORMAT" in
     "$BL64_MSG_FORMAT_PLAIN")
       printf "%b %s${linefeed}" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_HOST")
@@ -4121,7 +4121,7 @@ function _bl64_msg_format_emoji() {
     "$BL64_MSG_FORMAT_TIME")
       printf "[%b] %b %s${linefeed}" \
         "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_TIME2")
@@ -4133,21 +4133,21 @@ function _bl64_msg_format_emoji() {
     "$BL64_MSG_FORMAT_CALLER")
       printf "[%b] %b %s${linefeed}" \
         "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_SCRIPT")
       printf "[%b] %b %b %s${linefeed}" \
         "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
         "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_SCRIPT2")
       printf "%b|%b %b %s${linefeed}" \
         "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
         "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_FULL")
@@ -4155,7 +4155,7 @@ function _bl64_msg_format_emoji() {
         "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_FULL" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
         "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
         "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_FULL2")
@@ -4163,7 +4163,7 @@ function _bl64_msg_format_emoji() {
         "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
         "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
         "\e[${!style_fmtcaller}m${BL64_SCRIPT_ID}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     *) _bl64_msg_alert_show_parameter 'BL64_MSG_FORMAT' "$BL64_VAR_DEFAULT" "$BL64_MSG_FORMAT" ;;
@@ -4541,12 +4541,12 @@ function bl64_msg_show_text() {
 #######################################
 function bl64_msg_show_batch_start() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="${1:-$BL64_SCRIPT_ID}"
+  local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${message}" &&
     bl64_msg_app_verbose_is_enabled || return 0
 
-  _bl64_msg_print "$BL64_MSG_TYPE_BATCH" 'Process' "[${message}] started"
+  _bl64_msg_print "$BL64_MSG_TYPE_BATCH" 'Process' "${message:+${message} }started"
 }
 
 #######################################
@@ -4568,7 +4568,7 @@ function bl64_msg_show_batch_start() {
 function bl64_msg_show_batch_finish() {
   local -i status=$1
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
-  local message="${2:-$BL64_SCRIPT_ID}"
+  local message="${2:-}"
 
   # shellcheck disable=SC2086
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "${BL64_MSG_TYPE_BATCH}:${status}:${message}" &&
@@ -4576,9 +4576,9 @@ function bl64_msg_show_batch_finish() {
     return "$status"
 
   if ((status == 0)); then
-    _bl64_msg_print "$BL64_MSG_TYPE_BATCHOK" 'Process' "[${message}] finished successfully"
+    _bl64_msg_print "$BL64_MSG_TYPE_BATCHOK" 'Process' "${message:+${message} }finished successfully"
   else
-    _bl64_msg_print "$BL64_MSG_TYPE_BATCHERR" 'Process' "[${message}] finished with errors: exit-status-${status}"
+    _bl64_msg_print "$BL64_MSG_TYPE_BATCHERR" 'Process' "${message:+${message} }finished with errors (status: ${status})"
   fi
   # shellcheck disable=SC2086
   return "$status"
