@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - msg: formatting issues
+- rxtx: temp dir creation
 
 ## [23.1.1]
 
