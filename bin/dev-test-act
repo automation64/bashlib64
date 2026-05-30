@@ -13,7 +13,7 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+source ./bin/dev-set || exit 1
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
@@ -27,20 +27,25 @@ declare MY_WORKFLOWS="${1:-${DEV_TEST_ACT_WORKFLOWS}}"
 function my_test() {
   bl64_dbg_app_show_function
   local job=''
+  local docker_group_id=''
+
+  docker_group_id="$(stat -c '%g' "$DEV_LIB_ACT_DOCKER_SOCKET")" &&
+    [[ -n "$docker_group_id" ]] ||
+    return $?
 
   for job in $MY_WORKFLOWS; do
     bl64_msg_show_phase "run GitHub Actions workflow (${job})"
-    # shellcheck disable=SC2086
     "$DEV_LIB_ACT_BIN" \
       --strict \
       --use-gitignore \
       --env-file=/dev/null \
+      --container-options "--group-add ${docker_group_id}" \
       --concurrent-jobs="$DEV_TEST_ACT_JOBS_MAX" \
       --artifact-server-port="$DEV_LIB_ACT_PORT_ARTIFACT" \
       --artifact-server-path="$DEV_LIB_ACT_PATH_ARTIFACT" \
       --action-cache-path="$DEV_LIB_ACT_PATH_CACHE_ACTION" \
       --cache-server-path="$DEV_LIB_ACT_PATH_CACHE_SERVER" \
-      --job ${job} ||
+      --job=${job} >"${DEV_ENV_ACT_PATH_LOGS}/${job}.${DEV_TEST_ACT_FORMAT}" 2>&1 ||
       return $?
   done
 }
@@ -48,14 +53,17 @@ function my_test() {
 function my_initialize() {
   bl64_dbg_app_show_function
   dev_bin64_task_initialize &&
+    dev_bin64_log_setup "$BL64_VAR_ON" "$DEV_ENV_ACT_PATH_LOGS" &&
     bl64_check_command "$DEV_LIB_ACT_BIN" &&
     bl64_check_parameter 'MY_WORKFLOWS' &&
+    bl64_check_export 'DEV_ENV_ACT_PATH_LOGS' &&
     dev_bin64_task_show_setup \
-      'MY_WORKFLOWS'
+      'MY_WORKFLOWS' \
+      'DEV_ENV_ACT_PATH_LOGS'
 }
 
-bl64_lib_script_version_set '1.4.0'
-bl64_msg_help_about_set 'Run GitHub workflows'
+bl64_lib_script_version_set '1.5.0'
+bl64_msg_help_about_set 'Test GitHub Actions workflows'
 dev_bin64_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"

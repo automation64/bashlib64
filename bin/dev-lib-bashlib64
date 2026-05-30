@@ -16,7 +16,7 @@
 # Imports
 #
 
-source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+source ./bin/dev-set || exit 1
 
 #
 # Main
@@ -33,7 +33,7 @@ fi
 
 dev_bin64_msg_show_task 'dev-lib-bashlib64: Task: download BashLib64'
 INST64_BASHLIB64_VERSION="$DEV_LIB_BASHLIB64_VERSION" \
-"${DEV_LIB_INSTALLER64_TARGET}/install-bashlib64" ||
+  "${DEV_LIB_INSTALLER64_TARGET}/install-bashlib64" ||
   exit $?
 [[ -n "$DEV_CICD_DEBUG_BASH" ]] && set +x
 :

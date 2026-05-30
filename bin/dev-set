@@ -18,10 +18,6 @@
   declare DEV_SET_VERSION='12.0.0'
 }
 
-#
-# Internal Functions
-#
-
 function _dev_set_define_paths() {
   dev_bin64_msg_show_task 'dev-set' 'set project paths'
   DEV_PATH_SRC="${DEV_PATH_ROOT}/${DEV_BASE_SRC}"
@@ -68,13 +64,13 @@ function _dev_set_load_profile() {
     if [[ -r "$source_file" ]]; then
       dev_bin64_msg_show_task 'dev-set' "load profile local variables (${DEV_BASE_LOCAL})"
       source "$source_file" ||
-        { dev_bin64_msg_show_error 'dev-set' "unable to load source file (${source_file})" && return 1; }
+        { dev_bin64_msg_show_error_source "$source_file" && return 1; }
     fi
     source_file="${DEV_PATH_PROF_ETC}/${DEV_BASE_ENV}"
     if [[ -r "$source_file" ]]; then
       dev_bin64_msg_show_task 'dev-set' "load profile variables (${DEV_BASE_ENV})"
       source "$source_file" ||
-        { dev_bin64_msg_show_error 'dev-set' "unable to load source file (${source_file})" && return 1; }
+        { dev_bin64_msg_show_error_source "$source_file" && return 1; }
     fi
   fi
 }
@@ -89,7 +85,7 @@ function _dev_set_load_workstation() {
   if [[ -r "$file" ]]; then
     dev_bin64_msg_show_task 'dev-set' "load local environment variables (${DEV_BASE_LOCAL})"
     source "$file" ||
-      { dev_bin64_msg_show_error 'dev-set' "unable to source file (${file})" && return 1; }
+      { dev_bin64_msg_show_error_source "$file" && return 1; }
   fi
   return 0
 }
@@ -108,7 +104,7 @@ function _dev_set_load_local_post() {
   if [[ -r "$file" ]]; then
     dev_bin64_msg_show_task 'dev-set' "load project environment variables (${DEV_BASE_POST})"
     source "${file}" ||
-      { dev_bin64_msg_show_error 'dev-set' "unable to source file (${file})" && return 1; }
+      { dev_bin64_msg_show_error_source "$file" && return 1; }
   fi
   return 0
 }
@@ -123,7 +119,7 @@ function _dev_set_load_github() {
   if [[ -r "$DEV_BASE_LOCAL" ]]; then
     dev_bin64_msg_show_task 'dev-set' "Load local github automatic environment variables (${DEV_BASE_LOCAL})"
     source "${DEV_BASE_LOCAL}" ||
-      { dev_bin64_msg_show_error 'dev-set' "unable to source file (${DEV_BASE_LOCAL})" && return 1; }
+      { dev_bin64_msg_show_error_source "$DEV_BASE_LOCAL" && return 1; }
   fi
   return 0
 }
@@ -138,7 +134,7 @@ function _dev_set_load_testmansh() {
 function _dev_set_load_env() {
   dev_bin64_msg_show_task 'dev-set' "load project environment variables (${DEV_BASE_ENV})"
   source "${DEV_PATH_ROOT}/${DEV_BASE_ENV}" ||
-    { dev_bin64_msg_show_error 'dev-set' "unable to read environment variables (${DEV_PATH_ROOT}/${DEV_BASE_ENV})" && return 1; }
+    { dev_bin64_msg_show_error_source "${DEV_PATH_ROOT}/${DEV_BASE_ENV}" && return 1; }
   return 0
 }
 
@@ -152,7 +148,7 @@ function _dev_set_load_modules() {
     source "${DEV_PATH_BIN}/dev-env-installer64" &&
     return 0
 
-  dev_bin64_msg_show_error 'dev-set' "unable to load core modules"
+  dev_bin64_msg_show_error 'dev-set' 'unable to import core modules (bashlib64, installer64)'
   return 1
 }
 
@@ -165,7 +161,7 @@ function _dev_set_load_local() {
     _dev_set_load_testmansh
   else
     _dev_set_load_workstation
-  fi
+  fi || return $?
 
   if [[ -z "$DEV_PATH_ROOT" ]]; then
     dev_bin64_msg_show_error 'dev-set' 'unable to identify current repository location. Check that the variable DEV_PATH_ROOT is correctly set' &&
@@ -184,7 +180,7 @@ function _dev_set_load_secrets() {
   if [[ -r "$file" ]]; then
     dev_bin64_msg_show_task 'dev-set' "load local secrets (${DEV_BASE_SECRETS})"
     source "$file" ||
-      { dev_bin64_msg_show_error 'dev-set' "unable to source file (${file})" && return 1; }
+      { dev_bin64_msg_show_error_source "$file" && return 1; }
   fi
 
   [[ "$file" == "${DEV_PATH_PROF_VAULT}/${DEV_BASE_SECRETS}" ]] && return 0
@@ -192,9 +188,8 @@ function _dev_set_load_secrets() {
   if [[ -r "$file" ]]; then
     dev_bin64_msg_show_task 'dev-set' "load profile secrets (${DEV_BASE_SECRETS})"
     source "$file" ||
-      { dev_bin64_msg_show_error 'dev-set' "unable to load source file (${file})" && return 1; }
+      { dev_bin64_msg_show_error_source "$file" && return 1; }
   fi
-
 }
 
 # shellcheck disable=SC1090
@@ -205,12 +200,13 @@ function _dev_set_initialize() {
       return 1
   fi
   umask 'u=rwx,g=rx,o=rx'
-  source "$path_main_env"
+  source "$path_main_env" ||
+    { dev_bin64_msg_show_error_source "$path_main_env" && return 1; }
 }
 
 function _dev_set_cleanup() {
 
-  dev_bin64_msg_show_task 'dev-set' 'cleanup unsed external variables'
+  dev_bin64_msg_show_task 'dev-set' 'cleanup unused external variables'
   [[ -z "$GITHUB_WORKSPACE" ]] && unset GITHUB_WORKSPACE
   [[ -z "$GITLAB_CI" ]] && unset GITLAB_CI
   [[ -z "$TESTMANSH_PROJECT_ROOT" ]] && unset TESTMANSH_PROJECT_ROOT
@@ -245,13 +241,9 @@ function _dev_set_legacy() {
   return 0
 }
 
-#
-# Main
-#
-
-[[ -n "${DEV_CICD_DEBUG_BASH:-}" ]] && set -x
-# shellcheck disable=SC2015
+# Warning: keep the namespace to avoid source conflicts
 _dev_set_initialize &&
+  dev_bin64_lib_trace_start &&
   _dev_set_load_local &&
   _dev_set_define_paths &&
   _dev_set_load_env &&
@@ -260,7 +252,5 @@ _dev_set_initialize &&
   _dev_set_load_modules &&
   _dev_set_load_local_post &&
   _dev_set_legacy &&
-  _dev_set_cleanup ||
-  { dev_bin64_msg_show_error 'dev-set' 'failed to load Dev environment variables' && return 1; }
-[[ -n "$DEV_CICD_DEBUG_BASH" ]] && set +x
-:
+  _dev_set_cleanup &&
+  dev_bin64_lib_trace_finish

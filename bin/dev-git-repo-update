@@ -13,7 +13,7 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+source ./bin/dev-set || exit 1
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
@@ -50,6 +50,7 @@ function dev_repo_update() {
 function my_initialize() {
   bl64_dbg_app_show_function
   dev_bin64_task_initialize &&
+    dev_git_check_repo_root &&
     dev_bin64_task_show_setup \
       'DEV_GIT_BRANCH_MAIN' \
       'DEV_GIT_REMOTE_ORIGIN' \
@@ -57,7 +58,7 @@ function my_initialize() {
       'DEV_GIT_REMOTE_UPSTREAM_ENABLED'
 }
 
-bl64_lib_script_version_set '1.5.3'
+bl64_lib_script_version_set '1.6.0'
 bl64_msg_help_about_set 'Update local repository from origin and upstream'
 dev_bin64_initialize && my_initialize || exit $?
 

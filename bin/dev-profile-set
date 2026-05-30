@@ -12,43 +12,35 @@
 # limitations under the License.
 #######################################
 
-export DEV_PROFILE
-declare MY_PROFILE="${1:-}"
-# shellcheck disable=2034
-declare MY_VERSION='3.1.0'
+export DEV_PROFILE="${1:-}"
 
-function my_profile() {
-  [[ -d "etc/prof/${MY_PROFILE}" ]] && return 0
-  ./bin/dev-profile-create "$MY_PROFILE"
+function _dev_profile_set_profile() {
+  [[ -d "etc/prof/${DEV_PROFILE}" ]] && return 0
+  ./bin/dev-profile-create "$DEV_PROFILE"
 }
 
-function my_load() {
-  DEV_PROFILE="$MY_PROFILE"
+function _dev_profile_set_load() {
   source ./bin/dev-set ||
     { echo 'dev-profile-set:Error: unable to load dev environment' 2>&1 && return 1; }
 }
 
-function my_initialize() {
+function _dev_profile_set_initialize() {
   [[ "${BASH_SOURCE[0]}" == "${0}" ]] &&
     echo 'dev-profile-set:Error: invalid execution method. Use the following command line to run this script: source ./bin/dev-profile-set.' 2>&1 &&
     return 1
-  [[ -z "$MY_PROFILE" ]] &&
+  [[ -z "$DEV_PROFILE" ]] &&
     echo 'dev-profile-set:Error: missing profile name.' 2>&1 &&
     return 1
-  [[ "$MY_PROFILE" == 'none' ]] &&
+  [[ "$DEV_PROFILE" == 'none' ]] &&
     echo 'dev-profile-set:Error: invalid profile name (none).' 2>&1 &&
     return 1
   return 0
 }
 
-[[ -n "$DEV_CICD_DEBUG_BASH" ]] && set -x
-
-my_initialize &&
-  my_profile &&
-  my_load &&
-  unset my_initialize &&
-  unset my_profile &&
-  unset my_load ||
-  exit $?
-[[ -n "$DEV_CICD_DEBUG_BASH" ]] && set +x
-:
+# Warning: keep the namespace to avoid source conflicts
+_dev_profile_set_initialize &&
+  _dev_profile_set_profile &&
+  _dev_profile_set_load &&
+  unset _dev_profile_set_initialize &&
+  unset _dev_profile_set_profile &&
+  unset _dev_profile_set_load

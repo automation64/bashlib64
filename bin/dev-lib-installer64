@@ -16,7 +16,7 @@
 # Imports
 #
 
-source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+source ./bin/dev-set || exit 1
 
 #
 # Functions

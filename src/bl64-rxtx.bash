@@ -45,6 +45,8 @@ function bl64_rxtx_web_get_file() {
   # shellcheck disable=SC2086
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
     bl64_rxtx_run_curl \
+      $BL64_RXTX_SET_CURL_SHOW_ERROR \
+      $BL64_RXTX_SET_CURL_NO_PROGRESS \
       $BL64_RXTX_SET_CURL_FAIL \
       $BL64_RXTX_SET_CURL_REDIRECT \
       $BL64_RXTX_SET_CURL_OUTPUT "$destination" \
@@ -212,7 +214,7 @@ function _bl64_rxtx_git_get_dir_root() {
 
   bl64_check_module 'BL64_RXTX_MODULE' || return $?
 
-  repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
+  repo="$(bl64_fs_create_tmpdir)"
   bl64_check_directory "$repo" 'unable to create temporary git repo' || return "$BL64_LIB_ERROR_TASK_TEMP"
 
   git_name="$(bl64_fmt_path_get_basename "$source_url")"
@@ -244,7 +246,7 @@ function _bl64_rxtx_git_get_dir_sub() {
 
   bl64_check_module 'BL64_RXTX_MODULE' || return $?
 
-  repo="$($BL64_FS_ALIAS_MKTEMP_DIR)"
+  repo="$(bl64_fs_create_tmpdir)"
   # shellcheck disable=SC2086
   bl64_check_directory "$repo" 'unable to create temporary git repo' || return "$BL64_LIB_ERROR_TASK_TEMP"
 
