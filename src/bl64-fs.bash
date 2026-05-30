@@ -1555,7 +1555,7 @@ function bl64_fs_run_stat() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_STAT' ||
+    bl64_check_module 'BL64_FS_MODULE' ||
     return $?
 
   bl64_dbg_lib_trace_start
