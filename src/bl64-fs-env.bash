@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.4.5'
+  declare BL64_FS_VERSION='6.5.0'
 
   declare BL64_FS_MODULE='0'
 
@@ -23,6 +23,7 @@
   declare BL64_FS_CMD_MKTEMP=''
   declare BL64_FS_CMD_MV=''
   declare BL64_FS_CMD_RM=''
+  declare BL64_FS_CMD_STAT=''
   declare BL64_FS_CMD_TOUCH=''
 
   declare BL64_FS_ALIAS_CHOWN_DIR=''

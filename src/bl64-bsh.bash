@@ -675,7 +675,7 @@ function bl64_bsh_xdg_create() {
   bl64_check_parameter 'home_path' ||
     return $?
 
-  bl64_msg_show_lib_task "create user XDG directories (${home_path})"
+  bl64_msg_show_lib_subtask "create user XDG directories (${home_path})"
   bl64_lib_var_is_default "$dir_mode" && dir_mode='0750'
   bl64_fs_dir_create "$dir_mode" "$dir_user" "$dir_group" \
     "$xdg_config" \

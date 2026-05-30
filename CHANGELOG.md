@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [23.2.0]
+
+### Added
+
+- fs
+  - bl64_fs_run_stat
+
+### Changed
+
+- api
+  - bl64_api_call: enabled show error, enabled silent
+- rxtx
+  - bl64_rxtx_web_get_file: enabled show error, disabled show progress
+
+### Fixed
+
+- msg: formatting issues
+
 ## [23.1.1]
 
 ### Added

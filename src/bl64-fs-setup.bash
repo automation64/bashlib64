@@ -49,6 +49,7 @@ function bl64_fs_setup() {
 #######################################
 # Warning: bootstrap function
 function _bl64_fs_set_command() {
+  bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -63,6 +64,7 @@ function _bl64_fs_set_command() {
       BL64_FS_CMD_MV='/bin/mv'
       BL64_FS_CMD_RM='/bin/rm'
       BL64_FS_CMD_TOUCH='/usr/bin/touch'
+      BL64_FS_CMD_STAT='/usr/bin/stat'
       ;;
     ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
       BL64_FS_CMD_CHMOD='/usr/bin/chmod'
@@ -76,6 +78,7 @@ function _bl64_fs_set_command() {
       BL64_FS_CMD_MV='/usr/bin/mv'
       BL64_FS_CMD_RM='/usr/bin/rm'
       BL64_FS_CMD_TOUCH='/usr/bin/touch'
+      BL64_FS_CMD_STAT='/bin/stat'
       ;;
     ${BL64_OS_SLES}-*)
       BL64_FS_CMD_CHMOD='/usr/bin/chmod'
@@ -89,6 +92,7 @@ function _bl64_fs_set_command() {
       BL64_FS_CMD_MV='/usr/bin/mv'
       BL64_FS_CMD_RM='/usr/bin/rm'
       BL64_FS_CMD_TOUCH='/usr/bin/touch'
+      BL64_FS_CMD_STAT='/usr/bin/stat'
       ;;
     ${BL64_OS_ALP}-*)
       BL64_FS_CMD_CHMOD='/bin/chmod'
@@ -102,6 +106,7 @@ function _bl64_fs_set_command() {
       BL64_FS_CMD_MV='/bin/mv'
       BL64_FS_CMD_RM='/bin/rm'
       BL64_FS_CMD_TOUCH='/bin/touch'
+      BL64_FS_CMD_STAT='/bin/stat'
       ;;
     ${BL64_OS_ARC}-*)
       BL64_FS_CMD_CHMOD='/usr/bin/chmod'
@@ -115,6 +120,7 @@ function _bl64_fs_set_command() {
       BL64_FS_CMD_MV='/usr/bin/mv'
       BL64_FS_CMD_RM='/usr/bin/rm'
       BL64_FS_CMD_TOUCH='/usr/bin/touch'
+      BL64_FS_CMD_STAT='/usr/bin/stat'
       ;;
     ${BL64_OS_MCOS}-*)
       BL64_FS_CMD_CHMOD='/bin/chmod'
@@ -128,6 +134,7 @@ function _bl64_fs_set_command() {
       BL64_FS_CMD_MV='/bin/mv'
       BL64_FS_CMD_RM='/bin/rm'
       BL64_FS_CMD_TOUCH='/usr/bin/touch'
+      BL64_FS_CMD_STAT='/usr/bin/stat'
       ;;
     *) bl64_check_alert_unsupported ;;
   esac
@@ -148,6 +155,7 @@ function _bl64_fs_set_command() {
 #   0: always ok
 #######################################
 function _bl64_fs_set_options() {
+  bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -357,20 +365,12 @@ function _bl64_fs_set_options() {
 #######################################
 # shellcheck disable=SC2034
 function _bl64_fs_set_alias() {
-  local cmd_mawk='/usr/bin/mawk'
-
+  bl64_dbg_lib_show_function
   BL64_FS_ALIAS_CHOWN_DIR="${BL64_FS_CMD_CHOWN} ${BL64_FS_SET_CHOWN_VERBOSE} ${BL64_FS_SET_CHOWN_RECURSIVE}"
-  BL64_FS_ALIAS_CP_DFIND="/usr/bin/find"
-  BL64_FS_ALIAS_CP_DIR="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE} ${BL64_FS_SET_CP_RECURSIVE}"
-  BL64_FS_ALIAS_CP_FIFIND="/usr/bin/find"
   BL64_FS_ALIAS_CP_FILE="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE}"
-  BL64_FS_ALIAS_LN_FORCE="--force"
   BL64_FS_ALIAS_LN_SYMBOLIC="${BL64_FS_CMD_LN} ${BL64_FS_SET_LN_SYMBOLIC} ${BL64_FS_SET_LN_VERBOSE}"
   BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} ${BL64_FS_SET_LS_NOCOLOR}"
   BL64_FS_ALIAS_MKDIR_FULL="${BL64_FS_CMD_MKDIR} ${BL64_FS_SET_MKDIR_VERBOSE} ${BL64_FS_SET_MKDIR_PARENTS}"
-  BL64_FS_ALIAS_MKTEMP_DIR="${BL64_FS_CMD_MKTEMP} -d"
-  BL64_FS_ALIAS_MKTEMP_FILE="${BL64_FS_CMD_MKTEMP}"
-  BL64_FS_ALIAS_MV="${BL64_FS_CMD_MV} ${BL64_FS_SET_MV_VERBOSE} ${BL64_FS_SET_MV_FORCE}"
   BL64_FS_ALIAS_MV="${BL64_FS_CMD_MV} ${BL64_FS_SET_MV_VERBOSE} ${BL64_FS_SET_MV_FORCE}"
   BL64_FS_ALIAS_RM_FILE="${BL64_FS_CMD_RM} ${BL64_FS_SET_RM_VERBOSE} ${BL64_FS_SET_RM_FORCE}"
   BL64_FS_ALIAS_RM_FULL="${BL64_FS_CMD_RM} ${BL64_FS_SET_RM_VERBOSE} ${BL64_FS_SET_RM_FORCE} ${BL64_FS_SET_RM_RECURSIVE}"

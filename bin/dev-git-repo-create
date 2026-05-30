@@ -13,7 +13,7 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+source ./bin/dev-set || exit 1
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-rxtx.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-api.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-vcs.bash" &&
@@ -27,6 +27,10 @@ source ./bin/dev-env-git || exit 1
 
 function my_create() {
   bl64_dbg_app_show_function
+  if [[ -d .git ]]; then
+    bl64_msg_show_fatal 'the current repository is already initialized (.git). Repository creation can not continue.'
+    return 1
+  fi
   bl64_msg_show_task "Initialize local git repository (${DEV_PATH_ROOT})"
   bl64_vcs_run_git init -b "$DEV_GIT_BRANCH_MAIN" &&
     bl64_msg_show_task "Add upstream (${DEV_GIT_REMOTE_UPSTREAM_URL})" &&
@@ -48,7 +52,7 @@ function my_initialize() {
       'DEV_GIT_REMOTE_UPSTREAM_ENABLED'
 }
 
-bl64_lib_script_version_set '1.0.3'
+bl64_lib_script_version_set '1.1.0'
 bl64_msg_help_about_set 'Create local git repository and push to remote upstream'
 dev_bin64_initialize && my_initialize || exit $?
 

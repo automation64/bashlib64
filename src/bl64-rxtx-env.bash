@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_RXTX_VERSION='2.6.4'
+  declare BL64_RXTX_VERSION='2.7.0'
 
   declare BL64_RXTX_MODULE='0'
 
@@ -21,6 +21,7 @@
   declare BL64_RXTX_SET_CURL_REDIRECT=''
   declare BL64_RXTX_SET_CURL_REQUEST=''
   declare BL64_RXTX_SET_CURL_SECURE=''
+  declare BL64_RXTX_SET_CURL_SHOW_ERROR=''
   declare BL64_RXTX_SET_CURL_SILENT=''
   declare BL64_RXTX_SET_CURL_VERBOSE=''
   declare BL64_RXTX_SET_WGET_OUTPUT=''

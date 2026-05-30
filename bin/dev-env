@@ -40,7 +40,7 @@
   export DEV_SUFFIX_CHECKSUM='-checksums.txt'
 
   # Env / DevBin64 / Current version
-  export DEV_BIN64_VERSION='14.2.0'
+  export DEV_BIN64_VERSION='14.5.0'
 
   # Env / DevBin64 / Project root
   export DEV_PATH_ROOT=''
@@ -152,10 +152,10 @@ function dev_bin64_profile_check_disabled() {
   ! dev_bin64_profile_is_set && ! dev_bin64_profile_is_enabled && return 0
 
   dev_bin64_profile_is_set &&
-    dev_bin64_msg_show_error 'Profile must be disabled for this task. Set the variable DEV_PROFILE to "none" and retry.'
+    dev_bin64_msg_show_error 'dev-env' 'Profile must be disabled for this task. Set the variable DEV_PROFILE to "none" and retry.'
 
   dev_bin64_profile_is_enabled &&
-    dev_bin64_msg_show_error 'Profile is not supported for this task.'
+    dev_bin64_msg_show_error 'dev-env' 'Profile is not supported for this task.'
 
   return 1
 }
@@ -163,7 +163,7 @@ function dev_bin64_profile_check_disabled() {
 function dev_bin64_profile_check_set() {
   dev_bin64_profile_is_set && return 0
 
-  dev_bin64_msg_show_error 'Profile is not set. Please set the DEV_PROFILE variable to a valid profile name.'
+  dev_bin64_msg_show_error 'dev-env' 'Profile is not set. Please set the DEV_PROFILE variable to a valid profile name.'
   return 1
 }
 
@@ -175,29 +175,49 @@ function dev_bin64_profile_is_set() {
   [[ -n "$DEV_PROFILE" && "$DEV_PROFILE" != 'none' ]]
 }
 
+function dev_bin64_msg_show_error_parameters() {
+  local task="${1:-}"
+  local msg="${2:-}"
+  if [[ -z "$task" || -z "$msg" ]]; then
+    echo 'dev-env:Error: Missing required parameters: task or msg (dev_bin64_msg_show_*)' 2>&1
+    return 1
+  else
+    return 0
+  fi
+}
+
 function dev_bin64_msg_show_warning() {
-  local task="$1"
-  local msg="$2"
-  echo "${task}:Warning: ${msg}" 2>&1
+  local task="${1:-}"
+  local msg="${2:-}"
+  dev_bin64_msg_show_error_parameters "${task}" "${msg}" &&
+    echo "${task}:Warning: ${msg}" 2>&1
 }
 
 function dev_bin64_msg_show_error() {
-  local task="$1"
-  local msg="$2"
-  echo "${task}:Error: ${msg}" 2>&1
+  local task="${1:-}"
+  local msg="${2:-}"
+  dev_bin64_msg_show_error_parameters "${task}" "${msg}" &&
+    echo "${task}:Error: ${msg}" 2>&1
+}
+
+function dev_bin64_msg_show_error_source() {
+  local source_file="${1:-}"
+  dev_bin64_msg_show_error 'dev-set' "failed to import env file (${source_file})"
 }
 
 function dev_bin64_msg_show_task() {
-  local task="$1"
-  local msg="$2"
+  local task="${1:-}"
+  local msg="${2:-}"
+  dev_bin64_msg_show_error_parameters "${task}" "${msg}" || return $?
   [[ -n "$DEV_CICD_DEBUG_BASH" ]] && echo "${task}:Task: ${msg}"
   return 0
 }
 
 function dev_bin64_msg_show_legacy() {
-  local task="$1"
-  local msg="$2"
-  echo "${task}:Legacy: legacy content detected. Please re-run devbin64 to upgrade the latest repository structure (${msg})" 2>&1
+  local task="${1:-}"
+  local msg="${2:-}"
+  dev_bin64_msg_show_error_parameters "${task}" "${msg}" &&
+    echo "${task}:Legacy: legacy content detected. Please re-run devbin64 to upgrade the latest repository structure (${msg})" 2>&1
 }
 
 function dev_bin64_build_setup() {
@@ -366,7 +386,7 @@ function dev_bin64_lib_locate() {
 
 # Imported from Bashlib64:dev_bin64_lib_basename
 function dev_bin64_lib_basename() {
-  local path="$1"
+  local path="${1:-}"
   local base=''
   if [[ -n "$path" && "$path" != '/' ]]; then
     base="${path##*/}"
@@ -377,5 +397,15 @@ function dev_bin64_lib_basename() {
   else
     printf '%s' "$base"
   fi
+  return 0
+}
+
+function dev_bin64_lib_trace_start() {
+  [[ -n "${DEV_CICD_DEBUG_BASH:-}" && "$DEV_CICD_DEBUG_BASH" == 'TRACE' ]] && set -x
+  return 0
+}
+
+function dev_bin64_lib_trace_finish() {
+  [[ -n "${DEV_CICD_DEBUG_BASH:-}" && "$DEV_CICD_DEBUG_BASH" == 'TRACE' ]] && set +x
   return 0
 }

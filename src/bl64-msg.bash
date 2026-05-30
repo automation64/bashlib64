@@ -293,7 +293,7 @@ function _bl64_msg_format_emoji() {
     "$BL64_MSG_FORMAT_HOST")
       printf "[%b] %b %s${linefeed}" \
         "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_TIME")
@@ -305,7 +305,7 @@ function _bl64_msg_format_emoji() {
     "$BL64_MSG_FORMAT_TIME2")
       printf "%b %b %s${linefeed}" \
         "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_CALLER")
@@ -863,7 +863,7 @@ function bl64_msg_show_setup() {
   local variable=''
   local has_values=''
 
-  bl64_msg_app_detail_is_enabled || return 0
+  bl64_msg_app_verbose_is_enabled || return 0
   bl64_lib_var_is_default "$message" && message='Configuration parameters:'
   shift
 
@@ -900,11 +900,11 @@ function bl64_msg_help_show() {
   bl64_msg_set_format "$BL64_MSG_FORMAT_PLAIN"
 
   _bl64_msg_show_script
+  _bl64_msg_show_about
+
   if ! bl64_lib_var_is_default "$BL64_MSG_HELP_USAGE"; then
     _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage  ' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
   fi
-
-  _bl64_msg_show_about
 
   if ! bl64_lib_var_is_default "$BL64_MSG_HELP_DESCRIPTION"; then
     printf '\n%s\n' "$BL64_MSG_HELP_DESCRIPTION"
@@ -954,7 +954,7 @@ function bl64_msg_show_doc() {
   local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
-    bl64_msg_app_detail_is_enabled || return 0
+    bl64_msg_app_verbose_is_enabled || return 0
 
   _bl64_msg_print "$BL64_MSG_TYPE_INFO" 'Doc    ' "$message"
 }

@@ -13,7 +13,7 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+source ./bin/dev-set || exit 1
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-rxtx.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-api.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-vcs.bash" &&
@@ -66,7 +66,9 @@ function my_create() {
 function my_initialize() {
   bl64_dbg_app_show_function
   dev_bin64_task_initialize &&
+    dev_git_check_repo_root &&
     bl64_check_parameter 'MY_TAG' || return $?
+
   if bl64_lib_flag_is_enabled "$MY_CHANGELOG_ADD"; then
     bl64_check_file "$(pwd)/${DEV_BASE_CHANGELOG}" ||
       return $?
@@ -82,7 +84,7 @@ function my_initialize() {
     'DEV_BASE_CHANGELOG'
 }
 
-bl64_lib_script_version_set '2.2.2'
+bl64_lib_script_version_set '2.3.0'
 bl64_msg_help_about_set 'Create and push GIT tag to local, origin and upstream'
 dev_bin64_initialize && my_initialize || exit $?
 

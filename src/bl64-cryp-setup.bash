@@ -49,8 +49,10 @@ function bl64_cryp_setup() {
 #######################################
 # Warning: bootstrap function
 function _bl64_cryp_set_command() {
+  bl64_dbg_lib_show_function
   BL64_CRYP_CMD_MD5SUM="$(bl64_bsh_command_locate 'md5sum')"
   BL64_CRYP_CMD_SHA256SUM="$(bl64_bsh_command_locate 'sha256sum')"
   BL64_CRYP_CMD_GPG="$(bl64_bsh_command_locate 'gpg')"
   BL64_CRYP_CMD_OPENSSL="$(bl64_bsh_command_locate 'openssl')"
+  return 0
 }

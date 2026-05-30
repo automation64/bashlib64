@@ -103,7 +103,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='23.1.1'
+  declare BL64_VERSION='23.2.0'
 
   #
   # Imported generic shell standard variables
@@ -641,7 +641,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.17.3'
+  declare BL64_MSG_VERSION='5.17.4'
 
   declare BL64_MSG_MODULE='0'
 
@@ -767,7 +767,7 @@ function bl64_lib_script_minver_check() {
   declare BL64_MSG_LABEL_EMOJI_BATCHERR='(🔥)'
   declare BL64_MSG_LABEL_EMOJI_BATCHOK='(🌟)'
   declare BL64_MSG_LABEL_EMOJI_ERROR='(⛔)'
-  declare BL64_MSG_LABEL_EMOJI_HELP='(🚩)'
+  declare BL64_MSG_LABEL_EMOJI_HELP='(💡)'
   declare BL64_MSG_LABEL_EMOJI_INFO='(💡)'
   declare BL64_MSG_LABEL_EMOJI_INIT='(⚙️)'
   declare BL64_MSG_LABEL_EMOJI_INPUT='(📝)'
@@ -882,7 +882,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_OS_VERSION='5.12.1'
+  declare BL64_OS_VERSION='5.12.2'
 
   declare BL64_OS_MODULE='0'
 
@@ -996,7 +996,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_API_VERSION='2.2.2'
+  declare BL64_API_VERSION='2.3.0'
 
   declare BL64_API_MODULE='0'
 
@@ -1019,7 +1019,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ARC_VERSION='4.5.0'
+  declare BL64_ARC_VERSION='4.5.1'
 
   declare BL64_ARC_MODULE='0'
 
@@ -1087,7 +1087,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_BSH_VERSION='3.10.1'
+  declare BL64_BSH_VERSION='3.10.2'
 
   declare BL64_BSH_MODULE='0'
 
@@ -1109,7 +1109,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CNT_VERSION='4.0.1'
+  declare BL64_CNT_VERSION='4.0.2'
 
   declare BL64_CNT_MODULE='0'
 
@@ -1152,7 +1152,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_CRYP_VERSION='2.5.1'
+  declare BL64_CRYP_VERSION='2.5.2'
 
   declare BL64_CRYP_MODULE='0'
 
@@ -1179,7 +1179,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.4.5'
+  declare BL64_FS_VERSION='6.5.0'
 
   declare BL64_FS_MODULE='0'
 
@@ -1198,6 +1198,7 @@ function bl64_lib_script_minver_check() {
   declare BL64_FS_CMD_MKTEMP=''
   declare BL64_FS_CMD_MV=''
   declare BL64_FS_CMD_RM=''
+  declare BL64_FS_CMD_STAT=''
   declare BL64_FS_CMD_TOUCH=''
 
   declare BL64_FS_ALIAS_CHOWN_DIR=''
@@ -1433,7 +1434,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='4.2.4'
+  declare BL64_PY_VERSION='4.2.5'
 
   declare BL64_PY_MODULE='0'
 
@@ -1519,7 +1520,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_RXTX_VERSION='2.6.4'
+  declare BL64_RXTX_VERSION='2.7.0'
 
   declare BL64_RXTX_MODULE='0'
 
@@ -1536,6 +1537,7 @@ function bl64_lib_script_minver_check() {
   declare BL64_RXTX_SET_CURL_REDIRECT=''
   declare BL64_RXTX_SET_CURL_REQUEST=''
   declare BL64_RXTX_SET_CURL_SECURE=''
+  declare BL64_RXTX_SET_CURL_SHOW_ERROR=''
   declare BL64_RXTX_SET_CURL_SILENT=''
   declare BL64_RXTX_SET_CURL_VERBOSE=''
   declare BL64_RXTX_SET_WGET_OUTPUT=''
@@ -4115,7 +4117,7 @@ function _bl64_msg_format_emoji() {
     "$BL64_MSG_FORMAT_HOST")
       printf "[%b] %b %s${linefeed}" \
         "\e[${!style_fmthost}m${HOSTNAME}\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_TIME")
@@ -4127,7 +4129,7 @@ function _bl64_msg_format_emoji() {
     "$BL64_MSG_FORMAT_TIME2")
       printf "%b %b %s${linefeed}" \
         "\e[${!style_fmttime}m$(printf "$BL64_MSG_TIME_DMY_HMS_COMPACT" '-1')\e[${BL64_MSG_ANSI_CHAR_NORMAL}m" \
-        "${!label}" \
+        "${!label} ${type}:" \
         "$message"
       ;;
     "$BL64_MSG_FORMAT_CALLER")
@@ -4685,7 +4687,7 @@ function bl64_msg_show_setup() {
   local variable=''
   local has_values=''
 
-  bl64_msg_app_detail_is_enabled || return 0
+  bl64_msg_app_verbose_is_enabled || return 0
   bl64_lib_var_is_default "$message" && message='Configuration parameters:'
   shift
 
@@ -4722,11 +4724,11 @@ function bl64_msg_help_show() {
   bl64_msg_set_format "$BL64_MSG_FORMAT_PLAIN"
 
   _bl64_msg_show_script
+  _bl64_msg_show_about
+
   if ! bl64_lib_var_is_default "$BL64_MSG_HELP_USAGE"; then
     _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage  ' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
   fi
-
-  _bl64_msg_show_about
 
   if ! bl64_lib_var_is_default "$BL64_MSG_HELP_DESCRIPTION"; then
     printf '\n%s\n' "$BL64_MSG_HELP_DESCRIPTION"
@@ -4776,7 +4778,7 @@ function bl64_msg_show_doc() {
   local message="${1:-}"
 
   bl64_log_info "${FUNCNAME[1]:-MAIN}" "$message" &&
-    bl64_msg_app_detail_is_enabled || return 0
+    bl64_msg_app_verbose_is_enabled || return 0
 
   _bl64_msg_print "$BL64_MSG_TYPE_INFO" 'Doc    ' "$message"
 }
@@ -4805,6 +4807,7 @@ function bl64_msg_show_doc() {
 #######################################
 # Warning: bootstrap function
 function _bl64_os_set_command() {
+  bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_FLAVOR" in
     "$BL64_OS_FLAVOR_DEBIAN")
@@ -6260,6 +6263,8 @@ function bl64_api_call() {
   # shellcheck disable=SC2086
   bl64_bsh_job_try "$BL64_API_CALL_SET_MAX_RETRIES" "$BL64_API_CALL_SET_WAIT" \
     "$BL64_RXTX_CMD_CURL" \
+    $BL64_RXTX_SET_CURL_SILENT \
+    $BL64_RXTX_SET_CURL_SHOW_ERROR \
     $BL64_RXTX_SET_CURL_FAIL \
     $BL64_RXTX_SET_CURL_REDIRECT \
     $BL64_RXTX_SET_CURL_SECURE \
@@ -6385,6 +6390,8 @@ function bl64_arc_setup() {
 #######################################
 # Warning: bootstrap function
 function _bl64_arc_set_command() {
+  bl64_dbg_lib_show_function
+
   bl64_dbg_lib_show_comments 'detect optional commands. No error if not found'
   BL64_ARC_CMD_BUNZIP2="$(bl64_bsh_command_locate 'bunzip2')"
   BL64_ARC_CMD_GUNZIP="$(bl64_bsh_command_locate 'gunzip')"
@@ -6442,6 +6449,7 @@ function _bl64_arc_set_command() {
 #   0: always ok
 #######################################
 function _bl64_arc_set_options() {
+  bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
       BL64_ARC_SET_TAR_VERBOSE='--verbose'
@@ -8582,7 +8590,7 @@ function bl64_bsh_xdg_create() {
   bl64_check_parameter 'home_path' ||
     return $?
 
-  bl64_msg_show_lib_task "create user XDG directories (${home_path})"
+  bl64_msg_show_lib_subtask "create user XDG directories (${home_path})"
   bl64_lib_var_is_default "$dir_mode" && dir_mode='0750'
   bl64_fs_dir_create "$dir_mode" "$dir_user" "$dir_group" \
     "$xdg_config" \
@@ -8735,43 +8743,43 @@ function _bl64_cnt_set_command_podman() {
 function _bl64_cnt_set_options() {
   bl64_dbg_lib_show_function
 
-  #
-  # Standard CLI flags
-  #
-  # * Common to both podman and docker
-  #
-
   # shellcheck disable=SC2034
-  BL64_CNT_SET_DEBUG='--debug' &&
-    BL64_CNT_SET_ENTRYPOINT='--entrypoint' &&
-    BL64_CNT_SET_FILE='--file' &&
-    BL64_CNT_SET_FILTER='--filter' &&
-    BL64_CNT_SET_INTERACTIVE='--interactive' &&
-    BL64_CNT_SET_LOG_LEVEL='--log-level' &&
-    BL64_CNT_SET_NO_CACHE='--no-cache' &&
-    BL64_CNT_SET_PASSWORD_STDIN='--password-stdin' &&
-    BL64_CNT_SET_PASSWORD='--password' &&
-    BL64_CNT_SET_QUIET='--quiet' &&
-    BL64_CNT_SET_RM='--rm' &&
-    BL64_CNT_SET_TAG='--tag' &&
-    BL64_CNT_SET_TTY='--tty' &&
-    BL64_CNT_SET_USERNAME='--username' &&
+  {
+    #
+    # Standard CLI flags
+    #
+    # * Common to both podman and docker
+    #
+
+    BL64_CNT_SET_DEBUG='--debug'
+    BL64_CNT_SET_ENTRYPOINT='--entrypoint'
+    BL64_CNT_SET_FILE='--file'
+    BL64_CNT_SET_FILTER='--filter'
+    BL64_CNT_SET_INTERACTIVE='--interactive'
+    BL64_CNT_SET_LOG_LEVEL='--log-level'
+    BL64_CNT_SET_NO_CACHE='--no-cache'
+    BL64_CNT_SET_PASSWORD_STDIN='--password-stdin'
+    BL64_CNT_SET_PASSWORD='--password'
+    BL64_CNT_SET_QUIET='--quiet'
+    BL64_CNT_SET_RM='--rm'
+    BL64_CNT_SET_TAG='--tag'
+    BL64_CNT_SET_TTY='--tty'
+    BL64_CNT_SET_USERNAME='--username'
     BL64_CNT_SET_VERSION='version'
 
-  #
-  # Common parameter values
-  #
-  # * Common to both podman and docker
-  #
+    #
+    # Common parameter values
+    #
+    # * Common to both podman and docker
+    #
 
-  # shellcheck disable=SC2034
-  BL64_CNT_SET_FILTER_ID='{{.ID}}' &&
-    BL64_CNT_SET_FILTER_NAME='{{.Names}}' &&
-    BL64_CNT_SET_LOG_LEVEL_DEBUG='debug' &&
-    BL64_CNT_SET_LOG_LEVEL_ERROR='error' &&
-    BL64_CNT_SET_LOG_LEVEL_INFO='info' &&
+    BL64_CNT_SET_FILTER_ID='{{.ID}}'
+    BL64_CNT_SET_FILTER_NAME='{{.Names}}'
+    BL64_CNT_SET_LOG_LEVEL_DEBUG='debug'
+    BL64_CNT_SET_LOG_LEVEL_ERROR='error'
+    BL64_CNT_SET_LOG_LEVEL_INFO='info'
     BL64_CNT_SET_STATUS_RUNNING='running'
-
+  }
   return 0
 }
 
@@ -9935,10 +9943,12 @@ function bl64_cryp_setup() {
 #######################################
 # Warning: bootstrap function
 function _bl64_cryp_set_command() {
+  bl64_dbg_lib_show_function
   BL64_CRYP_CMD_MD5SUM="$(bl64_bsh_command_locate 'md5sum')"
   BL64_CRYP_CMD_SHA256SUM="$(bl64_bsh_command_locate 'sha256sum')"
   BL64_CRYP_CMD_GPG="$(bl64_bsh_command_locate 'gpg')"
   BL64_CRYP_CMD_OPENSSL="$(bl64_bsh_command_locate 'openssl')"
+  return 0
 }
 
 #######################################
@@ -10794,6 +10804,7 @@ function bl64_fs_setup() {
 #######################################
 # Warning: bootstrap function
 function _bl64_fs_set_command() {
+  bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -10808,6 +10819,7 @@ function _bl64_fs_set_command() {
       BL64_FS_CMD_MV='/bin/mv'
       BL64_FS_CMD_RM='/bin/rm'
       BL64_FS_CMD_TOUCH='/usr/bin/touch'
+      BL64_FS_CMD_STAT='/usr/bin/stat'
       ;;
     ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
       BL64_FS_CMD_CHMOD='/usr/bin/chmod'
@@ -10821,6 +10833,7 @@ function _bl64_fs_set_command() {
       BL64_FS_CMD_MV='/usr/bin/mv'
       BL64_FS_CMD_RM='/usr/bin/rm'
       BL64_FS_CMD_TOUCH='/usr/bin/touch'
+      BL64_FS_CMD_STAT='/bin/stat'
       ;;
     ${BL64_OS_SLES}-*)
       BL64_FS_CMD_CHMOD='/usr/bin/chmod'
@@ -10834,6 +10847,7 @@ function _bl64_fs_set_command() {
       BL64_FS_CMD_MV='/usr/bin/mv'
       BL64_FS_CMD_RM='/usr/bin/rm'
       BL64_FS_CMD_TOUCH='/usr/bin/touch'
+      BL64_FS_CMD_STAT='/usr/bin/stat'
       ;;
     ${BL64_OS_ALP}-*)
       BL64_FS_CMD_CHMOD='/bin/chmod'
@@ -10847,6 +10861,7 @@ function _bl64_fs_set_command() {
       BL64_FS_CMD_MV='/bin/mv'
       BL64_FS_CMD_RM='/bin/rm'
       BL64_FS_CMD_TOUCH='/bin/touch'
+      BL64_FS_CMD_STAT='/bin/stat'
       ;;
     ${BL64_OS_ARC}-*)
       BL64_FS_CMD_CHMOD='/usr/bin/chmod'
@@ -10860,6 +10875,7 @@ function _bl64_fs_set_command() {
       BL64_FS_CMD_MV='/usr/bin/mv'
       BL64_FS_CMD_RM='/usr/bin/rm'
       BL64_FS_CMD_TOUCH='/usr/bin/touch'
+      BL64_FS_CMD_STAT='/usr/bin/stat'
       ;;
     ${BL64_OS_MCOS}-*)
       BL64_FS_CMD_CHMOD='/bin/chmod'
@@ -10873,6 +10889,7 @@ function _bl64_fs_set_command() {
       BL64_FS_CMD_MV='/bin/mv'
       BL64_FS_CMD_RM='/bin/rm'
       BL64_FS_CMD_TOUCH='/usr/bin/touch'
+      BL64_FS_CMD_STAT='/usr/bin/stat'
       ;;
     *) bl64_check_alert_unsupported ;;
   esac
@@ -10893,6 +10910,7 @@ function _bl64_fs_set_command() {
 #   0: always ok
 #######################################
 function _bl64_fs_set_options() {
+  bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
     ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
@@ -11102,20 +11120,12 @@ function _bl64_fs_set_options() {
 #######################################
 # shellcheck disable=SC2034
 function _bl64_fs_set_alias() {
-  local cmd_mawk='/usr/bin/mawk'
-
+  bl64_dbg_lib_show_function
   BL64_FS_ALIAS_CHOWN_DIR="${BL64_FS_CMD_CHOWN} ${BL64_FS_SET_CHOWN_VERBOSE} ${BL64_FS_SET_CHOWN_RECURSIVE}"
-  BL64_FS_ALIAS_CP_DFIND="/usr/bin/find"
-  BL64_FS_ALIAS_CP_DIR="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE} ${BL64_FS_SET_CP_RECURSIVE}"
-  BL64_FS_ALIAS_CP_FIFIND="/usr/bin/find"
   BL64_FS_ALIAS_CP_FILE="${BL64_FS_CMD_CP} ${BL64_FS_SET_CP_VERBOSE} ${BL64_FS_SET_CP_FORCE}"
-  BL64_FS_ALIAS_LN_FORCE="--force"
   BL64_FS_ALIAS_LN_SYMBOLIC="${BL64_FS_CMD_LN} ${BL64_FS_SET_LN_SYMBOLIC} ${BL64_FS_SET_LN_VERBOSE}"
   BL64_FS_ALIAS_LS_FILES="${BL64_FS_CMD_LS} ${BL64_FS_SET_LS_NOCOLOR}"
   BL64_FS_ALIAS_MKDIR_FULL="${BL64_FS_CMD_MKDIR} ${BL64_FS_SET_MKDIR_VERBOSE} ${BL64_FS_SET_MKDIR_PARENTS}"
-  BL64_FS_ALIAS_MKTEMP_DIR="${BL64_FS_CMD_MKTEMP} -d"
-  BL64_FS_ALIAS_MKTEMP_FILE="${BL64_FS_CMD_MKTEMP}"
-  BL64_FS_ALIAS_MV="${BL64_FS_CMD_MV} ${BL64_FS_SET_MV_VERBOSE} ${BL64_FS_SET_MV_FORCE}"
   BL64_FS_ALIAS_MV="${BL64_FS_CMD_MV} ${BL64_FS_SET_MV_VERBOSE} ${BL64_FS_SET_MV_FORCE}"
   BL64_FS_ALIAS_RM_FILE="${BL64_FS_CMD_RM} ${BL64_FS_SET_RM_VERBOSE} ${BL64_FS_SET_RM_FORCE}"
   BL64_FS_ALIAS_RM_FULL="${BL64_FS_CMD_RM} ${BL64_FS_SET_RM_VERBOSE} ${BL64_FS_SET_RM_FORCE} ${BL64_FS_SET_RM_RECURSIVE}"
@@ -12658,6 +12668,32 @@ function bl64_fs_run_touch() {
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   "$BL64_FS_CMD_TOUCH" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_fs_run_stat() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_STAT' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_FS_CMD_STAT" \
     "$@"
   bl64_dbg_lib_trace_stop
 }
@@ -16445,6 +16481,7 @@ function bl64_py_setup() {
 }
 
 function _bl64_py_setup() {
+  bl64_dbg_lib_show_function "$@"
   local venv_path="${1:-}"
 
   if ! bl64_lib_var_is_default "$venv_path"; then
@@ -17566,31 +17603,31 @@ function bl64_rxtx_setup() {
 function _bl64_rxtx_set_command() {
   bl64_dbg_lib_show_function
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_RXTX_CMD_CURL='/usr/bin/curl'
-    BL64_RXTX_CMD_WGET='/usr/bin/wget'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_RXTX_CMD_CURL='/usr/bin/curl'
-    BL64_RXTX_CMD_WGET='/usr/bin/wget'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_RXTX_CMD_CURL='/usr/bin/curl'
-    BL64_RXTX_CMD_WGET='/usr/bin/wget'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_RXTX_CMD_CURL='/usr/bin/curl'
-    BL64_RXTX_CMD_WGET='/usr/bin/wget'
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_RXTX_CMD_CURL='/usr/bin/curl'
-    BL64_RXTX_CMD_WGET='/usr/bin/wget'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_RXTX_CMD_CURL='/usr/bin/curl'
-    BL64_RXTX_CMD_WGET="$BL64_VAR_INCOMPATIBLE"
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_RXTX_CMD_CURL='/usr/bin/curl'
+      BL64_RXTX_CMD_WGET='/usr/bin/wget'
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      BL64_RXTX_CMD_CURL='/usr/bin/curl'
+      BL64_RXTX_CMD_WGET='/usr/bin/wget'
+      ;;
+    ${BL64_OS_SLES}-*)
+      BL64_RXTX_CMD_CURL='/usr/bin/curl'
+      BL64_RXTX_CMD_WGET='/usr/bin/wget'
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_RXTX_CMD_CURL='/usr/bin/curl'
+      BL64_RXTX_CMD_WGET='/usr/bin/wget'
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_RXTX_CMD_CURL='/usr/bin/curl'
+      BL64_RXTX_CMD_WGET='/usr/bin/wget'
+      ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_RXTX_CMD_CURL='/usr/bin/curl'
+      BL64_RXTX_CMD_WGET="$BL64_VAR_INCOMPATIBLE"
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -17611,127 +17648,135 @@ function _bl64_rxtx_set_options() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-18.* | ${BL64_OS_DEB}-9.* | ${BL64_OS_DEB}-10.*)
-    BL64_RXTX_SET_CURL_FAIL='--fail'
-    BL64_RXTX_SET_CURL_HEADER='-H'
-    BL64_RXTX_SET_CURL_INCLUDE='--include'
-    BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_NO_PROGRESS=' '
-    BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_CURL_REQUEST='-X'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
-    BL64_RXTX_SET_CURL_SILENT='--silent'
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
-    BL64_RXTX_SET_WGET_SECURE='--no-config'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
-    ;;
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_RXTX_SET_CURL_FAIL='--fail'
-    BL64_RXTX_SET_CURL_HEADER='-H'
-    BL64_RXTX_SET_CURL_INCLUDE='--include'
-    BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_NO_PROGRESS='--no-progress-meter'
-    BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_CURL_REQUEST='-X'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
-    BL64_RXTX_SET_CURL_SILENT='--silent'
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
-    BL64_RXTX_SET_WGET_SECURE='--no-config'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
-    BL64_RXTX_SET_CURL_FAIL='--fail'
-    BL64_RXTX_SET_CURL_HEADER='-H'
-    BL64_RXTX_SET_CURL_INCLUDE='--include'
-    BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_NO_PROGRESS='--no-progress-meter'
-    BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_CURL_REQUEST='-X'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
-    BL64_RXTX_SET_CURL_SILENT='--silent'
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
-    BL64_RXTX_SET_WGET_SECURE='--no-config'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
-    ;;
-  ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_RXTX_SET_CURL_FAIL='--fail'
-    BL64_RXTX_SET_CURL_HEADER='-H'
-    BL64_RXTX_SET_CURL_INCLUDE='--include'
-    BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_NO_PROGRESS=' '
-    BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_CURL_REQUEST='-X'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
-    BL64_RXTX_SET_CURL_SILENT='--silent'
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
-    BL64_RXTX_SET_WGET_SECURE='--no-config'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_RXTX_SET_CURL_FAIL='--fail'
-    BL64_RXTX_SET_CURL_HEADER='-H'
-    BL64_RXTX_SET_CURL_INCLUDE='--include'
-    BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_NO_PROGRESS=' '
-    BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_CURL_REQUEST='-X'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
-    BL64_RXTX_SET_CURL_SILENT='--silent'
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
-    BL64_RXTX_SET_WGET_SECURE='--no-config'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_RXTX_SET_CURL_FAIL='--fail'
-    BL64_RXTX_SET_CURL_HEADER='-H'
-    BL64_RXTX_SET_CURL_INCLUDE='--include'
-    BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_NO_PROGRESS=' '
-    BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_CURL_REQUEST='-X'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
-    BL64_RXTX_SET_CURL_SILENT='--silent'
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_WGET_OUTPUT='-O'
-    BL64_RXTX_SET_WGET_SECURE=' '
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_RXTX_SET_CURL_FAIL='--fail'
-    BL64_RXTX_SET_CURL_HEADER='-H'
-    BL64_RXTX_SET_CURL_INCLUDE='--include'
-    BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_NO_PROGRESS=' '
-    BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_CURL_REQUEST='-X'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
-    BL64_RXTX_SET_CURL_SILENT='--silent'
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_WGET_OUTPUT='--output-document'
-    BL64_RXTX_SET_WGET_SECURE='--no-config'
-    BL64_RXTX_SET_WGET_VERBOSE='--verbose'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_RXTX_SET_CURL_FAIL='--fail'
-    BL64_RXTX_SET_CURL_HEADER='-H'
-    BL64_RXTX_SET_CURL_INCLUDE='--include'
-    BL64_RXTX_SET_CURL_OUTPUT='--output'
-    BL64_RXTX_SET_CURL_NO_PROGRESS='--no-progress-meter'
-    BL64_RXTX_SET_CURL_REDIRECT='--location'
-    BL64_RXTX_SET_CURL_REQUEST='-X'
-    BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
-    BL64_RXTX_SET_CURL_SILENT='--silent'
-    BL64_RXTX_SET_CURL_VERBOSE='--verbose'
-    BL64_RXTX_SET_WGET_OUTPUT=' '
-    BL64_RXTX_SET_WGET_SECURE=' '
-    BL64_RXTX_SET_WGET_VERBOSE=' '
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-18.* | ${BL64_OS_DEB}-9.* | ${BL64_OS_DEB}-10.*)
+      BL64_RXTX_SET_CURL_FAIL='--fail'
+      BL64_RXTX_SET_CURL_HEADER='-H'
+      BL64_RXTX_SET_CURL_INCLUDE='--include'
+      BL64_RXTX_SET_CURL_OUTPUT='--output'
+      BL64_RXTX_SET_CURL_NO_PROGRESS=' '
+      BL64_RXTX_SET_CURL_REDIRECT='--location'
+      BL64_RXTX_SET_CURL_REQUEST='-X'
+      BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+      BL64_RXTX_SET_CURL_SHOW_ERROR='--show-error'
+      BL64_RXTX_SET_CURL_SILENT='--silent'
+      BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+      BL64_RXTX_SET_WGET_OUTPUT='--output-document'
+      BL64_RXTX_SET_WGET_SECURE='--no-config'
+      BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+      ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_RXTX_SET_CURL_FAIL='--fail'
+      BL64_RXTX_SET_CURL_HEADER='-H'
+      BL64_RXTX_SET_CURL_INCLUDE='--include'
+      BL64_RXTX_SET_CURL_OUTPUT='--output'
+      BL64_RXTX_SET_CURL_NO_PROGRESS='--no-progress-meter'
+      BL64_RXTX_SET_CURL_REDIRECT='--location'
+      BL64_RXTX_SET_CURL_REQUEST='-X'
+      BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+      BL64_RXTX_SET_CURL_SHOW_ERROR='--show-error'
+      BL64_RXTX_SET_CURL_SILENT='--silent'
+      BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+      BL64_RXTX_SET_WGET_OUTPUT='--output-document'
+      BL64_RXTX_SET_WGET_SECURE='--no-config'
+      BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-*)
+      BL64_RXTX_SET_CURL_FAIL='--fail'
+      BL64_RXTX_SET_CURL_HEADER='-H'
+      BL64_RXTX_SET_CURL_INCLUDE='--include'
+      BL64_RXTX_SET_CURL_OUTPUT='--output'
+      BL64_RXTX_SET_CURL_NO_PROGRESS='--no-progress-meter'
+      BL64_RXTX_SET_CURL_REDIRECT='--location'
+      BL64_RXTX_SET_CURL_REQUEST='-X'
+      BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+      BL64_RXTX_SET_CURL_SHOW_ERROR='--show-error'
+      BL64_RXTX_SET_CURL_SILENT='--silent'
+      BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+      BL64_RXTX_SET_WGET_OUTPUT='--output-document'
+      BL64_RXTX_SET_WGET_SECURE='--no-config'
+      BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+      ;;
+    ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      BL64_RXTX_SET_CURL_FAIL='--fail'
+      BL64_RXTX_SET_CURL_HEADER='-H'
+      BL64_RXTX_SET_CURL_INCLUDE='--include'
+      BL64_RXTX_SET_CURL_OUTPUT='--output'
+      BL64_RXTX_SET_CURL_NO_PROGRESS=' '
+      BL64_RXTX_SET_CURL_REDIRECT='--location'
+      BL64_RXTX_SET_CURL_REQUEST='-X'
+      BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+      BL64_RXTX_SET_CURL_SHOW_ERROR='--show-error'
+      BL64_RXTX_SET_CURL_SILENT='--silent'
+      BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+      BL64_RXTX_SET_WGET_OUTPUT='--output-document'
+      BL64_RXTX_SET_WGET_SECURE='--no-config'
+      BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+      ;;
+    ${BL64_OS_SLES}-*)
+      BL64_RXTX_SET_CURL_FAIL='--fail'
+      BL64_RXTX_SET_CURL_HEADER='-H'
+      BL64_RXTX_SET_CURL_INCLUDE='--include'
+      BL64_RXTX_SET_CURL_OUTPUT='--output'
+      BL64_RXTX_SET_CURL_NO_PROGRESS=' '
+      BL64_RXTX_SET_CURL_REDIRECT='--location'
+      BL64_RXTX_SET_CURL_REQUEST='-X'
+      BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+      BL64_RXTX_SET_CURL_SHOW_ERROR='--show-error'
+      BL64_RXTX_SET_CURL_SILENT='--silent'
+      BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+      BL64_RXTX_SET_WGET_OUTPUT='--output-document'
+      BL64_RXTX_SET_WGET_SECURE='--no-config'
+      BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_RXTX_SET_CURL_FAIL='--fail'
+      BL64_RXTX_SET_CURL_HEADER='-H'
+      BL64_RXTX_SET_CURL_INCLUDE='--include'
+      BL64_RXTX_SET_CURL_OUTPUT='--output'
+      BL64_RXTX_SET_CURL_NO_PROGRESS=' '
+      BL64_RXTX_SET_CURL_REDIRECT='--location'
+      BL64_RXTX_SET_CURL_REQUEST='-X'
+      BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+      BL64_RXTX_SET_CURL_SHOW_ERROR='--show-error'
+      BL64_RXTX_SET_CURL_SILENT='--silent'
+      BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+      BL64_RXTX_SET_WGET_OUTPUT='-O'
+      BL64_RXTX_SET_WGET_SECURE=' '
+      BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_RXTX_SET_CURL_FAIL='--fail'
+      BL64_RXTX_SET_CURL_HEADER='-H'
+      BL64_RXTX_SET_CURL_INCLUDE='--include'
+      BL64_RXTX_SET_CURL_OUTPUT='--output'
+      BL64_RXTX_SET_CURL_NO_PROGRESS=' '
+      BL64_RXTX_SET_CURL_REDIRECT='--location'
+      BL64_RXTX_SET_CURL_REQUEST='-X'
+      BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+      BL64_RXTX_SET_CURL_SHOW_ERROR='--show-error'
+      BL64_RXTX_SET_CURL_SILENT='--silent'
+      BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+      BL64_RXTX_SET_WGET_OUTPUT='--output-document'
+      BL64_RXTX_SET_WGET_SECURE='--no-config'
+      BL64_RXTX_SET_WGET_VERBOSE='--verbose'
+      ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_RXTX_SET_CURL_FAIL='--fail'
+      BL64_RXTX_SET_CURL_HEADER='-H'
+      BL64_RXTX_SET_CURL_INCLUDE='--include'
+      BL64_RXTX_SET_CURL_OUTPUT='--output'
+      BL64_RXTX_SET_CURL_NO_PROGRESS='--no-progress-meter'
+      BL64_RXTX_SET_CURL_REDIRECT='--location'
+      BL64_RXTX_SET_CURL_REQUEST='-X'
+      BL64_RXTX_SET_CURL_SECURE='--config /dev/null'
+      BL64_RXTX_SET_CURL_SHOW_ERROR='--show-error'
+      BL64_RXTX_SET_CURL_SILENT='--silent'
+      BL64_RXTX_SET_CURL_VERBOSE='--verbose'
+      BL64_RXTX_SET_WGET_OUTPUT=' '
+      BL64_RXTX_SET_WGET_SECURE=' '
+      BL64_RXTX_SET_WGET_VERBOSE=' '
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -17754,31 +17799,31 @@ function _bl64_rxtx_set_alias() {
   bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
-    BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
-    BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
-    BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
-    BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
-    BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
-    BL64_RXTX_ALIAS_WGET=''
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
+      BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
+      BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
+      ;;
+    ${BL64_OS_SLES}-*)
+      BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
+      BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
+      BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
+      BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
+      ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
+      BL64_RXTX_ALIAS_WGET=''
+      ;;
+    *) bl64_check_alert_unsupported ;;
   esac
 }
 
@@ -17829,6 +17874,8 @@ function bl64_rxtx_web_get_file() {
   # shellcheck disable=SC2086
   if [[ -x "$BL64_RXTX_CMD_CURL" ]]; then
     bl64_rxtx_run_curl \
+      $BL64_RXTX_SET_CURL_SHOW_ERROR \
+      $BL64_RXTX_SET_CURL_NO_PROGRESS \
       $BL64_RXTX_SET_CURL_FAIL \
       $BL64_RXTX_SET_CURL_REDIRECT \
       $BL64_RXTX_SET_CURL_OUTPUT "$destination" \

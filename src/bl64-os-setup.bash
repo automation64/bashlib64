@@ -22,6 +22,7 @@
 #######################################
 # Warning: bootstrap function
 function _bl64_os_set_command() {
+  bl64_dbg_lib_show_function
   # shellcheck disable=SC2034
   case "$BL64_OS_FLAVOR" in
     "$BL64_OS_FLAVOR_DEBIAN")

@@ -23,7 +23,7 @@
 {
   # Env / GIT / Module environment definition version
   export DEV_ENV_GIT_ID='git'
-  export DEV_ENV_GIT_VERSION='1.1.0'
+  export DEV_ENV_GIT_VERSION='1.2.0'
 }
 
 #
@@ -60,4 +60,18 @@
 {
   # Lib / RSync / Command
   export DEV_LIB_RSYNC_BIN="${DEV_LIB_RSYNC_BIN:-/usr/bin/rsync}"
+}
+
+#
+# Module functions
+#
+# * Shared internal functions for module tasks
+#
+
+function dev_git_check_repo_root() {
+  bl64_dbg_app_show_function
+  if [[ ! -d .git ]]; then
+    bl64_msg_show_fatal 'task must be executed from the repository root (no ./.git found)'
+    return 1
+  fi
 }

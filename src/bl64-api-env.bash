@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_API_VERSION='2.2.2'
+  declare BL64_API_VERSION='2.3.0'
 
   declare BL64_API_MODULE='0'
 

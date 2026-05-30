@@ -1540,6 +1540,32 @@ function bl64_fs_run_touch() {
 }
 
 #######################################
+# Command wrapper with verbose, debug and common options
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_fs_run_stat() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_FS_STAT' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_FS_CMD_STAT" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
 # Backup path
 #
 # * Use for file  operations that will alter or replace the content and requires a quick rollback mechanism

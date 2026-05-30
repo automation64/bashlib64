@@ -13,7 +13,7 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+source ./bin/dev-set || exit 1
 # shellcheck source=lib/bl64/bashlib64.bash
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-rxtx.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-api.bash" &&
@@ -106,7 +106,7 @@ function my_release() {
 function my_initialize() {
   bl64_dbg_app_show_function
   dev_bin64_task_initialize &&
-  bl64_check_parameter 'MY_RELEASE_TAG' &&
+    bl64_check_parameter 'MY_RELEASE_TAG' &&
     bl64_check_export 'DEV_RELEASE_GITHUB_REPO_OWNER' &&
     bl64_check_export 'DEV_RELEASE_GITHUB_REPO_NAME' &&
     bl64_check_command "$DEV_LIB_GITHUB_BIN" &&

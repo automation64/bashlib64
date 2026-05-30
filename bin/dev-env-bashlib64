@@ -32,7 +32,7 @@
   # Lib / BashLib64 / Location
   export DEV_LIB_BASHLIB64_TARGET="${DEV_PATH_LIB}/${DEV_ENV_BASHLIB64_ID}"
   # Lib / BashLib64 / Version
-  export DEV_LIB_BASHLIB64_VERSION='23.0.2'
+  export DEV_LIB_BASHLIB64_VERSION='23.1.1'
 }
 
 #

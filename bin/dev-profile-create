@@ -13,7 +13,7 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
+source ./bin/dev-set || exit 1
 source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
   source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
@@ -50,7 +50,7 @@ function my_create() {
 function my_initialize() {
   bl64_dbg_app_show_function
   dev_bin64_task_initialize &&
-  bl64_check_parameter 'MY_PROFILE' &&
+    bl64_check_parameter 'MY_PROFILE' &&
     dev_bin64_task_show_setup \
       'MY_PROFILE'
 }
