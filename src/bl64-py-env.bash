@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='4.2.5'
+  declare BL64_PY_VERSION='4.2.6'
 
   declare BL64_PY_MODULE='0'
 
@@ -18,8 +18,10 @@
   declare BL64_PY_PATH_PIP_USR_BIN=''
 
   # Version info
-  declare BL64_PY_VERSION_PYTHON3=''
-  declare BL64_PY_VERSION_PIP3=''
+  declare BL64_PY_VERSION_PYTHON=''
+  declare BL64_PY_VERSION_PIP=''
+  declare BL64_PY_VERSION_PYTHON3='' # legacy
+  declare BL64_PY_VERSION_PIP3=''    # legacy
 
   declare BL64_PY_SET_PIP_DEBUG=''
   declare BL64_PY_SET_PIP_NO_COLOR
@@ -31,7 +33,7 @@
   declare BL64_PY_SET_PIP_VERBOSE=''
   declare BL64_PY_SET_PIP_VERSION=''
 
-  declare BL64_PY_DEF_VENV_CFG='pyvenv.cfg'
+  declare BL64_PY_FILE_VENV_CFG='pyvenv.cfg'
 
   # Variables used by Python
   declare VIRTUAL_ENV="${VIRTUAL_ENV:-}"

@@ -30,7 +30,7 @@ function bl64_fs_setup() {
     _bl64_fs_set_alias &&
     _bl64_fs_set_options &&
     BL64_FS_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'fs'
+  bl64_check_rise_module_setup 'fs'
 }
 
 #######################################
@@ -80,7 +80,7 @@ function _bl64_fs_set_command() {
       BL64_FS_CMD_TOUCH='/usr/bin/touch'
       BL64_FS_CMD_STAT='/bin/stat'
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       BL64_FS_CMD_CHMOD='/usr/bin/chmod'
       BL64_FS_CMD_CHOWN='/usr/bin/chown'
       BL64_FS_CMD_CP='/usr/bin/cp'
@@ -136,7 +136,7 @@ function _bl64_fs_set_command() {
       BL64_FS_CMD_TOUCH='/usr/bin/touch'
       BL64_FS_CMD_STAT='/usr/bin/stat'
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -220,7 +220,7 @@ function _bl64_fs_set_options() {
       BL64_FS_SET_RM_RECURSIVE='--recursive'
       BL64_FS_SET_RM_VERBOSE='--verbose'
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       BL64_FS_SET_CHMOD_RECURSIVE='--recursive'
       BL64_FS_SET_CHMOD_VERBOSE='--verbose'
       BL64_FS_SET_CHMOD_SYMLINK='-h'
@@ -344,7 +344,7 @@ function _bl64_fs_set_options() {
       BL64_FS_SET_RM_RECURSIVE='-R'
       BL64_FS_SET_RM_VERBOSE='-v'
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 

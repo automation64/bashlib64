@@ -31,7 +31,7 @@ function bl64_cnt_setup() {
     _bl64_cnt_set_command "$command_location" &&
     _bl64_cnt_set_options &&
     BL64_CNT_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'cnt'
+  bl64_check_rise_module_setup 'cnt'
 }
 
 #######################################

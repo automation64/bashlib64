@@ -186,7 +186,7 @@ function bl64_cryp_gpg_key_armor() {
     return $?
 
   if [[ -f "$target_key_file" ]]; then
-    bl64_fs_path_permission_set "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" \
+    bl64_fs_path_set_permissions "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" \
       "$target_key_file"
   fi
 }
@@ -241,7 +241,7 @@ function bl64_cryp_gpg_key_dearmor() {
     "$BL64_OS_CMD_CAT" "$target_key_file" >"$source_key_file" &&
       bl64_fs_file_remove "$target_key_file"
   else
-    bl64_fs_path_permission_set "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" "$target_key_file"
+    bl64_fs_path_set_permissions "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" "$target_key_file"
   fi
 }
 

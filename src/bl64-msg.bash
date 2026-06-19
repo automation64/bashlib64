@@ -10,36 +10,56 @@
 #
 
 function bl64_msg_app_verbose_enabled {
-  bl64_msg_show_deprecated 'bl64_msg_app_verbose_enabled' 'bl64_msg_app_verbose_is_enabled'
+  _bl64_lib_function_deprecated 'bl64_msg_app_verbose_enabled' 'bl64_msg_app_verbose_is_enabled'
   bl64_msg_app_verbose_is_enabled
 }
 function bl64_msg_lib_verbose_enabled {
-  bl64_msg_show_deprecated 'bl64_msg_lib_verbose_enabled' 'bl64_msg_app_detail_is_enabled'
+  _bl64_lib_function_deprecated 'bl64_msg_lib_verbose_enabled' 'bl64_msg_app_detail_is_enabled'
   bl64_msg_app_detail_is_enabled
 }
 function bl64_msg_lib_enable_verbose {
-  bl64_msg_show_deprecated 'bl64_msg_lib_enable_verbose' 'bl64_msg_app_enable_detail'
+  _bl64_lib_function_deprecated 'bl64_msg_lib_enable_verbose' 'bl64_msg_app_enable_detail'
   bl64_msg_app_enable_detail
 }
 function bl64_msg_lib_verbose_is_enabled {
-  bl64_msg_show_deprecated 'bl64_msg_lib_verbose_is_enabled' 'bl64_msg_app_detail_is_enabled'
+  _bl64_lib_function_deprecated 'bl64_msg_lib_verbose_is_enabled' 'bl64_msg_app_detail_is_enabled'
   bl64_msg_app_detail_is_enabled
 }
 function bl64_msg_show_usage() {
-  bl64_msg_show_deprecated 'bl64_msg_show_usage' 'bl64_msg_help_show'
+  _bl64_lib_function_deprecated 'bl64_msg_show_usage' 'bl64_msg_help_show'
   local usage="${1:-${BL64_VAR_NULL}}"
   local description="${2:-${BL64_VAR_DEFAULT}}"
   local commands="${3:-}"
   local flags="${4:-}"
   local parameters="${5:-}"
 
-  bl64_msg_help_usage_set "$usage"
-  bl64_msg_help_description_set "$description"
-  bl64_msg_help_parameters_set \
+  bl64_msg_help_set_usage "$usage"
+  bl64_msg_help_set_description "$description"
+  bl64_msg_help_set_parameters \
     "${commands}
 ${flags}
 ${parameters}"
   bl64_msg_help_show
+}
+function bl64_msg_help_usage_set() {
+  _bl64_lib_function_deprecated 'bl64_msg_help_usage_set' 'bl64_msg_help_set_usage'
+  bl64_msg_help_set_usage "$@"
+}
+function bl64_msg_help_about_set() {
+  _bl64_lib_function_deprecated 'bl64_msg_help_about_set' 'bl64_msg_help_set_about'
+  bl64_msg_help_set_about "$@"
+}
+function bl64_msg_help_description_set() {
+  _bl64_lib_function_deprecated 'bl64_msg_help_description_set' 'bl64_msg_help_set_description'
+  bl64_msg_help_set_description "$@"
+}
+function bl64_msg_help_parameters_set() {
+  _bl64_lib_function_deprecated 'bl64_msg_help_parameters_set' 'bl64_msg_help_set_parameters'
+  bl64_msg_help_set_parameters "$@"
+}
+function bl64_msg_show_about() {
+  _bl64_lib_function_deprecated 'bl64_msg_show_about' 'bl64_msg_help_show_about'
+  bl64_msg_help_show_about
 }
 
 #
@@ -901,10 +921,7 @@ function bl64_msg_help_show() {
 
   _bl64_msg_show_script
   _bl64_msg_show_about
-
-  if ! bl64_lib_var_is_default "$BL64_MSG_HELP_USAGE"; then
-    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage  ' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
-  fi
+  bl64_msg_help_show_usage
 
   if ! bl64_lib_var_is_default "$BL64_MSG_HELP_DESCRIPTION"; then
     printf '\n%s\n' "$BL64_MSG_HELP_DESCRIPTION"
@@ -918,9 +935,30 @@ function bl64_msg_help_show() {
 }
 
 #######################################
-# Display about the script message
+# Show usage help message
 #
-# * bl64_msg_help_about_set must be run before
+# Arguments:
+#   NONE
+# Outputs:
+#   STDOUT: help message
+#   STDERR: NONE
+# Returns:
+#   0: Always OK
+#######################################
+function bl64_msg_help_show_usage() {
+  _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
+  local current_format="$BL64_MSG_FORMAT"
+
+  bl64_msg_set_format "$BL64_MSG_FORMAT_PLAIN"
+  if ! bl64_lib_var_is_default "$BL64_MSG_HELP_USAGE"; then
+    _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage  ' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
+  fi
+  bl64_msg_set_format "$current_format"
+  return 0
+}
+
+#######################################
+# Show about help message
 #
 # Arguments:
 #   None
@@ -930,11 +968,16 @@ function bl64_msg_help_show() {
 # Returns:
 #   0: Always ok
 #######################################
-function bl64_msg_show_about() {
+function bl64_msg_help_show_about() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
+  local current_format="$BL64_MSG_FORMAT"
+
   bl64_msg_app_verbose_is_enabled || return 0
-  _bl64_msg_show_script &&
-    _bl64_msg_show_about
+
+  bl64_msg_set_format "$BL64_MSG_FORMAT_PLAIN" &&
+    _bl64_msg_show_script &&
+    _bl64_msg_show_about &&
+    bl64_msg_set_format "$current_format"
 }
 
 #######################################

@@ -5,6 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [23.3.0]
+
+### Added
+
+- All
+  - Fedora 44, Ubuntu 26, Alpine 23-24 support, OpenSuse Leap 15,16
+- k8s
+  - bl64_k8s_get_version
+- dbg
+  - bl64_dbg_app_show_about
+  - bl64_dbg_lib_show_about
+  - bl64_dbg_all_shift_show
+- check
+  - bl64_check_rise_task_failed
+  - bl64_check_rise_script_invalid_command
+  - bl64_check_rise_script_invalid_option
+  - bl64_check_rise_script_missing_parameter
+- msg
+  - bl64_msg_help_show_usage
+- ansible
+  - bl64_ans_set_paths: log path (ANSIBLE_LOG_PATH)
+- tf
+  - bl64_tf_set_paths
+- iam
+  - bl64_iam_user_get_gid
+
+### Changed
+
+- check
+  - bl64_check_alert_parameter_invalid: renamed to bl64_check_rise_parameter_invalid
+  - bl64_check_alert_unsupported: renamed to bl64_check_rise_task_unsupported
+  - bl64_check_alert_resource_not_found: renamed to bl64_check_rise_resource_not_found
+  - bl64_check_alert_undefined: renamed to bl64_check_rise_task_undefined
+  - bl64_check_alert_module_setup: renamed to bl64_check_rise_module_setup
+- msg
+  - bl64_msg_help_usage_set: renamed to bl64_msg_help_set_usage
+  - bl64_msg_help_about_set: renamed to bl64_msg_help_set_about
+  - bl64_msg_help_description_set: renamed to bl64_msg_help_set_description
+  - bl64_msg_help_parameters_set: renamed to bl64_msg_help_set_parameters
+  - bl64_msg_show_about: renamed to bl64_msg_help_show_about
+- tf
+  - bl64_tf_log_set: renamed to bl64_tf_set_logging
+- fs
+  - bl64_fs_path_permission_set: renamed to bl64_fs_path_set_permissions
+
 ## [23.2.0]
 
 ### Added

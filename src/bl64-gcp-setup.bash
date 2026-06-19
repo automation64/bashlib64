@@ -31,7 +31,7 @@ function bl64_gcp_setup() {
     _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
     _bl64_gcp_set_command "$gcloud_bin" &&
     BL64_GCP_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'gcp'
+  bl64_check_rise_module_setup 'gcp'
 }
 
 #######################################

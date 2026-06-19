@@ -10,37 +10,37 @@
 #
 
 function bl64_fmt_strip_starting_slash() {
-  bl64_msg_show_deprecated 'bl64_fmt_strip_starting_slash' 'bl64_fmt_path_strip_starting_slash'
+  _bl64_lib_function_deprecated 'bl64_fmt_strip_starting_slash' 'bl64_fmt_path_strip_starting_slash'
   bl64_fmt_path_strip_starting_slash "$@"
 }
 
 function bl64_fmt_strip_ending_slash() {
-  bl64_msg_show_deprecated 'bl64_fmt_strip_ending_slash' 'bl64_fmt_path_strip_ending_slash'
+  _bl64_lib_function_deprecated 'bl64_fmt_strip_ending_slash' 'bl64_fmt_path_strip_ending_slash'
   bl64_fmt_path_strip_ending_slash "$@"
 }
 
 function bl64_fmt_basename() {
-  bl64_msg_show_deprecated 'bl64_fmt_basename' 'bl64_fmt_path_get_basename'
+  _bl64_lib_function_deprecated 'bl64_fmt_basename' 'bl64_fmt_path_get_basename'
   bl64_fmt_path_get_basename "$@"
 }
 
 function bl64_fmt_dirname() {
-  bl64_msg_show_deprecated 'bl64_fmt_dirname' 'bl64_fmt_path_get_dirname'
+  _bl64_lib_function_deprecated 'bl64_fmt_dirname' 'bl64_fmt_path_get_dirname'
   bl64_fmt_path_get_dirname "$@"
 }
 
 function bl64_fmt_list_to_string() {
-  bl64_msg_show_deprecated 'bl64_fmt_list_to_string' 'bl64_fmt_list_convert_to_string'
+  _bl64_lib_function_deprecated 'bl64_fmt_list_to_string' 'bl64_fmt_list_convert_to_string'
   bl64_fmt_list_convert_to_string "$@"
 }
 
 function bl64_fmt_separator_line() {
-  bl64_msg_show_deprecated 'bl64_fmt_separator_line' 'bl64_ui_separator_show'
+  _bl64_lib_function_deprecated 'bl64_fmt_separator_line' 'bl64_ui_separator_show'
   bl64_ui_separator_show "$@"
 }
 
 function bl64_fmt_check_value_in_list() {
-  bl64_msg_show_deprecated 'bl64_fmt_check_value_in_list' 'bl64_fmt_list_check_membership'
+  _bl64_lib_function_deprecated 'bl64_fmt_check_value_in_list' 'bl64_fmt_list_check_membership'
   bl64_fmt_list_check_membership "$@"
 }
 
@@ -269,6 +269,7 @@ function bl64_fmt_list_check_membership() {
 
   shift
   shift
+
   bl64_check_parameter 'target_value' &&
     bl64_check_parameters_none $# 'please provide at least one value to check against' ||
     return $?

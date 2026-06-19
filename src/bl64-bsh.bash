@@ -10,11 +10,11 @@
 #
 
 function bl64_bsh_script_set_id() {
-  bl64_msg_show_deprecated 'bl64_bsh_script_set_id' 'bl64_lib_script_set_id'
+  _bl64_lib_function_deprecated 'bl64_bsh_script_set_id' 'bl64_lib_script_set_id'
   bl64_lib_script_set_id "$@"
 }
 function bl64_bsh_script_set_identity() {
-  bl64_msg_show_deprecated 'bl64_bsh_script_set_identity' 'bl64_lib_script_set_identity'
+  _bl64_lib_function_deprecated 'bl64_bsh_script_set_identity' 'bl64_lib_script_set_identity'
   bl64_lib_script_set_identity "$@"
 }
 
@@ -716,6 +716,7 @@ function bl64_bsh_job_try() {
   shift
   shift
   shift
+
   while :; do
     "$job_command" "$@" && return 0
     ((attempt++))

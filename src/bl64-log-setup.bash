@@ -66,7 +66,7 @@ function bl64_log_setup() {
     bl64_log_set_level "$log_level" &&
     bl64_log_set_format "$log_format" &&
     BL64_LOG_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'log'
+  bl64_check_rise_module_setup 'log'
 }
 
 #######################################
@@ -120,7 +120,7 @@ function bl64_log_set_level() {
     "$BL64_LOG_CATEGORY_DEBUG") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_DEBUG" ;;
     "$BL64_LOG_CATEGORY_WARNING") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_WARNING" ;;
     "$BL64_LOG_CATEGORY_ERROR") BL64_LOG_LEVEL="$BL64_LOG_CATEGORY_ERROR" ;;
-    *) bl64_check_alert_parameter_invalid 'log_level' ;;
+    *) bl64_check_rise_parameter_invalid 'log_level' ;;
   esac
 }
 
@@ -145,7 +145,7 @@ function bl64_log_set_format() {
       BL64_LOG_FORMAT="$BL64_LOG_FORMAT_CSV"
       BL64_LOG_FS=':'
       ;;
-    *) bl64_check_alert_parameter_invalid 'log_format' ;;
+    *) bl64_check_rise_parameter_invalid 'log_format' ;;
   esac
 }
 
@@ -181,7 +181,7 @@ function bl64_log_set_target() {
       _bl64_log_set_target_multiple "$log_target"
       ;;
     *)
-      bl64_check_alert_parameter_invalid 'log_type'
+      bl64_check_rise_parameter_invalid 'log_type'
       return $?
       ;;
   esac

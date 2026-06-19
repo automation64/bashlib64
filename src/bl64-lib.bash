@@ -3,26 +3,6 @@
 #######################################
 
 #
-# Public functions
-#
-
-function bl64_lib_mode_command_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_CMD"; }
-function bl64_lib_mode_compability_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_COMPATIBILITY"; }
-function bl64_lib_mode_strict_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_STRICT"; }
-
-function bl64_lib_mode_cicd_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; }
-function bl64_lib_mode_cicd_enable { BL64_LIB_CICD="$BL64_VAR_ON"; }
-function bl64_lib_mode_cicd_disable { BL64_LIB_CICD="$BL64_VAR_OFF"; }
-
-function bl64_lib_lang_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_LANG"; }
-function bl64_lib_trap_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_TRAPS"; }
-
-function bl64_lib_var_is_default {
-  local value="${1:-}"
-  [[ "$value" == "$BL64_VAR_DEFAULT" || "$value" == "$BL64_VAR_DEFAULT_LEGACY" ]]
-}
-
-#
 # Private functions
 #
 
@@ -91,9 +71,47 @@ function _bl64_lib_module_is_imported() {
   return 0
 }
 
+#######################################
+# Handles BashLib64 function deprecations
+#
+# Arguments:
+#   $1: Function name to be deprecated
+#   $2: Replacement function name
+# Outputs:
+#   STDOUT: None
+#   STDERR: Deprecation warning
+# Returns:
+#   0
+#######################################
+function _bl64_lib_function_deprecated() {
+  local function_name="${1:-NOT_SET}"
+  local function_replacement="${2:-NOT_SET}"
+  bl64_lib_flag_is_enabled "$BL64_LIB_DEPRECATION" || return 0
+  printf \
+    'Warning : Function to be removed from future versions of BashLib64. Please upgrade your source code. (%s :replace-with: %s)\n' \
+    "$function_name" \
+    "$function_replacement" >&2
+}
+
 #
 # Public functions
 #
+
+function bl64_lib_mode_command_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_CMD"; }
+function bl64_lib_mode_compability_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_COMPATIBILITY"; }
+function bl64_lib_mode_strict_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_STRICT"; }
+
+function bl64_lib_mode_cicd_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_CICD"; }
+function bl64_lib_mode_cicd_enable { BL64_LIB_CICD="$BL64_VAR_ON"; }
+function bl64_lib_mode_cicd_disable { BL64_LIB_CICD="$BL64_VAR_OFF"; }
+
+function bl64_lib_lang_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_LANG"; }
+function bl64_lib_trap_is_enabled { bl64_lib_flag_is_enabled "$BL64_LIB_TRAPS"; }
+
+function bl64_lib_var_is_default {
+  local value="${1:-}"
+  [[ "$value" == "$BL64_VAR_DEFAULT" || "$value" == "$BL64_VAR_DEFAULT_LEGACY" ]]
+}
 
 #######################################
 # Determines if the flag variable is enabled or not
@@ -228,4 +246,79 @@ function bl64_lib_script_minver_check() {
       return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
     fi
   done
+}
+
+#######################################
+# Harden runtime environment
+#
+# * Normalize sensitive shtop defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0
+#######################################
+function bl64_lib_harden_shopt() {
+  builtin shopt -qu \
+    'dotglob' \
+    'extdebug' \
+    'failglob' \
+    'globstar' \
+    'gnu_errfmt' \
+    'huponexit' \
+    'lastpipe' \
+    'login_shell' \
+    'nocaseglob' \
+    'nocasematch' \
+    'nullglob' \
+    'xpg_echo' &&
+    builtin shopt -qs \
+      'extquote'
+}
+
+#######################################
+# Harden runtime environment
+#
+# * Normalize sensitive bash option defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0
+#######################################
+function bl64_lib_harden_options() {
+  # Ensure pipeline exit status is failed when any cmd fails
+  builtin set -o 'pipefail'
+
+  # Enable error processing
+  builtin set -o 'errtrace'
+  builtin set -o 'functrace'
+
+  # Disable fast-fail. Developer must implement error handling (check for exit status)
+  builtin set +o 'errexit'
+
+  # Reset bash set options to defaults
+  builtin set -o 'braceexpand'
+  builtin set -o 'hashall'
+  builtin set +o 'allexport'
+  builtin set +o 'histexpand'
+  builtin set +o 'history'
+  builtin set +o 'ignoreeof'
+  builtin set +o 'monitor'
+  builtin set +o 'noclobber'
+  builtin set +o 'noglob'
+  builtin set +o 'nolog'
+  builtin set +o 'notify'
+  builtin set +o 'onecmd'
+  builtin set +o 'posix'
+
+  # Do not set/unset - Breaks bats-core
+  # set -o 'keyword'
+  # set -o 'noexec'
 }

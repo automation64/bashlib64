@@ -38,12 +38,12 @@ function bl64_ans_setup() {
     _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_PY_MODULE' &&
     _bl64_ans_set_command "$ansible_bin" &&
-    _bl64_ans_set_runtime "$ansible_config" &&
+    bl64_ans_set_paths "$ansible_config" &&
     _bl64_ans_set_options &&
     _bl64_ans_set_version &&
     BL64_ANS_ENV_IGNORE="$env_ignore" &&
     BL64_ANS_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'ans'
+  bl64_check_rise_module_setup 'ans'
 }
 
 #######################################
@@ -86,33 +86,16 @@ function _bl64_ans_set_options() {
 }
 
 #######################################
-# Set runtime defaults
-#
-# Arguments:
-#   $1: path to ansible_config
-# Outputs:
-#   STDOUT: None
-#   STDERR: setting errors
-# Returns:
-#   0: set ok
-#   >0: failed to set
-#######################################
-function _bl64_ans_set_runtime() {
-  bl64_dbg_lib_show_function "$@"
-  local config="${1:-}"
-  bl64_ans_set_paths "$config"
-}
-
-#######################################
 # Set and prepare module paths
 #
 # * Global paths only
 # * If preparation fails the whole module fails
 #
 # Arguments:
-#   $1: path to ansible_config
-#   $2: path to ansible collections
-#   $3: path to ansible workdir
+#   $1: path to ansible_config (ANSIBLE_CONFIG)
+#   $2: path to ansible collections (ANSIBLE_COLLECTIONS_PATHS)
+#   $3: path to ansible home (ANSIBLE_HOME)
+#   $4: path to ansible log (ANSIBLE_LOG_PATH)
 # Outputs:
 #   STDOUT: None
 #   STDERR: check errors
@@ -125,29 +108,28 @@ function bl64_ans_set_paths() {
   local config="${1:-${BL64_VAR_DEFAULT}}"
   local collections="${2:-${BL64_VAR_DEFAULT}}"
   local ansible="${3:-${BL64_VAR_DEFAULT}}"
+  local log="${4:-${BL64_VAR_DEFAULT}}"
 
-  if bl64_lib_var_is_default "$config"; then
-    BL64_ANS_PATH_USR_CONFIG=''
-  else
+  if ! bl64_lib_var_is_default "$config"; then
     bl64_check_file "$config" || return $?
     BL64_ANS_PATH_USR_CONFIG="$config"
   fi
 
-  if bl64_lib_var_is_default "$ansible"; then
-    BL64_ANS_PATH_USR_ANSIBLE="${HOME}/.ansible"
-  else
+  if ! bl64_lib_var_is_default "$ansible"; then
+    bl64_check_directory "$ansible" || return $?
     BL64_ANS_PATH_USR_ANSIBLE="$ansible"
   fi
 
-  # shellcheck disable=SC2034
-  if bl64_lib_var_is_default "$collections"; then
-    BL64_ANS_PATH_USR_COLLECTIONS="${BL64_ANS_PATH_USR_ANSIBLE}/collections/ansible_collections"
-  else
+  if ! bl64_lib_var_is_default "$collections"; then
     bl64_check_directory "$collections" || return $?
     BL64_ANS_PATH_USR_COLLECTIONS="$ansible"
   fi
 
-  bl64_dbg_lib_show_vars 'BL64_ANS_PATH_USR_CONFIG' 'BL64_ANS_PATH_USR_ANSIBLE' 'BL64_ANS_PATH_USR_COLLECTIONS'
+  if ! bl64_lib_var_is_default "$log"; then
+    BL64_ANS_PATH_USR_LOG="$log"
+  fi
+
+  bl64_dbg_lib_show_vars 'BL64_ANS_PATH_USR_CONFIG' 'BL64_ANS_PATH_USR_ANSIBLE' 'BL64_ANS_PATH_USR_COLLECTIONS' 'BL64_ANS_PATH_USR_LOG'
   return 0
 }
 

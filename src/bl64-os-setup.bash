@@ -104,27 +104,8 @@ function _bl64_os_set_command() {
       BL64_OS_CMD_TRUE='/usr/bin/true'
       BL64_OS_CMD_UNAME='/usr/bin/uname'
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
-}
-
-#######################################
-# Create command sets for common options
-#
-# * Warning: bootstrap function
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_os_set_options() {
-  bl64_dbg_lib_show_function
-
-  BL64_OS_SET_LOCALE_ALL='--all-locales'
 }
 
 #######################################
@@ -152,7 +133,7 @@ function _bl64_os_set_runtime() {
       "${BL64_OS_FLAVOR_MACOS}" | "${BL64_OS_FLAVOR_ALPINE}")
         bl64_dbg_lib_show_comments 'UTF locale not installed by default, skipping'
         ;;
-      *) bl64_check_alert_unsupported ;;
+      *) bl64_check_rise_task_unsupported ;;
     esac
   fi
 }
@@ -335,6 +316,10 @@ function _bl64_os_get_distro_from_os_release() {
       BL64_OS_DISTRO="${BL64_OS_OL}-${version_normalized}"
       BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
       ;;
+    'OPENSUSE-LEAP')
+      BL64_OS_DISTRO="${BL64_OS_OPS}-${version_normalized}"
+      BL64_OS_FLAVOR="$BL64_OS_FLAVOR_SUSE"
+      ;;
     'ROCKY')
       BL64_OS_DISTRO="${BL64_OS_RCK}-${version_normalized}"
       BL64_OS_FLAVOR="$BL64_OS_FLAVOR_REDHAT"
@@ -453,10 +438,9 @@ function bl64_os_setup() {
     _bl64_os_set_distro &&
     _bl64_os_set_runtime &&
     _bl64_os_set_command &&
-    _bl64_os_set_options &&
     _bl64_os_set_machine &&
     BL64_OS_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'os'
+  bl64_check_rise_module_setup 'os'
 }
 
 #######################################

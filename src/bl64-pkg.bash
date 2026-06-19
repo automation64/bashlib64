@@ -163,7 +163,7 @@ function bl64_pkg_repository_add() {
     ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
       _bl64_pkg_repository_add_yum "$name" "$source" "$gpgkey"
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -202,7 +202,7 @@ function bl64_pkg_repository_refresh() {
       bl64_check_privilege_root &&
         bl64_pkg_run_dnf 'makecache'
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       bl64_check_privilege_root &&
         bl64_pkg_run_zypper 'refresh'
       ;;
@@ -217,7 +217,7 @@ function bl64_pkg_repository_refresh() {
     ${BL64_OS_MCOS}-*)
       bl64_pkg_brew_repository_refresh
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -324,7 +324,7 @@ function bl64_pkg_install() {
       bl64_check_privilege_root &&
         bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'install' "$@"
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       bl64_check_privilege_root &&
         bl64_pkg_run_zypper 'install' $BL64_PKG_SET_ASSUME_YES -- "$@"
       ;;
@@ -339,7 +339,7 @@ function bl64_pkg_install() {
     ${BL64_OS_MCOS}-*)
       bl64_pkg_brew_install "$@"
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -387,7 +387,7 @@ function bl64_pkg_upgrade() {
       bl64_check_privilege_root &&
         bl64_pkg_run_dnf $BL64_PKG_SET_SLIM $BL64_PKG_SET_ASSUME_YES 'upgrade' "$@"
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       bl64_check_privilege_root &&
         bl64_pkg_run_zypper 'update' $BL64_PKG_SET_ASSUME_YES "$@"
       ;;
@@ -402,7 +402,7 @@ function bl64_pkg_upgrade() {
     ${BL64_OS_MCOS}-*)
       bl64_pkg_brew_upgrade "$@"
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -449,7 +449,7 @@ function bl64_pkg_cleanup() {
       bl64_check_privilege_root &&
         bl64_pkg_run_dnf 'clean' 'all'
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       bl64_check_privilege_root &&
         bl64_pkg_run_zypper 'clean' '--all'
       ;;
@@ -468,7 +468,7 @@ function bl64_pkg_cleanup() {
     ${BL64_OS_MCOS}-*)
       bl64_pkg_brew_cleanup
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -630,7 +630,7 @@ function bl64_pkg_run_brew() {
   local verbose='--quiet'
 
   bl64_check_module 'BL64_PKG_MODULE' &&
-    bl64_check_command "$BL64_PKG_CMD_BREW" &&
+    bl64_check_command "$BL64_PKG_CMD_BREW" "$BL64_VAR_DEFAULT" 'brew' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_privilege_not_root ||
     return $?

@@ -2,6 +2,10 @@
 # Library Main
 #
 
+bl64_lib_harden_shopt &&
+  bl64_lib_harden_options ||
+  exit $?
+
 # Normalize terminal settings
 TERM="${TERM:-vt100}"
 
@@ -25,6 +29,21 @@ if bl64_lib_mode_strict_is_enabled; then
   set -o 'privileged'
 fi
 
+# Set signal handlers
+# shellcheck disable=SC2064
+if bl64_lib_trap_is_enabled; then
+  trap "$BL64_LIB_SIGNAL_HUP" 'SIGHUP'
+  trap "$BL64_LIB_SIGNAL_STOP" 'SIGINT'
+  trap "$BL64_LIB_SIGNAL_QUIT" 'SIGQUIT'
+  trap "$BL64_LIB_SIGNAL_QUIT" 'SIGTERM'
+  trap "$BL64_LIB_SIGNAL_DEBUG" 'DEBUG'
+  trap "$BL64_LIB_SIGNAL_EXIT" 'EXIT'
+  trap "$BL64_LIB_SIGNAL_ERR" 'ERR'
+fi
+
+# Set default umask
+umask -S 'u=rwx,g=,o=' >/dev/null
+
 # Initialize modules that do not require setup parameters. Not OS bound
 [[ -n "${BL64_DBG_MODULE:-}" ]] && { bl64_dbg_setup || exit $?; }
 [[ -n "${BL64_CHECK_MODULE:-}" ]] && { bl64_check_setup || exit $?; }
@@ -47,45 +66,32 @@ fi
 [[ -n "${BL64_RND_MODULE:-}" ]] && { bl64_rnd_setup || exit $?; }
 [[ -n "${BL64_TM_MODULE:-}" ]] && { bl64_tm_setup || exit $?; }
 
-# Set signal handlers
-# shellcheck disable=SC2064
-if bl64_lib_trap_is_enabled; then
-  trap "$BL64_LIB_SIGNAL_HUP" 'SIGHUP'
-  trap "$BL64_LIB_SIGNAL_STOP" 'SIGINT'
-  trap "$BL64_LIB_SIGNAL_QUIT" 'SIGQUIT'
-  trap "$BL64_LIB_SIGNAL_QUIT" 'SIGTERM'
-  trap "$BL64_LIB_SIGNAL_DEBUG" 'DEBUG'
-  trap "$BL64_LIB_SIGNAL_EXIT" 'EXIT'
-  trap "$BL64_LIB_SIGNAL_ERR" 'ERR'
-fi
-
-# Set default umask
-umask -S 'u=rwx,g=,o=' >/dev/null
-
 bl64_lib_script_set_identity
+bl64_dbg_runtime_show
 
 # Check OS compatibility
 if [[ "${BL64_OS_MODULE:-$BL64_VAR_OFF}" == "$BL64_VAR_ON" ]]; then
   bl64_os_check_compatibility \
-    "${BL64_OS_ALM}-8" "${BL64_OS_ALM}-9" "${BL64_OS_ALM}-10" \
-    "${BL64_OS_ALP}-3.17" "${BL64_OS_ALP}-3.18" "${BL64_OS_ALP}-3.19" "${BL64_OS_ALP}-3.20" "${BL64_OS_ALP}-3.21" "${BL64_OS_ALP}-3.22"\
-    "${BL64_OS_AMZ}-2023" \
-    "${BL64_OS_ARC}-2025" \
-    "${BL64_OS_CNT}-7" "${BL64_OS_CNT}-8" "${BL64_OS_CNT}-9" "${BL64_OS_CNT}-10" \
-    "${BL64_OS_DEB}-9" "${BL64_OS_DEB}-10" "${BL64_OS_DEB}-11" "${BL64_OS_DEB}-12" "${BL64_OS_DEB}-13" \
-    "${BL64_OS_FD}-33" "${BL64_OS_FD}-34" "${BL64_OS_FD}-35" "${BL64_OS_FD}-36" "${BL64_OS_FD}-37" "${BL64_OS_FD}-38" "${BL64_OS_FD}-39" \
-    "${BL64_OS_FD}-40" "${BL64_OS_FD}-41" "${BL64_OS_FD}-42" "${BL64_OS_FD}-43" \
-    "${BL64_OS_KL}-2024" "${BL64_OS_KL}-2025" \
-    "${BL64_OS_MCOS}-12" "${BL64_OS_MCOS}-13" "${BL64_OS_MCOS}-14" "${BL64_OS_MCOS}-15" \
-    "${BL64_OS_OL}-7" "${BL64_OS_OL}-8" "${BL64_OS_OL}-9" "${BL64_OS_OL}-10" \
-    "${BL64_OS_RCK}-8" "${BL64_OS_RCK}-9" "${BL64_OS_RCK}-10" \
-    "${BL64_OS_RHEL}-8" "${BL64_OS_RHEL}-9" "${BL64_OS_RHEL}-10" \
-    "${BL64_OS_SLES}-15" "${BL64_OS_SLES}-16" \
-    "${BL64_OS_UB}-18" "${BL64_OS_UB}-20" "${BL64_OS_UB}-21" "${BL64_OS_UB}-22" "${BL64_OS_UB}-23" "${BL64_OS_UB}-24" "${BL64_OS_UB}-25" ||
+    "${BL64_OS_ALM}"-{8,9,10} \
+    "${BL64_OS_ALP}"-3.{17,18,19,20,21,22,23,24} \
+    "${BL64_OS_AMZ}"-2023 \
+    "${BL64_OS_ARC}"-2025 \
+    "${BL64_OS_CNT}"-{7,8,9,10} \
+    "${BL64_OS_DEB}"-{9,10,11,12,13} \
+    "${BL64_OS_FD}"-{33,34,35,36,37,38,39} \
+    "${BL64_OS_FD}"-{40,41,42,43,44} \
+    "${BL64_OS_KL}"-{2024,2025} \
+    "${BL64_OS_MCOS}"-{12,13,14,15} \
+    "${BL64_OS_OL}"-{7,8,9,10} \
+    "${BL64_OS_OPS}"-{15,16} \
+    "${BL64_OS_RCK}"-{8,9,10} \
+    "${BL64_OS_RHEL}"-{8,9,10} \
+    "${BL64_OS_SLES}"-{15,16} \
+    "${BL64_OS_UB}"-{18,20,21,22,23,24,25,26} ||
     exit $?
 fi
 
-# Run as script or sourced library?
+# Run as script or sourced library
 if bl64_lib_mode_command_is_enabled; then
   "$@"
 else

@@ -78,19 +78,20 @@ BashLib64 is a **Bash** library that provides a simple abstraction layer for dev
 The library has been tested on the following operating systems:
 
 - AlmaLinux: 8,9,10
-- Alpine: 3.17,3.18,3.19,3.20,3.21,3.22
+- Alpine: 3.17,3.18,3.19,3.20,3.21,3.22,3.23,3.24
 - AmazonLinux: 2023
 - ArchLinux, CachyOS, Manjaro: 2025
 - CentOS: 7,8,9,10
 - Debian: 9,10,11,12,13
-- Fedora: 33,34,35,36,37,38,39,40,41,42,43
+- Fedora: 33,34,35,36,37,38,39,40,41,42,43,44
 - KaliLinux: 2024,2025
 - MacOS (\*): 12,13,14,15
+- OpenSuse Leap: 15,16
 - OracleLinux; 7,8,9,10
 - RedHatEnterpriseLinux: 8,9,10
 - RockyLinux: 8,9,10
 - SuSELinuxEnterpriseServer: 15, 16
-- Ubuntu: 18,20,21,22,23,24,25
+- Ubuntu: 18,20,21,22,23,24,25,26
 
 Minimum Bash version: 4
 
@@ -100,7 +101,7 @@ Download the library to the project directory
 
 ```shell
 curl -O https://raw.githubusercontent.com/automation64/bashlib64/main/bashlib64.bash
-  ```
+```
 
 Or use the **Installer64** tool to install it in `/opt/bl64`
 

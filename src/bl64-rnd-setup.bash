@@ -25,5 +25,5 @@ function bl64_rnd_setup() {
     bl64_dbg_lib_show_function &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     BL64_RND_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'rnd'
+  bl64_check_rise_module_setup 'rnd'
 }

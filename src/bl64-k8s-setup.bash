@@ -31,9 +31,9 @@ function bl64_k8s_setup() {
     _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
     _bl64_k8s_set_command "$kubectl_bin" &&
     _bl64_k8s_set_version &&
-    _bl64_k8s_set_runtime &&
+    bl64_k8s_set_kubectl_output &&
     BL64_K8S_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'k8s'
+  bl64_check_rise_module_setup 'k8s'
 }
 
 #######################################
@@ -73,23 +73,17 @@ function _bl64_k8s_set_version() {
   bl64_dbg_lib_show_function
   local cli_version=''
 
-  bl64_dbg_lib_show_info "run kubectl to obtain client version"
-  cli_version="$(_bl64_k8s_get_version_1_22)"
+  cli_version="$(_bl64_k8s_set_version_1_22)"
   bl64_dbg_lib_show_vars 'cli_version'
 
-  if [[ -n "$cli_version" ]]; then
-    # shellcheck disable=SC2034
-    BL64_K8S_VERSION_KUBECTL="$cli_version"
-  else
+  if [[ -z "$cli_version" ]]; then
     bl64_msg_show_lib_error 'unable to determine kubectl version'
     return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
   fi
-
-  bl64_dbg_lib_show_vars 'BL64_K8S_VERSION_KUBECTL'
-  return 0
+  BL64_K8S_VERSION_KUBECTL="$cli_version"
 }
 
-function _bl64_k8s_get_version_1_22() {
+function _bl64_k8s_set_version_1_22() {
   bl64_dbg_lib_show_function
 
   bl64_dbg_lib_show_info "try with kubectl v1.22 options"
@@ -100,24 +94,6 @@ function _bl64_k8s_get_version_1_22() {
     $1 ~ /^ +"minor"$/ { gsub( /[" ,]/, "", $2 ); Minor = $2 }
     END { print Major "." Minor }
   '
-}
-
-#######################################
-# Set runtime defaults
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: setting errors
-# Returns:
-#   0: set ok
-#   >0: failed to set
-#######################################
-function _bl64_k8s_set_runtime() {
-  bl64_dbg_lib_show_function
-
-  bl64_k8s_set_kubectl_output
 }
 
 #######################################
@@ -143,7 +119,7 @@ function bl64_k8s_set_kubectl_output() {
   case "$output" in
     "$BL64_K8S_CFG_KUBECTL_OUTPUT_JSON") BL64_K8S_CFG_KUBECTL_OUTPUT='--output=json' ;;
     "$BL64_K8S_CFG_KUBECTL_OUTPUT_YAML") BL64_K8S_CFG_KUBECTL_OUTPUT='--output=yaml' ;;
-    *) bl64_check_alert_parameter_invalid ;;
+    *) bl64_check_rise_parameter_invalid ;;
   esac
 }
 
@@ -154,4 +130,10 @@ function bl64_k8s_set_kubeconfig() {
     bl64_check_file "$kubeconfig_path" ||
     return $?
   BL64_K8S_CFG_KUBECONFIG="$kubeconfig_path"
+}
+
+function bl64_k8s_get_version() {
+  bl64_dbg_lib_show_function
+  bl64_check_module 'BL64_K8S_MODULE' &&
+    echo "$BL64_K8S_VERSION_KUBECTL"
 }

@@ -26,5 +26,5 @@ function bl64_fmt_setup() {
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     BL64_FMT_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'fmt'
+  bl64_check_rise_module_setup 'fmt'
 }

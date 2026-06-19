@@ -1,5 +1,0 @@
-# X_FUNCTION_HEADER_PLACEHOLDER_X
-function X_APP_NAMESPACE_X_X_FUNCTION_NAME_X() {
-  bl64_dbg_app_show_function
-  # X_CODE_PLACEHOLDER_X
-}

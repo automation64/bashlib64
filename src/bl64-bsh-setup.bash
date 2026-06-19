@@ -30,7 +30,7 @@ function bl64_bsh_setup() {
     _bl64_bsh_set_options &&
     _bl64_bsh_set_version &&
     BL64_BSH_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'bsh'
+  bl64_check_rise_module_setup 'bsh'
 }
 
 #######################################
@@ -52,12 +52,12 @@ function _bl64_bsh_set_version() {
 
   # shellcheck disable=SC2034
   case "${BASH_VERSINFO[0]}" in
-  4*) BL64_BSH_VERSION_BASH='4.0' ;;
-  5*) BL64_BSH_VERSION_BASH='5.0' ;;
-  *)
-    bl64_check_alert_unsupported "Bash: ${BASH_VERSINFO[0]}"
-    return "$BL64_LIB_ERROR_OS_BASH_VERSION"
-    ;;
+    4*) BL64_BSH_VERSION_BASH='4.0' ;;
+    5*) BL64_BSH_VERSION_BASH='5.0' ;;
+    *)
+      bl64_check_rise_task_unsupported "Bash: ${BASH_VERSINFO[0]}"
+      return "$BL64_LIB_ERROR_OS_BASH_VERSION"
+      ;;
   esac
   bl64_dbg_lib_show_vars 'BL64_BSH_VERSION_BASH'
 

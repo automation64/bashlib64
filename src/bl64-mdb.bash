@@ -50,7 +50,7 @@ function bl64_mdb_dump_restore() {
 
   # shellcheck disable=SC2086
   bl64_mdb_run_mongorestore \
-    --writeConcern="{ w: '${BL64_MDB_REPLICA_WRITE}', j: true, wtimeout: ${BL64_MDB_REPLICA_TIMEOUT} }" \
+    --writeConcern="{ w: '${BL64_MDB_CFG_REPLICA_WRITE}', j: true, wtimeout: ${BL64_MDB_CFG_REPLICA_TIMEOUT} }" \
     --stopOnError \
     $db \
     $include \
@@ -96,7 +96,7 @@ function bl64_mdb_role_grant() {
       "%s",
       [ { role: "%s", db: "%s" } ],
       { w: "%s", j: true, wtimeout: %s }
-    );\n' "$user" "$role" "$db" "$BL64_MDB_REPLICA_WRITE" "$BL64_MDB_REPLICA_TIMEOUT" |
+    );\n' "$user" "$role" "$db" "$BL64_MDB_CFG_REPLICA_WRITE" "$BL64_MDB_CFG_REPLICA_TIMEOUT" |
     bl64_mdb_run_mongosh "$uri"
 
 }

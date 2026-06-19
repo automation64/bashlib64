@@ -32,23 +32,24 @@ function bl64_api_call() {
   local debug="$BL64_RXTX_SET_CURL_SILENT"
   local -i status=0
 
+  shift
+  shift
+  shift
+  shift
+
   bl64_check_module 'BL64_RXTX_MODULE' &&
-    bl64_check_command "$BL64_RXTX_CMD_CURL" &&
+    bl64_check_command "$BL64_RXTX_CMD_CURL" "$BL64_VAR_DEFAULT" 'curl' &&
     bl64_check_parameter 'api_url' &&
-    bl64_check_parameter 'api_path' || return $?
+    bl64_check_parameter 'api_path' ||
+    return $?
 
   [[ "$api_query" == "${BL64_VAR_NULL}" ]] && api_query=''
-  shift
-  shift
-  shift
-  shift
 
   bl64_dbg_lib_command_is_enabled && debug="${BL64_RXTX_SET_CURL_VERBOSE} ${BL64_RXTX_SET_CURL_INCLUDE}"
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
   bl64_bsh_job_try "$BL64_API_CALL_SET_MAX_RETRIES" "$BL64_API_CALL_SET_WAIT" \
     "$BL64_RXTX_CMD_CURL" \
-    $BL64_RXTX_SET_CURL_SILENT \
     $BL64_RXTX_SET_CURL_SHOW_ERROR \
     $BL64_RXTX_SET_CURL_FAIL \
     $BL64_RXTX_SET_CURL_REDIRECT \

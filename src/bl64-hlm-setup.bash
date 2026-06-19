@@ -26,9 +26,8 @@ function bl64_hlm_setup() {
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_hlm_set_command "$helm_bin" &&
     _bl64_hlm_set_options &&
-    _bl64_hlm_set_runtime &&
     BL64_HLM_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'hlm'
+  bl64_check_rise_module_setup 'hlm'
 }
 
 #######################################
@@ -69,23 +68,6 @@ function _bl64_hlm_set_options() {
     BL64_HLM_SET_OUTPUT_TABLE='--output table' &&
     BL64_HLM_SET_OUTPUT_JSON='--output json' &&
     BL64_HLM_SET_OUTPUT_YAML='--output yaml'
-}
-
-#######################################
-# Set runtime defaults
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_hlm_set_runtime() {
-  bl64_dbg_lib_show_function
-
-  bl64_hlm_set_timeout '5m0s'
 }
 
 #######################################

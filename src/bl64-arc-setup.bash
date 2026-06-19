@@ -30,7 +30,7 @@ function bl64_arc_setup() {
     _bl64_arc_set_command &&
     _bl64_arc_set_options &&
     BL64_ARC_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'arc'
+  bl64_check_rise_module_setup 'arc'
 }
 
 #######################################
@@ -70,7 +70,7 @@ function _bl64_arc_set_command() {
       BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
       BL64_ARC_CMD_ZIP='/usr/bin/zip'
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       BL64_ARC_CMD_TAR='/bin/tar'
       BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
       BL64_ARC_CMD_ZIP='/usr/bin/zip'
@@ -90,7 +90,7 @@ function _bl64_arc_set_command() {
       BL64_ARC_CMD_UNZIP='/usr/bin/unzip'
       BL64_ARC_CMD_ZIP='/usr/bin/zip'
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -118,7 +118,7 @@ function _bl64_arc_set_options() {
       BL64_ARC_SET_TAR_VERBOSE='--verbose'
       BL64_ARC_SET_UNZIP_OVERWRITE='-o'
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       BL64_ARC_SET_TAR_VERBOSE='--verbose'
       BL64_ARC_SET_UNZIP_OVERWRITE='-o'
       ;;
@@ -134,6 +134,6 @@ function _bl64_arc_set_options() {
       BL64_ARC_SET_TAR_VERBOSE='--verbose'
       BL64_ARC_SET_UNZIP_OVERWRITE='-o'
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }

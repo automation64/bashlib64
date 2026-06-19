@@ -20,28 +20,48 @@
 function _bl64_ans_harden_ansible() {
   bl64_dbg_lib_show_function
 
-  if [[ "$BL64_ANS_ENV_IGNORE" == "$BL64_VAR_ON" ]]; then
+  if bl64_lib_flag_is_enabled "$BL64_ANS_ENV_IGNORE"; then
     bl64_dbg_lib_show_info 'unset inherited ANSIBLE_* shell variables'
     bl64_dbg_lib_trace_start
+    unset ANSIBLE_ACTION_PLUGINS
+    unset ANSIBLE_BECOME
+    unset ANSIBLE_BECOME_PASSWORD_FILE
+    unset ANSIBLE_BECOME_PLUGINS
+    unset ANSIBLE_CACHE_PLUGIN
     unset ANSIBLE_CACHE_PLUGIN_CONNECTION
     unset ANSIBLE_COLLECTIONS_PATHS
+    unset ANSIBLE_COLLECTIONS_SCAN_SYS_PATH
     unset ANSIBLE_CONFIG
+    unset ANSIBLE_CONNECTION_PASSWORD_FILE
+    unset ANSIBLE_CONNECTION_PATH
+    unset ANSIBLE_FORCE_COLOR
     unset ANSIBLE_GALAXY_CACHE_DIR
     unset ANSIBLE_GALAXY_TOKEN_PATH
+    unset ANSIBLE_HOME
     unset ANSIBLE_INVENTORY
+    unset ANSIBLE_KEEP_REMOTE_FILES
     unset ANSIBLE_LOCAL_TEMP
     unset ANSIBLE_LOG_PATH
+    unset ANSIBLE_NO_LOG
+    unset ANSIBLE_NOCOLOR
     unset ANSIBLE_PERSISTENT_CONTROL_PATH_DIR
+    unset ANSIBLE_PIPELINING
     unset ANSIBLE_PLAYBOOK_DIR
     unset ANSIBLE_PRIVATE_KEY_FILE
-    unset ANSIBLE_ROLES_PATH
-    unset ANSIBLE_SSH_CONTROL_PATH_DIR
-    unset ANSIBLE_VAULT_PASSWORD_FILE
     unset ANSIBLE_RETRY_FILES_SAVE_PATH
+    unset ANSIBLE_ROLES_PATH
+    unset ANSIBLE_SSH_AGENT
+    unset ANSIBLE_SSH_AGENT_EXECUTABLE
+    unset ANSIBLE_SSH_CONTROL_PATH_DIR
+    unset ANSIBLE_STDOUT_CALLBACK
+    unset ANSIBLE_VAULT_PASSWORD_FILE
     bl64_dbg_lib_trace_stop
   fi
 
-  [[ -n "$BL64_ANS_PATH_USR_CONFIG" ]] && export ANSIBLE_CONFIG="$BL64_ANS_PATH_USR_CONFIG"
+  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_ANSIBLE" && export ANSIBLE_HOME="$BL64_ANS_PATH_USR_ANSIBLE"
+  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_CONFIG" && export ANSIBLE_CONFIG="$BL64_ANS_PATH_USR_CONFIG"
+  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_COLLECTIONS" && export ANSIBLE_COLLECTIONS_PATHS="$BL64_ANS_PATH_USR_COLLECTIONS"
+  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_LOG" && export ANSIBLE_LOG_PATH="$BL64_ANS_PATH_USR_LOG"
 
   return 0
 }

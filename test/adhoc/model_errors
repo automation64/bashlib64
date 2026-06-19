@@ -7,15 +7,24 @@
 # Model error messages
 #
 
-function test_check_alerts() {
-  bl64_check_alert_unsupported
-  bl64_check_alert_undefined 'caller'
+function test_check_rise() {
+  bl64_msg_show_separator 'test_check_rise'
+  bl64_check_rise_parameter_invalid
+  bl64_check_rise_task_unsupported
+  bl64_check_rise_resource_not_found
+  bl64_check_rise_task_undefined
+  bl64_check_rise_module_setup
+}
+
+function test_check_privilege() {
+  bl64_msg_show_separator 'test_check_privilege'
   bl64_check_privilege_root
 }
 
 function test_check_args() {
   export TEST_EXPORT_EMPTY=''
   export test_parameter_empty=''
+  bl64_msg_show_separator 'test_check_args'
   bl64_check_parameters_none
   bl64_check_parameter
   bl64_check_parameter 'test_parameter_empty'
@@ -25,11 +34,13 @@ function test_check_args() {
 }
 
 function test_check_commands() {
+  bl64_msg_show_separator 'test_check_commands'
   bl64_check_command '/no/command'
   bl64_check_command '/etc/os-release'
 }
 
 function test_check_paths() {
+  bl64_msg_show_separator 'test_check_paths'
   bl64_check_file '/no/file'
   bl64_check_file '/etc'
   bl64_check_directory '/no/dir/'
@@ -39,7 +50,17 @@ function test_check_paths() {
   bl64_check_overwrite '/etc'
 }
 
-test_check_alerts
+function test_check_help() {
+  bl64_msg_show_separator 'test_check_help'
+  bl64_check_rise_script_invalid_command
+  bl64_check_rise_script_invalid_command 'bl64_check_rise_script_invalid_command'
+  bl64_check_rise_script_invalid_option 'bl64_check_rise_script_invalid_option'
+  bl64_check_rise_script_missing_parameter 'bl64_check_rise_script_missing_parameter'
+}
+
+test_check_rise
 test_check_args
 test_check_commands
 test_check_paths
+test_check_privilege
+test_check_help

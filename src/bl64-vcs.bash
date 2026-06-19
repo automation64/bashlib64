@@ -22,7 +22,8 @@ function bl64_vcs_run_git() {
 
   bl64_check_module 'BL64_VCS_MODULE' &&
     bl64_check_parameters_none "$#" &&
-    bl64_check_command "$BL64_VCS_CMD_GIT" || return $?
+    bl64_check_command "$BL64_VCS_CMD_GIT" "$BL64_VAR_DEFAULT" 'git' ||
+    return $?
 
   _bl64_vcs_harden_git
 
@@ -95,8 +96,7 @@ function bl64_vcs_git_clone() {
   local verbose='--quiet --no-progress'
 
   bl64_check_parameter 'source' &&
-    bl64_check_parameter 'destination' &&
-    bl64_check_command "$BL64_VCS_CMD_GIT" ||
+    bl64_check_parameter 'destination' ||
     return $?
 
   bl64_lib_var_is_default "$branch" && branch=''
@@ -155,10 +155,8 @@ function bl64_vcs_git_sparse() {
   local branch="${3:-main}"
   local search_pattern="${4}"
   local item=''
-  local -i status=0
 
-  bl64_check_command "$BL64_VCS_CMD_GIT" &&
-    bl64_check_parameter 'source' &&
+  bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_check_parameter 'search_pattern' || return $?
 
@@ -224,6 +222,11 @@ function bl64_vcs_github_run_api() {
   local api_token="${4:-${BL64_VAR_NULL}}"
   local api_version="${5:-${BL64_VCS_GITHUB_API_VERSION}}"
 
+  shift
+  shift
+  shift
+  shift
+  shift
   bl64_check_parameter 'api_path' ||
     return $?
 
@@ -234,11 +237,6 @@ function bl64_vcs_github_run_api() {
       api_token=''
     fi
   fi
-  shift
-  shift
-  shift
-  shift
-  shift
 
   # shellcheck disable=SC2086
   bl64_api_call \

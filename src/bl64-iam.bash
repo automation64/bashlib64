@@ -10,7 +10,7 @@
 #
 
 function bl64_iam_xdg_create() {
-  bl64_msg_show_deprecated 'bl64_iam_xdg_create' 'bl64_bsh_xdg_create'
+  _bl64_lib_function_deprecated 'bl64_iam_xdg_create' 'bl64_bsh_xdg_create'
   bl64_bsh_xdg_create "$@"
 }
 
@@ -84,7 +84,7 @@ function bl64_iam_user_add() {
         $BL64_IAM_SET_USERADD_CREATE_HOME \
         "$login"
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       bl64_dbg_lib_show_comments 'SLES: force primary group creation when group is not specified'
       [[ -z "$group" ]] && extra_params='--user-group'
       bl64_dbg_lib_show_comments 'SLES: --user-group and --gid can not be used together'
@@ -132,7 +132,7 @@ function bl64_iam_user_add() {
         -addUser "$login" \
         -password "$password"
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -176,7 +176,7 @@ function bl64_iam_group_add() {
         ${group_id:+--gid ${group_id}} \
         "$group_name"
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       bl64_iam_run_groupadd \
         ${group_id:+--gid ${group_id}} \
         "$group_name"
@@ -191,7 +191,7 @@ function bl64_iam_group_add() {
         ${group_id:+--gid ${group_id}} \
         "$group_name"
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -244,7 +244,7 @@ function bl64_iam_group_is_created() {
 }
 
 #######################################
-# Get user's UID
+# Get user's ID (UID)
 #
 # Arguments:
 #   $1: user login name. Default: current user
@@ -262,6 +262,28 @@ function bl64_iam_user_get_id() {
     bl64_iam_run_id -u
   else
     bl64_iam_run_id -u "$user"
+  fi
+}
+
+#######################################
+# Get user's primary group ID (GID)
+#
+# Arguments:
+#   $1: user login name. Default: current user
+# Outputs:
+#   STDOUT: GID
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_iam_user_get_gid() {
+  bl64_dbg_lib_show_function "$@"
+  local user="${1:-}"
+  if [[ -z "$user" ]]; then
+    bl64_iam_run_id -g
+  else
+    bl64_iam_run_id -g "$user"
   fi
 }
 
@@ -614,7 +636,7 @@ function bl64_iam_user_modify() {
         ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
         "$login"
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       bl64_dbg_lib_show_comments 'force primary group creation'
       bl64_iam_run_usermod \
         ${uid:+${BL64_IAM_SET_USERADD_UID} "${uid}"} \
@@ -631,6 +653,6 @@ function bl64_iam_user_modify() {
         ${geco:+${BL64_IAM_SET_USERADD_GECO} "${geco}"} \
         "$login"
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }

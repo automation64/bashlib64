@@ -30,7 +30,7 @@ function bl64_cryp_setup() {
     _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
     _bl64_cryp_set_command &&
     BL64_CRYP_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'cryp'
+  bl64_check_rise_module_setup 'cryp'
 }
 
 #######################################

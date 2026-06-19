@@ -31,9 +31,8 @@ function bl64_mdb_setup() {
     _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
     _bl64_mdb_set_command "$mdb_bin" &&
     _bl64_mdb_set_options &&
-    _bl64_mdb_set_runtime &&
     BL64_MDB_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'mdb'
+  bl64_check_rise_module_setup 'mdb'
 }
 
 #######################################
@@ -74,23 +73,4 @@ function _bl64_mdb_set_options() {
   BL64_MDB_SET_VERBOSE='--verbose'
   BL64_MDB_SET_QUIET='--quiet'
   BL64_MDB_SET_NORC='--norc'
-}
-
-#######################################
-# Set runtime variables
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_mdb_set_runtime() {
-  bl64_dbg_lib_show_function
-
-  # Write concern defaults
-  BL64_MDB_REPLICA_WRITE='majority'
-  BL64_MDB_REPLICA_TIMEOUT='1000'
 }

@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.5.0'
+  declare BL64_FS_VERSION='6.6.0'
 
   declare BL64_FS_MODULE='0'
 
@@ -74,8 +74,8 @@
   declare BL64_FS_UMASK_RW_USER_RO_ALL='u=rwx,g=rx,o=rx'
   declare BL64_FS_UMASK_RW_GROUP_RO_ALL='u=rwx,g=rwx,o=rx'
 
-  declare BL64_FS_ARCHIVE_POSTFIX='-ARCHIVE'
-  declare BL64_FS_BACKUP_SUFFIX='-BACKUP'
+  declare BL64_FS_SUFFIX_ARCHIVE='-ARCHIVE'
+  declare BL64_FS_SUFFIX_BACKUP='-BACKUP'
 
   declare BL64_FS_TMP_PREFIX='bl64tmp'
 }

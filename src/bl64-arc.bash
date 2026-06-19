@@ -10,12 +10,12 @@
 #
 
 function bl64_arc_open_tar() {
-  bl64_msg_show_deprecated 'bl64_arc_open_tar' 'bl64_arc_tar_open'
+  _bl64_lib_function_deprecated 'bl64_arc_open_tar' 'bl64_arc_tar_open'
   bl64_arc_tar_open "$@"
 }
 
 function bl64_arc_open_zip() {
-  bl64_msg_show_deprecated 'bl64_arc_open_zip' 'bl64_arc_zip_open'
+  _bl64_lib_function_deprecated 'bl64_arc_open_zip' 'bl64_arc_zip_open'
   bl64_arc_zip_open "$@"
 }
 
@@ -321,7 +321,7 @@ function bl64_arc_tar_open() {
         --auto-compress \
         --file="$source"
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       bl64_arc_run_tar \
         --overwrite \
         --extract \
@@ -358,7 +358,7 @@ function bl64_arc_tar_open() {
         --no-acls \
         --file="$source"
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
   status=$?
 

@@ -38,7 +38,7 @@ function bl64_py_setup() {
     _bl64_py_setup "$BL64_VAR_DEFAULT"
   fi
 
-  bl64_check_alert_module_setup 'py'
+  bl64_check_rise_module_setup 'py'
 }
 
 function _bl64_py_setup() {
@@ -57,9 +57,10 @@ function _bl64_py_setup() {
     _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_py_set_command "$venv_path" &&
-    bl64_check_command "$BL64_PY_CMD_PYTHON3" &&
+    bl64_check_command "$BL64_PY_CMD_PYTHON3" "$BL64_VAR_DEFAULT" 'python3' &&
     _bl64_py_set_version &&
     _bl64_py_set_options &&
+    _bl64_py_pip_set_version &&
     BL64_PY_MODULE="$BL64_VAR_ON"
 }
 
@@ -100,8 +101,6 @@ function _bl64_py_set_command() {
     export VIRTUAL_ENV="$venv_path"
     export PATH="${VIRTUAL_ENV}:${PATH}"
     unset PYTHONHOME
-
-    bl64_dbg_lib_show_comments 'Let other basthlib64 functions know about this venv'
     # shellcheck disable=SC2034
     BL64_PY_PATH_VENV="$venv_path"
   fi
@@ -114,7 +113,7 @@ function _bl64_py_set_command_macos() {
   if [[ -x '/usr/bin/python3' ]]; then
     BL64_PY_CMD_PYTHON3='/usr/bin/python3'
   else
-    bl64_check_alert_unsupported
+    bl64_check_rise_task_unsupported
     return $?
   fi
 }
@@ -154,7 +153,7 @@ function _bl64_py_set_command_linux() {
     if bl64_check_compatibility_mode; then
       BL64_PY_CMD_PYTHON3='/usr/bin/python3'
     else
-      bl64_check_alert_unsupported
+      bl64_check_rise_task_unsupported
       return $?
     fi
   fi
@@ -186,7 +185,7 @@ function _bl64_py_set_options() {
     BL64_PY_SET_PIP_VERSION='--version'
   }
 
-  if [[ -n "$BL64_PY_VERSION_PIP3" && "${BL64_PY_VERSION_PIP3%%.*}" -ge 10 ]]; then
+  if [[ -n "$BL64_PY_VERSION_PIP" && "${BL64_PY_VERSION_PIP%%.*}" -ge 10 ]]; then
     BL64_PY_SET_PIP_NO_COLOR="--no-color"
   else
     BL64_PY_SET_PIP_NO_COLOR=' '
@@ -194,7 +193,7 @@ function _bl64_py_set_options() {
 
   # shellcheck disable=SC2034
   if [[ "$BL64_OS_TYPE" == "$BL64_OS_TYPE_MACOS" ]]; then
-    BL64_PY_PATH_PIP_USR_BIN="${HOME}/Library/Python/${BL64_PY_VERSION_PYTHON3}/bin"
+    BL64_PY_PATH_PIP_USR_BIN="${HOME}/Library/Python/${BL64_PY_VERSION_PYTHON}/bin"
   else
     BL64_PY_PATH_PIP_USR_BIN="${HOME}/.local/bin"
   fi
@@ -218,18 +217,36 @@ function _bl64_py_set_options() {
 #######################################
 function _bl64_py_set_version() {
   bl64_dbg_lib_show_function
-  BL64_PY_VERSION_PYTHON3="$(
+  BL64_PY_VERSION_PYTHON="$(
     "$BL64_PY_CMD_PYTHON3" -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
   )"
-  [[ -z "$BL64_PY_VERSION_PYTHON3" ]] &&
+  [[ -z "$BL64_PY_VERSION_PYTHON" ]] &&
     bl64_msg_show_lib_error "Unable to determine Python version (${BL64_PY_CMD_PYTHON3})" &&
     return "$BL64_LIB_ERROR_TASK_FAILED"
+  BL64_PY_VERSION_PYTHON3="$BL64_PY_VERSION_PYTHON"
+  return 0
+}
 
-  BL64_PY_VERSION_PIP3="$(
+#######################################
+# Set Python PIP version
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: command errors
+# Returns:
+#   0: ok
+#   $BL64_LIB_ERROR_APP_INCOMPATIBLE
+#######################################
+function _bl64_py_pip_set_version() {
+  bl64_dbg_lib_show_function
+  BL64_PY_VERSION_PIP="$(
     "$BL64_PY_CMD_PYTHON3" -c "import pip; print(pip.__version__)" 2>/dev/null
   )"
-  [[ -z "$BL64_PY_VERSION_PIP3" ]] &&
-    bl64_dbg_lib_show_info "Unable to determine PIP version)"
+  [[ -z "$BL64_PY_VERSION_PIP" ]] &&
+    bl64_dbg_lib_show_info "Unable to determine PIP version"
 
+  BL64_PY_VERSION_PIP3="$BL64_PY_VERSION_PIP"
   return 0
 }

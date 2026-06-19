@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_OS_VERSION='5.12.2'
+  declare BL64_OS_VERSION='5.13.0'
 
   declare BL64_OS_MODULE='0'
 
@@ -32,8 +32,6 @@
   declare BL64_OS_CMD_TRUE=''
   declare BL64_OS_CMD_UNAME=''
 
-  declare BL64_OS_SET_LOCALE_ALL=''
-
   #
   # OS standard name tags
   #
@@ -51,6 +49,7 @@
   declare BL64_OS_KL='KALI'
   declare BL64_OS_MCOS='DARWIN'
   declare BL64_OS_OL='ORACLELINUX'
+  declare BL64_OS_OPS='OPENSUSE'
   declare BL64_OS_RCK='ROCKYLINUX'
   declare BL64_OS_RHEL='RHEL'
   declare BL64_OS_SLES='SLES'

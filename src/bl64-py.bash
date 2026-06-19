@@ -59,6 +59,7 @@ function _bl64_py_harden_pip() {
   bl64_dbg_lib_trace_start
   export PIP_CONFIG_FILE='os.devnull'
   export PIP_DISABLE_PIP_VERSION_CHECK='yes'
+  export PIP_NO_COLOR='off'
   export PIP_NO_INPUT='yes'
   export PIP_NO_PYTHON_VERSION_WARNING='yes'
   export PIP_NO_WARN_SCRIPT_LOCATION='yes'
@@ -83,14 +84,18 @@ function _bl64_py_harden_pipx() {
 
   bl64_dbg_lib_show_info 'unset inherited PIPX* shell variables'
   bl64_dbg_lib_trace_start
-  bl64_dbg_lib_trace_stop
-  unset PIPX_HOME
-  unset PIPX_GLOBAL_HOME
   unset PIPX_BIN_DIR
-  unset PIPX_GLOBAL_BIN_DIR
-  unset PIPX_MAN_DIR
-  unset PIPX_GLOBAL_MAN_DIR
+  unset PIPX_DEFAULT_BACKEND
   unset PIPX_DEFAULT_PYTHON
+  unset PIPX_DISABLE_SHARED_LIBS_AUTO_UPGRADE
+  unset PIPX_GLOBAL_BIN_DIR
+  unset PIPX_GLOBAL_HOME
+  unset PIPX_GLOBAL_MAN_DIR
+  unset PIPX_HOME
+  unset PIPX_HOME_ALLOW_SPACE
+  unset PIPX_MAN_DIR
+  export USE_EMOJI='no'
+  bl64_dbg_lib_trace_stop
   return 0
 }
 
@@ -141,34 +146,7 @@ function bl64_py_venv_check() {
 
   bl64_check_parameter 'venv_path' &&
     bl64_check_directory "$venv_path" 'requested python virtual environment is missing' &&
-    bl64_check_file "${venv_path}/${BL64_PY_DEF_VENV_CFG}" 'requested python virtual environment is invalid (no pyvenv.cfg found)'
-}
-
-#######################################
-# Get Python PIP version
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: PIP version
-#   STDERR: PIP error
-# Returns:
-#   0: ok
-#   $BL64_LIB_ERROR_APP_INCOMPATIBLE
-#######################################
-function bl64_py_pip_get_version() {
-  bl64_dbg_lib_show_function
-  local -a version
-
-  read -r -a version < <(bl64_py_run_pip "$BL64_PY_SET_PIP_VERSION")
-  if [[ "${version[1]}" == [0-9.]* ]]; then
-    printf '%s' "${version[1]}"
-  else
-    # shellcheck disable=SC2086
-    return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
-  fi
-
-  return 0
+    bl64_check_file "${venv_path}/${BL64_PY_FILE_VENV_CFG}" 'requested python virtual environment is invalid (no pyvenv.cfg found)'
 }
 
 #######################################
@@ -365,19 +343,21 @@ function bl64_py_run_pip() {
   local verbose="$BL64_PY_SET_PIP_QUIET"
   local cache=' '
 
+  bl64_py_check_pip || return $?
+
+  _bl64_py_harden_pip
   if bl64_dbg_lib_command_is_enabled; then
     verbose="$BL64_PY_SET_PIP_DEBUG"
   else
     if bl64_msg_app_run_is_enabled; then
       verbose=' '
     else
-      export PIP_NO_COLOR='on'
+      PIP_NO_COLOR='on'
     fi
   fi
 
   [[ -n "$BL64_FS_PATH_CACHE" ]] && cache="--cache-dir=${BL64_FS_PATH_CACHE}"
 
-  _bl64_py_harden_pip
   # shellcheck disable=SC2086
   TMPDIR="${BL64_FS_PATH_TEMPORAL:-}" bl64_py_run_python \
     -m 'pip' \
@@ -400,21 +380,52 @@ function bl64_py_run_pip() {
 #######################################
 function bl64_py_run_pipx() {
   bl64_dbg_lib_show_function "$@"
-  local debug=' '
-  local verbose="$BL64_PY_SET_PIP_QUIET"
-  local cache=' '
-
-  if bl64_msg_app_run_is_enabled; then
-    verbose=' '
-  else
-    export USE_EMOJI='no'
-  fi
-  bl64_dbg_lib_command_is_enabled && debug="$BL64_PY_SET_PIP_DEBUG"
 
   _bl64_py_harden_pipx
+  bl64_msg_app_run_is_enabled && USE_EMOJI='yes'
   # shellcheck disable=SC2086
   bl64_py_run_python \
     -m 'pipx' \
-    $debug $verbose $cache \
     "$@"
+}
+
+#######################################
+# Check that PIP is available
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: error check
+# Returns:
+#   0: available
+#   BL64_LIB_ERROR_APP_MISSING
+#######################################
+function bl64_py_check_pip() {
+  bl64_dbg_lib_show_function
+  bl64_check_module 'BL64_PY_MODULE' || return $?
+  if [[ -n "$BL64_PY_VERSION_PIP" ]]; then
+    return 0
+  else
+    bl64_msg_show_lib_error 'PIP is not available or not installed for the current Python environment'
+    return "$BL64_LIB_ERROR_APP_MISSING"
+  fi
+}
+
+#######################################
+# Get Python PIP version
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: PIP version
+#   STDERR: PIP error
+# Returns:
+#   0: ok
+#   >0: unable to get version
+#######################################
+function bl64_py_pip_get_version() {
+  bl64_dbg_lib_show_function
+  bl64_py_check_pip &&
+    echo "$BL64_PY_VERSION_PIP"
 }
