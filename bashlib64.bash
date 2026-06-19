@@ -18579,8 +18579,8 @@ function bl64_tf_run_terraform() {
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_TF_MODULE' &&
-    _bl64_tf_harden_terraform
-  return $?
+    _bl64_tf_harden_terraform ||
+    return $?
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
