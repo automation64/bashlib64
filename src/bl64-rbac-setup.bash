@@ -32,7 +32,7 @@ function bl64_rbac_setup() {
     _bl64_rbac_set_options &&
     _bl64_rbac_set_alias &&
     BL64_RBAC_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'rbac'
+  bl64_check_rise_module_setup 'rbac'
 }
 
 #######################################
@@ -63,7 +63,7 @@ function _bl64_rbac_set_command() {
       BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
       BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       BL64_RBAC_CMD_SUDO='/usr/bin/sudo'
       BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
       BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
@@ -83,7 +83,7 @@ function _bl64_rbac_set_command() {
       BL64_RBAC_CMD_VISUDO='/usr/sbin/visudo'
       BL64_RBAC_FILE_SUDOERS='/etc/sudoers'
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 

@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_RBAC_VERSION='2.3.2'
+  declare BL64_RBAC_VERSION='2.4.0'
 
   declare BL64_RBAC_MODULE='0'
 

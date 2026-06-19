@@ -65,7 +65,7 @@ function bl64_rxtx_web_get_file() {
   if ((status != 0)); then
     bl64_msg_show_lib_error 'file download failed'
   else
-    bl64_fs_path_permission_set "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" "$destination"
+    bl64_fs_path_set_permissions "$file_mode" "$BL64_VAR_DEFAULT" "$file_user" "$file_group" "$BL64_VAR_OFF" "$destination"
     status=$?
   fi
 
@@ -157,7 +157,8 @@ function bl64_rxtx_run_curl() {
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_RXTX_MODULE' &&
-    bl64_check_command "$BL64_RXTX_CMD_CURL" || return $?
+    bl64_check_command "$BL64_RXTX_CMD_CURL" "$BL64_VAR_DEFAULT" 'curl' ||
+    return $?
 
   bl64_msg_app_run_is_enabled && verbose=''
   bl64_dbg_lib_command_is_enabled && verbose="$BL64_RXTX_SET_CURL_VERBOSE"
@@ -189,7 +190,8 @@ function bl64_rxtx_run_wget() {
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_RXTX_MODULE' &&
-    bl64_check_command "$BL64_RXTX_CMD_WGET" || return $?
+    bl64_check_command "$BL64_RXTX_CMD_WGET" "$BL64_VAR_DEFAULT" 'wget' ||
+    return $?
 
   bl64_dbg_lib_command_is_enabled &&
     verbose="$BL64_RXTX_SET_WGET_VERBOSE"

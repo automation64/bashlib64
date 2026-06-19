@@ -10,76 +10,80 @@
 #
 
 function bl64_fs_create_dir() {
-  bl64_msg_show_deprecated 'bl64_fs_create_dir' 'bl64_fs_dir_create'
+  _bl64_lib_function_deprecated 'bl64_fs_create_dir' 'bl64_fs_dir_create'
   bl64_fs_dir_create "$@"
 }
 function bl64_fs_cp_file() {
-  bl64_msg_show_deprecated 'bl64_fs_cp_file' 'bl64_fs_file_copy'
+  _bl64_lib_function_deprecated 'bl64_fs_cp_file' 'bl64_fs_file_copy'
   bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$@"
 }
 function bl64_fs_cp_dir() {
-  bl64_msg_show_deprecated 'bl64_fs_cp_dir' 'bl64_fs_path_copy'
+  _bl64_lib_function_deprecated 'bl64_fs_cp_dir' 'bl64_fs_path_copy'
   bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_RECURSIVE" "$@"
 }
 function bl64_fs_ln_symbolic() {
-  bl64_msg_show_deprecated 'bl64_fs_ln_symbolic' 'bl64_fs_symlink_create'
+  _bl64_lib_function_deprecated 'bl64_fs_ln_symbolic' 'bl64_fs_symlink_create'
   bl64_fs_symlink_create "$@"
 }
 function bl64_fs_create_symlink() {
-  bl64_msg_show_deprecated 'bl64_fs_create_symlink' 'bl64_fs_symlink_create'
+  _bl64_lib_function_deprecated 'bl64_fs_create_symlink' 'bl64_fs_symlink_create'
   bl64_fs_symlink_create "$@"
 }
 function bl64_fs_rm_file() {
-  bl64_msg_show_deprecated 'bl64_fs_rm_file' 'bl64_fs_file_remove'
+  _bl64_lib_function_deprecated 'bl64_fs_rm_file' 'bl64_fs_file_remove'
   bl64_fs_file_remove "$@"
 }
 function bl64_fs_rm_full() {
-  bl64_msg_show_deprecated 'bl64_fs_rm_full' 'bl64_fs_path_remove'
+  _bl64_lib_function_deprecated 'bl64_fs_rm_full' 'bl64_fs_path_remove'
   bl64_fs_path_remove "$@"
 }
 function bl64_fs_create_file() {
-  bl64_msg_show_deprecated 'bl64_fs_create_file' 'bl64_fs_file_create'
+  _bl64_lib_function_deprecated 'bl64_fs_create_file' 'bl64_fs_file_create'
   bl64_fs_file_create "$@"
 }
 function bl64_fs_copy_files() {
-  bl64_msg_show_deprecated 'bl64_fs_copy_files' 'bl64_fs_file_copy'
+  _bl64_lib_function_deprecated 'bl64_fs_copy_files' 'bl64_fs_file_copy'
   bl64_fs_file_copy "$@"
 }
 function bl64_fs_safeguard() {
-  bl64_msg_show_deprecated 'bl64_fs_safeguard' 'bl64_fs_path_archive'
+  _bl64_lib_function_deprecated 'bl64_fs_safeguard' 'bl64_fs_path_archive'
   bl64_fs_path_archive "$@"
 }
 function bl64_fs_restore() {
-  bl64_msg_show_deprecated 'bl64_fs_restore' 'bl64_fs_path_recover'
+  _bl64_lib_function_deprecated 'bl64_fs_restore' 'bl64_fs_path_recover'
   bl64_fs_path_recover "$@"
 }
 function bl64_fs_find_files() {
-  bl64_msg_show_deprecated 'bl64_fs_find_files' 'bl64_fs_file_search'
+  _bl64_lib_function_deprecated 'bl64_fs_find_files' 'bl64_fs_file_search'
   bl64_fs_file_search "$@"
 }
 function bl64_fs_chown_dir() {
-  bl64_msg_show_deprecated 'bl64_fs_chown_dir' 'bl64_fs_run_chown'
+  _bl64_lib_function_deprecated 'bl64_fs_chown_dir' 'bl64_fs_run_chown'
   bl64_fs_run_chown "$BL64_FS_SET_CHOWN_RECURSIVE" "$@"
 }
 function bl64_fs_chmod_dir() {
-  bl64_msg_show_deprecated 'bl64_fs_chmod_dir' 'bl64_fs_run_chmod'
+  _bl64_lib_function_deprecated 'bl64_fs_chmod_dir' 'bl64_fs_run_chmod'
   bl64_fs_run_chmod "$BL64_FS_SET_CHMOD_RECURSIVE" "$@"
 }
 function bl64_fs_mkdir_full() {
-  bl64_msg_show_deprecated 'bl64_fs_mkdir_full' 'bl64_fs_run_mkdir'
+  _bl64_lib_function_deprecated 'bl64_fs_mkdir_full' 'bl64_fs_run_mkdir'
   bl64_fs_run_mkdir "$BL64_FS_SET_MKDIR_PARENTS" "$@"
 }
 function bl64_fs_merge_files() {
-  bl64_msg_show_deprecated 'bl64_fs_merge_files' 'bl64_fs_file_merge'
+  _bl64_lib_function_deprecated 'bl64_fs_merge_files' 'bl64_fs_file_merge'
   bl64_fs_file_merge "$@"
 }
 function bl64_fs_merge_dir() {
-  bl64_msg_show_deprecated 'bl64_fs_merge_dir' 'bl64_fs_path_merge'
+  _bl64_lib_function_deprecated 'bl64_fs_merge_dir' 'bl64_fs_path_merge'
   bl64_fs_path_merge "$@"
+}
+function bl64_fs_path_permission_set() {
+  _bl64_lib_function_deprecated 'bl64_fs_path_permission_set' 'bl64_fs_path_set_permissions'
+  bl64_fs_path_set_permissions "$@"
 }
 function bl64_fs_set_permissions() {
   bl64_dbg_lib_show_function "$@"
-  bl64_msg_show_deprecated 'bl64_fs_set_permissions' 'bl64_fs_path_permission_set'
+  _bl64_lib_function_deprecated 'bl64_fs_set_permissions' 'bl64_fs_path_set_permissions'
   local mode="${1:-${BL64_VAR_DEFAULT}}"
   local user="${2:-${BL64_VAR_DEFAULT}}"
   local group="${3:-${BL64_VAR_DEFAULT}}"
@@ -89,7 +93,7 @@ function bl64_fs_set_permissions() {
   shift
   shift
 
-  bl64_fs_path_permission_set \
+  bl64_fs_path_set_permissions \
     "$mode" \
     "$mode" \
     "$user" \
@@ -100,7 +104,7 @@ function bl64_fs_set_permissions() {
 
 function bl64_fs_fix_permissions() {
   bl64_dbg_lib_show_function "$@"
-  bl64_msg_show_deprecated 'bl64_fs_fix_permissions' 'bl64_fs_path_permission_set'
+  _bl64_lib_function_deprecated 'bl64_fs_fix_permissions' 'bl64_fs_path_set_permissions'
   local file_mode="${1:-${BL64_VAR_DEFAULT}}"
   local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
   local path=''
@@ -108,7 +112,7 @@ function bl64_fs_fix_permissions() {
   shift
   shift
 
-  bl64_fs_path_permission_set \
+  bl64_fs_path_set_permissions \
     "$file_mode" \
     "$dir_mode" \
     "$BL64_VAR_DEFAULT" \
@@ -121,7 +125,7 @@ function bl64_fs_fix_permissions() {
 # Private functions
 #
 
-function _bl64_fs_path_permission_set_file() {
+function _bl64_fs_path_set_permissions_file() {
   bl64_dbg_lib_show_function "$@"
   local mode="${1:-}"
   local recursive="${2:-}"
@@ -142,7 +146,7 @@ function _bl64_fs_path_permission_set_file() {
   fi
 }
 
-function _bl64_fs_path_permission_set_dir() {
+function _bl64_fs_path_set_permissions_dir() {
   bl64_dbg_lib_show_function "$@"
   local mode="${1:-}"
   local recursive="${2:-}"
@@ -163,7 +167,7 @@ function _bl64_fs_path_permission_set_dir() {
   fi
 }
 
-function _bl64_fs_path_permission_set_user() {
+function _bl64_fs_path_set_permissions_user() {
   bl64_dbg_lib_show_function "$@"
   local user="${1:-}"
   local recursive="${2:-}"
@@ -180,7 +184,7 @@ function _bl64_fs_path_permission_set_user() {
     "$path"
 }
 
-function _bl64_fs_path_permission_set_group() {
+function _bl64_fs_path_set_permissions_group() {
   bl64_dbg_lib_show_function "$@"
   local group="${1:-}"
   local recursive="${2:-}"
@@ -243,7 +247,7 @@ function bl64_fs_dir_create() {
     bl64_fs_run_mkdir \
       "$BL64_FS_SET_MKDIR_PARENTS" \
       "$path" &&
-      bl64_fs_path_permission_set \
+      bl64_fs_path_set_permissions \
         "$BL64_VAR_DEFAULT" \
         "$mode" \
         "$user" \
@@ -351,7 +355,7 @@ function bl64_fs_path_copy() {
 
   for path_current in "$@"; do
     path_base="$(bl64_fmt_path_get_basename "$path_current")"
-    bl64_fs_path_permission_set \
+    bl64_fs_path_set_permissions \
       "$file_mode" \
       "$dir_mode" \
       "$user" \
@@ -414,7 +418,7 @@ function bl64_fs_file_copy() {
 
   for path_current in "$@"; do
     path_base="$(bl64_fmt_path_get_basename "$path_current")"
-    bl64_fs_path_permission_set \
+    bl64_fs_path_set_permissions \
       "$file_mode" \
       "$BL64_VAR_DEFAULT" \
       "$user" \
@@ -489,7 +493,7 @@ function bl64_fs_file_merge() {
 
   if ((status == 0)); then
     bl64_dbg_lib_show_comments "merge commplete, update permissions if needed (${destination})"
-    bl64_fs_path_permission_set "$mode" "$BL64_VAR_DEFAULT" "$user" "$group" "$BL64_VAR_OFF" "$destination"
+    bl64_fs_path_set_permissions "$mode" "$BL64_VAR_DEFAULT" "$user" "$group" "$BL64_VAR_OFF" "$destination"
     status=$?
   else
     bl64_dbg_lib_show_comments "merge failed, removing incomplete file (${destination})"
@@ -543,7 +547,7 @@ function bl64_fs_path_merge() {
     ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
       bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" --no-target-directory "$source" "$target"
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" --no-target-directory "$source" "$target"
       ;;
     ${BL64_OS_ALP}-*)
@@ -559,7 +563,7 @@ function bl64_fs_path_merge() {
       # shellcheck disable=SC2086
       bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$BL64_FS_SET_CP_DEREFERENCE" "$recursive" ${source}/ "$target"
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -814,9 +818,9 @@ function bl64_fs_run_find() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MODULE' &&
+    bl64_check_command "$BL64_FS_CMD_FIND" "$BL64_VAR_DEFAULT" 'find' ||
     return $?
-  bl64_check_command "$BL64_FS_CMD_FIND" || return $?
 
   bl64_dbg_lib_trace_start
   "$BL64_FS_CMD_FIND" "$@"
@@ -845,8 +849,10 @@ function bl64_fs_file_search() {
   local pattern="${2:-${BL64_VAR_DEFAULT}}"
   local content="${3:-${BL64_VAR_DEFAULT}}"
 
-  bl64_check_command "$BL64_FS_CMD_FIND" &&
-    bl64_check_directory "$path" || return $?
+  bl64_check_module 'BL64_FS_MODULE' &&
+    bl64_check_command "$BL64_FS_CMD_FIND" "$BL64_VAR_DEFAULT" 'find' &&
+    bl64_check_directory "$path" ||
+    return $?
 
   bl64_lib_var_is_default "$pattern" && pattern=''
 
@@ -893,7 +899,7 @@ function bl64_fs_file_search() {
 function bl64_fs_path_archive() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-}"
-  local backup="${source}${BL64_FS_ARCHIVE_POSTFIX}"
+  local backup="${source}${BL64_FS_SUFFIX_ARCHIVE}"
 
   bl64_check_parameter 'source' ||
     return $?
@@ -934,7 +940,7 @@ function bl64_fs_path_recover() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-}"
   local -i result=$2
-  local backup="${source}${BL64_FS_ARCHIVE_POSTFIX}"
+  local backup="${source}${BL64_FS_SUFFIX_ARCHIVE}"
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'result' ||
@@ -982,7 +988,7 @@ function bl64_fs_path_recover() {
 #   0: operation completed ok
 #   >0: operation failed
 #######################################
-function bl64_fs_path_permission_set() {
+function bl64_fs_path_set_permissions() {
   bl64_dbg_lib_show_function "$@"
   local file_mode="${1:-${BL64_VAR_DEFAULT}}"
   local dir_mode="${2:-${BL64_VAR_DEFAULT}}"
@@ -1003,10 +1009,10 @@ function bl64_fs_path_permission_set() {
   bl64_dbg_lib_show_info "path list:[${*}]"
   for target_path in "$@"; do
     bl64_check_path "$target_path" || return $?
-    _bl64_fs_path_permission_set_file "$file_mode" "$recursive" "$target_path" &&
-      _bl64_fs_path_permission_set_dir "$dir_mode" "$recursive" "$target_path" &&
-      _bl64_fs_path_permission_set_user "$user" "$recursive" "$target_path" &&
-      _bl64_fs_path_permission_set_group "$group" "$recursive" "$target_path" ||
+    _bl64_fs_path_set_permissions_file "$file_mode" "$recursive" "$target_path" &&
+      _bl64_fs_path_set_permissions_dir "$dir_mode" "$recursive" "$target_path" &&
+      _bl64_fs_path_set_permissions_user "$user" "$recursive" "$target_path" &&
+      _bl64_fs_path_set_permissions_group "$group" "$recursive" "$target_path" ||
       return $?
   done
 }
@@ -1429,7 +1435,7 @@ function bl64_fs_file_create() {
 
   bl64_msg_show_lib_subtask "create empty regular file (${file_path})"
   bl64_fs_run_touch "$file_path" &&
-    bl64_fs_path_permission_set \
+    bl64_fs_path_set_permissions \
       "$mode" \
       "$BL64_VAR_DEFAULT" \
       "$user" \
@@ -1584,7 +1590,7 @@ function bl64_fs_run_stat() {
 function bl64_fs_file_backup() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-}"
-  local backup="${source}${BL64_FS_BACKUP_SUFFIX}"
+  local backup="${source}${BL64_FS_SUFFIX_BACKUP}"
 
   bl64_check_parameter 'source' || return $?
   [[ ! -f "$source" ]] && bl64_dbg_lib_show_comments "file is not yet created, nothing to do (${source})" && return 0
@@ -1619,7 +1625,7 @@ function bl64_fs_file_restore() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-}"
   local -i result=$2
-  local backup="${source}${BL64_FS_BACKUP_SUFFIX}"
+  local backup="${source}${BL64_FS_SUFFIX_BACKUP}"
 
   bl64_check_parameter 'source' &&
     bl64_check_parameter 'result' ||
@@ -1698,7 +1704,7 @@ function bl64_fs_path_move() {
 
   for path_current in "$@"; do
     path_base="$(bl64_fmt_path_get_basename "$path_current")"
-    bl64_fs_path_permission_set \
+    bl64_fs_path_set_permissions \
       "$file_mode" \
       "$dir_mode" \
       "$user" \

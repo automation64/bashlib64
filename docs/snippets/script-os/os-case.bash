@@ -1,4 +1,4 @@
-  case "$BL64_OS_DISTRO" in
+case "$BL64_OS_DISTRO" in
   ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
     # X_CODE_PLACEHOLDER_X
     ;;
@@ -17,5 +17,5 @@
   ${BL64_OS_MCOS}-*)
     # X_CODE_PLACEHOLDER_X
     ;;
-  *) bl64_check_alert_unsupported ;;
-  esac
+  *) bl64_check_rise_task_unsupported ;;
+esac

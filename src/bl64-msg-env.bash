@@ -4,12 +4,9 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.17.4'
+  declare BL64_MSG_VERSION='5.18.0'
 
   declare BL64_MSG_MODULE='0'
-
-  # Target verbosity)
-  declare BL64_MSG_VERBOSE=''
 
   #
   # Verbosity levels
@@ -20,6 +17,8 @@
   declare BL64_MSG_VERBOSE_DETAIL='DETAIL'
   declare BL64_MSG_VERBOSE_LIB='LIB' # deprecated. Use BL64_MSG_VERBOSE_DETAIL
   declare BL64_MSG_VERBOSE_ALL='ALL'
+  # Selected level
+  declare BL64_MSG_VERBOSE=''
 
   #
   # Message type tag
@@ -49,8 +48,7 @@
   declare BL64_MSG_OUTPUT_ASCII='ASCII'
   declare BL64_MSG_OUTPUT_ANSI='ANSI'
   declare BL64_MSG_OUTPUT_EMOJI='EMOJI'
-
-  # default message output type
+  # Selected type
   declare BL64_MSG_OUTPUT=''
 
   #
@@ -66,8 +64,7 @@
   declare BL64_MSG_FORMAT_SCRIPT2='SCRIPT2'
   declare BL64_MSG_FORMAT_TIME='TIME'
   declare BL64_MSG_FORMAT_TIME2='TIME2'
-
-  # Selected message format
+  # Selected format
   declare BL64_MSG_FORMAT="${BL64_MSG_FORMAT:-$BL64_MSG_FORMAT_FULL}"
 
   #

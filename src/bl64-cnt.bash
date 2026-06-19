@@ -928,7 +928,7 @@ function bl64_cnt_container_is_running() {
   local result=''
 
   if bl64_lib_var_is_default "$name" && bl64_lib_var_is_default "$id"; then
-    bl64_check_alert_parameter_invalid "$BL64_VAR_DEFAULT" "no filter was selected. Task requires one of them (ID, Name)"
+    bl64_check_rise_parameter_invalid "$BL64_VAR_DEFAULT" "no filter was selected. Task requires one of them (ID, Name)"
     return $?
   fi
 
@@ -1019,7 +1019,7 @@ function bl64_cnt_run_docker() {
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_CNT_MODULE' &&
-    bl64_check_command "$BL64_CNT_CMD_DOCKER" ||
+    bl64_check_command "$BL64_CNT_CMD_DOCKER" "$BL64_VAR_DEFAULT" 'docker' ||
     return $?
 
   if bl64_dbg_lib_command_is_enabled; then
@@ -1056,7 +1056,7 @@ function bl64_cnt_run_podman() {
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_CNT_MODULE' &&
-    bl64_check_command "$BL64_CNT_CMD_PODMAN" ||
+    bl64_check_command "$BL64_CNT_CMD_PODMAN" "$BL64_VAR_DEFAULT" 'podman' ||
     return $?
 
   bl64_dbg_lib_command_is_enabled && verbose="$BL64_CNT_SET_LOG_LEVEL_DEBUG"

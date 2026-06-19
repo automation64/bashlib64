@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MDB_VERSION='2.0.2'
+  declare BL64_MDB_VERSION='2.0.3'
 
   declare BL64_MDB_MODULE='0'
 
@@ -16,6 +16,6 @@
   declare BL64_MDB_SET_QUIET=''
   declare BL64_MDB_SET_NORC=''
 
-  declare BL64_MDB_REPLICA_WRITE=''
-  declare BL64_MDB_REPLICA_TIMEOUT=''
+  declare BL64_MDB_CFG_REPLICA_WRITE='majority'
+  declare BL64_MDB_CFG_REPLICA_TIMEOUT='1000'
 }

@@ -32,7 +32,7 @@ function bl64_rxtx_setup() {
     _bl64_rxtx_set_options &&
     _bl64_rxtx_set_alias &&
     BL64_RXTX_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'rxtx'
+  bl64_check_rise_module_setup 'rxtx'
 }
 
 #######################################
@@ -61,7 +61,7 @@ function _bl64_rxtx_set_command() {
       BL64_RXTX_CMD_CURL='/usr/bin/curl'
       BL64_RXTX_CMD_WGET='/usr/bin/wget'
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       BL64_RXTX_CMD_CURL='/usr/bin/curl'
       BL64_RXTX_CMD_WGET='/usr/bin/wget'
       ;;
@@ -77,7 +77,7 @@ function _bl64_rxtx_set_command() {
       BL64_RXTX_CMD_CURL='/usr/bin/curl'
       BL64_RXTX_CMD_WGET="$BL64_VAR_INCOMPATIBLE"
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -162,7 +162,7 @@ function _bl64_rxtx_set_options() {
       BL64_RXTX_SET_WGET_SECURE='--no-config'
       BL64_RXTX_SET_WGET_VERBOSE='--verbose'
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       BL64_RXTX_SET_CURL_FAIL='--fail'
       BL64_RXTX_SET_CURL_HEADER='-H'
       BL64_RXTX_SET_CURL_INCLUDE='--include'
@@ -226,7 +226,7 @@ function _bl64_rxtx_set_options() {
       BL64_RXTX_SET_WGET_SECURE=' '
       BL64_RXTX_SET_WGET_VERBOSE=' '
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -257,7 +257,7 @@ function _bl64_rxtx_set_alias() {
       BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
       BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
       BL64_RXTX_ALIAS_WGET="$BL64_RXTX_CMD_WGET ${BL64_RXTX_SET_WGET_SECURE}"
       ;;
@@ -273,6 +273,6 @@ function _bl64_rxtx_set_alias() {
       BL64_RXTX_ALIAS_CURL="$BL64_RXTX_CMD_CURL ${BL64_RXTX_SET_CURL_SECURE}"
       BL64_RXTX_ALIAS_WGET=''
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }

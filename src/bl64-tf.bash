@@ -3,6 +3,18 @@
 #######################################
 
 #
+# Deprecation aliases
+#
+# * Aliases to deprecated functions
+# * Needed to maintain compatibility up to N-2 versions
+#
+
+function bl64_tf_log_set() {
+  _bl64_lib_function_deprecated 'bl64_tf_log_set' 'bl64_tf_set_logging'
+  bl64_tf_set_logging "$@"
+}
+
+#
 # Private functions
 #
 
@@ -24,13 +36,14 @@ function _bl64_tf_harden_terraform() {
   bl64_dbg_lib_trace_start
   unset TF_CLI_CONFIG_FILE
   unset TF_DATA_DIR
-  unset TF_IN_AUTOMATION
   unset TF_INPUT
-  unset TF_LOG
-  unset TF_LOG_PATH
   unset TF_PLUGIN_CACHE_DIR
   unset TF_REGISTRY_CLIENT_TIMEOUT
   unset TF_REGISTRY_DISCOVERY_RETRY
+
+  export TF_IN_AUTOMATION='ON'
+  export TF_LOG_PATH="$BL64_TF_PATH_LOG"
+  export TF_LOG="$BL64_TF_CFG_LOG_LEVEL"
   bl64_dbg_lib_trace_stop
 
   return 0
@@ -56,11 +69,8 @@ function _bl64_tf_harden_tofu() {
   unset TF_CLI_CONFIG_FILE
   unset TF_DATA_DIR
   unset TF_ENCRYPTION
-  unset TF_IN_AUTOMATION
   unset TF_INPUT
-  unset TF_LOG
   unset TF_LOG_CORE
-  unset TF_LOG_PATH
   unset TF_LOG_PROVIDER
   unset TF_PLUGIN_CACHE_DIR
   unset TF_PROVIDER_DOWNLOAD_RETRY
@@ -69,6 +79,10 @@ function _bl64_tf_harden_tofu() {
   unset TF_STATE_PERSIST_INTERVAL
   unset TF_WORKSPACE
   unset TOFU_CPU_PROFILE
+
+  export TF_IN_AUTOMATION='ON'
+  export TF_LOG_PATH="$BL64_TF_PATH_LOG"
+  export TF_LOG="$BL64_TF_CFG_LOG_LEVEL"
   bl64_dbg_lib_trace_stop
 
   return 0
@@ -100,7 +114,7 @@ function bl64_tf_output_export() {
     "$BL64_TF_OUTPUT_RAW") format='-raw' ;;
     "$BL64_TF_OUTPUT_JSON") format='-json' ;;
     "$BL64_TF_OUTPUT_TEXT") format='' ;;
-    *) bl64_check_alert_undefined ;;
+    *) bl64_check_rise_task_undefined ;;
   esac
 
   # shellcheck disable=SC2086
@@ -129,19 +143,9 @@ function bl64_tf_run_terraform() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TF_MODULE' ||
+    bl64_check_module 'BL64_TF_MODULE' &&
+    _bl64_tf_harden_terraform ||
     return $?
-
-  _bl64_tf_harden_terraform
-
-  export TF_IN_AUTOMATION='ON'
-  if bl64_dbg_lib_command_is_enabled; then
-    export TF_LOG="$BL64_TF_SET_LOG_TRACE"
-  else
-    export TF_LOG="$BL64_TF_LOG_LEVEL"
-  fi
-  ! bl64_lib_var_is_default "$BL64_TF_LOG_PATH" && export TF_LOG_PATH="$BL64_TF_LOG_PATH"
-  bl64_dbg_lib_show_vars 'TF_LOG' 'TF_LOG_PATH'
 
   bl64_dbg_lib_trace_start
   # shellcheck disable=SC2086
@@ -168,22 +172,58 @@ function bl64_tf_run_tofu() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TF_MODULE' ||
+    bl64_check_module 'BL64_TF_MODULE' &&
+    _bl64_tf_harden_tofu ||
     return $?
-
-  _bl64_tf_harden_tofu
-
-  export TF_IN_AUTOMATION='ON'
-  if bl64_dbg_lib_command_is_enabled; then
-    export TF_LOG="$BL64_TF_SET_LOG_TRACE"
-  else
-    export TF_LOG="$BL64_TF_LOG_LEVEL"
-  fi
-  ! bl64_lib_var_is_default "$BL64_TF_LOG_PATH" && export TF_LOG_PATH="$BL64_TF_LOG_PATH"
-  bl64_dbg_lib_show_vars 'TF_LOG' 'TF_LOG_PATH'
 
   bl64_dbg_lib_trace_start
   "$BL64_TF_CMD_TOFU" \
     "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Set logging configuration
+#
+# * Path is not checked for existence as the tool will automatically create it
+#
+# Arguments:
+#   $1: full path to the log file. Default: STDERR
+#   $2: log level. One of BL64_TF_SET_LOG_*. Default: INFO
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function bl64_tf_set_logging() {
+  bl64_dbg_lib_show_function "$@"
+  local path="${1:-$BL64_VAR_DEFAULT}"
+  local level="${2:-$BL64_TF_SET_LOG_INFO}"
+
+  ! bl64_lib_var_is_default "$path" && BL64_TF_PATH_LOG="$path"
+  ! bl64_lib_var_is_default "$level" && BL64_TF_CFG_LOG_LEVEL="$level"
+  return 0
+}
+
+#######################################
+# Set runtime paths
+#
+# * Path is not checked for existence as the tool will automatically create it
+#
+# Arguments:
+#   $1: (optional) plugin cache
+# Outputs:
+#   STDOUT: None
+#   STDERR: requirement error
+# Returns:
+#   0: set ok
+#   >0: set failed
+#######################################
+function bl64_tf_set_paths() {
+  bl64_dbg_lib_show_function "$@"
+  local plugin_cache="${1:-$BL64_VAR_DEFAULT}"
+  # shellcheck disable=SC2034
+  ! bl64_lib_var_is_default "$plugin_cache" && BL64_TF_PATH_PLUGIN_CACHE="$plugin_cache"
+  return 0
 }

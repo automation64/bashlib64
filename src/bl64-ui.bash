@@ -10,7 +10,7 @@
 #
 
 function bl64_ui_confirmation_ask() {
-  bl64_msg_show_deprecated 'bl64_ui_confirmation_ask' 'bl64_ui_ask_confirmation'
+  _bl64_lib_function_deprecated 'bl64_ui_confirmation_ask' 'bl64_ui_ask_confirmation'
   bl64_ui_ask_confirmation "$@"
 }
 
@@ -18,9 +18,9 @@ function bl64_ui_confirmation_ask() {
 # Private functions
 #
 
-function _bl64_ui_is_confirmation_disabled(){
+function _bl64_ui_is_confirmation_disabled() {
   bl64_dbg_lib_show_function
-  if bl64_lib_flag_is_enabled "$BL64_UI_CONFIRMATION_SKIP"; then
+  if bl64_lib_flag_is_enabled "$BL64_UI_CFG_SKIP_CONFIRMATION"; then
     bl64_msg_show_text '** warning - confirmation verification disabled. The operation will continue without interruption **'
     return 0
   fi
@@ -57,7 +57,7 @@ function bl64_ui_ask_confirmation() {
   bl64_msg_show_input "${question} [${confirmation}]: "
   _bl64_ui_is_confirmation_disabled && return 0
 
-  read -r -t "$BL64_UI_CONFIRMATION_TIMEOUT" input
+  read -r -t "$BL64_UI_CFG_INPUT_TIMEOUT" input
 
   input="${input#"${input%%[![:space:]]*}"}"
   input="${input%"${input##*[![:space:]]}"}"
@@ -87,9 +87,9 @@ function bl64_ui_ask_proceed() {
     _bl64_ui_is_confirmation_disabled && return 0
     read -r input
     case "$input" in
-    [Yy]*) return 0 ;;
-    [Nn]*) bl64_msg_show_warning 'User requested not to proceed. No further action will be taken.' && return 1 ;;
-    *) bl64_msg_show_lib_error "Invalid input. Please answer y or n." ;;
+      [Yy]*) return 0 ;;
+      [Nn]*) bl64_msg_show_warning 'User requested not to proceed. No further action will be taken.' && return 1 ;;
+      *) bl64_msg_show_lib_error "Invalid input. Please answer y or n." ;;
     esac
   done
 }
@@ -134,9 +134,9 @@ function bl64_ui_ask_yesno() {
     _bl64_ui_is_confirmation_disabled && return 0
     read -r input
     case "$input" in
-    [Yy]*) return 0 ;;
-    [Nn]*) return 1 ;;
-    *) bl64_msg_show_lib_error "Invalid input. Please answer y or n." ;;
+      [Yy]*) return 0 ;;
+      [Nn]*) return 1 ;;
+      *) bl64_msg_show_lib_error "Invalid input. Please answer y or n." ;;
     esac
   done
 }

@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_HLM_VERSION='3.0.2'
+  declare BL64_HLM_VERSION='3.0.3'
 
   declare BL64_HLM_MODULE='0'
 
@@ -15,5 +15,5 @@
   declare BL64_HLM_SET_OUTPUT_JSON=''
   declare BL64_HLM_SET_OUTPUT_YAML=''
 
-  declare BL64_HLM_RUN_TIMEOUT=''
+  declare BL64_HLM_RUN_TIMEOUT='5m0s'
 }

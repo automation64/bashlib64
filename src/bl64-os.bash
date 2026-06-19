@@ -10,11 +10,11 @@
 #
 
 function bl64_os_match() {
-  bl64_msg_show_deprecated 'bl64_os_match' 'bl64_os_is_distro'
+  _bl64_lib_function_deprecated 'bl64_os_match' 'bl64_os_is_distro'
   bl64_os_is_distro "$@"
 }
 function bl64_os_match_compatible() {
-  bl64_msg_show_deprecated 'bl64_os_match_compatible' 'bl64_os_is_compatible'
+  _bl64_lib_function_deprecated 'bl64_os_match_compatible' 'bl64_os_is_compatible'
   bl64_os_is_compatible "$@"
 }
 
@@ -26,7 +26,7 @@ function bl64_os_match_compatible() {
 # Compare the current OS against the provided flavor
 #
 # Arguments:
-#   $1: flavor ID: BL64_OS_FLAVOR_*
+#   $@: list of flavor ID: BL64_OS_FLAVOR_*
 # Outputs:
 #   STDOUT: None
 #   STDERR: None
@@ -37,13 +37,16 @@ function bl64_os_match_compatible() {
 #######################################
 function bl64_os_is_flavor() {
   bl64_dbg_lib_show_function "$@"
-  local os_flavor="${1:-}"
+  local os_flavor="${*:-}"
+  local current=''
 
   bl64_check_module 'BL64_OS_MODULE' &&
     bl64_check_parameter 'os_flavor' ||
     return $?
 
-  [[ "$BL64_OS_FLAVOR" == "$os_flavor" ]] && return 0
+  for current in $os_flavor; do
+    [[ "$current" == "$BL64_OS_FLAVOR" ]] && return 0
+  done
   return "$BL64_LIB_ERROR_OS_NOT_MATCH"
 }
 
@@ -153,7 +156,7 @@ function bl64_os_lang_is_available() {
 
   bl64_dbg_lib_show_info 'look for the requested locale using the locale command'
   IFS=$'\n'
-  for line in $("$BL64_OS_CMD_LOCALE" "$BL64_OS_SET_LOCALE_ALL"); do
+  for line in $("$BL64_OS_CMD_LOCALE" --all-locales); do
     unset IFS
     bl64_dbg_lib_show_info "checking [${line}] == [${locale}]"
     [[ "$line" == "$locale" ]] && return 0
@@ -366,7 +369,7 @@ function bl64_os_run_uname() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_module 'BL64_OS_MODULE' &&
-    bl64_check_command "$BL64_OS_CMD_CAT" ||
+    bl64_check_command "$BL64_OS_CMD_UNAME" ||
     return $?
 
   bl64_dbg_lib_trace_start

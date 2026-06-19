@@ -27,5 +27,5 @@ function bl64_api_setup() {
     _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_RXTX_MODULE' &&
     BL64_API_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'api'
+  bl64_check_rise_module_setup 'api'
 }

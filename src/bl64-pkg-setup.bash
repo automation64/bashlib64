@@ -27,11 +27,11 @@ function bl64_pkg_setup() {
     _bl64_lib_module_is_imported 'BL64_RXTX_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_CRYP_MODULE' &&
     _bl64_pkg_set_command &&
-    _bl64_pkg_set_runtime &&
+    _bl64_pkg_set_paths &&
     _bl64_pkg_set_options &&
     _bl64_pkg_set_alias &&
     BL64_PKG_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'pkg'
+  bl64_check_rise_module_setup 'pkg'
 }
 
 #######################################
@@ -75,7 +75,7 @@ function _bl64_pkg_set_command() {
       BL64_PKG_CMD_DNF='/usr/bin/dnf'
       BL64_PKG_CMD_RPM='/usr/bin/rpm'
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       BL64_PKG_CMD_ZYPPER='/usr/bin/zypper'
       BL64_PKG_CMD_RPM='/usr/bin/rpm'
       ;;
@@ -89,7 +89,7 @@ function _bl64_pkg_set_command() {
       BL64_PKG_CMD_INSTALLER='/usr/sbin/installer'
       BL64_PKG_CMD_SOFTWAREUPDATE='/usr/sbin/softwareupdate'
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -117,7 +117,7 @@ function _bl64_pkg_set_options() {
       BL64_PKG_SET_QUIET='--quiet --quiet'
       BL64_PKG_SET_VERBOSE=' '
       ;;
-    ${BL64_OS_FD}-41.* | ${BL64_OS_FD}-42.* | ${BL64_OS_FD}-43.*)
+    ${BL64_OS_FD}-41.* | ${BL64_OS_FD}-42.* | ${BL64_OS_FD}-43.* | ${BL64_OS_FD}-44.*)
       BL64_PKG_SET_ASSUME_YES='--assumeyes'
       BL64_PKG_SET_SLIM='--no-docs'
       BL64_PKG_SET_QUIET='--quiet'
@@ -141,7 +141,7 @@ function _bl64_pkg_set_options() {
       BL64_PKG_SET_QUIET='--quiet'
       BL64_PKG_SET_VERBOSE='--color=never --verbose'
       ;;
-    ${BL64_OS_SLES}-*)
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
       BL64_PKG_SET_ASSUME_YES='--no-confirm'
       BL64_PKG_SET_SLIM=' '
       BL64_PKG_SET_QUIET='--quiet'
@@ -160,7 +160,7 @@ function _bl64_pkg_set_options() {
       BL64_PKG_SET_VERBOSE='--verbose'
       ;;
     ${BL64_OS_MCOS}-*) : ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -203,7 +203,7 @@ function _bl64_pkg_set_alias() {
       BL64_PKG_ALIAS_APT_INSTALL="$BL64_PKG_CMD_APT install ${BL64_PKG_SET_ASSUME_YES} ${BL64_PKG_SET_VERBOSE}"
       BL64_PKG_ALIAS_APT_CLEAN="$BL64_PKG_CMD_APT clean"
       ;;
-    ${BL64_OS_SLES}-*) : ;;
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*) : ;;
     ${BL64_OS_ALP}-*)
       BL64_PKG_ALIAS_APK_CACHE="$BL64_PKG_CMD_APK update ${BL64_PKG_SET_VERBOSE}"
       BL64_PKG_ALIAS_APK_INSTALL="$BL64_PKG_CMD_APK add ${BL64_PKG_SET_VERBOSE}"
@@ -215,25 +215,8 @@ function _bl64_pkg_set_alias() {
       BL64_PKG_ALIAS_BRW_INSTALL="$BL64_PKG_CMD_BREW install ${BL64_PKG_SET_VERBOSE}"
       BL64_PKG_ALIAS_BRW_CLEAN="$BL64_PKG_CMD_BREW cleanup ${BL64_PKG_SET_VERBOSE} --prune=all -s"
       ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
-}
-
-#######################################
-# Set runtime defaults
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: setting errors
-# Returns:
-#   0: set ok
-#   >0: failed to set
-#######################################
-function _bl64_pkg_set_runtime() {
-  bl64_dbg_lib_show_function
-  bl64_pkg_set_paths
 }
 
 #######################################
@@ -241,6 +224,7 @@ function _bl64_pkg_set_runtime() {
 #
 # * Global paths only
 # * If preparation fails the whole module fails
+# * Warning: bootstrap function
 #
 # Arguments:
 #   None
@@ -252,7 +236,7 @@ function _bl64_pkg_set_runtime() {
 #   >0: failed to prepare paths
 #######################################
 # shellcheck disable=SC2120
-function bl64_pkg_set_paths() {
+function _bl64_pkg_set_paths() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
@@ -266,10 +250,10 @@ function bl64_pkg_set_paths() {
       BL64_PKG_PATH_APT_SOURCES_LIST_D='/etc/apt/sources.list.d'
       BL64_PKG_PATH_GPG_KEYRINGS='/usr/share/keyrings'
       ;;
-    ${BL64_OS_SLES}-*) : ;;
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*) : ;;
     ${BL64_OS_ALP}-*) : ;;
     ${BL64_OS_ARC}-*) : ;;
     ${BL64_OS_MCOS}-*) : ;;
-    *) bl64_check_alert_unsupported ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }

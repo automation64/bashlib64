@@ -25,5 +25,5 @@ function bl64_tm_setup() {
     _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
     bl64_dbg_lib_show_function &&
     BL64_TM_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'tm'
+  bl64_check_rise_module_setup 'tm'
 }

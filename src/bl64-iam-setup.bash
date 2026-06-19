@@ -31,7 +31,7 @@ function bl64_iam_setup() {
     _bl64_iam_set_alias &&
     _bl64_iam_set_options &&
     BL64_IAM_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'iam'
+  bl64_check_rise_module_setup 'iam'
 }
 
 #######################################
@@ -53,44 +53,44 @@ function _bl64_iam_set_command() {
   bl64_dbg_lib_show_function
 
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
-    BL64_IAM_CMD_USERMOD='/usr/sbin/usermod'
-    BL64_IAM_CMD_GROUPADD='/usr/sbin/groupadd'
-    BL64_IAM_CMD_GROUPMOD='/usr/sbin/groupmod'
-    BL64_IAM_CMD_ID='/usr/bin/id'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
-    BL64_IAM_CMD_USERMOD='/usr/sbin/usermod'
-    BL64_IAM_CMD_GROUPADD='/usr/sbin/groupadd'
-    BL64_IAM_CMD_GROUPMOD='/usr/sbin/groupmod'
-    BL64_IAM_CMD_ID='/usr/bin/id'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
-    BL64_IAM_CMD_USERMOD='/usr/sbin/usermod'
-    BL64_IAM_CMD_GROUPADD='/usr/sbin/groupadd'
-    BL64_IAM_CMD_GROUPMOD='/usr/sbin/groupmod'
-    BL64_IAM_CMD_ID='/usr/bin/id'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_IAM_CMD_ADDUSER='/usr/sbin/adduser'
-    BL64_IAM_CMD_ADDGROUP='/usr/sbin/addgroup'
-    BL64_IAM_CMD_ID='/usr/bin/id'
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_IAM_CMD_USERADD='/usr/bin/useradd'
-    BL64_IAM_CMD_USERMOD='/usr/bin/usermod'
-    BL64_IAM_CMD_GROUPADD='/usr/bin/groupadd'
-    BL64_IAM_CMD_GROUPMOD='/usr/bin/groupmod'
-    BL64_IAM_CMD_ID='/usr/bin/id'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_IAM_CMD_SYSADMINCTL='/usr/sbin/sysadminctl'
-    BL64_IAM_CMD_ID='/usr/bin/id'
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
+      BL64_IAM_CMD_USERMOD='/usr/sbin/usermod'
+      BL64_IAM_CMD_GROUPADD='/usr/sbin/groupadd'
+      BL64_IAM_CMD_GROUPMOD='/usr/sbin/groupmod'
+      BL64_IAM_CMD_ID='/usr/bin/id'
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
+      BL64_IAM_CMD_USERMOD='/usr/sbin/usermod'
+      BL64_IAM_CMD_GROUPADD='/usr/sbin/groupadd'
+      BL64_IAM_CMD_GROUPMOD='/usr/sbin/groupmod'
+      BL64_IAM_CMD_ID='/usr/bin/id'
+      ;;
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
+      BL64_IAM_CMD_USERADD='/usr/sbin/useradd'
+      BL64_IAM_CMD_USERMOD='/usr/sbin/usermod'
+      BL64_IAM_CMD_GROUPADD='/usr/sbin/groupadd'
+      BL64_IAM_CMD_GROUPMOD='/usr/sbin/groupmod'
+      BL64_IAM_CMD_ID='/usr/bin/id'
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_IAM_CMD_ADDUSER='/usr/sbin/adduser'
+      BL64_IAM_CMD_ADDGROUP='/usr/sbin/addgroup'
+      BL64_IAM_CMD_ID='/usr/bin/id'
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_IAM_CMD_USERADD='/usr/bin/useradd'
+      BL64_IAM_CMD_USERMOD='/usr/bin/usermod'
+      BL64_IAM_CMD_GROUPADD='/usr/bin/groupadd'
+      BL64_IAM_CMD_GROUPMOD='/usr/bin/groupmod'
+      BL64_IAM_CMD_ID='/usr/bin/id'
+      ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_IAM_CMD_SYSADMINCTL='/usr/sbin/sysadminctl'
+      BL64_IAM_CMD_ID='/usr/bin/id'
+      ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -114,25 +114,25 @@ function _bl64_iam_set_alias() {
 
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_ADDUSER"
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_SYSADMINCTL"
-    ;;
-  *) bl64_check_alert_unsupported ;;
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
+      ;;
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
+      BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_ADDUSER"
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_USERADD"
+      ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_IAM_ALIAS_USERADD="$BL64_IAM_CMD_SYSADMINCTL"
+      ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -154,72 +154,72 @@ function _bl64_iam_set_options() {
 
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
-    BL64_IAM_SET_USERADD_GECO='--comment'
-    BL64_IAM_SET_USERADD_GROUP='--gid'
-    BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
-    BL64_IAM_SET_USERADD_SHELL='--shell'
-    BL64_IAM_SET_USERADD_UID='--uid'
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
+      BL64_IAM_SET_USERADD_GECO='--comment'
+      BL64_IAM_SET_USERADD_GROUP='--gid'
+      BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
+      BL64_IAM_SET_USERADD_SHELL='--shell'
+      BL64_IAM_SET_USERADD_UID='--uid'
 
-    BL64_IAM_SYSTEM_USER='root'
-    BL64_IAM_SYSTEM_GROUP='root'
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
-    BL64_IAM_SET_USERADD_GECO='--comment'
-    BL64_IAM_SET_USERADD_GROUP='--gid'
-    BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
-    BL64_IAM_SET_USERADD_SHELL='--shell'
-    BL64_IAM_SET_USERADD_UID='--uid'
+      BL64_IAM_SYSTEM_USER='root'
+      BL64_IAM_SYSTEM_GROUP='root'
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
+      BL64_IAM_SET_USERADD_GECO='--comment'
+      BL64_IAM_SET_USERADD_GROUP='--gid'
+      BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
+      BL64_IAM_SET_USERADD_SHELL='--shell'
+      BL64_IAM_SET_USERADD_UID='--uid'
 
-    BL64_IAM_SYSTEM_USER='root'
-    BL64_IAM_SYSTEM_GROUP='root'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
-    BL64_IAM_SET_USERADD_GECO='--comment'
-    BL64_IAM_SET_USERADD_GROUP='--gid'
-    BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
-    BL64_IAM_SET_USERADD_SHELL='--shell'
-    BL64_IAM_SET_USERADD_UID='--uid'
+      BL64_IAM_SYSTEM_USER='root'
+      BL64_IAM_SYSTEM_GROUP='root'
+      ;;
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
+      BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
+      BL64_IAM_SET_USERADD_GECO='--comment'
+      BL64_IAM_SET_USERADD_GROUP='--gid'
+      BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
+      BL64_IAM_SET_USERADD_SHELL='--shell'
+      BL64_IAM_SET_USERADD_UID='--uid'
 
-    BL64_IAM_SYSTEM_USER='root'
-    BL64_IAM_SYSTEM_GROUP='root'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_IAM_SET_USERADD_CREATE_HOME=' '
-    BL64_IAM_SET_USERADD_GECO='-g'
-    BL64_IAM_SET_USERADD_GROUP='-G'
-    BL64_IAM_SET_USERADD_HOME_PATH='-h'
-    BL64_IAM_SET_USERADD_SHELL='-s'
-    BL64_IAM_SET_USERADD_UID='-u'
+      BL64_IAM_SYSTEM_USER='root'
+      BL64_IAM_SYSTEM_GROUP='root'
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_IAM_SET_USERADD_CREATE_HOME=' '
+      BL64_IAM_SET_USERADD_GECO='-g'
+      BL64_IAM_SET_USERADD_GROUP='-G'
+      BL64_IAM_SET_USERADD_HOME_PATH='-h'
+      BL64_IAM_SET_USERADD_SHELL='-s'
+      BL64_IAM_SET_USERADD_UID='-u'
 
-    BL64_IAM_SYSTEM_USER='root'
-    BL64_IAM_SYSTEM_GROUP='root'
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
-    BL64_IAM_SET_USERADD_GECO='--comment'
-    BL64_IAM_SET_USERADD_GROUP='--gid'
-    BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
-    BL64_IAM_SET_USERADD_SHELL='--shell'
-    BL64_IAM_SET_USERADD_UID='--uid'
+      BL64_IAM_SYSTEM_USER='root'
+      BL64_IAM_SYSTEM_GROUP='root'
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_IAM_SET_USERADD_CREATE_HOME='--create-home'
+      BL64_IAM_SET_USERADD_GECO='--comment'
+      BL64_IAM_SET_USERADD_GROUP='--gid'
+      BL64_IAM_SET_USERADD_HOME_PATH='--home-dir'
+      BL64_IAM_SET_USERADD_SHELL='--shell'
+      BL64_IAM_SET_USERADD_UID='--uid'
 
-    BL64_IAM_SYSTEM_USER='root'
-    BL64_IAM_SYSTEM_GROUP='root'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_IAM_SET_USERADD_CREATE_HOME=' '
-    BL64_IAM_SET_USERADD_GECO='-fullName'
-    BL64_IAM_SET_USERADD_GROUP='-gid'
-    BL64_IAM_SET_USERADD_HOME_PATH='-home'
-    BL64_IAM_SET_USERADD_SHELL='-shell'
-    BL64_IAM_SET_USERADD_UID='-UID'
+      BL64_IAM_SYSTEM_USER='root'
+      BL64_IAM_SYSTEM_GROUP='root'
+      ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_IAM_SET_USERADD_CREATE_HOME=' '
+      BL64_IAM_SET_USERADD_GECO='-fullName'
+      BL64_IAM_SET_USERADD_GROUP='-gid'
+      BL64_IAM_SET_USERADD_HOME_PATH='-home'
+      BL64_IAM_SET_USERADD_SHELL='-shell'
+      BL64_IAM_SET_USERADD_UID='-UID'
 
-    BL64_IAM_SYSTEM_USER='root'
-    BL64_IAM_SYSTEM_GROUP='wheel'
-    ;;
-  *) bl64_check_alert_unsupported ;;
+      BL64_IAM_SYSTEM_USER='root'
+      BL64_IAM_SYSTEM_GROUP='wheel'
+      ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }

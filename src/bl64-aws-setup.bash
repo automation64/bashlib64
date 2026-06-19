@@ -44,12 +44,11 @@ function bl64_aws_setup() {
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
     _bl64_aws_set_command "$aws_bin" &&
-    bl64_check_command "$BL64_AWS_CMD_AWS" &&
+    bl64_check_command "$BL64_AWS_CMD_AWS" "$BL64_VAR_DEFAULT" 'aws' &&
     _bl64_aws_set_options &&
-    _bl64_aws_set_resources &&
     _bl64_aws_set_runtime "$aws_home" &&
     BL64_AWS_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'aws'
+  bl64_check_rise_module_setup 'aws'
 }
 
 #######################################
@@ -96,33 +95,6 @@ function _bl64_aws_set_options() {
     BL64_AWS_SET_OUPUT_NO_PAGER='--no-cli-pager'
     BL64_AWS_SET_OUPUT_NO_COLOR='--color off'
     BL64_AWS_SET_INPUT_NO_PROMPT='--no-cli-auto-prompt'
-  }
-  return 0
-}
-
-#######################################
-# Declare version specific definitions
-#
-# * Use to capture default file names, values, attributes, etc
-# * Do not use to capture CLI flags. Use *_set_options instead
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_aws_set_resources() {
-  bl64_dbg_lib_show_function
-  # shellcheck disable=SC2034
-  {
-    BL64_AWS_DEF_SUFFIX_TOKEN='json'
-    BL64_AWS_DEF_SUFFIX_HOME='.aws'
-    BL64_AWS_DEF_SUFFIX_CACHE='sso/cache'
-    BL64_AWS_DEF_SUFFIX_CONFIG='cfg'
-    BL64_AWS_DEF_SUFFIX_CREDENTIALS='secret'
   }
   return 0
 }
@@ -209,7 +181,7 @@ function bl64_aws_set_paths() {
 #######################################
 # Set AWS region
 #
-# * Use anytime you neeto to change the target region
+# * Use anytime you need to to change the target region
 #
 # Arguments:
 #   $1: AWS region

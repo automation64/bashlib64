@@ -4,17 +4,17 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_AWS_VERSION='4.0.5'
+  declare BL64_AWS_VERSION='4.0.6'
 
   declare BL64_AWS_MODULE='0'
 
   declare BL64_AWS_CMD_AWS="$BL64_VAR_UNAVAILABLE"
 
-  declare BL64_AWS_DEF_SUFFIX_TOKEN=''
-  declare BL64_AWS_DEF_SUFFIX_HOME=''
-  declare BL64_AWS_DEF_SUFFIX_CACHE=''
-  declare BL64_AWS_DEF_SUFFIX_CONFIG=''
-  declare BL64_AWS_DEF_SUFFIX_CREDENTIALS=''
+  declare BL64_AWS_DEF_SUFFIX_TOKEN='json'
+  declare BL64_AWS_DEF_SUFFIX_HOME='.aws'
+  declare BL64_AWS_DEF_SUFFIX_CACHE='sso/cache'
+  declare BL64_AWS_DEF_SUFFIX_CONFIG='cfg'
+  declare BL64_AWS_DEF_SUFFIX_CREDENTIALS='secret'
 
   declare BL64_AWS_CLI_MODE='0700'
   declare BL64_AWS_CLI_HOME=''

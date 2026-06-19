@@ -27,7 +27,7 @@ function bl64_txt_setup() {
     _bl64_txt_set_command &&
     _bl64_txt_set_options &&
     BL64_TXT_MODULE="$BL64_VAR_ON"
-  bl64_check_alert_module_setup 'txt'
+  bl64_check_rise_module_setup 'txt'
 }
 
 #######################################
@@ -52,111 +52,111 @@ function _bl64_txt_set_command() {
 
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_TXT_CMD_AWK='/usr/bin/awk'
-    BL64_TXT_CMD_BASE64='/usr/bin/base64'
-    BL64_TXT_CMD_CUT='/usr/bin/cut'
-    BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
-    BL64_TXT_CMD_GAWK='/usr/bin/gawk'
-    BL64_TXT_CMD_GREP='/bin/grep'
-    BL64_TXT_CMD_FMT='/bin/fmt'
-    BL64_TXT_CMD_SED='/bin/sed'
-    BL64_TXT_CMD_SORT='/usr/bin/sort'
-    BL64_TXT_CMD_TAIL='/usr/bin/tail'
-    BL64_TXT_CMD_TR='/usr/bin/tr'
-    BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_TXT_CMD_AWK='/usr/bin/awk'
+      BL64_TXT_CMD_BASE64='/usr/bin/base64'
+      BL64_TXT_CMD_CUT='/usr/bin/cut'
+      BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
+      BL64_TXT_CMD_GAWK='/usr/bin/gawk'
+      BL64_TXT_CMD_GREP='/bin/grep'
+      BL64_TXT_CMD_FMT='/bin/fmt'
+      BL64_TXT_CMD_SED='/bin/sed'
+      BL64_TXT_CMD_SORT='/usr/bin/sort'
+      BL64_TXT_CMD_TAIL='/usr/bin/tail'
+      BL64_TXT_CMD_TR='/usr/bin/tr'
+      BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
-    if [[ -x '/usr/bin/gawk' ]]; then
+      if [[ -x '/usr/bin/gawk' ]]; then
+        BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
+      elif [[ -x '/usr/bin/mawk' ]]; then
+        BL64_TXT_CMD_AWK_POSIX='/usr/bin/mawk'
+      fi
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+      BL64_TXT_CMD_AWK='/usr/bin/awk'
+      BL64_TXT_CMD_BASE64='/usr/bin/base64'
+      BL64_TXT_CMD_CUT='/usr/bin/cut'
+      BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
+      BL64_TXT_CMD_GAWK='/usr/bin/gawk'
+      BL64_TXT_CMD_GREP='/usr/bin/grep'
+      BL64_TXT_CMD_FMT='/usr/bin/fmt'
+      BL64_TXT_CMD_SED='/usr/bin/sed'
+      BL64_TXT_CMD_SORT='/usr/bin/sort'
+      BL64_TXT_CMD_TAIL='/usr/bin/tail'
+      BL64_TXT_CMD_TR='/usr/bin/tr'
+      BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
+
       BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
-    elif [[ -x '/usr/bin/mawk' ]]; then
-      BL64_TXT_CMD_AWK_POSIX='/usr/bin/mawk'
-    fi
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_TXT_CMD_AWK='/usr/bin/awk'
-    BL64_TXT_CMD_BASE64='/usr/bin/base64'
-    BL64_TXT_CMD_CUT='/usr/bin/cut'
-    BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
-    BL64_TXT_CMD_GAWK='/usr/bin/gawk'
-    BL64_TXT_CMD_GREP='/usr/bin/grep'
-    BL64_TXT_CMD_FMT='/usr/bin/fmt'
-    BL64_TXT_CMD_SED='/usr/bin/sed'
-    BL64_TXT_CMD_SORT='/usr/bin/sort'
-    BL64_TXT_CMD_TAIL='/usr/bin/tail'
-    BL64_TXT_CMD_TR='/usr/bin/tr'
-    BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
+      ;;
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
+      BL64_TXT_CMD_AWK='/usr/bin/gawk'
+      BL64_TXT_CMD_BASE64='/usr/bin/base64'
+      BL64_TXT_CMD_CUT='/usr/bin/cut'
+      BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
+      BL64_TXT_CMD_GAWK='/usr/bin/gawk'
+      BL64_TXT_CMD_GREP='/usr/bin/grep'
+      BL64_TXT_CMD_FMT='/usr/bin/fmt'
+      BL64_TXT_CMD_SED='/usr/bin/sed'
+      BL64_TXT_CMD_SORT='/usr/bin/sort'
+      BL64_TXT_CMD_TAIL='/usr/bin/tail'
+      BL64_TXT_CMD_TR='/usr/bin/tr'
+      BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
-    BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_TXT_CMD_AWK='/usr/bin/gawk'
-    BL64_TXT_CMD_BASE64='/usr/bin/base64'
-    BL64_TXT_CMD_CUT='/usr/bin/cut'
-    BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
-    BL64_TXT_CMD_GAWK='/usr/bin/gawk'
-    BL64_TXT_CMD_GREP='/usr/bin/grep'
-    BL64_TXT_CMD_FMT='/usr/bin/fmt'
-    BL64_TXT_CMD_SED='/usr/bin/sed'
-    BL64_TXT_CMD_SORT='/usr/bin/sort'
-    BL64_TXT_CMD_TAIL='/usr/bin/tail'
-    BL64_TXT_CMD_TR='/usr/bin/tr'
-    BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
-
-    BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_TXT_CMD_AWK='/usr/bin/awk'
-    BL64_TXT_CMD_BASE64='/bin/base64'
-    BL64_TXT_CMD_CUT='/usr/bin/cut'
-    BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
-    BL64_TXT_CMD_GAWK='/usr/bin/gawk'
-    BL64_TXT_CMD_GREP='/bin/grep'
-    BL64_TXT_CMD_FMT='/bin/fmt'
-    BL64_TXT_CMD_SED='/bin/sed'
-    BL64_TXT_CMD_SORT='/usr/bin/sort'
-    BL64_TXT_CMD_TAIL='/usr/bin/tail'
-    BL64_TXT_CMD_TR='/usr/bin/tr'
-    BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
-
-    if [[ -x '/usr/bin/gawk' ]]; then
       BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
-    else
-      bl64_dbg_lib_show_comments 'no GAWK present. AWK bundled with busybox is not posix compliant'
-    fi
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_TXT_CMD_AWK='/usr/bin/gawk'
-    BL64_TXT_CMD_BASE64='/usr/bin/base64'
-    BL64_TXT_CMD_CUT='/usr/bin/cut'
-    BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
-    BL64_TXT_CMD_GAWK='/usr/bin/gawk'
-    BL64_TXT_CMD_GREP='/usr/bin/grep'
-    BL64_TXT_CMD_FMT='/usr/bin/fmt'
-    BL64_TXT_CMD_SED='/usr/bin/sed'
-    BL64_TXT_CMD_SORT='/usr/bin/sort'
-    BL64_TXT_CMD_TAIL='/usr/bin/tail'
-    BL64_TXT_CMD_TR='/usr/bin/tr'
-    BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_TXT_CMD_AWK='/usr/bin/awk'
+      BL64_TXT_CMD_BASE64='/bin/base64'
+      BL64_TXT_CMD_CUT='/usr/bin/cut'
+      BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
+      BL64_TXT_CMD_GAWK='/usr/bin/gawk'
+      BL64_TXT_CMD_GREP='/bin/grep'
+      BL64_TXT_CMD_FMT='/bin/fmt'
+      BL64_TXT_CMD_SED='/bin/sed'
+      BL64_TXT_CMD_SORT='/usr/bin/sort'
+      BL64_TXT_CMD_TAIL='/usr/bin/tail'
+      BL64_TXT_CMD_TR='/usr/bin/tr'
+      BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
-    BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_TXT_CMD_AWK='/usr/bin/awk'
-    BL64_TXT_CMD_BASE64='/usr/bin/base64'
-    BL64_TXT_CMD_CUT='/usr/bin/cut'
-    BL64_TXT_CMD_ENVSUBST='/opt/homebrew/bin/envsubst'
-    BL64_TXT_CMD_GAWK="$BL64_VAR_UNAVAILABLE"
-    BL64_TXT_CMD_GREP='/usr/bin/grep'
-    BL64_TXT_CMD_FMT='/usr/bin/fmt'
-    BL64_TXT_CMD_SED='/usr/bin/sed'
-    BL64_TXT_CMD_SORT='/usr/bin/sort'
-    BL64_TXT_CMD_TAIL='/usr/bin/tail'
-    BL64_TXT_CMD_TR='/usr/bin/tr'
-    BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
+      if [[ -x '/usr/bin/gawk' ]]; then
+        BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
+      else
+        bl64_dbg_lib_show_comments 'no GAWK present. AWK bundled with busybox is not posix compliant'
+      fi
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_TXT_CMD_AWK='/usr/bin/gawk'
+      BL64_TXT_CMD_BASE64='/usr/bin/base64'
+      BL64_TXT_CMD_CUT='/usr/bin/cut'
+      BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
+      BL64_TXT_CMD_GAWK='/usr/bin/gawk'
+      BL64_TXT_CMD_GREP='/usr/bin/grep'
+      BL64_TXT_CMD_FMT='/usr/bin/fmt'
+      BL64_TXT_CMD_SED='/usr/bin/sed'
+      BL64_TXT_CMD_SORT='/usr/bin/sort'
+      BL64_TXT_CMD_TAIL='/usr/bin/tail'
+      BL64_TXT_CMD_TR='/usr/bin/tr'
+      BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
-    BL64_TXT_CMD_AWK_POSIX='/usr/bin/awk'
-    ;;
-  *) bl64_check_alert_unsupported ;;
+      BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
+      ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_TXT_CMD_AWK='/usr/bin/awk'
+      BL64_TXT_CMD_BASE64='/usr/bin/base64'
+      BL64_TXT_CMD_CUT='/usr/bin/cut'
+      BL64_TXT_CMD_ENVSUBST='/opt/homebrew/bin/envsubst'
+      BL64_TXT_CMD_GAWK="$BL64_VAR_UNAVAILABLE"
+      BL64_TXT_CMD_GREP='/usr/bin/grep'
+      BL64_TXT_CMD_FMT='/usr/bin/fmt'
+      BL64_TXT_CMD_SED='/usr/bin/sed'
+      BL64_TXT_CMD_SORT='/usr/bin/sort'
+      BL64_TXT_CMD_TAIL='/usr/bin/tail'
+      BL64_TXT_CMD_TR='/usr/bin/tr'
+      BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
+
+      BL64_TXT_CMD_AWK_POSIX='/usr/bin/awk'
+      ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 }
 
@@ -176,112 +176,112 @@ function _bl64_txt_set_options() {
 
   # shellcheck disable=SC2034
   case "$BL64_OS_DISTRO" in
-  ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
-    BL64_TXT_SET_AWS_FS='-F'
-    BL64_TXT_SET_GREP_ERE='-E'
-    BL64_TXT_SET_GREP_INVERT='-v'
-    BL64_TXT_SET_GREP_NO_CASE='-i'
-    BL64_TXT_SET_GREP_QUIET='--quiet'
-    BL64_TXT_SET_GREP_LINE='-x'
-    BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
-    BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
-    BL64_TXT_SET_GREP_STRING='-F'
-    BL64_TXT_SET_GREP_STDIN='-'
-    BL64_TXT_SET_SED_EXPRESSION='-e'
-    BL64_TXT_SET_SED_INLINE='-i'
-    BL64_TXT_SET_SORT_NATURAL='-V'
-    BL64_TXT_SET_TAIL_LINES='-n'
+    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+      BL64_TXT_SET_AWS_FS='-F'
+      BL64_TXT_SET_GREP_ERE='-E'
+      BL64_TXT_SET_GREP_INVERT='-v'
+      BL64_TXT_SET_GREP_NO_CASE='-i'
+      BL64_TXT_SET_GREP_QUIET='--quiet'
+      BL64_TXT_SET_GREP_LINE='-x'
+      BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
+      BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+      BL64_TXT_SET_GREP_STRING='-F'
+      BL64_TXT_SET_GREP_STDIN='-'
+      BL64_TXT_SET_SED_EXPRESSION='-e'
+      BL64_TXT_SET_SED_INLINE='-i'
+      BL64_TXT_SET_SORT_NATURAL='-V'
+      BL64_TXT_SET_TAIL_LINES='-n'
 
-    if [[ -x '/usr/bin/gawk' ]]; then
+      if [[ -x '/usr/bin/gawk' ]]; then
+        BL64_TXT_SET_AWK_POSIX='--posix'
+      fi
+      ;;
+    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
       BL64_TXT_SET_AWK_POSIX='--posix'
-    fi
-    ;;
-  ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
-    BL64_TXT_SET_AWK_POSIX='--posix'
-    BL64_TXT_SET_AWS_FS='-F'
-    BL64_TXT_SET_GREP_ERE='-E'
-    BL64_TXT_SET_GREP_INVERT='-v'
-    BL64_TXT_SET_GREP_NO_CASE='-i'
-    BL64_TXT_SET_GREP_QUIET='--quiet'
-    BL64_TXT_SET_GREP_LINE='-x'
-    BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
-    BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
-    BL64_TXT_SET_GREP_STRING='-F'
-    BL64_TXT_SET_GREP_STDIN='-'
-    BL64_TXT_SET_SED_EXPRESSION='-e'
-    BL64_TXT_SET_SED_INLINE='-i'
-    BL64_TXT_SET_SORT_NATURAL='-V'
-    BL64_TXT_SET_TAIL_LINES='-n'
-    ;;
-  ${BL64_OS_SLES}-*)
-    BL64_TXT_SET_AWK_POSIX='--posix'
-    BL64_TXT_SET_AWS_FS='-F'
-    BL64_TXT_SET_GREP_ERE='-E'
-    BL64_TXT_SET_GREP_INVERT='-v'
-    BL64_TXT_SET_GREP_NO_CASE='-i'
-    BL64_TXT_SET_GREP_QUIET='-q'
-    BL64_TXT_SET_GREP_LINE='-x'
-    BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
-    BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
-    BL64_TXT_SET_GREP_STRING='-F'
-    BL64_TXT_SET_GREP_STDIN='-'
-    BL64_TXT_SET_SED_EXPRESSION='-e'
-    BL64_TXT_SET_SED_INLINE='-i'
-    BL64_TXT_SET_SORT_NATURAL='-V'
-    BL64_TXT_SET_TAIL_LINES='-n'
-    ;;
-  ${BL64_OS_ALP}-*)
-    BL64_TXT_SET_AWK_POSIX=''
-    BL64_TXT_SET_AWS_FS='-F'
-    BL64_TXT_SET_GREP_ERE='-E'
-    BL64_TXT_SET_GREP_INVERT='-v'
-    BL64_TXT_SET_GREP_NO_CASE='-i'
-    BL64_TXT_SET_GREP_QUIET='-q'
-    BL64_TXT_SET_GREP_LINE='-x'
-    BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
-    BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
-    BL64_TXT_SET_GREP_STRING='-F'
-    BL64_TXT_SET_GREP_STDIN='-'
-    BL64_TXT_SET_SED_EXPRESSION='-e'
-    BL64_TXT_SET_SED_INLINE='-i'
-    BL64_TXT_SET_SORT_NATURAL='-V'
-    BL64_TXT_SET_TAIL_LINES='-n'
-    ;;
-  ${BL64_OS_ARC}-*)
-    BL64_TXT_SET_AWK_POSIX='--posix'
-    BL64_TXT_SET_AWS_FS='-F'
-    BL64_TXT_SET_GREP_ERE='-E'
-    BL64_TXT_SET_GREP_INVERT='-v'
-    BL64_TXT_SET_GREP_NO_CASE='-i'
-    BL64_TXT_SET_GREP_QUIET='--quiet'
-    BL64_TXT_SET_GREP_LINE='-x'
-    BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
-    BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
-    BL64_TXT_SET_GREP_STRING='-F'
-    BL64_TXT_SET_GREP_STDIN='-'
-    BL64_TXT_SET_SED_EXPRESSION='-e'
-    BL64_TXT_SET_SED_INLINE='-i'
-    BL64_TXT_SET_SORT_NATURAL='-V'
-    BL64_TXT_SET_TAIL_LINES='-n'
-    ;;
-  ${BL64_OS_MCOS}-*)
-    BL64_TXT_SET_AWK_POSIX=''
-    BL64_TXT_SET_AWS_FS='-F'
-    BL64_TXT_SET_GREP_ERE='-E'
-    BL64_TXT_SET_GREP_INVERT='-v'
-    BL64_TXT_SET_GREP_NO_CASE='-i'
-    BL64_TXT_SET_GREP_QUIET='-q'
-    BL64_TXT_SET_GREP_LINE='-x'
-    BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
-    BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
-    BL64_TXT_SET_GREP_STRING='-F'
-    BL64_TXT_SET_GREP_STDIN='-'
-    BL64_TXT_SET_SED_EXPRESSION='-e'
-    BL64_TXT_SET_SED_INLINE='-i' # Warning: requires backup suffix
-    BL64_TXT_SET_SORT_NATURAL='-V'
-    BL64_TXT_SET_TAIL_LINES='-n'
-    ;;
-  *) bl64_check_alert_unsupported ;;
+      BL64_TXT_SET_AWS_FS='-F'
+      BL64_TXT_SET_GREP_ERE='-E'
+      BL64_TXT_SET_GREP_INVERT='-v'
+      BL64_TXT_SET_GREP_NO_CASE='-i'
+      BL64_TXT_SET_GREP_QUIET='--quiet'
+      BL64_TXT_SET_GREP_LINE='-x'
+      BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
+      BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+      BL64_TXT_SET_GREP_STRING='-F'
+      BL64_TXT_SET_GREP_STDIN='-'
+      BL64_TXT_SET_SED_EXPRESSION='-e'
+      BL64_TXT_SET_SED_INLINE='-i'
+      BL64_TXT_SET_SORT_NATURAL='-V'
+      BL64_TXT_SET_TAIL_LINES='-n'
+      ;;
+    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
+      BL64_TXT_SET_AWK_POSIX='--posix'
+      BL64_TXT_SET_AWS_FS='-F'
+      BL64_TXT_SET_GREP_ERE='-E'
+      BL64_TXT_SET_GREP_INVERT='-v'
+      BL64_TXT_SET_GREP_NO_CASE='-i'
+      BL64_TXT_SET_GREP_QUIET='-q'
+      BL64_TXT_SET_GREP_LINE='-x'
+      BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
+      BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+      BL64_TXT_SET_GREP_STRING='-F'
+      BL64_TXT_SET_GREP_STDIN='-'
+      BL64_TXT_SET_SED_EXPRESSION='-e'
+      BL64_TXT_SET_SED_INLINE='-i'
+      BL64_TXT_SET_SORT_NATURAL='-V'
+      BL64_TXT_SET_TAIL_LINES='-n'
+      ;;
+    ${BL64_OS_ALP}-*)
+      BL64_TXT_SET_AWK_POSIX=''
+      BL64_TXT_SET_AWS_FS='-F'
+      BL64_TXT_SET_GREP_ERE='-E'
+      BL64_TXT_SET_GREP_INVERT='-v'
+      BL64_TXT_SET_GREP_NO_CASE='-i'
+      BL64_TXT_SET_GREP_QUIET='-q'
+      BL64_TXT_SET_GREP_LINE='-x'
+      BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
+      BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+      BL64_TXT_SET_GREP_STRING='-F'
+      BL64_TXT_SET_GREP_STDIN='-'
+      BL64_TXT_SET_SED_EXPRESSION='-e'
+      BL64_TXT_SET_SED_INLINE='-i'
+      BL64_TXT_SET_SORT_NATURAL='-V'
+      BL64_TXT_SET_TAIL_LINES='-n'
+      ;;
+    ${BL64_OS_ARC}-*)
+      BL64_TXT_SET_AWK_POSIX='--posix'
+      BL64_TXT_SET_AWS_FS='-F'
+      BL64_TXT_SET_GREP_ERE='-E'
+      BL64_TXT_SET_GREP_INVERT='-v'
+      BL64_TXT_SET_GREP_NO_CASE='-i'
+      BL64_TXT_SET_GREP_QUIET='--quiet'
+      BL64_TXT_SET_GREP_LINE='-x'
+      BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
+      BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+      BL64_TXT_SET_GREP_STRING='-F'
+      BL64_TXT_SET_GREP_STDIN='-'
+      BL64_TXT_SET_SED_EXPRESSION='-e'
+      BL64_TXT_SET_SED_INLINE='-i'
+      BL64_TXT_SET_SORT_NATURAL='-V'
+      BL64_TXT_SET_TAIL_LINES='-n'
+      ;;
+    ${BL64_OS_MCOS}-*)
+      BL64_TXT_SET_AWK_POSIX=''
+      BL64_TXT_SET_AWS_FS='-F'
+      BL64_TXT_SET_GREP_ERE='-E'
+      BL64_TXT_SET_GREP_INVERT='-v'
+      BL64_TXT_SET_GREP_NO_CASE='-i'
+      BL64_TXT_SET_GREP_QUIET='-q'
+      BL64_TXT_SET_GREP_LINE='-x'
+      BL64_TXT_SET_GREP_ONLY_MATCHING='-o'
+      BL64_TXT_SET_GREP_SHOW_FILE_ONLY='-l'
+      BL64_TXT_SET_GREP_STRING='-F'
+      BL64_TXT_SET_GREP_STDIN='-'
+      BL64_TXT_SET_SED_EXPRESSION='-e'
+      BL64_TXT_SET_SED_INLINE='-i' # Warning: requires backup suffix
+      BL64_TXT_SET_SORT_NATURAL='-V'
+      BL64_TXT_SET_TAIL_LINES='-n'
+      ;;
+    *) bl64_check_rise_task_unsupported ;;
   esac
 
 }

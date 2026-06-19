@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# template-command: 1.0.0
+#source "/opt/bl64/bashlib64-core.bash" || exit 1
+source build/prepare/project/bashlib64-core.bash || exit 1
+
+declare MY_COMMAND=''
+declare MY_OPTION=''
+declare MY_COMMAND_HELP='help'
+declare MY_ALIAS_HELP='h'
+declare MY_COMMAND_X_TASK_ID_X='X_TASK_ID_LOWERCASE_X'
+declare MY_ALIAS_X_TASK_ID_X='X_TASK_LETTER_X'
+
+function my_X_TASK_ID_LOWERCASE_X() {
+  bl64_dbg_app_show_function
+}
+
+function my_initialize() {
+  bl64_dbg_app_show_function
+  case "$MY_COMMAND" in
+    'X_TASK_LETTER_X' | "$MY_COMMAND_X_TASK_ID_X") MY_COMMAND="$MY_COMMAND_X_TASK_ID_X" ;;
+    *) bl64_check_rise_script_invalid_command "$MY_COMMAND" || return $? ;;
+  esac
+}
+
+bl64_lib_script_version_set '1.0.0'
+bl64_msg_help_set_usage '[-V format] [-D Debug] <COMMAND> [COMMAND_PARAMETERS]'
+bl64_msg_help_set_about 'X_SCRIPT_ABOUT_X'
+bl64_msg_help_set_parameters \
+  "Commands:
+
+${MY_ALIAS_X_TASK_ID_X} | ${MY_COMMAND_X_TASK_ID_X}       : X_TASK_HELP_X.
+${MY_ALIAS_HELP} | ${MY_COMMAND_HELP}       : Show this help message.
+
+Options
+-V format  : verbose message format. Format: BL64_MSG_FORMAT_*
+-D Debug   : Enable debugging mode. Format: BL64_DBG_TARGET_*"
+
+# shellcheck disable=SC2249
+while getopts ':V:D:' MY_OPTION; do
+  case "${MY_OPTION:-}" in
+    V) bl64_msg_set_level "$OPTARG" ;;
+    D) bl64_dbg_set_level "$OPTARG" ;;
+    :) bl64_check_rise_script_missing_parameter "$OPTARG" || exit 1 ;;
+    \?) bl64_check_rise_script_invalid_option "$OPTARG" || exit 1 ;;
+  esac
+done
+shift $((OPTIND - 1))
+MY_COMMAND="${1:-}"
+[[ "$MY_COMMAND" =~ ($MY_COMMAND_HELP|$MY_ALIAS_HELP) ]] && bl64_msg_help_show && exit 0
+shift
+my_initialize || exit $?
+
+bl64_msg_show_batch_start
+"my_${MY_COMMAND}" "${@:-}"
+bl64_msg_show_batch_finish $?

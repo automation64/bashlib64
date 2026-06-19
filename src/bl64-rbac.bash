@@ -88,7 +88,7 @@ function bl64_rbac_check_sudoers() {
   local debug="$BL64_RBAC_SET_SUDO_QUIET"
 
   bl64_check_parameter 'sudoers' &&
-    bl64_check_command "$BL64_RBAC_CMD_VISUDO" ||
+    bl64_check_command "$BL64_RBAC_CMD_VISUDO" "$BL64_VAR_DEFAULT" 'visudo' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug=' '
 
@@ -125,7 +125,7 @@ function bl64_rbac_run_command() {
   local target=''
 
   bl64_check_parameter 'user' &&
-    bl64_check_command "$BL64_RBAC_CMD_SUDO" ||
+    bl64_check_command "$BL64_RBAC_CMD_SUDO" "$BL64_VAR_DEFAULT" 'sudo' ||
     return $?
 
   shift
@@ -168,7 +168,7 @@ function bl64_rbac_run_bash_function() {
   bl64_check_parameter 'library' &&
     bl64_check_parameter 'user' &&
     bl64_check_file "$library" &&
-    bl64_check_command "$BL64_RBAC_CMD_SUDO" ||
+    bl64_check_command "$BL64_RBAC_CMD_SUDO" "$BL64_VAR_DEFAULT" 'sudo' ||
     return $?
 
   shift

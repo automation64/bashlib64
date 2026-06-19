@@ -4,12 +4,9 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TF_VERSION='3.2.0'
+  declare BL64_TF_VERSION='3.3.0'
 
   declare BL64_TF_MODULE='0'
-
-  declare BL64_TF_LOG_PATH=''
-  declare BL64_TF_LOG_LEVEL=''
 
   declare BL64_TF_CMD_TERRAFORM="$BL64_VAR_UNAVAILABLE"
   declare BL64_TF_CMD_TOFU="$BL64_VAR_UNAVAILABLE"
@@ -28,6 +25,11 @@
   declare BL64_TF_SET_LOG_ERROR='ERROR'
   declare BL64_TF_SET_LOG_OFF='OFF'
 
-  declare BL64_TF_DEF_PATH_LOCK=''
-  declare BL64_TF_DEF_PATH_RUNTIME=''
+  declare BL64_TF_FILE_LOCK='.terraform.lock.hcl'
+  declare BL64_TF_DIR_RUNTIME='.terraform'
+
+  declare BL64_TF_CFG_LOG_LEVEL=''
+
+  declare BL64_TF_PATH_PLUGIN_CACHE=''
+  declare BL64_TF_PATH_LOG=''
 }

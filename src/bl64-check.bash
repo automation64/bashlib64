@@ -10,13 +10,32 @@
 #
 
 function bl64_check_module_imported() {
-  bl64_msg_show_deprecated 'bl64_check_module_imported' '_bl64_lib_module_is_imported'
+  _bl64_lib_function_deprecated 'bl64_check_module_imported' '_bl64_lib_module_is_imported'
   _bl64_lib_module_is_imported "$@"
 }
-
 function bl64_check_user() {
-  bl64_msg_show_deprecated 'bl64_check_user' 'bl64_iam_check_user'
+  _bl64_lib_function_deprecated 'bl64_check_user' 'bl64_iam_check_user'
   bl64_iam_check_user "$@"
+}
+function bl64_check_alert_parameter_invalid() {
+  _bl64_lib_function_deprecated 'bl64_check_alert_parameter_invalid' 'bl64_check_rise_parameter_invalid'
+  bl64_check_rise_parameter_invalid "$@"
+}
+function bl64_check_alert_unsupported() {
+  _bl64_lib_function_deprecated 'bl64_check_alert_unsupported' 'bl64_check_rise_task_unsupported'
+  bl64_check_rise_task_unsupported "$@"
+}
+function bl64_check_alert_resource_not_found() {
+  _bl64_lib_function_deprecated 'bl64_check_alert_resource_not_found' 'bl64_check_rise_resource_not_found'
+  bl64_check_rise_resource_not_found "$@"
+}
+function bl64_check_alert_undefined() {
+  _bl64_lib_function_deprecated 'bl64_check_alert_undefined' 'bl64_check_rise_task_undefined'
+  bl64_check_rise_task_undefined "$@"
+}
+function bl64_check_alert_module_setup() {
+  _bl64_lib_function_deprecated 'bl64_check_alert_module_setup' 'bl64_check_rise_module_setup'
+  bl64_check_rise_module_setup "$@"
 }
 
 #
@@ -500,10 +519,10 @@ function bl64_check_overwrite_skip() {
 #   BL64_LIB_ERROR_PARAMETER_INVALID
 #######################################
 # shellcheck disable=SC2120
-function bl64_check_alert_parameter_invalid() {
+function bl64_check_rise_parameter_invalid() {
   _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local parameter="${1:-${BL64_VAR_DEFAULT}}"
-  local message="${2:-the requested operation was provided with an invalid parameter value}"
+  local message="${2:-invalid parameter value}"
 
   bl64_lib_var_is_default "$parameter" && parameter=''
   bl64_msg_show_check "${message} ${parameter:+(parameter: ${parameter})}"
@@ -521,11 +540,11 @@ function bl64_check_alert_parameter_invalid() {
 # Returns:
 #   BL64_LIB_ERROR_OS_INCOMPATIBLE
 #######################################
-function bl64_check_alert_unsupported() {
+function bl64_check_rise_task_unsupported() {
   _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local extra="${1:-}"
 
-  bl64_msg_show_check "the requested operation is not supported on the current OS (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO})"
+  bl64_msg_show_check "task not supported on the current OS (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO})"
   return "$BL64_LIB_ERROR_OS_INCOMPATIBLE"
 }
 
@@ -552,7 +571,7 @@ function bl64_check_compatibility_mode() {
   if bl64_lib_mode_compability_is_enabled; then
     bl64_dbg_lib_show_info "using generic compatibility mode for untested command version (${extra:+${extra} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO})"
   else
-    bl64_check_alert_unsupported "$extra"
+    bl64_check_rise_task_unsupported "$extra"
     return $?
   fi
 }
@@ -571,11 +590,11 @@ function bl64_check_compatibility_mode() {
 # Returns:
 #   BL64_LIB_ERROR_APP_MISSING
 #######################################
-function bl64_check_alert_resource_not_found() {
+function bl64_check_rise_resource_not_found() {
   _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local resource="${1:-}"
 
-  bl64_msg_show_check "required resource was not found on the system (${resource:+resource: ${resource} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO})"
+  bl64_msg_show_check "the required resource was not found on the system (${resource:+resource: ${resource} ${BL64_MSG_COSMETIC_PIPE} }os: ${BL64_OS_DISTRO})"
   return "$BL64_LIB_ERROR_APP_MISSING"
 }
 
@@ -593,11 +612,11 @@ function bl64_check_alert_resource_not_found() {
 #   BL64_LIB_ERROR_TASK_UNDEFINED
 #######################################
 # shellcheck disable=SC2119,SC2120
-function bl64_check_alert_undefined() {
+function bl64_check_rise_task_undefined() {
   _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local target="${1:-}"
 
-  bl64_msg_show_check "requested command is not defined or implemented (${target:+ ${BL64_MSG_COSMETIC_PIPE} command: ${target}})"
+  bl64_msg_show_check "command not defined or implemented (${target:+ ${BL64_MSG_COSMETIC_PIPE} command: ${target}})"
   return "$BL64_LIB_ERROR_TASK_UNDEFINED"
 }
 
@@ -616,7 +635,7 @@ function bl64_check_alert_undefined() {
 # Returns:
 #   $status
 #######################################
-function bl64_check_alert_module_setup() {
+function bl64_check_rise_module_setup() {
   local -i last_status=$? # must be first line to catch $?
   _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
   local module="${1:-}"
@@ -624,7 +643,7 @@ function bl64_check_alert_module_setup() {
   bl64_check_parameter 'module' || return $?
 
   if [[ "$last_status" != '0' ]]; then
-    bl64_msg_show_check "BashLib64 module setup failure (module: ${module})"
+    bl64_msg_show_check "module setup failed (module: ${module})"
     return "$last_status"
   else
     return 0
@@ -777,4 +796,98 @@ function bl64_check_command_search_path() {
   fi
 
   bl64_check_command "$full_path"
+}
+
+#######################################
+# Raise generic catch-all task error
+#
+# * Use in functions to rise an error when no other check or rise function covers it
+#
+# Arguments:
+#   $1: error message
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_TASK_FAILED
+#######################################
+# shellcheck disable=SC2119,SC2120
+function bl64_check_rise_task_failed() {
+  _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
+  local message="${1:-}"
+  bl64_msg_show_check "${message:-task execution failed}"
+  return "$BL64_LIB_ERROR_TASK_FAILED"
+}
+
+#######################################
+# Raise an error for missing or invalid script command
+#
+# * Use as a catch-all case branch in the script initialization function
+#
+# Arguments:
+#   $1: command value
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_PARAMETER_INVALID
+#######################################
+# shellcheck disable=SC2119,SC2120
+function bl64_check_rise_script_invalid_command() {
+  _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
+  local command="${1:-}"
+  BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN"
+  if [[ -z "$command" ]] || bl64_lib_var_is_default "$command"; then
+    bl64_msg_show_fatal 'missing script command name'
+  else
+    bl64_msg_show_fatal "invalid script command name (command: ${command})"
+  fi
+  bl64_msg_help_show_usage
+  return "$BL64_LIB_ERROR_PARAMETER_INVALID"
+}
+
+#######################################
+# Raise an error for invalid script option
+#
+# * Use for the getops value '?' error
+#
+# Arguments:
+#   $1: option value
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_PARAMETER_INVALID
+#######################################
+# shellcheck disable=SC2119,SC2120
+function bl64_check_rise_script_invalid_option() {
+  _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
+  local option="${1:-}"
+  BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN"
+  bl64_msg_show_fatal "invalid script option (option: ${option})"
+  bl64_msg_help_show_usage
+  return "$BL64_LIB_ERROR_PARAMETER_INVALID"
+}
+
+#######################################
+# Raise an error for missing script option parameter
+#
+# * Use for the getops value ':' error
+#
+# Arguments:
+#   $1: option value
+# Outputs:
+#   STDOUT: none
+#   STDERR: message
+# Returns:
+#   BL64_LIB_ERROR_PARAMETER_INVALID
+#######################################
+# shellcheck disable=SC2119,SC2120
+function bl64_check_rise_script_missing_parameter() {
+  _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function "$@"
+  local option="${1:-}"
+  BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN"
+  bl64_msg_show_fatal "missing parameter for the script option (option: ${option})"
+  bl64_msg_help_show_usage
+  return "$BL64_LIB_ERROR_PARAMETER_INVALID"
 }

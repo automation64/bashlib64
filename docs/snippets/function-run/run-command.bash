@@ -19,7 +19,7 @@ function bl64_X_MODULE_X_run_X_COMMAND_X() {
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_X_MODULE_ID_X_MODULE' &&
     # optional # bl64_check_privilege_root &&
-    bl64_check_command "$BL64_X_MODULE_ID_X_CMD_X_CMD_X" ||
+    bl64_check_command "$BL64_X_MODULE_ID_X_CMD_X_CMD_X" "$BL64_VAR_DEFAULT" 'X_COMMAND_X' ||
     return $?
 
   # optional # bl64_msg_app_detail_is_enabled && verbosity='X_VERBOSE_FLAG_X'

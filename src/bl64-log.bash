@@ -10,7 +10,7 @@
 #
 
 function bl64_log_set_runtime() {
-  bl64_msg_show_deprecated 'bl64_log_set_runtime' 'bl64_log_set_target'
+  _bl64_lib_function_deprecated 'bl64_log_set_runtime' 'bl64_log_set_target'
   bl64_log_set_target "${1:-}" "$BL64_LOG_TYPE_MULTIPLE"
 }
 

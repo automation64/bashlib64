@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_RXTX_VERSION='2.7.0'
+  declare BL64_RXTX_VERSION='2.8.0'
 
   declare BL64_RXTX_MODULE='0'
 
