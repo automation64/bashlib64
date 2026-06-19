@@ -223,6 +223,7 @@ function bl64_tf_set_logging() {
 function bl64_tf_set_paths() {
   bl64_dbg_lib_show_function "$@"
   local plugin_cache="${1:-$BL64_VAR_DEFAULT}"
+  # shellcheck disable=SC2034
   ! bl64_lib_var_is_default "$plugin_cache" && BL64_TF_PATH_PLUGIN_CACHE="$plugin_cache"
   return 0
 }

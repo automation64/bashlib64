@@ -223,6 +223,8 @@ function _bl64_py_set_version() {
   [[ -z "$BL64_PY_VERSION_PYTHON" ]] &&
     bl64_msg_show_lib_error "Unable to determine Python version (${BL64_PY_CMD_PYTHON3})" &&
     return "$BL64_LIB_ERROR_TASK_FAILED"
+
+  # shellcheck disable=SC2034
   BL64_PY_VERSION_PYTHON3="$BL64_PY_VERSION_PYTHON"
   return 0
 }
@@ -247,6 +249,7 @@ function _bl64_py_pip_set_version() {
   [[ -z "$BL64_PY_VERSION_PIP" ]] &&
     bl64_dbg_lib_show_info "Unable to determine PIP version"
 
+  # shellcheck disable=SC2034
   BL64_PY_VERSION_PIP3="$BL64_PY_VERSION_PIP"
   return 0
 }
