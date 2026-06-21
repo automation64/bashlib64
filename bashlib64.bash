@@ -57,7 +57,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='23.3.0'
+  declare BL64_VERSION='23.3.1'
 
   #
   # Imported generic shell standard variables
@@ -682,7 +682,7 @@ function bl64_lib_harden_options() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.18.0'
+  declare BL64_MSG_VERSION='5.18.1'
 
   declare BL64_MSG_MODULE='0'
 
@@ -1006,7 +1006,7 @@ function bl64_lib_harden_options() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ANS_VERSION='3.0.2'
+  declare BL64_ANS_VERSION='3.0.3'
 
   declare BL64_ANS_MODULE='0'
 
@@ -1019,8 +1019,9 @@ function bl64_lib_harden_options() {
   declare BL64_ANS_CMD_ANSIBLE_GALAXY="$BL64_VAR_UNAVAILABLE"
 
   declare BL64_ANS_PATH_USR_ANSIBLE=''
-  declare BL64_ANS_PATH_USR_COLLECTIONS=''
   declare BL64_ANS_PATH_USR_CONFIG=''
+  declare BL64_ANS_PATH_USR_COLLECTIONS=''
+  declare BL64_ANS_PATH_USR_LOG=''
 
   declare BL64_ANS_SET_VERBOSE=''
   declare BL64_ANS_SET_DIFF=''
@@ -4991,14 +4992,11 @@ function bl64_msg_help_show_usage() {
 #######################################
 function bl64_msg_help_show_about() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-  local current_format="$BL64_MSG_FORMAT"
 
   bl64_msg_app_verbose_is_enabled || return 0
 
-  bl64_msg_set_format "$BL64_MSG_FORMAT_PLAIN" &&
-    _bl64_msg_show_script &&
-    _bl64_msg_show_about &&
-    bl64_msg_set_format "$current_format"
+  _bl64_msg_show_script &&
+    _bl64_msg_show_about
 }
 
 #######################################

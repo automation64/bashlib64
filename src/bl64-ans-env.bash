@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ANS_VERSION='3.0.2'
+  declare BL64_ANS_VERSION='3.0.3'
 
   declare BL64_ANS_MODULE='0'
 
@@ -17,8 +17,9 @@
   declare BL64_ANS_CMD_ANSIBLE_GALAXY="$BL64_VAR_UNAVAILABLE"
 
   declare BL64_ANS_PATH_USR_ANSIBLE=''
-  declare BL64_ANS_PATH_USR_COLLECTIONS=''
   declare BL64_ANS_PATH_USR_CONFIG=''
+  declare BL64_ANS_PATH_USR_COLLECTIONS=''
+  declare BL64_ANS_PATH_USR_LOG=''
 
   declare BL64_ANS_SET_VERBOSE=''
   declare BL64_ANS_SET_DIFF=''
