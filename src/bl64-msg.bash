@@ -970,14 +970,11 @@ function bl64_msg_help_show_usage() {
 #######################################
 function bl64_msg_help_show_about() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-  local current_format="$BL64_MSG_FORMAT"
 
   bl64_msg_app_verbose_is_enabled || return 0
 
-  bl64_msg_set_format "$BL64_MSG_FORMAT_PLAIN" &&
-    _bl64_msg_show_script &&
-    _bl64_msg_show_about &&
-    bl64_msg_set_format "$current_format"
+  _bl64_msg_show_script &&
+    _bl64_msg_show_about
 }
 
 #######################################
