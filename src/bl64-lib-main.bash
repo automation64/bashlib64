@@ -50,7 +50,6 @@ umask -S 'u=rwx,g=,o=' >/dev/null
 [[ -n "${BL64_MSG_MODULE:-}" ]] && { bl64_msg_setup || exit $?; }
 [[ -n "${BL64_BSH_MODULE:-}" ]] && { bl64_bsh_setup || exit $?; }
 [[ -n "${BL64_RND_MODULE:-}" ]] && { bl64_rnd_setup || exit $?; }
-[[ -n "${BL64_UI_MODULE:-}" ]] && { bl64_ui_setup || exit $?; }
 # Initialize modules that do not require setup parameters. OS bound
 [[ -n "${BL64_OS_MODULE:-}" ]] && { bl64_os_setup || exit $?; }
 [[ -n "${BL64_TXT_MODULE:-}" ]] && { bl64_txt_setup || exit $?; }

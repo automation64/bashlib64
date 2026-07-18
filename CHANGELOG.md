@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ans
   - \_bl64_ans_harden_ansible: updated parameter list
   - \_bl64_ans_harden_ansible: renamed to bl64_ans_harden_ansible to allow external usage
+- ui
+  - No longer automatically initialized. Requires setup if using TUI tools
 
 ## [23.3.1]
 
