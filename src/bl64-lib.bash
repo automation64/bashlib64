@@ -149,6 +149,28 @@ function _bl64_lib_harden_shopt() {
 }
 
 #######################################
+# Helper bootstrap function
+#
+# * for bootstrap only
+# * use to avoid module dependencies during bootstrap
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0
+#######################################
+function _bl64_lib_helper_id() {
+  if [[ -x /usr/bin/id ]]; then
+    /usr/bin/id -u -n
+  else
+    echo ''
+  fi
+}
+
+#######################################
 # Harden runtime environment
 #
 # * Normalize sensitive bash option defaults

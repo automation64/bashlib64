@@ -72,7 +72,7 @@ _bl64_lib_script_set_identity &&
   exit $?
 
 # Normalize user identity
-LOGNAME="${LOGNAME:-$(bl64_iam_user_get_current)}"
+LOGNAME="${LOGNAME:-$(_bl64_lib_helper_id)}"
 USER="${USER:-$LOGNAME}"
 
 # Run as script or sourced library
