@@ -1086,8 +1086,7 @@ function bl64_fs_run_rm() {
 function bl64_fs_run_ls() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+  bl64_check_module 'BL64_FS_MODULE' ||
     return $?
 
   bl64_dbg_lib_trace_start

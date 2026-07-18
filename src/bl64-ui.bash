@@ -320,3 +320,171 @@ function bl64_ui_ask_input_date() {
     fi
   done
 }
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_ui_run_bat() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_command "$BL64_UI_CMD_BAT" "$BL64_VAR_DEFAULT" 'bat' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_UI_CMD_BAT" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_ui_run_dialog() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_command "$BL64_UI_CMD_DIALOG" "$BL64_VAR_DEFAULT" 'dialog' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_UI_CMD_DIALOG" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_ui_run_fzf() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_command "$BL64_UI_CMD_FZF" "$BL64_VAR_DEFAULT" 'fzf' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_UI_CMD_FZF" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_ui_run_whiptail() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_command "$BL64_UI_CMD_WHIPTAIL" "$BL64_VAR_DEFAULT" 'whiptail' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_UI_CMD_WHIPTAIL" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_ui_run_gum() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_command "$BL64_UI_CMD_GUM" "$BL64_VAR_DEFAULT" 'gum' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_UI_CMD_GUM" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_ui_run_less() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_command "$BL64_UI_CMD_LESS" "$BL64_VAR_DEFAULT" 'less' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_UI_CMD_LESS" "$@"
+  bl64_dbg_lib_trace_stop
+}

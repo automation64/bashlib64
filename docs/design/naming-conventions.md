@@ -8,8 +8,10 @@
     - [Flag](#flag)
     - [Command Runner](#command-runner)
   - [Variable Names](#variable-names)
+    - [Reserved](#reserved)
     - [Global Internal](#global-internal)
     - [Global Generic](#global-generic)
+    - [Attribute name prefix](#attribute-name-prefix)
 
 ## Function Names
 
@@ -40,6 +42,10 @@
 
 ## Variable Names
 
+### Reserved
+
+- `<MODULE>_MODULE`
+
 ### Global Internal
 
 - `_<VARIABLE>`
@@ -47,3 +53,12 @@
 ### Global Generic
 
 - `<MODULE>[_OBJECT]_<ATTRIBUTE>`
+
+### Attribute name prefix
+
+- `_ALIAS_<ATTRIBUTE>`: external command shell alias
+- `_CFG_<ATTRIBUTE>`: external command configuration setting
+- `_CMD_<ATTRIBUTE>`: full path to external command
+- `_PATH_<ATTRIBUTE>`: full path to file or directory
+- `_SET_<ATTRIBUTE>`: external command command line option
+- `_TXT_<ATTRIBUTE>`: localized text

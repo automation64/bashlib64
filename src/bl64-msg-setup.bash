@@ -80,20 +80,15 @@ function bl64_msg_set_level() {
 function bl64_msg_set_format() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local format="${1:-}"
-  local legacy_BL64_MSG_FORMAT_PLAIN='R'
-  local legacy_BL64_MSG_FORMAT_HOST='H'
-  local legacy_BL64_MSG_FORMAT_TIME='T'
-  local legacy_BL64_MSG_FORMAT_CALLER='C'
-  local legacy_BL64_MSG_FORMAT_FULL='F'
 
   bl64_check_parameter 'format' || return $?
 
   case "$format" in
-    "$BL64_MSG_FORMAT_PLAIN" | "$legacy_BL64_MSG_FORMAT_PLAIN") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN" ;;
-    "$BL64_MSG_FORMAT_HOST" | "$legacy_BL64_MSG_FORMAT_HOST") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST" ;;
-    "$BL64_MSG_FORMAT_TIME" | "$legacy_BL64_MSG_FORMAT_TIME") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME" ;;
-    "$BL64_MSG_FORMAT_CALLER" | "$legacy_BL64_MSG_FORMAT_CALLER") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER" ;;
-    "$BL64_MSG_FORMAT_FULL" | "$legacy_BL64_MSG_FORMAT_FULL") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL" ;;
+    "$BL64_MSG_FORMAT_PLAIN" | "$_BL64_MSG_FORMAT_PLAIN_LEGACY") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN" ;;
+    "$BL64_MSG_FORMAT_HOST" | "$_BL64_MSG_FORMAT_HOST_LEGACY") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST" ;;
+    "$BL64_MSG_FORMAT_TIME" | "$_BL64_MSG_FORMAT_TIME_LEGACY") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME" ;;
+    "$BL64_MSG_FORMAT_CALLER" | "$_BL64_MSG_FORMAT_CALLER_LEGACY") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER" ;;
+    "$BL64_MSG_FORMAT_FULL" | "$_BL64_MSG_FORMAT_FULL_LEGACY") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL" ;;
     "$BL64_MSG_FORMAT_TIME2" | "$BL64_MSG_FORMAT_FULL2" | "$BL64_MSG_FORMAT_SCRIPT" | "$BL64_MSG_FORMAT_SCRIPT2") BL64_MSG_FORMAT="$format" ;;
     *)
       bl64_check_rise_parameter_invalid 'BL64_MSG_FORMAT' 'invalid value. Not one of: BL64_MSG_FORMAT_*'
@@ -157,8 +152,6 @@ function bl64_msg_set_output() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local output="${1:-}"
   local theme="${2:-${BL64_VAR_DEFAULT}}"
-  local legacy_BL64_MSG_OUTPUT_ASCII='A'
-  local legacy_BL64_MSG_OUTPUT_ANSI='N'
 
   if bl64_lib_var_is_default "$output"; then
     if bl64_lib_mode_cicd_is_enabled; then
@@ -173,12 +166,12 @@ function bl64_msg_set_output() {
   fi
 
   case "$output" in
-    "$BL64_MSG_OUTPUT_ASCII" | "$legacy_BL64_MSG_OUTPUT_ASCII")
+    "$BL64_MSG_OUTPUT_ASCII" | "$_BL64_MSG_OUTPUT_ASCII_DEPRECATED")
       bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ASCII_STD"
       BL64_MSG_LABEL="$output"
       BL64_MSG_OUTPUT="$output"
       ;;
-    "$BL64_MSG_OUTPUT_ANSI" | "$legacy_BL64_MSG_OUTPUT_ANSI")
+    "$BL64_MSG_OUTPUT_ANSI" | "$_BL64_MSG_OUTPUT_ANSI_DEPRECATED")
       bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ANSI_STD"
       BL64_MSG_OUTPUT="$output"
       ;;

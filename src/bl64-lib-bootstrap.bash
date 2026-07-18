@@ -4,11 +4,11 @@
 
 # Verify that the current shell is supported
 if [ -z "$BASH_VERSION" ]; then
-  builtin echo "Fatal: BashLib64 is not supported in the current shell (shell: $SHELL)"
-  builtin exit 1
+  builtin echo "Fatal: BashLib64 is not supported on the current shell (shell: $SHELL)"
+  builtin exit 32
 elif [ "${BASH_VERSINFO[0]}" -lt 4 ]; then
-  builtin echo "Fatal: BashLib64 requires Bash V4 or greater (current-version: ${BASH_VERSION})"
-  builtin exit 1
+  builtin echo "Fatal: BashLib64 requires Bash-V4 or greater (current-version: ${BASH_VERSION})"
+  builtin exit 32
 fi
 
 # Do not inherit aliases and commands

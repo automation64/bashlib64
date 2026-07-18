@@ -1,6 +1,8 @@
-# Template: 1.0.0
 #
-# Configuration
+# ShellCheck / Configuration
+#
+# * Version: 1.0.0
+# * Template: 1.0.0
 #
 
 external-sources=true

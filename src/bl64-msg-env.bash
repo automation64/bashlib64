@@ -4,9 +4,23 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.18.1'
+  declare BL64_MSG_VERSION='5.18.2'
 
   declare BL64_MSG_MODULE='0'
+
+  #
+  # Deprecated Variables
+  #
+  # * Needed to maintain compatibility up to N-2 versions
+  #
+  declare BL64_MSG_VERBOSE_LIB='LIB'            #replaced-by# BL64_MSG_VERBOSE_DETAIL
+  declare _BL64_MSG_OUTPUT_ASCII_DEPRECATED='A' #old-value#
+  declare _BL64_MSG_OUTPUT_ANSI_DEPRECATED='N'  #old-value#
+  declare _BL64_MSG_FORMAT_PLAIN_LEGACY='R'     #old-value#
+  declare _BL64_MSG_FORMAT_HOST_LEGACY='H'      #old-value#
+  declare _BL64_MSG_FORMAT_TIME_LEGACY='T'      #old-value#
+  declare _BL64_MSG_FORMAT_CALLER_LEGACY='C'    #old-value#
+  declare _BL64_MSG_FORMAT_FULL_LEGACY='F'      #old-value#
 
   #
   # Verbosity levels
@@ -15,7 +29,6 @@
   declare BL64_MSG_VERBOSE_NONE='NONE'
   declare BL64_MSG_VERBOSE_APP='APP'
   declare BL64_MSG_VERBOSE_DETAIL='DETAIL'
-  declare BL64_MSG_VERBOSE_LIB='LIB' # deprecated. Use BL64_MSG_VERBOSE_DETAIL
   declare BL64_MSG_VERBOSE_ALL='ALL'
   # Selected level
   declare BL64_MSG_VERBOSE=''

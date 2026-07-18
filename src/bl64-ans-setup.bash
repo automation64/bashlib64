@@ -39,7 +39,6 @@ function bl64_ans_setup() {
     _bl64_lib_module_is_imported 'BL64_PY_MODULE' &&
     _bl64_ans_set_command "$ansible_bin" &&
     bl64_ans_set_paths "$ansible_config" &&
-    _bl64_ans_set_options &&
     _bl64_ans_set_version &&
     BL64_ANS_ENV_IGNORE="$env_ignore" &&
     BL64_ANS_MODULE="$BL64_VAR_ON"
@@ -68,24 +67,6 @@ function _bl64_ans_set_command() {
 }
 
 #######################################
-# Create command sets for common options
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_ans_set_options() {
-  bl64_dbg_lib_show_function
-  BL64_ANS_SET_VERBOSE='-v'
-  BL64_ANS_SET_DIFF='--diff'
-  BL64_ANS_SET_DEBUG='-vvvvv'
-}
-
-#######################################
 # Set and prepare module paths
 #
 # * Global paths only
@@ -96,6 +77,8 @@ function _bl64_ans_set_options() {
 #   $2: path to ansible collections (ANSIBLE_COLLECTIONS_PATHS)
 #   $3: path to ansible home (ANSIBLE_HOME)
 #   $4: path to ansible log (ANSIBLE_LOG_PATH)
+#   $5: path to ansible inventory (ANSIBLE_INVENTORY)
+#   $6: common path for temporary ansible content
 # Outputs:
 #   STDOUT: None
 #   STDERR: check errors
@@ -107,29 +90,81 @@ function bl64_ans_set_paths() {
   bl64_dbg_lib_show_function "$@"
   local config="${1:-${BL64_VAR_DEFAULT}}"
   local collections="${2:-${BL64_VAR_DEFAULT}}"
-  local ansible="${3:-${BL64_VAR_DEFAULT}}"
+  local home="${3:-${BL64_VAR_DEFAULT}}"
   local log="${4:-${BL64_VAR_DEFAULT}}"
+  local inventory="${5:-${BL64_VAR_DEFAULT}}"
+  local tmp="${6:-${BL64_VAR_DEFAULT}}"
 
   if ! bl64_lib_var_is_default "$config"; then
     bl64_check_file "$config" || return $?
     BL64_ANS_PATH_USR_CONFIG="$config"
   fi
 
-  if ! bl64_lib_var_is_default "$ansible"; then
-    bl64_check_directory "$ansible" || return $?
-    BL64_ANS_PATH_USR_ANSIBLE="$ansible"
+  if ! bl64_lib_var_is_default "$home"; then
+    bl64_check_directory "$home" || return $?
+    BL64_ANS_PATH_USR_HOME="$home"
   fi
 
   if ! bl64_lib_var_is_default "$collections"; then
     bl64_check_directory "$collections" || return $?
-    BL64_ANS_PATH_USR_COLLECTIONS="$ansible"
+    BL64_ANS_PATH_USR_COLLECTIONS="$collections"
   fi
 
   if ! bl64_lib_var_is_default "$log"; then
     BL64_ANS_PATH_USR_LOG="$log"
   fi
 
-  bl64_dbg_lib_show_vars 'BL64_ANS_PATH_USR_CONFIG' 'BL64_ANS_PATH_USR_ANSIBLE' 'BL64_ANS_PATH_USR_COLLECTIONS' 'BL64_ANS_PATH_USR_LOG'
+  if ! bl64_lib_var_is_default "$inventory"; then
+    bl64_check_file "$inventory" || return $?
+    BL64_ANS_PATH_USR_INVENTORY="$inventory"
+  fi
+
+  if ! bl64_lib_var_is_default "$tmp"; then
+    bl64_check_directory "$tmp" || return $?
+    BL64_ANS_PATH_USR_TMP="$tmp"
+  fi
+
+  bl64_dbg_lib_show_vars \
+    'BL64_ANS_PATH_USR_CONFIG' \
+    'BL64_ANS_PATH_USR_HOME' \
+    'BL64_ANS_PATH_USR_COLLECTIONS' \
+    'BL64_ANS_PATH_USR_LOG' \
+    'BL64_ANS_PATH_USR_INVENTORY' \
+    'BL64_ANS_PATH_USR_TMP'
+  return 0
+}
+
+#######################################
+# Set command options
+#
+# * Options are applied when the command is run
+#
+# Arguments:
+#   $1: set output callback (ANSIBLE_STDOUT_CALLBACK)
+#   $2: set verbosity level (ANSIBLE_VERBOSITY)
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: option prepared ok
+#   >0: failed to prepare option
+#######################################
+function bl64_ans_set_options() {
+  bl64_dbg_lib_show_function "$@"
+  local stdout_callback="${1:-${BL64_VAR_DEFAULT}}"
+  local verbosity="${2:-${BL64_VAR_DEFAULT}}"
+
+  if ! bl64_lib_var_is_default "$stdout_callback"; then
+    BL64_ANS_CFG_STDOUT_CALLBACK="$stdout_callback"
+  fi
+
+  if ! bl64_lib_var_is_default "$verbosity"; then
+    BL64_ANS_CFG_VERBOSITY="$verbosity"
+  fi
+
+  bl64_dbg_lib_show_vars \
+    'BL64_ANS_CFG_STDOUT_CALLBACK' \
+    'BL64_ANS_CFG_VERBOSITY'
   return 0
 }
 

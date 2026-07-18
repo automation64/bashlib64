@@ -93,6 +93,129 @@ function _bl64_lib_function_deprecated() {
     "$function_replacement" >&2
 }
 
+#######################################
+# Define current script identity
+#
+# * BL64_SCRIPT_SID: session ID for the running script. Changes on each run
+# * BL64_SCRIPT_PATH: full path to the base directory script
+# * BL64_SCRIPT_NAME: file name of the current script
+# * BL64_SCRIPT_ID: script id (tag)
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0: identity set
+#   >0: failed to set
+#######################################
+function _bl64_lib_script_set_identity() {
+  BL64_SCRIPT_SID="${BASHPID}${RANDOM}" &&
+    BL64_SCRIPT_PATH="$(_bl64_lib_script_get_path)" &&
+    BL64_SCRIPT_NAME="$(_bl64_lib_script_get_name)" &&
+    bl64_lib_script_set_id "$BL64_SCRIPT_NAME"
+}
+
+#######################################
+# Harden runtime environment
+#
+# * Normalize sensitive shtop defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0
+#######################################
+function _bl64_lib_harden_shopt() {
+  builtin shopt -qu \
+    'dotglob' \
+    'extdebug' \
+    'failglob' \
+    'globstar' \
+    'gnu_errfmt' \
+    'huponexit' \
+    'lastpipe' \
+    'login_shell' \
+    'nocaseglob' \
+    'nocasematch' \
+    'nullglob' \
+    'xpg_echo' &&
+    builtin shopt -qs \
+      'extquote'
+}
+
+#######################################
+# Harden runtime environment
+#
+# * Normalize sensitive bash option defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0
+#######################################
+function _bl64_lib_harden_options() {
+  # Ensure pipeline exit status is failed when any cmd fails
+  builtin set -o 'pipefail'
+
+  # Enable error processing
+  builtin set -o 'errtrace'
+  builtin set -o 'functrace'
+
+  # Disable fast-fail. Developer must implement error handling (check for exit status)
+  builtin set +o 'errexit'
+
+  # Reset bash set options to defaults
+  builtin set -o 'braceexpand'
+  builtin set -o 'hashall'
+  builtin set +o 'allexport'
+  builtin set +o 'histexpand'
+  builtin set +o 'history'
+  builtin set +o 'ignoreeof'
+  builtin set +o 'monitor'
+  builtin set +o 'noclobber'
+  builtin set +o 'noglob'
+  builtin set +o 'nolog'
+  builtin set +o 'notify'
+  builtin set +o 'onecmd'
+  builtin set +o 'posix'
+
+  # Do not set/unset - Breaks bats-core
+  # set -o 'keyword'
+  # set -o 'noexec'
+}
+
+function _bl64_lib_check_os_compabitility() {
+  # Check OS compatibility
+  if [[ "${BL64_OS_MODULE:-$BL64_VAR_OFF}" == "$BL64_VAR_ON" ]]; then
+    bl64_os_check_compatibility \
+      "${BL64_OS_ALM}"-{8,9,10} \
+      "${BL64_OS_ALP}"-3.{17,18,19,20,21,22,23,24} \
+      "${BL64_OS_AMZ}"-2023 \
+      "${BL64_OS_ARC}"-2025 \
+      "${BL64_OS_CNT}"-{7,8,9,10} \
+      "${BL64_OS_DEB}"-{9,10,11,12,13} \
+      "${BL64_OS_FD}"-{33,34,35,36,37,38,39} \
+      "${BL64_OS_FD}"-{40,41,42,43,44} \
+      "${BL64_OS_KL}"-{2024,2025} \
+      "${BL64_OS_MCOS}"-{12,13,14,15} \
+      "${BL64_OS_OL}"-{7,8,9,10} \
+      "${BL64_OS_OPS}"-{15,16} \
+      "${BL64_OS_RCK}"-{8,9,10} \
+      "${BL64_OS_RHEL}"-{8,9,10} \
+      "${BL64_OS_SLES}"-{15,16} \
+      "${BL64_OS_UB}"-{18,20,21,22,23,24,25,26} ||
+      return $?
+  fi
+}
+
 #
 # Public functions
 #
@@ -166,30 +289,6 @@ function bl64_lib_script_set_id() {
 }
 
 #######################################
-# Define current script identity
-#
-# * BL64_SCRIPT_SID: session ID for the running script. Changes on each run
-# * BL64_SCRIPT_PATH: full path to the base directory script
-# * BL64_SCRIPT_NAME: file name of the current script
-# * BL64_SCRIPT_ID: script id (tag)
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: Error messages
-# Returns:
-#   0: identity set
-#   >0: failed to set
-#######################################
-function bl64_lib_script_set_identity() {
-  BL64_SCRIPT_SID="${BASHPID}${RANDOM}" &&
-    BL64_SCRIPT_PATH="$(_bl64_lib_script_get_path)" &&
-    BL64_SCRIPT_NAME="$(_bl64_lib_script_get_name)" &&
-    bl64_lib_script_set_id "$BL64_SCRIPT_NAME"
-}
-
-#######################################
 # Define current script version
 #
 # Arguments:
@@ -246,79 +345,4 @@ function bl64_lib_script_minver_check() {
       return "$BL64_LIB_ERROR_APP_INCOMPATIBLE"
     fi
   done
-}
-
-#######################################
-# Harden runtime environment
-#
-# * Normalize sensitive shtop defaults
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: Error messages
-# Returns:
-#   0
-#######################################
-function bl64_lib_harden_shopt() {
-  builtin shopt -qu \
-    'dotglob' \
-    'extdebug' \
-    'failglob' \
-    'globstar' \
-    'gnu_errfmt' \
-    'huponexit' \
-    'lastpipe' \
-    'login_shell' \
-    'nocaseglob' \
-    'nocasematch' \
-    'nullglob' \
-    'xpg_echo' &&
-    builtin shopt -qs \
-      'extquote'
-}
-
-#######################################
-# Harden runtime environment
-#
-# * Normalize sensitive bash option defaults
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: Error messages
-# Returns:
-#   0
-#######################################
-function bl64_lib_harden_options() {
-  # Ensure pipeline exit status is failed when any cmd fails
-  builtin set -o 'pipefail'
-
-  # Enable error processing
-  builtin set -o 'errtrace'
-  builtin set -o 'functrace'
-
-  # Disable fast-fail. Developer must implement error handling (check for exit status)
-  builtin set +o 'errexit'
-
-  # Reset bash set options to defaults
-  builtin set -o 'braceexpand'
-  builtin set -o 'hashall'
-  builtin set +o 'allexport'
-  builtin set +o 'histexpand'
-  builtin set +o 'history'
-  builtin set +o 'ignoreeof'
-  builtin set +o 'monitor'
-  builtin set +o 'noclobber'
-  builtin set +o 'noglob'
-  builtin set +o 'nolog'
-  builtin set +o 'notify'
-  builtin set +o 'onecmd'
-  builtin set +o 'posix'
-
-  # Do not set/unset - Breaks bats-core
-  # set -o 'keyword'
-  # set -o 'noexec'
 }

@@ -14,8 +14,8 @@ function bl64_bsh_script_set_id() {
   bl64_lib_script_set_id "$@"
 }
 function bl64_bsh_script_set_identity() {
-  _bl64_lib_function_deprecated 'bl64_bsh_script_set_identity' 'bl64_lib_script_set_identity'
-  bl64_lib_script_set_identity "$@"
+  _bl64_lib_function_deprecated 'bl64_bsh_script_set_identity' '_bl64_lib_script_set_identity'
+  _bl64_lib_script_set_identity "$@"
 }
 
 #

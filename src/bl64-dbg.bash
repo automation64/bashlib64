@@ -87,6 +87,30 @@ function _bl64_dbg_lib_check_enable { BL64_DBG_EXCLUDE_CHECK="$BL64_VAR_OFF"; }
 function _bl64_dbg_lib_log_enable { BL64_DBG_EXCLUDE_LOG="$BL64_VAR_OFF"; }
 function _bl64_dbg_lib_msg_enable { BL64_DBG_EXCLUDE_MSG="$BL64_VAR_OFF"; }
 
+function _bl64_dbg_runtime_show() {
+  local label="${_BL64_DBG_TXT_LABEL_BASH_RUNTIME}"
+  bl64_dbg_app_command_is_enabled || return 0
+
+  _bl64_dbg_show "${label} Bash / Interpreter path: [${BASH}]"
+  _bl64_dbg_show "${label} Bash / ShOpt Options: [${BASHOPTS:-NONE}]"
+  _bl64_dbg_show "${label} Bash / Set -o Options: [${SHELLOPTS:-NONE}]"
+  _bl64_dbg_show "${label} Bash / Version: [${BASH_VERSION}]"
+  _bl64_dbg_show "${label} Bash / Detected OS: [${OSTYPE:-NONE}]"
+  _bl64_dbg_show "${label} Shell / Locale setting: [${LC_ALL:-NONE}]"
+  _bl64_dbg_show "${label} Shell / Hostname: [${HOSTNAME:-EMPTY}]"
+  _bl64_dbg_show "${label} Script / User ID: [${EUID}]"
+  _bl64_dbg_show "${label} Script / Effective User ID: [${UID}]"
+  _bl64_dbg_show "${label} Script / Arguments: [${BASH_ARGV[*]:-NONE}]"
+  _bl64_dbg_show "${label} Script / Last executed command: [${BASH_COMMAND:-NONE}]"
+  _bl64_dbg_show "${label} Script / Last exit status: [${last_status}]"
+
+  bl64_dbg_runtime_show_paths
+  bl64_dbg_runtime_show_callstack
+  bl64_dbg_runtime_show_bashlib64
+
+  return 0
+}
+
 #
 # Public functions
 #
@@ -124,41 +148,6 @@ function bl64_dbg_all_dryrun_disable { BL64_DBG_DRYRUN="$BL64_DBG_DRYRUN_NONE"; 
 function bl64_dbg_all_dryrun_enable { BL64_DBG_DRYRUN="$BL64_DBG_DRYRUN_ALL"; }
 function bl64_dbg_app_dryrun_enable { BL64_DBG_DRYRUN="$BL64_DBG_DRYRUN_APP"; }
 function bl64_dbg_lib_dryrun_enable { BL64_DBG_DRYRUN="$BL64_DBG_DRYRUN_LIB"; }
-
-#######################################
-# Show runtime info
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: runtime info
-# Returns:
-#   latest exit status (before function call)
-#######################################
-function bl64_dbg_runtime_show() {
-  local label="${_BL64_DBG_TXT_LABEL_BASH_RUNTIME}"
-  bl64_dbg_app_command_is_enabled || return 0
-
-  _bl64_dbg_show "${label} Bash / Interpreter path: [${BASH}]"
-  _bl64_dbg_show "${label} Bash / ShOpt Options: [${BASHOPTS:-NONE}]"
-  _bl64_dbg_show "${label} Bash / Set -o Options: [${SHELLOPTS:-NONE}]"
-  _bl64_dbg_show "${label} Bash / Version: [${BASH_VERSION}]"
-  _bl64_dbg_show "${label} Bash / Detected OS: [${OSTYPE:-NONE}]"
-  _bl64_dbg_show "${label} Shell / Locale setting: [${LC_ALL:-NONE}]"
-  _bl64_dbg_show "${label} Shell / Hostname: [${HOSTNAME:-EMPTY}]"
-  _bl64_dbg_show "${label} Script / User ID: [${EUID}]"
-  _bl64_dbg_show "${label} Script / Effective User ID: [${UID}]"
-  _bl64_dbg_show "${label} Script / Arguments: [${BASH_ARGV[*]:-NONE}]"
-  _bl64_dbg_show "${label} Script / Last executed command: [${BASH_COMMAND:-NONE}]"
-  _bl64_dbg_show "${label} Script / Last exit status: [${last_status}]"
-
-  bl64_dbg_runtime_show_paths
-  bl64_dbg_runtime_show_callstack
-  bl64_dbg_runtime_show_bashlib64
-
-  return 0
-}
 
 #######################################
 # Show BashLib64 runtime information

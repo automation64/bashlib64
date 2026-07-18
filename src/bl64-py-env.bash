@@ -8,6 +8,14 @@
 
   declare BL64_PY_MODULE='0'
 
+  #
+  # Deprecated Variables
+  #
+  # * Needed to maintain compatibility up to N-2 versions
+  #
+  declare BL64_PY_VERSION_PYTHON3='' #replaced-by# BL64_PY_VERSION_PYTHON
+  declare BL64_PY_VERSION_PIP3=''    #replaced-by# BL64_PY_VERSION_PIP
+
   # Define placeholders for optional distro native python versions
   declare BL64_PY_CMD_PYTHON3="$BL64_VAR_UNAVAILABLE"
 
@@ -20,8 +28,6 @@
   # Version info
   declare BL64_PY_VERSION_PYTHON=''
   declare BL64_PY_VERSION_PIP=''
-  declare BL64_PY_VERSION_PYTHON3='' # legacy
-  declare BL64_PY_VERSION_PIP3=''    # legacy
 
   declare BL64_PY_SET_PIP_DEBUG=''
   declare BL64_PY_SET_PIP_NO_COLOR

@@ -27,11 +27,11 @@
 
 # Verify that the current shell is supported
 if [ -z "$BASH_VERSION" ]; then
-  builtin echo "Fatal: BashLib64 is not supported in the current shell (shell: $SHELL)"
-  builtin exit 1
+  builtin echo "Fatal: BashLib64 is not supported on the current shell (shell: $SHELL)"
+  builtin exit 32
 elif [ "${BASH_VERSINFO[0]}" -lt 4 ]; then
-  builtin echo "Fatal: BashLib64 requires Bash V4 or greater (current-version: ${BASH_VERSION})"
-  builtin exit 1
+  builtin echo "Fatal: BashLib64 requires Bash-V4 or greater (current-version: ${BASH_VERSION})"
+  builtin exit 32
 fi
 
 # Do not inherit aliases and commands
@@ -57,21 +57,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='23.3.1'
-
-  #
-  # Imported generic shell standard variables
-  #
-
-  export HOME="${HOME:-}"
-  export LANG="${LANG:-}"
-  export LANGUAGE="${LANGUAGE:-}"
-  export LC_ALL="${LC_ALL:-}"
-  export PATH="${PATH:-}"
-  export PS1="${PS1:-}"
-  export PS2="${PS2:-}"
-  export TERM="${TERM:-}"
-  export TMPDIR="${TMPDIR:-}"
+  declare BL64_VERSION='23.4.0'
 
   #
   # Common constants
@@ -315,6 +301,129 @@ function _bl64_lib_function_deprecated() {
     "$function_replacement" >&2
 }
 
+#######################################
+# Define current script identity
+#
+# * BL64_SCRIPT_SID: session ID for the running script. Changes on each run
+# * BL64_SCRIPT_PATH: full path to the base directory script
+# * BL64_SCRIPT_NAME: file name of the current script
+# * BL64_SCRIPT_ID: script id (tag)
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0: identity set
+#   >0: failed to set
+#######################################
+function _bl64_lib_script_set_identity() {
+  BL64_SCRIPT_SID="${BASHPID}${RANDOM}" &&
+    BL64_SCRIPT_PATH="$(_bl64_lib_script_get_path)" &&
+    BL64_SCRIPT_NAME="$(_bl64_lib_script_get_name)" &&
+    bl64_lib_script_set_id "$BL64_SCRIPT_NAME"
+}
+
+#######################################
+# Harden runtime environment
+#
+# * Normalize sensitive shtop defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0
+#######################################
+function _bl64_lib_harden_shopt() {
+  builtin shopt -qu \
+    'dotglob' \
+    'extdebug' \
+    'failglob' \
+    'globstar' \
+    'gnu_errfmt' \
+    'huponexit' \
+    'lastpipe' \
+    'login_shell' \
+    'nocaseglob' \
+    'nocasematch' \
+    'nullglob' \
+    'xpg_echo' &&
+    builtin shopt -qs \
+      'extquote'
+}
+
+#######################################
+# Harden runtime environment
+#
+# * Normalize sensitive bash option defaults
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: Error messages
+# Returns:
+#   0
+#######################################
+function _bl64_lib_harden_options() {
+  # Ensure pipeline exit status is failed when any cmd fails
+  builtin set -o 'pipefail'
+
+  # Enable error processing
+  builtin set -o 'errtrace'
+  builtin set -o 'functrace'
+
+  # Disable fast-fail. Developer must implement error handling (check for exit status)
+  builtin set +o 'errexit'
+
+  # Reset bash set options to defaults
+  builtin set -o 'braceexpand'
+  builtin set -o 'hashall'
+  builtin set +o 'allexport'
+  builtin set +o 'histexpand'
+  builtin set +o 'history'
+  builtin set +o 'ignoreeof'
+  builtin set +o 'monitor'
+  builtin set +o 'noclobber'
+  builtin set +o 'noglob'
+  builtin set +o 'nolog'
+  builtin set +o 'notify'
+  builtin set +o 'onecmd'
+  builtin set +o 'posix'
+
+  # Do not set/unset - Breaks bats-core
+  # set -o 'keyword'
+  # set -o 'noexec'
+}
+
+function _bl64_lib_check_os_compabitility() {
+  # Check OS compatibility
+  if [[ "${BL64_OS_MODULE:-$BL64_VAR_OFF}" == "$BL64_VAR_ON" ]]; then
+    bl64_os_check_compatibility \
+      "${BL64_OS_ALM}"-{8,9,10} \
+      "${BL64_OS_ALP}"-3.{17,18,19,20,21,22,23,24} \
+      "${BL64_OS_AMZ}"-2023 \
+      "${BL64_OS_ARC}"-2025 \
+      "${BL64_OS_CNT}"-{7,8,9,10} \
+      "${BL64_OS_DEB}"-{9,10,11,12,13} \
+      "${BL64_OS_FD}"-{33,34,35,36,37,38,39} \
+      "${BL64_OS_FD}"-{40,41,42,43,44} \
+      "${BL64_OS_KL}"-{2024,2025} \
+      "${BL64_OS_MCOS}"-{12,13,14,15} \
+      "${BL64_OS_OL}"-{7,8,9,10} \
+      "${BL64_OS_OPS}"-{15,16} \
+      "${BL64_OS_RCK}"-{8,9,10} \
+      "${BL64_OS_RHEL}"-{8,9,10} \
+      "${BL64_OS_SLES}"-{15,16} \
+      "${BL64_OS_UB}"-{18,20,21,22,23,24,25,26} ||
+      return $?
+  fi
+}
+
 #
 # Public functions
 #
@@ -388,30 +497,6 @@ function bl64_lib_script_set_id() {
 }
 
 #######################################
-# Define current script identity
-#
-# * BL64_SCRIPT_SID: session ID for the running script. Changes on each run
-# * BL64_SCRIPT_PATH: full path to the base directory script
-# * BL64_SCRIPT_NAME: file name of the current script
-# * BL64_SCRIPT_ID: script id (tag)
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: Error messages
-# Returns:
-#   0: identity set
-#   >0: failed to set
-#######################################
-function bl64_lib_script_set_identity() {
-  BL64_SCRIPT_SID="${BASHPID}${RANDOM}" &&
-    BL64_SCRIPT_PATH="$(_bl64_lib_script_get_path)" &&
-    BL64_SCRIPT_NAME="$(_bl64_lib_script_get_name)" &&
-    bl64_lib_script_set_id "$BL64_SCRIPT_NAME"
-}
-
-#######################################
 # Define current script version
 #
 # Arguments:
@@ -469,81 +554,6 @@ function bl64_lib_script_minver_check() {
     fi
   done
 }
-
-#######################################
-# Harden runtime environment
-#
-# * Normalize sensitive shtop defaults
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: Error messages
-# Returns:
-#   0
-#######################################
-function bl64_lib_harden_shopt() {
-  builtin shopt -qu \
-    'dotglob' \
-    'extdebug' \
-    'failglob' \
-    'globstar' \
-    'gnu_errfmt' \
-    'huponexit' \
-    'lastpipe' \
-    'login_shell' \
-    'nocaseglob' \
-    'nocasematch' \
-    'nullglob' \
-    'xpg_echo' &&
-    builtin shopt -qs \
-      'extquote'
-}
-
-#######################################
-# Harden runtime environment
-#
-# * Normalize sensitive bash option defaults
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: Error messages
-# Returns:
-#   0
-#######################################
-function bl64_lib_harden_options() {
-  # Ensure pipeline exit status is failed when any cmd fails
-  builtin set -o 'pipefail'
-
-  # Enable error processing
-  builtin set -o 'errtrace'
-  builtin set -o 'functrace'
-
-  # Disable fast-fail. Developer must implement error handling (check for exit status)
-  builtin set +o 'errexit'
-
-  # Reset bash set options to defaults
-  builtin set -o 'braceexpand'
-  builtin set -o 'hashall'
-  builtin set +o 'allexport'
-  builtin set +o 'histexpand'
-  builtin set +o 'history'
-  builtin set +o 'ignoreeof'
-  builtin set +o 'monitor'
-  builtin set +o 'noclobber'
-  builtin set +o 'noglob'
-  builtin set +o 'nolog'
-  builtin set +o 'notify'
-  builtin set +o 'onecmd'
-  builtin set +o 'posix'
-
-  # Do not set/unset - Breaks bats-core
-  # set -o 'keyword'
-  # set -o 'noexec'
-}
 #######################################
 # BashLib64 / Module / Globals / Check for conditions and report status
 #######################################
@@ -561,7 +571,7 @@ function bl64_lib_harden_options() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_DBG_VERSION='3.5.0'
+  declare BL64_DBG_VERSION='3.5.1'
 
   declare BL64_DBG_MODULE='0'
 
@@ -682,9 +692,23 @@ function bl64_lib_harden_options() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.18.1'
+  declare BL64_MSG_VERSION='5.18.2'
 
   declare BL64_MSG_MODULE='0'
+
+  #
+  # Deprecated Variables
+  #
+  # * Needed to maintain compatibility up to N-2 versions
+  #
+  declare BL64_MSG_VERBOSE_LIB='LIB'            #replaced-by# BL64_MSG_VERBOSE_DETAIL
+  declare _BL64_MSG_OUTPUT_ASCII_DEPRECATED='A' #old-value#
+  declare _BL64_MSG_OUTPUT_ANSI_DEPRECATED='N'  #old-value#
+  declare _BL64_MSG_FORMAT_PLAIN_LEGACY='R'     #old-value#
+  declare _BL64_MSG_FORMAT_HOST_LEGACY='H'      #old-value#
+  declare _BL64_MSG_FORMAT_TIME_LEGACY='T'      #old-value#
+  declare _BL64_MSG_FORMAT_CALLER_LEGACY='C'    #old-value#
+  declare _BL64_MSG_FORMAT_FULL_LEGACY='F'      #old-value#
 
   #
   # Verbosity levels
@@ -693,7 +717,6 @@ function bl64_lib_harden_options() {
   declare BL64_MSG_VERBOSE_NONE='NONE'
   declare BL64_MSG_VERBOSE_APP='APP'
   declare BL64_MSG_VERBOSE_DETAIL='DETAIL'
-  declare BL64_MSG_VERBOSE_LIB='LIB' # deprecated. Use BL64_MSG_VERBOSE_DETAIL
   declare BL64_MSG_VERBOSE_ALL='ALL'
   # Selected level
   declare BL64_MSG_VERBOSE=''
@@ -1006,7 +1029,7 @@ function bl64_lib_harden_options() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_ANS_VERSION='3.0.3'
+  declare BL64_ANS_VERSION='3.1.0'
 
   declare BL64_ANS_MODULE='0'
 
@@ -1018,14 +1041,15 @@ function bl64_lib_harden_options() {
   declare BL64_ANS_CMD_ANSIBLE_PLAYBOOK="$BL64_VAR_UNAVAILABLE"
   declare BL64_ANS_CMD_ANSIBLE_GALAXY="$BL64_VAR_UNAVAILABLE"
 
-  declare BL64_ANS_PATH_USR_ANSIBLE=''
+  declare BL64_ANS_PATH_USR_HOME=''
   declare BL64_ANS_PATH_USR_CONFIG=''
   declare BL64_ANS_PATH_USR_COLLECTIONS=''
+  declare BL64_ANS_PATH_USR_INVENTORY=''
   declare BL64_ANS_PATH_USR_LOG=''
+  declare BL64_ANS_PATH_USR_TMP=''
 
-  declare BL64_ANS_SET_VERBOSE=''
-  declare BL64_ANS_SET_DIFF=''
-  declare BL64_ANS_SET_DEBUG=''
+  declare BL64_ANS_CFG_STDOUT_CALLBACK=''
+  declare BL64_ANS_CFG_VERBOSITY=''
 }
 
 #######################################
@@ -1125,7 +1149,7 @@ function bl64_lib_harden_options() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_BSH_VERSION='3.10.2'
+  declare BL64_BSH_VERSION='3.10.3'
 
   declare BL64_BSH_MODULE='0'
 
@@ -1217,7 +1241,7 @@ function bl64_lib_harden_options() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.6.0'
+  declare BL64_FS_VERSION='6.6.1'
 
   declare BL64_FS_MODULE='0'
 
@@ -1476,6 +1500,14 @@ function bl64_lib_harden_options() {
 
   declare BL64_PY_MODULE='0'
 
+  #
+  # Deprecated Variables
+  #
+  # * Needed to maintain compatibility up to N-2 versions
+  #
+  declare BL64_PY_VERSION_PYTHON3='' #replaced-by# BL64_PY_VERSION_PYTHON
+  declare BL64_PY_VERSION_PIP3=''    #replaced-by# BL64_PY_VERSION_PIP
+
   # Define placeholders for optional distro native python versions
   declare BL64_PY_CMD_PYTHON3="$BL64_VAR_UNAVAILABLE"
 
@@ -1488,8 +1520,6 @@ function bl64_lib_harden_options() {
   # Version info
   declare BL64_PY_VERSION_PYTHON=''
   declare BL64_PY_VERSION_PIP=''
-  declare BL64_PY_VERSION_PYTHON3='' # legacy
-  declare BL64_PY_VERSION_PIP3=''    # legacy
 
   declare BL64_PY_SET_PIP_DEBUG=''
   declare BL64_PY_SET_PIP_NO_COLOR
@@ -1688,12 +1718,19 @@ function bl64_lib_harden_options() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_UI_VERSION='3.3.0'
+  declare BL64_UI_VERSION='3.4.0'
 
   declare BL64_UI_MODULE='0'
 
   declare BL64_UI_CFG_INPUT_TIMEOUT='60'
   declare BL64_UI_CFG_SKIP_CONFIRMATION="$BL64_VAR_NO"
+
+  declare BL64_UI_CMD_BAT="$BL64_VAR_UNAVAILABLE"
+  declare BL64_UI_CMD_DIALOG="$BL64_VAR_UNAVAILABLE"
+  declare BL64_UI_CMD_FZF="$BL64_VAR_UNAVAILABLE"
+  declare BL64_UI_CMD_GUM="$BL64_VAR_UNAVAILABLE"
+  declare BL64_UI_CMD_LESS="$BL64_VAR_UNAVAILABLE"
+  declare BL64_UI_CMD_WHIPTAIL="$BL64_VAR_UNAVAILABLE"
 }
 
 #######################################
@@ -2831,6 +2868,30 @@ function _bl64_dbg_lib_check_enable { BL64_DBG_EXCLUDE_CHECK="$BL64_VAR_OFF"; }
 function _bl64_dbg_lib_log_enable { BL64_DBG_EXCLUDE_LOG="$BL64_VAR_OFF"; }
 function _bl64_dbg_lib_msg_enable { BL64_DBG_EXCLUDE_MSG="$BL64_VAR_OFF"; }
 
+function _bl64_dbg_runtime_show() {
+  local label="${_BL64_DBG_TXT_LABEL_BASH_RUNTIME}"
+  bl64_dbg_app_command_is_enabled || return 0
+
+  _bl64_dbg_show "${label} Bash / Interpreter path: [${BASH}]"
+  _bl64_dbg_show "${label} Bash / ShOpt Options: [${BASHOPTS:-NONE}]"
+  _bl64_dbg_show "${label} Bash / Set -o Options: [${SHELLOPTS:-NONE}]"
+  _bl64_dbg_show "${label} Bash / Version: [${BASH_VERSION}]"
+  _bl64_dbg_show "${label} Bash / Detected OS: [${OSTYPE:-NONE}]"
+  _bl64_dbg_show "${label} Shell / Locale setting: [${LC_ALL:-NONE}]"
+  _bl64_dbg_show "${label} Shell / Hostname: [${HOSTNAME:-EMPTY}]"
+  _bl64_dbg_show "${label} Script / User ID: [${EUID}]"
+  _bl64_dbg_show "${label} Script / Effective User ID: [${UID}]"
+  _bl64_dbg_show "${label} Script / Arguments: [${BASH_ARGV[*]:-NONE}]"
+  _bl64_dbg_show "${label} Script / Last executed command: [${BASH_COMMAND:-NONE}]"
+  _bl64_dbg_show "${label} Script / Last exit status: [${last_status}]"
+
+  bl64_dbg_runtime_show_paths
+  bl64_dbg_runtime_show_callstack
+  bl64_dbg_runtime_show_bashlib64
+
+  return 0
+}
+
 #
 # Public functions
 #
@@ -2868,41 +2929,6 @@ function bl64_dbg_all_dryrun_disable { BL64_DBG_DRYRUN="$BL64_DBG_DRYRUN_NONE"; 
 function bl64_dbg_all_dryrun_enable { BL64_DBG_DRYRUN="$BL64_DBG_DRYRUN_ALL"; }
 function bl64_dbg_app_dryrun_enable { BL64_DBG_DRYRUN="$BL64_DBG_DRYRUN_APP"; }
 function bl64_dbg_lib_dryrun_enable { BL64_DBG_DRYRUN="$BL64_DBG_DRYRUN_LIB"; }
-
-#######################################
-# Show runtime info
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: runtime info
-# Returns:
-#   latest exit status (before function call)
-#######################################
-function bl64_dbg_runtime_show() {
-  local label="${_BL64_DBG_TXT_LABEL_BASH_RUNTIME}"
-  bl64_dbg_app_command_is_enabled || return 0
-
-  _bl64_dbg_show "${label} Bash / Interpreter path: [${BASH}]"
-  _bl64_dbg_show "${label} Bash / ShOpt Options: [${BASHOPTS:-NONE}]"
-  _bl64_dbg_show "${label} Bash / Set -o Options: [${SHELLOPTS:-NONE}]"
-  _bl64_dbg_show "${label} Bash / Version: [${BASH_VERSION}]"
-  _bl64_dbg_show "${label} Bash / Detected OS: [${OSTYPE:-NONE}]"
-  _bl64_dbg_show "${label} Shell / Locale setting: [${LC_ALL:-NONE}]"
-  _bl64_dbg_show "${label} Shell / Hostname: [${HOSTNAME:-EMPTY}]"
-  _bl64_dbg_show "${label} Script / User ID: [${EUID}]"
-  _bl64_dbg_show "${label} Script / Effective User ID: [${UID}]"
-  _bl64_dbg_show "${label} Script / Arguments: [${BASH_ARGV[*]:-NONE}]"
-  _bl64_dbg_show "${label} Script / Last executed command: [${BASH_COMMAND:-NONE}]"
-  _bl64_dbg_show "${label} Script / Last exit status: [${last_status}]"
-
-  bl64_dbg_runtime_show_paths
-  bl64_dbg_runtime_show_callstack
-  bl64_dbg_runtime_show_bashlib64
-
-  return 0
-}
 
 #######################################
 # Show BashLib64 runtime information
@@ -3836,20 +3862,15 @@ function bl64_msg_set_level() {
 function bl64_msg_set_format() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local format="${1:-}"
-  local legacy_BL64_MSG_FORMAT_PLAIN='R'
-  local legacy_BL64_MSG_FORMAT_HOST='H'
-  local legacy_BL64_MSG_FORMAT_TIME='T'
-  local legacy_BL64_MSG_FORMAT_CALLER='C'
-  local legacy_BL64_MSG_FORMAT_FULL='F'
 
   bl64_check_parameter 'format' || return $?
 
   case "$format" in
-    "$BL64_MSG_FORMAT_PLAIN" | "$legacy_BL64_MSG_FORMAT_PLAIN") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN" ;;
-    "$BL64_MSG_FORMAT_HOST" | "$legacy_BL64_MSG_FORMAT_HOST") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST" ;;
-    "$BL64_MSG_FORMAT_TIME" | "$legacy_BL64_MSG_FORMAT_TIME") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME" ;;
-    "$BL64_MSG_FORMAT_CALLER" | "$legacy_BL64_MSG_FORMAT_CALLER") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER" ;;
-    "$BL64_MSG_FORMAT_FULL" | "$legacy_BL64_MSG_FORMAT_FULL") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL" ;;
+    "$BL64_MSG_FORMAT_PLAIN" | "$_BL64_MSG_FORMAT_PLAIN_LEGACY") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_PLAIN" ;;
+    "$BL64_MSG_FORMAT_HOST" | "$_BL64_MSG_FORMAT_HOST_LEGACY") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_HOST" ;;
+    "$BL64_MSG_FORMAT_TIME" | "$_BL64_MSG_FORMAT_TIME_LEGACY") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_TIME" ;;
+    "$BL64_MSG_FORMAT_CALLER" | "$_BL64_MSG_FORMAT_CALLER_LEGACY") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_CALLER" ;;
+    "$BL64_MSG_FORMAT_FULL" | "$_BL64_MSG_FORMAT_FULL_LEGACY") BL64_MSG_FORMAT="$BL64_MSG_FORMAT_FULL" ;;
     "$BL64_MSG_FORMAT_TIME2" | "$BL64_MSG_FORMAT_FULL2" | "$BL64_MSG_FORMAT_SCRIPT" | "$BL64_MSG_FORMAT_SCRIPT2") BL64_MSG_FORMAT="$format" ;;
     *)
       bl64_check_rise_parameter_invalid 'BL64_MSG_FORMAT' 'invalid value. Not one of: BL64_MSG_FORMAT_*'
@@ -3913,8 +3934,6 @@ function bl64_msg_set_output() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function "$@"
   local output="${1:-}"
   local theme="${2:-${BL64_VAR_DEFAULT}}"
-  local legacy_BL64_MSG_OUTPUT_ASCII='A'
-  local legacy_BL64_MSG_OUTPUT_ANSI='N'
 
   if bl64_lib_var_is_default "$output"; then
     if bl64_lib_mode_cicd_is_enabled; then
@@ -3929,12 +3948,12 @@ function bl64_msg_set_output() {
   fi
 
   case "$output" in
-    "$BL64_MSG_OUTPUT_ASCII" | "$legacy_BL64_MSG_OUTPUT_ASCII")
+    "$BL64_MSG_OUTPUT_ASCII" | "$_BL64_MSG_OUTPUT_ASCII_DEPRECATED")
       bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ASCII_STD"
       BL64_MSG_LABEL="$output"
       BL64_MSG_OUTPUT="$output"
       ;;
-    "$BL64_MSG_OUTPUT_ANSI" | "$legacy_BL64_MSG_OUTPUT_ANSI")
+    "$BL64_MSG_OUTPUT_ANSI" | "$_BL64_MSG_OUTPUT_ANSI_DEPRECATED")
       bl64_lib_var_is_default "$theme" && theme="$BL64_MSG_THEME_ID_ANSI_STD"
       BL64_MSG_OUTPUT="$output"
       ;;
@@ -6066,7 +6085,6 @@ function bl64_ans_setup() {
     _bl64_lib_module_is_imported 'BL64_PY_MODULE' &&
     _bl64_ans_set_command "$ansible_bin" &&
     bl64_ans_set_paths "$ansible_config" &&
-    _bl64_ans_set_options &&
     _bl64_ans_set_version &&
     BL64_ANS_ENV_IGNORE="$env_ignore" &&
     BL64_ANS_MODULE="$BL64_VAR_ON"
@@ -6095,24 +6113,6 @@ function _bl64_ans_set_command() {
 }
 
 #######################################
-# Create command sets for common options
-#
-# Arguments:
-#   None
-# Outputs:
-#   STDOUT: None
-#   STDERR: None
-# Returns:
-#   0: always ok
-#######################################
-function _bl64_ans_set_options() {
-  bl64_dbg_lib_show_function
-  BL64_ANS_SET_VERBOSE='-v'
-  BL64_ANS_SET_DIFF='--diff'
-  BL64_ANS_SET_DEBUG='-vvvvv'
-}
-
-#######################################
 # Set and prepare module paths
 #
 # * Global paths only
@@ -6123,6 +6123,8 @@ function _bl64_ans_set_options() {
 #   $2: path to ansible collections (ANSIBLE_COLLECTIONS_PATHS)
 #   $3: path to ansible home (ANSIBLE_HOME)
 #   $4: path to ansible log (ANSIBLE_LOG_PATH)
+#   $5: path to ansible inventory (ANSIBLE_INVENTORY)
+#   $6: common path for temporary ansible content
 # Outputs:
 #   STDOUT: None
 #   STDERR: check errors
@@ -6134,29 +6136,81 @@ function bl64_ans_set_paths() {
   bl64_dbg_lib_show_function "$@"
   local config="${1:-${BL64_VAR_DEFAULT}}"
   local collections="${2:-${BL64_VAR_DEFAULT}}"
-  local ansible="${3:-${BL64_VAR_DEFAULT}}"
+  local home="${3:-${BL64_VAR_DEFAULT}}"
   local log="${4:-${BL64_VAR_DEFAULT}}"
+  local inventory="${5:-${BL64_VAR_DEFAULT}}"
+  local tmp="${6:-${BL64_VAR_DEFAULT}}"
 
   if ! bl64_lib_var_is_default "$config"; then
     bl64_check_file "$config" || return $?
     BL64_ANS_PATH_USR_CONFIG="$config"
   fi
 
-  if ! bl64_lib_var_is_default "$ansible"; then
-    bl64_check_directory "$ansible" || return $?
-    BL64_ANS_PATH_USR_ANSIBLE="$ansible"
+  if ! bl64_lib_var_is_default "$home"; then
+    bl64_check_directory "$home" || return $?
+    BL64_ANS_PATH_USR_HOME="$home"
   fi
 
   if ! bl64_lib_var_is_default "$collections"; then
     bl64_check_directory "$collections" || return $?
-    BL64_ANS_PATH_USR_COLLECTIONS="$ansible"
+    BL64_ANS_PATH_USR_COLLECTIONS="$collections"
   fi
 
   if ! bl64_lib_var_is_default "$log"; then
     BL64_ANS_PATH_USR_LOG="$log"
   fi
 
-  bl64_dbg_lib_show_vars 'BL64_ANS_PATH_USR_CONFIG' 'BL64_ANS_PATH_USR_ANSIBLE' 'BL64_ANS_PATH_USR_COLLECTIONS' 'BL64_ANS_PATH_USR_LOG'
+  if ! bl64_lib_var_is_default "$inventory"; then
+    bl64_check_file "$inventory" || return $?
+    BL64_ANS_PATH_USR_INVENTORY="$inventory"
+  fi
+
+  if ! bl64_lib_var_is_default "$tmp"; then
+    bl64_check_directory "$tmp" || return $?
+    BL64_ANS_PATH_USR_TMP="$tmp"
+  fi
+
+  bl64_dbg_lib_show_vars \
+    'BL64_ANS_PATH_USR_CONFIG' \
+    'BL64_ANS_PATH_USR_HOME' \
+    'BL64_ANS_PATH_USR_COLLECTIONS' \
+    'BL64_ANS_PATH_USR_LOG' \
+    'BL64_ANS_PATH_USR_INVENTORY' \
+    'BL64_ANS_PATH_USR_TMP'
+  return 0
+}
+
+#######################################
+# Set command options
+#
+# * Options are applied when the command is run
+#
+# Arguments:
+#   $1: set output callback (ANSIBLE_STDOUT_CALLBACK)
+#   $2: set verbosity level (ANSIBLE_VERBOSITY)
+# Outputs:
+#   STDOUT: None
+#   STDERR: check errors
+# Returns:
+#   0: option prepared ok
+#   >0: failed to prepare option
+#######################################
+function bl64_ans_set_options() {
+  bl64_dbg_lib_show_function "$@"
+  local stdout_callback="${1:-${BL64_VAR_DEFAULT}}"
+  local verbosity="${2:-${BL64_VAR_DEFAULT}}"
+
+  if ! bl64_lib_var_is_default "$stdout_callback"; then
+    BL64_ANS_CFG_STDOUT_CALLBACK="$stdout_callback"
+  fi
+
+  if ! bl64_lib_var_is_default "$verbosity"; then
+    BL64_ANS_CFG_VERBOSITY="$verbosity"
+  fi
+
+  bl64_dbg_lib_show_vars \
+    'BL64_ANS_CFG_STDOUT_CALLBACK' \
+    'BL64_ANS_CFG_VERBOSITY'
   return 0
 }
 
@@ -6214,37 +6268,74 @@ function _bl64_ans_set_version() {
 # Returns:
 #   0: always ok
 #######################################
-function _bl64_ans_harden_ansible() {
+function bl64_ans_harden_ansible() {
   bl64_dbg_lib_show_function
 
   if bl64_lib_flag_is_enabled "$BL64_ANS_ENV_IGNORE"; then
     bl64_dbg_lib_show_info 'unset inherited ANSIBLE_* shell variables'
     bl64_dbg_lib_trace_start
     unset ANSIBLE_ACTION_PLUGINS
+    unset ANSIBLE_AGNOSTIC_BECOME_PROMPT
     unset ANSIBLE_BECOME
+    unset ANSIBLE_BECOME_ASK_PASS
     unset ANSIBLE_BECOME_PASSWORD_FILE
     unset ANSIBLE_BECOME_PLUGINS
     unset ANSIBLE_CACHE_PLUGIN
     unset ANSIBLE_CACHE_PLUGIN_CONNECTION
+    unset ANSIBLE_CALLBACK_PLUGINS
+    unset ANSIBLE_CALLBACKS_ENABLED
+    unset ANSIBLE_CLICONF_PLUGINS
     unset ANSIBLE_COLLECTIONS_PATHS
     unset ANSIBLE_COLLECTIONS_SCAN_SYS_PATH
     unset ANSIBLE_CONFIG
     unset ANSIBLE_CONNECTION_PASSWORD_FILE
     unset ANSIBLE_CONNECTION_PATH
+    unset ANSIBLE_CONNECTION_PLUGINS
+    unset ANSIBLE_COW_PATH
+    unset ANSIBLE_DEBUG
+    unset ANSIBLE_DEPRECATION_WARNINGS
+    unset ANSIBLE_DEVEL_WARNING
+    unset ANSIBLE_DIFF_ALWAYS
+    unset ANSIBLE_DISPLAY_ARGS_TO_STDOUT
+    unset ANSIBLE_EXECUTABLE
+    unset ANSIBLE_FACTS_MODULES
+    unset ANSIBLE_FILTER_PLUGINS
     unset ANSIBLE_FORCE_COLOR
     unset ANSIBLE_GALAXY_CACHE_DIR
+    unset ANSIBLE_GALAXY_DISABLE_GPG_VERIFY
+    unset ANSIBLE_GALAXY_DISPLAY_PROGRESS
+    unset ANSIBLE_GALAXY_GPG_KEYRING
+    unset ANSIBLE_GALAXY_IGNORE
+    unset ANSIBLE_GALAXY_IGNORE_SIGNATURE_STATUS_CODES
+    unset ANSIBLE_GALAXY_SERVER
+    unset ANSIBLE_GALAXY_SERVER_LIST
     unset ANSIBLE_GALAXY_TOKEN_PATH
     unset ANSIBLE_HOME
+    unset ANSIBLE_HOST_KEY_CHECKING
+    unset ANSIBLE_HTTPAPI_PLUGINS
     unset ANSIBLE_INVENTORY
+    unset ANSIBLE_INVENTORY_PLUGINS
+    unset ANSIBLE_JINJA2_EXTENSIONS
     unset ANSIBLE_KEEP_REMOTE_FILES
+    unset ANSIBLE_LIBRARY
+    unset ANSIBLE_LOAD_CALLBACK_PLUGINS
     unset ANSIBLE_LOCAL_TEMP
+    unset ANSIBLE_LOG_FILTER
     unset ANSIBLE_LOG_PATH
+    unset ANSIBLE_LOG_VERBOSITY
+    unset ANSIBLE_LOOKUP_PLUGINS
+    unset ANSIBLE_MODULE_ARGS
+    unset ANSIBLE_MODULE_UTILS
+    unset ANSIBLE_NETCONF_PLUGINS
     unset ANSIBLE_NO_LOG
+    unset ANSIBLE_NO_TARGET_SYSLOG
     unset ANSIBLE_NOCOLOR
+    unset ANSIBLE_PAGER
     unset ANSIBLE_PERSISTENT_CONTROL_PATH_DIR
     unset ANSIBLE_PIPELINING
     unset ANSIBLE_PLAYBOOK_DIR
     unset ANSIBLE_PRIVATE_KEY_FILE
+    unset ANSIBLE_PYTHON_INTERPRETER
     unset ANSIBLE_RETRY_FILES_SAVE_PATH
     unset ANSIBLE_ROLES_PATH
     unset ANSIBLE_SSH_AGENT
@@ -6252,13 +6343,49 @@ function _bl64_ans_harden_ansible() {
     unset ANSIBLE_SSH_CONTROL_PATH_DIR
     unset ANSIBLE_STDOUT_CALLBACK
     unset ANSIBLE_VAULT_PASSWORD_FILE
+    unset ANSIBLE_VERBOSE_TO_STDERR
+    unset ANSIBLE_VERBOSITY
     bl64_dbg_lib_trace_stop
   fi
 
-  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_ANSIBLE" && export ANSIBLE_HOME="$BL64_ANS_PATH_USR_ANSIBLE"
-  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_CONFIG" && export ANSIBLE_CONFIG="$BL64_ANS_PATH_USR_CONFIG"
   ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_COLLECTIONS" && export ANSIBLE_COLLECTIONS_PATHS="$BL64_ANS_PATH_USR_COLLECTIONS"
+  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_CONFIG" && export ANSIBLE_CONFIG="$BL64_ANS_PATH_USR_CONFIG"
+  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_HOME" && export ANSIBLE_HOME="$BL64_ANS_PATH_USR_HOME"
+  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_INVENTORY" && export ANSIBLE_INVENTORY="$BL64_ANS_PATH_USR_INVENTORY"
   ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_LOG" && export ANSIBLE_LOG_PATH="$BL64_ANS_PATH_USR_LOG"
+  bl64_dbg_lib_show_vars 'ANSIBLE_HOME' 'ANSIBLE_CONFIG' 'ANSIBLE_COLLECTIONS_PATHS' 'ANSIBLE_INVENTORY' 'ANSIBLE_LOG_PATH'
+
+  if ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_TMP"; then
+    export ANSIBLE_CACHE_PLUGIN_CONNECTION="${BL64_ANS_PATH_USR_TMP}/cpc"
+    export ANSIBLE_GALAXY_CACHE_DIR="${BL64_ANS_PATH_USR_TMP}/gc"
+    export ANSIBLE_LOCAL_TEMP="${BL64_ANS_PATH_USR_TMP}/tmp"
+    export ANSIBLE_PERSISTENT_CONTROL_PATH_DIR="${BL64_ANS_PATH_USR_TMP}/pc"
+    export ANSIBLE_RETRY_FILES_SAVE_PATH="${BL64_ANS_PATH_USR_TMP}/rf"
+    export ANSIBLE_SSH_CONTROL_PATH_DIR="${BL64_ANS_PATH_USR_TMP}/ssh"
+    bl64_dbg_lib_show_vars \
+      'ANSIBLE_CACHE_PLUGIN_CONNECTION' \
+      'ANSIBLE_GALAXY_CACHE_DIR' \
+      'ANSIBLE_LOCAL_TEMP' \
+      'ANSIBLE_PERSISTENT_CONTROL_PATH_DIR' \
+      'ANSIBLE_RETRY_FILES_SAVE_PATH' \
+      'ANSIBLE_SSH_CONTROL_PATH_DIR'
+  fi
+
+  ! bl64_lib_var_is_default "$BL64_ANS_CFG_STDOUT_CALLBACK" && export ANSIBLE_STDOUT_CALLBACK="$BL64_ANS_CFG_STDOUT_CALLBACK"
+  bl64_dbg_lib_show_vars 'ANSIBLE_STDOUT_CALLBACK'
+
+  if bl64_lib_mode_cicd_is_enabled; then
+    export ANSIBLE_BECOME_ASK_PASS='False'
+    export ANSIBLE_GALAXY_DISPLAY_PROGRESS='False'
+    export ANSIBLE_HOST_KEY_CHECKING='False'
+    export ANSIBLE_NOCOLOR='True'
+  fi
+  if ! bl64_lib_var_is_default "$BL64_ANS_CFG_VERBOSITY"; then
+    export ANSIBLE_VERBOSITY="$BL64_ANS_CFG_VERBOSITY"
+  else
+    bl64_msg_app_detail_is_enabled && export ANSIBLE_VERBOSITY='1'
+  fi
+  bl64_dbg_lib_command_is_enabled && export ANSIBLE_DEBUG='True'
 
   return 0
 }
@@ -6311,21 +6438,15 @@ function bl64_ans_collections_install() {
 #######################################
 function bl64_ans_run_ansible() {
   bl64_dbg_lib_show_function "$@"
-  local debug=' '
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_ANS_MODULE' ||
     return $?
 
-  bl64_msg_app_detail_is_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
-  bl64_dbg_lib_command_is_enabled && debug="$BL64_ANS_SET_DEBUG"
-
-  _bl64_ans_harden_ansible
+  bl64_ans_harden_ansible
 
   bl64_dbg_lib_trace_start
-  # shellcheck disable=SC2086
   "$BL64_ANS_CMD_ANSIBLE" \
-    $debug \
     "$@"
   bl64_dbg_lib_trace_stop
 }
@@ -6350,25 +6471,19 @@ function bl64_ans_run_ansible_galaxy() {
   bl64_dbg_lib_show_function "$@"
   local command="${1:-${BL64_VAR_NULL}}"
   local subcommand="${2:-${BL64_VAR_NULL}}"
-  local debug=' '
 
   bl64_check_module 'BL64_ANS_MODULE' &&
     bl64_check_parameter 'command' &&
-    bl64_check_parameter 'subcommand' ||
+    bl64_check_parameter 'subcommand' &&
+    shift 2 ||
     return $?
 
-  bl64_msg_app_detail_is_enabled && debug="$BL64_ANS_SET_VERBOSE"
+  bl64_ans_harden_ansible
 
-  _bl64_ans_harden_ansible
-
-  shift
-  shift
   bl64_dbg_lib_trace_start
-  # shellcheck disable=SC2086
   "$BL64_ANS_CMD_ANSIBLE_GALAXY" \
     "$command" \
     "$subcommand" \
-    $debug \
     "$@"
   bl64_dbg_lib_trace_stop
 }
@@ -6389,21 +6504,15 @@ function bl64_ans_run_ansible_galaxy() {
 #######################################
 function bl64_ans_run_ansible_playbook() {
   bl64_dbg_lib_show_function "$@"
-  local debug=' '
 
   bl64_check_parameters_none "$#" &&
     bl64_check_module 'BL64_ANS_MODULE' ||
     return $?
 
-  bl64_msg_app_detail_is_enabled && debug="${BL64_ANS_SET_VERBOSE} ${BL64_ANS_SET_DIFF}"
-  bl64_dbg_lib_command_is_enabled && debug="$BL64_ANS_SET_DEBUG"
-
-  _bl64_ans_harden_ansible
+  bl64_ans_harden_ansible
 
   bl64_dbg_lib_trace_start
-  # shellcheck disable=SC2086
   "$BL64_ANS_CMD_ANSIBLE_PLAYBOOK" \
-    $debug \
     "$@"
   bl64_dbg_lib_trace_stop
 }
@@ -8129,8 +8238,8 @@ function bl64_bsh_script_set_id() {
   bl64_lib_script_set_id "$@"
 }
 function bl64_bsh_script_set_identity() {
-  _bl64_lib_function_deprecated 'bl64_bsh_script_set_identity' 'bl64_lib_script_set_identity'
-  bl64_lib_script_set_identity "$@"
+  _bl64_lib_function_deprecated 'bl64_bsh_script_set_identity' '_bl64_lib_script_set_identity'
+  _bl64_lib_script_set_identity "$@"
 }
 
 #
@@ -12421,8 +12530,7 @@ function bl64_fs_run_rm() {
 function bl64_fs_run_ls() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+  bl64_check_module 'BL64_FS_MODULE' ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -19463,14 +19571,42 @@ function bl64_txt_run_fmt() {
 #######################################
 function bl64_ui_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
+  local search_paths=("${@:-}")
 
   # shellcheck disable=SC2034
   _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
     _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
     bl64_dbg_lib_show_function &&
     _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
+    _bl64_ui_set_command "${search_paths[@]}" &&
     BL64_UI_MODULE="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'ui'
+}
+
+#######################################
+# Identify and normalize commands
+#
+# * If no values are provided, try to detect commands looking for common paths
+# * Commands are exported as variables with full path
+# * All commands are optional, no error if not found
+#
+# Arguments:
+#   None
+# Outputs:
+#   STDOUT: None
+#   STDERR: None
+# Returns:
+#   0: always ok
+#######################################
+function _bl64_ui_set_command() {
+  bl64_dbg_lib_show_function "$@"
+  BL64_UI_CMD_BAT="$(bl64_bsh_command_locate 'bat' "$@")"
+  BL64_UI_CMD_DIALOG="$(bl64_bsh_command_locate 'dialog' "$@")"
+  BL64_UI_CMD_FZF="$(bl64_bsh_command_locate 'fzf' "$@")"
+  BL64_UI_CMD_GUM="$(bl64_bsh_command_locate 'gum' "$@")"
+  BL64_UI_CMD_LESS="$(bl64_bsh_command_locate 'less' "$@")"
+  BL64_UI_CMD_WHIPTAIL="$(bl64_bsh_command_locate 'whiptail' "$@")"
+  return 0
 }
 
 #######################################
@@ -19794,6 +19930,174 @@ function bl64_ui_ask_input_date() {
       bl64_msg_show_lib_error "Invalid input. Please enter a valid date (DD-MM-YYYY)."
     fi
   done
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_ui_run_bat() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_command "$BL64_UI_CMD_BAT" "$BL64_VAR_DEFAULT" 'bat' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_UI_CMD_BAT" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_ui_run_dialog() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_command "$BL64_UI_CMD_DIALOG" "$BL64_VAR_DEFAULT" 'dialog' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_UI_CMD_DIALOG" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_ui_run_fzf() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_command "$BL64_UI_CMD_FZF" "$BL64_VAR_DEFAULT" 'fzf' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_UI_CMD_FZF" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_ui_run_whiptail() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_command "$BL64_UI_CMD_WHIPTAIL" "$BL64_VAR_DEFAULT" 'whiptail' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_UI_CMD_WHIPTAIL" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_ui_run_gum() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_command "$BL64_UI_CMD_GUM" "$BL64_VAR_DEFAULT" 'gum' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_UI_CMD_GUM" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_ui_run_less() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_command "$BL64_UI_CMD_LESS" "$BL64_VAR_DEFAULT" 'less' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_UI_CMD_LESS" "$@"
+  bl64_dbg_lib_trace_stop
 }
 
 #######################################
@@ -20541,8 +20845,8 @@ function bl64_xsv_json_format_machine() {
 # Library Main
 #
 
-bl64_lib_harden_shopt &&
-  bl64_lib_harden_options ||
+_bl64_lib_harden_shopt &&
+  _bl64_lib_harden_options ||
   exit $?
 
 # Normalize terminal settings
@@ -20551,7 +20855,7 @@ TERM="${TERM:-vt100}"
 # Normalize paths
 TMPDIR='/tmp'
 
-# Normalize common shell variables
+# Normalize interactive prompts
 PS1="${PS1:-BL64 \u@\H:\w$ }"
 PS2="${PS2:-BL64 > }"
 
@@ -20605,30 +20909,14 @@ umask -S 'u=rwx,g=,o=' >/dev/null
 [[ -n "${BL64_RND_MODULE:-}" ]] && { bl64_rnd_setup || exit $?; }
 [[ -n "${BL64_TM_MODULE:-}" ]] && { bl64_tm_setup || exit $?; }
 
-bl64_lib_script_set_identity
-bl64_dbg_runtime_show
+_bl64_lib_script_set_identity &&
+  _bl64_dbg_runtime_show &&
+  _bl64_lib_check_os_compabitility ||
+  exit $?
 
-# Check OS compatibility
-if [[ "${BL64_OS_MODULE:-$BL64_VAR_OFF}" == "$BL64_VAR_ON" ]]; then
-  bl64_os_check_compatibility \
-    "${BL64_OS_ALM}"-{8,9,10} \
-    "${BL64_OS_ALP}"-3.{17,18,19,20,21,22,23,24} \
-    "${BL64_OS_AMZ}"-2023 \
-    "${BL64_OS_ARC}"-2025 \
-    "${BL64_OS_CNT}"-{7,8,9,10} \
-    "${BL64_OS_DEB}"-{9,10,11,12,13} \
-    "${BL64_OS_FD}"-{33,34,35,36,37,38,39} \
-    "${BL64_OS_FD}"-{40,41,42,43,44} \
-    "${BL64_OS_KL}"-{2024,2025} \
-    "${BL64_OS_MCOS}"-{12,13,14,15} \
-    "${BL64_OS_OL}"-{7,8,9,10} \
-    "${BL64_OS_OPS}"-{15,16} \
-    "${BL64_OS_RCK}"-{8,9,10} \
-    "${BL64_OS_RHEL}"-{8,9,10} \
-    "${BL64_OS_SLES}"-{15,16} \
-    "${BL64_OS_UB}"-{18,20,21,22,23,24,25,26} ||
-    exit $?
-fi
+# Normalize user identity
+LOGNAME="${LOGNAME:-$(bl64_iam_user_get_current)}"
+USER="${USER:-$LOGNAME}"
 
 # Run as script or sourced library
 if bl64_lib_mode_command_is_enabled; then
