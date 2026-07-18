@@ -65,8 +65,9 @@ umask -S 'u=rwx,g=,o=' >/dev/null
 [[ -n "${BL64_RND_MODULE:-}" ]] && { bl64_rnd_setup || exit $?; }
 [[ -n "${BL64_TM_MODULE:-}" ]] && { bl64_tm_setup || exit $?; }
 
+[[ $(type -t _bl64_dbg_runtime_show) == 'function' ]] && _bl64_dbg_runtime_show
+
 _bl64_lib_script_set_identity &&
-  _bl64_dbg_runtime_show &&
   _bl64_lib_check_os_compabitility ||
   exit $?
 
