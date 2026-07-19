@@ -20,8 +20,10 @@
   # Flag for unavailable command or task
   declare BL64_VAR_UNAVAILABLE='_UNV_'
 
-  # Pseudo null value
+  # Pseudo null value. Equals to ''
   declare BL64_VAR_NULL='_NULL_'
+
+  # Common values
   declare BL64_VAR_ALL='_ALL_'
   declare BL64_VAR_NONE='_NONE_'
 

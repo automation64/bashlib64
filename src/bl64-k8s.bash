@@ -498,7 +498,7 @@ function bl64_k8s_run_kubectl_plugin() {
     return $?
 
   _bl64_k8s_harden_kubectl
-  if ! bl64_lib_var_is_default "$kubeconfig"; then
+  if bl64_lib_var_is_set "$kubeconfig"; then
     bl64_check_file "$kubeconfig" 'kubectl config file not found' ||
       return $?
     export KUBECONFIG="$kubeconfig"

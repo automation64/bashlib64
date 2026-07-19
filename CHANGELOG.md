@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - core
-  - Added USER, LOGNAME standardization
+  - bootstrap: USER, LOGNAME standardization
+  - bl64_lib_var_is_set
 - ans
   - bl64_ans_set_paths: added inventory and temp path support
   - bl64_ans_set_options

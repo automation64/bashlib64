@@ -97,14 +97,14 @@ function bl64_ans_harden_ansible() {
     bl64_dbg_lib_trace_stop
   fi
 
-  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_COLLECTIONS" && export ANSIBLE_COLLECTIONS_PATHS="$BL64_ANS_PATH_USR_COLLECTIONS"
-  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_CONFIG" && export ANSIBLE_CONFIG="$BL64_ANS_PATH_USR_CONFIG"
-  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_HOME" && export ANSIBLE_HOME="$BL64_ANS_PATH_USR_HOME"
-  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_INVENTORY" && export ANSIBLE_INVENTORY="$BL64_ANS_PATH_USR_INVENTORY"
-  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_LOG" && export ANSIBLE_LOG_PATH="$BL64_ANS_PATH_USR_LOG"
+  bl64_lib_var_is_set "$BL64_ANS_PATH_USR_COLLECTIONS" && export ANSIBLE_COLLECTIONS_PATHS="$BL64_ANS_PATH_USR_COLLECTIONS"
+  bl64_lib_var_is_set "$BL64_ANS_PATH_USR_CONFIG" && export ANSIBLE_CONFIG="$BL64_ANS_PATH_USR_CONFIG"
+  bl64_lib_var_is_set "$BL64_ANS_PATH_USR_HOME" && export ANSIBLE_HOME="$BL64_ANS_PATH_USR_HOME"
+  bl64_lib_var_is_set "$BL64_ANS_PATH_USR_INVENTORY" && export ANSIBLE_INVENTORY="$BL64_ANS_PATH_USR_INVENTORY"
+  bl64_lib_var_is_set "$BL64_ANS_PATH_USR_LOG" && export ANSIBLE_LOG_PATH="$BL64_ANS_PATH_USR_LOG"
   bl64_dbg_lib_show_vars 'ANSIBLE_HOME' 'ANSIBLE_CONFIG' 'ANSIBLE_COLLECTIONS_PATHS' 'ANSIBLE_INVENTORY' 'ANSIBLE_LOG_PATH'
 
-  if ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_TMP"; then
+  if bl64_lib_var_is_set "$BL64_ANS_PATH_USR_TMP"; then
     export ANSIBLE_CACHE_PLUGIN_CONNECTION="${BL64_ANS_PATH_USR_TMP}/cpc"
     export ANSIBLE_GALAXY_CACHE_DIR="${BL64_ANS_PATH_USR_TMP}/gc"
     export ANSIBLE_LOCAL_TEMP="${BL64_ANS_PATH_USR_TMP}/tmp"
@@ -120,7 +120,7 @@ function bl64_ans_harden_ansible() {
       'ANSIBLE_SSH_CONTROL_PATH_DIR'
   fi
 
-  ! bl64_lib_var_is_default "$BL64_ANS_CFG_STDOUT_CALLBACK" && export ANSIBLE_STDOUT_CALLBACK="$BL64_ANS_CFG_STDOUT_CALLBACK"
+  bl64_lib_var_is_set "$BL64_ANS_CFG_STDOUT_CALLBACK" && export ANSIBLE_STDOUT_CALLBACK="$BL64_ANS_CFG_STDOUT_CALLBACK"
   bl64_dbg_lib_show_vars 'ANSIBLE_STDOUT_CALLBACK'
 
   if bl64_lib_mode_cicd_is_enabled; then
@@ -129,7 +129,7 @@ function bl64_ans_harden_ansible() {
     export ANSIBLE_HOST_KEY_CHECKING='False'
     export ANSIBLE_NOCOLOR='True'
   fi
-  if ! bl64_lib_var_is_default "$BL64_ANS_CFG_VERBOSITY"; then
+  if bl64_lib_var_is_set "$BL64_ANS_CFG_VERBOSITY"; then
     export ANSIBLE_VERBOSITY="$BL64_ANS_CFG_VERBOSITY"
   else
     bl64_msg_app_detail_is_enabled && export ANSIBLE_VERBOSITY='1'

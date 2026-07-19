@@ -258,6 +258,11 @@ function bl64_lib_var_is_default {
   [[ "$value" == "$BL64_VAR_DEFAULT" || "$value" == "$BL64_VAR_DEFAULT_LEGACY" ]]
 }
 
+function bl64_lib_var_is_set {
+  local value="${1:-}"
+  [[ "$value" != '' && "$value" != "$BL64_VAR_NULL" ]] && ! bl64_lib_var_is_default "$value"
+}
+
 #######################################
 # Determines if the flag variable is enabled or not
 #

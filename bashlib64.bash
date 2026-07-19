@@ -73,8 +73,10 @@ builtin unset MAILPATH
   # Flag for unavailable command or task
   declare BL64_VAR_UNAVAILABLE='_UNV_'
 
-  # Pseudo null value
+  # Pseudo null value. Equals to ''
   declare BL64_VAR_NULL='_NULL_'
+
+  # Common values
   declare BL64_VAR_ALL='_ALL_'
   declare BL64_VAR_NONE='_NONE_'
 
@@ -466,6 +468,11 @@ function bl64_lib_var_is_default {
   [[ "$value" == "$BL64_VAR_DEFAULT" || "$value" == "$BL64_VAR_DEFAULT_LEGACY" ]]
 }
 
+function bl64_lib_var_is_set {
+  local value="${1:-}"
+  [[ "$value" != '' && "$value" != "$BL64_VAR_NULL" ]] && ! bl64_lib_var_is_default "$value"
+}
+
 #######################################
 # Determines if the flag variable is enabled or not
 #
@@ -714,7 +721,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.18.2'
+  declare BL64_MSG_VERSION='5.18.3'
 
   declare BL64_MSG_MODULE='0'
 
@@ -1415,7 +1422,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_K8S_VERSION='4.2.0'
+  declare BL64_K8S_VERSION='4.2.1'
 
   declare BL64_K8S_MODULE='0'
 
@@ -4438,7 +4445,7 @@ function _bl64_msg_show_script() {
 
 function _bl64_msg_show_about() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
-  if ! bl64_lib_var_is_default "$BL64_MSG_HELP_ABOUT"; then
+  if bl64_lib_var_is_set "$BL64_MSG_HELP_ABOUT"; then
     _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'About  ' "$BL64_MSG_HELP_ABOUT"
   fi
 }
@@ -4986,11 +4993,11 @@ function bl64_msg_help_show() {
   _bl64_msg_show_about
   bl64_msg_help_show_usage
 
-  if ! bl64_lib_var_is_default "$BL64_MSG_HELP_DESCRIPTION"; then
+  if bl64_lib_var_is_set "$BL64_MSG_HELP_DESCRIPTION"; then
     printf '\n%s\n' "$BL64_MSG_HELP_DESCRIPTION"
   fi
 
-  if ! bl64_lib_var_is_default "$BL64_MSG_HELP_PARAMETERS"; then
+  if bl64_lib_var_is_set "$BL64_MSG_HELP_PARAMETERS"; then
     printf '\n%s\n' "$BL64_MSG_HELP_PARAMETERS"
   fi
   bl64_msg_set_format "$current_format"
@@ -5013,7 +5020,7 @@ function bl64_msg_help_show_usage() {
   local current_format="$BL64_MSG_FORMAT"
 
   bl64_msg_set_format "$BL64_MSG_FORMAT_PLAIN"
-  if ! bl64_lib_var_is_default "$BL64_MSG_HELP_USAGE"; then
+  if bl64_lib_var_is_set "$BL64_MSG_HELP_USAGE"; then
     _bl64_msg_print "$BL64_MSG_TYPE_HELP" 'Usage  ' "${BL64_SCRIPT_ID} ${BL64_MSG_HELP_USAGE}"
   fi
   bl64_msg_set_format "$current_format"
@@ -6370,14 +6377,14 @@ function bl64_ans_harden_ansible() {
     bl64_dbg_lib_trace_stop
   fi
 
-  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_COLLECTIONS" && export ANSIBLE_COLLECTIONS_PATHS="$BL64_ANS_PATH_USR_COLLECTIONS"
-  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_CONFIG" && export ANSIBLE_CONFIG="$BL64_ANS_PATH_USR_CONFIG"
-  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_HOME" && export ANSIBLE_HOME="$BL64_ANS_PATH_USR_HOME"
-  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_INVENTORY" && export ANSIBLE_INVENTORY="$BL64_ANS_PATH_USR_INVENTORY"
-  ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_LOG" && export ANSIBLE_LOG_PATH="$BL64_ANS_PATH_USR_LOG"
+  bl64_lib_var_is_set "$BL64_ANS_PATH_USR_COLLECTIONS" && export ANSIBLE_COLLECTIONS_PATHS="$BL64_ANS_PATH_USR_COLLECTIONS"
+  bl64_lib_var_is_set "$BL64_ANS_PATH_USR_CONFIG" && export ANSIBLE_CONFIG="$BL64_ANS_PATH_USR_CONFIG"
+  bl64_lib_var_is_set "$BL64_ANS_PATH_USR_HOME" && export ANSIBLE_HOME="$BL64_ANS_PATH_USR_HOME"
+  bl64_lib_var_is_set "$BL64_ANS_PATH_USR_INVENTORY" && export ANSIBLE_INVENTORY="$BL64_ANS_PATH_USR_INVENTORY"
+  bl64_lib_var_is_set "$BL64_ANS_PATH_USR_LOG" && export ANSIBLE_LOG_PATH="$BL64_ANS_PATH_USR_LOG"
   bl64_dbg_lib_show_vars 'ANSIBLE_HOME' 'ANSIBLE_CONFIG' 'ANSIBLE_COLLECTIONS_PATHS' 'ANSIBLE_INVENTORY' 'ANSIBLE_LOG_PATH'
 
-  if ! bl64_lib_var_is_default "$BL64_ANS_PATH_USR_TMP"; then
+  if bl64_lib_var_is_set "$BL64_ANS_PATH_USR_TMP"; then
     export ANSIBLE_CACHE_PLUGIN_CONNECTION="${BL64_ANS_PATH_USR_TMP}/cpc"
     export ANSIBLE_GALAXY_CACHE_DIR="${BL64_ANS_PATH_USR_TMP}/gc"
     export ANSIBLE_LOCAL_TEMP="${BL64_ANS_PATH_USR_TMP}/tmp"
@@ -6393,7 +6400,7 @@ function bl64_ans_harden_ansible() {
       'ANSIBLE_SSH_CONTROL_PATH_DIR'
   fi
 
-  ! bl64_lib_var_is_default "$BL64_ANS_CFG_STDOUT_CALLBACK" && export ANSIBLE_STDOUT_CALLBACK="$BL64_ANS_CFG_STDOUT_CALLBACK"
+  bl64_lib_var_is_set "$BL64_ANS_CFG_STDOUT_CALLBACK" && export ANSIBLE_STDOUT_CALLBACK="$BL64_ANS_CFG_STDOUT_CALLBACK"
   bl64_dbg_lib_show_vars 'ANSIBLE_STDOUT_CALLBACK'
 
   if bl64_lib_mode_cicd_is_enabled; then
@@ -6402,7 +6409,7 @@ function bl64_ans_harden_ansible() {
     export ANSIBLE_HOST_KEY_CHECKING='False'
     export ANSIBLE_NOCOLOR='True'
   fi
-  if ! bl64_lib_var_is_default "$BL64_ANS_CFG_VERBOSITY"; then
+  if bl64_lib_var_is_set "$BL64_ANS_CFG_VERBOSITY"; then
     export ANSIBLE_VERBOSITY="$BL64_ANS_CFG_VERBOSITY"
   else
     bl64_msg_app_detail_is_enabled && export ANSIBLE_VERBOSITY='1'
@@ -15270,7 +15277,7 @@ function bl64_k8s_run_kubectl_plugin() {
     return $?
 
   _bl64_k8s_harden_kubectl
-  if ! bl64_lib_var_is_default "$kubeconfig"; then
+  if bl64_lib_var_is_set "$kubeconfig"; then
     bl64_check_file "$kubeconfig" 'kubectl config file not found' ||
       return $?
     export KUBECONFIG="$kubeconfig"
