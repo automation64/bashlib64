@@ -51,13 +51,9 @@ builtin unset IFS
 builtin unset MAIL
 builtin unset MAILPATH
 
-#######################################
-# BashLib64 / Module / Globals / Setup script run-time environment
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='23.4.0'
+  declare BL64_VERSION='23.5.0'
 
   #
   # Common constants
@@ -191,7 +187,6 @@ builtin unset MAILPATH
   declare BL64_SCRIPT_SID=''
   declare BL64_SCRIPT_ID=''
   declare BL64_SCRIPT_VERSION='1.0.0'
-
   #
   # Set Signal traps
   #
@@ -252,11 +247,11 @@ function _bl64_lib_script_get_name() {
 # Check that the module is imported
 #
 # * Used for the modular version of bashlib64 to ensure dependant modules are loaded (sourced)
-# * A module is considered imported if the associated shell environment variable BL64_XXX_MODULE is defined
+# * A module is considered imported if the associated shell environment variable BL64_XXX_MOD_SETUP is defined
 # * This check will not verify if the module was also initialized. Use the function 'bl64_check_module' instead
 #
 # Arguments:
-#   $1: module id (eg: BL64_XXXX_MODULE)
+#   $1: module id (eg: BL64_XXXX_MOD_SETUP)
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
@@ -426,7 +421,7 @@ function _bl64_lib_harden_options() {
 
 function _bl64_lib_check_os_compabitility() {
   # Check OS compatibility
-  if [[ "${BL64_OS_MODULE:-$BL64_VAR_OFF}" == "$BL64_VAR_ON" ]]; then
+  if [[ "${BL64_OS_MOD_SETUP:-$BL64_VAR_OFF}" == "$BL64_VAR_ON" ]]; then
     bl64_os_check_compatibility \
       "${BL64_OS_ALM}"-{8,9,10} \
       "${BL64_OS_ALP}"-3.{17,18,19,20,21,22,23,24} \
@@ -583,26 +578,18 @@ function bl64_lib_script_minver_check() {
     fi
   done
 }
-#######################################
-# BashLib64 / Module / Globals / Check for conditions and report status
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_CHECK_VERSION='6.3.0'
-
-  declare BL64_CHECK_MODULE='0'
+  declare BL64_CHECK_MOD_VERSION='6.3.0'
+  declare BL64_CHECK_MOD_INFO='General Purpose Checks'
+  declare BL64_CHECK_MOD_SETUP='0'
 }
 
-#######################################
-# BashLib64 / Module / Globals / Show shell debugging information
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_DBG_VERSION='3.5.1'
-
-  declare BL64_DBG_MODULE='0'
+  declare BL64_DBG_MOD_VERSION='3.5.1'
+  declare BL64_DBG_MOD_INFO='Shell Debugging'
+  declare BL64_DBG_MOD_SETUP='0'
 
   # Debug target
   declare BL64_DBG_TARGET=''
@@ -678,15 +665,11 @@ function bl64_lib_script_minver_check() {
   declare _BL64_DBG_TXT_CALLSTACK='Last executed function'
 }
 
-#######################################
-# BashLib64 / Module / Globals / Write messages to logs
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_LOG_VERSION='3.0.2'
-
-  declare BL64_LOG_MODULE='0'
+  declare BL64_LOG_MOD_VERSION='3.0.2'
+  declare BL64_LOG_MOD_INFO='Logs Management'
+  declare BL64_LOG_MOD_SETUP='0'
 
   # Log file types
   declare BL64_LOG_FORMAT_CSV='C'
@@ -715,15 +698,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_LOG_RUNTIME=''
 }
 
-#######################################
-# BashLib64 / Module / Globals / Display messages
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.18.3'
-
-  declare BL64_MSG_MODULE='0'
+  declare BL64_MSG_MOD_VERSION='5.18.3'
+  declare BL64_MSG_MOD_INFO='Script Messaging'
+  declare BL64_MSG_MOD_SETUP='0'
 
   #
   # Deprecated Variables
@@ -966,15 +945,11 @@ function bl64_lib_script_minver_check() {
 
 }
 
-#######################################
-# BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_OS_VERSION='5.13.0'
-
-  declare BL64_OS_MODULE='0'
+  declare BL64_OS_MOD_VERSION='5.13.0'
+  declare BL64_OS_MOD_INFO='Operating System Tools Interface'
+  declare BL64_OS_MOD_SETUP='0'
 
   # Current OS Distro ID
   declare BL64_OS_DISTRO=''
@@ -1052,15 +1027,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_OS_MACHINE_UNK='UNKNOWN'
 }
 
-#######################################
-# BashLib64 / Module / Globals / Interact with Ansible CLI
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_ANS_VERSION='3.1.0'
-
-  declare BL64_ANS_MODULE='0'
+  declare BL64_ANS_MOD_VERSION='3.1.0'
+  declare BL64_ANS_MOD_INFO='Ansible Interface'
+  declare BL64_ANS_MOD_SETUP='0'
 
   declare BL64_ANS_ENV_IGNORE=''
 
@@ -1081,15 +1052,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_ANS_CFG_VERBOSITY=''
 }
 
-#######################################
-# BashLib64 / Module / Globals / Interact with RESTful APIs
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_API_VERSION='2.3.0'
-
-  declare BL64_API_MODULE='0'
+  declare BL64_API_MOD_VERSION='2.3.0'
+  declare BL64_API_MOD_INFO='API Client Interface'
+  declare BL64_API_MOD_SETUP='0'
 
   declare BL64_API_CALL_SET_MAX_RETRIES='3'
   declare BL64_API_CALL_SET_WAIT='10'
@@ -1104,15 +1071,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_API_METHOD_PUT='PUT'
 }
 
-#######################################
-# BashLib64 / Module / Globals / Manage archive files
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_ARC_VERSION='4.6.0'
-
-  declare BL64_ARC_MODULE='0'
+  declare BL64_ARC_MOD_VERSION='4.6.0'
+  declare BL64_ARC_MOD_INFO='File Archival Tools Interface'
+  declare BL64_ARC_MOD_SETUP='0'
 
   declare BL64_ARC_CMD_BUNZIP2="$BL64_VAR_UNAVAILABLE"
   declare BL64_ARC_CMD_GUNZIP="$BL64_VAR_UNAVAILABLE"
@@ -1128,15 +1091,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_ARC_SET_UNZIP_OVERWRITE=''
 }
 
-#######################################
-# BashLib64 / Module / Globals / Interact with AWS
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_AWS_VERSION='4.0.6'
-
-  declare BL64_AWS_MODULE='0'
+  declare BL64_AWS_MOD_VERSION='4.0.6'
+  declare BL64_AWS_MOD_INFO='AWS CLI Interface'
+  declare BL64_AWS_MOD_SETUP='0'
 
   declare BL64_AWS_CMD_AWS="$BL64_VAR_UNAVAILABLE"
 
@@ -1172,15 +1131,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_AWS_ACCESS_MODE_TOKEN='T'
 }
 
-#######################################
-# BashLib64 / Module / Globals / Interact with Bash shell
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_BSH_VERSION='3.10.3'
-
-  declare BL64_BSH_MODULE='0'
+  declare BL64_BSH_MOD_VERSION='3.10.3'
+  declare BL64_BSH_MOD_INFO='Bash Shell Interface'
+  declare BL64_BSH_MOD_SETUP='0'
 
   declare BL64_BSH_VERSION_BASH=''
   declare BL64_BSH_ENV_STORE='.env.d'
@@ -1194,15 +1149,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_BSH_JOB_SET_WAIT='5'
 }
 
-#######################################
-# BashLib64 / Module / Globals / Interact with container engines
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_CNT_VERSION='4.0.2'
-
-  declare BL64_CNT_MODULE='0'
+  declare BL64_CNT_MOD_VERSION='4.0.2'
+  declare BL64_CNT_MOD_INFO='Container Tools Interface'
+  declare BL64_CNT_MOD_SETUP='0'
 
   declare BL64_CNT_DRIVER_DOCKER='docker'
   declare BL64_CNT_DRIVER_PODMAN='podman'
@@ -1237,15 +1188,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_CNT_SET_STATUS_RUNNING=''
 }
 
-#######################################
-# BashLib64 / Module / Globals / Cryptography tools
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_CRYP_VERSION='2.5.3'
-
-  declare BL64_CRYP_MODULE='0'
+  declare BL64_CRYP_MOD_VERSION='2.5.3'
+  declare BL64_CRYP_MOD_INFO='Cryptographic Tools Interface'
+  declare BL64_CRYP_MOD_SETUP='0'
 
   declare BL64_CRYP_CMD_GPG="$BL64_VAR_UNAVAILABLE"
   declare BL64_CRYP_CMD_OPENSSL="$BL64_VAR_UNAVAILABLE"
@@ -1253,26 +1200,18 @@ function bl64_lib_script_minver_check() {
   declare BL64_CRYP_CMD_SHA256SUM="$BL64_VAR_UNAVAILABLE"
 }
 
-#######################################
-# BashLib64 / Module / Globals / Format text data
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_FMT_VERSION='5.1.1'
-
-  declare BL64_FMT_MODULE='0'
+  declare BL64_FMT_MOD_VERSION='5.1.1'
+  declare BL64_FMT_MOD_INFO='Value Formatting and Transformation'
+  declare BL64_FMT_MOD_SETUP='0'
 }
 
-#######################################
-# BashLib64 / Module / Globals / Manage local filesystem
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.6.1'
-
-  declare BL64_FS_MODULE='0'
+  declare BL64_FS_MOD_VERSION='6.6.1'
+  declare BL64_FS_MOD_INFO='File System Tools Interface'
+  declare BL64_FS_MOD_SETUP='0'
 
   declare BL64_FS_PATH_TEMPORAL=''
   declare BL64_FS_PATH_CACHE=''
@@ -1346,15 +1285,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_FS_TMP_PREFIX='bl64tmp'
 }
 
-#######################################
-# BashLib64 / Module / Globals / Interact with GCP
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_GCP_VERSION='3.0.4'
-
-  declare BL64_GCP_MODULE='0'
+  declare BL64_GCP_MOD_VERSION='3.0.4'
+  declare BL64_GCP_MOD_INFO='Google Cloud Platform CLI Interface'
+  declare BL64_GCP_MOD_SETUP='0'
 
   declare BL64_GCP_CMD_GCLOUD="$BL64_VAR_UNAVAILABLE"
 
@@ -1365,15 +1300,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_GCP_CLI_IMPERSONATE_SA=''
 }
 
-#######################################
-# BashLib64 / Module / Globals / Interact with HLM
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_HLM_VERSION='3.0.3'
-
-  declare BL64_HLM_MODULE='0'
+  declare BL64_HLM_MOD_VERSION='3.0.3'
+  declare BL64_HLM_MOD_INFO='Helm CLI Interface'
+  declare BL64_HLM_MOD_SETUP='0'
 
   declare BL64_HLM_CMD_HELM="$BL64_VAR_UNAVAILABLE"
 
@@ -1385,15 +1316,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_HLM_RUN_TIMEOUT='5m0s'
 }
 
-#######################################
-# BashLib64 / Module / Globals / Manage OS identity and access service
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_IAM_VERSION='6.3.0'
-
-  declare BL64_IAM_MODULE='0'
+  declare BL64_IAM_MOD_VERSION='6.3.0'
+  declare BL64_IAM_MOD_INFO='Identity and Access Management Tools Interface'
+  declare BL64_IAM_MOD_SETUP='0'
 
   declare BL64_IAM_CMD_USERADD="$BL64_VAR_INCOMPATIBLE"
   declare BL64_IAM_CMD_USERMOD="$BL64_VAR_INCOMPATIBLE"
@@ -1415,10 +1342,6 @@ function bl64_lib_script_minver_check() {
   declare BL64_IAM_SYSTEM_USER=''
   declare BL64_IAM_SYSTEM_GROUP=''
 }
-
-#######################################
-# BashLib64 / Module / Globals / Interact with Kubernetes
-#######################################
 
 # shellcheck disable=SC2034
 {
@@ -1446,9 +1369,9 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MDB_VERSION='2.0.3'
-
-  declare BL64_MDB_MODULE='0'
+  declare BL64_MDB_MOD_VERSION='2.0.3'
+  declare BL64_MDB_MOD_INFO='MongoDB Tools Interface'
+  declare BL64_MDB_MOD_SETUP='0'
 
   declare BL64_MDB_CMD_MONGOSH="$BL64_VAR_UNAVAILABLE"
   declare BL64_MDB_CMD_MONGORESTORE="$BL64_VAR_UNAVAILABLE"
@@ -1462,15 +1385,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_MDB_CFG_REPLICA_TIMEOUT='1000'
 }
 
-#######################################
-# BashLib64 / Module / Globals / Manage native OS packages
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_PKG_VERSION='6.8.0'
-
-  declare BL64_PKG_MODULE='0'
+  declare BL64_PKG_MOD_VERSION='6.8.0'
+  declare BL64_PKG_MOD_INFO='Native Package Management Tools Interface'
+  declare BL64_PKG_MOD_SETUP='0'
 
   declare BL64_PKG_CMD_APK="$BL64_VAR_INCOMPATIBLE"
   declare BL64_PKG_CMD_APT="$BL64_VAR_INCOMPATIBLE"
@@ -1519,15 +1438,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_PKG_DEF_SUFIX_YUM_REPOSITORY='repo'
 }
 
-#######################################
-# BashLib64 / Module / Globals / Interact with system-wide Python
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='4.2.6'
-
-  declare BL64_PY_MODULE='0'
+  declare BL64_PY_MOD_VERSION='4.2.6'
+  declare BL64_PY_MOD_INFO='Python Tools Interface'
+  declare BL64_PY_MOD_SETUP='0'
 
   #
   # Deprecated Variables
@@ -1566,15 +1481,11 @@ function bl64_lib_script_minver_check() {
   declare VIRTUAL_ENV="${VIRTUAL_ENV:-}"
 }
 
-#######################################
-# BashLib64 / Module / Globals / Manage role based access service
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_RBAC_VERSION='2.4.0'
-
-  declare BL64_RBAC_MODULE='0'
+  declare BL64_RBAC_MOD_VERSION='2.4.0'
+  declare BL64_RBAC_MOD_INFO='Role Based Access Management Tools Interface'
+  declare BL64_RBAC_MOD_SETUP='0'
 
   declare BL64_RBAC_CMD_SUDO=''
   declare BL64_RBAC_CMD_VISUDO=''
@@ -1587,15 +1498,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_RBAC_SET_SUDO_QUIET=''
 }
 
-#######################################
-# BashLib64 / Module / Globals / Generate random data
-#######################################
-
 # shellcheck disable=SC2034,SC2155
 {
-  declare BL64_RND_VERSION='2.0.1'
-
-  declare BL64_RND_MODULE='0'
+  declare BL64_RND_MOD_VERSION='2.0.1'
+  declare BL64_RND_MOD_INFO='Random Values Generation'
+  declare BL64_RND_MOD_SETUP='0'
 
   declare -i BL64_RND_LENGTH_1=1
   declare -i BL64_RND_LENGTH_20=20
@@ -1613,15 +1520,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_RND_POOL_ALPHANUMERIC_MAX_IDX="$((${#BL64_RND_POOL_ALPHANUMERIC} - 1))"
 }
 
-#######################################
-# BashLib64 / Module / Globals / Transfer and Receive data over the network
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_RXTX_VERSION='2.8.0'
-
-  declare BL64_RXTX_MODULE='0'
+  declare BL64_RXTX_MOD_VERSION='2.8.0'
+  declare BL64_RXTX_MOD_INFO='Data Transfer Tools Interface'
+  declare BL64_RXTX_MOD_SETUP='0'
 
   declare BL64_RXTX_CMD_CURL=''
   declare BL64_RXTX_CMD_WGET=''
@@ -1651,15 +1554,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_RXTX_GITHUB_URL='https://github.com'
 }
 
-#######################################
-# BashLib64 / Module / Globals / Interact with Terraform
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_TF_VERSION='3.3.0'
-
-  declare BL64_TF_MODULE='0'
+  declare BL64_TF_MOD_VERSION='3.3.0'
+  declare BL64_TF_MOD_INFO='Terraform Tools Interface'
+  declare BL64_TF_MOD_SETUP='0'
 
   declare BL64_TF_CMD_TERRAFORM="$BL64_VAR_UNAVAILABLE"
   declare BL64_TF_CMD_TOFU="$BL64_VAR_UNAVAILABLE"
@@ -1687,26 +1586,18 @@ function bl64_lib_script_minver_check() {
   declare BL64_TF_PATH_LOG=''
 }
 
-#######################################
-# BashLib64 / Module / Globals / Manage date-time data
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_TM_VERSION='2.0.1'
-
-  declare BL64_TM_MODULE='0'
+  declare BL64_TM_MOD_VERSION='2.0.1'
+  declare BL64_TM_MOD_INFO='Time and Date'
+  declare BL64_TM_MOD_SETUP='0'
 }
 
-#######################################
-# BashLib64 / Module / Globals / Manipulate text files content
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_TXT_VERSION='2.8.0'
-
-  declare BL64_TXT_MODULE='0'
+  declare BL64_TXT_MOD_VERSION='2.8.0'
+  declare BL64_TXT_MOD_INFO='Text File Manipulation'
+  declare BL64_TXT_MOD_SETUP='0'
 
   declare BL64_TXT_CMD_AWK_POSIX="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_AWK="$BL64_VAR_UNAVAILABLE"
@@ -1741,15 +1632,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_TXT_FLAG_STDIN='STDIN'
 }
 
-#######################################
-# BashLib64 / Module / Globals / User Interface
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_UI_VERSION='3.4.0'
-
-  declare BL64_UI_MODULE='0'
+  declare BL64_UI_MOD_VERSION='3.5.0'
+  declare BL64_UI_MOD_INFO='Text User Interface'
+  declare BL64_UI_MOD_SETUP='0'
 
   declare BL64_UI_CFG_INPUT_TIMEOUT='60'
   declare BL64_UI_CFG_SKIP_CONFIRMATION="$BL64_VAR_NO"
@@ -1759,18 +1646,30 @@ function bl64_lib_script_minver_check() {
   declare BL64_UI_CMD_FZF="$BL64_VAR_UNAVAILABLE"
   declare BL64_UI_CMD_GUM="$BL64_VAR_UNAVAILABLE"
   declare BL64_UI_CMD_LESS="$BL64_VAR_UNAVAILABLE"
+  declare BL64_UI_CMD_MORE="$BL64_VAR_UNAVAILABLE"
   declare BL64_UI_CMD_WHIPTAIL="$BL64_VAR_UNAVAILABLE"
-}
 
-#######################################
-# BashLib64 / Module / Globals / Manage Version Control System
-#######################################
+  declare BL64_UI_PAGER=''
+  declare BL64_UI_PAGER_BAT='BAT'
+  declare BL64_UI_PAGER_CAT='CAT'
+  declare BL64_UI_PAGER_LESS='LESS'
+  declare BL64_UI_PAGER_MORE='MORE'
+
+  declare BL64_UI_TUI=''
+  declare BL64_UI_TUI_BASH='BASH'
+  declare BL64_UI_TUI_DIALOG='DIALOG'
+  declare BL64_UI_TUI_FZF='FZF'
+  declare BL64_UI_TUI_GUM='GUM'
+  declare BL64_UI_TUI_WHIPTAIL='WHIPTAIL'
+
+  declare _BL64_UI_TXT_SELECT_ITEM='Select an item from the list'
+}
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VCS_VERSION='3.2.2'
-
-  declare BL64_VCS_MODULE='0'
+  declare BL64_VCS_MOD_VERSION='3.2.2'
+  declare BL64_VCS_MOD_INFO='Version Control System Tools Interface'
+  declare BL64_VCS_MOD_SETUP='0'
 
   declare BL64_VCS_CMD_GIT=''
 
@@ -1789,15 +1688,11 @@ function bl64_lib_script_minver_check() {
   declare BL64_VCS_GITHUB_LATEST='latest'
 }
 
-#######################################
-# BashLib64 / Module / Globals / Manipulate CSV like text files
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_XSV_VERSION='2.3.0'
-
-  declare BL64_XSV_MODULE='0'
+  declare BL64_XSV_MOD_VERSION='2.3.0'
+  declare BL64_XSV_MOD_INFO='Structured Data Tools Interface'
+  declare BL64_XSV_MOD_SETUP='0'
 
   declare BL64_XSV_CMD_PKL="$BL64_VAR_UNAVAILABLE"
   declare BL64_XSV_CMD_YQ="$BL64_VAR_UNAVAILABLE"
@@ -1843,10 +1738,10 @@ function bl64_check_setup() {
   _bl64_dbg_lib_check_is_enabled && bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    BL64_CHECK_MODULE="$BL64_VAR_ON"
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    BL64_CHECK_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'check'
 }
 
@@ -2536,7 +2431,7 @@ function bl64_check_parameters_none() {
 # * Use in functions that depends on module resources being present before execution
 #
 # Arguments:
-#   $1: module id (eg: BL64_XXXX_MODULE)
+#   $1: module id (eg: BL64_XXXX_MOD_SETUP)
 # Outputs:
 #   STDOUT: none
 #   STDERR: message
@@ -2770,7 +2665,7 @@ function bl64_dbg_setup() {
   # shellcheck disable=SC2034
   bl64_dbg_all_disable &&
     bl64_dbg_all_dryrun_disable &&
-    BL64_DBG_MODULE="$BL64_VAR_ON"
+    BL64_DBG_MOD_SETUP="$BL64_VAR_ON"
 }
 
 #######################################
@@ -3524,17 +3419,17 @@ function bl64_log_setup() {
   bl64_lib_var_is_default "$log_format" && log_format="$BL64_LOG_FORMAT_CSV"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
     bl64_dbg_lib_show_function "$@" &&
-    _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
     bl64_check_parameter 'log_repository' &&
     bl64_log_set_repository "$log_repository" &&
     bl64_log_set_target "$log_target" "$log_type" &&
     bl64_log_set_level "$log_level" &&
     bl64_log_set_format "$log_format" &&
-    BL64_LOG_MODULE="$BL64_VAR_ON"
+    BL64_LOG_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'log'
 }
 
@@ -3698,7 +3593,7 @@ function _bl64_log_register() {
   local category="${2:-}"
   local payload="${3:-}"
 
-  [[ "$BL64_LOG_MODULE" == "$BL64_VAR_OFF" ]] && return 0
+  [[ "$BL64_LOG_MOD_SETUP" == "$BL64_VAR_OFF" ]] && return 0
   [[ -z "$source" || -z "$category" || -z "$payload" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
 
   case "$BL64_LOG_FORMAT" in
@@ -3832,13 +3727,13 @@ function bl64_msg_setup() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_LOG_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_LOG_MOD_SETUP' &&
     bl64_msg_set_output "$BL64_VAR_DEFAULT" &&
     bl64_msg_app_enable_verbose &&
-    BL64_MSG_MODULE="$BL64_VAR_ON"
+    BL64_MSG_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'msg'
 }
 
@@ -4190,7 +4085,7 @@ function _bl64_msg_print() {
   local type="${2:-}"
   local message="${3:-}"
 
-  _bl64_msg_module_check_setup 'BL64_MSG_MODULE' || return $?
+  _bl64_msg_module_check_setup 'BL64_MSG_MOD_SETUP' || return $?
   [[ -n "$attribute" && -n "$type" ]] || return "$BL64_LIB_ERROR_PARAMETER_MISSING"
 
   case "$BL64_MSG_OUTPUT" in
@@ -5501,16 +5396,16 @@ function bl64_os_setup() {
     return "$BL64_LIB_ERROR_OS_BASH_VERSION"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
     _bl64_os_set_type &&
     _bl64_os_set_distro &&
     _bl64_os_set_runtime &&
     _bl64_os_set_command &&
     _bl64_os_set_machine &&
-    BL64_OS_MODULE="$BL64_VAR_ON"
+    BL64_OS_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'os'
 }
 
@@ -5610,7 +5505,7 @@ function bl64_os_is_flavor() {
   local os_flavor="${*:-}"
   local current=''
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_parameter 'os_flavor' ||
     return $?
 
@@ -5640,7 +5535,7 @@ function bl64_os_is_distro() {
   local item=''
   local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_parameters_none $# ||
     return $?
   bl64_dbg_lib_show_info "Look for [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
@@ -5674,7 +5569,7 @@ function bl64_os_is_compatible() {
   local item=''
   local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_parameters_none $# ||
     return $?
   bl64_dbg_lib_show_info "Look for exact match [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
@@ -5719,7 +5614,7 @@ function bl64_os_lang_is_available() {
   local locale="${1:-}"
   local line=''
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_parameter 'locale' &&
     bl64_check_command "$BL64_OS_CMD_LOCALE" ||
     return $?
@@ -5803,7 +5698,7 @@ function bl64_os_run_sleep() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_OS_MODULE' ||
+    bl64_check_module 'BL64_OS_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -5830,7 +5725,7 @@ function bl64_os_run_getent() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_command "$BL64_OS_CMD_GETENT" ||
     return $?
 
@@ -5858,7 +5753,7 @@ function bl64_os_run_getent() {
 function bl64_os_run_date() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_command "$BL64_OS_CMD_DATE" ||
     return $?
 
@@ -5886,7 +5781,7 @@ function bl64_os_run_date() {
 function bl64_os_run_cat() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_command "$BL64_OS_CMD_CAT" ||
     return $?
 
@@ -5938,7 +5833,7 @@ function bl64_os_check_not_version() {
 function bl64_os_run_uname() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_command "$BL64_OS_CMD_UNAME" ||
     return $?
 
@@ -6039,7 +5934,7 @@ function bl64_os_check_flavor() {
   bl64_dbg_lib_show_function "$@"
   local flavor=''
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_parameters_none $# ||
     return $?
 
@@ -6102,21 +5997,21 @@ function bl64_ans_setup() {
   local env_ignore="${3:-${BL64_VAR_ON}}"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function "$@" &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_XSV_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_PY_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FMT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_XSV_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_PY_MOD_SETUP' &&
     _bl64_ans_set_command "$ansible_bin" &&
     bl64_ans_set_paths "$ansible_config" &&
     _bl64_ans_set_version &&
     BL64_ANS_ENV_IGNORE="$env_ignore" &&
-    BL64_ANS_MODULE="$BL64_VAR_ON"
+    BL64_ANS_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'ans'
 }
 
@@ -6469,7 +6364,7 @@ function bl64_ans_run_ansible() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_ANS_MODULE' ||
+    bl64_check_module 'BL64_ANS_MOD_SETUP' ||
     return $?
 
   bl64_ans_harden_ansible
@@ -6501,7 +6396,7 @@ function bl64_ans_run_ansible_galaxy() {
   local command="${1:-${BL64_VAR_NULL}}"
   local subcommand="${2:-${BL64_VAR_NULL}}"
 
-  bl64_check_module 'BL64_ANS_MODULE' &&
+  bl64_check_module 'BL64_ANS_MOD_SETUP' &&
     bl64_check_parameter 'command' &&
     bl64_check_parameter 'subcommand' &&
     shift 2 ||
@@ -6535,7 +6430,7 @@ function bl64_ans_run_ansible_playbook() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_ANS_MODULE' ||
+    bl64_check_module 'BL64_ANS_MOD_SETUP' ||
     return $?
 
   bl64_ans_harden_ansible
@@ -6568,13 +6463,13 @@ function bl64_api_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_RXTX_MODULE' &&
-    BL64_API_MODULE="$BL64_VAR_ON"
+    _bl64_lib_module_is_imported 'BL64_BSH_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_RXTX_MOD_SETUP' &&
+    BL64_API_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'api'
 }
 
@@ -6617,7 +6512,7 @@ function bl64_api_call() {
   shift
   shift
 
-  bl64_check_module 'BL64_RXTX_MODULE' &&
+  bl64_check_module 'BL64_RXTX_MOD_SETUP' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" "$BL64_VAR_DEFAULT" 'curl' &&
     bl64_check_parameter 'api_url' &&
     bl64_check_parameter 'api_path' ||
@@ -6727,16 +6622,16 @@ function bl64_arc_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MOD_SETUP' &&
     _bl64_arc_set_command &&
     _bl64_arc_set_options &&
-    BL64_ARC_MODULE="$BL64_VAR_ON"
+    BL64_ARC_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'arc'
 }
 
@@ -6999,7 +6894,7 @@ function bl64_arc_run_unzip() {
   bl64_dbg_lib_show_function "$@"
   local verbose='-qq'
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
@@ -7033,7 +6928,7 @@ function bl64_arc_run_zip() {
   bl64_dbg_lib_show_function "$@"
   local verbose=' '
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_ZIP" || return $?
 
@@ -7066,7 +6961,7 @@ function bl64_arc_run_7zz() {
   bl64_dbg_lib_show_function "$@"
   local verbose='-bso0 -bd'
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_7ZZ" || return $?
 
@@ -7097,7 +6992,7 @@ function bl64_arc_run_tar() {
   bl64_check_parameters_none "$#" || return $?
   local verbose=' '
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_command "$BL64_ARC_CMD_TAR" ||
     return $?
 
@@ -7133,7 +7028,7 @@ function bl64_arc_tar_open() {
   local destination="${2:-}"
   local -i status=0
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_check_file "$source" &&
@@ -7276,7 +7171,7 @@ function bl64_arc_run_unxz() {
   bl64_dbg_lib_show_function "$@"
   local verbose=' '
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNXZ" || return $?
 
@@ -7310,7 +7205,7 @@ function bl64_arc_run_bunzip2() {
   bl64_dbg_lib_show_function "$@"
   local verbose='--quiet'
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_BUNZIP2" || return $?
 
@@ -7343,7 +7238,7 @@ function bl64_arc_run_gunzip() {
   bl64_dbg_lib_show_function "$@"
   local verbose='--quiet'
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_GUNZIP" || return $?
 
@@ -7485,7 +7380,7 @@ function bl64_arc_bzip2_open() {
 #######################################
 function bl64_arc_run_zstd() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_ZSTD" || return $?
 
@@ -7542,13 +7437,13 @@ function bl64_arc_zstd_open() {
 
 function bl64_aws_get_cli_config() {
   bl64_dbg_lib_show_function
-  bl64_check_module 'BL64_AWS_MODULE' || return $?
+  bl64_check_module 'BL64_AWS_MOD_SETUP' || return $?
   echo "$BL64_AWS_CLI_CONFIG"
 }
 
 function bl64_aws_get_cli_credentials() {
   bl64_dbg_lib_show_function
-  bl64_check_module 'BL64_AWS_MODULE' || return $?
+  bl64_check_module 'BL64_AWS_MOD_SETUP' || return $?
   echo "$BL64_AWS_CLI_CREDENTIALS"
 }
 
@@ -7572,16 +7467,16 @@ function bl64_aws_setup() {
   local aws_home="${2:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function "$@" &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
     _bl64_aws_set_command "$aws_bin" &&
     bl64_check_command "$BL64_AWS_CMD_AWS" "$BL64_VAR_DEFAULT" 'aws' &&
     _bl64_aws_set_options &&
     _bl64_aws_set_runtime "$aws_home" &&
-    BL64_AWS_MODULE="$BL64_VAR_ON"
+    BL64_AWS_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'aws'
 }
 
@@ -7879,7 +7774,7 @@ function bl64_aws_cli_create_sso() {
     bl64_check_parameter 'sso_region' &&
     bl64_check_parameter 'sso_account_id' &&
     bl64_check_parameter 'sso_role_name' &&
-    bl64_check_module 'BL64_AWS_MODULE' ||
+    bl64_check_module 'BL64_AWS_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_show_info "create AWS CLI profile for AWS SSO login (${BL64_AWS_CLI_CONFIG})"
@@ -7910,7 +7805,7 @@ function bl64_aws_cli_create_sso() {
 #######################################
 function bl64_aws_sso_login() {
   bl64_dbg_lib_show_function
-  bl64_check_module 'BL64_AWS_MODULE' &&
+  bl64_check_module 'BL64_AWS_MOD_SETUP' &&
     bl64_check_parameter 'BL64_AWS_ACCESS_PROFILE' ||
     return $?
   bl64_aws_run_aws \
@@ -7961,7 +7856,7 @@ function bl64_aws_sso_get_token() {
   local start_url="${1:-}"
   local token_file=''
 
-  bl64_check_module 'BL64_AWS_MODULE' &&
+  bl64_check_module 'BL64_AWS_MOD_SETUP' &&
     bl64_check_parameter 'start_url' &&
     bl64_check_directory "$BL64_AWS_CLI_CACHE" ||
     return $?
@@ -8005,7 +7900,7 @@ function bl64_aws_run_aws() {
   local debug=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_AWS_MODULE' ||
+    bl64_check_module 'BL64_AWS_MOD_SETUP' ||
     return $?
 
   bl64_msg_app_run_is_enabled && verbosity=' '
@@ -8045,7 +7940,7 @@ function bl64_aws_access_enable_profile() {
   local profile_name="${1:-}"
 
   bl64_check_parameter 'profile_name' &&
-    bl64_check_module 'BL64_AWS_MODULE' ||
+    bl64_check_module 'BL64_AWS_MOD_SETUP' ||
     return $?
 
   bl64_msg_show_lib_task "Enable AWS CLI Profile access mode (${profile_name})"
@@ -8077,7 +7972,7 @@ function bl64_aws_access_enable_sso() {
   local profile_name="${1:-}"
 
   bl64_check_parameter 'profile_name' &&
-    bl64_check_module 'BL64_AWS_MODULE' ||
+    bl64_check_module 'BL64_AWS_MOD_SETUP' ||
     return $?
 
   bl64_msg_show_lib_task "Enable AWS SSO access mode (${profile_name})"
@@ -8110,7 +8005,7 @@ function bl64_aws_access_enable_key() {
 
   bl64_check_parameter 'key_id' &&
     bl64_check_parameter 'key_secret' &&
-    bl64_check_module 'BL64_AWS_MODULE' ||
+    bl64_check_module 'BL64_AWS_MOD_SETUP' ||
     return $?
 
   bl64_msg_show_lib_task "Enable AWS IAM Key access mode (${key_id})"
@@ -8147,7 +8042,7 @@ function bl64_aws_access_enable_token() {
   bl64_check_parameter 'key_id' &&
     bl64_check_parameter 'key_secret' &&
     bl64_check_parameter 'token' &&
-    bl64_check_module 'BL64_AWS_MODULE' ||
+    bl64_check_module 'BL64_AWS_MOD_SETUP' ||
     return $?
 
   bl64_msg_show_lib_task "Enable AWS Session Token access mode (${key_id})"
@@ -8181,16 +8076,16 @@ function bl64_bsh_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_XSV_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_FMT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_XSV_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
     _bl64_bsh_set_options &&
     _bl64_bsh_set_version &&
-    BL64_BSH_MODULE="$BL64_VAR_ON"
+    BL64_BSH_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'bsh'
 }
 
@@ -9008,15 +8903,15 @@ function bl64_cnt_setup() {
   local command_location="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MOD_SETUP' &&
     _bl64_cnt_set_command "$command_location" &&
     _bl64_cnt_set_options &&
-    BL64_CNT_MODULE="$BL64_VAR_ON"
+    BL64_CNT_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'cnt'
 }
 
@@ -9748,7 +9643,7 @@ function bl64_cnt_login_stdin() {
   local user="${1:-}"
   local registry="${2:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'user' &&
     bl64_check_parameter 'registry' ||
     return $?
@@ -9777,7 +9672,7 @@ function bl64_cnt_login_file() {
   local file="${2:-}"
   local registry="${3:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'user' &&
     bl64_check_parameter 'file' &&
     bl64_check_parameter 'registry' &&
@@ -9808,7 +9703,7 @@ function bl64_cnt_login() {
   local password="${2:-}"
   local registry="${3:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'user' &&
     bl64_check_parameter 'password' &&
     bl64_check_parameter 'registry' ||
@@ -9859,7 +9754,7 @@ function bl64_cnt_run_sh() {
 function bl64_cnt_run_interactive() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_CNT_MODULE' ||
+  bl64_check_module 'BL64_CNT_MOD_SETUP' ||
     return $?
 
   "_bl64_cnt_${BL64_CNT_DRIVER}_run_interactive" "$@"
@@ -9886,7 +9781,7 @@ function bl64_cnt_build() {
   local file="${2:-Dockerfile}"
   local tag="${3:-latest}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'context' &&
     bl64_check_directory "$context" &&
     bl64_check_file "${context}/${file}" ||
@@ -9923,7 +9818,7 @@ function bl64_cnt_push() {
   local source="${1:-}"
   local destination="${2:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' ||
     return $?
@@ -9948,7 +9843,7 @@ function bl64_cnt_pull() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'source' ||
     return $?
 
@@ -9974,7 +9869,7 @@ function bl64_cnt_tag() {
   local source="${1:-}"
   local target="${2:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'target' ||
     return $?
@@ -9998,7 +9893,7 @@ function bl64_cnt_tag() {
 function bl64_cnt_run() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_CNT_MODULE' ||
+  bl64_check_module 'BL64_CNT_MOD_SETUP' ||
     return $?
 
   "_bl64_cnt_${BL64_CNT_DRIVER}_run" "$@"
@@ -10022,7 +9917,7 @@ function bl64_cnt_run() {
 function bl64_cnt_cli() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_CNT_MODULE' ||
+  bl64_check_module 'BL64_CNT_MOD_SETUP' ||
     return $?
 
   "bl64_cnt_run_${BL64_CNT_DRIVER}" "$@"
@@ -10056,7 +9951,7 @@ function bl64_cnt_container_is_running() {
     return $?
   fi
 
-  bl64_check_module 'BL64_CNT_MODULE' ||
+  bl64_check_module 'BL64_CNT_MOD_SETUP' ||
     return $?
 
   result="$("_bl64_cnt_${BL64_CNT_DRIVER}_ps_filter" "$name" "$id" "$BL64_CNT_SET_STATUS_RUNNING")" ||
@@ -10086,7 +9981,7 @@ function bl64_cnt_network_is_defined() {
   bl64_dbg_lib_show_function "$@"
   local network="${1:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'network' ||
     return $?
 
@@ -10109,7 +10004,7 @@ function bl64_cnt_network_create() {
   bl64_dbg_lib_show_function "$@"
   local network="${1:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'network' ||
     return $?
 
@@ -10142,7 +10037,7 @@ function bl64_cnt_run_docker() {
   local debug=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_command "$BL64_CNT_CMD_DOCKER" "$BL64_VAR_DEFAULT" 'docker' ||
     return $?
 
@@ -10179,7 +10074,7 @@ function bl64_cnt_run_podman() {
   local verbose='error'
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_command "$BL64_CNT_CMD_PODMAN" "$BL64_VAR_DEFAULT" 'podman' ||
     return $?
 
@@ -10253,16 +10148,16 @@ function bl64_cryp_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_RXTX_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_RXTX_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
     _bl64_cryp_set_command &&
-    BL64_CRYP_MODULE="$BL64_VAR_ON"
+    BL64_CRYP_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'cryp'
 }
 
@@ -10312,7 +10207,7 @@ function bl64_cryp_run_gpg() {
   bl64_dbg_lib_show_function "$@"
   local verbosity=''
 
-  bl64_check_module 'BL64_CRYP_MODULE' &&
+  bl64_check_module 'BL64_CRYP_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_CRYP_CMD_GPG" || return $?
 
@@ -10343,7 +10238,7 @@ function bl64_cryp_run_gpg() {
 function bl64_cryp_run_openssl() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_CRYP_MODULE' &&
+  bl64_check_module 'BL64_CRYP_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_CRYP_CMD_OPENSSL" || return $?
 
@@ -10371,7 +10266,7 @@ function bl64_cryp_run_openssl() {
 function bl64_cryp_run_md5sum() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_CRYP_MODULE' &&
+  bl64_check_module 'BL64_CRYP_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_CRYP_CMD_MD5SUM" || return $?
 
@@ -10398,7 +10293,7 @@ function bl64_cryp_run_md5sum() {
 function bl64_cryp_run_sha256sum() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_CRYP_MODULE' &&
+  bl64_check_module 'BL64_CRYP_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_CRYP_CMD_SHA256SUM" || return $?
 
@@ -10568,7 +10463,7 @@ function bl64_cryp_key_download() {
 
   bl64_check_parameter 'source_url' &&
     bl64_check_parameter 'target_key_file' &&
-    bl64_check_module 'BL64_RXTX_MODULE' ||
+    bl64_check_module 'BL64_RXTX_MOD_SETUP' ||
     return $?
 
   bl64_rxtx_web_get_file \
@@ -10607,12 +10502,12 @@ function bl64_fmt_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    BL64_FMT_MODULE="$BL64_VAR_ON"
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    BL64_FMT_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'fmt'
 }
 
@@ -11115,16 +11010,16 @@ function bl64_fs_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FMT_MOD_SETUP' &&
     _bl64_fs_set_command &&
     _bl64_fs_set_alias &&
     _bl64_fs_set_options &&
-    BL64_FS_MODULE="$BL64_VAR_ON"
+    BL64_FS_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'fs'
 }
 
@@ -12057,7 +11952,7 @@ function bl64_fs_run_chown() {
   local debug=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug="$BL64_FS_SET_CHOWN_VERBOSE"
 
@@ -12084,7 +11979,7 @@ function bl64_fs_run_chown() {
 function bl64_fs_run_mktemp() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_FS_MODULE' ||
+  bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -12110,7 +12005,7 @@ function bl64_fs_run_chmod() {
   local debug=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug="$BL64_FS_SET_CHMOD_VERBOSE"
 
@@ -12137,7 +12032,7 @@ function bl64_fs_run_mkdir() {
   local debug=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug="$BL64_FS_SET_MKDIR_VERBOSE"
 
@@ -12164,7 +12059,7 @@ function bl64_fs_run_mv() {
   local debug=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug="$BL64_FS_SET_MV_VERBOSE"
 
@@ -12291,7 +12186,7 @@ function bl64_fs_run_find() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' &&
+    bl64_check_module 'BL64_FS_MOD_SETUP' &&
     bl64_check_command "$BL64_FS_CMD_FIND" "$BL64_VAR_DEFAULT" 'find' ||
     return $?
 
@@ -12322,7 +12217,7 @@ function bl64_fs_file_search() {
   local pattern="${2:-${BL64_VAR_DEFAULT}}"
   local content="${3:-${BL64_VAR_DEFAULT}}"
 
-  bl64_check_module 'BL64_FS_MODULE' &&
+  bl64_check_module 'BL64_FS_MOD_SETUP' &&
     bl64_check_command "$BL64_FS_CMD_FIND" "$BL64_VAR_DEFAULT" 'find' &&
     bl64_check_directory "$path" ||
     return $?
@@ -12507,7 +12402,7 @@ function bl64_fs_run_cp() {
   local debug=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug="$BL64_FS_SET_CP_VERBOSE"
 
@@ -12534,7 +12429,7 @@ function bl64_fs_run_rm() {
   local debug=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug="$BL64_FS_SET_CP_VERBOSE"
 
@@ -12559,7 +12454,7 @@ function bl64_fs_run_rm() {
 function bl64_fs_run_ls() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_FS_MODULE' ||
+  bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -12584,7 +12479,7 @@ function bl64_fs_run_ln() {
   local debug=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug="$BL64_FS_SET_LN_VERBOSE"
 
@@ -13007,7 +12902,7 @@ function bl64_fs_run_touch() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -13033,7 +12928,7 @@ function bl64_fs_run_stat() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -13209,17 +13104,17 @@ function bl64_gcp_setup() {
   local gcloud_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function "$@" &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_XSV_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FMT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_XSV_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
     _bl64_gcp_set_command "$gcloud_bin" &&
-    BL64_GCP_MODULE="$BL64_VAR_ON"
+    BL64_GCP_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'gcp'
 }
 
@@ -13384,7 +13279,7 @@ function bl64_gcp_run_gcloud() {
   local impersonate_sa=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_GCP_MODULE' ||
+    bl64_check_module 'BL64_GCP_MOD_SETUP' ||
     return $?
 
   if bl64_dbg_lib_command_is_enabled; then
@@ -13504,13 +13399,13 @@ function bl64_hlm_setup() {
   local helm_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function "$@" &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
     _bl64_hlm_set_command "$helm_bin" &&
     _bl64_hlm_set_options &&
-    BL64_HLM_MODULE="$BL64_VAR_ON"
+    BL64_HLM_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'hlm'
 }
 
@@ -13738,7 +13633,7 @@ function bl64_hlm_run_helm() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_HLM_MODULE' ||
+    bl64_check_module 'BL64_HLM_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_HLM_SET_DEBUG"
@@ -13774,17 +13669,17 @@ function bl64_iam_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_RND_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_RND_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FMT_MOD_SETUP' &&
     _bl64_iam_set_command &&
     _bl64_iam_set_alias &&
     _bl64_iam_set_options &&
-    BL64_IAM_MODULE="$BL64_VAR_ON"
+    BL64_IAM_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'iam'
 }
 
@@ -14330,7 +14225,7 @@ function bl64_iam_run_useradd() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_USERADD" ||
     return $?
@@ -14362,7 +14257,7 @@ function bl64_iam_run_groupadd() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_GROUPADD" ||
     return $?
@@ -14394,7 +14289,7 @@ function bl64_iam_run_groupmod() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_GROUPMOD" ||
     return $?
@@ -14426,7 +14321,7 @@ function bl64_iam_run_usermod() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_USERMOD" ||
     return $?
@@ -14458,7 +14353,7 @@ function bl64_iam_run_adduser() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_ADDUSER" ||
     return $?
@@ -14490,7 +14385,7 @@ function bl64_iam_run_addgroup() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_ADDGROUP" ||
     return $?
@@ -14521,7 +14416,7 @@ function bl64_iam_run_id() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_command "$BL64_IAM_CMD_ID" ||
     return $?
 
@@ -14551,7 +14446,7 @@ function bl64_iam_run_sysadminctl() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_SYSADMINCTL" ||
     return $?
@@ -14659,15 +14554,15 @@ function bl64_k8s_setup() {
   local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function "$@" &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_XSV_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FMT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_XSV_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
     _bl64_k8s_set_command "$kubectl_bin" &&
     _bl64_k8s_set_version &&
     bl64_k8s_set_kubectl_output &&
@@ -15352,18 +15247,18 @@ function bl64_mdb_setup() {
   local mdb_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function "$@" &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_XSV_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FMT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_XSV_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
     _bl64_mdb_set_command "$mdb_bin" &&
     _bl64_mdb_set_options &&
-    BL64_MDB_MODULE="$BL64_VAR_ON"
+    BL64_MDB_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'mdb'
 }
 
@@ -15533,7 +15428,7 @@ function bl64_mdb_run_mongosh_eval() {
   shift
   bl64_check_parameters_none "$#" &&
     bl64_check_parameter 'uri' &&
-    bl64_check_module 'BL64_MDB_MODULE' ||
+    bl64_check_module 'BL64_MDB_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
@@ -15571,7 +15466,7 @@ function bl64_mdb_run_mongosh() {
 
   shift
   bl64_check_parameter 'uri' &&
-    bl64_check_module 'BL64_MDB_MODULE' ||
+    bl64_check_module 'BL64_MDB_MOD_SETUP' ||
     return $?
 
   bl64_msg_app_detail_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
@@ -15605,7 +15500,7 @@ function bl64_mdb_run_mongorestore() {
   local verbosity="$BL64_MDB_SET_QUIET"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_MDB_MODULE' ||
+    bl64_check_module 'BL64_MDB_MOD_SETUP' ||
     return $?
 
   bl64_msg_app_detail_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
@@ -15637,7 +15532,7 @@ function bl64_mdb_run_mongoexport() {
   local verbosity="$BL64_MDB_SET_QUIET"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_MDB_MODULE' ||
+    bl64_check_module 'BL64_MDB_MOD_SETUP' ||
     return $?
 
   bl64_msg_app_detail_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
@@ -15670,19 +15565,19 @@ function bl64_pkg_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2249
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_RXTX_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_CRYP_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_RXTX_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_CRYP_MOD_SETUP' &&
     _bl64_pkg_set_command &&
     _bl64_pkg_set_paths &&
     _bl64_pkg_set_options &&
     _bl64_pkg_set_alias &&
-    BL64_PKG_MODULE="$BL64_VAR_ON"
+    BL64_PKG_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'pkg'
 }
 
@@ -16409,7 +16304,7 @@ function bl64_pkg_run_dnf() {
   bl64_dbg_lib_show_function "$@"
   local verbose="$BL64_PKG_SET_QUIET"
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -16439,7 +16334,7 @@ function bl64_pkg_run_yum() {
   bl64_dbg_lib_show_function "$@"
   local verbose="$BL64_PKG_SET_QUIET"
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -16469,7 +16364,7 @@ function bl64_pkg_run_apt() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -16511,7 +16406,7 @@ function bl64_pkg_run_apk() {
   bl64_dbg_lib_show_function "$@"
   local verbose="$BL64_PKG_SET_QUIET"
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -16541,7 +16436,7 @@ function bl64_pkg_run_brew() {
   bl64_dbg_lib_show_function "$@"
   local verbose='--quiet'
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_command "$BL64_PKG_CMD_BREW" "$BL64_VAR_DEFAULT" 'brew' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_privilege_not_root ||
@@ -16577,7 +16472,7 @@ function bl64_pkg_run_zypper() {
   bl64_dbg_lib_show_function "$@"
   local verbose="$BL64_PKG_SET_QUIET"
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -16607,7 +16502,7 @@ function bl64_pkg_run_rpm() {
   bl64_dbg_lib_show_function "$@"
   local verbose='--quiet'
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -16636,7 +16531,7 @@ function bl64_pkg_run_rpm() {
 function bl64_pkg_run_dpkg() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -16663,7 +16558,7 @@ function bl64_pkg_run_installer() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -16693,7 +16588,7 @@ function bl64_pkg_run_installer() {
 function bl64_pkg_run_softwareupdate() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -16720,7 +16615,7 @@ function bl64_pkg_run_pacman() {
   bl64_dbg_lib_show_function "$@"
   local debug=' '
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -16785,17 +16680,17 @@ function _bl64_py_setup() {
   fi
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
     _bl64_py_set_command "$venv_path" &&
     bl64_check_command "$BL64_PY_CMD_PYTHON3" "$BL64_VAR_DEFAULT" 'python3' &&
     _bl64_py_set_version &&
     _bl64_py_set_options &&
     _bl64_py_pip_set_version &&
-    BL64_PY_MODULE="$BL64_VAR_ON"
+    BL64_PY_MOD_SETUP="$BL64_VAR_ON"
 }
 
 #######################################
@@ -17305,7 +17200,7 @@ function bl64_py_run_python() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_PY_MODULE' ||
+    bl64_check_module 'BL64_PY_MOD_SETUP' ||
     return $?
 
   _bl64_py_harden_python
@@ -17393,7 +17288,7 @@ function bl64_py_run_pipx() {
 #######################################
 function bl64_py_check_pip() {
   bl64_dbg_lib_show_function
-  bl64_check_module 'BL64_PY_MODULE' || return $?
+  bl64_check_module 'BL64_PY_MOD_SETUP' || return $?
   if [[ -n "$BL64_PY_VERSION_PIP" ]]; then
     return 0
   else
@@ -17442,18 +17337,18 @@ function bl64_rbac_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_IAM_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_IAM_MOD_SETUP' &&
     _bl64_rbac_set_command &&
     _bl64_rbac_set_options &&
     _bl64_rbac_set_alias &&
-    BL64_RBAC_MODULE="$BL64_VAR_ON"
+    BL64_RBAC_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'rbac'
 }
 
@@ -17760,11 +17655,11 @@ function bl64_rnd_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    BL64_RND_MODULE="$BL64_VAR_ON"
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    BL64_RND_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'rnd'
 }
 
@@ -17896,18 +17791,18 @@ function bl64_rxtx_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_VCS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_VCS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MOD_SETUP' &&
     _bl64_rxtx_set_command &&
     _bl64_rxtx_set_options &&
     _bl64_rxtx_set_alias &&
-    BL64_RXTX_MODULE="$BL64_VAR_ON"
+    BL64_RXTX_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'rxtx'
 }
 
@@ -18186,7 +18081,7 @@ function bl64_rxtx_web_get_file() {
   local file_group="${6:-${BL64_VAR_DEFAULT}}"
   local -i status=0
 
-  bl64_check_module 'BL64_RXTX_MODULE' &&
+  bl64_check_module 'BL64_RXTX_MOD_SETUP' &&
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_fs_check_new_file "$destination" ||
@@ -18259,7 +18154,7 @@ function bl64_rxtx_git_get_dir() {
   local branch="${5:-main}"
   local -i status=0
 
-  bl64_check_module 'BL64_RXTX_MODULE' &&
+  bl64_check_module 'BL64_RXTX_MOD_SETUP' &&
     bl64_check_parameter 'source_url' &&
     bl64_check_parameter 'source_path' &&
     bl64_check_parameter 'destination' &&
@@ -18311,7 +18206,7 @@ function bl64_rxtx_run_curl() {
   local verbose="$BL64_RXTX_SET_CURL_SILENT"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_RXTX_MODULE' &&
+    bl64_check_module 'BL64_RXTX_MOD_SETUP' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" "$BL64_VAR_DEFAULT" 'curl' ||
     return $?
 
@@ -18344,7 +18239,7 @@ function bl64_rxtx_run_wget() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_RXTX_MODULE' &&
+    bl64_check_module 'BL64_RXTX_MOD_SETUP' &&
     bl64_check_command "$BL64_RXTX_CMD_WGET" "$BL64_VAR_DEFAULT" 'wget' ||
     return $?
 
@@ -18369,7 +18264,7 @@ function _bl64_rxtx_git_get_dir_root() {
   local git_name=''
   local transition=''
 
-  bl64_check_module 'BL64_RXTX_MODULE' || return $?
+  bl64_check_module 'BL64_RXTX_MOD_SETUP' || return $?
 
   repo="$(bl64_fs_create_tmpdir)"
   bl64_check_directory "$repo" 'unable to create temporary git repo' || return "$BL64_LIB_ERROR_TASK_TEMP"
@@ -18401,7 +18296,7 @@ function _bl64_rxtx_git_get_dir_sub() {
   local source=''
   local transition=''
 
-  bl64_check_module 'BL64_RXTX_MODULE' || return $?
+  bl64_check_module 'BL64_RXTX_MOD_SETUP' || return $?
 
   repo="$(bl64_fs_create_tmpdir)"
   # shellcheck disable=SC2086
@@ -18452,7 +18347,7 @@ function bl64_rxtx_github_get_asset() {
   local replace="${6:-${BL64_VAR_OFF}}"
   local mode="${7:-${BL64_VAR_DEFAULT}}"
 
-  bl64_check_module 'BL64_RXTX_MODULE' &&
+  bl64_check_module 'BL64_RXTX_MOD_SETUP' &&
     bl64_check_parameter 'repo_owner' &&
     bl64_check_parameter 'repo_name' &&
     bl64_check_parameter 'release_tag' &&
@@ -18492,14 +18387,14 @@ function bl64_tf_setup() {
   local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function "$@" &&
-    _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
     _bl64_tf_set_command "$terraform_bin" &&
     _bl64_tf_set_version &&
-    BL64_TF_MODULE="$BL64_VAR_ON"
+    BL64_TF_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'tf'
 }
 
@@ -18713,7 +18608,7 @@ function bl64_tf_run_terraform() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TF_MODULE' &&
+    bl64_check_module 'BL64_TF_MOD_SETUP' &&
     _bl64_tf_harden_terraform ||
     return $?
 
@@ -18742,7 +18637,7 @@ function bl64_tf_run_tofu() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TF_MODULE' &&
+    bl64_check_module 'BL64_TF_MOD_SETUP' &&
     _bl64_tf_harden_tofu ||
     return $?
 
@@ -18820,11 +18715,11 @@ function bl64_tm_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    BL64_TM_MODULE="$BL64_VAR_ON"
+    BL64_TM_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'tm'
 }
 
@@ -18888,13 +18783,13 @@ function bl64_txt_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
     _bl64_txt_set_command &&
     _bl64_txt_set_options &&
-    BL64_TXT_MODULE="$BL64_VAR_ON"
+    BL64_TXT_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'txt'
 }
 
@@ -19286,7 +19181,7 @@ function bl64_txt_run_awk() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_AWK_POSIX" ||
     return $?
 
@@ -19314,7 +19209,7 @@ function bl64_txt_run_awk() {
 function bl64_txt_run_envsubst() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_ENVSUBST" ||
     return $?
 
@@ -19341,7 +19236,7 @@ function bl64_txt_run_grep() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_GREP" ||
     return $?
 
@@ -19387,7 +19282,7 @@ function bl64_txt_run_sed() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_SED" ||
     return $?
 
@@ -19413,7 +19308,7 @@ function bl64_txt_run_sed() {
 function bl64_txt_run_base64() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_BASE64" ||
     return $?
 
@@ -19440,7 +19335,7 @@ function bl64_txt_run_tr() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_TR" ||
     return $?
 
@@ -19467,7 +19362,7 @@ function bl64_txt_run_cut() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_CUT" ||
     return $?
 
@@ -19493,7 +19388,7 @@ function bl64_txt_run_cut() {
 function bl64_txt_run_uniq() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_UNIQ" ||
     return $?
 
@@ -19519,7 +19414,7 @@ function bl64_txt_run_uniq() {
 function bl64_txt_run_sort() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_SORT" ||
     return $?
 
@@ -19545,7 +19440,7 @@ function bl64_txt_run_sort() {
 function bl64_txt_run_tail() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_TAIL" ||
     return $?
 
@@ -19571,7 +19466,7 @@ function bl64_txt_run_tail() {
 function bl64_txt_run_fmt() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_FMT" ||
     return $?
 
@@ -19603,12 +19498,12 @@ function bl64_ui_setup() {
   local search_paths=("${@:-}")
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
     _bl64_ui_set_command "${search_paths[@]}" &&
-    BL64_UI_MODULE="$BL64_VAR_ON"
+    BL64_UI_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'ui'
 }
 
@@ -19633,8 +19528,33 @@ function _bl64_ui_set_command() {
   BL64_UI_CMD_DIALOG="$(bl64_bsh_command_locate 'dialog' "$@")"
   BL64_UI_CMD_FZF="$(bl64_bsh_command_locate 'fzf' "$@")"
   BL64_UI_CMD_GUM="$(bl64_bsh_command_locate 'gum' "$@")"
-  BL64_UI_CMD_LESS="$(bl64_bsh_command_locate 'less' "$@")"
+  BL64_UI_CMD_LESS="$(bl64_bsh_command_locate 'less')"
+  BL64_UI_CMD_MORE="$(bl64_bsh_command_locate 'more')"
   BL64_UI_CMD_WHIPTAIL="$(bl64_bsh_command_locate 'whiptail' "$@")"
+
+  if [[ -x "${BL64_UI_CMD_BAT}" ]]; then
+    BL64_UI_PAGER="${BL64_UI_PAGER_BAT}"
+  elif [[ -x "${BL64_UI_CMD_LESS}" ]]; then
+    BL64_UI_PAGER="${BL64_UI_PAGER_LESS}"
+  elif [[ -x "${BL64_UI_CMD_MORE}" ]]; then
+    BL64_UI_PAGER="${BL64_UI_PAGER_MORE}"
+  else
+    BL64_UI_PAGER="${BL64_UI_PAGER_CAT}"
+  fi
+
+  if [[ -x "${BL64_UI_CMD_DIALOG}" ]]; then
+    BL64_UI_TUI="${BL64_UI_TUI_DIALOG}"
+  elif [[ -x "${BL64_UI_CMD_FZF}" ]]; then
+    BL64_UI_TUI="${BL64_UI_TUI_FZF}"
+  elif [[ -x "${BL64_UI_CMD_GUM}" ]]; then
+    BL64_UI_TUI="${BL64_UI_TUI_GUM}"
+  elif [[ -x "${BL64_UI_CMD_WHIPTAIL}" ]]; then
+    BL64_UI_TUI="${BL64_UI_TUI_WHIPTAIL}"
+  else
+    BL64_UI_TUI="${BL64_UI_TUI_BASH}"
+  fi
+
+  bl64_dbg_lib_show_vars 'BL64_UI_PAGER' 'BL64_UI_TUI'
   return 0
 }
 
@@ -19669,6 +19589,19 @@ function _bl64_ui_is_confirmation_disabled() {
     return 0
   fi
   return 1
+}
+
+function _bl64_ui_harden_fzf() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_trace_start
+  unset FZF_DEFAULT_COMMAND
+  unset FZF_DEFAULT_OPTS
+  unset FZF_DEFAULT_OPTS_FILE
+  unset FZF_API_KEY
+  bl64_dbg_lib_trace_stop
+
+  return 0
 }
 
 #
@@ -19980,7 +19913,7 @@ function bl64_ui_run_bat() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_module 'BL64_UI_MOD_SETUP' &&
     bl64_check_command "$BL64_UI_CMD_BAT" "$BL64_VAR_DEFAULT" 'bat' ||
     return $?
 
@@ -20008,7 +19941,7 @@ function bl64_ui_run_dialog() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_module 'BL64_UI_MOD_SETUP' &&
     bl64_check_command "$BL64_UI_CMD_DIALOG" "$BL64_VAR_DEFAULT" 'dialog' ||
     return $?
 
@@ -20035,10 +19968,11 @@ function bl64_ui_run_dialog() {
 function bl64_ui_run_fzf() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_UI_MODULE' &&
+  bl64_check_module 'BL64_UI_MOD_SETUP' &&
     bl64_check_command "$BL64_UI_CMD_FZF" "$BL64_VAR_DEFAULT" 'fzf' ||
     return $?
+
+  _bl64_ui_harden_fzf
 
   bl64_dbg_lib_trace_start
   "$BL64_UI_CMD_FZF" "$@"
@@ -20064,7 +19998,7 @@ function bl64_ui_run_whiptail() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_module 'BL64_UI_MOD_SETUP' &&
     bl64_check_command "$BL64_UI_CMD_WHIPTAIL" "$BL64_VAR_DEFAULT" 'whiptail' ||
     return $?
 
@@ -20092,7 +20026,7 @@ function bl64_ui_run_gum() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_module 'BL64_UI_MOD_SETUP' &&
     bl64_check_command "$BL64_UI_CMD_GUM" "$BL64_VAR_DEFAULT" 'gum' ||
     return $?
 
@@ -20120,13 +20054,97 @@ function bl64_ui_run_less() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_module 'BL64_UI_MOD_SETUP' &&
     bl64_check_command "$BL64_UI_CMD_LESS" "$BL64_VAR_DEFAULT" 'less' ||
     return $?
 
   bl64_dbg_lib_trace_start
   "$BL64_UI_CMD_LESS" "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Outputs:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_ui_run_more() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_parameters_none "$#" &&
+    bl64_check_module 'BL64_UI_MOD_SETUP' &&
+    bl64_check_command "$BL64_UI_CMD_MORE" "$BL64_VAR_DEFAULT" 'more' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_UI_CMD_MORE" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Select one item from a list
+#
+# Arguments:
+#   $1: list of items. Format: list of string
+# Outputs:
+#   STDOUT: selected item
+#   STDERR: command errors
+# Returns:
+#   0: item selected
+#   >0: item not selected or error
+#######################################
+function bl64_ui_select_item() {
+  bl64_dbg_lib_show_function "$@"
+  # shellcheck disable=SC2034
+  local item_list="${*:-}"
+  local item=''
+  local PS3="${_BL64_UI_TXT_SELECT_ITEM}: "
+  local menu_options=()
+
+  bl64_check_parameter 'item_list' || return $?
+
+  # shellcheck disable=SC2249
+  case "$BL64_UI_TUI" in
+    "$BL64_UI_TUI_DIALOG")
+      for item in "$@"; do
+        menu_options+=("$item" "")
+      done
+      bl64_dbg_lib_show_comments 'redirection required to show selection via stdout'
+      bl64_ui_run_dialog --menu "$_BL64_UI_TXT_SELECT_ITEM" 0 0 0 "${menu_options[@]}" 3>&1 1>&2 2>&3
+      ;;
+    "$BL64_UI_TUI_FZF")
+      printf '%s\n' "$@" | bl64_ui_run_fzf
+      ;;
+    "$BL64_UI_TUI_WHIPTAIL")
+      for item in "$@"; do
+        menu_options+=("$item" "")
+      done
+      bl64_dbg_lib_show_comments 'redirection required to show selection via stdout'
+      bl64_ui_run_whiptail --menu "$_BL64_UI_TXT_SELECT_ITEM" 0 0 0 "${menu_options[@]}" 3>&1 1>&2 2>&3
+      ;;
+    "$BL64_UI_TUI_GUM")
+      bl64_ui_run_gum choose "$@"
+      ;;
+    "$BL64_UI_TUI_BASH")
+      select item in "$@"; do
+        if [[ -n "$item" ]]; then
+          echo "$item"
+          return 0
+        fi
+      done
+      return 1
+      ;;
+  esac
 }
 
 #######################################
@@ -20151,19 +20169,19 @@ function bl64_vcs_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_API_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_API_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MOD_SETUP' &&
     _bl64_vcs_set_command &&
     _bl64_vcs_set_options &&
-    BL64_VCS_MODULE="$BL64_VAR_ON"
+    BL64_VCS_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'vcs'
 }
 
@@ -20229,7 +20247,7 @@ function bl64_vcs_run_git() {
   bl64_dbg_lib_show_function "$@"
   local verbose="$BL64_VCS_SET_GIT_QUIET"
 
-  bl64_check_module 'BL64_VCS_MODULE' &&
+  bl64_check_module 'BL64_VCS_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_VCS_CMD_GIT" "$BL64_VAR_DEFAULT" 'git' ||
     return $?
@@ -20482,7 +20500,7 @@ function bl64_vcs_github_release_get_latest() {
   local repo_name="${2:-}"
   local repo_tag=''
 
-  bl64_check_module 'BL64_VCS_MODULE' &&
+  bl64_check_module 'BL64_VCS_MOD_SETUP' &&
     bl64_check_parameter 'repo_owner' &&
     bl64_check_parameter 'repo_name' ||
     return $?
@@ -20597,13 +20615,13 @@ function bl64_xsv_setup() {
   local search_paths=("${@:-}")
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MOD_SETUP' &&
     _bl64_xsv_set_command "${search_paths[@]}" &&
-    BL64_XSV_MODULE="$BL64_VAR_ON"
+    BL64_XSV_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'xsv'
 }
 
@@ -20756,7 +20774,7 @@ function bl64_xsv_run_jq() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_XSV_MODULE' &&
+    bl64_check_module 'BL64_XSV_MOD_SETUP' &&
     bl64_check_command "$BL64_XSV_CMD_JQ" "$BL64_VAR_DEFAULT" 'jq' ||
     return $?
 
@@ -20784,7 +20802,7 @@ function bl64_xsv_run_yq() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_XSV_MODULE' &&
+    bl64_check_module 'BL64_XSV_MOD_SETUP' &&
     bl64_check_command "$BL64_XSV_CMD_YQ" "$BL64_VAR_DEFAULT" 'yq' ||
     return $?
 
@@ -20812,7 +20830,7 @@ function bl64_xsv_run_pkl() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_XSV_MODULE' &&
+    bl64_check_module 'BL64_XSV_MOD_SETUP' &&
     bl64_check_command "$BL64_XSV_CMD_PKL" "$BL64_VAR_DEFAULT" 'pkl' ||
     return $?
 
@@ -20917,25 +20935,25 @@ fi
 umask -S 'u=rwx,g=,o=' >/dev/null
 
 # Initialize modules that do not require setup parameters. Not OS bound
-[[ -n "${BL64_DBG_MODULE:-}" ]] && { bl64_dbg_setup || exit $?; }
-[[ -n "${BL64_CHECK_MODULE:-}" ]] && { bl64_check_setup || exit $?; }
-[[ -n "${BL64_MSG_MODULE:-}" ]] && { bl64_msg_setup || exit $?; }
-[[ -n "${BL64_BSH_MODULE:-}" ]] && { bl64_bsh_setup || exit $?; }
-[[ -n "${BL64_RND_MODULE:-}" ]] && { bl64_rnd_setup || exit $?; }
+[[ -n "${BL64_DBG_MOD_SETUP:-}" ]] && { bl64_dbg_setup || exit $?; }
+[[ -n "${BL64_CHECK_MOD_SETUP:-}" ]] && { bl64_check_setup || exit $?; }
+[[ -n "${BL64_MSG_MOD_SETUP:-}" ]] && { bl64_msg_setup || exit $?; }
+[[ -n "${BL64_BSH_MOD_SETUP:-}" ]] && { bl64_bsh_setup || exit $?; }
+[[ -n "${BL64_RND_MOD_SETUP:-}" ]] && { bl64_rnd_setup || exit $?; }
 # Initialize modules that do not require setup parameters. OS bound
-[[ -n "${BL64_OS_MODULE:-}" ]] && { bl64_os_setup || exit $?; }
-[[ -n "${BL64_TXT_MODULE:-}" ]] && { bl64_txt_setup || exit $?; }
-[[ -n "${BL64_FMT_MODULE:-}" ]] && { bl64_fmt_setup || exit $?; }
-[[ -n "${BL64_FS_MODULE:-}" ]] && { bl64_fs_setup || exit $?; }
-[[ -n "${BL64_IAM_MODULE:-}" ]] && { bl64_iam_setup || exit $?; }
-[[ -n "${BL64_RBAC_MODULE:-}" ]] && { bl64_rbac_setup || exit $?; }
-[[ -n "${BL64_RXTX_MODULE:-}" ]] && { bl64_rxtx_setup || exit $?; }
-[[ -n "${BL64_API_MODULE:-}" ]] && { bl64_api_setup || exit $?; }
-[[ -n "${BL64_VCS_MODULE:-}" ]] && { bl64_vcs_setup || exit $?; }
-[[ -n "${BL64_ARC_MODULE:-}" ]] && { bl64_arc_setup || exit $?; }
-[[ -n "${BL64_PKG_MODULE:-}" ]] && { bl64_pkg_setup || exit $?; }
-[[ -n "${BL64_RND_MODULE:-}" ]] && { bl64_rnd_setup || exit $?; }
-[[ -n "${BL64_TM_MODULE:-}" ]] && { bl64_tm_setup || exit $?; }
+[[ -n "${BL64_OS_MOD_SETUP:-}" ]] && { bl64_os_setup || exit $?; }
+[[ -n "${BL64_TXT_MOD_SETUP:-}" ]] && { bl64_txt_setup || exit $?; }
+[[ -n "${BL64_FMT_MOD_SETUP:-}" ]] && { bl64_fmt_setup || exit $?; }
+[[ -n "${BL64_FS_MOD_SETUP:-}" ]] && { bl64_fs_setup || exit $?; }
+[[ -n "${BL64_IAM_MOD_SETUP:-}" ]] && { bl64_iam_setup || exit $?; }
+[[ -n "${BL64_RBAC_MOD_SETUP:-}" ]] && { bl64_rbac_setup || exit $?; }
+[[ -n "${BL64_RXTX_MOD_SETUP:-}" ]] && { bl64_rxtx_setup || exit $?; }
+[[ -n "${BL64_API_MOD_SETUP:-}" ]] && { bl64_api_setup || exit $?; }
+[[ -n "${BL64_VCS_MOD_SETUP:-}" ]] && { bl64_vcs_setup || exit $?; }
+[[ -n "${BL64_ARC_MOD_SETUP:-}" ]] && { bl64_arc_setup || exit $?; }
+[[ -n "${BL64_PKG_MOD_SETUP:-}" ]] && { bl64_pkg_setup || exit $?; }
+[[ -n "${BL64_RND_MOD_SETUP:-}" ]] && { bl64_rnd_setup || exit $?; }
+[[ -n "${BL64_TM_MOD_SETUP:-}" ]] && { bl64_tm_setup || exit $?; }
 
 [[ $(type -t _bl64_dbg_runtime_show) == 'function' ]] && _bl64_dbg_runtime_show
 
