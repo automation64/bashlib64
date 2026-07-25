@@ -23,7 +23,6 @@ function bl64_txt_setup() {
   _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
     _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
     _bl64_txt_set_command &&
     _bl64_txt_set_options &&
     BL64_TXT_MOD_SETUP="$BL64_VAR_ON"

@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [23.5.0]
+## [23.5.1]
 
 ### Added
 
@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - bl64_ui_select_item
   - bl64_ui_run_more
   - bl64_ui_page
+  - bl64_ui_get_command_pager
 - txt
   - bl64_txt_run_tee
   - bl64_txt_dump
@@ -28,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - fs: changed **os** to **txt**
   - cryp: dropped **os**
   - rbac: dropped **os**
+  - txt: dropped **os**
 
 ### Deprecated
 

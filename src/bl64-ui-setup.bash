@@ -80,3 +80,15 @@ function _bl64_ui_set_command() {
   bl64_dbg_lib_show_vars 'BL64_UI_PAGER' 'BL64_UI_TUI'
   return 0
 }
+
+function bl64_ui_get_command_pager() {
+  bl64_dbg_lib_show_function
+  bl64_check_module 'BL64_UI_MOD_SETUP' || return $?
+  case "$BL64_UI_PAGER" in
+    "$BL64_UI_PAGER_BAT") echo "$BL64_UI_CMD_BAT" ;;
+    "$BL64_UI_PAGER_LESS") echo "$BL64_UI_CMD_LESS" ;;
+    "$BL64_UI_PAGER_MORE") echo "$BL64_UI_CMD_MORE" ;;
+    "$BL64_UI_PAGER_CAT") echo "$BL64_UI_CMD_CAT" ;;
+    *) bl64_check_rise_parameter_invalid 'BL64_UI_PAGER' ;;
+  esac
+}

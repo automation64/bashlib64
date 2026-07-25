@@ -1,6 +1,6 @@
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='23.5.0'
+  declare BL64_VERSION='23.5.1'
 
   #
   # Common constants

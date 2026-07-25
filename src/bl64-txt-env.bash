@@ -1,6 +1,6 @@
 # shellcheck disable=SC2034
 {
-  declare BL64_TXT_MOD_VERSION='2.9.0'
+  declare BL64_TXT_MOD_VERSION='2.9.1'
   declare BL64_TXT_MOD_INFO='Text File Tools Interface'
   declare BL64_TXT_MOD_SETUP='0'
 

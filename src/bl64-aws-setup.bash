@@ -2,22 +2,6 @@
 # BashLib64 / Module / Setup / Interact with AWS
 #######################################
 
-#
-# Module attributes getters
-#
-
-function bl64_aws_get_cli_config() {
-  bl64_dbg_lib_show_function
-  bl64_check_module 'BL64_AWS_MOD_SETUP' || return $?
-  echo "$BL64_AWS_CLI_CONFIG"
-}
-
-function bl64_aws_get_cli_credentials() {
-  bl64_dbg_lib_show_function
-  bl64_check_module 'BL64_AWS_MOD_SETUP' || return $?
-  echo "$BL64_AWS_CLI_CREDENTIALS"
-}
-
 #######################################
 # Setup the bashlib64 module
 #
@@ -199,4 +183,16 @@ function bl64_aws_set_region() {
   BL64_AWS_CLI_REGION="$region"
   bl64_msg_show_lib_subtask "set AWS region (${BL64_AWS_CLI_REGION})"
   return 0
+}
+
+function bl64_aws_get_cli_config() {
+  bl64_dbg_lib_show_function
+  bl64_check_module 'BL64_AWS_MOD_SETUP' || return $?
+  echo "$BL64_AWS_CLI_CONFIG"
+}
+
+function bl64_aws_get_cli_credentials() {
+  bl64_dbg_lib_show_function
+  bl64_check_module 'BL64_AWS_MOD_SETUP' || return $?
+  echo "$BL64_AWS_CLI_CREDENTIALS"
 }

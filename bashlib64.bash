@@ -53,7 +53,7 @@ builtin unset MAILPATH
 
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='23.5.0'
+  declare BL64_VERSION='23.5.1'
 
   #
   # Common constants
@@ -1593,7 +1593,7 @@ function bl64_lib_script_minver_check() {
 
 # shellcheck disable=SC2034
 {
-  declare BL64_TXT_MOD_VERSION='2.9.0'
+  declare BL64_TXT_MOD_VERSION='2.9.1'
   declare BL64_TXT_MOD_INFO='Text File Tools Interface'
   declare BL64_TXT_MOD_SETUP='0'
 
@@ -7395,22 +7395,6 @@ function bl64_arc_zstd_open() {
 # BashLib64 / Module / Setup / Interact with AWS
 #######################################
 
-#
-# Module attributes getters
-#
-
-function bl64_aws_get_cli_config() {
-  bl64_dbg_lib_show_function
-  bl64_check_module 'BL64_AWS_MOD_SETUP' || return $?
-  echo "$BL64_AWS_CLI_CONFIG"
-}
-
-function bl64_aws_get_cli_credentials() {
-  bl64_dbg_lib_show_function
-  bl64_check_module 'BL64_AWS_MOD_SETUP' || return $?
-  echo "$BL64_AWS_CLI_CREDENTIALS"
-}
-
 #######################################
 # Setup the bashlib64 module
 #
@@ -7592,6 +7576,18 @@ function bl64_aws_set_region() {
   BL64_AWS_CLI_REGION="$region"
   bl64_msg_show_lib_subtask "set AWS region (${BL64_AWS_CLI_REGION})"
   return 0
+}
+
+function bl64_aws_get_cli_config() {
+  bl64_dbg_lib_show_function
+  bl64_check_module 'BL64_AWS_MOD_SETUP' || return $?
+  echo "$BL64_AWS_CLI_CONFIG"
+}
+
+function bl64_aws_get_cli_credentials() {
+  bl64_dbg_lib_show_function
+  bl64_check_module 'BL64_AWS_MOD_SETUP' || return $?
+  echo "$BL64_AWS_CLI_CREDENTIALS"
 }
 
 #######################################
@@ -18895,7 +18891,6 @@ function bl64_txt_setup() {
   _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
     _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
     _bl64_txt_set_command &&
     _bl64_txt_set_options &&
     BL64_TXT_MOD_SETUP="$BL64_VAR_ON"
@@ -19772,6 +19767,18 @@ function _bl64_ui_set_command() {
 
   bl64_dbg_lib_show_vars 'BL64_UI_PAGER' 'BL64_UI_TUI'
   return 0
+}
+
+function bl64_ui_get_command_pager() {
+  bl64_dbg_lib_show_function
+  bl64_check_module 'BL64_UI_MOD_SETUP' || return $?
+  case "$BL64_UI_PAGER" in
+    "$BL64_UI_PAGER_BAT") echo "$BL64_UI_CMD_BAT" ;;
+    "$BL64_UI_PAGER_LESS") echo "$BL64_UI_CMD_LESS" ;;
+    "$BL64_UI_PAGER_MORE") echo "$BL64_UI_CMD_MORE" ;;
+    "$BL64_UI_PAGER_CAT") echo "$BL64_UI_CMD_CAT" ;;
+    *) bl64_check_rise_parameter_invalid 'BL64_UI_PAGER' ;;
+  esac
 }
 
 #######################################
