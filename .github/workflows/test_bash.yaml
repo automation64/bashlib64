@@ -1,5 +1,5 @@
 ---
-# template: 2.7.0
+# template: 2.8.0
 name: "Test/Bash"
 
 permissions:
@@ -12,8 +12,6 @@ concurrency:
 env:
   DEV_CICD_DEBUG: ${{ vars.DEV_CICD_DEBUG || 'NONE' }}
   DEV_CICD_DEBUG_BASH: ${{ vars.DEV_CICD_DEBUG_BASH || '' }}
-  BL64_LIB_CICD: ${{ vars.BL64_LIB_CICD || 'YES' }}
-  DEV_TEST_BASH_RUNNER_ENVIRONMENT: ${{ vars.DEV_TEST_BASH_RUNNER_ENVIRONMENT || 'ON' }}
 
 # yamllint disable-line rule:truthy
 on:
@@ -32,6 +30,8 @@ on:
 jobs:
   test-bash-linux:
     runs-on: "ubuntu-latest"
+    env:
+      DEV_TEST_BASH_PATH_REPORT: "./logs/bash/bash-test-linux.log"
     strategy:
       fail-fast: false
       max-parallel: 3
@@ -89,9 +89,18 @@ jobs:
           source ./bin/dev-env-bash &&
           ./bin/dev-test-bash $DEV_TEST_BASH_CONTAINER_${{matrix.target}} ${DEV_TEST_BASH_CASES}/UNX
 
+      - name: "Save report as repository artifact"
+        uses: actions/upload-artifact@v6
+        continue-on-error: true
+        if: always()
+        with:
+          name: "bash-test-linux.log"
+          path: "./logs/bash/bash-test-linux.log"
+
   test-bash-macos:
     needs: "test-bash-linux"
-    if: "always()"
+    env:
+      DEV_TEST_BASH_PATH_REPORT: "./logs/bash/bash-test-macos.log"
     runs-on: "macos-latest"
     steps:
       - name: "Check out repository code"
@@ -129,4 +138,12 @@ jobs:
           source ./bin/dev-set &&
           source ./bin/dev-env-bash &&
           ./bin/dev-test-bash CONTAINER_MODE_DISABLED ${DEV_TEST_BASH_CASES}/UNX
+
+      - name: "Save report as repository artifact"
+        uses: actions/upload-artifact@v6
+        continue-on-error: true
+        if: always()
+        with:
+          name: "bash-test-macos.log"
+          path: "./logs/bash/bash-test-macos.log"
 ...
