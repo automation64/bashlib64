@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Manipulate CSV like text files
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_XSV_VERSION='2.3.0'
-
-  declare BL64_XSV_MODULE='0'
+  declare BL64_XSV_MOD_VERSION='2.3.0'
+  declare BL64_XSV_MOD_INFO='Structured Data Tools Interface'
+  declare BL64_XSV_MOD_SETUP='0'
 
   declare BL64_XSV_CMD_PKL="$BL64_VAR_UNAVAILABLE"
   declare BL64_XSV_CMD_YQ="$BL64_VAR_UNAVAILABLE"

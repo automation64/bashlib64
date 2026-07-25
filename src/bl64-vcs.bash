@@ -9,7 +9,7 @@
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -20,7 +20,7 @@ function bl64_vcs_run_git() {
   bl64_dbg_lib_show_function "$@"
   local verbose="$BL64_VCS_SET_GIT_QUIET"
 
-  bl64_check_module 'BL64_VCS_MODULE' &&
+  bl64_check_module 'BL64_VCS_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_VCS_CMD_GIT" "$BL64_VAR_DEFAULT" 'git' ||
     return $?
@@ -47,7 +47,7 @@ function bl64_vcs_run_git() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -81,7 +81,7 @@ function _bl64_vcs_harden_git() {
 #   $2: destination path where the repository will be created
 #   $3: (optional) branch name
 #   $4: (optional) new repository name
-# Outputs:
+# Channels:
 #   STDOUT: git output
 #   STDERR: git stderr
 # Returns:
@@ -142,7 +142,7 @@ function bl64_vcs_git_clone() {
 #   $2: destination path where the repository will be created
 #   $3: branch name. Default: main
 #   $4: include search_pattern list. Field separator: space
-# Outputs:
+# Channels:
 #   STDOUT: git output
 #   STDERR: git stderr
 # Returns:
@@ -207,7 +207,7 @@ function bl64_vcs_git_sparse() {
 #   $4: API Token. Default: none
 #   $5: API Version. Default: $BL64_VCS_GITHUB_API_VERSION
 #   $@: additional arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -260,7 +260,7 @@ function bl64_vcs_github_run_api() {
 # Arguments:
 #   $1: repo owner
 #   $2: repo name
-# Outputs:
+# Channels:
 #   STDOUT: release tag
 #   STDERR: api error
 # Returns:
@@ -273,7 +273,7 @@ function bl64_vcs_github_release_get_latest() {
   local repo_name="${2:-}"
   local repo_tag=''
 
-  bl64_check_module 'BL64_VCS_MODULE' &&
+  bl64_check_module 'BL64_VCS_MOD_SETUP' &&
     bl64_check_parameter 'repo_owner' &&
     bl64_check_parameter 'repo_name' ||
     return $?
@@ -313,7 +313,7 @@ function _bl64_vcs_github_release_get_latest() {
 # Arguments:
 #   $1: changelog path
 #   $2: semver release tag
-# Outputs:
+# Channels:
 #   STDOUT: release description
 #   STDERR: execution error
 # Returns:

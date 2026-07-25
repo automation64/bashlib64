@@ -11,7 +11,7 @@
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -56,7 +56,7 @@ function _bl64_hlm_harden_helm() {
 # Arguments:
 #   $1: repository name
 #   $2: repository source
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -96,7 +96,7 @@ function bl64_hlm_repo_add() {
 #   $3: chart name
 #   $4: chart source
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -149,7 +149,7 @@ function bl64_hlm_chart_upgrade() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -161,7 +161,7 @@ function bl64_hlm_run_helm() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_HLM_MODULE' ||
+    bl64_check_module 'BL64_HLM_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_HLM_SET_DEBUG"

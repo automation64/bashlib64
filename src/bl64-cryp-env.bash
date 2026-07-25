@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Cryptography tools
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_CRYP_VERSION='2.5.3'
-
-  declare BL64_CRYP_MODULE='0'
+  declare BL64_CRYP_MOD_VERSION='2.6.0'
+  declare BL64_CRYP_MOD_INFO='Cryptographic Tools Interface'
+  declare BL64_CRYP_MOD_SETUP='0'
 
   declare BL64_CRYP_CMD_GPG="$BL64_VAR_UNAVAILABLE"
   declare BL64_CRYP_CMD_OPENSSL="$BL64_VAR_UNAVAILABLE"

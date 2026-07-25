@@ -7,7 +7,7 @@
 #
 # Arguments:
 #   $1: (optional) Full path where commands are
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -20,15 +20,15 @@ function bl64_k8s_setup() {
   local kubectl_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function "$@" &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_XSV_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FMT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_XSV_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
     _bl64_k8s_set_command "$kubectl_bin" &&
     _bl64_k8s_set_version &&
     bl64_k8s_set_kubectl_output &&
@@ -44,7 +44,7 @@ function bl64_k8s_setup() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -62,7 +62,7 @@ function _bl64_k8s_set_command() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: command errors
 # Returns:
@@ -104,7 +104,7 @@ function _bl64_k8s_set_version_1_22() {
 #
 # Arguments:
 #   $1: output type. Default: json. One of BL64_K8S_CFG_KUBECTL_OUTPUT_*
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: parameter error
 # Returns:

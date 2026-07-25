@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Interact with RESTful APIs
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_API_VERSION='2.3.0'
-
-  declare BL64_API_MODULE='0'
+  declare BL64_API_MOD_VERSION='2.3.0'
+  declare BL64_API_MOD_INFO='API Client Interface'
+  declare BL64_API_MOD_SETUP='0'
 
   declare BL64_API_CALL_SET_MAX_RETRIES='3'
   declare BL64_API_CALL_SET_WAIT='10'

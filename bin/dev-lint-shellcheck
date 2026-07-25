@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-lint: 1.2.0
+# template-lint: 1.3.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -13,23 +13,16 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || exit 1
-# shellcheck source=lib/bl64/bashlib64-core.bash
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
-source ./bin/dev-env-shellcheck || exit 1
+source ./bin/dev-set &&
+  source ./bin/dev-source-base &&
+  source ./bin/dev-env-shellcheck || exit 1
 
 declare MY_TARGET="${*:-$DEV_LINT_SHELLCHECK_TARGET}"
 
 function my_lint_local() {
   bl64_dbg_app_show_function "$@"
   local target="$1"
-  "$DEV_LIB_SHELLCHECK_BIN" \
-    --color=auto \
+  dev_shellcheck_run_shellcheck \
     --wiki-link-count=0 \
     --severity=info \
     --format="$DEV_LINT_SHELLCHECK_FORMAT" \
@@ -40,7 +33,11 @@ function my_lint() {
   bl64_dbg_app_show_function
   local current=''
 
-  [[ -d "$MY_TARGET" ]] && MY_TARGET+='/*'
+  if [[ -d "$MY_TARGET" ]]; then
+    MY_TARGET="$(bl64_fs_file_search "$MY_TARGET")" ||
+      return $?
+  fi
+
   echo '' >"$DEV_LINT_SHELLCHECK_PATH_REPORT"
   for current in $MY_TARGET; do
     bl64_msg_show_phase "lint Shell target (${current})"
@@ -50,17 +47,17 @@ function my_lint() {
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  dev_bin64_task_initialize &&
-    dev_bin64_log_setup "$BL64_VAR_ON" "$DEV_ENV_SHELLCHECK_PATH_LOGS" &&
-    bl64_check_command "$DEV_LIB_SHELLCHECK_BIN" &&
-    dev_bin64_task_show_setup \
+  dev_base_task_initialize &&
+    dev_base_log_setup "$BL64_VAR_ON" "$DEV_ENV_SHELLCHECK_PATH_LOGS" &&
+    dev_base_lib_check_command "$DEV_ENV_SHELLCHECK_ID" "$DEV_LIB_SHELLCHECK_BIN" &&
+    dev_base_task_show_setup \
       'DEV_LINT_SHELLCHECK_PATH_REPORT' \
       'MY_TARGET'
 }
 
-bl64_lib_script_version_set '2.1.1'
-bl64_msg_help_about_set 'Lint source code'
-dev_bin64_initialize && my_initialize || exit $?
+bl64_lib_script_version_set '2.2.0'
+bl64_msg_help_set_about 'Lint source code'
+dev_base_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_lint

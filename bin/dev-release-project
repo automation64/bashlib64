@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# template-task: 1.9.0
+#######################################
+# Copyright SerDigital64 - https://github.com/serdigital64
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#######################################
+
+source ./bin/dev-set &&
+  source ./bin/dev-source-base &&
+  source ./bin/dev-env-project || exit 1
+
+declare MY_SOURCE_FILE=''
+
+function my_release() {
+  bl64_dbg_app_show_function
+  local file_mode='0644'
+  bl64_fs_path_copy \
+    "$file_mode" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" \
+    "$DEV_RELEASE_PROJECT_PATH_TARGET" \
+    "$MY_SOURCE_FILE"
+}
+
+function my_initialize() {
+  bl64_dbg_app_show_function
+  dev_base_task_initialize &&
+    MY_SOURCE_FILE="${DEV_PACK_PROJECT_PATH_STAGING}/${DEV_PACK_PROJECT_ASSETS_SA}" &&
+    bl64_check_file "$MY_SOURCE_FILE" &&
+    dev_base_task_show_setup \
+      'DEV_RELEASE_PROJECT_PATH_TARGET' \
+      'DEV_PACK_PROJECT_PATH_STAGING' \
+      'DEV_PACK_PROJECT_ASSETS_SA' \
+      'MY_SOURCE_FILE'
+}
+
+bl64_lib_script_version_set '1.0.0'
+bl64_msg_help_set_about 'Promote stand-alone library to main branch'
+dev_base_initialize && my_initialize || exit $?
+
+bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
+my_release
+bl64_msg_show_batch_finish $? "$BL64_SCRIPT_ID"

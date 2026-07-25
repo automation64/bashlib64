@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / OS / Identify OS attributes and provide command aliases
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_OS_VERSION='5.13.0'
-
-  declare BL64_OS_MODULE='0'
+  declare BL64_OS_MOD_VERSION='5.14.0'
+  declare BL64_OS_MOD_INFO='Operating System Tools Interface'
+  declare BL64_OS_MOD_SETUP='0'
 
   # Current OS Distro ID
   declare BL64_OS_DISTRO=''
@@ -21,14 +17,12 @@
   declare BL64_OS_MACHINE=''
 
   declare BL64_OS_CMD_BASH=''
-  declare BL64_OS_CMD_CAT=''
   declare BL64_OS_CMD_DATE=''
   declare BL64_OS_CMD_FALSE=''
   declare BL64_OS_CMD_GETENT=''
   declare BL64_OS_CMD_HOSTNAME=''
   declare BL64_OS_CMD_LOCALE=''
   declare BL64_OS_CMD_SLEEP=''
-  declare BL64_OS_CMD_TEE=''
   declare BL64_OS_CMD_TRUE=''
   declare BL64_OS_CMD_UNAME=''
 

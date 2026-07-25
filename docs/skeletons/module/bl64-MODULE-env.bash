@@ -1,0 +1,6 @@
+# shellcheck disable=SC2034
+{
+  declare BL64_X_MODULE_CAPS_X_MOD_VERSION='1.0.0'
+  declare BL64_X_MODULE_CAPS_X_MOD_INFO='X_MODULE_DESCRIPTION_X'
+  declare BL64_X_MODULE_CAPS_X_MOD_SETUP='0'
+}

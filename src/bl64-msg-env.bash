@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Display messages
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_MSG_VERSION='5.18.3'
-
-  declare BL64_MSG_MODULE='0'
+  declare BL64_MSG_MOD_VERSION='5.18.3'
+  declare BL64_MSG_MOD_INFO='Script Messaging'
+  declare BL64_MSG_MOD_SETUP='0'
 
   #
   # Deprecated Variables

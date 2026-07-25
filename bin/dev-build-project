@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-build: 1.0.0
+# template-build: 1.1.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -13,17 +13,9 @@
 # limitations under the License.
 #######################################
 
-# shellcheck source=bin/dev-set
-source ./bin/dev-set || { echo 'dev-set:Error: unable to load dev environment' 2>&1 && exit 1; }
-# shellcheck source-path=/opt/bl64
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
-# shellcheck source-path=bin
-source ./bin/dev-env-project || exit 1
+source ./bin/dev-set &&
+  source ./bin/dev-source-base &&
+  source ./bin/dev-env-project || exit 1
 
 declare MY_BUILD_SA="${DEV_BUILD_PROJECT_PATH_TARGET}/${DEV_PACK_PROJECT_ASSETS_SA}"
 declare MY_BUILD_CORE="${DEV_BUILD_PROJECT_PATH_TARGET}/${DEV_PACK_PROJECT_ASSETS_CORE}"
@@ -44,7 +36,7 @@ function my_build_merge_main() {
     return $?
 }
 
-function dev_build_merge_module() {
+function my_build_merge_module() {
   bl64_dbg_lib_show_function "$@"
   local destination="$1"
   local modules="$2"
@@ -73,14 +65,14 @@ function my_build_create_modules() {
   local module_name=''
 
   bl64_msg_show_task 'adding modules'
-  dev_build_merge_module "$MY_BUILD_SA" "${DEV_ENV_PROJECT_MODULES_CORE} ${DEV_ENV_PROJECT_MODULES_OPT}" &&
-    dev_build_merge_module "$MY_BUILD_CORE" "$DEV_ENV_PROJECT_MODULES_CORE" &&
-    dev_build_merge_module "$MY_BUILD_OPT" "$DEV_ENV_PROJECT_MODULES_OPT" ||
+  my_build_merge_module "$MY_BUILD_SA" "${DEV_ENV_PROJECT_MODULES_CORE} ${DEV_ENV_PROJECT_MODULES_OPT}" &&
+    my_build_merge_module "$MY_BUILD_CORE" "$DEV_ENV_PROJECT_MODULES_CORE" &&
+    my_build_merge_module "$MY_BUILD_OPT" "$DEV_ENV_PROJECT_MODULES_OPT" ||
     return $?
 
   for module_name in ${DEV_ENV_PROJECT_MODULES_CORE} ${DEV_ENV_PROJECT_MODULES_OPT}; do
     build_module="${DEV_BUILD_PROJECT_PATH_TARGET}/${DEV_PACK_PROJECT_ASSETS_MODULE}-${module_name}.bash"
-    dev_build_merge_module "${build_module}.tmp" "$module_name"
+    my_build_merge_module "${build_module}.tmp" "$module_name"
     {
       "$BL64_OS_CMD_CAT" 'bl64-lib-header.bash' &&
         echo &&
@@ -92,7 +84,7 @@ function my_build_create_modules() {
   done
 }
 
-function dev_build_merge_core() {
+function my_build_merge_core() {
   bl64_dbg_lib_show_function
   "$BL64_OS_CMD_CAT" "bl64-lib-header.bash" &&
     echo &&
@@ -106,7 +98,7 @@ function my_build_create_header() {
   # Create header
   bl64_msg_show_task 'creating library header'
   # shellcheck disable=SC2119
-  dev_build_merge_core >"$MY_BUILD_SA" &&
+  my_build_merge_core >"$MY_BUILD_SA" &&
     bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$MY_BUILD_SA" "$MY_BUILD_CORE" &&
     bl64_fs_run_cp "$BL64_FS_SET_CP_FORCE" "$MY_BUILD_SA" "$MY_BUILD_MODULE_CORE" ||
     return $?
@@ -126,18 +118,18 @@ function my_build() {
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  bl64_msg_show_about
-  dev_bin64_build_setup "$DEV_BUILD_PROJECT_PATH_TARGET" &&
-    dev_bin64_task_show_setup \
+  dev_base_task_initialize &&
+    dev_base_build_setup "$DEV_BUILD_PROJECT_PATH_TARGET" &&
+    dev_base_task_show_setup \
       'DEV_BUILD_PROJECT_PATH_SOURCE' \
       'DEV_BUILD_PROJECT_PATH_TARGET' \
       'DEV_ENV_PROJECT_MODULES_CORE' \
       'DEV_ENV_PROJECT_MODULES_OPT'
 }
 
-bl64_lib_script_version_set '1.0.0'
-bl64_msg_help_about_set 'Build application in staging area'
-dev_bin64_initialize && my_initialize || exit $?
+bl64_lib_script_version_set '2.0.0'
+bl64_msg_help_set_about 'Build application in staging area'
+dev_base_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_build

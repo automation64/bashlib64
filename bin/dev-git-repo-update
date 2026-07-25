@@ -13,17 +13,9 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || exit 1
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-rxtx.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-api.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-vcs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
-source ./bin/dev-env-git || exit 1
+source ./bin/dev-set &&
+  source ./bin/dev-source-base &&
+  source ./bin/dev-env-git || exit 1
 
 function dev_repo_update() {
   bl64_dbg_app_show_function
@@ -49,9 +41,9 @@ function dev_repo_update() {
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  dev_bin64_task_initialize &&
+  dev_base_task_initialize &&
     dev_git_check_repo_root &&
-    dev_bin64_task_show_setup \
+    dev_base_task_show_setup \
       'DEV_GIT_BRANCH_MAIN' \
       'DEV_GIT_REMOTE_ORIGIN' \
       'DEV_GIT_REMOTE_UPSTREAM' \
@@ -59,8 +51,8 @@ function my_initialize() {
 }
 
 bl64_lib_script_version_set '1.6.0'
-bl64_msg_help_about_set 'Update local repository from origin and upstream'
-dev_bin64_initialize && my_initialize || exit $?
+bl64_msg_help_set_about 'Update local repository from origin and upstream'
+dev_base_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 dev_repo_update

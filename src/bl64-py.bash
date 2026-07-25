@@ -11,7 +11,7 @@
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -39,7 +39,7 @@ function _bl64_py_harden_python() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -73,7 +73,7 @@ function _bl64_py_harden_pip() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -108,7 +108,7 @@ function _bl64_py_harden_pipx() {
 #
 # Arguments:
 #   $1: full path to the virtual environment
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -133,7 +133,7 @@ function bl64_py_venv_create() {
 #
 # Arguments:
 #   $1: full path to the virtual environment
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -158,7 +158,7 @@ function bl64_py_venv_check() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
@@ -210,7 +210,7 @@ function bl64_py_pip_usr_prepare() {
 #
 # Arguments:
 #   package list, separated by spaces (expanded with $@)
-# Outputs:
+# Channels:
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
@@ -252,7 +252,7 @@ function bl64_py_pip_usr_install() {
 #
 # Arguments:
 #   package list, separated by spaces (expanded with $@)
-# Outputs:
+# Channels:
 #   STDOUT: process output
 #   STDERR: process stderr
 # Returns:
@@ -280,7 +280,7 @@ function bl64_py_pip_usr_deploy() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
@@ -304,7 +304,7 @@ function bl64_py_pip_usr_cleanup() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -315,7 +315,7 @@ function bl64_py_run_python() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_PY_MODULE' ||
+    bl64_check_module 'BL64_PY_MOD_SETUP' ||
     return $?
 
   _bl64_py_harden_python
@@ -332,7 +332,7 @@ function bl64_py_run_python() {
 #
 # Arguments:
 #   $@: arguments are passes as-is
-# Outputs:
+# Channels:
 #   STDOUT: PIP output
 #   STDERR: PIP error
 # Returns:
@@ -372,7 +372,7 @@ function bl64_py_run_pip() {
 #
 # Arguments:
 #   $@: arguments are passes as-is
-# Outputs:
+# Channels:
 #   STDOUT: PIPX output
 #   STDERR: PIPX error
 # Returns:
@@ -394,7 +394,7 @@ function bl64_py_run_pipx() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: error check
 # Returns:
@@ -403,7 +403,7 @@ function bl64_py_run_pipx() {
 #######################################
 function bl64_py_check_pip() {
   bl64_dbg_lib_show_function
-  bl64_check_module 'BL64_PY_MODULE' || return $?
+  bl64_check_module 'BL64_PY_MOD_SETUP' || return $?
   if [[ -n "$BL64_PY_VERSION_PIP" ]]; then
     return 0
   else
@@ -417,7 +417,7 @@ function bl64_py_check_pip() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: PIP version
 #   STDERR: PIP error
 # Returns:

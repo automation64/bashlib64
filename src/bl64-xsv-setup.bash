@@ -7,7 +7,7 @@
 #
 # Arguments:
 #   $@: (optional) search full paths for tools
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -19,13 +19,13 @@ function bl64_xsv_setup() {
   local search_paths=("${@:-}")
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MOD_SETUP' &&
     _bl64_xsv_set_command "${search_paths[@]}" &&
-    BL64_XSV_MODULE="$BL64_VAR_ON"
+    BL64_XSV_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'xsv'
 }
 
@@ -38,7 +38,7 @@ function bl64_xsv_setup() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:

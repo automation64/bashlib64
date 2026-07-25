@@ -26,7 +26,7 @@
   export DEV_ENV_GITHUB_VERSION='2.0.0'
 
   # Lib / GitHub / Installer
-  export DEV_LIB_GITHUB_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-ghcli"
+  export DEV_LIB_GITHUB_INSTALLER="ghcli"
   # Lib / GitHub / Skip installation?
   export DEV_LIB_GITHUB_SKIP='YES'
   # Lib / GitHub / Target

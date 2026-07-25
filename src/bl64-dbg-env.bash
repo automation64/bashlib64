@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Show shell debugging information
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_DBG_VERSION='3.5.1'
-
-  declare BL64_DBG_MODULE='0'
+  declare BL64_DBG_MOD_VERSION='3.5.1'
+  declare BL64_DBG_MOD_INFO='Shell Debugging'
+  declare BL64_DBG_MOD_SETUP='0'
 
   # Debug target
   declare BL64_DBG_TARGET=''

@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Interact with GCP
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_GCP_VERSION='3.0.4'
-
-  declare BL64_GCP_MODULE='0'
+  declare BL64_GCP_MOD_VERSION='3.0.4'
+  declare BL64_GCP_MOD_INFO='Google Cloud Platform CLI Interface'
+  declare BL64_GCP_MOD_SETUP='0'
 
   declare BL64_GCP_CMD_GCLOUD="$BL64_VAR_UNAVAILABLE"
 

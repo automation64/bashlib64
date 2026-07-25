@@ -9,7 +9,7 @@
 #
 # Arguments:
 #   $1: full path to the virtual environment
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -51,17 +51,17 @@ function _bl64_py_setup() {
   fi
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
     _bl64_py_set_command "$venv_path" &&
     bl64_check_command "$BL64_PY_CMD_PYTHON3" "$BL64_VAR_DEFAULT" 'python3' &&
     _bl64_py_set_version &&
     _bl64_py_set_options &&
     _bl64_py_pip_set_version &&
-    BL64_PY_MODULE="$BL64_VAR_ON"
+    BL64_PY_MOD_SETUP="$BL64_VAR_ON"
 }
 
 #######################################
@@ -75,7 +75,7 @@ function _bl64_py_setup() {
 #
 # Arguments:
 #   $1: full path to the virtual environment
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -164,7 +164,7 @@ function _bl64_py_set_command_linux() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -208,7 +208,7 @@ function _bl64_py_set_options() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: command errors
 # Returns:
@@ -234,7 +234,7 @@ function _bl64_py_set_version() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: command errors
 # Returns:

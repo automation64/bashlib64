@@ -8,7 +8,7 @@
 # Arguments:
 #   $1: Minimum. Default: BL64_RND_RANDOM_MIN
 #   $2: Maximum. Default: BL64_RND_RANDOM_MAX
-# Outputs:
+# Channels:
 #   STDOUT: random number
 #   STDERR: execution error
 # Returns:
@@ -40,7 +40,7 @@ function bl64_rnd_get_range() {
 #
 # Arguments:
 #   $1: Length. Default: BL64_RND_LENGTH_1
-# Outputs:
+# Channels:
 #   STDOUT: random string
 #   STDERR: execution error
 # Returns:
@@ -72,7 +72,7 @@ function bl64_rnd_get_numeric() {
 # Arguments:
 #   $1: Minimum. Default: BL64_RND_RANDOM_MIN
 #   $2: Maximum. Default: BL64_RND_RANDOM_MAX
-# Outputs:
+# Channels:
 #   STDOUT: random string
 #   STDERR: execution error
 # Returns:

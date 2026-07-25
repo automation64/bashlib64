@@ -2,6 +2,22 @@
 # BashLib64 / Module / Functions / Manipulate text files content
 #######################################
 
+#
+# Deprecation aliases
+#
+# * Aliases to deprecated functions
+# * Needed to maintain compatibility up to N-2 versions
+#
+
+function bl64_txt_line_replace_sed() {
+  _bl64_lib_function_deprecated 'bl64_txt_line_replace_sed' 'bl64_txt_modify'
+  bl64_txt_modify "$@"
+}
+
+#
+# Public functions
+#
+
 #######################################
 # Removes comments from text input using the external tool Grep
 #
@@ -10,7 +26,7 @@
 #
 # Arguments:
 #   $1: Full path to the text file. Use $BL64_TXT_FLAG_STDIN for stdin. Default: STDIN
-# Outputs:
+# Channels:
 #   STDOUT: Original text with comments removed
 #   STDERR: grep Error message
 # Returns:
@@ -34,7 +50,7 @@ function bl64_txt_strip_comments() {
 #
 # Arguments:
 #   $1: source file path
-# Outputs:
+# Channels:
 #   STDOUT: source modified with replaced variables
 #   STDERR: command stderr
 # Returns:
@@ -58,7 +74,7 @@ function bl64_txt_replace_env() {
 # Arguments:
 #   $1: source file path. Use $BL64_TXT_FLAG_STDIN for stdin. Default: STDIN
 #   $2: text to look for. Default: empty line
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: Error messages
 # Returns:
@@ -88,14 +104,14 @@ function bl64_txt_search_line() {
 #
 # Arguments:
 #   $1: sed expression
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: Error messages
 # Returns:
 #   0: operation ok
 #   >0: operation failed
 #######################################
-function bl64_txt_line_replace_sed() {
+function bl64_txt_modify() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-${BL64_TXT_FLAG_STDIN}}"
   local sed_expression="${2:-}"
@@ -119,7 +135,7 @@ function bl64_txt_line_replace_sed() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -130,7 +146,7 @@ function bl64_txt_run_awk() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_AWK_POSIX" ||
     return $?
 
@@ -147,7 +163,7 @@ function bl64_txt_run_awk() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -158,7 +174,7 @@ function bl64_txt_run_awk() {
 function bl64_txt_run_envsubst() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_ENVSUBST" ||
     return $?
 
@@ -174,7 +190,7 @@ function bl64_txt_run_envsubst() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -185,7 +201,7 @@ function bl64_txt_run_grep() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_GREP" ||
     return $?
 
@@ -199,7 +215,7 @@ function bl64_txt_run_grep() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -220,7 +236,7 @@ function bl64_txt_run_egrep() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -231,7 +247,7 @@ function bl64_txt_run_sed() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_SED" ||
     return $?
 
@@ -247,7 +263,7 @@ function bl64_txt_run_sed() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -257,7 +273,7 @@ function bl64_txt_run_sed() {
 function bl64_txt_run_base64() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_BASE64" ||
     return $?
 
@@ -273,7 +289,7 @@ function bl64_txt_run_base64() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -284,7 +300,7 @@ function bl64_txt_run_tr() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_TR" ||
     return $?
 
@@ -300,7 +316,7 @@ function bl64_txt_run_tr() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -311,7 +327,7 @@ function bl64_txt_run_cut() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TXT_MODULE' &&
+    bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_CUT" ||
     return $?
 
@@ -327,7 +343,7 @@ function bl64_txt_run_cut() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -337,7 +353,7 @@ function bl64_txt_run_cut() {
 function bl64_txt_run_uniq() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_UNIQ" ||
     return $?
 
@@ -353,7 +369,7 @@ function bl64_txt_run_uniq() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -363,7 +379,7 @@ function bl64_txt_run_uniq() {
 function bl64_txt_run_sort() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_SORT" ||
     return $?
 
@@ -379,7 +395,7 @@ function bl64_txt_run_sort() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -389,7 +405,7 @@ function bl64_txt_run_sort() {
 function bl64_txt_run_tail() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_TAIL" ||
     return $?
 
@@ -405,7 +421,7 @@ function bl64_txt_run_tail() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -415,11 +431,90 @@ function bl64_txt_run_tail() {
 function bl64_txt_run_fmt() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_TXT_MODULE' &&
+  bl64_check_module 'BL64_TXT_MOD_SETUP' &&
     bl64_check_command "$BL64_TXT_CMD_FMT" ||
     return $?
 
   bl64_dbg_lib_trace_start
   "$BL64_TXT_CMD_FMT" "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Channels:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_txt_run_cat() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_TXT_MOD_SETUP' &&
+    bl64_check_command "$BL64_TXT_CMD_CAT" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_TXT_CMD_CAT" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit config
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Channels:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+function bl64_txt_run_tee() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_TXT_MOD_SETUP' &&
+    bl64_check_command "$BL64_TXT_CMD_TEE" ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  # shellcheck disable=SC2086
+  "$BL64_TXT_CMD_TEE" \
+    "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Show file content as-is
+#
+# Arguments:
+#   $1: full path to source file
+# Channels:
+#   STDOUT: File content
+#   STDERR: Error messages
+# Returns:
+#   0: operation ok
+#   >0: operation failed
+#######################################
+function bl64_txt_dump() {
+  bl64_dbg_lib_show_function "$@"
+  local file_path="${1:-}"
+
+  bl64_check_parameter 'file_path' &&
+    bl64_check_file "$file_path" ||
+    return $?
+
+  bl64_txt_run_cat "$file_path"
 }

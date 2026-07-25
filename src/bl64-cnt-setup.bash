@@ -10,7 +10,7 @@
 #
 # Arguments:
 #   $1: (optional) Full path where commands are
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -22,15 +22,15 @@ function bl64_cnt_setup() {
   local command_location="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MOD_SETUP' &&
     _bl64_cnt_set_command "$command_location" &&
     _bl64_cnt_set_options &&
-    BL64_CNT_MODULE="$BL64_VAR_ON"
+    BL64_CNT_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'cnt'
 }
 
@@ -42,7 +42,7 @@ function bl64_cnt_setup() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -87,7 +87,7 @@ function _bl64_cnt_set_command_podman() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:

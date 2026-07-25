@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Generate random data
-#######################################
-
 # shellcheck disable=SC2034,SC2155
 {
-  declare BL64_RND_VERSION='2.0.1'
-
-  declare BL64_RND_MODULE='0'
+  declare BL64_RND_MOD_VERSION='2.0.1'
+  declare BL64_RND_MOD_INFO='Random Values Generation'
+  declare BL64_RND_MOD_SETUP='0'
 
   declare -i BL64_RND_LENGTH_1=1
   declare -i BL64_RND_LENGTH_20=20

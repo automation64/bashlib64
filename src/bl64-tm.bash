@@ -9,7 +9,7 @@
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: formated string
 #   STDERR: command Error message
 # Returns:
@@ -26,7 +26,7 @@ function bl64_tm_create_timestamp() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: formated string
 #   STDERR: command Error message
 # Returns:

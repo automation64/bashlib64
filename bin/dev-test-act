@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-task: 1.9.0
+# template-test: 1.2.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -13,14 +13,9 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || exit 1
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
-source ./bin/dev-env-act || exit 1
+source ./bin/dev-set &&
+  source ./bin/dev-source-base &&
+  source ./bin/dev-env-act || exit 1
 
 declare MY_WORKFLOWS="${1:-${DEV_TEST_ACT_WORKFLOWS}}"
 
@@ -35,36 +30,35 @@ function my_test() {
 
   for job in $MY_WORKFLOWS; do
     bl64_msg_show_phase "run GitHub Actions workflow (${job})"
-    "$DEV_LIB_ACT_BIN" \
+    dev_act_run_act \
       --strict \
       --use-gitignore \
-      --env-file=/dev/null \
       --container-options "--group-add ${docker_group_id}" \
       --concurrent-jobs="$DEV_TEST_ACT_JOBS_MAX" \
       --artifact-server-port="$DEV_LIB_ACT_PORT_ARTIFACT" \
       --artifact-server-path="$DEV_LIB_ACT_PATH_ARTIFACT" \
       --action-cache-path="$DEV_LIB_ACT_PATH_CACHE_ACTION" \
       --cache-server-path="$DEV_LIB_ACT_PATH_CACHE_SERVER" \
-      --job=${job} >"${DEV_ENV_ACT_PATH_LOGS}/${job}.${DEV_TEST_ACT_FORMAT}" 2>&1 ||
+      --job=${job} >"${DEV_ENV_ACT_PATH_LOGS}/${DEV_TEST_ACT_PREFIX_REPORT}${job}.${DEV_TEST_ACT_FORMAT}" 2>&1 ||
       return $?
   done
 }
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  dev_bin64_task_initialize &&
-    dev_bin64_log_setup "$BL64_VAR_ON" "$DEV_ENV_ACT_PATH_LOGS" &&
-    bl64_check_command "$DEV_LIB_ACT_BIN" &&
+  dev_base_task_initialize &&
+    dev_base_log_setup "$BL64_VAR_OFF" "$DEV_ENV_ACT_PATH_LOGS" &&
+    dev_base_lib_check_command "$DEV_ENV_ACT_ID" "$DEV_LIB_ACT_BIN" &&
     bl64_check_parameter 'MY_WORKFLOWS' &&
     bl64_check_export 'DEV_ENV_ACT_PATH_LOGS' &&
-    dev_bin64_task_show_setup \
+    dev_base_task_show_setup \
       'MY_WORKFLOWS' \
       'DEV_ENV_ACT_PATH_LOGS'
 }
 
-bl64_lib_script_version_set '1.5.0'
-bl64_msg_help_about_set 'Test GitHub Actions workflows'
-dev_bin64_initialize && my_initialize || exit $?
+bl64_lib_script_version_set '1.6.0'
+bl64_msg_help_set_about 'Test GitHub Actions workflows'
+dev_base_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_test

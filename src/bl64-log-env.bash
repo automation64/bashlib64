@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Write messages to logs
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_LOG_VERSION='3.0.2'
-
-  declare BL64_LOG_MODULE='0'
+  declare BL64_LOG_MOD_VERSION='3.0.2'
+  declare BL64_LOG_MOD_INFO='Logs Management'
+  declare BL64_LOG_MOD_SETUP='0'
 
   # Log file types
   declare BL64_LOG_FORMAT_CSV='C'

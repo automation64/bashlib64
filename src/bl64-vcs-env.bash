@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Manage Version Control System
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_VCS_VERSION='3.2.2'
-
-  declare BL64_VCS_MODULE='0'
+  declare BL64_VCS_MOD_VERSION='3.2.2'
+  declare BL64_VCS_MOD_INFO='Version Control System Tools Interface'
+  declare BL64_VCS_MOD_SETUP='0'
 
   declare BL64_VCS_CMD_GIT=''
 

@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Manage local filesystem
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_FS_VERSION='6.6.1'
-
-  declare BL64_FS_MODULE='0'
+  declare BL64_FS_MOD_VERSION='6.7.0'
+  declare BL64_FS_MOD_INFO='File System Tools Interface'
+  declare BL64_FS_MOD_SETUP='0'
 
   declare BL64_FS_PATH_TEMPORAL=''
   declare BL64_FS_PATH_CACHE=''

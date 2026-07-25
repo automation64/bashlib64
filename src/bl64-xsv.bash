@@ -7,7 +7,7 @@
 #
 # Arguments:
 #   $1: Full path to the file
-# Outputs:
+# Channels:
 #   STDOUT: file content
 #   STDERR: Error messages
 # Returns:
@@ -37,7 +37,7 @@ function bl64_xsv_dump() {
 #   $4: one or more fields to show on record match. Format: single string using $BL64_XSV_COLON as field separator
 #   $5: field separator for the source file. Default: $BL64_XSV_COLON
 #   $6: field separator for the output record. Default: $BL64_XSV_COLON
-# Outputs:
+# Channels:
 #   STDOUT: matching records
 #   STDERR: Error messages
 # Returns:
@@ -112,7 +112,7 @@ function bl64_xsv_search_records() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -124,7 +124,7 @@ function bl64_xsv_run_jq() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_XSV_MODULE' &&
+    bl64_check_module 'BL64_XSV_MOD_SETUP' &&
     bl64_check_command "$BL64_XSV_CMD_JQ" "$BL64_VAR_DEFAULT" 'jq' ||
     return $?
 
@@ -140,7 +140,7 @@ function bl64_xsv_run_jq() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -152,7 +152,7 @@ function bl64_xsv_run_yq() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_XSV_MODULE' &&
+    bl64_check_module 'BL64_XSV_MOD_SETUP' &&
     bl64_check_command "$BL64_XSV_CMD_YQ" "$BL64_VAR_DEFAULT" 'yq' ||
     return $?
 
@@ -168,7 +168,7 @@ function bl64_xsv_run_yq() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -180,7 +180,7 @@ function bl64_xsv_run_pkl() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_XSV_MODULE' &&
+    bl64_check_module 'BL64_XSV_MOD_SETUP' &&
     bl64_check_command "$BL64_XSV_CMD_PKL" "$BL64_VAR_DEFAULT" 'pkl' ||
     return $?
 
@@ -194,7 +194,7 @@ function bl64_xsv_run_pkl() {
 #
 # Arguments:
 #   $1: Full path to the file or nothing for STDIN. Default: STDIN
-# Outputs:
+# Channels:
 #   STDOUT: file content
 #   STDERR: Error messages
 # Returns:
@@ -218,7 +218,7 @@ function bl64_xsv_json_format_human() {
 #
 # Arguments:
 #   $1: Full path to the file or nothing for STDIN. Default: STDIN
-# Outputs:
+# Channels:
 #   STDOUT: file content
 #   STDERR: Error messages
 # Returns:

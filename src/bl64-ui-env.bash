@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / User Interface
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_UI_VERSION='3.4.0'
-
-  declare BL64_UI_MODULE='0'
+  declare BL64_UI_MOD_VERSION='3.5.0'
+  declare BL64_UI_MOD_INFO='Text User Interface'
+  declare BL64_UI_MOD_SETUP='0'
 
   declare BL64_UI_CFG_INPUT_TIMEOUT='60'
   declare BL64_UI_CFG_SKIP_CONFIRMATION="$BL64_VAR_NO"
@@ -16,5 +12,21 @@
   declare BL64_UI_CMD_FZF="$BL64_VAR_UNAVAILABLE"
   declare BL64_UI_CMD_GUM="$BL64_VAR_UNAVAILABLE"
   declare BL64_UI_CMD_LESS="$BL64_VAR_UNAVAILABLE"
+  declare BL64_UI_CMD_MORE="$BL64_VAR_UNAVAILABLE"
   declare BL64_UI_CMD_WHIPTAIL="$BL64_VAR_UNAVAILABLE"
+
+  declare BL64_UI_PAGER=''
+  declare BL64_UI_PAGER_BAT='BAT'
+  declare BL64_UI_PAGER_CAT='CAT'
+  declare BL64_UI_PAGER_LESS='LESS'
+  declare BL64_UI_PAGER_MORE='MORE'
+
+  declare BL64_UI_TUI=''
+  declare BL64_UI_TUI_BASH='BASH'
+  declare BL64_UI_TUI_DIALOG='DIALOG'
+  declare BL64_UI_TUI_FZF='FZF'
+  declare BL64_UI_TUI_GUM='GUM'
+  declare BL64_UI_TUI_WHIPTAIL='WHIPTAIL'
+
+  declare _BL64_UI_TXT_SELECT_ITEM='Select an item from the list'
 }

@@ -107,7 +107,7 @@ function _bl64_msg_alert_show_parameter() {
 #   $1: style attribute
 #   $2: type of message
 #   $3: message to show
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: message when type is error or warning
 # Returns:
@@ -120,7 +120,7 @@ function _bl64_msg_print() {
   local type="${2:-}"
   local message="${3:-}"
 
-  _bl64_msg_module_check_setup 'BL64_MSG_MODULE' || return $?
+  _bl64_msg_module_check_setup 'BL64_MSG_MOD_SETUP' || return $?
   [[ -n "$attribute" && -n "$type" ]] || return "$BL64_LIB_ERROR_PARAMETER_MISSING"
 
   case "$BL64_MSG_OUTPUT" in
@@ -389,7 +389,7 @@ function _bl64_msg_show_about() {
 #
 # Arguments:
 #   $1: error message
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -409,7 +409,7 @@ function bl64_msg_show_check() {
 #
 # Arguments:
 #   $1: error message
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -429,7 +429,7 @@ function bl64_msg_show_error() {
 #
 # Arguments:
 #   $1: error message
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -449,7 +449,7 @@ function bl64_msg_show_app_error() {
 #
 # Arguments:
 #   $1: error message
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -470,7 +470,7 @@ function bl64_msg_show_lib_error() {
 # * Use before halting the script with exit
 # Arguments:
 #   $1: error message
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -490,7 +490,7 @@ function bl64_msg_show_fatal() {
 #
 # Arguments:
 #   $1: warning message
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -510,7 +510,7 @@ function bl64_msg_show_warning() {
 #
 # Arguments:
 #   $1: warning message
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -530,7 +530,7 @@ function bl64_msg_show_attention() {
 #
 # Arguments:
 #   $1: message
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -552,7 +552,7 @@ function bl64_msg_show_init() {
 #
 # Arguments:
 #   $1: message
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -574,7 +574,7 @@ function bl64_msg_show_info() {
 #
 # Arguments:
 #   $1: message
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -596,7 +596,7 @@ function bl64_msg_show_phase() {
 #
 # Arguments:
 #   $1: message
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -618,7 +618,7 @@ function bl64_msg_show_task() {
 #
 # Arguments:
 #   $1: message
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -640,7 +640,7 @@ function bl64_msg_show_subtask() {
 #
 # Arguments:
 #   $1: message
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -662,7 +662,7 @@ function bl64_msg_show_lib_task() {
 #
 # Arguments:
 #   $1: message
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -684,7 +684,7 @@ function bl64_msg_show_lib_subtask() {
 #
 # Arguments:
 #   $1: message
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -706,7 +706,7 @@ function bl64_msg_show_lib_info() {
 #
 # Arguments:
 #   $1: message
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -730,7 +730,7 @@ function bl64_msg_show_text() {
 #
 # Arguments:
 #   $2: batch short description
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -756,7 +756,7 @@ function bl64_msg_show_batch_start() {
 # Arguments:
 #   $1: process exit status.
 #   $2: batch short description. Default: BL64_SCRIPT_ID
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -789,7 +789,7 @@ function bl64_msg_show_batch_finish() {
 #
 # Arguments:
 #   $1: message
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -810,7 +810,7 @@ function bl64_msg_show_input() {
 #   $1: Prefix string. Default: none
 #   $2: character used to build the line. Default: =
 #   $3: separator length (without prefix). Default: 60
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -846,7 +846,7 @@ function bl64_msg_show_separator() {
 # Arguments:
 #   $1: function_name
 #   $2: function_replacement
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -870,7 +870,7 @@ function bl64_msg_show_deprecated() {
 # Arguments:
 #   $1: (optional) message
 #   $@: variable names
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -907,7 +907,7 @@ function bl64_msg_show_setup() {
 #
 # Arguments:
 #   NONE
-# Outputs:
+# Channels:
 #   STDOUT: help message
 #   STDERR: NONE
 # Returns:
@@ -939,7 +939,7 @@ function bl64_msg_help_show() {
 #
 # Arguments:
 #   NONE
-# Outputs:
+# Channels:
 #   STDOUT: help message
 #   STDERR: NONE
 # Returns:
@@ -962,7 +962,7 @@ function bl64_msg_help_show_usage() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:
@@ -982,7 +982,7 @@ function bl64_msg_help_show_about() {
 #
 # Arguments:
 #   $1: message
-# Outputs:
+# Channels:
 #   STDOUT: message
 #   STDERR: None
 # Returns:

@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [23.5.0]
+
+### Added
+
+- ui
+  - bl64_ui_select_item
+  - bl64_ui_run_more
+  - bl64_ui_page
+- txt
+  - bl64_txt_run_tee
+  - bl64_txt_dump
+- fmt
+  - bl64_fmt_list_sort_lexicographical
+  - bl64_fmt_list_sort_numeric
+  - bl64_fmt_list_sort_dictionary
+
+### Changed
+
+- Updated module dependencies
+  - cnt: changed **os** to **txt**
+  - fs: changed **os** to **txt**
+  - cryp: dropped **os**
+  - rbac: dropped **os**
+
+### Deprecated
+
+- os
+  - bl64_os_run_cat: replaced by bl64_txt_run_cat
+  - BL64_OS_CMD_CAT: replaced by BL64_TXT_CMD_CAT
+  - BL64_OS_CMD_TEE: replaced by BL64_TXT_CMD_TEE
+- txt
+  - bl64_txt_line_replace_sed: replaced by bl64_txt_modify
+
 ## [23.4.0]
 
 ### Added

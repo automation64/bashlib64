@@ -9,7 +9,7 @@
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -21,13 +21,13 @@ function bl64_msg_setup() {
   _bl64_dbg_lib_msg_is_enabled && bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_LOG_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_LOG_MOD_SETUP' &&
     bl64_msg_set_output "$BL64_VAR_DEFAULT" &&
     bl64_msg_app_enable_verbose &&
-    BL64_MSG_MODULE="$BL64_VAR_ON"
+    BL64_MSG_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'msg'
 }
 
@@ -38,7 +38,7 @@ function bl64_msg_setup() {
 #
 # Arguments:
 #   $1: target level. One of BL64_MSG_VERBOSE_*
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: check error
 # Returns:
@@ -70,7 +70,7 @@ function bl64_msg_set_level() {
 #
 # Arguments:
 #   $1: format. One of BL64_MSG_FORMAT_*
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: parameter error
 # Returns:
@@ -104,7 +104,7 @@ function bl64_msg_set_format() {
 #
 # Arguments:
 #   $1: theme name. One of BL64_MSG_THEME_ID_*
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: parameter error
 # Returns:
@@ -141,7 +141,7 @@ function bl64_msg_set_theme() {
 # Arguments:
 #   $1: output type. One of BL64_MSG_OUTPUT_*. Default: BL64_MSG_OUTPUT_ANSI
 #   $2: (optional) theme. Default: STD
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: parameter error
 # Returns:

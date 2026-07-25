@@ -15,8 +15,57 @@
 source ./bin/dev-set || exit 1
 
 # shellcheck disable=2034
-declare MY_VERSION='3.3.0'
+declare MY_VERSION='4.0.0'
+declare MY_URL_INSTALLER64='https://raw.githubusercontent.com/automation64/installer64/main/src/install-installer64'
 
-# Download main components
-./bin/dev-lib-installer64 &&
-  ./bin/dev-lib-bashlib64
+#
+# Functions
+#
+
+function my_install_bashlib64() {
+  if [[ "$DEV_PATH_LIB_BASHLIB64" == "${DEV_PATH_LIB}/bl64" ]]; then
+    dev_bin64_msg_show_task 'dev-lib-base' 'install BashLib64'
+    INST64_SYSTEM_WIDE='NO' \
+      INST64_LIB_PATH="$DEV_PATH_LIB_INSTALLER64" \
+      INST64_BASHLIB64_VERSION="$DEV_BASE_BASHLIB64" \
+      INST64_BASHLIB64_TARGET="$DEV_PATH_LIB_BASHLIB64" \
+      ./inst64/install-bashlib64
+  else
+    dev_bin64_msg_show_warning 'dev-lib-base' "using custom BashLib64 path (${DEV_PATH_LIB_BASHLIB64})"
+  fi
+}
+
+function my_install_installer64() {
+  if [[ "$DEV_PATH_LIB_INSTALLER64" == "${DEV_PATH_LIB}/inst64" ]]; then
+    dev_bin64_msg_show_task 'dev-lib-base' 'install Installer64'
+    INST64_SYSTEM_WIDE='NO' \
+      INST64_INSTALLER64_VERSION="$DEV_LIB_INSTALLER64_VERSION" \
+      INST64_INSTALLER64_TARGET="$DEV_PATH_LIB_INSTALLER64" \
+      ./install-installer64 ||
+      return $?
+    rm -f \
+      'install-installer64'
+  else
+    dev_bin64_msg_show_warning 'dev-lib-base' "using custom Install64 path (${DEV_PATH_LIB_INSTALLER64})"
+  fi
+}
+
+function my_download_installer64() {
+  dev_bin64_msg_show_task 'dev-lib-base' 'download Installer64 installer'
+  if [[ -n "$GITHUB_TOKEN" ]]; then
+    curl -LO -H "Authorization: Bearer $GITHUB_TOKEN" "$MY_URL_INSTALLER64"
+  else
+    curl -LO "$MY_URL_INSTALLER64"
+  fi ||
+    return $?
+  chmod 700 ./install-installer64
+}
+
+#
+# Main
+#
+
+cd "$DEV_PATH_LIB" &&
+  my_download_installer64 &&
+  my_install_installer64 &&
+  my_install_bashlib64

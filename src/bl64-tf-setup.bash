@@ -7,7 +7,7 @@
 #
 # Arguments:
 #   $1: (optional) Full path where commands are
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -20,14 +20,14 @@ function bl64_tf_setup() {
   local terraform_bin="${1:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function "$@" &&
-    _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
     _bl64_tf_set_command "$terraform_bin" &&
     _bl64_tf_set_version &&
-    BL64_TF_MODULE="$BL64_VAR_ON"
+    BL64_TF_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'tf'
 }
 
@@ -39,7 +39,7 @@ function bl64_tf_setup() {
 #
 # Arguments:
 #   $1: (optional) Full path where commands are
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: detection errors
 # Returns:
@@ -64,7 +64,7 @@ function _bl64_tf_set_command() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: command errors
 # Returns:

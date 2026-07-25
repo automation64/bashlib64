@@ -12,7 +12,7 @@
 #   $1: (optional) Full path where commands are
 #   $2: (optional) Full path to the ansible configuration file
 #   $3: (optional) Ignore inherited shell environment? Default: BL64_VAR_ON
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -27,21 +27,21 @@ function bl64_ans_setup() {
   local env_ignore="${3:-${BL64_VAR_ON}}"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function "$@" &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_BSH_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_XSV_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_PY_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_BSH_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FMT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_XSV_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_PY_MOD_SETUP' &&
     _bl64_ans_set_command "$ansible_bin" &&
     bl64_ans_set_paths "$ansible_config" &&
     _bl64_ans_set_version &&
     BL64_ANS_ENV_IGNORE="$env_ignore" &&
-    BL64_ANS_MODULE="$BL64_VAR_ON"
+    BL64_ANS_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'ans'
 }
 
@@ -53,7 +53,7 @@ function bl64_ans_setup() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -79,7 +79,7 @@ function _bl64_ans_set_command() {
 #   $4: path to ansible log (ANSIBLE_LOG_PATH)
 #   $5: path to ansible inventory (ANSIBLE_INVENTORY)
 #   $6: common path for temporary ansible content
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: check errors
 # Returns:
@@ -142,7 +142,7 @@ function bl64_ans_set_paths() {
 # Arguments:
 #   $1: set output callback (ANSIBLE_STDOUT_CALLBACK)
 #   $2: set verbosity level (ANSIBLE_VERBOSITY)
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: check errors
 # Returns:
@@ -175,7 +175,7 @@ function bl64_ans_set_options() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: command errors
 # Returns:

@@ -31,7 +31,7 @@ function bl64_iam_xdg_create() {
 #   $4: (optional) shell. Format: full path. Default: os native
 #   $5: (optional) description. Default: none
 #   $6: (optional) user ID. Default: os native
-# Outputs:
+# Channels:
 #   STDOUT: native user add command output
 #   STDERR: native user add command error messages
 # Returns:
@@ -142,7 +142,7 @@ function bl64_iam_user_add() {
 # Arguments:
 #   $1: group name
 #   $2: (optional) group ID
-# Outputs:
+# Channels:
 #   STDOUT: Progress info
 #   STDERR: Command execution error
 # Returns:
@@ -200,7 +200,7 @@ function bl64_iam_group_add() {
 #
 # Arguments:
 #   $1: login name
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: command error messages
 # Returns:
@@ -224,7 +224,7 @@ function bl64_iam_user_is_created() {
 #
 # Arguments:
 #   $1: group name
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: command error messages
 # Returns:
@@ -248,7 +248,7 @@ function bl64_iam_group_is_created() {
 #
 # Arguments:
 #   $1: user login name. Default: current user
-# Outputs:
+# Channels:
 #   STDOUT: user ID
 #   STDERR: command stderr
 # Returns:
@@ -270,7 +270,7 @@ function bl64_iam_user_get_id() {
 #
 # Arguments:
 #   $1: user login name. Default: current user
-# Outputs:
+# Channels:
 #   STDOUT: GID
 #   STDERR: command stderr
 # Returns:
@@ -292,7 +292,7 @@ function bl64_iam_user_get_gid() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: user name
 #   STDERR: command stderr
 # Returns:
@@ -310,7 +310,7 @@ function bl64_iam_user_get_current() {
 # Arguments:
 #   $1: user name
 #   $2: error message
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -338,7 +338,7 @@ function bl64_iam_check_user() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -350,7 +350,7 @@ function bl64_iam_run_useradd() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_USERADD" ||
     return $?
@@ -370,7 +370,7 @@ function bl64_iam_run_useradd() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -382,7 +382,7 @@ function bl64_iam_run_groupadd() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_GROUPADD" ||
     return $?
@@ -402,7 +402,7 @@ function bl64_iam_run_groupadd() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -414,7 +414,7 @@ function bl64_iam_run_groupmod() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_GROUPMOD" ||
     return $?
@@ -434,7 +434,7 @@ function bl64_iam_run_groupmod() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -446,7 +446,7 @@ function bl64_iam_run_usermod() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_USERMOD" ||
     return $?
@@ -466,7 +466,7 @@ function bl64_iam_run_usermod() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -478,7 +478,7 @@ function bl64_iam_run_adduser() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_ADDUSER" ||
     return $?
@@ -498,7 +498,7 @@ function bl64_iam_run_adduser() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -510,7 +510,7 @@ function bl64_iam_run_addgroup() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_ADDGROUP" ||
     return $?
@@ -530,7 +530,7 @@ function bl64_iam_run_addgroup() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -541,7 +541,7 @@ function bl64_iam_run_id() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_command "$BL64_IAM_CMD_ID" ||
     return $?
 
@@ -559,7 +559,7 @@ function bl64_iam_run_id() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -571,7 +571,7 @@ function bl64_iam_run_sysadminctl() {
   local verbosity=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_IAM_MODULE' &&
+    bl64_check_module 'BL64_IAM_MOD_SETUP' &&
     bl64_check_privilege_root &&
     bl64_check_command "$BL64_IAM_CMD_SYSADMINCTL" ||
     return $?
@@ -595,7 +595,7 @@ function bl64_iam_run_sysadminctl() {
 #   $3: (optional) shell. Format: full path. Default: os native
 #   $4: (optional) description. Default: none
 #   $5: (optional) user ID. Default: os native
-# Outputs:
+# Channels:
 #   STDOUT: progress
 #   STDERR: execution errors
 # Returns:

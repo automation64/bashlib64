@@ -23,7 +23,7 @@ function _bl64_gcp_configure() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -73,7 +73,7 @@ function _bl64_gcp_harden_gcloud() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -88,7 +88,7 @@ function bl64_gcp_run_gcloud() {
   local impersonate_sa=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_GCP_MODULE' ||
+    bl64_check_module 'BL64_GCP_MOD_SETUP' ||
     return $?
 
   if bl64_dbg_lib_command_is_enabled; then
@@ -121,7 +121,7 @@ function bl64_gcp_run_gcloud() {
 # Arguments:
 #   $1: key file full path
 #   $2: project id
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -161,7 +161,7 @@ function bl64_gcp_login_sa() {
 # Arguments:
 #   $1: Secret Name
 #   $2: Version Number
-# Outputs:
+# Channels:
 #   STDOUT: secret value
 #   STDERR: command stderr
 # Returns:

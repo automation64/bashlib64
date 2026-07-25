@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Interact with container engines
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_CNT_VERSION='4.0.2'
-
-  declare BL64_CNT_MODULE='0'
+  declare BL64_CNT_MOD_VERSION='4.1.0'
+  declare BL64_CNT_MOD_INFO='Container Tools Interface'
+  declare BL64_CNT_MOD_SETUP='0'
 
   declare BL64_CNT_DRIVER_DOCKER='docker'
   declare BL64_CNT_DRIVER_PODMAN='podman'

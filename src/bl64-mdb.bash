@@ -19,7 +19,7 @@
 #   $5: restore user password
 #   $6: host where mongodb is
 #   $7: mongodb tcp port
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -73,7 +73,7 @@ function bl64_mdb_dump_restore() {
 #   $2: role name
 #   $3: user name
 #   $4: db where user and role are. Default: admin.
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -109,7 +109,7 @@ function bl64_mdb_role_grant() {
 # Arguments:
 #   $1: connection URI
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -124,7 +124,7 @@ function bl64_mdb_run_mongosh_eval() {
   shift
   bl64_check_parameters_none "$#" &&
     bl64_check_parameter 'uri' &&
-    bl64_check_module 'BL64_MDB_MODULE' ||
+    bl64_check_module 'BL64_MDB_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_command_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
@@ -148,7 +148,7 @@ function bl64_mdb_run_mongosh_eval() {
 # Arguments:
 #   $1: connection URI
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -162,7 +162,7 @@ function bl64_mdb_run_mongosh() {
 
   shift
   bl64_check_parameter 'uri' &&
-    bl64_check_module 'BL64_MDB_MODULE' ||
+    bl64_check_module 'BL64_MDB_MOD_SETUP' ||
     return $?
 
   bl64_msg_app_detail_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
@@ -184,7 +184,7 @@ function bl64_mdb_run_mongosh() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -196,7 +196,7 @@ function bl64_mdb_run_mongorestore() {
   local verbosity="$BL64_MDB_SET_QUIET"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_MDB_MODULE' ||
+    bl64_check_module 'BL64_MDB_MOD_SETUP' ||
     return $?
 
   bl64_msg_app_detail_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"
@@ -216,7 +216,7 @@ function bl64_mdb_run_mongorestore() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -228,7 +228,7 @@ function bl64_mdb_run_mongoexport() {
   local verbosity="$BL64_MDB_SET_QUIET"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_MDB_MODULE' ||
+    bl64_check_module 'BL64_MDB_MOD_SETUP' ||
     return $?
 
   bl64_msg_app_detail_is_enabled && verbosity="$BL64_MDB_SET_VERBOSE"

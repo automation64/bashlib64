@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-test: 1.1.0
+# template-test: 1.2.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -13,19 +13,13 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || exit 1
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-cnt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
-source ./bin/dev-env-bash || exit 1
+source ./bin/dev-set &&
+  source ./bin/dev-source-base &&
+  source ./bin/dev-env-bash || exit 1
 
 declare MY_CONTAINER="${1:-${BL64_VAR_DEFAULT}}"
 shift
-declare MY_TARGET="${*:-}"
+declare MY_TARGET="${*:-$DEV_TEST_BASH_CASES}"
 
 function my_test_host_run() {
   local test_file="$1"
@@ -36,18 +30,8 @@ function my_test_container_run() {
   local container_path="$1"
   local test_file="$2"
   # shellcheck disable=SC2086
-  bl64_cnt_run \
-    $BL64_CNT_SET_RM \
-    $BL64_CNT_SET_TTY \
-    --env=DEV_TEST_BASH_CONTAINER_ENVIRONMENT='ON' \
-    --env=DEV_ENV_BASH_CONTAINER_PATH_SRC \
-    --env=DEV_ENV_BASH_CONTAINER_PATH_ROOT \
-    --env=DEV_ENV_BASH_CONTAINER_PATH_TEST \
-    --workdir="$DEV_ENV_BASH_CONTAINER_PATH_ROOT" \
-    --mount "type=bind,source=${DEV_PATH_SRC},target=${DEV_ENV_BASH_CONTAINER_PATH_SRC},readonly" \
-    --mount "type=bind,source=${DEV_PATH_ROOT},target=${DEV_ENV_BASH_CONTAINER_PATH_ROOT},readonly" \
-    --mount "type=bind,source=${DEV_PATH_TEST},target=${DEV_ENV_BASH_CONTAINER_PATH_TEST},readonly" \
-    --entrypoint="${DEV_ENV_BASH_CONTAINER_PATH_ROOT}/${test_file}" \
+  dev_base_lib_run_container \
+    "${DEV_BASE_MOUNT_ROOT}/${test_file}" \
     "${DEV_ENV_BASH_REGISTRY}/${container_path}"
 }
 
@@ -60,7 +44,7 @@ function my_test_run() {
   [[ "$test_file" =~ "$DEV_BASE_GITKEEP" ]] && return 0
 
   bl64_msg_show_phase "run test target: ${test_file}"
-  if [[ "$container_path" == "$DEV_TEST_BASH_CONTAINER_DISABLED" ]]; then
+  if [[ "$container_path" == "$DEV_BASE_FLAG_RUN_LOCAL" ]]; then
     my_test_host_run "$test_file"
   else
     my_test_container_run "$container_path" "$test_file"
@@ -90,10 +74,11 @@ function my_test() {
     tests="$MY_TARGET"
   fi
 
+  echo '' >"$DEV_TEST_BASH_PATH_REPORT"
   for current in $tests; do
     bl64_dbg_app_show_comments 'skip git dir holder'
     [[ "$current" == "$DEV_BASE_GITKEEP" ]] && continue
-    my_test_run "${MY_CONTAINER}" "$current" ||
+    my_test_run "${MY_CONTAINER}" "$current" >>"$DEV_TEST_BASH_PATH_REPORT" 2>&1 ||
       return $?
     sleep "$DEV_TEST_BASH_COOLDOWN"
   done
@@ -101,28 +86,27 @@ function my_test() {
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  dev_bin64_task_initialize ||
+  dev_base_task_initialize &&
+    dev_base_log_setup "$BL64_VAR_OFF" "$DEV_ENV_BASH_PATH_LOGS" &&
+    bl64_check_directory "$DEV_TEST_BASH_CASES" ||
     return $?
 
-  if [[ "$MY_CONTAINER" != "$DEV_TEST_BASH_CONTAINER_DISABLED" ]]; then
+  if [[ "$MY_CONTAINER" != "$DEV_BASE_FLAG_RUN_LOCAL" ]]; then
     bl64_lib_var_is_default "$MY_CONTAINER" &&
       MY_CONTAINER="$DEV_TEST_BASH_CONTAINER"
     bl64_cnt_setup ||
       return $?
   fi
-  if [[ -z "$MY_TARGET" ]]; then
-    MY_TARGET="$DEV_TEST_BASH_CASES"
-  fi
 
-  bl64_check_directory "$DEV_TEST_BASH_CASES" &&
-    dev_bin64_task_show_setup \
-      'MY_CONTAINER' \
-      'MY_TARGET'
+  dev_base_task_show_setup \
+    'MY_CONTAINER' \
+    'MY_TARGET' \
+    'DEV_TEST_BASH_PATH_REPORT'
 }
 
-bl64_lib_script_version_set '1.5.0'
-bl64_msg_help_about_set 'Run bash test scripts inside a container or on the host'
-dev_bin64_initialize && my_initialize || exit $?
+bl64_lib_script_version_set '1.6.0'
+bl64_msg_help_set_about 'Run bash test scripts inside a container or on the host'
+dev_base_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_test

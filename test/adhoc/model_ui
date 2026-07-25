@@ -21,6 +21,8 @@ function ui_ask() {
 
 clear
 
+bl64_ui_setup
+
 bl64_msg_show_separator 'BL64_UI_CONFIRMATION_SKIP=YES'
 BL64_UI_CONFIRMATION_SKIP=YES
 ui_ask

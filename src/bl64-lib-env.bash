@@ -1,10 +1,6 @@
-#######################################
-# BashLib64 / Module / Globals / Setup script run-time environment
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_VERSION='23.4.0'
+  declare BL64_VERSION='23.5.0'
 
   #
   # Common constants
@@ -138,7 +134,6 @@
   declare BL64_SCRIPT_SID=''
   declare BL64_SCRIPT_ID=''
   declare BL64_SCRIPT_VERSION='1.0.0'
-
   #
   # Set Signal traps
   #

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-lint: 1.2.0
+# template-lint: 1.3.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -13,34 +13,31 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || exit 1
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
-source ./bin/dev-env-act || exit 1
+source ./bin/dev-set &&
+  source ./bin/dev-source-base &&
+  source ./bin/dev-env-act || exit 1
 
 function my_lint() {
   bl64_dbg_app_show_function
-  "$DEV_LIB_ACT_BIN" \
-    --env-file=/dev/null \
+  dev_act_run_act \
     --verbose \
     --validate \
     --strict \
-    --use-gitignore
+    --use-gitignore >"$DEV_LINT_ACT_PATH_REPORT" 2>&1
 }
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  dev_bin64_task_initialize &&
-    bl64_check_command "$DEV_LIB_ACT_BIN"
+  dev_base_task_initialize &&
+    dev_base_log_setup "$BL64_VAR_OFF" "$DEV_ENV_ACT_PATH_LOGS" &&
+    dev_base_lib_check_command "$DEV_ENV_ACT_ID" "$DEV_LIB_ACT_BIN" &&
+    dev_base_task_show_setup \
+      'DEV_LINT_ACT_PATH_REPORT'
 }
 
-bl64_lib_script_version_set '1.0.2'
-bl64_msg_help_about_set 'Lint GitHub workflows'
-dev_bin64_initialize && my_initialize || exit $?
+bl64_lib_script_version_set '1.1.0'
+bl64_msg_help_set_about 'Lint GitHub workflows'
+dev_base_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_lint

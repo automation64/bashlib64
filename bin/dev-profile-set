@@ -15,7 +15,13 @@
 export DEV_PROFILE="${1:-}"
 
 function _dev_profile_set_profile() {
-  [[ -d "etc/prof/${DEV_PROFILE}" ]] && return 0
+  [[ -d "build/prof/${DEV_PROFILE}" ]] &&
+    [[ -d "etc/prof/${DEV_PROFILE}" ]] &&
+    [[ -d "logs/prof/${DEV_PROFILE}" ]] &&
+    [[ -d "tmp/prof/${DEV_PROFILE}" ]] &&
+    [[ -d "var/prof/${DEV_PROFILE}" ]] &&
+    [[ -d "vault/prof/${DEV_PROFILE}" ]] &&
+    return 0
   ./bin/dev-profile-create "$DEV_PROFILE"
 }
 

@@ -17,6 +17,10 @@ function bl64_os_match_compatible() {
   _bl64_lib_function_deprecated 'bl64_os_match_compatible' 'bl64_os_is_compatible'
   bl64_os_is_compatible "$@"
 }
+function bl64_os_run_cat() {
+  _bl64_lib_function_deprecated 'bl64_os_run_cat' 'bl64_txt_run_cat'
+  bl64_txt_run_cat "$@"
+}
 
 #
 # Public functions
@@ -27,7 +31,7 @@ function bl64_os_match_compatible() {
 #
 # Arguments:
 #   $@: list of flavor ID: BL64_OS_FLAVOR_*
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -40,7 +44,7 @@ function bl64_os_is_flavor() {
   local os_flavor="${*:-}"
   local current=''
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_parameter 'os_flavor' ||
     return $?
 
@@ -57,7 +61,7 @@ function bl64_os_is_flavor() {
 #
 # Arguments:
 #   $@: each argument is an OS target. The list is any combintation of the formats: "$BL64_OS_<ALIAS>" "${BL64_OS_<ALIAS>}-V" "${BL64_OS_<ALIAS>}-V.S"
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -70,7 +74,7 @@ function bl64_os_is_distro() {
   local item=''
   local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_parameters_none $# ||
     return $?
   bl64_dbg_lib_show_info "Look for [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
@@ -91,7 +95,7 @@ function bl64_os_is_distro() {
 #
 # Arguments:
 #   $@: each argument is an OS target. The list is any combintation of the formats: "$BL64_OS_<ALIAS>" "${BL64_OS_<ALIAS>}-V" "${BL64_OS_<ALIAS>}-V.S"
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -104,7 +108,7 @@ function bl64_os_is_compatible() {
   local item=''
   local -i status=$BL64_LIB_ERROR_OS_NOT_MATCH
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_parameters_none $# ||
     return $?
   bl64_dbg_lib_show_info "Look for exact match [BL64_OS_DISTRO=${BL64_OS_DISTRO}] in [OSList=${*}}]"
@@ -137,7 +141,7 @@ function bl64_os_is_compatible() {
 #
 # Arguments:
 #   $1: locale name
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Validation errors
 # Returns:
@@ -149,7 +153,7 @@ function bl64_os_lang_is_available() {
   local locale="${1:-}"
   local line=''
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_parameter 'locale' &&
     bl64_check_command "$BL64_OS_CMD_LOCALE" ||
     return $?
@@ -176,7 +180,7 @@ function bl64_os_lang_is_available() {
 #
 # Arguments:
 #   $@: list of OS versions to check against. Format: same as bl64_os_is_distro
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -200,7 +204,7 @@ function bl64_os_check_version() {
 #
 # Arguments:
 #   $@: list of OS versions to check against. Format: same as bl64_os_is_distro
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -222,7 +226,7 @@ function bl64_os_check_compatibility() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -233,7 +237,7 @@ function bl64_os_run_sleep() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_OS_MODULE' ||
+    bl64_check_module 'BL64_OS_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -249,7 +253,7 @@ function bl64_os_run_sleep() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -260,7 +264,7 @@ function bl64_os_run_getent() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_OS_MODULE' &&
+    bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_command "$BL64_OS_CMD_GETENT" ||
     return $?
 
@@ -278,7 +282,7 @@ function bl64_os_run_getent() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -288,7 +292,7 @@ function bl64_os_run_getent() {
 function bl64_os_run_date() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_command "$BL64_OS_CMD_DATE" ||
     return $?
 
@@ -300,41 +304,13 @@ function bl64_os_run_date() {
 }
 
 #######################################
-# Command wrapper with verbose, debug and common options
-#
-# * Trust no one. Ignore inherited config and use explicit config
-#
-# Arguments:
-#   $@: arguments are passed as-is to the command
-# Outputs:
-#   STDOUT: command output
-#   STDERR: command stderr
-# Returns:
-#   0: operation completed ok
-#   >0: operation failed
-#######################################
-function bl64_os_run_cat() {
-  bl64_dbg_lib_show_function "$@"
-
-  bl64_check_module 'BL64_OS_MODULE' &&
-    bl64_check_command "$BL64_OS_CMD_CAT" ||
-    return $?
-
-  bl64_dbg_lib_trace_start
-  # shellcheck disable=SC2086
-  "$BL64_OS_CMD_CAT" \
-    "$@"
-  bl64_dbg_lib_trace_stop
-}
-
-#######################################
 # Check the current OS version is not in the unsupported list
 #
 # * Same as bl64_os_check_version, but for the opposite purpose
 #
 # Arguments:
 #   $@: list of OS versions to check against. Format: same as bl64_os_is_distro
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -358,7 +334,7 @@ function bl64_os_check_not_version() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -368,7 +344,7 @@ function bl64_os_check_not_version() {
 function bl64_os_run_uname() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_command "$BL64_OS_CMD_UNAME" ||
     return $?
 
@@ -458,7 +434,7 @@ function _bl64_os_is_distro() {
 #
 # Arguments:
 #   $@: list of OS flavors to check against. Format: BL64_OS_FLAVOR_*
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -469,7 +445,7 @@ function bl64_os_check_flavor() {
   bl64_dbg_lib_show_function "$@"
   local flavor=''
 
-  bl64_check_module 'BL64_OS_MODULE' &&
+  bl64_check_module 'BL64_OS_MOD_SETUP' &&
     bl64_check_parameters_none $# ||
     return $?
 
@@ -490,7 +466,7 @@ function bl64_os_check_flavor() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:

@@ -14,7 +14,7 @@
 #   $4: file permissions. Format: chown format. Default: use current umask
 #   $5: file user name. Default: current
 #   $6: file group name. Default: current
-# Outputs:
+# Channels:
 #   STDOUT: None unless BL64_DBG_TARGET_LIB_CMD
 #   STDERR: command error
 # Returns:
@@ -31,7 +31,7 @@ function bl64_rxtx_web_get_file() {
   local file_group="${6:-${BL64_VAR_DEFAULT}}"
   local -i status=0
 
-  bl64_check_module 'BL64_RXTX_MODULE' &&
+  bl64_check_module 'BL64_RXTX_MOD_SETUP' &&
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_fs_check_new_file "$destination" ||
@@ -87,7 +87,7 @@ function bl64_rxtx_web_get_file() {
 #   $3: destination path. Format: full path
 #   $4: replace existing content. Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
 #   $5: branch name. Default: main
-# Outputs:
+# Channels:
 #   STDOUT: command stdout
 #   STDERR: command error
 # Returns:
@@ -104,7 +104,7 @@ function bl64_rxtx_git_get_dir() {
   local branch="${5:-main}"
   local -i status=0
 
-  bl64_check_module 'BL64_RXTX_MODULE' &&
+  bl64_check_module 'BL64_RXTX_MOD_SETUP' &&
     bl64_check_parameter 'source_url' &&
     bl64_check_parameter 'source_path' &&
     bl64_check_parameter 'destination' &&
@@ -144,7 +144,7 @@ function bl64_rxtx_git_get_dir() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -156,7 +156,7 @@ function bl64_rxtx_run_curl() {
   local verbose="$BL64_RXTX_SET_CURL_SILENT"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_RXTX_MODULE' &&
+    bl64_check_module 'BL64_RXTX_MOD_SETUP' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" "$BL64_VAR_DEFAULT" 'curl' ||
     return $?
 
@@ -177,7 +177,7 @@ function bl64_rxtx_run_curl() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -189,7 +189,7 @@ function bl64_rxtx_run_wget() {
   local verbose=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_RXTX_MODULE' &&
+    bl64_check_module 'BL64_RXTX_MOD_SETUP' &&
     bl64_check_command "$BL64_RXTX_CMD_WGET" "$BL64_VAR_DEFAULT" 'wget' ||
     return $?
 
@@ -214,7 +214,7 @@ function _bl64_rxtx_git_get_dir_root() {
   local git_name=''
   local transition=''
 
-  bl64_check_module 'BL64_RXTX_MODULE' || return $?
+  bl64_check_module 'BL64_RXTX_MOD_SETUP' || return $?
 
   repo="$(bl64_fs_create_tmpdir)"
   bl64_check_directory "$repo" 'unable to create temporary git repo' || return "$BL64_LIB_ERROR_TASK_TEMP"
@@ -246,7 +246,7 @@ function _bl64_rxtx_git_get_dir_sub() {
   local source=''
   local transition=''
 
-  bl64_check_module 'BL64_RXTX_MODULE' || return $?
+  bl64_check_module 'BL64_RXTX_MOD_SETUP' || return $?
 
   repo="$(bl64_fs_create_tmpdir)"
   # shellcheck disable=SC2086
@@ -280,7 +280,7 @@ function _bl64_rxtx_git_get_dir_sub() {
 #   $5: destination
 #   $6: replace existing content Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
 #   $7: permissions. Regular chown format accepted. Default: umask defined
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: task error
 # Returns:
@@ -297,7 +297,7 @@ function bl64_rxtx_github_get_asset() {
   local replace="${6:-${BL64_VAR_OFF}}"
   local mode="${7:-${BL64_VAR_DEFAULT}}"
 
-  bl64_check_module 'BL64_RXTX_MODULE' &&
+  bl64_check_module 'BL64_RXTX_MOD_SETUP' &&
     bl64_check_parameter 'repo_owner' &&
     bl64_check_parameter 'repo_name' &&
     bl64_check_parameter 'release_tag' &&

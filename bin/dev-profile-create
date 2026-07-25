@@ -13,15 +13,9 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || exit 1
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
-
-declare MY_PROFILE="${1:-}"
+source ./bin/dev-set &&
+  source ./bin/dev-source-base &&
+  declare MY_PROFILE="${1:-}"
 
 function my_create() {
   bl64_dbg_app_show_function
@@ -49,15 +43,15 @@ function my_create() {
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  dev_bin64_task_initialize &&
+  dev_base_task_initialize &&
     bl64_check_parameter 'MY_PROFILE' &&
-    dev_bin64_task_show_setup \
+    dev_base_task_show_setup \
       'MY_PROFILE'
 }
 
 bl64_lib_script_version_set '2.2.0'
-bl64_msg_help_about_set 'Create profile directory structure'
-dev_bin64_initialize && my_initialize || exit $?
+bl64_msg_help_set_about 'Create profile directory structure'
+dev_base_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_create

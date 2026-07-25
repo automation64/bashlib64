@@ -96,7 +96,7 @@ function _bl64_pkg_repository_add_apt() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -137,7 +137,7 @@ function _bl64_pkg_harden_apt() {
 #   $4: extra package specific parameter. For APT: suite. Default: empty
 #   $5: extra package specific parameter. For APT: component. Default: empty
 #
-# Outputs:
+# Channels:
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
@@ -174,7 +174,7 @@ function bl64_pkg_repository_add() {
 #   * root privilege (sudo)
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
@@ -235,7 +235,7 @@ function bl64_pkg_brew_repository_refresh() {
 #
 # Arguments:
 #   package list, separated by spaces (expanded with $@)
-# Outputs:
+# Channels:
 #   STDOUT: process output
 #   STDERR: process stderr
 # Returns:
@@ -264,7 +264,7 @@ function bl64_pkg_brew_deploy() {
 #   * root privilege (sudo)
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
@@ -294,7 +294,7 @@ function bl64_pkg_brew_prepare() {
 #   * root privilege (sudo)
 # Arguments:
 #   package list, separated by spaces (expanded with $@)
-# Outputs:
+# Channels:
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
@@ -357,7 +357,7 @@ function bl64_pkg_brew_install() {
 #   * root privilege (sudo)
 # Arguments:
 #   package list, separated by spaces (expanded with $@)
-# Outputs:
+# Channels:
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
@@ -420,7 +420,7 @@ function bl64_pkg_brew_upgrade() {
 #   * root privilege (sudo)
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: package manager stderr
 #   STDERR: package manager stderr
 # Returns:
@@ -486,7 +486,7 @@ function bl64_pkg_brew_cleanup() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -497,7 +497,7 @@ function bl64_pkg_run_dnf() {
   bl64_dbg_lib_show_function "$@"
   local verbose="$BL64_PKG_SET_QUIET"
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -516,7 +516,7 @@ function bl64_pkg_run_dnf() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -527,7 +527,7 @@ function bl64_pkg_run_yum() {
   bl64_dbg_lib_show_function "$@"
   local verbose="$BL64_PKG_SET_QUIET"
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -546,7 +546,7 @@ function bl64_pkg_run_yum() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -557,7 +557,7 @@ function bl64_pkg_run_apt() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -588,7 +588,7 @@ function bl64_pkg_run_apt() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -599,7 +599,7 @@ function bl64_pkg_run_apk() {
   bl64_dbg_lib_show_function "$@"
   local verbose="$BL64_PKG_SET_QUIET"
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -618,7 +618,7 @@ function bl64_pkg_run_apk() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -629,7 +629,7 @@ function bl64_pkg_run_brew() {
   bl64_dbg_lib_show_function "$@"
   local verbose='--quiet'
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_command "$BL64_PKG_CMD_BREW" "$BL64_VAR_DEFAULT" 'brew' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_privilege_not_root ||
@@ -654,7 +654,7 @@ function bl64_pkg_run_brew() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -665,7 +665,7 @@ function bl64_pkg_run_zypper() {
   bl64_dbg_lib_show_function "$@"
   local verbose="$BL64_PKG_SET_QUIET"
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -684,7 +684,7 @@ function bl64_pkg_run_zypper() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -695,7 +695,7 @@ function bl64_pkg_run_rpm() {
   bl64_dbg_lib_show_function "$@"
   local verbose='--quiet'
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -714,7 +714,7 @@ function bl64_pkg_run_rpm() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -724,7 +724,7 @@ function bl64_pkg_run_rpm() {
 function bl64_pkg_run_dpkg() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -740,7 +740,7 @@ function bl64_pkg_run_dpkg() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -751,7 +751,7 @@ function bl64_pkg_run_installer() {
   bl64_dbg_lib_show_function "$@"
   local verbose=''
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -771,7 +771,7 @@ function bl64_pkg_run_installer() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -781,7 +781,7 @@ function bl64_pkg_run_installer() {
 function bl64_pkg_run_softwareupdate() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 
@@ -797,7 +797,7 @@ function bl64_pkg_run_softwareupdate() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -808,7 +808,7 @@ function bl64_pkg_run_pacman() {
   bl64_dbg_lib_show_function "$@"
   local debug=' '
 
-  bl64_check_module 'BL64_PKG_MODULE' &&
+  bl64_check_module 'BL64_PKG_MOD_SETUP' &&
     bl64_check_parameters_none "$#" ||
     return $?
 

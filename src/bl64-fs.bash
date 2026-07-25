@@ -218,7 +218,7 @@ function _bl64_fs_path_set_permissions_group() {
 #   $2: user name. Default: current
 #   $3: group name. Default: current
 #   $@: full directory paths
-# Outputs:
+# Channels:
 #   STDOUT: verbose operation
 #   STDOUT: command errors
 # Returns:
@@ -268,7 +268,7 @@ function bl64_fs_dir_create() {
 #
 # Arguments:
 #   $@: list of full paths
-# Outputs:
+# Channels:
 #   STDOUT: verbose operation
 #   STDOUT: command errors
 # Returns:
@@ -307,7 +307,7 @@ function bl64_fs_path_remove() {
 #   $4: group name. Default: current
 #   $5: destination path. Created if not present
 #   $@: full source paths. Directory and/or files
-# Outputs:
+# Channels:
 #   STDOUT: verbose operation
 #   STDERR: command errors
 # Returns:
@@ -378,7 +378,7 @@ function bl64_fs_path_copy() {
 #   $3: group name. Default: current
 #   $4: destination path. Must exist
 #   $@: full file paths. No wildcards allowed
-# Outputs:
+# Channels:
 #   STDOUT: verbose operation
 #   STDERR: command errors
 # Returns:
@@ -443,7 +443,7 @@ function bl64_fs_file_copy() {
 #   $4: replace existing content. Values: $BL64_VAR_ON | $BL64_VAR_OFF (default)
 #   $5: destination file. Full path
 #   $@: source files. Full path
-# Outputs:
+# Channels:
 #   STDOUT: verbose operation
 #   STDOUT: command errors
 # Returns:
@@ -481,10 +481,10 @@ function bl64_fs_file_merge() {
     if ((first == 1)); then
       first=0
       bl64_check_path_absolute "$path" &&
-        "$BL64_OS_CMD_CAT" "$path" >"$destination"
+        bl64_txt_dump "$path" >"$destination"
     else
       bl64_check_path_absolute "$path" &&
-        "$BL64_OS_CMD_CAT" "$path" >>"$destination"
+        bl64_txt_dump "$path" >>"$destination"
     fi
     status=$?
     ((status != 0)) && break
@@ -515,7 +515,7 @@ function bl64_fs_file_merge() {
 #   $1: source path
 #   $2: target path
 #   $3: recursive. Default: ON
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -572,7 +572,7 @@ function bl64_fs_path_merge() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -584,7 +584,7 @@ function bl64_fs_run_chown() {
   local debug=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug="$BL64_FS_SET_CHOWN_VERBOSE"
 
@@ -601,7 +601,7 @@ function bl64_fs_run_chown() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -611,7 +611,7 @@ function bl64_fs_run_chown() {
 function bl64_fs_run_mktemp() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_FS_MODULE' ||
+  bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -625,7 +625,7 @@ function bl64_fs_run_mktemp() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -637,7 +637,7 @@ function bl64_fs_run_chmod() {
   local debug=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug="$BL64_FS_SET_CHMOD_VERBOSE"
 
@@ -652,7 +652,7 @@ function bl64_fs_run_chmod() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -664,7 +664,7 @@ function bl64_fs_run_mkdir() {
   local debug=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug="$BL64_FS_SET_MKDIR_VERBOSE"
 
@@ -679,7 +679,7 @@ function bl64_fs_run_mkdir() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -691,7 +691,7 @@ function bl64_fs_run_mv() {
   local debug=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug="$BL64_FS_SET_MV_VERBOSE"
 
@@ -708,7 +708,7 @@ function bl64_fs_run_mv() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: rm output
 #   STDERR: rm stderr
 # Returns:
@@ -735,7 +735,7 @@ function bl64_fs_cleanup_tmps() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: rm output
 #   STDERR: rm stderr
 # Returns:
@@ -759,7 +759,7 @@ function bl64_fs_cleanup_logs() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: rm output
 #   STDERR: rm stderr
 # Returns:
@@ -786,7 +786,7 @@ function bl64_fs_cleanup_caches() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: output from clean functions
 #   STDERR: output from clean functions
 # Returns:
@@ -807,7 +807,7 @@ function bl64_fs_cleanup_full() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -818,7 +818,7 @@ function bl64_fs_run_find() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' &&
+    bl64_check_module 'BL64_FS_MOD_SETUP' &&
     bl64_check_command "$BL64_FS_CMD_FIND" "$BL64_VAR_DEFAULT" 'find' ||
     return $?
 
@@ -836,7 +836,7 @@ function bl64_fs_run_find() {
 #   $1: search path
 #   $2: search pattern. Format: find -name options
 #   $3: search content in text files
-# Outputs:
+# Channels:
 #   STDOUT: file list. One path per line
 #   STDERR: command stderr
 # Returns:
@@ -849,7 +849,7 @@ function bl64_fs_file_search() {
   local pattern="${2:-${BL64_VAR_DEFAULT}}"
   local content="${3:-${BL64_VAR_DEFAULT}}"
 
-  bl64_check_module 'BL64_FS_MODULE' &&
+  bl64_check_module 'BL64_FS_MOD_SETUP' &&
     bl64_check_command "$BL64_FS_CMD_FIND" "$BL64_VAR_DEFAULT" 'find' &&
     bl64_check_directory "$path" ||
     return $?
@@ -889,7 +889,7 @@ function bl64_fs_file_search() {
 # Arguments:
 #   $1: safeguard path (produced by bl64_fs_path_archive)
 #   $2: task status (exit status from last operation)
-# Outputs:
+# Channels:
 #   STDOUT: Task progress
 #   STDERR: Task errors
 # Returns:
@@ -929,7 +929,7 @@ function bl64_fs_path_archive() {
 # Arguments:
 #   $1: safeguard path (produced by bl64_fs_path_archive)
 #   $2: task status (exit status from last operation)
-# Outputs:
+# Channels:
 #   STDOUT: Task progress
 #   STDERR: Task errors
 # Returns:
@@ -981,7 +981,7 @@ function bl64_fs_path_recover() {
 #   $4: group name. Default: no change
 #   $5: Recursive. Format: ON|OFF. Default: OFF
 #   $@: list of paths. Must use full path for each
-# Outputs:
+# Channels:
 #   STDOUT: command stdin
 #   STDERR: command stderr
 # Returns:
@@ -1022,7 +1022,7 @@ function bl64_fs_path_set_permissions() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -1034,7 +1034,7 @@ function bl64_fs_run_cp() {
   local debug=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug="$BL64_FS_SET_CP_VERBOSE"
 
@@ -1049,7 +1049,7 @@ function bl64_fs_run_cp() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -1061,7 +1061,7 @@ function bl64_fs_run_rm() {
   local debug=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug="$BL64_FS_SET_CP_VERBOSE"
 
@@ -1076,7 +1076,7 @@ function bl64_fs_run_rm() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -1086,7 +1086,7 @@ function bl64_fs_run_rm() {
 function bl64_fs_run_ls() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_FS_MODULE' ||
+  bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -1099,7 +1099,7 @@ function bl64_fs_run_ls() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -1111,7 +1111,7 @@ function bl64_fs_run_ln() {
   local debug=''
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
   bl64_dbg_lib_command_is_enabled && debug="$BL64_FS_SET_LN_VERBOSE"
 
@@ -1129,7 +1129,7 @@ function bl64_fs_run_ln() {
 #
 # Arguments:
 #   $1: permission. Format: BL64_FS_UMASK_RW_USER
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: command stderr
 # Returns:
@@ -1157,7 +1157,7 @@ function bl64_fs_set_umask() {
 #   $3: permissions. Format: chown format. Default: use current umask
 #   $4: user name. Default: current
 #   $5: group name. Default: current
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -1194,7 +1194,7 @@ function bl64_fs_set_ephemeral() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: full path to temp dir
 #   STDERR: error messages
 # Returns:
@@ -1218,7 +1218,7 @@ function bl64_fs_create_tmpdir() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: full path to temp file
 #   STDERR: error messages
 # Returns:
@@ -1239,7 +1239,7 @@ function bl64_fs_create_tmpfile() {
 #
 # Arguments:
 #   $1: full path to the tmpdir
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: error messages
 # Returns:
@@ -1267,7 +1267,7 @@ function bl64_fs_rm_tmpdir() {
 #
 # Arguments:
 #   $1: full path to the tmpfile
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: error messages
 # Returns:
@@ -1298,7 +1298,7 @@ function bl64_fs_rm_tmpfile() {
 #
 # Arguments:
 #   $1: new file path
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -1328,7 +1328,7 @@ function bl64_fs_check_new_file() {
 #
 # Arguments:
 #   $1: new directory path
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -1360,7 +1360,7 @@ function bl64_fs_check_new_dir() {
 #   $1: source path
 #   $2: destination path
 #   $3: overwrite symlink if already present?
-# Outputs:
+# Channels:
 #   STDOUT: verbose operation
 #   STDOUT: command errors
 # Returns:
@@ -1413,7 +1413,7 @@ function bl64_fs_symlink_create() {
 #   $2: (optional) permissions. Format: chown format. Default: use current umask
 #   $3: (optional) user name. Default: current
 #   $4: (optional) group name. Default: current
-# Outputs:
+# Channels:
 #   STDOUT: Task progress
 #   STDERR: Task errors
 # Returns:
@@ -1452,7 +1452,7 @@ function bl64_fs_file_create() {
 #
 # Arguments:
 #   $@: list of full file paths
-# Outputs:
+# Channels:
 #   STDOUT: verbose operation
 #   STDOUT: command errors
 # Returns:
@@ -1496,7 +1496,7 @@ function bl64_fs_file_remove() {
 #   $2: user name. Default: current
 #   $3: group name. Default: current
 #   $@: full directory paths
-# Outputs:
+# Channels:
 #   STDOUT: verbose operation
 #   STDOUT: command errors
 # Returns:
@@ -1523,7 +1523,7 @@ function bl64_fs_dir_reset() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -1534,7 +1534,7 @@ function bl64_fs_run_touch() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -1549,7 +1549,7 @@ function bl64_fs_run_touch() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -1560,7 +1560,7 @@ function bl64_fs_run_stat() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_FS_MODULE' ||
+    bl64_check_module 'BL64_FS_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_trace_start
@@ -1579,7 +1579,7 @@ function bl64_fs_run_stat() {
 #
 # Arguments:
 #   $1: file path
-# Outputs:
+# Channels:
 #   STDOUT: Task progress
 #   STDERR: Task errors
 # Returns:
@@ -1613,7 +1613,7 @@ function bl64_fs_file_backup() {
 # Arguments:
 #   $1: safeguard path (produced by bl64_fs_file_backup)
 #   $2: task status (exit status from last operation)
-# Outputs:
+# Channels:
 #   STDOUT: Task progress
 #   STDERR: Task errors
 # Returns:
@@ -1644,7 +1644,7 @@ function bl64_fs_file_restore() {
   else
     bl64_msg_show_lib_subtask "restore original file from backup ([${backup}]->[${source}])"
     # shellcheck disable=SC2086
-    bl64_os_run_cat "$backup" >"$source" &&
+    bl64_txt_dump "$backup" >"$source" &&
       bl64_fs_file_remove "$backup" ||
       return "$BL64_LIB_ERROR_TASK_RESTORE"
   fi
@@ -1665,7 +1665,7 @@ function bl64_fs_file_restore() {
 #   $4: group name. Default: current
 #   $5: destination path
 #   $@: full source paths. No wildcards allowed
-# Outputs:
+# Channels:
 #   STDOUT: verbose operation
 #   STDERR: command errors
 # Returns:

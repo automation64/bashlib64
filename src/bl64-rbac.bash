@@ -26,7 +26,7 @@ function _bl64_rbac_add_root() {
       }
     ' \
     "$BL64_RBAC_FILE_SUDOERS" >"$new_file" &&
-    bl64_os_run_cat "$new_file" >"$BL64_RBAC_FILE_SUDOERS" &&
+    bl64_txt_dump "$new_file" >"$BL64_RBAC_FILE_SUDOERS" &&
     bl64_fs_file_remove "$new_file"
 }
 
@@ -39,7 +39,7 @@ function _bl64_rbac_add_root() {
 #
 # Arguments:
 #   $1: user name. User must already be present.
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: execution errors
 # Returns:
@@ -74,7 +74,7 @@ function bl64_rbac_add_root() {
 #
 # Arguments:
 #   $1: full path to the sudoers file
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -113,7 +113,7 @@ function bl64_rbac_check_sudoers() {
 # Arguments:
 #   $1: user to run as. Default: root
 #   $@: command and arguments to run
-# Outputs:
+# Channels:
 #   STDOUT: command or sudo output
 #   STDERR: command or sudo error
 # Returns:
@@ -153,7 +153,7 @@ function bl64_rbac_run_command() {
 #   $1: library that contains the target function.
 #   $2: user to run as. Default: root
 #   $@: command and arguments to run
-# Outputs:
+# Channels:
 #   STDOUT: command or sudo output
 #   STDERR: command or sudo error
 # Returns:

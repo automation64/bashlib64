@@ -28,9 +28,9 @@ function _bl64_cnt_login_put_password() {
   if [[ "$password" != "$BL64_VAR_DEFAULT" ]]; then
     printf '%s\n' "$password"
   elif [[ "$file" != "$BL64_VAR_DEFAULT" ]]; then
-    "$BL64_OS_CMD_CAT" "$file"
+    bl64_txt_dump "$file"
   elif [[ "$file" == "$BL64_CNT_FLAG_STDIN" ]]; then
-    "$BL64_OS_CMD_CAT"
+    bl64_txt_run_cat
   fi
 }
 
@@ -42,7 +42,7 @@ function _bl64_cnt_login_put_password() {
 #   $2: password
 #   $3: file
 #   $4: registry
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -72,7 +72,7 @@ function _bl64_cnt_docker_login() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -101,7 +101,7 @@ function _bl64_cnt_docker_run_interactive() {
 #   $1: file
 #   $2: tag
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -131,7 +131,7 @@ function _bl64_cnt_docker_build() {
 #
 # Arguments:
 #   $1: source
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -153,7 +153,7 @@ function _bl64_cnt_docker_pull() {
 # Arguments:
 #   $1: source. Format: image[:tag]
 #   $2: target. Format: image[:tag]
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -178,7 +178,7 @@ function _bl64_cnt_docker_tag() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -200,7 +200,7 @@ function _bl64_cnt_docker_run() {
 #
 # Arguments:
 #   $1: network name
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -228,7 +228,7 @@ function _bl64_cnt_docker_network_is_defined() {
 #
 # Arguments:
 #   $1: network name
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -251,7 +251,7 @@ function _bl64_cnt_docker_network_create() {
 #   $1: name
 #   $2: id
 #   $3: status
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -289,7 +289,7 @@ function _bl64_cnt_docker_ps_filter() {
 #   $2: password
 #   $3: file
 #   $4: registry
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -319,7 +319,7 @@ function _bl64_cnt_podman_login() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -347,7 +347,7 @@ function _bl64_cnt_podman_run_interactive() {
 #   $1: file
 #   $2: tag
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -377,7 +377,7 @@ function _bl64_cnt_podman_build() {
 # Arguments:
 #   $1: source
 #   $2: destination
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -400,7 +400,7 @@ function _bl64_cnt_podman_push() {
 #
 # Arguments:
 #   $1: source
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -422,7 +422,7 @@ function _bl64_cnt_podman_pull() {
 # Arguments:
 #   $1: source. Format: image[:tag]
 #   $2: target. Format: image[:tag]
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -447,7 +447,7 @@ function _bl64_cnt_podman_tag() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -467,7 +467,7 @@ function _bl64_cnt_podman_run() {
 #
 # Arguments:
 #   $1: network name
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -495,7 +495,7 @@ function _bl64_cnt_podman_network_is_defined() {
 #
 # Arguments:
 #   $1: network name
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -518,7 +518,7 @@ function _bl64_cnt_podman_network_create() {
 #   $1: name
 #   $2: id
 #   $3: status
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -554,7 +554,7 @@ function _bl64_cnt_podman_ps_filter() {
 # Arguments:
 #   $1: source
 #   $2: destination
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -587,7 +587,7 @@ function _bl64_cnt_docker_push() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -612,7 +612,7 @@ function bl64_cnt_is_inside_container() {
 # Arguments:
 #   $1: user
 #   $2: registry
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -624,7 +624,7 @@ function bl64_cnt_login_stdin() {
   local user="${1:-}"
   local registry="${2:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'user' &&
     bl64_check_parameter 'registry' ||
     return $?
@@ -640,7 +640,7 @@ function bl64_cnt_login_stdin() {
 #   $1: user
 #   $2: file
 #   $3: registry
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -653,7 +653,7 @@ function bl64_cnt_login_file() {
   local file="${2:-}"
   local registry="${3:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'user' &&
     bl64_check_parameter 'file' &&
     bl64_check_parameter 'registry' &&
@@ -671,7 +671,7 @@ function bl64_cnt_login_file() {
 #   $1: user
 #   $2: password
 #   $3: registry
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -684,7 +684,7 @@ function bl64_cnt_login() {
   local password="${2:-}"
   local registry="${3:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'user' &&
     bl64_check_parameter 'password' &&
     bl64_check_parameter 'registry' ||
@@ -701,7 +701,7 @@ function bl64_cnt_login() {
 #
 # Arguments:
 #   $1: container
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -725,7 +725,7 @@ function bl64_cnt_run_sh() {
 #
 # Arguments:
 #   $@: arguments are passed as-is
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -735,7 +735,7 @@ function bl64_cnt_run_sh() {
 function bl64_cnt_run_interactive() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_CNT_MODULE' ||
+  bl64_check_module 'BL64_CNT_MOD_SETUP' ||
     return $?
 
   "_bl64_cnt_${BL64_CNT_DRIVER}_run_interactive" "$@"
@@ -749,7 +749,7 @@ function bl64_cnt_run_interactive() {
 #   $2: dockerfile path. Format: relative to the build context
 #   $3: tag to be applied to the resulting source. Format: docker tag
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -762,7 +762,7 @@ function bl64_cnt_build() {
   local file="${2:-Dockerfile}"
   local tag="${3:-latest}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'context' &&
     bl64_check_directory "$context" &&
     bl64_check_file "${context}/${file}" ||
@@ -787,7 +787,7 @@ function bl64_cnt_build() {
 # Arguments:
 #   $1: source. Format: IMAGE:TAG
 #   $2: destination. Format: REPOSITORY/IMAGE:TAG
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -799,7 +799,7 @@ function bl64_cnt_push() {
   local source="${1:-}"
   local destination="${2:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' ||
     return $?
@@ -813,7 +813,7 @@ function bl64_cnt_push() {
 #
 # Arguments:
 #   $1: source. Format: [REPOSITORY/]IMAGE:TAG
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -824,7 +824,7 @@ function bl64_cnt_pull() {
   bl64_dbg_lib_show_function "$@"
   local source="${1:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'source' ||
     return $?
 
@@ -838,7 +838,7 @@ function bl64_cnt_pull() {
 # Arguments:
 #   $1: source. Format: image[:tag]
 #   $2: target. Format: image[:tag]
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -850,7 +850,7 @@ function bl64_cnt_tag() {
   local source="${1:-}"
   local target="${2:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'target' ||
     return $?
@@ -864,7 +864,7 @@ function bl64_cnt_tag() {
 #
 # Arguments:
 #   $@: arguments are passed as-is
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -874,7 +874,7 @@ function bl64_cnt_tag() {
 function bl64_cnt_run() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_CNT_MODULE' ||
+  bl64_check_module 'BL64_CNT_MOD_SETUP' ||
     return $?
 
   "_bl64_cnt_${BL64_CNT_DRIVER}_run" "$@"
@@ -888,7 +888,7 @@ function bl64_cnt_run() {
 #
 # Arguments:
 #   $@: arguments are passed as-is
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -898,7 +898,7 @@ function bl64_cnt_run() {
 function bl64_cnt_cli() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_module 'BL64_CNT_MODULE' ||
+  bl64_check_module 'BL64_CNT_MOD_SETUP' ||
     return $?
 
   "bl64_cnt_run_${BL64_CNT_DRIVER}" "$@"
@@ -914,7 +914,7 @@ function bl64_cnt_cli() {
 # Arguments:
 #   $1: name. Exact match
 #   $2: id
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -932,7 +932,7 @@ function bl64_cnt_container_is_running() {
     return $?
   fi
 
-  bl64_check_module 'BL64_CNT_MODULE' ||
+  bl64_check_module 'BL64_CNT_MOD_SETUP' ||
     return $?
 
   result="$("_bl64_cnt_${BL64_CNT_DRIVER}_ps_filter" "$name" "$id" "$BL64_CNT_SET_STATUS_RUNNING")" ||
@@ -951,7 +951,7 @@ function bl64_cnt_container_is_running() {
 #
 # Arguments:
 #   $1: network name
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -962,7 +962,7 @@ function bl64_cnt_network_is_defined() {
   bl64_dbg_lib_show_function "$@"
   local network="${1:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'network' ||
     return $?
 
@@ -974,7 +974,7 @@ function bl64_cnt_network_is_defined() {
 #
 # Arguments:
 #   $1: network name
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -985,7 +985,7 @@ function bl64_cnt_network_create() {
   bl64_dbg_lib_show_function "$@"
   local network="${1:-}"
 
-  bl64_check_module 'BL64_CNT_MODULE' &&
+  bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_parameter 'network' ||
     return $?
 
@@ -1005,7 +1005,7 @@ function bl64_cnt_network_create() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -1018,7 +1018,7 @@ function bl64_cnt_run_docker() {
   local debug=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_command "$BL64_CNT_CMD_DOCKER" "$BL64_VAR_DEFAULT" 'docker' ||
     return $?
 
@@ -1043,7 +1043,7 @@ function bl64_cnt_run_docker() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -1055,7 +1055,7 @@ function bl64_cnt_run_podman() {
   local verbose='error'
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_CNT_MODULE' &&
+    bl64_check_module 'BL64_CNT_MOD_SETUP' &&
     bl64_check_command "$BL64_CNT_CMD_PODMAN" "$BL64_VAR_DEFAULT" 'podman' ||
     return $?
 
@@ -1074,7 +1074,7 @@ function bl64_cnt_run_podman() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -1093,7 +1093,7 @@ function bl64_cnt_check_in_container() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:

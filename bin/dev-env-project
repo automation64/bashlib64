@@ -26,12 +26,7 @@
 {
   # Env / Project / Module environment definition version
   export DEV_ENV_PROJECT_ID='project'
-  export DEV_ENV_PROJECT_VERSION='2.1.0'
-
-  # Env / Project / Container path for project mounts
-  export DEV_ENV_PROJECT_CONTAINER_PATH_SRC='/source'
-  export DEV_ENV_PROJECT_CONTAINER_PATH_ROOT='/project'
-  export DEV_ENV_PROJECT_CONTAINER_PATH_TEST='/test'
+  export DEV_ENV_PROJECT_VERSION='2.2.0'
 
   # Build / Project / Target
   export DEV_BUILD_PROJECT_PATH_TARGET="${DEV_PATH_BUILD_PREPARE}/${DEV_ENV_PROJECT_ID}"
@@ -39,6 +34,9 @@
   # Pack / Project / Paths
   export DEV_PACK_PROJECT_PATH_STAGING="${DEV_PATH_BUILD_STAGING}/${DEV_ENV_PROJECT_ID}"
   export DEV_PACK_PROJECT_PATH_TARGET="${DEV_PATH_BUILD_PACK}/${DEV_ENV_PROJECT_ID}"
+
+  # Release / Project / Paths
+  export DEV_RELEASE_PROJECT_PATH_TARGET="${DEV_PATH_ROOT}"
 }
 
 #
@@ -49,12 +47,6 @@
 
 # shellcheck disable=SC2154
 {
-  # Env / Project / Registry for lab and testing containers
-  export DEV_ENV_PROJECT_REGISTRY="${DEV_ENV_PROJECT_REGISTRY:-ghcr.io/automation64}"
-
-  # Lab / Project / Default image
-  export DEV_LAB_PROJECT_CONTAINER="${DEV_LAB_PROJECT_CONTAINER:-dev/ubuntu-22.4-dev}"
-
   # Build / Project / Target
   export DEV_BUILD_PROJECT_PATH_SOURCE="${DEV_BUILD_PROJECT_PATH_SOURCE:-$DEV_PATH_SRC}"
 

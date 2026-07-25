@@ -15,7 +15,7 @@
 # shellcheck disable=SC2034
 {
   # DevSet / Version
-  declare DEV_SET_VERSION='12.0.0'
+  declare DEV_SET_VERSION='12.2.0'
 }
 
 function _dev_set_define_paths() {
@@ -34,6 +34,9 @@ function _dev_set_define_paths() {
   DEV_PATH_VAULT="${DEV_PATH_ROOT}/vault"
   DEV_PATH_LOGS="${DEV_PATH_ROOT}/logs"
   DEV_PATH_TMP="${DEV_PATH_ROOT}/tmp"
+
+  DEV_PATH_LIB_INSTALLER64="${DEV_PATH_LIB_INSTALLER64:-${DEV_PATH_LIB}/inst64}"
+  DEV_PATH_LIB_BASHLIB64="${DEV_PATH_LIB_BASHLIB64:-${DEV_PATH_LIB}/bl64}"
 }
 
 # shellcheck disable=SC1090
@@ -96,6 +99,7 @@ function _dev_set_load_gitlab() {
   # shellcheck disable=SC2155
   DEV_PATH_ROOT="$CI_PROJECT_DIR"
   BL64_LIB_CICD='YES'
+  DEV_BASE_RUNTIME_CURRENT="$DEV_BASE_FLAG_RUN_CONTAINER"
 }
 
 function _dev_set_load_local_post() {
@@ -114,6 +118,7 @@ function _dev_set_load_github() {
   # shellcheck disable=SC2155
   DEV_PATH_ROOT="$GITHUB_WORKSPACE"
   BL64_LIB_CICD='YES'
+  DEV_BASE_RUNTIME_CURRENT="$DEV_BASE_FLAG_RUN_VM"
 
   DEV_BASE_LOCAL="${DEV_PATH_ROOT}/.local-github.env"
   if [[ -r "$DEV_BASE_LOCAL" ]]; then
@@ -128,6 +133,7 @@ function _dev_set_load_testmansh() {
   dev_bin64_msg_show_task 'dev-set' "Info: testmansh container detected, setting project root (${TESTMANSH_PROJECT_ROOT})"
   DEV_PATH_ROOT="$TESTMANSH_PROJECT_ROOT"
   BL64_LIB_CICD='YES'
+  DEV_BASE_RUNTIME_CURRENT="$DEV_BASE_FLAG_RUN_CONTAINER"
 }
 
 # shellcheck disable=SC1090
@@ -136,20 +142,6 @@ function _dev_set_load_env() {
   source "${DEV_PATH_ROOT}/${DEV_BASE_ENV}" ||
     { dev_bin64_msg_show_error_source "${DEV_PATH_ROOT}/${DEV_BASE_ENV}" && return 1; }
   return 0
-}
-
-# shellcheck disable=SC1090
-function _dev_set_load_modules() {
-  local module_name=''
-  local module_env=''
-
-  # Load mandatory base modules, based on dependency order
-  source "${DEV_PATH_BIN}/dev-env-bashlib64" &&
-    source "${DEV_PATH_BIN}/dev-env-installer64" &&
-    return 0
-
-  dev_bin64_msg_show_error 'dev-set' 'unable to import core modules (bashlib64, installer64)'
-  return 1
 }
 
 function _dev_set_load_local() {
@@ -204,28 +196,6 @@ function _dev_set_initialize() {
     { dev_bin64_msg_show_error_source "$path_main_env" && return 1; }
 }
 
-function _dev_set_cleanup() {
-
-  dev_bin64_msg_show_task 'dev-set' 'cleanup unused external variables'
-  [[ -z "$GITHUB_WORKSPACE" ]] && unset GITHUB_WORKSPACE
-  [[ -z "$GITLAB_CI" ]] && unset GITLAB_CI
-  [[ -z "$TESTMANSH_PROJECT_ROOT" ]] && unset TESTMANSH_PROJECT_ROOT
-
-  dev_bin64_msg_show_task 'dev-set' 'cleanup internal functions'
-  unset _dev_set_define_paths
-  unset _dev_set_initialize
-  unset _dev_set_load_env
-  unset _dev_set_legacy
-  unset _dev_set_load_local
-  unset _dev_set_load_local_post
-  unset _dev_set_load_modules
-  unset _dev_set_load_profile
-  unset _dev_set_load_secrets
-  unset _dev_set_load_testmansh
-  unset _dev_set_load_workstation
-  unset _dev_set_load_github
-}
-
 function _dev_set_legacy() {
   local file=''
 
@@ -241,6 +211,27 @@ function _dev_set_legacy() {
   return 0
 }
 
+function _dev_set_cleanup() {
+
+  dev_bin64_msg_show_task 'dev-set' 'cleanup unused external variables'
+  [[ -z "$GITHUB_WORKSPACE" ]] && unset GITHUB_WORKSPACE
+  [[ -z "$GITLAB_CI" ]] && unset GITLAB_CI
+  [[ -z "$TESTMANSH_PROJECT_ROOT" ]] && unset TESTMANSH_PROJECT_ROOT
+
+  dev_bin64_msg_show_task 'dev-set' 'cleanup internal functions'
+  unset _dev_set_define_paths
+  unset _dev_set_initialize
+  unset _dev_set_load_env
+  unset _dev_set_legacy
+  unset _dev_set_load_local
+  unset _dev_set_load_local_post
+  unset _dev_set_load_profile
+  unset _dev_set_load_secrets
+  unset _dev_set_load_testmansh
+  unset _dev_set_load_workstation
+  unset _dev_set_load_github
+}
+
 # Warning: keep the namespace to avoid source conflicts
 _dev_set_initialize &&
   dev_bin64_lib_trace_start &&
@@ -249,7 +240,6 @@ _dev_set_initialize &&
   _dev_set_load_env &&
   _dev_set_load_profile &&
   _dev_set_load_secrets &&
-  _dev_set_load_modules &&
   _dev_set_load_local_post &&
   _dev_set_legacy &&
   _dev_set_cleanup &&

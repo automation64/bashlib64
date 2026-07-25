@@ -13,7 +13,7 @@
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: check errors
 # Returns:
@@ -68,7 +68,7 @@ function _bl64_aws_run_aws_prepare() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -121,7 +121,7 @@ function _bl64_aws_harden_aws() {
 #   $3: region
 #   $4: account id
 #   $5: permission set
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -142,7 +142,7 @@ function bl64_aws_cli_create_sso() {
     bl64_check_parameter 'sso_region' &&
     bl64_check_parameter 'sso_account_id' &&
     bl64_check_parameter 'sso_role_name' &&
-    bl64_check_module 'BL64_AWS_MODULE' ||
+    bl64_check_module 'BL64_AWS_MOD_SETUP' ||
     return $?
 
   bl64_dbg_lib_show_info "create AWS CLI profile for AWS SSO login (${BL64_AWS_CLI_CONFIG})"
@@ -164,7 +164,7 @@ function bl64_aws_cli_create_sso() {
 #
 # Arguments:
 #   $1: profile name
-# Outputs:
+# Channels:
 #   STDOUT: login process information
 #   STDERR: command stderr
 # Returns:
@@ -173,7 +173,7 @@ function bl64_aws_cli_create_sso() {
 #######################################
 function bl64_aws_sso_login() {
   bl64_dbg_lib_show_function
-  bl64_check_module 'BL64_AWS_MODULE' &&
+  bl64_check_module 'BL64_AWS_MOD_SETUP' &&
     bl64_check_parameter 'BL64_AWS_ACCESS_PROFILE' ||
     return $?
   bl64_aws_run_aws \
@@ -187,7 +187,7 @@ function bl64_aws_sso_login() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: ARN
 #   STDERR: command stderr
 # Returns:
@@ -212,7 +212,7 @@ function bl64_aws_sts_get_caller_arn() {
 #
 # Arguments:
 #   $1: profile name
-# Outputs:
+# Channels:
 #   STDOUT: token path
 #   STDERR: command stderr
 # Returns:
@@ -224,7 +224,7 @@ function bl64_aws_sso_get_token() {
   local start_url="${1:-}"
   local token_file=''
 
-  bl64_check_module 'BL64_AWS_MODULE' &&
+  bl64_check_module 'BL64_AWS_MOD_SETUP' &&
     bl64_check_parameter 'start_url' &&
     bl64_check_directory "$BL64_AWS_CLI_CACHE" ||
     return $?
@@ -255,7 +255,7 @@ function bl64_aws_sso_get_token() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -268,7 +268,7 @@ function bl64_aws_run_aws() {
   local debug=' '
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_AWS_MODULE' ||
+    bl64_check_module 'BL64_AWS_MOD_SETUP' ||
     return $?
 
   bl64_msg_app_run_is_enabled && verbosity=' '
@@ -296,7 +296,7 @@ function bl64_aws_run_aws() {
 #
 # Arguments:
 #   $1: Profile name
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: check errors
 # Returns:
@@ -308,7 +308,7 @@ function bl64_aws_access_enable_profile() {
   local profile_name="${1:-}"
 
   bl64_check_parameter 'profile_name' &&
-    bl64_check_module 'BL64_AWS_MODULE' ||
+    bl64_check_module 'BL64_AWS_MOD_SETUP' ||
     return $?
 
   bl64_msg_show_lib_task "Enable AWS CLI Profile access mode (${profile_name})"
@@ -328,7 +328,7 @@ function bl64_aws_access_enable_profile() {
 #
 # Arguments:
 #   $1: Profile name
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: check errors
 # Returns:
@@ -340,7 +340,7 @@ function bl64_aws_access_enable_sso() {
   local profile_name="${1:-}"
 
   bl64_check_parameter 'profile_name' &&
-    bl64_check_module 'BL64_AWS_MODULE' ||
+    bl64_check_module 'BL64_AWS_MOD_SETUP' ||
     return $?
 
   bl64_msg_show_lib_task "Enable AWS SSO access mode (${profile_name})"
@@ -359,7 +359,7 @@ function bl64_aws_access_enable_sso() {
 # Arguments:
 #   $1: Key ID
 #   $2: Key Secret
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: check errors
 # Returns:
@@ -373,7 +373,7 @@ function bl64_aws_access_enable_key() {
 
   bl64_check_parameter 'key_id' &&
     bl64_check_parameter 'key_secret' &&
-    bl64_check_module 'BL64_AWS_MODULE' ||
+    bl64_check_module 'BL64_AWS_MOD_SETUP' ||
     return $?
 
   bl64_msg_show_lib_task "Enable AWS IAM Key access mode (${key_id})"
@@ -394,7 +394,7 @@ function bl64_aws_access_enable_key() {
 #   $1: Key ID
 #   $2: Key Secret
 #   $3: Token
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: check errors
 # Returns:
@@ -410,7 +410,7 @@ function bl64_aws_access_enable_token() {
   bl64_check_parameter 'key_id' &&
     bl64_check_parameter 'key_secret' &&
     bl64_check_parameter 'token' &&
-    bl64_check_module 'BL64_AWS_MODULE' ||
+    bl64_check_module 'BL64_AWS_MOD_SETUP' ||
     return $?
 
   bl64_msg_show_lib_task "Enable AWS Session Token access mode (${key_id})"

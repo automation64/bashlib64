@@ -13,18 +13,9 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || exit 1
-# shellcheck source=lib/bl64/bashlib64.bash
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-rxtx.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-api.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-vcs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
-source ./bin/dev-env-git &&
+source ./bin/dev-set &&
+  source ./bin/dev-source-base &&
+  source ./bin/dev-env-git &&
   source ./bin/dev-env-github || exit 1
 
 declare MY_RELEASE_TAG="${1:-}"
@@ -105,13 +96,13 @@ function my_release() {
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  dev_bin64_task_initialize &&
+  dev_base_task_initialize &&
     bl64_check_parameter 'MY_RELEASE_TAG' &&
     bl64_check_export 'DEV_RELEASE_GITHUB_REPO_OWNER' &&
     bl64_check_export 'DEV_RELEASE_GITHUB_REPO_NAME' &&
     bl64_check_command "$DEV_LIB_GITHUB_BIN" &&
     bl64_check_file "$DEV_BASE_CHANGELOG" &&
-    dev_bin64_task_show_setup \
+    dev_base_task_show_setup \
       'DEV_RELEASE_GITHUB_REPO_OWNER' \
       'DEV_RELEASE_GITHUB_REPO_NAME' \
       'DEV_RELEASE_GITHUB_ARTIFACT' \
@@ -121,8 +112,8 @@ function my_initialize() {
 }
 
 bl64_lib_script_version_set '2.4.1'
-bl64_msg_help_about_set 'Create a GitHub release'
-dev_bin64_initialize && my_initialize || exit $?
+bl64_msg_help_set_about 'Create a GitHub release'
+dev_base_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_release "$MY_RELEASE_TAG"

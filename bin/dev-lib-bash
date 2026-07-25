@@ -17,9 +17,8 @@
 # Imports
 #
 
-source ./bin/dev-set || exit 1
-# shellcheck source=bin/dev-env-bash
-source ./bin/dev-env-bash || exit 1
+source ./bin/dev-set &&
+  source ./bin/dev-env-bash || exit 1
 
 #
 # Main

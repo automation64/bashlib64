@@ -11,7 +11,7 @@
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -148,7 +148,7 @@ function bl64_ans_harden_ansible() {
 #
 # Arguments:
 #   $@: list of ansible collections to install
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -178,7 +178,7 @@ function bl64_ans_collections_install() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -189,7 +189,7 @@ function bl64_ans_run_ansible() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_ANS_MODULE' ||
+    bl64_check_module 'BL64_ANS_MOD_SETUP' ||
     return $?
 
   bl64_ans_harden_ansible
@@ -209,7 +209,7 @@ function bl64_ans_run_ansible() {
 #   $1: command
 #   $2: subcommand
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -221,7 +221,7 @@ function bl64_ans_run_ansible_galaxy() {
   local command="${1:-${BL64_VAR_NULL}}"
   local subcommand="${2:-${BL64_VAR_NULL}}"
 
-  bl64_check_module 'BL64_ANS_MODULE' &&
+  bl64_check_module 'BL64_ANS_MOD_SETUP' &&
     bl64_check_parameter 'command' &&
     bl64_check_parameter 'subcommand' &&
     shift 2 ||
@@ -244,7 +244,7 @@ function bl64_ans_run_ansible_galaxy() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -255,7 +255,7 @@ function bl64_ans_run_ansible_playbook() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_ANS_MODULE' ||
+    bl64_check_module 'BL64_ANS_MOD_SETUP' ||
     return $?
 
   bl64_ans_harden_ansible

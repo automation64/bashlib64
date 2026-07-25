@@ -24,7 +24,7 @@ clear
 # Debugging Control
 #
 
-export BL64_LIB_CICD=YES
+#export BL64_LIB_CICD=YES
 #bl64_msg_all_enable_verbose
 #bl64_dbg_all_enable
 #bl64_dbg_lib_enable

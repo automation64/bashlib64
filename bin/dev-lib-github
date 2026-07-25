@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-lib-inst64: 1.4.0
+# template-lib-inst64: 2.0.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -13,31 +13,25 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || exit 1
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
-source ./bin/dev-env-github || exit 1
+source ./bin/dev-set &&
+  source ./bin/dev-source-base &&
+  source ./bin/dev-env-github || exit 1
 
 function my_download() {
   bl64_dbg_app_show_function
   bl64_lib_flag_is_enabled "$DEV_LIB_GITHUB_SKIP" && return 0
   INST64_GHCLI_TARGET="$DEV_LIB_GITHUB_TARGET" \
-    "${DEV_LIB_GITHUB_INSTALLER}"
+    dev_base_lib_install "$DEV_LIB_GITHUB_INSTALLER"
 }
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  dev_bin64_task_initialize &&
-    bl64_check_file "$DEV_LIB_GITHUB_INSTALLER"
+  dev_base_task_initialize
 }
 
 bl64_lib_script_version_set '1.0.0'
-bl64_msg_help_about_set 'Prepare module resources'
-dev_bin64_initialize && my_initialize || exit $?
+bl64_msg_help_set_about 'Prepare module resources'
+dev_base_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_download

@@ -33,7 +33,7 @@ function _bl64_log_set_target_multiple() {
 #   $3: target type. One of BL64_LOG_TYPE_*
 #   $4: level. One of BL64_LOG_CATEGORY_*
 #   $5: format. One of BL64_LOG_FORMAT_*
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -55,17 +55,17 @@ function bl64_log_setup() {
   bl64_lib_var_is_default "$log_format" && log_format="$BL64_LOG_FORMAT_CSV"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
     bl64_dbg_lib_show_function "$@" &&
-    _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
     bl64_check_parameter 'log_repository' &&
     bl64_log_set_repository "$log_repository" &&
     bl64_log_set_target "$log_target" "$log_type" &&
     bl64_log_set_level "$log_level" &&
     bl64_log_set_format "$log_format" &&
-    BL64_LOG_MODULE="$BL64_VAR_ON"
+    BL64_LOG_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'log'
 }
 
@@ -76,7 +76,7 @@ function bl64_log_setup() {
 #
 # Arguments:
 #   $1: repository path
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: command stderr
 # Returns:
@@ -103,7 +103,7 @@ function bl64_log_set_repository() {
 #
 # Arguments:
 #   $1: target level. One of BL64_LOG_CATEGORY_*
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: check error
 # Returns:
@@ -129,7 +129,7 @@ function bl64_log_set_level() {
 #
 # Arguments:
 #   $1: log format. One of BL64_LOG_FORMAT_*
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: commands stderr
 # Returns:
@@ -157,7 +157,7 @@ function bl64_log_set_format() {
 # Arguments:
 #   $1: log target. Format: file name
 #   $2: target type
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: commands stderr
 # Returns:

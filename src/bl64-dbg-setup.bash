@@ -11,7 +11,7 @@
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -24,7 +24,7 @@ function bl64_dbg_setup() {
   # shellcheck disable=SC2034
   bl64_dbg_all_disable &&
     bl64_dbg_all_dryrun_disable &&
-    BL64_DBG_MODULE="$BL64_VAR_ON"
+    BL64_DBG_MOD_SETUP="$BL64_VAR_ON"
 }
 
 #######################################
@@ -32,7 +32,7 @@ function bl64_dbg_setup() {
 #
 # Arguments:
 #   $1: target level. One of BL64_DBG_TARGET_*
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: check error
 # Returns:

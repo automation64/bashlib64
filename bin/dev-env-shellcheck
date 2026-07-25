@@ -13,7 +13,6 @@
 # limitations under the License.
 #######################################
 
-
 #
 # Module variables
 #
@@ -24,12 +23,10 @@
 {
   # Env / ShellCheck / Module environment definition version
   export DEV_ENV_SHELLCHECK_ID='shellcheck'
-  export DEV_ENV_SHELLCHECK_VERSION='2.1.0'
-  # Env / ShellCheck / Log path
-  export DEV_ENV_SHELLCHECK_PATH_LOGS="${DEV_PATH_LOGS}/${DEV_ENV_SHELLCHECK_ID}"
+  export DEV_ENV_SHELLCHECK_VERSION='2.3.0'
 
   # Lib / ShellCheck / Installer
-  export DEV_LIB_SHELLCHECK_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-shellcheck"
+  export DEV_LIB_SHELLCHECK_INSTALLER="shellcheck"
   # Lib / ShellCheck / Skip installation?
   export DEV_LIB_SHELLCHECK_SKIP='YES'
   # Lib / ShellCheck / Target
@@ -39,8 +36,6 @@
 
   # Lint / ShellCheck / Format
   export DEV_LINT_SHELLCHECK_FORMAT='json'
-  # Lint / ShellCheck / Report
-  export DEV_LINT_SHELLCHECK_PATH_REPORT="${DEV_ENV_SHELLCHECK_PATH_LOGS}/${DEV_ENV_SHELLCHECK_ID}-lint.${DEV_LINT_SHELLCHECK_FORMAT}"
 }
 
 #
@@ -51,6 +46,12 @@
 
 # shellcheck disable=SC2154
 {
+  # Env / ShellCheck / Log path
+  export DEV_ENV_SHELLCHECK_PATH_LOGS="${DEV_ENV_SHELLCHECK_PATH_LOGS:-${DEV_PATH_PROF_LOGS}/${DEV_ENV_SHELLCHECK_ID}}"
+
+  # Lint / ShellCheck / Report
+  export DEV_LINT_SHELLCHECK_PATH_REPORT="${DEV_ENV_SHELLCHECK_PATH_LOGS}/${DEV_ENV_SHELLCHECK_ID}-lint.${DEV_LINT_SHELLCHECK_FORMAT}"
+
   # Lint / ShellCheck / Target
   export DEV_LINT_SHELLCHECK_TARGET="${DEV_LINT_SHELLCHECK_TARGET:-${DEV_BASE_SRC}}"
 }
@@ -76,4 +77,19 @@
       DEV_LIB_SHELLCHECK_TARGET="$(dev_bin64_lib_basename "$DEV_LIB_SHELLCHECK_BIN")"
     fi
   fi
+}
+
+#
+# Module functions
+#
+# * Shared internal functions for module tasks
+#
+
+function dev_shellcheck_run_shellcheck() {
+  bl64_dbg_app_show_function "$@"
+  bl64_dbg_lib_trace_start
+  "$DEV_LIB_SHELLCHECK_BIN" \
+    --color=auto \
+    "$@"
+  bl64_dbg_lib_trace_stop
 }

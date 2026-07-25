@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Manage OS identity and access service
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_IAM_VERSION='6.3.0'
-
-  declare BL64_IAM_MODULE='0'
+  declare BL64_IAM_MOD_VERSION='6.3.0'
+  declare BL64_IAM_MOD_INFO='Identity and Access Management Tools Interface'
+  declare BL64_IAM_MOD_SETUP='0'
 
   declare BL64_IAM_CMD_USERADD="$BL64_VAR_INCOMPATIBLE"
   declare BL64_IAM_CMD_USERMOD="$BL64_VAR_INCOMPATIBLE"

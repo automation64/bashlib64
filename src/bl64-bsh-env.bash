@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Interact with Bash shell
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_BSH_VERSION='3.10.3'
-
-  declare BL64_BSH_MODULE='0'
+  declare BL64_BSH_MOD_VERSION='3.10.3'
+  declare BL64_BSH_MOD_INFO='Bash Shell Interface'
+  declare BL64_BSH_MOD_SETUP='0'
 
   declare BL64_BSH_VERSION_BASH=''
   declare BL64_BSH_ENV_STORE='.env.d'

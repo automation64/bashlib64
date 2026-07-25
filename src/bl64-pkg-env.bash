@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Manage native OS packages
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_PKG_VERSION='6.8.0'
-
-  declare BL64_PKG_MODULE='0'
+  declare BL64_PKG_MOD_VERSION='6.8.0'
+  declare BL64_PKG_MOD_INFO='Native Package Management Tools Interface'
+  declare BL64_PKG_MOD_SETUP='0'
 
   declare BL64_PKG_CMD_APK="$BL64_VAR_INCOMPATIBLE"
   declare BL64_PKG_CMD_APT="$BL64_VAR_INCOMPATIBLE"

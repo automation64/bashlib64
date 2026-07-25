@@ -28,7 +28,7 @@ function bl64_arc_open_zip() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -49,7 +49,7 @@ function _bl64_arc_harden_unzip() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -70,7 +70,7 @@ function _bl64_arc_harden_zip() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -91,7 +91,7 @@ function _bl64_arc_harden_gzip() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -113,7 +113,7 @@ function _bl64_arc_harden_bzip2() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -141,7 +141,7 @@ function _bl64_arc_harden_unxz() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -152,7 +152,7 @@ function bl64_arc_run_unzip() {
   bl64_dbg_lib_show_function "$@"
   local verbose='-qq'
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNZIP" || return $?
 
@@ -175,7 +175,7 @@ function bl64_arc_run_unzip() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -186,7 +186,7 @@ function bl64_arc_run_zip() {
   bl64_dbg_lib_show_function "$@"
   local verbose=' '
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_ZIP" || return $?
 
@@ -208,7 +208,7 @@ function bl64_arc_run_zip() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -219,7 +219,7 @@ function bl64_arc_run_7zz() {
   bl64_dbg_lib_show_function "$@"
   local verbose='-bso0 -bd'
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_7ZZ" || return $?
 
@@ -238,7 +238,7 @@ function bl64_arc_run_7zz() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -250,7 +250,7 @@ function bl64_arc_run_tar() {
   bl64_check_parameters_none "$#" || return $?
   local verbose=' '
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_command "$BL64_ARC_CMD_TAR" ||
     return $?
 
@@ -273,7 +273,7 @@ function bl64_arc_run_tar() {
 # Arguments:
 #   $1: Full path to the source file
 #   $2: Full path to the destination
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: tar or lib error messages
 # Returns:
@@ -286,7 +286,7 @@ function bl64_arc_tar_open() {
   local destination="${2:-}"
   local -i status=0
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameter 'source' &&
     bl64_check_parameter 'destination' &&
     bl64_check_file "$source" &&
@@ -379,7 +379,7 @@ function bl64_arc_tar_open() {
 # Arguments:
 #   $1: Full path to the source file
 #   $2: Full path to the destination
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: tar or lib error messages
 # Returns:
@@ -418,7 +418,7 @@ function bl64_arc_zip_open() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -429,7 +429,7 @@ function bl64_arc_run_unxz() {
   bl64_dbg_lib_show_function "$@"
   local verbose=' '
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_UNXZ" || return $?
 
@@ -452,7 +452,7 @@ function bl64_arc_run_unxz() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -463,7 +463,7 @@ function bl64_arc_run_bunzip2() {
   bl64_dbg_lib_show_function "$@"
   local verbose='--quiet'
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_BUNZIP2" || return $?
 
@@ -485,7 +485,7 @@ function bl64_arc_run_bunzip2() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -496,7 +496,7 @@ function bl64_arc_run_gunzip() {
   bl64_dbg_lib_show_function "$@"
   local verbose='--quiet'
 
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_GUNZIP" || return $?
 
@@ -521,7 +521,7 @@ function bl64_arc_run_gunzip() {
 # Arguments:
 #   $1: Full path to the source file
 #   $2: Full path to the destination
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: tar or lib error messages
 # Returns:
@@ -557,7 +557,7 @@ function bl64_arc_gzip_open() {
 # Arguments:
 #   $1: Full path to the source file
 #   $2: Full path to the destination
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: tar or lib error messages
 # Returns:
@@ -595,7 +595,7 @@ function bl64_arc_7z_open() {
 # Arguments:
 #   $1: Full path to the source file
 #   $2: Full path to the destination
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: tar or lib error messages
 # Returns:
@@ -629,7 +629,7 @@ function bl64_arc_bzip2_open() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -638,7 +638,7 @@ function bl64_arc_bzip2_open() {
 #######################################
 function bl64_arc_run_zstd() {
   bl64_dbg_lib_show_function "$@"
-  bl64_check_module 'BL64_ARC_MODULE' &&
+  bl64_check_module 'BL64_ARC_MOD_SETUP' &&
     bl64_check_parameters_none "$#" &&
     bl64_check_command "$BL64_ARC_CMD_ZSTD" || return $?
 
@@ -658,7 +658,7 @@ function bl64_arc_run_zstd() {
 # Arguments:
 #   $1: Full path to the source file
 #   $2: Full path to the destination
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: tar or lib error messages
 # Returns:

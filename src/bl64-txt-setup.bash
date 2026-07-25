@@ -9,7 +9,7 @@
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -20,13 +20,13 @@ function bl64_txt_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
     _bl64_txt_set_command &&
     _bl64_txt_set_options &&
-    BL64_TXT_MODULE="$BL64_VAR_ON"
+    BL64_TXT_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'txt'
 }
 
@@ -40,7 +40,7 @@ function bl64_txt_setup() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -51,10 +51,11 @@ function _bl64_txt_set_command() {
   bl64_dbg_lib_show_function
 
   # shellcheck disable=SC2034
-  case "$BL64_OS_DISTRO" in
-    ${BL64_OS_UB}-* | ${BL64_OS_DEB}-* | ${BL64_OS_KL}-*)
+  case "$BL64_OS_FLAVOR" in
+    "$BL64_OS_FLAVOR_DEBIAN")
       BL64_TXT_CMD_AWK='/usr/bin/awk'
       BL64_TXT_CMD_BASE64='/usr/bin/base64'
+      BL64_TXT_CMD_CAT='/bin/cat'
       BL64_TXT_CMD_CUT='/usr/bin/cut'
       BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
       BL64_TXT_CMD_GAWK='/usr/bin/gawk'
@@ -63,6 +64,7 @@ function _bl64_txt_set_command() {
       BL64_TXT_CMD_SED='/bin/sed'
       BL64_TXT_CMD_SORT='/usr/bin/sort'
       BL64_TXT_CMD_TAIL='/usr/bin/tail'
+      BL64_TXT_CMD_TEE='/usr/bin/tee'
       BL64_TXT_CMD_TR='/usr/bin/tr'
       BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
@@ -72,9 +74,10 @@ function _bl64_txt_set_command() {
         BL64_TXT_CMD_AWK_POSIX='/usr/bin/mawk'
       fi
       ;;
-    ${BL64_OS_FD}-* | ${BL64_OS_AMZ}-* | ${BL64_OS_CNT}-* | ${BL64_OS_RHEL}-* | ${BL64_OS_ALM}-* | ${BL64_OS_OL}-* | ${BL64_OS_RCK}-*)
+    "$BL64_OS_FLAVOR_FEDORA" | "$BL64_OS_FLAVOR_REDHAT")
       BL64_TXT_CMD_AWK='/usr/bin/awk'
       BL64_TXT_CMD_BASE64='/usr/bin/base64'
+      BL64_TXT_CMD_CAT='/usr/bin/cat'
       BL64_TXT_CMD_CUT='/usr/bin/cut'
       BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
       BL64_TXT_CMD_GAWK='/usr/bin/gawk'
@@ -83,14 +86,16 @@ function _bl64_txt_set_command() {
       BL64_TXT_CMD_SED='/usr/bin/sed'
       BL64_TXT_CMD_SORT='/usr/bin/sort'
       BL64_TXT_CMD_TAIL='/usr/bin/tail'
+      BL64_TXT_CMD_TEE='/usr/bin/tee'
       BL64_TXT_CMD_TR='/usr/bin/tr'
       BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
       BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
       ;;
-    ${BL64_OS_SLES}-* | ${BL64_OS_OPS}-*)
+    "$BL64_OS_FLAVOR_SUSE")
       BL64_TXT_CMD_AWK='/usr/bin/gawk'
       BL64_TXT_CMD_BASE64='/usr/bin/base64'
+      BL64_TXT_CMD_CAT='/usr/bin/cat'
       BL64_TXT_CMD_CUT='/usr/bin/cut'
       BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
       BL64_TXT_CMD_GAWK='/usr/bin/gawk'
@@ -99,14 +104,16 @@ function _bl64_txt_set_command() {
       BL64_TXT_CMD_SED='/usr/bin/sed'
       BL64_TXT_CMD_SORT='/usr/bin/sort'
       BL64_TXT_CMD_TAIL='/usr/bin/tail'
+      BL64_TXT_CMD_TEE='/usr/bin/tee'
       BL64_TXT_CMD_TR='/usr/bin/tr'
       BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
       BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
       ;;
-    ${BL64_OS_ALP}-*)
+    "$BL64_OS_FLAVOR_ALPINE")
       BL64_TXT_CMD_AWK='/usr/bin/awk'
       BL64_TXT_CMD_BASE64='/bin/base64'
+      BL64_TXT_CMD_CAT='/bin/cat'
       BL64_TXT_CMD_CUT='/usr/bin/cut'
       BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
       BL64_TXT_CMD_GAWK='/usr/bin/gawk'
@@ -115,6 +122,7 @@ function _bl64_txt_set_command() {
       BL64_TXT_CMD_SED='/bin/sed'
       BL64_TXT_CMD_SORT='/usr/bin/sort'
       BL64_TXT_CMD_TAIL='/usr/bin/tail'
+      BL64_TXT_CMD_TEE='/usr/bin/tee'
       BL64_TXT_CMD_TR='/usr/bin/tr'
       BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
@@ -124,9 +132,10 @@ function _bl64_txt_set_command() {
         bl64_dbg_lib_show_comments 'no GAWK present. AWK bundled with busybox is not posix compliant'
       fi
       ;;
-    ${BL64_OS_ARC}-*)
+    "$BL64_OS_FLAVOR_ARCH")
       BL64_TXT_CMD_AWK='/usr/bin/gawk'
       BL64_TXT_CMD_BASE64='/usr/bin/base64'
+      BL64_TXT_CMD_CAT='/usr/bin/cat'
       BL64_TXT_CMD_CUT='/usr/bin/cut'
       BL64_TXT_CMD_ENVSUBST='/usr/bin/envsubst'
       BL64_TXT_CMD_GAWK='/usr/bin/gawk'
@@ -135,14 +144,16 @@ function _bl64_txt_set_command() {
       BL64_TXT_CMD_SED='/usr/bin/sed'
       BL64_TXT_CMD_SORT='/usr/bin/sort'
       BL64_TXT_CMD_TAIL='/usr/bin/tail'
+      BL64_TXT_CMD_TEE='/usr/bin/tee'
       BL64_TXT_CMD_TR='/usr/bin/tr'
       BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
       BL64_TXT_CMD_AWK_POSIX='/usr/bin/gawk'
       ;;
-    ${BL64_OS_MCOS}-*)
+    "$BL64_OS_FLAVOR_MACOS")
       BL64_TXT_CMD_AWK='/usr/bin/awk'
       BL64_TXT_CMD_BASE64='/usr/bin/base64'
+      BL64_TXT_CMD_CAT='/bin/cat'
       BL64_TXT_CMD_CUT='/usr/bin/cut'
       BL64_TXT_CMD_ENVSUBST='/opt/homebrew/bin/envsubst'
       BL64_TXT_CMD_GAWK="$BL64_VAR_UNAVAILABLE"
@@ -151,6 +162,7 @@ function _bl64_txt_set_command() {
       BL64_TXT_CMD_SED='/usr/bin/sed'
       BL64_TXT_CMD_SORT='/usr/bin/sort'
       BL64_TXT_CMD_TAIL='/usr/bin/tail'
+      BL64_TXT_CMD_TEE='/usr/bin/tee'
       BL64_TXT_CMD_TR='/usr/bin/tr'
       BL64_TXT_CMD_UNIQ='/usr/bin/uniq'
 
@@ -165,7 +177,7 @@ function _bl64_txt_set_command() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:

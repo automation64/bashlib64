@@ -8,13 +8,13 @@
 
 function bl64_aws_get_cli_config() {
   bl64_dbg_lib_show_function
-  bl64_check_module 'BL64_AWS_MODULE' || return $?
+  bl64_check_module 'BL64_AWS_MOD_SETUP' || return $?
   echo "$BL64_AWS_CLI_CONFIG"
 }
 
 function bl64_aws_get_cli_credentials() {
   bl64_dbg_lib_show_function
-  bl64_check_module 'BL64_AWS_MODULE' || return $?
+  bl64_check_module 'BL64_AWS_MOD_SETUP' || return $?
   echo "$BL64_AWS_CLI_CREDENTIALS"
 }
 
@@ -24,7 +24,7 @@ function bl64_aws_get_cli_credentials() {
 # Arguments:
 #   $1: CLI Path. Format: Full path. Default: $PATH
 #   $2: AWS_HOME. Format: full path. Default: AWS CLI default
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -38,16 +38,16 @@ function bl64_aws_setup() {
   local aws_home="${2:-${BL64_VAR_DEFAULT}}"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function "$@" &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
     _bl64_aws_set_command "$aws_bin" &&
     bl64_check_command "$BL64_AWS_CMD_AWS" "$BL64_VAR_DEFAULT" 'aws' &&
     _bl64_aws_set_options &&
     _bl64_aws_set_runtime "$aws_home" &&
-    BL64_AWS_MODULE="$BL64_VAR_ON"
+    BL64_AWS_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'aws'
 }
 
@@ -59,7 +59,7 @@ function bl64_aws_setup() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -76,7 +76,7 @@ function _bl64_aws_set_command() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -104,7 +104,7 @@ function _bl64_aws_set_options() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: setting errors
 # Returns:
@@ -126,7 +126,7 @@ function _bl64_aws_set_runtime() {
 #
 # Arguments:
 #   $1: Full path. Default: $HOME/.aws
-# Outputs:
+# Channels:
 #   STDOUT: verbose operation
 #   STDERR: check errors
 # Returns:
@@ -156,7 +156,7 @@ function bl64_aws_set_home() {
 # Arguments:
 #   $1: configuration file name
 #   $2: credential file name
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: check errors
 # Returns:
@@ -185,7 +185,7 @@ function bl64_aws_set_paths() {
 #
 # Arguments:
 #   $1: AWS region
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: check errors
 # Returns:

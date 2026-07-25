@@ -14,7 +14,7 @@
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -27,80 +27,68 @@ function _bl64_os_set_command() {
   case "$BL64_OS_FLAVOR" in
     "$BL64_OS_FLAVOR_DEBIAN")
       BL64_OS_CMD_BASH='/bin/bash'
-      BL64_OS_CMD_CAT='/bin/cat'
       BL64_OS_CMD_DATE='/bin/date'
       BL64_OS_CMD_FALSE='/bin/false'
       BL64_OS_CMD_HOSTNAME='/bin/hostname'
       BL64_OS_CMD_GETENT='/usr/bin/getent'
       BL64_OS_CMD_LOCALE='/usr/bin/locale'
       BL64_OS_CMD_SLEEP='/bin/sleep'
-      BL64_OS_CMD_TEE='/usr/bin/tee'
       BL64_OS_CMD_TRUE='/bin/true'
       BL64_OS_CMD_UNAME='/bin/uname'
       ;;
     "$BL64_OS_FLAVOR_FEDORA" | "$BL64_OS_FLAVOR_REDHAT")
       BL64_OS_CMD_BASH='/bin/bash'
-      BL64_OS_CMD_CAT='/usr/bin/cat'
       BL64_OS_CMD_DATE='/bin/date'
       BL64_OS_CMD_FALSE='/usr/bin/false'
       BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
       BL64_OS_CMD_GETENT='/usr/bin/getent'
       BL64_OS_CMD_LOCALE='/usr/bin/locale'
       BL64_OS_CMD_SLEEP='/usr/bin/sleep'
-      BL64_OS_CMD_TEE='/usr/bin/tee'
       BL64_OS_CMD_TRUE='/usr/bin/true'
       BL64_OS_CMD_UNAME='/bin/uname'
       ;;
     "$BL64_OS_FLAVOR_SUSE")
       BL64_OS_CMD_BASH='/usr/bin/bash'
-      BL64_OS_CMD_CAT='/usr/bin/cat'
       BL64_OS_CMD_DATE='/usr/bin/date'
       BL64_OS_CMD_FALSE='/usr/bin/false'
       BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
       BL64_OS_CMD_GETENT='/usr/bin/getent'
       BL64_OS_CMD_LOCALE='/usr/bin/locale'
       BL64_OS_CMD_SLEEP='/usr/bin/sleep'
-      BL64_OS_CMD_TEE='/usr/bin/tee'
       BL64_OS_CMD_TRUE='/usr/bin/true'
       BL64_OS_CMD_UNAME='/usr/bin/uname'
       ;;
     "$BL64_OS_FLAVOR_ALPINE")
       BL64_OS_CMD_BASH='/bin/bash'
-      BL64_OS_CMD_CAT='/bin/cat'
       BL64_OS_CMD_DATE='/bin/date'
       BL64_OS_CMD_FALSE='/bin/false'
       BL64_OS_CMD_HOSTNAME='/bin/hostname'
       BL64_OS_CMD_GETENT='/usr/bin/getent'
       BL64_OS_CMD_LOCALE='/usr/bin/locale'
       BL64_OS_CMD_SLEEP='/bin/sleep'
-      BL64_OS_CMD_TEE='/usr/bin/tee'
       BL64_OS_CMD_TRUE='/bin/true'
       BL64_OS_CMD_UNAME='/bin/uname'
       ;;
     "$BL64_OS_FLAVOR_ARCH")
       BL64_OS_CMD_BASH='/bin/bash'
-      BL64_OS_CMD_CAT='/usr/bin/cat'
       BL64_OS_CMD_DATE='/bin/date'
       BL64_OS_CMD_FALSE='/usr/bin/false'
       BL64_OS_CMD_HOSTNAME='/usr/bin/hostname'
       BL64_OS_CMD_GETENT='/usr/bin/getent'
       BL64_OS_CMD_LOCALE='/usr/bin/locale'
       BL64_OS_CMD_SLEEP='/usr/bin/sleep'
-      BL64_OS_CMD_TEE='/usr/bin/tee'
       BL64_OS_CMD_TRUE='/usr/bin/true'
       BL64_OS_CMD_UNAME='/bin/uname'
       ;;
     "$BL64_OS_FLAVOR_MACOS")
       # Homebrew used when no native option available
       BL64_OS_CMD_BASH='/opt/homebre/bin/bash'
-      BL64_OS_CMD_CAT='/bin/cat'
       BL64_OS_CMD_DATE='/bin/date'
       BL64_OS_CMD_FALSE='/usr/bin/false'
       BL64_OS_CMD_HOSTNAME='/bin/hostname'
       BL64_OS_CMD_GETENT="$BL64_VAR_INCOMPATIBLE"
       BL64_OS_CMD_LOCALE='/usr/bin/locale'
       BL64_OS_CMD_SLEEP='/usr/bin/sleep'
-      BL64_OS_CMD_TEE='/usr/bin/tee'
       BL64_OS_CMD_TRUE='/usr/bin/true'
       BL64_OS_CMD_UNAME='/usr/bin/uname'
       ;;
@@ -115,7 +103,7 @@ function _bl64_os_set_command() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -146,7 +134,7 @@ function _bl64_os_set_runtime() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: OS Type
 #   STDERR: command stderr
 # Returns:
@@ -174,7 +162,7 @@ function _bl64_os_set_type() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: OS Type
 #   STDERR: command stderr
 # Returns:
@@ -210,7 +198,7 @@ function _bl64_os_set_machine() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -254,7 +242,7 @@ function _bl64_os_get_distro_from_uname() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -415,7 +403,7 @@ function _bl64_os_release_normalize() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -430,16 +418,16 @@ function bl64_os_setup() {
     return "$BL64_LIB_ERROR_OS_BASH_VERSION"
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
     _bl64_os_set_type &&
     _bl64_os_set_distro &&
     _bl64_os_set_runtime &&
     _bl64_os_set_command &&
     _bl64_os_set_machine &&
-    BL64_OS_MODULE="$BL64_VAR_ON"
+    BL64_OS_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'os'
 }
 
@@ -453,7 +441,7 @@ function bl64_os_setup() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -476,7 +464,7 @@ function _bl64_os_set_distro() {
 #
 # Arguments:
 #   $1: locale name
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Validation errors
 # Returns:

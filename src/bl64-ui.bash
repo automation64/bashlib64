@@ -31,6 +31,89 @@ function _bl64_ui_is_confirmation_disabled() {
   return 1
 }
 
+function _bl64_ui_harden_fzf() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_trace_start
+  unset FZF_DEFAULT_COMMAND
+  unset FZF_DEFAULT_OPTS
+  unset FZF_DEFAULT_OPTS_FILE
+  unset FZF_API_KEY
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+function _bl64_ui_harden_less() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_trace_start
+  unset LESSANSIENDCHARS
+  unset LESSANSIMIDCHARS
+  unset LESSANSIOSCALLOW
+  unset LESSANSIOSCCHARS
+  unset LESSBINFMT
+  unset LESSCHARDEF
+  unset LESSCHARSET
+  unset LESSCLOSE
+  unset LESSECHO
+  unset LESSEDIT
+  unset LESSGLOBALTAGS
+  unset LESSHISTFILE
+  unset LESSHISTSIZE
+  unset LESSKEYIN
+  unset LESSKEY
+  unset LESSKEY_CONTENT
+  unset LESSKEYIN_SYSTEM
+  unset LESSKEY_SYSTEM
+  unset LESSMETACHARS
+  unset LESSMETAESCAPE
+  unset LESSNOCONFIG
+  unset LESSOPEN
+  unset LESSSECURE_ALLOW
+  unset LESSSEPARATOR
+  unset LESSUTFBINFMT
+  unset LESSUTFCHARDEF
+  unset LESS_COLUMNS
+  unset LESS_LINES
+  unset LESS_DATA_DELAY
+  unset LESS_IS_MORE
+  unset LESS_OSC8_OPEN_xxx
+  unset LESS_OSC8_OPEN_ANY
+  unset LESS_OSC8_OPEN_NONE
+  unset LESS_SHELL_LINES
+  unset LESS_SIGUSR1
+  unset LESS_TERMCAP_xx
+  unset LESS_TERMINFO_xxxx
+  unset LESS_TERMCAP_BRACKETED_PASTE_START
+  unset LESS_TERMCAP_BRACKETED_PASTE_END
+  unset LESS_TERMCAP_MOUSE_START
+  unset LESS_TERMCAP_MOUSE_END
+  unset LESS_TERMCAP_SUSPEND
+  unset LESS_TERMCAP_RESUME
+  unset LESS_UNSUPPORT
+
+  export LESSSECURE='1'
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
+function _bl64_ui_harden_bat() {
+  bl64_dbg_lib_show_function
+
+  bl64_dbg_lib_trace_start
+  unset BAT_THEME
+  unset BAT_THEME_DARK
+  unset BAT_THEME_LIGHT
+  unset BAT_STYLE
+  unset BAT_CONFIG_PATH
+  export BAT_PAGER='builtin'
+  bl64_dbg_lib_trace_stop
+
+  return 0
+}
+
 #
 # Public functions
 #
@@ -41,7 +124,7 @@ function _bl64_ui_is_confirmation_disabled() {
 # Arguments:
 #   $1: confirmation question
 #   $2: confirmation value that needs to be match
-# Outputs:
+# Channels:
 #   STDOUT: user interaction
 #   STDERR: command stderr
 # Returns:
@@ -72,7 +155,7 @@ function bl64_ui_ask_confirmation() {
 #
 # Arguments:
 #   $1: question to ask
-# Outputs:
+# Channels:
 #   STDOUT: user interaction
 # Returns:
 #   0: user answered yes
@@ -101,7 +184,7 @@ function bl64_ui_ask_proceed() {
 #
 # Arguments:
 #   $1: Separator payload. Format: string
-# Outputs:
+# Channels:
 #   STDOUT: separator line
 #   STDERR: grep Error message
 # Returns:
@@ -119,7 +202,7 @@ function bl64_ui_separator_show() {
 #
 # Arguments:
 #   $1: question to ask
-# Outputs:
+# Channels:
 #   STDOUT: user interaction
 # Returns:
 #   0: user answered yes
@@ -146,7 +229,7 @@ function bl64_ui_ask_yesno() {
 #
 # Arguments:
 #   $1: prompt message
-# Outputs:
+# Channels:
 #   STDOUT: user interaction
 # Returns:
 #   0: success
@@ -165,7 +248,7 @@ function bl64_ui_ask_input_free() {
 #
 # Arguments:
 #   $1: prompt message
-# Outputs:
+# Channels:
 #   STDOUT: user interaction
 # Returns:
 #   0: valid integer
@@ -192,7 +275,7 @@ function bl64_ui_ask_input_integer() {
 #
 # Arguments:
 #   $1: prompt message
-# Outputs:
+# Channels:
 #   STDOUT: user interaction
 # Returns:
 #   0: valid float
@@ -219,7 +302,7 @@ function bl64_ui_ask_input_decimal() {
 #
 # Arguments:
 #   $1: prompt message
-# Outputs:
+# Channels:
 #   STDOUT: user interaction
 # Returns:
 #   0: valid string
@@ -245,7 +328,7 @@ function bl64_ui_ask_input_string() {
 #
 # Arguments:
 #   $1: prompt message
-# Outputs:
+# Channels:
 #   STDOUT: user interaction
 # Returns:
 #   0: valid semantic version
@@ -272,7 +355,7 @@ function bl64_ui_ask_input_semver() {
 #
 # Arguments:
 #   $1: prompt message
-# Outputs:
+# Channels:
 #   STDOUT: user interaction
 # Returns:
 #   0: valid time
@@ -299,7 +382,7 @@ function bl64_ui_ask_input_time() {
 #
 # Arguments:
 #   $1: prompt message
-# Outputs:
+# Channels:
 #   STDOUT: user interaction
 # Returns:
 #   0: valid date
@@ -328,7 +411,7 @@ function bl64_ui_ask_input_date() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -339,13 +422,15 @@ function bl64_ui_ask_input_date() {
 function bl64_ui_run_bat() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_UI_MODULE' &&
+  bl64_check_module 'BL64_UI_MOD_SETUP' &&
     bl64_check_command "$BL64_UI_CMD_BAT" "$BL64_VAR_DEFAULT" 'bat' ||
     return $?
 
+  _bl64_ui_harden_bat
   bl64_dbg_lib_trace_start
-  "$BL64_UI_CMD_BAT" "$@"
+  "$BL64_UI_CMD_BAT" \
+    --no-config \
+    "$@"
   bl64_dbg_lib_trace_stop
 }
 
@@ -356,7 +441,7 @@ function bl64_ui_run_bat() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -368,7 +453,7 @@ function bl64_ui_run_dialog() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_module 'BL64_UI_MOD_SETUP' &&
     bl64_check_command "$BL64_UI_CMD_DIALOG" "$BL64_VAR_DEFAULT" 'dialog' ||
     return $?
 
@@ -384,7 +469,7 @@ function bl64_ui_run_dialog() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -395,10 +480,11 @@ function bl64_ui_run_dialog() {
 function bl64_ui_run_fzf() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_UI_MODULE' &&
+  bl64_check_module 'BL64_UI_MOD_SETUP' &&
     bl64_check_command "$BL64_UI_CMD_FZF" "$BL64_VAR_DEFAULT" 'fzf' ||
     return $?
+
+  _bl64_ui_harden_fzf
 
   bl64_dbg_lib_trace_start
   "$BL64_UI_CMD_FZF" "$@"
@@ -412,7 +498,7 @@ function bl64_ui_run_fzf() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -424,7 +510,7 @@ function bl64_ui_run_whiptail() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_module 'BL64_UI_MOD_SETUP' &&
     bl64_check_command "$BL64_UI_CMD_WHIPTAIL" "$BL64_VAR_DEFAULT" 'whiptail' ||
     return $?
 
@@ -440,7 +526,7 @@ function bl64_ui_run_whiptail() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -452,7 +538,7 @@ function bl64_ui_run_gum() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_UI_MODULE' &&
+    bl64_check_module 'BL64_UI_MOD_SETUP' &&
     bl64_check_command "$BL64_UI_CMD_GUM" "$BL64_VAR_DEFAULT" 'gum' ||
     return $?
 
@@ -468,7 +554,7 @@ function bl64_ui_run_gum() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -479,12 +565,120 @@ function bl64_ui_run_gum() {
 function bl64_ui_run_less() {
   bl64_dbg_lib_show_function "$@"
 
-  bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_UI_MODULE' &&
+  bl64_check_module 'BL64_UI_MOD_SETUP' &&
     bl64_check_command "$BL64_UI_CMD_LESS" "$BL64_VAR_DEFAULT" 'less' ||
     return $?
 
+  _bl64_ui_harden_less
   bl64_dbg_lib_trace_start
   "$BL64_UI_CMD_LESS" "$@"
   bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Command wrapper with verbose, debug and common options
+#
+# * Trust no one. Ignore inherited config and use explicit
+#
+# Arguments:
+#   $@: arguments are passed as-is to the command
+# Channels:
+#   STDOUT: command output
+#   STDERR: command stderr
+# Returns:
+#   0: operation completed ok
+#   >0: operation failed
+#######################################
+# shellcheck disable=SC2120
+function bl64_ui_run_more() {
+  bl64_dbg_lib_show_function "$@"
+
+  bl64_check_module 'BL64_UI_MOD_SETUP' &&
+    bl64_check_command "$BL64_UI_CMD_MORE" "$BL64_VAR_DEFAULT" 'more' ||
+    return $?
+
+  bl64_dbg_lib_trace_start
+  "$BL64_UI_CMD_MORE" "$@"
+  bl64_dbg_lib_trace_stop
+}
+
+#######################################
+# Select one item from a list
+#
+# Arguments:
+#   $@: list of items. Format: list of string
+# Channels:
+#   STDOUT: selected item
+#   STDERR: command errors
+# Returns:
+#   0: item selected
+#   >0: item not selected or error
+#######################################
+function bl64_ui_select_item() {
+  bl64_dbg_lib_show_function "$@"
+  # shellcheck disable=SC2034
+  local item_list="${*:-}"
+  local item=''
+  local PS3="${_BL64_UI_TXT_SELECT_ITEM}: "
+  local menu_options=()
+
+  bl64_check_module 'BL64_UI_MOD_SETUP' &&
+    bl64_check_parameter 'item_list' || return $?
+
+  case "$BL64_UI_TUI" in
+    "$BL64_UI_TUI_DIALOG")
+      for item in "$@"; do
+        menu_options+=("$item" "")
+      done
+      bl64_dbg_lib_show_comments 'redirection required to show selection via stdout'
+      bl64_ui_run_dialog --menu "$_BL64_UI_TXT_SELECT_ITEM" 0 0 0 "${menu_options[@]}" 3>&1 1>&2 2>&3
+      ;;
+    "$BL64_UI_TUI_FZF")
+      printf '%s\n' "$@" | bl64_ui_run_fzf
+      ;;
+    "$BL64_UI_TUI_WHIPTAIL")
+      for item in "$@"; do
+        menu_options+=("$item" "")
+      done
+      bl64_dbg_lib_show_comments 'redirection required to show selection via stdout'
+      bl64_ui_run_whiptail --menu "$_BL64_UI_TXT_SELECT_ITEM" 0 0 0 "${menu_options[@]}" 3>&1 1>&2 2>&3
+      ;;
+    "$BL64_UI_TUI_GUM")
+      bl64_ui_run_gum choose "$@"
+      ;;
+    "$BL64_UI_TUI_BASH")
+      select item in "$@"; do
+        if [[ -n "$item" ]]; then
+          echo "$item"
+          return 0
+        fi
+      done
+      return "$BL64_LIB_ERROR_TASK_FAILED"
+      ;;
+    *) bl64_check_rise_parameter_invalid 'BL64_UI_TUI' ;;
+  esac
+}
+
+#######################################
+# Show content using a paging tool
+#
+# Arguments:
+#   None
+# Channels:
+#   STDIN: content to show
+#   STDOUT: user interaction
+#   STDERR: command errors
+# Returns:
+#   0: pager finished ok
+#   >0: pager error
+#######################################
+function bl64_ui_page() {
+  bl64_dbg_lib_show_function
+  case "$BL64_UI_PAGER" in
+    "$BL64_UI_PAGER_BAT") bl64_ui_run_bat - ;;
+    "$BL64_UI_PAGER_LESS") bl64_ui_run_less - ;;
+    "$BL64_UI_PAGER_MORE") bl64_ui_run_more - ;;
+    "$BL64_UI_PAGER_CAT") bl64_ui_run_cat ;;
+    *) bl64_check_rise_parameter_invalid 'BL64_UI_PAGER' ;;
+  esac
 }

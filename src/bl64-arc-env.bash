@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Manage archive files
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_ARC_VERSION='4.6.0'
-
-  declare BL64_ARC_MODULE='0'
+  declare BL64_ARC_MOD_VERSION='4.6.0'
+  declare BL64_ARC_MOD_INFO='File Archival Tools Interface'
+  declare BL64_ARC_MOD_SETUP='0'
 
   declare BL64_ARC_CMD_BUNZIP2="$BL64_VAR_UNAVAILABLE"
   declare BL64_ARC_CMD_GUNZIP="$BL64_VAR_UNAVAILABLE"

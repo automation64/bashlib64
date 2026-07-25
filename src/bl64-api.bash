@@ -16,7 +16,7 @@
 #   $3: RESTful method. Format: $BL64_API_METHOD_*. Default: $BL64_API_METHOD_GET
 #   $4: API query to be appended to the API path. Format: url encoded string. Default: none
 #   $@: additional arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -37,7 +37,7 @@ function bl64_api_call() {
   shift
   shift
 
-  bl64_check_module 'BL64_RXTX_MODULE' &&
+  bl64_check_module 'BL64_RXTX_MOD_SETUP' &&
     bl64_check_command "$BL64_RXTX_CMD_CURL" "$BL64_VAR_DEFAULT" 'curl' &&
     bl64_check_parameter 'api_url' &&
     bl64_check_parameter 'api_path' ||
@@ -79,7 +79,7 @@ function bl64_api_call() {
 #
 # Arguments:
 #   $1: String to convert. Must be terminated by \n
-# Outputs:
+# Channels:
 #   STDOUT: encoded string
 #   STDERR: execution errors
 # Returns:

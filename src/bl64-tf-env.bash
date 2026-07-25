@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Interact with Terraform
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_TF_VERSION='3.3.0'
-
-  declare BL64_TF_MODULE='0'
+  declare BL64_TF_MOD_VERSION='3.3.0'
+  declare BL64_TF_MOD_INFO='Terraform Tools Interface'
+  declare BL64_TF_MOD_SETUP='0'
 
   declare BL64_TF_CMD_TERRAFORM="$BL64_VAR_UNAVAILABLE"
   declare BL64_TF_CMD_TOFU="$BL64_VAR_UNAVAILABLE"

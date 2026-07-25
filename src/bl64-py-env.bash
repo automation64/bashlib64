@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Interact with system-wide Python
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_PY_VERSION='4.2.6'
-
-  declare BL64_PY_MODULE='0'
+  declare BL64_PY_MOD_VERSION='4.2.6'
+  declare BL64_PY_MOD_INFO='Python Tools Interface'
+  declare BL64_PY_MOD_SETUP='0'
 
   #
   # Deprecated Variables

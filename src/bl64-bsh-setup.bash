@@ -9,7 +9,7 @@
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -20,16 +20,16 @@ function bl64_bsh_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_XSV_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_TXT_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FS_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_FMT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_XSV_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_TXT_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FS_MOD_SETUP' &&
     _bl64_bsh_set_options &&
     _bl64_bsh_set_version &&
-    BL64_BSH_MODULE="$BL64_VAR_ON"
+    BL64_BSH_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'bsh'
 }
 
@@ -40,7 +40,7 @@ function bl64_bsh_setup() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: command errors
 # Returns:
@@ -69,7 +69,7 @@ function _bl64_bsh_set_version() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:

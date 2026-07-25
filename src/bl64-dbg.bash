@@ -154,7 +154,7 @@ function bl64_dbg_lib_dryrun_enable { BL64_DBG_DRYRUN="$BL64_DBG_DRYRUN_LIB"; }
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: bl64 runtime info
 # Returns:
@@ -176,7 +176,7 @@ function bl64_dbg_runtime_show_bashlib64() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: callstack
 # Returns:
@@ -196,7 +196,7 @@ function bl64_dbg_runtime_show_callstack() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: callstack
 # Returns:
@@ -221,7 +221,7 @@ function bl64_dbg_runtime_show_paths() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -240,7 +240,7 @@ function bl64_dbg_app_trace_stop() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: Tracing
 #   STDERR: Debug messages
 # Returns:
@@ -260,7 +260,7 @@ function bl64_dbg_app_trace_start() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -281,7 +281,7 @@ function bl64_dbg_lib_trace_stop() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: Tracing
 #   STDERR: Debug messages
 # Returns:
@@ -301,7 +301,7 @@ function bl64_dbg_lib_trace_start() {
 #
 # Arguments:
 #   $1: message
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Debug message
 # Returns:
@@ -318,7 +318,7 @@ function bl64_dbg_lib_show_info() {
 #
 # Arguments:
 #   $@: messages
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Debug message
 # Returns:
@@ -335,7 +335,7 @@ function bl64_dbg_app_show_info() {
 #
 # Arguments:
 #   $@: variable names
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Debug message
 # Returns:
@@ -364,7 +364,7 @@ function bl64_dbg_lib_show_vars() {
 #
 # Arguments:
 #   $@: variable names
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Debug message
 # Returns:
@@ -393,7 +393,7 @@ function bl64_dbg_app_show_vars() {
 #
 # Arguments:
 #   $@: parameters
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Debug message
 # Returns:
@@ -411,7 +411,7 @@ function bl64_dbg_lib_show_function() {
 #
 # Arguments:
 #   $@: parameters
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Debug message
 # Returns:
@@ -431,7 +431,7 @@ function bl64_dbg_app_show_function() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -454,7 +454,7 @@ function bl64_dbg_lib_command_trace_stop() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: Tracing
 #   STDERR: Debug messages
 # Returns:
@@ -474,7 +474,7 @@ function bl64_dbg_lib_command_trace_start() {
 #
 # Arguments:
 #   $1: comments
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Debug message
 # Returns:
@@ -491,7 +491,7 @@ function bl64_dbg_lib_show_comments() {
 #
 # Arguments:
 #   $@: comments
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Debug message
 # Returns:
@@ -508,7 +508,7 @@ function bl64_dbg_app_show_comments() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: declare -p output
 #   STDERR: None
 # Returns:
@@ -532,7 +532,7 @@ function bl64_dbg_app_show_globals() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: declare -p output
 #   STDERR: None
 # Returns:
@@ -556,7 +556,7 @@ function bl64_dbg_lib_show_globals() {
 #
 # Arguments:
 #   $@: messages
-# Outputs:
+# Channels:
 #   STDOUT: Dryrun message
 #   STDERR: None
 # Returns:
@@ -573,7 +573,7 @@ function bl64_dbg_app_dryrun_show() {
 #
 # Arguments:
 #   $@: messages
-# Outputs:
+# Channels:
 #   STDOUT: Dryrun message
 #   STDERR: None
 # Returns:
@@ -593,7 +593,7 @@ function bl64_dbg_lib_dryrun_show() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Break warning
 # Returns:
@@ -609,7 +609,7 @@ function bl64_dbg_app_breakpoint() {
 #
 # Arguments:
 #   $1: message
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Debug message
 # Returns:
@@ -626,7 +626,7 @@ function bl64_dbg_lib_show_about() {
 #
 # Arguments:
 #   $@: messages
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Debug message
 # Returns:
@@ -645,7 +645,7 @@ function bl64_dbg_app_show_about() {
 #
 # Arguments:
 #   $@
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Debug message
 # Returns:

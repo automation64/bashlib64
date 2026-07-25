@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+. test/lib/adhoc-setup.bash ||
+  { echo 'test:Error: unable to load test environment' 2>&1 && exit 1; }
+
+declare option_list='Item1 Item2 Item3'
+
+function ui_select_item() {
+  bl64_ui_select_item $option_list
+}
+
+clear
+bl64_msg_all_enable_verbose
+#bl64_dbg_all_enable
+bl64_ui_setup
+
+bl64_msg_show_separator "Testing BL64_UI_TUI_BASH"
+BL64_UI_TUI="$BL64_UI_TUI_BASH"
+ui_select_item
+
+bl64_msg_show_separator "Testing BL64_UI_TUI_GUM"
+BL64_UI_TUI="$BL64_UI_TUI_GUM"
+ui_select_item
+
+bl64_msg_show_separator "Testing BL64_UI_TUI_WHIPTAIL"
+BL64_UI_TUI="$BL64_UI_TUI_WHIPTAIL"
+ui_select_item
+
+bl64_msg_show_separator "Testing BL64_UI_TUI_DIALOG"
+BL64_UI_TUI="$BL64_UI_TUI_DIALOG"
+ui_select_item
+
+bl64_msg_show_separator "Testing BL64_UI_TUI_FZF"
+BL64_UI_TUI="$BL64_UI_TUI_FZF"
+ui_select_item

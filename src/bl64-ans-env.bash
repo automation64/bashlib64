@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Interact with Ansible CLI
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_ANS_VERSION='3.1.0'
-
-  declare BL64_ANS_MODULE='0'
+  declare BL64_ANS_MOD_VERSION='3.1.0'
+  declare BL64_ANS_MOD_INFO='Ansible Interface'
+  declare BL64_ANS_MOD_SETUP='0'
 
   declare BL64_ANS_ENV_IGNORE=''
 

@@ -23,12 +23,10 @@
 {
   # Env / Act / Module environment definition version
   export DEV_ENV_ACT_ID='act'
-  export DEV_ENV_ACT_VERSION='1.4.0'
-  # Env / Act / Log path
-  export DEV_ENV_ACT_PATH_LOGS="${DEV_PATH_LOGS}/${DEV_ENV_ACT_ID}"
+  export DEV_ENV_ACT_VERSION='1.5.0'
 
   # Lib / Act / Installer
-  export DEV_LIB_ACT_INSTALLER="${DEV_LIB_INSTALLER64_TARGET}/install-act"
+  export DEV_LIB_ACT_INSTALLER="act"
   # Lib / Act / Skip installation?
   export DEV_LIB_ACT_SKIP='YES'
   # Lib / Act / Target
@@ -40,6 +38,11 @@
   export DEV_LIB_ACT_PORT_ARTIFACT='18080'
   export DEV_LIB_ACT_DOCKER_SOCKET='/var/run/docker.sock'
 
+  # Lint / Act / Format
+  export DEV_LINT_ACT_FORMAT='log'
+
+  # Test / Act / Report
+  export DEV_TEST_ACT_PREFIX_REPORT="${DEV_ENV_ACT_ID}-test-"
   # Test / Act / Format
   export DEV_TEST_ACT_FORMAT='log'
 }
@@ -52,6 +55,12 @@
 
 # shellcheck disable=SC2154
 {
+  # Env / Act / Log path
+  export DEV_ENV_ACT_PATH_LOGS="${DEV_ENV_ACT_PATH_LOGS:-${DEV_PATH_PROF_LOGS}/${DEV_ENV_ACT_ID}}"
+
+  # Lint / Act / Report
+  export DEV_LINT_ACT_PATH_REPORT="${DEV_ENV_ACT_PATH_LOGS}/${DEV_ENV_ACT_ID}-lint.${DEV_LINT_ACT_FORMAT}"
+
   # Test / Act / List of workflows. Format: job-id, separated by spaces
   export DEV_TEST_ACT_WORKFLOWS="${DEV_TEST_ACT_WORKFLOWS:-sast-gitleaks}"
 
@@ -80,4 +89,21 @@
       DEV_LIB_ACT_TARGET="$(dev_bin64_lib_basename "$DEV_LIB_ACT_BIN")"
     fi
   fi
+}
+
+#
+# Module functions
+#
+# * Shared internal functions for module tasks
+#
+
+function dev_act_run_act() {
+  bl64_dbg_app_show_function "$@"
+  dev_base_lib_check_command "$DEV_ENV_ACT_ID" "$DEV_LIB_ACT_BIN" ||
+    return $?
+  bl64_dbg_lib_trace_start
+  "$DEV_LIB_ACT_BIN" \
+    --env-file=/dev/null \
+    "$@"
+  bl64_dbg_lib_trace_stop
 }

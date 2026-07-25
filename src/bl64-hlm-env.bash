@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Interact with HLM
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_HLM_VERSION='3.0.3'
-
-  declare BL64_HLM_MODULE='0'
+  declare BL64_HLM_MOD_VERSION='3.0.3'
+  declare BL64_HLM_MOD_INFO='Helm CLI Interface'
+  declare BL64_HLM_MOD_SETUP='0'
 
   declare BL64_HLM_CMD_HELM="$BL64_VAR_UNAVAILABLE"
 

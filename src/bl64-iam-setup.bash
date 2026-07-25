@@ -9,7 +9,7 @@
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -20,17 +20,17 @@ function bl64_iam_setup() {
   [[ -z "$BL64_VERSION" ]] && echo 'Error: bashlib64-module-core.bash must be the last sourced library' >&2 && return 21
 
   # shellcheck disable=SC2034
-  _bl64_lib_module_is_imported 'BL64_CHECK_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_DBG_MODULE' &&
+  _bl64_lib_module_is_imported 'BL64_CHECK_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_DBG_MOD_SETUP' &&
     bl64_dbg_lib_show_function &&
-    _bl64_lib_module_is_imported 'BL64_OS_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_MSG_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_RND_MODULE' &&
-    _bl64_lib_module_is_imported 'BL64_FMT_MODULE' &&
+    _bl64_lib_module_is_imported 'BL64_OS_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_MSG_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_RND_MOD_SETUP' &&
+    _bl64_lib_module_is_imported 'BL64_FMT_MOD_SETUP' &&
     _bl64_iam_set_command &&
     _bl64_iam_set_alias &&
     _bl64_iam_set_options &&
-    BL64_IAM_MODULE="$BL64_VAR_ON"
+    BL64_IAM_MOD_SETUP="$BL64_VAR_ON"
   bl64_check_rise_module_setup 'iam'
 }
 
@@ -43,7 +43,7 @@ function bl64_iam_setup() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -103,7 +103,7 @@ function _bl64_iam_set_command() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -143,7 +143,7 @@ function _bl64_iam_set_alias() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:

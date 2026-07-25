@@ -59,7 +59,7 @@ function bl64_fmt_check_value_in_list() {
 #
 # Arguments:
 #   $1: Target path
-# Outputs:
+# Channels:
 #   STDOUT: Updated path
 #   STDERR: None
 # Returns:
@@ -89,7 +89,7 @@ function bl64_fmt_path_strip_starting_slash() {
 #
 # Arguments:
 #   $1: Target path
-# Outputs:
+# Channels:
 #   STDOUT: Updated path
 #   STDERR: None
 # Returns:
@@ -133,7 +133,7 @@ function bl64_fmt_path_strip_ending_slash() {
 #
 # Arguments:
 #   $1: Path
-# Outputs:
+# Channels:
 #   STDOUT: Basename
 #   STDERR: None
 # Returns:
@@ -175,7 +175,7 @@ function bl64_fmt_path_get_basename() {
 #
 # Arguments:
 #   $1: Path
-# Outputs:
+# Channels:
 #   STDOUT: Dirname
 #   STDERR: None
 # Returns:
@@ -212,9 +212,8 @@ function bl64_fmt_path_get_dirname() {
 #   $1: output field separator. Default: space
 #   $2: prefix. Format: string
 #   $3: postfix. Format: string
-# Inputs:
-#   STDIN: list
-# Outputs:
+# Channels:
+#   STDIN: list of values
 #   STDOUT: string
 #   STDERR: None
 # Returns:
@@ -253,7 +252,7 @@ function bl64_fmt_list_convert_to_string() {
 #   $1: (optional) error message
 #   $2: value that will be verified
 #   $@: list of one or more values to check against
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: error message
 # Returns:
@@ -291,7 +290,7 @@ function bl64_fmt_list_check_membership() {
 #
 # Arguments:
 #   $1: Version
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: error message
 # Returns:
@@ -310,7 +309,7 @@ function bl64_fmt_version_is_semver() {
 #
 # Arguments:
 #   $1: Version
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: error message
 # Returns:
@@ -329,7 +328,7 @@ function bl64_fmt_version_is_major_minor() {
 #
 # Arguments:
 #   $1: Version
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: error message
 # Returns:
@@ -348,7 +347,7 @@ function bl64_fmt_version_is_major() {
 #
 # Arguments:
 #   $1: Version
-# Outputs:
+# Channels:
 #   STDOUT: Major.Minor
 #   STDERR: error message
 # Returns:
@@ -388,7 +387,7 @@ function bl64_fmt_version_convert_to_major_minor() {
 #
 # Arguments:
 #   $1: version string
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: error message
 # Returns:
@@ -417,7 +416,7 @@ function bl64_fmt_version_check_semver_format() {
 # Arguments:
 #   $1: SemVer A
 #   $2: SemVer B
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: error message
 # Returns:
@@ -464,6 +463,19 @@ function bl64_fmt_version_is_less_than() {
   return 1
 }
 
+#######################################
+# Compares two semantic versions (A and B) and returns true if A is less than or equal to B.
+#
+# Arguments:
+#   $1: SemVer A
+#   $2: SemVer B
+# Channels:
+#   STDOUT: none
+#   STDERR: error message
+# Returns:
+#   0: If version_a is less than version_b.
+#   1: If version_a is greater than or equal to version_b.
+#######################################
 function bl64_fmt_version_is_less_than_or_equal() {
   bl64_dbg_lib_show_function "$@"
   local version_a="${1:-}"
@@ -473,4 +485,139 @@ function bl64_fmt_version_is_less_than_or_equal() {
     return 0
   fi
   bl64_fmt_version_is_less_than "$version_a" "$version_b"
+}
+
+#######################################
+# Sort lines using numeric order
+#
+# Arguments:
+#   $1: Reverse Order?. Default: NO. Format: boolean
+# Channels:
+#   STDIN: list of values to sort
+#   STDOUT: sorted list
+#   STDERR: error message
+# Returns:
+#   0: success
+#   >0: failure
+#######################################
+function bl64_fmt_list_sort_numeric() {
+  bl64_dbg_lib_show_function "$@"
+  local reverse="${1:-$BL64_VAR_NO}"
+
+  ! bl64_lib_flag_is_enabled "$reverse" && reverse=''
+
+  bl64_fmt_run_sort \
+    ${reverse:+ -r} \
+    -n \
+    -
+}
+
+#######################################
+# Sort lines using numeric order
+#
+# Arguments:
+#   $1: Reverse Order?. Default: NO. Format: boolean
+# Channels:
+#   STDIN: list of values to sort
+#   STDOUT: sorted list
+#   STDERR: error message
+# Returns:
+#   0: success
+#   >0: failure
+#######################################
+function bl64_fmt_list_sort_numeric() {
+  bl64_dbg_lib_show_function "$@"
+  local reverse="${1:-$BL64_VAR_NO}"
+
+  ! bl64_lib_flag_is_enabled "$reverse" && reverse=''
+
+  bl64_fmt_run_sort \
+    ${reverse:+ -r} \
+    -n \
+    -
+}
+
+#######################################
+# Sort lines using numeric order
+#
+# Arguments:
+#   $1: Reverse Order?. Default: NO. Format: boolean
+# Channels:
+#   STDIN: list of values to sort
+#   STDOUT: sorted list
+#   STDERR: error message
+# Returns:
+#   0: success
+#   >0: failure
+#######################################
+function bl64_fmt_list_sort_dictionary() {
+  bl64_dbg_lib_show_function "$@"
+  local reverse="${1:-$BL64_VAR_NO}"
+
+  ! bl64_lib_flag_is_enabled "$reverse" && reverse=''
+
+  bl64_fmt_run_sort \
+    ${reverse:+ -r} \
+    -d \
+    -
+}
+
+#######################################
+# Sort lines using dictionary order
+#
+# Arguments:
+#   $1: Reverse Order?. Default: NO. Format: boolean
+#   $2: Ignore case?. Default: YES. Format: boolean
+# Channels:
+#   STDIN: list of values to sort
+#   STDOUT: sorted list
+#   STDERR: error message
+# Returns:
+#   0: success
+#   >0: failure
+#######################################
+function bl64_fmt_list_sort_dictionary() {
+  bl64_dbg_lib_show_function "$@"
+  local reverse="${1:-$BL64_VAR_NO}"
+  local ignore_case="${2:-$BL64_VAR_YES}"
+
+  ! bl64_lib_flag_is_enabled "$reverse" && reverse=''
+  ! bl64_lib_flag_is_enabled "$ignore_case" && ignore_case=''
+
+  bl64_fmt_run_sort \
+    ${reverse:+ -r} \
+    ${ignore_case:+ -f} \
+    -d \
+    -
+}
+
+#######################################
+# Sort lines using lexicographical order
+#
+# * Considers all type of characters
+# * This is the default sorting order for the GNU sort tool
+#
+# Arguments:
+#   $1: Reverse Order?. Default: NO. Format: boolean
+#   $2: Ignore case?. Default: YES. Format: boolean
+# Channels:
+#   STDIN: list of values to sort
+#   STDOUT: sorted list
+#   STDERR: error message
+# Returns:
+#   0: success
+#   >0: failure
+#######################################
+function bl64_fmt_list_sort_lexicographical() {
+  bl64_dbg_lib_show_function "$@"
+  local reverse="${1:-$BL64_VAR_NO}"
+  local ignore_case="${2:-$BL64_VAR_YES}"
+
+  ! bl64_lib_flag_is_enabled "$reverse" && reverse=''
+  ! bl64_lib_flag_is_enabled "$ignore_case" && ignore_case=''
+
+  bl64_fmt_run_sort \
+    ${reverse:+ -r} \
+    ${ignore_case:+ -f} \
+    -
 }

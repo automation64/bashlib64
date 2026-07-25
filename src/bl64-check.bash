@@ -49,7 +49,7 @@ function bl64_check_alert_module_setup() {
 #   $1: Full path to the command to check
 #   $2: (optional) Not found error message
 #   $3: (optional) Command name. Displayed in the error message when not found
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -102,7 +102,7 @@ function bl64_check_command() {
 # Arguments:
 #   $1: Full path to the file
 #   $2: Not found error message
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -141,7 +141,7 @@ function bl64_check_file() {
 # Arguments:
 #   $1: Full path to the directory
 #   $2: Not found error message
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -182,7 +182,7 @@ function bl64_check_directory() {
 # Arguments:
 #   $1: Full path
 #   $2: Not found error message.
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -216,7 +216,7 @@ function bl64_check_path() {
 # Arguments:
 #   $1: parameter name
 #   $2: (optional) parameter description. Shown on error messages
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -261,7 +261,7 @@ function bl64_check_parameter() {
 # Arguments:
 #   $1: parameter name
 #   $2: parameter description. Shown on error messages
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -302,7 +302,7 @@ function bl64_check_export() {
 # Arguments:
 #   $1: Path string
 #   $2: Failed check error message
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -332,7 +332,7 @@ function bl64_check_path_relative() {
 # Arguments:
 #   $1: Full path
 #   $2: Failed check error message
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -363,7 +363,7 @@ function bl64_check_path_not_present() {
 # Arguments:
 #   $1: Path string
 #   $2: Failed check error message
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -390,7 +390,7 @@ function bl64_check_path_absolute() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -412,7 +412,7 @@ function bl64_check_privilege_root() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -440,7 +440,7 @@ function bl64_check_privilege_not_root() {
 #   $1: Full path to the object
 #   $2: Overwrite flag. Must be ON(1) or OFF(0). Default: OFF
 #   $3: Error message
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -477,7 +477,7 @@ function bl64_check_overwrite() {
 #   $1: Full path to the object
 #   $2: Overwrite flag. Must be ON(1) or OFF(0). Default: OFF
 #   $3: Warning message
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -512,7 +512,7 @@ function bl64_check_overwrite_skip() {
 # Arguments:
 #   $1: parameter name
 #   $2: error message
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -534,7 +534,7 @@ function bl64_check_rise_parameter_invalid() {
 #
 # Arguments:
 #   $1: extra error message. Added to the error detail between (). Default: none
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -556,7 +556,7 @@ function bl64_check_rise_task_unsupported() {
 #
 # Arguments:
 #   $1: extra error message. Added to the error detail between (). Default: none
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -584,7 +584,7 @@ function bl64_check_compatibility_mode() {
 #
 # Arguments:
 #   $1: resource name. Default: none
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -605,7 +605,7 @@ function bl64_check_rise_resource_not_found() {
 #
 # Arguments:
 #   $1: command
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -629,7 +629,7 @@ function bl64_check_rise_task_undefined() {
 #
 # Arguments:
 #   $1: bashlib64 module alias
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -656,7 +656,7 @@ function bl64_check_rise_module_setup() {
 # Arguments:
 #   $1: must be $# to capture number of parameters from the calling function
 #   $2: error message
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -684,8 +684,8 @@ function bl64_check_parameters_none() {
 # * Use in functions that depends on module resources being present before execution
 #
 # Arguments:
-#   $1: module id (eg: BL64_XXXX_MODULE)
-# Outputs:
+#   $1: module id (eg: BL64_XXXX_MOD_SETUP)
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -719,7 +719,7 @@ function bl64_check_module() {
 # Arguments:
 #   $1: exit status
 #   $2: error message
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -748,7 +748,7 @@ function bl64_check_status() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -772,7 +772,7 @@ function bl64_check_home() {
 # Arguments:
 #   $1: command file name
 #   $2: Not found error message.
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error message
 # Returns:
@@ -805,7 +805,7 @@ function bl64_check_command_search_path() {
 #
 # Arguments:
 #   $1: error message
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -826,7 +826,7 @@ function bl64_check_rise_task_failed() {
 #
 # Arguments:
 #   $1: command value
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -853,7 +853,7 @@ function bl64_check_rise_script_invalid_command() {
 #
 # Arguments:
 #   $1: option value
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -876,7 +876,7 @@ function bl64_check_rise_script_invalid_option() {
 #
 # Arguments:
 #   $1: option value
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:

@@ -11,7 +11,7 @@
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -51,7 +51,7 @@ function _bl64_k8s_harden_kubectl() {
 #   $3: resource name
 #   $4: label name
 #   $5: label value
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -97,7 +97,7 @@ function bl64_k8s_label_set() {
 #   $2: resource type
 #   $3: resource name
 #   $@: remaining args are passed as is. Use the syntax: key=value
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -143,7 +143,7 @@ function bl64_k8s_annotation_set() {
 # Arguments:
 #   $1: full path to the kube/config file for the target cluster
 #   $2: namespace name
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -181,7 +181,7 @@ function bl64_k8s_namespace_create() {
 #   $1: full path to the kube/config file for the target cluster
 #   $2: target namespace
 #   $3: service account name
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -224,7 +224,7 @@ function bl64_k8s_sa_create() {
 #   $3: secret name
 #   $4: secret key
 #   $5: path to the file with the secret value
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -272,7 +272,7 @@ function bl64_k8s_secret_create() {
 #   $2: source namespace
 #   $3: target namespace
 #   $4: secret name
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -330,7 +330,7 @@ function bl64_k8s_secret_copy() {
 #   $1: full path to the kube/config file for the target cluster
 #   $2: namespace where resources are
 #   $3: full path to the resource definition file
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -376,7 +376,7 @@ function bl64_k8s_resource_update() {
 #   $2: resource type
 #   $3: resource name
 #   $4: namespace where resources are (optional)
-# Outputs:
+# Channels:
 #   STDOUT: resource definition
 #   STDERR: command stderr
 # Returns:
@@ -410,7 +410,7 @@ function bl64_k8s_resource_get() {
 # Arguments:
 #   $1: full path to the kube/config file for the target cluster. Use BL64_VAR_DEFAULT to leave default
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -442,7 +442,7 @@ function bl64_k8s_run_kubectl_cfg() {
 # Arguments:
 #   $1: full path to the kube/config file for the target cluster. Use BL64_VAR_DEFAULT to leave default
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -479,7 +479,7 @@ function bl64_k8s_run_kubectl() {
 # Arguments:
 #   $1: full path to the kube/config file for the target cluster. Use BL64_VAR_DEFAULT to leave default
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -519,7 +519,7 @@ function bl64_k8s_run_kubectl_plugin() {
 #   $2: resource type
 #   $3: resource name
 #   $4: namespace where resources are
-# Outputs:
+# Channels:
 #   STDOUT: nothing
 #   STDERR: nothing unless debug
 # Returns:

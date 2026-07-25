@@ -42,12 +42,12 @@ function _bl64_lib_script_get_name() {
 # Check that the module is imported
 #
 # * Used for the modular version of bashlib64 to ensure dependant modules are loaded (sourced)
-# * A module is considered imported if the associated shell environment variable BL64_XXX_MODULE is defined
+# * A module is considered imported if the associated shell environment variable BL64_XXX_MOD_SETUP is defined
 # * This check will not verify if the module was also initialized. Use the function 'bl64_check_module' instead
 #
 # Arguments:
-#   $1: module id (eg: BL64_XXXX_MODULE)
-# Outputs:
+#   $1: module id (eg: BL64_XXXX_MOD_SETUP)
+# Channels:
 #   STDOUT: none
 #   STDERR: message
 # Returns:
@@ -77,7 +77,7 @@ function _bl64_lib_module_is_imported() {
 # Arguments:
 #   $1: Function name to be deprecated
 #   $2: Replacement function name
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Deprecation warning
 # Returns:
@@ -103,7 +103,7 @@ function _bl64_lib_function_deprecated() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error messages
 # Returns:
@@ -124,7 +124,7 @@ function _bl64_lib_script_set_identity() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error messages
 # Returns:
@@ -156,7 +156,7 @@ function _bl64_lib_harden_shopt() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error messages
 # Returns:
@@ -177,7 +177,7 @@ function _bl64_lib_helper_id() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error messages
 # Returns:
@@ -216,7 +216,7 @@ function _bl64_lib_harden_options() {
 
 function _bl64_lib_check_os_compabitility() {
   # Check OS compatibility
-  if [[ "${BL64_OS_MODULE:-$BL64_VAR_OFF}" == "$BL64_VAR_ON" ]]; then
+  if [[ "${BL64_OS_MOD_SETUP:-$BL64_VAR_OFF}" == "$BL64_VAR_ON" ]]; then
     bl64_os_check_compatibility \
       "${BL64_OS_ALM}"-{8,9,10} \
       "${BL64_OS_ALP}"-3.{17,18,19,20,21,22,23,24} \
@@ -276,7 +276,7 @@ function bl64_lib_var_is_set {
 #
 # Arguments:
 #   $1: flag value. Strings are automatically converted to uppercase
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: command stderr
 # Returns:
@@ -300,7 +300,7 @@ function bl64_lib_flag_is_enabled {
 #
 # Arguments:
 #   $1: id value
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error messages
 # Returns:
@@ -320,7 +320,7 @@ function bl64_lib_script_set_id() {
 #
 # Arguments:
 #   $1: semver
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error messages
 # Returns:
@@ -339,7 +339,7 @@ function bl64_lib_script_version_set() {
 #
 # Arguments:
 #   $1: minimum bashlib64 version (semver format)
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error messages
 # Returns:

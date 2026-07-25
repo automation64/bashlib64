@@ -33,7 +33,7 @@ function bl64_bsh_script_set_identity() {
 #
 # Arguments:
 #   $*: pattern
-# Outputs:
+# Channels:
 #   STDOUT: pattern match. Empty is none
 #   STDERR: Error messages
 # Returns:
@@ -93,7 +93,7 @@ function bl64_bsh_pattern_match_file() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: full path
 #   STDERR: Error messages
 # Returns:
@@ -120,7 +120,7 @@ function bl64_bsh_script_get_path() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: script name
 #   STDERR: Error messages
 # Returns:
@@ -144,7 +144,7 @@ function bl64_bsh_script_get_name() {
 # Arguments:
 #   $1: variable name
 #   $2: value
-# Outputs:
+# Channels:
 #   STDOUT: export string
 #   STDERR: Error messages
 # Returns:
@@ -174,7 +174,7 @@ function bl64_bsh_env_export_variable() {
 #
 # Arguments:
 #   $1: path to the YAML file
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: conversion errors
 # Returns:
@@ -219,7 +219,7 @@ function bl64_bsh_env_import_yaml() {
 #
 # Arguments:
 #   $1: command name with/without path
-# Outputs:
+# Channels:
 #   STDOUT: full path
 #   STDERR: Error messages
 # Returns:
@@ -249,7 +249,7 @@ function bl64_bsh_command_get_path() {
 #
 # Arguments:
 #   $1: command name with/without path
-# Outputs:
+# Channels:
 #   STDOUT: none
 #   STDERR: Error messages
 # Returns:
@@ -284,7 +284,7 @@ function bl64_bsh_command_is_executable() {
 #   $2: permissions. Default: 0750
 #   $3: user name. Default: current
 #   $4: group name. Default: current
-# Outputs:
+# Channels:
 #   STDOUT: progress
 #   STDERR: Error messages
 # Returns:
@@ -314,7 +314,7 @@ function bl64_bsh_env_store_create() {
 #
 # Arguments:
 #   $1: User home path. Default: HOME
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Error messages
 # Returns:
@@ -339,7 +339,7 @@ function bl64_bsh_env_store_is_present() {
 #   $1: Full path to the source .env file
 #   $2: Load priority. Default: 64
 #   $3: User home path. Default: HOME
-# Outputs:
+# Channels:
 #   STDOUT: progress
 #   STDERR: Error messages
 # Returns:
@@ -373,7 +373,7 @@ function bl64_bsh_env_store_publish() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: snippet
 #   STDERR: none
 # Returns:
@@ -404,7 +404,7 @@ fi\n
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: snippet
 #   STDERR: none
 # Returns:
@@ -441,7 +441,7 @@ fi\n
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: snippet
 #   STDERR: none
 # Returns:
@@ -470,7 +470,7 @@ fi\n
 #   $1: insecure setting?: ON: user paths first. OFF: user paths last. Default: OFF
 #   $2: include system paths?. Default: OFF
 #   $3: extra paths, separated by :
-# Outputs:
+# Channels:
 #   STDOUT: snippet
 #   STDERR: none
 # Returns:
@@ -516,7 +516,7 @@ function bl64_bsh_profile_path_generate() {
 #
 # Arguments:
 #   $1: target path
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Command error
 # Returns:
@@ -535,7 +535,7 @@ function bl64_bsh_run_pushd() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: Command error
 # Returns:
@@ -554,7 +554,7 @@ function bl64_bsh_run_popd() {
 # Arguments:
 #   $1: command name
 #   $@: (optional) list of additional paths where to look on
-# Outputs:
+# Channels:
 #   STDOUT: full path
 #   STDERR: Error messages
 # Returns:
@@ -579,7 +579,7 @@ function bl64_bsh_command_locate_user() {
 # Arguments:
 #   $1: command name
 #   $@: (optional) list of additional paths where to look on
-# Outputs:
+# Channels:
 #   STDOUT: full path
 #   STDERR: Error messages
 # Returns:
@@ -627,7 +627,7 @@ function bl64_bsh_command_locate() {
 # Arguments:
 #   $1: command name
 #   $@: (optional) list of additional paths where to look on
-# Outputs:
+# Channels:
 #   STDOUT: full path
 #   STDERR: Error messages
 # Returns:
@@ -655,7 +655,7 @@ function bl64_bsh_command_import() {
 #   $2: permissions. Default: 0750
 #   $3: user name. Default: current
 #   $4: group name. Default: current
-# Outputs:
+# Channels:
 #   STDOUT: progress
 #   STDERR: execution errors
 # Returns:
@@ -694,7 +694,7 @@ function bl64_bsh_xdg_create() {
 #   $1: maximum number of retries. Default: BL64_BSH_JOB_SET_MAX_RETRIES
 #   $2: wait time between retries in seconds. Default: BL64_BSH_JOB_SET_WAIT
 #   $@: command to execute
-# Outputs:
+# Channels:
 #   STDOUT: progress
 #   STDERR: execution errors
 # Returns:

@@ -25,7 +25,7 @@ function bl64_log_set_runtime() {
 #   $1: name of the source that is generating the message
 #   $2: log message category. Use any of $BL64_LOG_CATEGORY_*
 #   $3: message
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: execution errors
 # Returns:
@@ -40,7 +40,7 @@ function _bl64_log_register() {
   local category="${2:-}"
   local payload="${3:-}"
 
-  [[ "$BL64_LOG_MODULE" == "$BL64_VAR_OFF" ]] && return 0
+  [[ "$BL64_LOG_MOD_SETUP" == "$BL64_VAR_OFF" ]] && return 0
   [[ -z "$source" || -z "$category" || -z "$payload" ]] && return "$BL64_LIB_ERROR_PARAMETER_MISSING"
 
   case "$BL64_LOG_FORMAT" in
@@ -74,7 +74,7 @@ function _bl64_log_register() {
 # Arguments:
 #   $1: name of the source that is generating the message
 #   $2: message to be recorded
-# Outputs:
+# Channels:
 #   STDOUT: message (when BL64_LOG_VERBOSE='1')
 #   STDERR: execution errors
 # Returns:
@@ -103,7 +103,7 @@ function bl64_log_info() {
 # Arguments:
 #   $1: name of the source that is generating the message
 #   $2: message to be recorded
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: execution errors, message (when BL64_LOG_VERBOSE='1')
 # Returns:
@@ -129,7 +129,7 @@ function bl64_log_error() {
 # Arguments:
 #   $1: name of the source that is generating the message
 #   $2: message to be recorded
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: execution errors, message (when BL64_LOG_VERBOSE='1')
 # Returns:

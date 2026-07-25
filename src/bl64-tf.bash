@@ -23,7 +23,7 @@ function bl64_tf_log_set() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -54,7 +54,7 @@ function _bl64_tf_harden_terraform() {
 #
 # Arguments:
 #   None
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -98,7 +98,7 @@ function _bl64_tf_harden_tofu() {
 # Arguments:
 #   $1: output format. One of BL64_TF_OUTPUT_*
 #   $2: (optional) variable name
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -132,7 +132,7 @@ function bl64_tf_output_export() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -143,7 +143,7 @@ function bl64_tf_run_terraform() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TF_MODULE' &&
+    bl64_check_module 'BL64_TF_MOD_SETUP' &&
     _bl64_tf_harden_terraform ||
     return $?
 
@@ -161,7 +161,7 @@ function bl64_tf_run_terraform() {
 #
 # Arguments:
 #   $@: arguments are passed as-is to the command
-# Outputs:
+# Channels:
 #   STDOUT: command output
 #   STDERR: command stderr
 # Returns:
@@ -172,7 +172,7 @@ function bl64_tf_run_tofu() {
   bl64_dbg_lib_show_function "$@"
 
   bl64_check_parameters_none "$#" &&
-    bl64_check_module 'BL64_TF_MODULE' &&
+    bl64_check_module 'BL64_TF_MOD_SETUP' &&
     _bl64_tf_harden_tofu ||
     return $?
 
@@ -190,7 +190,7 @@ function bl64_tf_run_tofu() {
 # Arguments:
 #   $1: full path to the log file. Default: STDERR
 #   $2: log level. One of BL64_TF_SET_LOG_*. Default: INFO
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: None
 # Returns:
@@ -213,7 +213,7 @@ function bl64_tf_set_logging() {
 #
 # Arguments:
 #   $1: (optional) plugin cache
-# Outputs:
+# Channels:
 #   STDOUT: None
 #   STDERR: requirement error
 # Returns:

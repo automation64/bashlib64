@@ -1,12 +1,8 @@
-#######################################
-# BashLib64 / Module / Globals / Interact with AWS
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_AWS_VERSION='4.0.6'
-
-  declare BL64_AWS_MODULE='0'
+  declare BL64_AWS_MOD_VERSION='4.0.6'
+  declare BL64_AWS_MOD_INFO='AWS CLI Interface'
+  declare BL64_AWS_MOD_SETUP='0'
 
   declare BL64_AWS_CMD_AWS="$BL64_VAR_UNAVAILABLE"
 

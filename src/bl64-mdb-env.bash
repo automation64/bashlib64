@@ -4,9 +4,9 @@
 
 # shellcheck disable=SC2034
 {
-  declare BL64_MDB_VERSION='2.0.3'
-
-  declare BL64_MDB_MODULE='0'
+  declare BL64_MDB_MOD_VERSION='2.0.3'
+  declare BL64_MDB_MOD_INFO='MongoDB Tools Interface'
+  declare BL64_MDB_MOD_SETUP='0'
 
   declare BL64_MDB_CMD_MONGOSH="$BL64_VAR_UNAVAILABLE"
   declare BL64_MDB_CMD_MONGORESTORE="$BL64_VAR_UNAVAILABLE"

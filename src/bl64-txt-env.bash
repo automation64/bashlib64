@@ -1,16 +1,13 @@
-#######################################
-# BashLib64 / Module / Globals / Manipulate text files content
-#######################################
-
 # shellcheck disable=SC2034
 {
-  declare BL64_TXT_VERSION='2.8.0'
-
-  declare BL64_TXT_MODULE='0'
+  declare BL64_TXT_MOD_VERSION='2.9.0'
+  declare BL64_TXT_MOD_INFO='Text File Tools Interface'
+  declare BL64_TXT_MOD_SETUP='0'
 
   declare BL64_TXT_CMD_AWK_POSIX="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_AWK="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_BASE64="$BL64_VAR_UNAVAILABLE"
+  declare BL64_TXT_CMD_CAT="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_CUT="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_ENVSUBST="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_FMT="$BL64_VAR_UNAVAILABLE"
@@ -19,6 +16,7 @@
   declare BL64_TXT_CMD_SED="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_SORT="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_TAIL="$BL64_VAR_UNAVAILABLE"
+  declare BL64_TXT_CMD_TEE="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_TR="$BL64_VAR_UNAVAILABLE"
   declare BL64_TXT_CMD_UNIQ="$BL64_VAR_UNAVAILABLE"
 

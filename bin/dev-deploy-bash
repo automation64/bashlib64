@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# template-task: 1.9.0
+# template-deploy: 1.1.0
 #######################################
 # Copyright SerDigital64 - https://github.com/serdigital64
 #
@@ -13,44 +13,31 @@
 # limitations under the License.
 #######################################
 
-source ./bin/dev-set || exit 1
-source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fs.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-txt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-xsv.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-fmt.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-module-bsh.bash" &&
-  source "${DEV_LIB_BASHLIB64_TARGET}/bashlib64-core.bash" || exit 1
-source ./bin/dev-env-bash || exit 1
+source ./bin/dev-set &&
+  source ./bin/dev-source-base &&
+  source ./bin/dev-env-bash || exit 1
 
 declare MY_DEPLOYER="${1:-}"
-declare MY_LOGS="${2:-${DEV_ENV_BASH_PATH_LOGS}}"
 
 function my_deploy() {
   bl64_dbg_app_show_function
-
-  bl64_msg_show_task 'Prepare log store'
-  bl64_fs_path_remove "$MY_LOGS"
-  bl64_fs_dir_create \
-    "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$BL64_VAR_DEFAULT" "$MY_LOGS" ||
-    return $?
-
-  bl64_msg_show_phase 'Deploy application'
-  "$MY_DEPLOYER" | "$BL64_OS_CMD_TEE" "${MY_LOGS}/${DEV_DEPLOY_BASH_LOG}" 2>&1
+  "$MY_DEPLOYER" >"$DEV_DEPLOY_BASH_PATH_LOG" 2>&1
 }
 
 function my_initialize() {
   bl64_dbg_app_show_function
-  dev_bin64_task_initialize &&
+  dev_base_task_initialize &&
+    dev_base_log_setup "$BL64_VAR_OFF" "$DEV_ENV_BASH_PATH_LOGS" &&
     bl64_check_parameter 'MY_DEPLOYER' &&
     bl64_check_command "$MY_DEPLOYER" &&
-    dev_bin64_task_show_setup \
+    dev_base_task_show_setup \
       'MY_DEPLOYER' \
-      'MY_LOGS'
+      'DEV_DEPLOY_BASH_PATH_LOG'
 }
 
-bl64_lib_script_version_set '1.0.2'
-bl64_msg_help_about_set 'Run deployment scripts'
-dev_bin64_initialize && my_initialize || exit $?
+bl64_lib_script_version_set '2.0.0'
+bl64_msg_help_set_about 'Run deployment scripts'
+dev_base_initialize && my_initialize || exit $?
 
 bl64_msg_show_batch_start "$BL64_SCRIPT_ID"
 my_deploy
